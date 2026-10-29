@@ -1,0 +1,90 @@
+{
+  "version": 2,
+  "originalVersion": "v001",
+  "originalLinePath": "public/assets/levels/coloring-three-rabbits/coloring-three-rabbits-line-v001.png",
+  "originalSourceRecord": "../v001/source-notes.json",
+  "originalLineSha256": "2ac69489ec0a2275f4f7f0da2126245bcc6b5b487951fd626aca986b81af656d",
+  "tool": "built-in image_gen.imagegen",
+  "transparentBackground": false,
+  "prompt": "Use case: precise-object-edit。游戏填色线稿局部修补。输入图1是唯一编辑目标：方形米白纸底黑线稿；输入图2仅作为辨认纹样轮廓的颜色参考。请保留图1的构图、每一朵花、每一条卷叶的位置、线条风格和米白纸底，保持正方形和完整边界。只修复影响封闭填色的断口：尤其中心圆内三只兔子身体轮廓过浅并有小缺口，把原有兔身轮廓连通并加深到外围线条相近；三只兔子环绕中心、共用三只耳朵，不得变成六耳，不得重新设计兔姿。对于外围原本连续但中途缺少一小段的花瓣和卷叶线，沿原曲线合理接上，使每个应闭合的花瓣/兔身可以独立填色。参考图有残损，不照搬残损断裂；只从它辨认应有形状。禁止上色，禁止添加装饰、花纹、文字、标记，禁止简化现有细节，禁止替换整个纹样。原稿中完整线条的形状和位置必须保持。输出单张修复后的完整线稿。",
+  "generatedOriginalName": "exec-0875f2a5-d961-4543-8208-5fe253b76b1d.png",
+  "generatedArchive": "ai-repair-full-output.png",
+  "generatedSha256": "fc8627fe79dcf7b090d17c90c04891922e32b00d0fafbc1e4f3b84f95950ab67",
+  "generatedSize": [
+    1254,
+    1254
+  ],
+  "adoptedComposite": "reviewed-local-composite.png",
+  "compositeSha256": "ba017d700f49cfd17df9ecc3867cf3130295ac948c8031516b9ded28eac55f55",
+  "scopeMask": "repair-scope-mask.png",
+  "fullGeneratedImageUsed": false,
+  "recipe": {
+    "type": "local-affine-plus-elliptical-mask",
+    "affine": [
+      [
+        0.9825174808502197,
+        0,
+        6.199300765991211
+      ],
+      [
+        0,
+        0.9929577708244324,
+        2.3591549396514893
+      ]
+    ],
+    "center": [
+      607.15,
+      616.25
+    ],
+    "radii": [
+      139,
+      140
+    ],
+    "innerFeatherRatio": 0.02
+  },
+  "scopePixelCount": 61127,
+  "changedPixelCount": 61016,
+  "outsideScopeChangedPixelCount": 0,
+  "regionCount": 345,
+  "artworkVersion": "v002-98b84162e341-cdadb50a0166",
+  "linePath": "/assets/levels/coloring-three-rabbits/coloring-three-rabbits-line-v002.png",
+  "regionMapPath": "/assets/levels/coloring-three-rabbits/coloring-three-rabbits-regions-v002.png",
+  "lineSha256": "98b84162e341c8c9f4e0c965fbb654249ef05997a4d9bbca026b4b05823146fb",
+  "regionMapSha256": "cdadb50a0166b37b6eab480bfd767e378d14faf318a28f8537a22e41cdb45076",
+  "probeResults": {
+    "leftRabbit": {
+      "pixel": [
+        530,
+        590
+      ],
+      "regionId": 132
+    },
+    "upperRabbit": {
+      "pixel": [
+        670,
+        550
+      ],
+      "regionId": 132
+    },
+    "lowerRabbit": {
+      "pixel": [
+        640,
+        690
+      ],
+      "regionId": 132
+    },
+    "circleBackground": {
+      "pixel": [
+        600,
+        520
+      ],
+      "regionId": 125
+    }
+  },
+  "limitations": [
+    "颈背断口已修复，兔身与周围圆内背景不再连通。",
+    "三兔通过真实共用耳形相连，联动着色；不声称三只兔身均为独立区域。",
+    "外圈未采用AI重描，保留原稿现有开放边缘。"
+  ],
+  "technicalProcessing": "只从已生成图配准、重采样和局部蒙版合成，未用PIL/OpenCV绘制新内容线条；区域分割参数沿用v001，无补线闭运算或膨胀。"
+}

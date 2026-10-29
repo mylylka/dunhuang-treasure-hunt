@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "generator": "scripts/generate-sound-audition.py",
+  "sampleRate": 44100,
+  "methods": [
+    "衰减非整数倍模态正弦叠加",
+    "固定种子带限噪声",
+    "柔和首尾包络",
+    "低音量短反射",
+    "同类主动RMS匹配及0.40FS峰值上限"
+  ],
+  "brushSeeds": [
+    402,
+    809
+  ],
+  "rmsTargets": {
+    "button": 0.055,
+    "rotate": 0.06,
+    "success": 0.07,
+    "error": 0.045,
+    "fill": 0.035,
+    "hint": 0.06,
+    "complete": 0.075
+  },
+  "rebuild": "python3 scripts/generate-sound-audition.py",
+  "oldVersionPolicy": "后续修订另建版本，不删除已交付试听。"
+}

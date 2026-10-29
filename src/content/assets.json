@@ -1,0 +1,490 @@
+[
+  {
+    "id": "bg-landscape",
+    "path": "/assets/shared/bg-landscape-v001.png",
+    "width": 1600,
+    "height": 900,
+    "kind": "background",
+    "placeholder": false,
+    "version": "user-art-v001",
+    "sourceNote": "开发者在 ChatGPT 网页端生成并交付的 AI 教学美术；原稿按 v001 保存，不是原壁画照片或历史原貌复原。"
+  },
+  {
+    "id": "bg-portrait",
+    "path": "/assets/shared/bg-portrait-v001.png",
+    "width": 900,
+    "height": 1600,
+    "kind": "background",
+    "placeholder": false,
+    "version": "user-art-v001",
+    "sourceNote": "开发者在 ChatGPT 网页端生成并交付的 AI 教学美术；原稿按 v001 保存，不是原壁画照片或历史原貌复原。"
+  },
+  {
+    "id": "panel",
+    "path": "/assets/shared/panel-v001.png",
+    "width": 1024,
+    "height": 1024,
+    "kind": "panel",
+    "placeholder": false,
+    "version": "user-art-v001",
+    "sourceNote": "开发者在 ChatGPT 网页端生成并交付的 AI 教学美术；原稿按 v001 保存，不是原壁画照片或历史原貌复原。",
+    "slice": {
+      "top": 310,
+      "right": 318,
+      "bottom": 310,
+      "left": 318
+    }
+  },
+  {
+    "id": "button-primary",
+    "path": "/assets/shared/button-primary-v001.png",
+    "width": 1024,
+    "height": 256,
+    "kind": "button",
+    "placeholder": false,
+    "version": "user-art-v001",
+    "sourceNote": "开发者在 ChatGPT 网页端生成并交付的 AI 教学美术；原稿按 v001 保存，不是原壁画照片或历史原貌复原。",
+    "slice": {
+      "top": 64,
+      "right": 220,
+      "bottom": 64,
+      "left": 220
+    }
+  },
+  {
+    "id": "button-secondary",
+    "path": "/assets/shared/button-secondary-v001.png",
+    "width": 1024,
+    "height": 256,
+    "kind": "button",
+    "placeholder": false,
+    "version": "user-art-v001",
+    "sourceNote": "开发者在 ChatGPT 网页端生成并交付的 AI 教学美术；原稿按 v001 保存，不是原壁画照片或历史原貌复原。",
+    "slice": {
+      "top": 64,
+      "right": 220,
+      "bottom": 64,
+      "left": 220
+    }
+  },
+  {
+    "id": "icon-back",
+    "path": "/assets/shared/icon-back-v001.png",
+    "width": 256,
+    "height": 256,
+    "kind": "icon",
+    "placeholder": false,
+    "version": "user-art-v001",
+    "sourceNote": "开发者在 ChatGPT 网页端生成并交付的 AI 教学美术；原稿按 v001 保存，不是原壁画照片或历史原貌复原。"
+  },
+  {
+    "id": "icon-hint",
+    "path": "/assets/shared/icon-hint-v001.png",
+    "width": 256,
+    "height": 256,
+    "kind": "icon",
+    "placeholder": false,
+    "version": "user-art-v001",
+    "sourceNote": "开发者在 ChatGPT 网页端生成并交付的 AI 教学美术；原稿按 v001 保存，不是原壁画照片或历史原貌复原。"
+  },
+  {
+    "id": "icon-restart",
+    "path": "/assets/shared/icon-restart-v001.png",
+    "width": 256,
+    "height": 256,
+    "kind": "icon",
+    "placeholder": false,
+    "version": "user-art-v001",
+    "sourceNote": "开发者在 ChatGPT 网页端生成并交付的 AI 教学美术；原稿按 v001 保存，不是原壁画照片或历史原貌复原。"
+  },
+  {
+    "id": "icon-locked",
+    "path": "/assets/shared/icon-locked-v001.png",
+    "width": 256,
+    "height": 256,
+    "kind": "icon",
+    "placeholder": false,
+    "version": "user-art-v001",
+    "sourceNote": "开发者在 ChatGPT 网页端生成并交付的 AI 教学美术；原稿按 v001 保存，不是原壁画照片或历史原貌复原。"
+  },
+  {
+    "id": "icon-completed",
+    "path": "/assets/shared/icon-completed-v001.png",
+    "width": 256,
+    "height": 256,
+    "kind": "icon",
+    "placeholder": false,
+    "version": "user-art-v001",
+    "sourceNote": "开发者在 ChatGPT 网页端生成并交付的 AI 教学美术；原稿按 v001 保存，不是原壁画照片或历史原貌复原。"
+  },
+  {
+    "id": "cover-patterns",
+    "path": "/assets/themes/cover-patterns-v001.png",
+    "width": 1200,
+    "height": 800,
+    "kind": "cover",
+    "placeholder": false,
+    "version": "user-art-v001",
+    "sourceNote": "开发者在 ChatGPT 网页端生成并交付的 AI 教学美术；原稿按 v001 保存，不是原壁画照片或历史原貌复原。"
+  },
+  {
+    "id": "cover-music",
+    "path": "/assets/themes/cover-music-v001.png",
+    "width": 1200,
+    "height": 800,
+    "kind": "cover",
+    "placeholder": false,
+    "version": "user-art-v001",
+    "sourceNote": "开发者在 ChatGPT 网页端生成并交付的 AI 教学美术；原稿按 v001 保存，不是原壁画照片或历史原貌复原。"
+  },
+  {
+    "id": "cover-stories",
+    "path": "/assets/themes/cover-stories-v001.png",
+    "width": 1200,
+    "height": 800,
+    "kind": "cover",
+    "placeholder": false,
+    "version": "user-art-v001",
+    "sourceNote": "开发者在 ChatGPT 网页端生成并交付的 AI 教学美术；原稿按 v001 保存，不是原壁画照片或历史原貌复原。"
+  },
+  {
+    "id": "patterns-intro-a",
+    "path": "/assets/levels/patterns-intro/patterns-intro-a-v001.png",
+    "width": 1200,
+    "height": 800,
+    "kind": "level",
+    "placeholder": false,
+    "version": "user-art-v001",
+    "sourceNote": "开发者在 ChatGPT 网页端生成并交付的 AI 教学美术；原稿按 v001 保存，不是原壁画照片或历史原貌复原。"
+  },
+  {
+    "id": "patterns-intro-b",
+    "path": "/assets/levels/patterns-intro/patterns-intro-b-v001.png",
+    "width": 1200,
+    "height": 800,
+    "kind": "level",
+    "placeholder": false,
+    "version": "user-art-v001",
+    "sourceNote": "开发者在 ChatGPT 网页端生成并交付的 AI 教学美术；原稿按 v001 保存，不是原壁画照片或历史原貌复原。 以 L01 为底，仅在五个配置区域用局部蒙版合入 L02，边缘轻微过渡；区域外像素与 A 相同。"
+  },
+  {
+    "id": "lesson-329-ceiling",
+    "path": "/assets/lessons/patterns/lesson-329-ceiling-v002.png",
+    "width": 1032,
+    "height": 1040,
+    "kind": "teaching",
+    "placeholder": false,
+    "version": "reference-v002",
+    "sourceNote": "真实教学参考图。中国工艺美术学会刊载；吴健摄影，敦煌研究院供图。原文图注明确窟号、摄影与供图机构；与第329窟官方介绍及原数字敦煌井心逐一比对中心莲花、四角团花与四身飞天；下载原文件本身无叠加水印。 完整保留下载图像；仅转PNG，不放大或重采样。原下载图本身无叠加水印，未擦除、遮挡或裁掉水印，未调色、补画或AI修复。 原件与来源登记见art-source/references/patterns/v002/source-notes.json。"
+  },
+  {
+    "id": "lesson-329-center",
+    "path": "/assets/lessons/patterns/lesson-329-center-v002.png",
+    "width": 420,
+    "height": 415,
+    "kind": "teaching",
+    "placeholder": false,
+    "version": "reference-v002",
+    "sourceNote": "真实教学参考图。中国工艺美术学会刊载；吴健摄影，敦煌研究院供图。原文图注明确窟号、摄影与供图机构；与第329窟官方介绍及原数字敦煌井心逐一比对中心莲花、四角团花与四身飞天；下载原文件本身无叠加水印。 仅技术裁切井心，原像素矩形[310, 320, 730, 735]，未放大或重采样。原下载图本身无叠加水印，未擦除、遮挡或裁掉水印，未调色、补画或AI修复。 原件与来源登记见art-source/references/patterns/v002/source-notes.json。"
+  },
+  {
+    "id": "lesson-329-interior",
+    "path": "/assets/lessons/patterns/lesson-329-interior-v001.png",
+    "width": 563,
+    "height": 829,
+    "kind": "teaching",
+    "placeholder": false,
+    "version": "reference-v001",
+    "sourceNote": "真实教学参考图。敦煌研究院。官方页面图片与图注已核验。原件与来源登记见 art-source/references/patterns/v001/source-notes.json。仅转PNG，不放大、不调色、不抹水印。"
+  },
+  {
+    "id": "lesson-257-ceiling",
+    "path": "/assets/lessons/patterns/lesson-257-ceiling-v001.png",
+    "width": 782,
+    "height": 840,
+    "kind": "teaching",
+    "placeholder": false,
+    "version": "reference-v001",
+    "sourceNote": "真实教学参考图。敦煌研究院·数字敦煌。官方平棋页面及公开预览；保留原有黑色缺图区域和水印。原件与来源登记见 art-source/references/patterns/v001/source-notes.json。仅转PNG，不放大、不调色、不抹水印。"
+  },
+  {
+    "id": "lesson-401-ceiling",
+    "path": "/assets/lessons/patterns/lesson-401-ceiling-v001.png",
+    "width": 813,
+    "height": 554,
+    "kind": "teaching",
+    "placeholder": false,
+    "version": "reference-v001",
+    "sourceNote": "真实教学参考图。敦煌研究院。官方页面图片与说明已核验。原件与来源登记见 art-source/references/patterns/v001/source-notes.json。仅转PNG，不放大、不调色、不抹水印。"
+  },
+  {
+    "id": "lesson-407-rabbits",
+    "path": "/assets/lessons/patterns/lesson-407-rabbits-v001.png",
+    "width": 1024,
+    "height": 1020,
+    "kind": "teaching",
+    "placeholder": false,
+    "version": "reference-v001",
+    "sourceNote": "真实教学参考图。新华社；敦煌研究院供图。新华社原文图注与文末供图署名核验；敦煌研究院第407窟说明交叉核验。原件与来源登记见 art-source/references/patterns/v001/source-notes.json。仅转PNG，不放大、不调色、不抹水印。"
+  },
+  {
+    "id": "lesson-201-ceiling",
+    "path": "/assets/lessons/patterns/lesson-201-ceiling-v001.png",
+    "width": 450,
+    "height": 304,
+    "kind": "teaching",
+    "placeholder": false,
+    "version": "reference-v001",
+    "sourceNote": "真实教学参考图。敦煌研究院。官方页面图片与说明已核验；原图仅450×304，不用于细节辨认测验。原件与来源登记见 art-source/references/patterns/v001/source-notes.json。仅转PNG，不放大、不调色、不抹水印。"
+  },
+  {
+    "id": "lesson-254-ceiling",
+    "path": "/assets/lessons/patterns/lesson-254-ceiling-v001.png",
+    "width": 800,
+    "height": 820,
+    "kind": "teaching",
+    "placeholder": false,
+    "version": "reference-v001",
+    "sourceNote": "真实教学参考图。敦煌研究院·数字敦煌。官方页面与公开预览核验；中央黑区是塔柱占位，保留原水印。原件与来源登记见 art-source/references/patterns/v001/source-notes.json。仅转PNG，不放大、不调色、不抹水印。"
+  },
+  {
+    "id": "lesson-254-niche",
+    "path": "/assets/lessons/patterns/lesson-254-niche-v001.png",
+    "width": 450,
+    "height": 565,
+    "kind": "teaching",
+    "placeholder": false,
+    "version": "reference-v001",
+    "sourceNote": "真实教学参考图。敦煌研究院。官方页面图片及数字敦煌南壁龛楣忍冬说明核验。原件与来源登记见 art-source/references/patterns/v001/source-notes.json。仅转PNG，不放大、不调色、不抹水印。"
+  },
+  {
+    "id": "lesson-user-254-ceiling",
+    "path": "/assets/lessons/patterns/lesson-user-254-ceiling-v001.png",
+    "width": 1628,
+    "height": 936,
+    "kind": "teaching",
+    "placeholder": false,
+    "version": "reference-v001",
+    "sourceNote": "真实教学参考图。开发者提供；原图片出版来源待补。平棋结构、莲花及忍冬类型与官方第254窟说明及预览对照相符；该文件的原始出版出处尚待补齐，不标为数字敦煌下载图。原件与来源登记见 art-source/references/patterns/v001/source-notes.json。仅转PNG，不放大、不调色、不抹水印。"
+  },
+  {
+    "id": "lesson-user-honeysuckle",
+    "path": "/assets/lessons/patterns/lesson-user-honeysuckle-v001.png",
+    "width": 710,
+    "height": 1045,
+    "kind": "teaching",
+    "placeholder": false,
+    "version": "reference-v001",
+    "sourceNote": "真实教学参考图。开发者提供；图中带知乎署名水印，原出版来源待核。仅作补充观察；保留文字及水印；窟号、年代与原出版出处均待核，不用于年代或洞窟归属题。原件与来源登记见 art-source/references/patterns/v001/source-notes.json。仅转PNG，不放大、不调色、不抹水印。"
+  },
+  {
+    "id": "lesson-user-rabbits",
+    "path": "/assets/lessons/patterns/lesson-user-rabbits-v001.png",
+    "width": 400,
+    "height": 568,
+    "kind": "teaching",
+    "placeholder": false,
+    "version": "reference-v001",
+    "sourceNote": "真实教学参考图。开发者提供；拼版原出处待补。图像内容与官方第407窟说明交叉核验；原拼版出处待补；正式数耳互动使用1024像素敦煌研究院供图。原件与来源登记见 art-source/references/patterns/v001/source-notes.json。仅转PNG，不放大、不调色、不抹水印。"
+  },
+  {
+    "id": "lesson-407-borders",
+    "path": "/assets/lessons/patterns/lesson-407-borders-v002.png",
+    "width": 845,
+    "height": 747,
+    "kind": "teaching",
+    "placeholder": false,
+    "version": "reference-v002",
+    "sourceNote": "真实教学参考图。莫高窟参观预约网发布；《敦煌研究》编辑部，摄影敦煌研究院文物数字化研究所。原文图注与摄影署名明确；敦煌研究院第407窟页面交叉证实井心四周多层菱格莲花纹；照片构图与同窟三兔、八飞天、莲瓣及垂幔边带对应。下载原文件本身无叠加水印。 完整保留下载图像；仅转PNG，不放大或重采样。原下载图本身无叠加水印，未擦除、遮挡或裁掉水印，未调色、补画或AI修复。 原件与来源登记见art-source/references/patterns/v002/source-notes.json。"
+  },
+  {
+    "id": "patterns-lotus-a",
+    "path": "/assets/levels/patterns-lotus/patterns-lotus-a-v001.png",
+    "width": 1254,
+    "height": 1254,
+    "kind": "level",
+    "placeholder": false,
+    "version": "user-patterns-v001",
+    "sourceNote": "开发者使用 AI 生成并交付的教学示意，非原壁画照片或历史原貌复原。 A 保持原尺寸与构图。"
+  },
+  {
+    "id": "patterns-lotus-b",
+    "path": "/assets/levels/patterns-lotus/patterns-lotus-b-v001.png",
+    "width": 1254,
+    "height": 1254,
+    "kind": "level",
+    "placeholder": false,
+    "version": "user-patterns-v001",
+    "sourceNote": "开发者使用 AI 生成并交付的教学示意，非原壁画照片或历史原貌复原。 以 A 为底，仅在五个确认区域合成配准后的 B，内向羽化；区域外像素与 A 完全一致。"
+  },
+  {
+    "id": "patterns-scrolls-a",
+    "path": "/assets/levels/patterns-scrolls/patterns-scrolls-a-v001.png",
+    "width": 1254,
+    "height": 1254,
+    "kind": "level",
+    "placeholder": false,
+    "version": "user-patterns-v001",
+    "sourceNote": "开发者使用 AI 生成并交付的教学示意，非原壁画照片或历史原貌复原。 A 保持原尺寸与构图。"
+  },
+  {
+    "id": "patterns-scrolls-b",
+    "path": "/assets/levels/patterns-scrolls/patterns-scrolls-b-v001.png",
+    "width": 1254,
+    "height": 1254,
+    "kind": "level",
+    "placeholder": false,
+    "version": "user-patterns-v001",
+    "sourceNote": "开发者使用 AI 生成并交付的教学示意，非原壁画照片或历史原貌复原。 以 A 为底，仅在五个确认区域合成配准后的 B，内向羽化；区域外像素与 A 完全一致。"
+  },
+  {
+    "id": "coloring-three-rabbits-reference",
+    "path": "/assets/levels/coloring-three-rabbits/coloring-three-rabbits-reference-v002.png",
+    "width": 1254,
+    "height": 1254,
+    "kind": "level",
+    "placeholder": false,
+    "version": "user-reference-v002",
+    "sourceNote": "开发者2026-10-29重新交付的AI教学配色参考，完整原稿与参考更新记录见art-source/levels/coloring-three-rabbits/v003/reference-update.json。完整保留尺寸与构图；仅格式转换，不改线稿、区域图和作品版本。"
+  },
+  {
+    "id": "coloring-three-rabbits-line",
+    "path": "/assets/levels/coloring-three-rabbits/coloring-three-rabbits-line-v002.png",
+    "width": 1206,
+    "height": 1206,
+    "kind": "level",
+    "placeholder": false,
+    "version": "v002-98b84162e341-cdadb50a0166",
+    "sourceNote": "开发者授权使用内置image_gen局部补线；完整AI候选仅按登记范围配准合入原稿，修复范围外像素不变。原稿、完整AI输出与局部合成结果均保留。 记录见art-source/levels/coloring-three-rabbits/v002/source-notes.json。"
+  },
+  {
+    "id": "coloring-three-rabbits-regions",
+    "path": "/assets/levels/coloring-three-rabbits/coloring-three-rabbits-regions-v002.png",
+    "width": 1206,
+    "height": 1206,
+    "kind": "level",
+    "placeholder": false,
+    "version": "v002-98b84162e341-cdadb50a0166",
+    "sourceNote": "开发者授权使用内置image_gen局部补线；完整AI候选仅按登记范围配准合入原稿，修复范围外像素不变。RGB24区域ID蒙版，0不可填；真实相连区域联动着色。 记录见art-source/levels/coloring-three-rabbits/v002/source-notes.json。"
+  },
+  {
+    "id": "coloring-lotus-camellia-reference",
+    "path": "/assets/levels/coloring-lotus-camellia/coloring-lotus-camellia-reference-v001.png",
+    "width": 1400,
+    "height": 1388,
+    "kind": "level",
+    "placeholder": false,
+    "version": "user-art-v001",
+    "sourceNote": "开发者交付的填色配色参考，完整原稿归档；保持原尺寸和构图，仅格式转换。文化图源与技术处理见art-source/levels/coloring-lotus-camellia/v001/source-notes.json。"
+  },
+  {
+    "id": "coloring-lotus-camellia-line",
+    "path": "/assets/levels/coloring-lotus-camellia/coloring-lotus-camellia-line-v001.png",
+    "width": 1075,
+    "height": 1075,
+    "kind": "level",
+    "placeholder": false,
+    "version": "user-art-v001",
+    "sourceNote": "开发者交付的填色线稿，完整原稿归档；保持原尺寸和构图，仅格式转换。文化图源与技术处理见art-source/levels/coloring-lotus-camellia/v001/source-notes.json。"
+  },
+  {
+    "id": "coloring-lotus-camellia-regions",
+    "path": "/assets/levels/coloring-lotus-camellia/coloring-lotus-camellia-regions-v001.png",
+    "width": 1075,
+    "height": 1075,
+    "kind": "level",
+    "placeholder": false,
+    "version": "v001-c09834f2b304-ca4d24df32eb",
+    "sourceNote": "技术区域ID蒙版，从实际线稿边界提取；无补线、无闭运算、无膨胀。RGB编码R+G*256+B*65536，0不可填。511个候选区域，真实相连白区不强行拆分；详见同关原稿目录processing.json。"
+  },
+  {
+    "id": "coloring-grape-pomegranate-reference",
+    "path": "/assets/levels/coloring-grape-pomegranate/coloring-grape-pomegranate-reference-v002.png",
+    "width": 1254,
+    "height": 1254,
+    "kind": "level",
+    "placeholder": false,
+    "version": "user-reference-v002",
+    "sourceNote": "开发者2026-10-29重新交付的AI教学配色参考，完整原稿与参考更新记录见art-source/levels/coloring-grape-pomegranate/v003/reference-update.json。完整保留尺寸与构图；仅格式转换，不改线稿、区域图和作品版本。"
+  },
+  {
+    "id": "coloring-grape-pomegranate-line",
+    "path": "/assets/levels/coloring-grape-pomegranate/coloring-grape-pomegranate-line-v001.png",
+    "width": 1206,
+    "height": 1206,
+    "kind": "level",
+    "placeholder": false,
+    "version": "user-art-v001",
+    "sourceNote": "开发者交付的填色线稿，完整原稿归档；保持原尺寸和构图，仅格式转换。文化图源与技术处理见art-source/levels/coloring-grape-pomegranate/v001/source-notes.json。"
+  },
+  {
+    "id": "coloring-grape-pomegranate-regions",
+    "path": "/assets/levels/coloring-grape-pomegranate/coloring-grape-pomegranate-regions-v001.png",
+    "width": 1206,
+    "height": 1206,
+    "kind": "level",
+    "placeholder": false,
+    "version": "v001-ea467a9244ac-33e3a9199209",
+    "sourceNote": "技术区域ID蒙版，从实际线稿边界提取；无补线、无闭运算、无膨胀。RGB编码R+G*256+B*65536，0不可填。611个候选区域，真实相连白区不强行拆分；详见同关原稿目录processing.json。"
+  },
+  {
+    "id": "coloring-grape-lotus-reference",
+    "path": "/assets/levels/coloring-grape-lotus/coloring-grape-lotus-reference-v002.png",
+    "width": 1254,
+    "height": 1254,
+    "kind": "level",
+    "placeholder": false,
+    "version": "user-reference-v002",
+    "sourceNote": "开发者2026-10-29重新交付的AI教学配色参考，完整原稿与参考更新记录见art-source/levels/coloring-grape-lotus/v003/reference-update.json。完整保留尺寸与构图；仅格式转换，不改线稿、区域图和作品版本。"
+  },
+  {
+    "id": "coloring-grape-lotus-line",
+    "path": "/assets/levels/coloring-grape-lotus/coloring-grape-lotus-line-v002.png",
+    "width": 1206,
+    "height": 1206,
+    "kind": "level",
+    "placeholder": false,
+    "version": "v002-242c767bd384-f0e5aebd6636",
+    "sourceNote": "开发者授权使用内置image_gen局部补线；完整AI候选仅按登记范围配准合入原稿，修复范围外像素不变。原稿、完整AI输出与局部合成结果均保留。 记录见art-source/levels/coloring-grape-lotus/v002/source-notes.json。"
+  },
+  {
+    "id": "coloring-grape-lotus-regions",
+    "path": "/assets/levels/coloring-grape-lotus/coloring-grape-lotus-regions-v002.png",
+    "width": 1206,
+    "height": 1206,
+    "kind": "level",
+    "placeholder": false,
+    "version": "v002-242c767bd384-f0e5aebd6636",
+    "sourceNote": "开发者授权使用内置image_gen局部补线；完整AI候选仅按登记范围配准合入原稿，修复范围外像素不变。RGB24区域ID蒙版，0不可填；真实相连区域联动着色。 记录见art-source/levels/coloring-grape-lotus/v002/source-notes.json。"
+  },
+  {
+    "id": "puzzle-lotus-ceiling-image",
+    "path": "/assets/levels/puzzle-lotus-ceiling/puzzle-lotus-ceiling-image-v002.png",
+    "width": 1440,
+    "height": 1440,
+    "kind": "level",
+    "placeholder": false,
+    "version": "user-puzzle-v002",
+    "sourceNote": "开发者交付拼图图像，用户授权局部去除右下平台水印。仅采用登记范围，其他像素保持不变。原稿及处理记录见art-source/levels/puzzle-lotus-ceiling/v002/source-notes.json。"
+  },
+  {
+    "id": "puzzle-three-rabbits-image",
+    "path": "/assets/levels/puzzle-three-rabbits/puzzle-three-rabbits-image-v002.png",
+    "width": 1440,
+    "height": 1440,
+    "kind": "level",
+    "placeholder": false,
+    "version": "user-puzzle-v002",
+    "sourceNote": "开发者交付拼图图像，用户授权局部去除右下平台水印。仅采用登记范围，其他像素保持不变。原稿及处理记录见art-source/levels/puzzle-three-rabbits/v002/source-notes.json。"
+  },
+  {
+    "id": "puzzle-twin-dragons-image",
+    "path": "/assets/levels/puzzle-twin-dragons/puzzle-twin-dragons-image-v002.png",
+    "width": 1440,
+    "height": 1440,
+    "kind": "level",
+    "placeholder": false,
+    "version": "user-puzzle-v002",
+    "sourceNote": "开发者交付拼图图像，用户授权局部去除右下平台水印。仅采用登记范围，其他像素保持不变。原稿及处理记录见art-source/levels/puzzle-twin-dragons/v002/source-notes.json。"
+  }
+]

@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "receivedOn": "2026-10-28",
+  "originals": [
+    {
+      "role": "reference",
+      "originalFilename": "葡萄石榴纹藻井颜色参考.png",
+      "originalPath": "art-source/levels/coloring-grape-pomegranate/v001/葡萄石榴纹藻井颜色参考.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaExtrema": null,
+      "sha256": "cf140f8049d6b359e850e556286013e84dda0865a7d37aa3ddd1c1479175cfed",
+      "runtimePath": "/assets/levels/coloring-grape-pomegranate/coloring-grape-pomegranate-reference-v001.png",
+      "source": "开发者交付；原图文化出处、具体洞窟、年代及生成提示词未随本批提供。",
+      "processing": "原稿字节完整归档；运行版保持原尺寸、完整构图和RGB像素，仅转换为PNG。未裁切、拉伸、补画、调色或去水印。"
+    },
+    {
+      "role": "line",
+      "originalFilename": "葡萄石榴纹线条稿.PNG",
+      "originalPath": "art-source/levels/coloring-grape-pomegranate/v001/葡萄石榴纹线条稿.PNG",
+      "width": 1206,
+      "height": 1206,
+      "mode": "RGBA",
+      "alphaExtrema": [
+        255,
+        255
+      ],
+      "sha256": "ea467a9244acc23e52c967a2c002bbb46eeb5081ff3a99aba11815302c1d5ae5",
+      "runtimePath": "/assets/levels/coloring-grape-pomegranate/coloring-grape-pomegranate-line-v001.png",
+      "source": "开发者交付；原图文化出处、具体洞窟、年代及生成提示词未随本批提供。",
+      "processing": "原稿字节完整归档；运行版保持原尺寸、完整构图和RGB像素，仅转换为PNG。未裁切、拉伸、补画、调色或去水印。"
+    }
+  ],
+  "status": "配对对应已视觉核对；不要求线稿与配色参考逐像素配准；未见叠加水印。",
+  "authorship": "开发者提供的参考与线稿；未推测其具体创作方式或考古出处。",
+  "processingRecord": "processing.json",
+  "paletteNote": "运行色板是参考图附近的屏幕色候选，供自由创作，不标为历史颜料配方。"
+}

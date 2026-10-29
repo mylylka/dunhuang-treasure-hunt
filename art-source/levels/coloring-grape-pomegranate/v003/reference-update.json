@@ -1,0 +1,25 @@
+{
+  "date": "2026-10-29",
+  "purpose": "用户替换配色参考和关卡封面；不更改线稿、区域图、作品版本或存档。",
+  "originalFile": "葡萄石榴纹藻井颜色参考.png",
+  "deliveryPath": "/Users/liujing/Downloads/填色游戏素材/葡萄石榴纹藻井颜色参考.png",
+  "originalSha256": "436cfd3d83158500653ceeacd9752069195b2b1048184b42f04a19ef10cb30a6",
+  "width": 1254,
+  "height": 1254,
+  "archiveVersion": "v003",
+  "runtimeReferenceVersion": "user-reference-v002",
+  "runtimePath": "public/assets/levels/coloring-grape-pomegranate/coloring-grape-pomegranate-reference-v002.png",
+  "runtimeSha256": "cfa76362f247d1ba5f51a9b212f741d7876825d0f8d443236410fb19b5271781",
+  "processing": "完整保留构图；按EXIF方向规范化并转换RGB PNG；不缩放、不裁切、不调色、不改图。",
+  "source": "开发者使用AI生成并重新交付的教学配色示意；非原壁画照片。",
+  "pixelVerification": "运行PNG与方向规范化后的交付原稿RGB像素完全一致。",
+  "unchanged": [
+    "lineAssetId",
+    "regionsAssetId",
+    "artworkVersion",
+    "level configuration",
+    "stored works",
+    "completion progress"
+  ],
+  "previousReference": "art-source/levels/coloring-grape-pomegranate/v001/葡萄石榴纹藻井颜色参考.png"
+}

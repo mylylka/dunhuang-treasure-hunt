@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "receivedOn": "2026-10-28",
+  "originals": [
+    {
+      "role": "reference",
+      "originalFilename": "葡萄莲花纹藻井颜色参考.png",
+      "originalPath": "art-source/levels/coloring-grape-lotus/v001/葡萄莲花纹藻井颜色参考.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "alphaExtrema": null,
+      "sha256": "32044f25ca972caa60b8e8415c92f652c94eecf308341c8f78affea4d3d50957",
+      "runtimePath": "/assets/levels/coloring-grape-lotus/coloring-grape-lotus-reference-v001.png",
+      "source": "开发者交付；原图文化出处、具体洞窟、年代及生成提示词未随本批提供。",
+      "processing": "原稿字节完整归档；运行版保持原尺寸、完整构图和RGB像素，仅转换为PNG。未裁切、拉伸、补画、调色或去水印。"
+    },
+    {
+      "role": "line",
+      "originalFilename": "葡萄莲花纹线条稿.PNG",
+      "originalPath": "art-source/levels/coloring-grape-lotus/v001/葡萄莲花纹线条稿.PNG",
+      "width": 1206,
+      "height": 1206,
+      "mode": "RGBA",
+      "alphaExtrema": [
+        255,
+        255
+      ],
+      "sha256": "3980bb9444e2312dc205d86a68af800aa1a89fb2a665014c4896b890fd413b20",
+      "runtimePath": "/assets/levels/coloring-grape-lotus/coloring-grape-lotus-line-v001.png",
+      "source": "开发者交付；原图文化出处、具体洞窟、年代及生成提示词未随本批提供。",
+      "processing": "原稿字节完整归档；运行版保持原尺寸、完整构图和RGB像素，仅转换为PNG。未裁切、拉伸、补画、调色或去水印。"
+    }
+  ],
+  "status": "配对对应已视觉核对；不要求线稿与配色参考逐像素配准；未见叠加水印。",
+  "authorship": "开发者提供的参考与线稿；未推测其具体创作方式或考古出处。",
+  "processingRecord": "processing.json",
+  "paletteNote": "运行色板是参考图附近的屏幕色候选，供自由创作，不标为历史颜料配方。"
+}

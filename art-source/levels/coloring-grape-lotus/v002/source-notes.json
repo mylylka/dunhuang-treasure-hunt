@@ -1,0 +1,200 @@
+{
+  "version": 2,
+  "originalVersion": "v001",
+  "originalLinePath": "public/assets/levels/coloring-grape-lotus/coloring-grape-lotus-line-v001.png",
+  "originalSourceRecord": "../v001/source-notes.json",
+  "originalLineSha256": "5c768ac953c5304efd81e4056c1ffccf2fe025ebd5a4cd711fe02d05470e69f5",
+  "tool": "built-in image_gen.imagegen",
+  "transparentBackground": false,
+  "prompt": "Use case: precise-object-edit。补齐填色线稿开放边界。图1为编辑目标，图2仅作为图案形状与边界的参考。保留图1整个莲花中心、所有花叶、卷曲带状装饰位置、粗细黑线和米白纸底，不改成图2的颜色。问题仅在图1四角，卷曲带的平行黑线在接近纸边时断在空白里，使本应闭合的带状白区漏到背景。参照图2内层方框及角部卷叶的结构，为图1增加一圈非常细的正方形边界，并把四角这些开放线端沿原曲线小幅延伸接到该边界，确保四角各条带状区域封闭。边界距离画面边缘约2%，不可切掉任何现有内容，不能把附近独立花朵连到一起。主体已有封闭花瓣、圆形、花叶内部线、轮廓必须完全保留，不新加纹样，不上色，不简化或重绘主体，不加文字。输出一张正方形完整线稿。",
+  "generatedOriginalName": "exec-f14dc407-889c-49e3-9ce6-970db55e7d21.png",
+  "generatedArchive": "ai-repair-full-output.png",
+  "generatedSha256": "6d6da5c9e7a607ec7763e9bfab02b4f30de0f00269114d2f912a4a7ba4dea846",
+  "generatedSize": [
+    1254,
+    1254
+  ],
+  "adoptedComposite": "reviewed-local-composite.png",
+  "compositeSha256": "615c266c1a27091919c44c9b7e1d211b522f2c70910a3dd67cc65adf1a68d640",
+  "scopeMask": "repair-scope-mask.png",
+  "fullGeneratedImageUsed": false,
+  "recipe": {
+    "type": "four-side-local-affine-and-normal-axis-compression-plus-generated-frame",
+    "bands": {
+      "top": {
+        "xRanges": [
+          [
+            180,
+            480
+          ],
+          [
+            730,
+            1035
+          ]
+        ],
+        "yRange": [
+          21,
+          72
+        ]
+      },
+      "bottom": {
+        "xRanges": [
+          [
+            165,
+            485
+          ],
+          [
+            725,
+            1045
+          ]
+        ],
+        "yRange": [
+          1128,
+          1192
+        ]
+      },
+      "left": {
+        "xRange": [
+          19,
+          72
+        ],
+        "yRanges": [
+          [
+            170,
+            490
+          ],
+          [
+            720,
+            1045
+          ]
+        ]
+      },
+      "right": {
+        "xRange": [
+          1122,
+          1192
+        ],
+        "yRanges": [
+          [
+            165,
+            495
+          ],
+          [
+            720,
+            1050
+          ]
+        ]
+      }
+    },
+    "targetFrame": {
+      "left": 22,
+      "right": 1188,
+      "top": 24,
+      "bottom": 1188,
+      "samplingMargin": 3
+    },
+    "sourceFrame": {
+      "left": 23,
+      "right": 1231,
+      "top": 24,
+      "bottom": 1198
+    },
+    "joiningFeatherPixels": 2,
+    "sideAffines": {
+      "top": [
+        [
+          0.9961816801731909,
+          -0.003877452156907139,
+          -0.36930218849728663
+        ],
+        [
+          0.0009417176527430993,
+          0.9811952553641827,
+          2.5787544948503864
+        ]
+      ],
+      "bottom": [
+        [
+          0.9938495494143976,
+          -0.017591595742950078,
+          19.343498502675722
+        ],
+        [
+          -0.00045480188502884975,
+          0.988687259136784,
+          6.593482147618682
+        ]
+      ],
+      "left": [
+        [
+          0.9961934985313264,
+          0.001165079604738686,
+          -1.4582166502104121
+        ],
+        [
+          -0.001915101397736361,
+          0.9953416122022917,
+          -0.06921941070112693
+        ]
+      ],
+      "right": [
+        [
+          0.9543377871994753,
+          -0.0020376827863901026,
+          37.269335400732764
+        ],
+        [
+          0.01772875164367223,
+          0.9893139502982415,
+          -13.482650244303137
+        ]
+      ]
+    }
+  },
+  "scopePixelCount": 167390,
+  "changedPixelCount": 167230,
+  "outsideScopeChangedPixelCount": 0,
+  "regionCount": 510,
+  "artworkVersion": "v002-242c767bd384-f0e5aebd6636",
+  "linePath": "/assets/levels/coloring-grape-lotus/coloring-grape-lotus-line-v002.png",
+  "regionMapPath": "/assets/levels/coloring-grape-lotus/coloring-grape-lotus-regions-v002.png",
+  "lineSha256": "242c767bd3847e93847b11fc5106166c9ef16a842b8024d67a04c3b28613462e",
+  "regionMapSha256": "f0e5aebd663636fb885ff12d1d68b837882691623c9650eda36f7bb6e6d5e2d2",
+  "probeResults": {
+    "upperLeftBand": {
+      "pixel": [
+        380,
+        52
+      ],
+      "regionId": 1
+    },
+    "rightBand": {
+      "pixel": [
+        1160,
+        730
+      ],
+      "regionId": 6
+    },
+    "lowerBand": {
+      "pixel": [
+        472,
+        1148
+      ],
+      "regionId": 481
+    },
+    "outsidePaper": {
+      "pixel": [
+        5,
+        5
+      ],
+      "regionId": 0
+    }
+  },
+  "limitations": [
+    "新增方框闭合，外围白区不再直接漏向纸外。",
+    "部分四角带在原稿中真实连通，采用联动着色；未强行拆成独立小带。",
+    "右侧及底侧部分原线端仍止于框前，未继续扩大替换或伪造补线。",
+    "右侧窄带使用独立仿射配准及法向压缩，主体和花朵保留原稿。"
+  ],
+  "technicalProcessing": "只从已生成图配准、重采样和局部蒙版合成，未用PIL/OpenCV绘制新内容线条；区域分割参数沿用v001，无补线闭运算或膨胀。"
+}

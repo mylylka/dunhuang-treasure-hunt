@@ -1,0 +1,15 @@
+{
+  "family": "Dunhuang Title",
+  "originalFamily": "LXGW WenKai / 霞鹜文楷",
+  "originalVersion": "Version 1.530; October 18, 2026",
+  "projectUrl": "https://github.com/lxgw/LxgwWenKai",
+  "downloadUrl": "https://raw.githubusercontent.com/lxgw/LxgwWenKai/main/fonts/TTF/LXGWWenKai-Regular.ttf",
+  "license": "SIL Open Font License 1.1",
+  "retrievedOn": "2026-10-28",
+  "originalSha256": "2d73eea94ad808999d90c0000c239a84a33b09d4bc6ab6c5b8bbf1eda8a7fc8b",
+  "subsetCharacters": "敦煌寻宝记",
+  "output": "public/assets/shared/fonts/dunhuang-title-v001.woff",
+  "outputBytes": 3048,
+  "outputSha256": "ae7a6f78a2c7666fccd85158369b0131cd95435294a57b969bc2ab2c13406921",
+  "processing": "Only glyph subsetting and internal-family rename; font copyright and license retained. WOFF uses zlib; no system font installation."
+}

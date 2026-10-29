@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "receivedOn": "2026-10-28",
+  "originals": [
+    {
+      "role": "reference",
+      "originalFilename": "莲花茶花纹藻井.png",
+      "originalPath": "art-source/levels/coloring-lotus-camellia/v001/莲花茶花纹藻井.png",
+      "width": 1400,
+      "height": 1388,
+      "mode": "RGB",
+      "alphaExtrema": null,
+      "sha256": "b9bea913628fe7ea474dc142b0de808b96f94f98905d5511ba105e4417437197",
+      "runtimePath": "/assets/levels/coloring-lotus-camellia/coloring-lotus-camellia-reference-v001.png",
+      "source": "开发者交付；原图文化出处、具体洞窟、年代及生成提示词未随本批提供。",
+      "processing": "原稿字节完整归档；运行版保持原尺寸、完整构图和RGB像素，仅转换为PNG。未裁切、拉伸、补画、调色或去水印。"
+    },
+    {
+      "role": "line",
+      "originalFilename": "莲花茶花纹线条稿.PNG",
+      "originalPath": "art-source/levels/coloring-lotus-camellia/v001/莲花茶花纹线条稿.PNG",
+      "width": 1075,
+      "height": 1075,
+      "mode": "RGBA",
+      "alphaExtrema": [
+        255,
+        255
+      ],
+      "sha256": "c09834f2b304e589e2782c9d6670a777298f2e7af274f997f55f4c990a41a54d",
+      "runtimePath": "/assets/levels/coloring-lotus-camellia/coloring-lotus-camellia-line-v001.png",
+      "source": "开发者交付；原图文化出处、具体洞窟、年代及生成提示词未随本批提供。",
+      "processing": "原稿字节完整归档；运行版保持原尺寸、完整构图和RGB像素，仅转换为PNG。未裁切、拉伸、补画、调色或去水印。"
+    }
+  ],
+  "status": "配对对应已视觉核对；不要求线稿与配色参考逐像素配准；未见叠加水印。",
+  "authorship": "开发者提供的参考与线稿；未推测其具体创作方式或考古出处。",
+  "processingRecord": "processing.json",
+  "paletteNote": "运行色板是参考图附近的屏幕色候选，供自由创作，不标为历史颜料配方。"
+}

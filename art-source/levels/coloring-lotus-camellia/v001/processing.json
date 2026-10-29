@@ -1,0 +1,8208 @@
+{
+  "version": 1,
+  "parameters": {
+    "method": "local-contrast-dark-strokes",
+    "maximumGray": 200,
+    "backgroundSigma": 5,
+    "minimumLocalContrast": 12,
+    "strongInkGray": 125,
+    "minimumStrokeComponentArea": 18,
+    "barrierConnectivity": 8,
+    "regionConnectivity": 4,
+    "dilationPixels": 0,
+    "closingPixels": 0,
+    "minimumRegionArea": 180,
+    "minimumSafeRadius": 2.2,
+    "excludeImageBoundaryConnected": true
+  },
+  "lineSha256": "c09834f2b304e589e2782c9d6670a777298f2e7af274f997f55f4c990a41a54d",
+  "regionMapSha256": "ca4d24df32eb39e017870426dea15c6b02ed3ff997c17bdc7692f6b4ab4fc985",
+  "artworkVersion": "v001-c09834f2b304-ca4d24df32eb",
+  "regionCount": 511,
+  "largeRegionCount": 249,
+  "minimumWhiteRegionPixels": 180,
+  "encoding": "id=R+G*256+B*65536; 0 unpaintable",
+  "runtimeBlend": "white base/region tint multiplied with original RGB; retain original strokes and paper texture",
+  "limitations": [
+    "参考为1400×1388、线稿为1075×1075，保留各自完整比例，不拉伸配准。",
+    "花瓣多重细线形成细窄白带，小碎区不纳入可点击区，不要求填满。"
+  ],
+  "regions": [
+    {
+      "id": 1,
+      "sourceComponentId": 2,
+      "bboxPixels": [
+        23,
+        27,
+        1022,
+        1030
+      ],
+      "samplePixel": [
+        848,
+        39
+      ],
+      "safeRadiusPixels": 5.0,
+      "largeArea": true
+    },
+    {
+      "id": 2,
+      "sourceComponentId": 3,
+      "bboxPixels": [
+        30,
+        36,
+        1005,
+        1014
+      ],
+      "samplePixel": [
+        35,
+        38
+      ],
+      "safeRadiusPixels": 3.0,
+      "largeArea": false
+    },
+    {
+      "id": 3,
+      "sourceComponentId": 4,
+      "bboxPixels": [
+        40,
+        41,
+        73,
+        74
+      ],
+      "samplePixel": [
+        83,
+        66
+      ],
+      "safeRadiusPixels": 21.26,
+      "largeArea": true
+    },
+    {
+      "id": 4,
+      "sourceComponentId": 6,
+      "bboxPixels": [
+        40,
+        42,
+        87,
+        86
+      ],
+      "samplePixel": [
+        91,
+        101
+      ],
+      "safeRadiusPixels": 6.325,
+      "largeArea": true
+    },
+    {
+      "id": 5,
+      "sourceComponentId": 7,
+      "bboxPixels": [
+        40,
+        42,
+        102,
+        101
+      ],
+      "samplePixel": [
+        123,
+        84
+      ],
+      "safeRadiusPixels": 6.708,
+      "largeArea": true
+    },
+    {
+      "id": 6,
+      "sourceComponentId": 8,
+      "bboxPixels": [
+        130,
+        42,
+        94,
+        87
+      ],
+      "samplePixel": [
+        195,
+        120
+      ],
+      "safeRadiusPixels": 8.246,
+      "largeArea": true
+    },
+    {
+      "id": 7,
+      "sourceComponentId": 10,
+      "bboxPixels": [
+        38,
+        44,
+        990,
+        499
+      ],
+      "samplePixel": [
+        262,
+        82
+      ],
+      "safeRadiusPixels": 39.0,
+      "largeArea": true
+    },
+    {
+      "id": 8,
+      "sourceComponentId": 11,
+      "bboxPixels": [
+        134,
+        49,
+        78,
+        62
+      ],
+      "samplePixel": [
+        202,
+        60
+      ],
+      "safeRadiusPixels": 6.708,
+      "largeArea": true
+    },
+    {
+      "id": 9,
+      "sourceComponentId": 12,
+      "bboxPixels": [
+        506,
+        50,
+        68,
+        38
+      ],
+      "samplePixel": [
+        543,
+        55
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 10,
+      "sourceComponentId": 13,
+      "bboxPixels": [
+        850,
+        52,
+        91,
+        83
+      ],
+      "samplePixel": [
+        875,
+        127
+      ],
+      "safeRadiusPixels": 7.28,
+      "largeArea": true
+    },
+    {
+      "id": 11,
+      "sourceComponentId": 14,
+      "bboxPixels": [
+        931,
+        52,
+        97,
+        101
+      ],
+      "samplePixel": [
+        938,
+        72
+      ],
+      "safeRadiusPixels": 6.0,
+      "largeArea": true
+    },
+    {
+      "id": 12,
+      "sourceComponentId": 15,
+      "bboxPixels": [
+        944,
+        53,
+        84,
+        86
+      ],
+      "samplePixel": [
+        966,
+        101
+      ],
+      "safeRadiusPixels": 6.325,
+      "largeArea": true
+    },
+    {
+      "id": 13,
+      "sourceComponentId": 16,
+      "bboxPixels": [
+        957,
+        53,
+        72,
+        73
+      ],
+      "samplePixel": [
+        983,
+        73
+      ],
+      "safeRadiusPixels": 21.0,
+      "largeArea": true
+    },
+    {
+      "id": 14,
+      "sourceComponentId": 18,
+      "bboxPixels": [
+        863,
+        57,
+        75,
+        62
+      ],
+      "samplePixel": [
+        880,
+        110
+      ],
+      "safeRadiusPixels": 7.28,
+      "largeArea": true
+    },
+    {
+      "id": 15,
+      "sourceComponentId": 19,
+      "bboxPixels": [
+        137,
+        58,
+        64,
+        39
+      ],
+      "samplePixel": [
+        191,
+        72
+      ],
+      "safeRadiusPixels": 7.81,
+      "largeArea": true
+    },
+    {
+      "id": 16,
+      "sourceComponentId": 21,
+      "bboxPixels": [
+        512,
+        59,
+        57,
+        28
+      ],
+      "samplePixel": [
+        533,
+        66
+      ],
+      "safeRadiusPixels": 5.0,
+      "largeArea": false
+    },
+    {
+      "id": 17,
+      "sourceComponentId": 22,
+      "bboxPixels": [
+        395,
+        64,
+        48,
+        33
+      ],
+      "samplePixel": [
+        425,
+        71
+      ],
+      "safeRadiusPixels": 3.0,
+      "largeArea": false
+    },
+    {
+      "id": 18,
+      "sourceComponentId": 25,
+      "bboxPixels": [
+        631,
+        66,
+        50,
+        30
+      ],
+      "samplePixel": [
+        648,
+        73
+      ],
+      "safeRadiusPixels": 3.0,
+      "largeArea": false
+    },
+    {
+      "id": 19,
+      "sourceComponentId": 26,
+      "bboxPixels": [
+        874,
+        66,
+        61,
+        36
+      ],
+      "samplePixel": [
+        882,
+        89
+      ],
+      "safeRadiusPixels": 7.071,
+      "largeArea": true
+    },
+    {
+      "id": 20,
+      "sourceComponentId": 27,
+      "bboxPixels": [
+        139,
+        67,
+        45,
+        16
+      ],
+      "samplePixel": [
+        176,
+        78
+      ],
+      "safeRadiusPixels": 4.123,
+      "largeArea": false
+    },
+    {
+      "id": 21,
+      "sourceComponentId": 31,
+      "bboxPixels": [
+        499,
+        69,
+        81,
+        59
+      ],
+      "samplePixel": [
+        552,
+        85
+      ],
+      "safeRadiusPixels": 11.662,
+      "largeArea": true
+    },
+    {
+      "id": 22,
+      "sourceComponentId": 32,
+      "bboxPixels": [
+        400,
+        72,
+        40,
+        24
+      ],
+      "samplePixel": [
+        423,
+        78
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 23,
+      "sourceComponentId": 35,
+      "bboxPixels": [
+        635,
+        74,
+        42,
+        24
+      ],
+      "samplePixel": [
+        664,
+        82
+      ],
+      "safeRadiusPixels": 4.0,
+      "largeArea": false
+    },
+    {
+      "id": 24,
+      "sourceComponentId": 45,
+      "bboxPixels": [
+        386,
+        81,
+        69,
+        47
+      ],
+      "samplePixel": [
+        417,
+        94
+      ],
+      "safeRadiusPixels": 11.662,
+      "largeArea": true
+    },
+    {
+      "id": 25,
+      "sourceComponentId": 50,
+      "bboxPixels": [
+        619,
+        84,
+        70,
+        47
+      ],
+      "samplePixel": [
+        654,
+        96
+      ],
+      "safeRadiusPixels": 11.402,
+      "largeArea": true
+    },
+    {
+      "id": 26,
+      "sourceComponentId": 56,
+      "bboxPixels": [
+        91,
+        94,
+        104,
+        103
+      ],
+      "samplePixel": [
+        186,
+        137
+      ],
+      "safeRadiusPixels": 8.544,
+      "largeArea": true
+    },
+    {
+      "id": 27,
+      "sourceComponentId": 59,
+      "bboxPixels": [
+        523,
+        95,
+        36,
+        31
+      ],
+      "samplePixel": [
+        541,
+        100
+      ],
+      "safeRadiusPixels": 5.099,
+      "largeArea": false
+    },
+    {
+      "id": 28,
+      "sourceComponentId": 62,
+      "bboxPixels": [
+        558,
+        98,
+        35,
+        36
+      ],
+      "samplePixel": [
+        590,
+        104
+      ],
+      "safeRadiusPixels": 3.0,
+      "largeArea": false
+    },
+    {
+      "id": 29,
+      "sourceComponentId": 65,
+      "bboxPixels": [
+        98,
+        101,
+        79,
+        80
+      ],
+      "samplePixel": [
+        170,
+        143
+      ],
+      "safeRadiusPixels": 7.0,
+      "largeArea": true
+    },
+    {
+      "id": 30,
+      "sourceComponentId": 70,
+      "bboxPixels": [
+        879,
+        102,
+        100,
+        101
+      ],
+      "samplePixel": [
+        934,
+        195
+      ],
+      "safeRadiusPixels": 8.0,
+      "largeArea": true
+    },
+    {
+      "id": 31,
+      "sourceComponentId": 80,
+      "bboxPixels": [
+        105,
+        108,
+        51,
+        52
+      ],
+      "samplePixel": [
+        149,
+        152
+      ],
+      "safeRadiusPixels": 5.0,
+      "largeArea": true
+    },
+    {
+      "id": 32,
+      "sourceComponentId": 84,
+      "bboxPixels": [
+        895,
+        109,
+        77,
+        77
+      ],
+      "samplePixel": [
+        902,
+        149
+      ],
+      "safeRadiusPixels": 7.0,
+      "largeArea": true
+    },
+    {
+      "id": 33,
+      "sourceComponentId": 87,
+      "bboxPixels": [
+        109,
+        112,
+        37,
+        37
+      ],
+      "samplePixel": [
+        139,
+        142
+      ],
+      "safeRadiusPixels": 5.0,
+      "largeArea": false
+    },
+    {
+      "id": 34,
+      "sourceComponentId": 88,
+      "bboxPixels": [
+        103,
+        112,
+        59,
+        54
+      ],
+      "samplePixel": [
+        140,
+        163
+      ],
+      "safeRadiusPixels": 2.236,
+      "largeArea": false
+    },
+    {
+      "id": 35,
+      "sourceComponentId": 89,
+      "bboxPixels": [
+        277,
+        112,
+        46,
+        41
+      ],
+      "samplePixel": [
+        301,
+        115
+      ],
+      "safeRadiusPixels": 3.162,
+      "largeArea": false
+    },
+    {
+      "id": 36,
+      "sourceComponentId": 97,
+      "bboxPixels": [
+        751,
+        117,
+        46,
+        44
+      ],
+      "samplePixel": [
+        788,
+        132
+      ],
+      "safeRadiusPixels": 3.162,
+      "largeArea": false
+    },
+    {
+      "id": 37,
+      "sourceComponentId": 98,
+      "bboxPixels": [
+        915,
+        118,
+        49,
+        48
+      ],
+      "samplePixel": [
+        922,
+        157
+      ],
+      "safeRadiusPixels": 5.0,
+      "largeArea": false
+    },
+    {
+      "id": 38,
+      "sourceComponentId": 99,
+      "bboxPixels": [
+        283,
+        119,
+        38,
+        32
+      ],
+      "samplePixel": [
+        307,
+        121
+      ],
+      "safeRadiusPixels": 3.0,
+      "largeArea": false
+    },
+    {
+      "id": 39,
+      "sourceComponentId": 100,
+      "bboxPixels": [
+        284,
+        119,
+        61,
+        63
+      ],
+      "samplePixel": [
+        305,
+        139
+      ],
+      "safeRadiusPixels": 11.402,
+      "largeArea": true
+    },
+    {
+      "id": 40,
+      "sourceComponentId": 104,
+      "bboxPixels": [
+        375,
+        120,
+        92,
+        55
+      ],
+      "samplePixel": [
+        405,
+        123
+      ],
+      "safeRadiusPixels": 3.162,
+      "largeArea": false
+    },
+    {
+      "id": 41,
+      "sourceComponentId": 105,
+      "bboxPixels": [
+        516,
+        120,
+        42,
+        49
+      ],
+      "samplePixel": [
+        539,
+        133
+      ],
+      "safeRadiusPixels": 9.899,
+      "largeArea": true
+    },
+    {
+      "id": 42,
+      "sourceComponentId": 110,
+      "bboxPixels": [
+        606,
+        123,
+        98,
+        23
+      ],
+      "samplePixel": [
+        622,
+        130
+      ],
+      "safeRadiusPixels": 4.123,
+      "largeArea": false
+    },
+    {
+      "id": 43,
+      "sourceComponentId": 111,
+      "bboxPixels": [
+        753,
+        123,
+        38,
+        36
+      ],
+      "samplePixel": [
+        767,
+        127
+      ],
+      "safeRadiusPixels": 4.123,
+      "largeArea": false
+    },
+    {
+      "id": 44,
+      "sourceComponentId": 113,
+      "bboxPixels": [
+        729,
+        125,
+        61,
+        61
+      ],
+      "samplePixel": [
+        768,
+        145
+      ],
+      "safeRadiusPixels": 11.662,
+      "largeArea": true
+    },
+    {
+      "id": 45,
+      "sourceComponentId": 117,
+      "bboxPixels": [
+        381,
+        128,
+        82,
+        47
+      ],
+      "samplePixel": [
+        398,
+        131
+      ],
+      "safeRadiusPixels": 4.0,
+      "largeArea": true
+    },
+    {
+      "id": 46,
+      "sourceComponentId": 119,
+      "bboxPixels": [
+        613,
+        128,
+        86,
+        23
+      ],
+      "samplePixel": [
+        684,
+        133
+      ],
+      "safeRadiusPixels": 3.162,
+      "largeArea": false
+    },
+    {
+      "id": 47,
+      "sourceComponentId": 122,
+      "bboxPixels": [
+        40,
+        132,
+        84,
+        95
+      ],
+      "samplePixel": [
+        116,
+        197
+      ],
+      "safeRadiusPixels": 8.0,
+      "largeArea": true
+    },
+    {
+      "id": 48,
+      "sourceComponentId": 124,
+      "bboxPixels": [
+        46,
+        136,
+        61,
+        77
+      ],
+      "samplePixel": [
+        99,
+        195
+      ],
+      "safeRadiusPixels": 7.211,
+      "largeArea": true
+    },
+    {
+      "id": 49,
+      "sourceComponentId": 125,
+      "bboxPixels": [
+        388,
+        136,
+        71,
+        44
+      ],
+      "samplePixel": [
+        438,
+        155
+      ],
+      "safeRadiusPixels": 16.0,
+      "largeArea": true
+    },
+    {
+      "id": 50,
+      "sourceComponentId": 126,
+      "bboxPixels": [
+        617,
+        136,
+        77,
+        43
+      ],
+      "samplePixel": [
+        673,
+        153
+      ],
+      "safeRadiusPixels": 17.464,
+      "largeArea": true
+    },
+    {
+      "id": 51,
+      "sourceComponentId": 127,
+      "bboxPixels": [
+        53,
+        139,
+        39,
+        64
+      ],
+      "samplePixel": [
+        83,
+        189
+      ],
+      "safeRadiusPixels": 7.81,
+      "largeArea": true
+    },
+    {
+      "id": 52,
+      "sourceComponentId": 129,
+      "bboxPixels": [
+        689,
+        140,
+        84,
+        76
+      ],
+      "samplePixel": [
+        719,
+        143
+      ],
+      "safeRadiusPixels": 4.0,
+      "largeArea": true
+    },
+    {
+      "id": 53,
+      "sourceComponentId": 130,
+      "bboxPixels": [
+        946,
+        140,
+        82,
+        93
+      ],
+      "samplePixel": [
+        1019,
+        225
+      ],
+      "safeRadiusPixels": 7.616,
+      "largeArea": true
+    },
+    {
+      "id": 54,
+      "sourceComponentId": 131,
+      "bboxPixels": [
+        544,
+        141,
+        83,
+        77
+      ],
+      "samplePixel": [
+        577,
+        149
+      ],
+      "safeRadiusPixels": 4.243,
+      "largeArea": true
+    },
+    {
+      "id": 55,
+      "sourceComponentId": 135,
+      "bboxPixels": [
+        308,
+        144,
+        66,
+        66
+      ],
+      "samplePixel": [
+        353,
+        147
+      ],
+      "safeRadiusPixels": 3.162,
+      "largeArea": false
+    },
+    {
+      "id": 56,
+      "sourceComponentId": 136,
+      "bboxPixels": [
+        451,
+        144,
+        81,
+        75
+      ],
+      "samplePixel": [
+        523,
+        177
+      ],
+      "safeRadiusPixels": 4.472,
+      "largeArea": true
+    },
+    {
+      "id": 57,
+      "sourceComponentId": 137,
+      "bboxPixels": [
+        961,
+        144,
+        61,
+        76
+      ],
+      "samplePixel": [
+        1010,
+        211
+      ],
+      "safeRadiusPixels": 7.211,
+      "largeArea": true
+    },
+    {
+      "id": 58,
+      "sourceComponentId": 139,
+      "bboxPixels": [
+        976,
+        147,
+        38,
+        63
+      ],
+      "samplePixel": [
+        992,
+        200
+      ],
+      "safeRadiusPixels": 8.0,
+      "largeArea": true
+    },
+    {
+      "id": 59,
+      "sourceComponentId": 140,
+      "bboxPixels": [
+        693,
+        149,
+        72,
+        65
+      ],
+      "samplePixel": [
+        724,
+        153
+      ],
+      "safeRadiusPixels": 4.123,
+      "largeArea": true
+    },
+    {
+      "id": 60,
+      "sourceComponentId": 142,
+      "bboxPixels": [
+        990,
+        149,
+        19,
+        42
+      ],
+      "samplePixel": [
+        995,
+        185
+      ],
+      "safeRadiusPixels": 5.0,
+      "largeArea": false
+    },
+    {
+      "id": 61,
+      "sourceComponentId": 147,
+      "bboxPixels": [
+        552,
+        151,
+        70,
+        63
+      ],
+      "samplePixel": [
+        556,
+        185
+      ],
+      "safeRadiusPixels": 4.0,
+      "largeArea": true
+    },
+    {
+      "id": 62,
+      "sourceComponentId": 148,
+      "bboxPixels": [
+        315,
+        152,
+        70,
+        71
+      ],
+      "samplePixel": [
+        334,
+        196
+      ],
+      "safeRadiusPixels": 16.553,
+      "largeArea": true
+    },
+    {
+      "id": 63,
+      "sourceComponentId": 149,
+      "bboxPixels": [
+        454,
+        152,
+        69,
+        62
+      ],
+      "samplePixel": [
+        497,
+        160
+      ],
+      "safeRadiusPixels": 4.243,
+      "largeArea": true
+    },
+    {
+      "id": 64,
+      "sourceComponentId": 154,
+      "bboxPixels": [
+        456,
+        158,
+        178,
+        137
+      ],
+      "samplePixel": [
+        490,
+        266
+      ],
+      "safeRadiusPixels": 13.892,
+      "largeArea": true
+    },
+    {
+      "id": 65,
+      "sourceComponentId": 155,
+      "bboxPixels": [
+        697,
+        158,
+        61,
+        65
+      ],
+      "samplePixel": [
+        716,
+        173
+      ],
+      "safeRadiusPixels": 15.524,
+      "largeArea": true
+    },
+    {
+      "id": 66,
+      "sourceComponentId": 156,
+      "bboxPixels": [
+        562,
+        159,
+        57,
+        48
+      ],
+      "samplePixel": [
+        592,
+        175
+      ],
+      "safeRadiusPixels": 16.279,
+      "largeArea": true
+    },
+    {
+      "id": 67,
+      "sourceComponentId": 158,
+      "bboxPixels": [
+        457,
+        160,
+        58,
+        49
+      ],
+      "samplePixel": [
+        481,
+        176
+      ],
+      "safeRadiusPixels": 16.279,
+      "largeArea": true
+    },
+    {
+      "id": 68,
+      "sourceComponentId": 165,
+      "bboxPixels": [
+        346,
+        173,
+        113,
+        83
+      ],
+      "samplePixel": [
+        430,
+        176
+      ],
+      "safeRadiusPixels": 2.828,
+      "largeArea": false
+    },
+    {
+      "id": 69,
+      "sourceComponentId": 166,
+      "bboxPixels": [
+        615,
+        173,
+        115,
+        84
+      ],
+      "samplePixel": [
+        721,
+        248
+      ],
+      "safeRadiusPixels": 2.236,
+      "largeArea": false
+    },
+    {
+      "id": 70,
+      "sourceComponentId": 171,
+      "bboxPixels": [
+        619,
+        177,
+        106,
+        76
+      ],
+      "samplePixel": [
+        691,
+        188
+      ],
+      "safeRadiusPixels": 5.0,
+      "largeArea": true
+    },
+    {
+      "id": 71,
+      "sourceComponentId": 173,
+      "bboxPixels": [
+        351,
+        179,
+        105,
+        72
+      ],
+      "samplePixel": [
+        393,
+        184
+      ],
+      "safeRadiusPixels": 3.162,
+      "largeArea": false
+    },
+    {
+      "id": 72,
+      "sourceComponentId": 174,
+      "bboxPixels": [
+        821,
+        179,
+        29,
+        21
+      ],
+      "samplePixel": [
+        836,
+        182
+      ],
+      "safeRadiusPixels": 3.162,
+      "largeArea": false
+    },
+    {
+      "id": 73,
+      "sourceComponentId": 175,
+      "bboxPixels": [
+        176,
+        180,
+        58,
+        57
+      ],
+      "samplePixel": [
+        179,
+        219
+      ],
+      "safeRadiusPixels": 4.0,
+      "largeArea": false
+    },
+    {
+      "id": 74,
+      "sourceComponentId": 179,
+      "bboxPixels": [
+        359,
+        186,
+        92,
+        58
+      ],
+      "samplePixel": [
+        439,
+        194
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 75,
+      "sourceComponentId": 180,
+      "bboxPixels": [
+        845,
+        186,
+        52,
+        56
+      ],
+      "samplePixel": [
+        862,
+        189
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 76,
+      "sourceComponentId": 182,
+      "bboxPixels": [
+        624,
+        187,
+        93,
+        63
+      ],
+      "samplePixel": [
+        678,
+        192
+      ],
+      "safeRadiusPixels": 3.162,
+      "largeArea": false
+    },
+    {
+      "id": 77,
+      "sourceComponentId": 183,
+      "bboxPixels": [
+        184,
+        188,
+        48,
+        48
+      ],
+      "samplePixel": [
+        208,
+        195
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 78,
+      "sourceComponentId": 184,
+      "bboxPixels": [
+        257,
+        188,
+        15,
+        48
+      ],
+      "samplePixel": [
+        261,
+        192
+      ],
+      "safeRadiusPixels": 3.162,
+      "largeArea": false
+    },
+    {
+      "id": 79,
+      "sourceComponentId": 186,
+      "bboxPixels": [
+        185,
+        189,
+        77,
+        77
+      ],
+      "samplePixel": [
+        205,
+        222
+      ],
+      "safeRadiusPixels": 13.0,
+      "largeArea": true
+    },
+    {
+      "id": 80,
+      "sourceComponentId": 190,
+      "bboxPixels": [
+        802,
+        191,
+        17,
+        44
+      ],
+      "samplePixel": [
+        812,
+        196
+      ],
+      "safeRadiusPixels": 3.162,
+      "largeArea": false
+    },
+    {
+      "id": 81,
+      "sourceComponentId": 191,
+      "bboxPixels": [
+        845,
+        193,
+        44,
+        47
+      ],
+      "samplePixel": [
+        860,
+        197
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 82,
+      "sourceComponentId": 192,
+      "bboxPixels": [
+        363,
+        194,
+        81,
+        52
+      ],
+      "samplePixel": [
+        376,
+        214
+      ],
+      "safeRadiusPixels": 5.385,
+      "largeArea": true
+    },
+    {
+      "id": 83,
+      "sourceComponentId": 193,
+      "bboxPixels": [
+        630,
+        194,
+        80,
+        51
+      ],
+      "samplePixel": [
+        652,
+        198
+      ],
+      "safeRadiusPixels": 5.0,
+      "largeArea": true
+    },
+    {
+      "id": 84,
+      "sourceComponentId": 195,
+      "bboxPixels": [
+        813,
+        195,
+        74,
+        73
+      ],
+      "samplePixel": [
+        852,
+        213
+      ],
+      "safeRadiusPixels": 12.728,
+      "largeArea": true
+    },
+    {
+      "id": 85,
+      "sourceComponentId": 199,
+      "bboxPixels": [
+        572,
+        199,
+        42,
+        66
+      ],
+      "samplePixel": [
+        588,
+        203
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 86,
+      "sourceComponentId": 202,
+      "bboxPixels": [
+        383,
+        200,
+        40,
+        30
+      ],
+      "samplePixel": [
+        416,
+        203
+      ],
+      "safeRadiusPixels": 2.828,
+      "largeArea": false
+    },
+    {
+      "id": 87,
+      "sourceComponentId": 203,
+      "bboxPixels": [
+        458,
+        200,
+        45,
+        65
+      ],
+      "samplePixel": [
+        491,
+        208
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 88,
+      "sourceComponentId": 204,
+      "bboxPixels": [
+        652,
+        201,
+        41,
+        29
+      ],
+      "samplePixel": [
+        669,
+        205
+      ],
+      "safeRadiusPixels": 2.828,
+      "largeArea": false
+    },
+    {
+      "id": 89,
+      "sourceComponentId": 207,
+      "bboxPixels": [
+        387,
+        206,
+        33,
+        22
+      ],
+      "samplePixel": [
+        406,
+        208
+      ],
+      "safeRadiusPixels": 3.0,
+      "largeArea": false
+    },
+    {
+      "id": 90,
+      "sourceComponentId": 208,
+      "bboxPixels": [
+        457,
+        206,
+        38,
+        52
+      ],
+      "samplePixel": [
+        491,
+        221
+      ],
+      "safeRadiusPixels": 3.0,
+      "largeArea": false
+    },
+    {
+      "id": 91,
+      "sourceComponentId": 209,
+      "bboxPixels": [
+        580,
+        206,
+        37,
+        52
+      ],
+      "samplePixel": [
+        585,
+        231
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 92,
+      "sourceComponentId": 215,
+      "bboxPixels": [
+        436,
+        211,
+        51,
+        42
+      ],
+      "samplePixel": [
+        473,
+        225
+      ],
+      "safeRadiusPixels": 12.53,
+      "largeArea": true
+    },
+    {
+      "id": 93,
+      "sourceComponentId": 216,
+      "bboxPixels": [
+        588,
+        211,
+        51,
+        40
+      ],
+      "samplePixel": [
+        602,
+        222
+      ],
+      "safeRadiusPixels": 12.0,
+      "largeArea": true
+    },
+    {
+      "id": 94,
+      "sourceComponentId": 217,
+      "bboxPixels": [
+        284,
+        212,
+        60,
+        83
+      ],
+      "samplePixel": [
+        289,
+        251
+      ],
+      "safeRadiusPixels": 4.0,
+      "largeArea": true
+    },
+    {
+      "id": 95,
+      "sourceComponentId": 218,
+      "bboxPixels": [
+        384,
+        213,
+        49,
+        35
+      ],
+      "samplePixel": [
+        404,
+        221
+      ],
+      "safeRadiusPixels": 7.81,
+      "largeArea": true
+    },
+    {
+      "id": 96,
+      "sourceComponentId": 220,
+      "bboxPixels": [
+        642,
+        213,
+        50,
+        35
+      ],
+      "samplePixel": [
+        668,
+        221
+      ],
+      "safeRadiusPixels": 7.0,
+      "largeArea": true
+    },
+    {
+      "id": 97,
+      "sourceComponentId": 221,
+      "bboxPixels": [
+        732,
+        216,
+        59,
+        81
+      ],
+      "samplePixel": [
+        783,
+        263
+      ],
+      "safeRadiusPixels": 4.0,
+      "largeArea": true
+    },
+    {
+      "id": 98,
+      "sourceComponentId": 222,
+      "bboxPixels": [
+        292,
+        217,
+        53,
+        72
+      ],
+      "samplePixel": [
+        308,
+        221
+      ],
+      "safeRadiusPixels": 3.162,
+      "largeArea": false
+    },
+    {
+      "id": 99,
+      "sourceComponentId": 224,
+      "bboxPixels": [
+        514,
+        218,
+        52,
+        32
+      ],
+      "samplePixel": [
+        526,
+        225
+      ],
+      "safeRadiusPixels": 4.0,
+      "largeArea": false
+    },
+    {
+      "id": 100,
+      "sourceComponentId": 228,
+      "bboxPixels": [
+        218,
+        222,
+        30,
+        30
+      ],
+      "samplePixel": [
+        224,
+        226
+      ],
+      "safeRadiusPixels": 4.472,
+      "largeArea": false
+    },
+    {
+      "id": 101,
+      "sourceComponentId": 229,
+      "bboxPixels": [
+        371,
+        222,
+        32,
+        31
+      ],
+      "samplePixel": [
+        373,
+        232
+      ],
+      "safeRadiusPixels": 3.0,
+      "largeArea": false
+    },
+    {
+      "id": 102,
+      "sourceComponentId": 237,
+      "bboxPixels": [
+        732,
+        223,
+        51,
+        68
+      ],
+      "samplePixel": [
+        772,
+        232
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 103,
+      "sourceComponentId": 238,
+      "bboxPixels": [
+        299,
+        224,
+        51,
+        58
+      ],
+      "samplePixel": [
+        316,
+        241
+      ],
+      "safeRadiusPixels": 16.492,
+      "largeArea": true
+    },
+    {
+      "id": 104,
+      "sourceComponentId": 240,
+      "bboxPixels": [
+        398,
+        225,
+        24,
+        21
+      ],
+      "samplePixel": [
+        411,
+        232
+      ],
+      "safeRadiusPixels": 3.0,
+      "largeArea": false
+    },
+    {
+      "id": 105,
+      "sourceComponentId": 243,
+      "bboxPixels": [
+        518,
+        225,
+        43,
+        23
+      ],
+      "samplePixel": [
+        548,
+        232
+      ],
+      "safeRadiusPixels": 3.162,
+      "largeArea": false
+    },
+    {
+      "id": 106,
+      "sourceComponentId": 245,
+      "bboxPixels": [
+        653,
+        225,
+        24,
+        23
+      ],
+      "samplePixel": [
+        665,
+        233
+      ],
+      "safeRadiusPixels": 3.0,
+      "largeArea": false
+    },
+    {
+      "id": 107,
+      "sourceComponentId": 248,
+      "bboxPixels": [
+        825,
+        226,
+        30,
+        31
+      ],
+      "samplePixel": [
+        850,
+        233
+      ],
+      "safeRadiusPixels": 4.243,
+      "largeArea": false
+    },
+    {
+      "id": 108,
+      "sourceComponentId": 251,
+      "bboxPixels": [
+        725,
+        227,
+        49,
+        57
+      ],
+      "samplePixel": [
+        757,
+        249
+      ],
+      "safeRadiusPixels": 17.0,
+      "largeArea": true
+    },
+    {
+      "id": 109,
+      "sourceComponentId": 262,
+      "bboxPixels": [
+        515,
+        233,
+        50,
+        39
+      ],
+      "samplePixel": [
+        539,
+        242
+      ],
+      "safeRadiusPixels": 8.0,
+      "largeArea": true
+    },
+    {
+      "id": 110,
+      "sourceComponentId": 279,
+      "bboxPixels": [
+        234,
+        238,
+        51,
+        52
+      ],
+      "samplePixel": [
+        246,
+        251
+      ],
+      "safeRadiusPixels": 9.22,
+      "largeArea": true
+    },
+    {
+      "id": 111,
+      "sourceComponentId": 284,
+      "bboxPixels": [
+        390,
+        238,
+        67,
+        54
+      ],
+      "samplePixel": [
+        453,
+        265
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 112,
+      "sourceComponentId": 285,
+      "bboxPixels": [
+        501,
+        238,
+        30,
+        36
+      ],
+      "samplePixel": [
+        505,
+        243
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 113,
+      "sourceComponentId": 290,
+      "bboxPixels": [
+        616,
+        239,
+        67,
+        54
+      ],
+      "samplePixel": [
+        619,
+        265
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 114,
+      "sourceComponentId": 294,
+      "bboxPixels": [
+        396,
+        240,
+        53,
+        45
+      ],
+      "samplePixel": [
+        445,
+        256
+      ],
+      "safeRadiusPixels": 3.0,
+      "largeArea": false
+    },
+    {
+      "id": 115,
+      "sourceComponentId": 299,
+      "bboxPixels": [
+        624,
+        241,
+        54,
+        47
+      ],
+      "samplePixel": [
+        627,
+        262
+      ],
+      "safeRadiusPixels": 3.162,
+      "largeArea": false
+    },
+    {
+      "id": 116,
+      "sourceComponentId": 308,
+      "bboxPixels": [
+        402,
+        243,
+        39,
+        36
+      ],
+      "samplePixel": [
+        412,
+        267
+      ],
+      "safeRadiusPixels": 9.22,
+      "largeArea": true
+    },
+    {
+      "id": 117,
+      "sourceComponentId": 311,
+      "bboxPixels": [
+        632,
+        243,
+        43,
+        37
+      ],
+      "samplePixel": [
+        662,
+        269
+      ],
+      "safeRadiusPixels": 10.296,
+      "largeArea": true
+    },
+    {
+      "id": 118,
+      "sourceComponentId": 313,
+      "bboxPixels": [
+        789,
+        243,
+        50,
+        50
+      ],
+      "samplePixel": [
+        825,
+        253
+      ],
+      "safeRadiusPixels": 9.0,
+      "largeArea": true
+    },
+    {
+      "id": 119,
+      "sourceComponentId": 325,
+      "bboxPixels": [
+        330,
+        249,
+        66,
+        49
+      ],
+      "samplePixel": [
+        391,
+        292
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 120,
+      "sourceComponentId": 330,
+      "bboxPixels": [
+        336,
+        252,
+        55,
+        40
+      ],
+      "samplePixel": [
+        374,
+        287
+      ],
+      "safeRadiusPixels": 3.162,
+      "largeArea": false
+    },
+    {
+      "id": 121,
+      "sourceComponentId": 332,
+      "bboxPixels": [
+        678,
+        252,
+        66,
+        47
+      ],
+      "samplePixel": [
+        739,
+        285
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 122,
+      "sourceComponentId": 333,
+      "bboxPixels": [
+        343,
+        254,
+        51,
+        30
+      ],
+      "samplePixel": [
+        357,
+        269
+      ],
+      "safeRadiusPixels": 12.53,
+      "largeArea": true
+    },
+    {
+      "id": 123,
+      "sourceComponentId": 335,
+      "bboxPixels": [
+        680,
+        254,
+        49,
+        33
+      ],
+      "samplePixel": [
+        715,
+        273
+      ],
+      "safeRadiusPixels": 12.53,
+      "largeArea": true
+    },
+    {
+      "id": 124,
+      "sourceComponentId": 336,
+      "bboxPixels": [
+        682,
+        254,
+        54,
+        39
+      ],
+      "samplePixel": [
+        733,
+        272
+      ],
+      "safeRadiusPixels": 3.0,
+      "largeArea": false
+    },
+    {
+      "id": 125,
+      "sourceComponentId": 340,
+      "bboxPixels": [
+        183,
+        259,
+        45,
+        17
+      ],
+      "samplePixel": [
+        186,
+        263
+      ],
+      "safeRadiusPixels": 3.162,
+      "largeArea": false
+    },
+    {
+      "id": 126,
+      "sourceComponentId": 349,
+      "bboxPixels": [
+        836,
+        265,
+        53,
+        15
+      ],
+      "samplePixel": [
+        884,
+        268
+      ],
+      "safeRadiusPixels": 3.162,
+      "largeArea": false
+    },
+    {
+      "id": 127,
+      "sourceComponentId": 355,
+      "bboxPixels": [
+        559,
+        268,
+        87,
+        57
+      ],
+      "samplePixel": [
+        586,
+        292
+      ],
+      "safeRadiusPixels": 5.385,
+      "largeArea": true
+    },
+    {
+      "id": 128,
+      "sourceComponentId": 356,
+      "bboxPixels": [
+        264,
+        269,
+        165,
+        147
+      ],
+      "samplePixel": [
+        306,
+        381
+      ],
+      "safeRadiusPixels": 13.416,
+      "largeArea": true
+    },
+    {
+      "id": 129,
+      "sourceComponentId": 367,
+      "bboxPixels": [
+        664,
+        274,
+        145,
+        163
+      ],
+      "samplePixel": [
+        698,
+        314
+      ],
+      "safeRadiusPixels": 13.342,
+      "largeArea": true
+    },
+    {
+      "id": 130,
+      "sourceComponentId": 368,
+      "bboxPixels": [
+        447,
+        275,
+        13,
+        47
+      ],
+      "samplePixel": [
+        453,
+        284
+      ],
+      "safeRadiusPixels": 5.385,
+      "largeArea": false
+    },
+    {
+      "id": 131,
+      "sourceComponentId": 372,
+      "bboxPixels": [
+        102,
+        280,
+        45,
+        48
+      ],
+      "samplePixel": [
+        110,
+        295
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 132,
+      "sourceComponentId": 373,
+      "bboxPixels": [
+        459,
+        280,
+        123,
+        26
+      ],
+      "samplePixel": [
+        524,
+        287
+      ],
+      "safeRadiusPixels": 8.0,
+      "largeArea": true
+    },
+    {
+      "id": 133,
+      "sourceComponentId": 374,
+      "bboxPixels": [
+        358,
+        281,
+        89,
+        61
+      ],
+      "samplePixel": [
+        410,
+        335
+      ],
+      "safeRadiusPixels": 6.0,
+      "largeArea": true
+    },
+    {
+      "id": 134,
+      "sourceComponentId": 379,
+      "bboxPixels": [
+        110,
+        286,
+        37,
+        40
+      ],
+      "samplePixel": [
+        125,
+        293
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 135,
+      "sourceComponentId": 380,
+      "bboxPixels": [
+        205,
+        286,
+        85,
+        64
+      ],
+      "samplePixel": [
+        250,
+        292
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 136,
+      "sourceComponentId": 381,
+      "bboxPixels": [
+        591,
+        286,
+        42,
+        26
+      ],
+      "samplePixel": [
+        606,
+        297
+      ],
+      "safeRadiusPixels": 8.0,
+      "largeArea": false
+    },
+    {
+      "id": 137,
+      "sourceComponentId": 383,
+      "bboxPixels": [
+        920,
+        286,
+        44,
+        44
+      ],
+      "samplePixel": [
+        942,
+        290
+      ],
+      "safeRadiusPixels": 4.0,
+      "largeArea": false
+    },
+    {
+      "id": 138,
+      "sourceComponentId": 384,
+      "bboxPixels": [
+        115,
+        288,
+        60,
+        60
+      ],
+      "samplePixel": [
+        132,
+        312
+      ],
+      "safeRadiusPixels": 13.342,
+      "largeArea": true
+    },
+    {
+      "id": 139,
+      "sourceComponentId": 387,
+      "bboxPixels": [
+        892,
+        292,
+        63,
+        61
+      ],
+      "samplePixel": [
+        935,
+        313
+      ],
+      "safeRadiusPixels": 11.314,
+      "largeArea": true
+    },
+    {
+      "id": 140,
+      "sourceComponentId": 388,
+      "bboxPixels": [
+        631,
+        293,
+        37,
+        31
+      ],
+      "samplePixel": [
+        649,
+        312
+      ],
+      "safeRadiusPixels": 5.831,
+      "largeArea": false
+    },
+    {
+      "id": 141,
+      "sourceComponentId": 389,
+      "bboxPixels": [
+        784,
+        293,
+        83,
+        59
+      ],
+      "samplePixel": [
+        826,
+        296
+      ],
+      "safeRadiusPixels": 3.162,
+      "largeArea": false
+    },
+    {
+      "id": 142,
+      "sourceComponentId": 390,
+      "bboxPixels": [
+        212,
+        294,
+        71,
+        57
+      ],
+      "samplePixel": [
+        228,
+        301
+      ],
+      "safeRadiusPixels": 5.385,
+      "largeArea": true
+    },
+    {
+      "id": 143,
+      "sourceComponentId": 392,
+      "bboxPixels": [
+        924,
+        294,
+        33,
+        36
+      ],
+      "samplePixel": [
+        950,
+        305
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 144,
+      "sourceComponentId": 394,
+      "bboxPixels": [
+        287,
+        299,
+        495,
+        495
+      ],
+      "samplePixel": [
+        304,
+        543
+      ],
+      "safeRadiusPixels": 17.692,
+      "largeArea": true
+    },
+    {
+      "id": 145,
+      "sourceComponentId": 396,
+      "bboxPixels": [
+        791,
+        300,
+        68,
+        51
+      ],
+      "samplePixel": [
+        823,
+        306
+      ],
+      "safeRadiusPixels": 3.162,
+      "largeArea": false
+    },
+    {
+      "id": 146,
+      "sourceComponentId": 398,
+      "bboxPixels": [
+        394,
+        302,
+        40,
+        25
+      ],
+      "samplePixel": [
+        424,
+        312
+      ],
+      "safeRadiusPixels": 7.28,
+      "largeArea": false
+    },
+    {
+      "id": 147,
+      "sourceComponentId": 400,
+      "bboxPixels": [
+        299,
+        304,
+        44,
+        43
+      ],
+      "samplePixel": [
+        328,
+        306
+      ],
+      "safeRadiusPixels": 3.0,
+      "largeArea": false
+    },
+    {
+      "id": 148,
+      "sourceComponentId": 402,
+      "bboxPixels": [
+        131,
+        306,
+        74,
+        84
+      ],
+      "samplePixel": [
+        139,
+        345
+      ],
+      "safeRadiusPixels": 4.123,
+      "largeArea": true
+    },
+    {
+      "id": 149,
+      "sourceComponentId": 403,
+      "bboxPixels": [
+        221,
+        306,
+        55,
+        50
+      ],
+      "samplePixel": [
+        240,
+        322
+      ],
+      "safeRadiusPixels": 16.763,
+      "largeArea": true
+    },
+    {
+      "id": 150,
+      "sourceComponentId": 404,
+      "bboxPixels": [
+        734,
+        307,
+        40,
+        44
+      ],
+      "samplePixel": [
+        754,
+        313
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 151,
+      "sourceComponentId": 405,
+      "bboxPixels": [
+        713,
+        308,
+        23,
+        44
+      ],
+      "samplePixel": [
+        725,
+        310
+      ],
+      "safeRadiusPixels": 3.0,
+      "largeArea": false
+    },
+    {
+      "id": 152,
+      "sourceComponentId": 406,
+      "bboxPixels": [
+        796,
+        308,
+        57,
+        49
+      ],
+      "samplePixel": [
+        835,
+        325
+      ],
+      "safeRadiusPixels": 16.971,
+      "largeArea": true
+    },
+    {
+      "id": 153,
+      "sourceComponentId": 407,
+      "bboxPixels": [
+        306,
+        310,
+        35,
+        36
+      ],
+      "samplePixel": [
+        329,
+        313
+      ],
+      "safeRadiusPixels": 3.162,
+      "largeArea": false
+    },
+    {
+      "id": 154,
+      "sourceComponentId": 410,
+      "bboxPixels": [
+        866,
+        310,
+        72,
+        71
+      ],
+      "samplePixel": [
+        872,
+        312
+      ],
+      "safeRadiusPixels": 3.0,
+      "largeArea": false
+    },
+    {
+      "id": 155,
+      "sourceComponentId": 411,
+      "bboxPixels": [
+        140,
+        313,
+        64,
+        73
+      ],
+      "samplePixel": [
+        143,
+        360
+      ],
+      "safeRadiusPixels": 4.0,
+      "largeArea": true
+    },
+    {
+      "id": 156,
+      "sourceComponentId": 412,
+      "bboxPixels": [
+        649,
+        313,
+        97,
+        92
+      ],
+      "samplePixel": [
+        668,
+        324
+      ],
+      "safeRadiusPixels": 7.81,
+      "largeArea": true
+    },
+    {
+      "id": 157,
+      "sourceComponentId": 414,
+      "bboxPixels": [
+        735,
+        314,
+        32,
+        34
+      ],
+      "samplePixel": [
+        743,
+        316
+      ],
+      "safeRadiusPixels": 3.0,
+      "largeArea": false
+    },
+    {
+      "id": 158,
+      "sourceComponentId": 416,
+      "bboxPixels": [
+        311,
+        316,
+        41,
+        41
+      ],
+      "samplePixel": [
+        323,
+        330
+      ],
+      "safeRadiusPixels": 9.22,
+      "largeArea": true
+    },
+    {
+      "id": 159,
+      "sourceComponentId": 417,
+      "bboxPixels": [
+        868,
+        318,
+        64,
+        63
+      ],
+      "samplePixel": [
+        891,
+        325
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 160,
+      "sourceComponentId": 418,
+      "bboxPixels": [
+        723,
+        319,
+        41,
+        41
+      ],
+      "samplePixel": [
+        752,
+        336
+      ],
+      "safeRadiusPixels": 7.616,
+      "largeArea": true
+    },
+    {
+      "id": 161,
+      "sourceComponentId": 421,
+      "bboxPixels": [
+        148,
+        321,
+        69,
+        62
+      ],
+      "samplePixel": [
+        164,
+        364
+      ],
+      "safeRadiusPixels": 16.031,
+      "largeArea": true
+    },
+    {
+      "id": 162,
+      "sourceComponentId": 427,
+      "bboxPixels": [
+        393,
+        322,
+        145,
+        131
+      ],
+      "samplePixel": [
+        535,
+        347
+      ],
+      "safeRadiusPixels": 3.0,
+      "largeArea": false
+    },
+    {
+      "id": 163,
+      "sourceComponentId": 428,
+      "bboxPixels": [
+        537,
+        322,
+        146,
+        130
+      ],
+      "samplePixel": [
+        677,
+        401
+      ],
+      "safeRadiusPixels": 2.828,
+      "largeArea": false
+    },
+    {
+      "id": 164,
+      "sourceComponentId": 430,
+      "bboxPixels": [
+        857,
+        324,
+        67,
+        66
+      ],
+      "samplePixel": [
+        906,
+        366
+      ],
+      "safeRadiusPixels": 16.492,
+      "largeArea": true
+    },
+    {
+      "id": 165,
+      "sourceComponentId": 435,
+      "bboxPixels": [
+        399,
+        328,
+        133,
+        122
+      ],
+      "samplePixel": [
+        516,
+        336
+      ],
+      "safeRadiusPixels": 8.062,
+      "largeArea": true
+    },
+    {
+      "id": 166,
+      "sourceComponentId": 436,
+      "bboxPixels": [
+        542,
+        328,
+        136,
+        122
+      ],
+      "samplePixel": [
+        670,
+        387
+      ],
+      "safeRadiusPixels": 8.0,
+      "largeArea": true
+    },
+    {
+      "id": 167,
+      "sourceComponentId": 439,
+      "bboxPixels": [
+        304,
+        334,
+        89,
+        95
+      ],
+      "samplePixel": [
+        377,
+        341
+      ],
+      "safeRadiusPixels": 7.071,
+      "largeArea": true
+    },
+    {
+      "id": 168,
+      "sourceComponentId": 442,
+      "bboxPixels": [
+        242,
+        336,
+        49,
+        65
+      ],
+      "samplePixel": [
+        279,
+        340
+      ],
+      "safeRadiusPixels": 3.162,
+      "largeArea": false
+    },
+    {
+      "id": 169,
+      "sourceComponentId": 443,
+      "bboxPixels": [
+        781,
+        336,
+        48,
+        66
+      ],
+      "samplePixel": [
+        796,
+        340
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 170,
+      "sourceComponentId": 449,
+      "bboxPixels": [
+        416,
+        341,
+        106,
+        103
+      ],
+      "samplePixel": [
+        499,
+        352
+      ],
+      "safeRadiusPixels": 11.705,
+      "largeArea": true
+    },
+    {
+      "id": 171,
+      "sourceComponentId": 450,
+      "bboxPixels": [
+        553,
+        341,
+        108,
+        102
+      ],
+      "samplePixel": [
+        574,
+        353
+      ],
+      "safeRadiusPixels": 12.083,
+      "largeArea": true
+    },
+    {
+      "id": 172,
+      "sourceComponentId": 452,
+      "bboxPixels": [
+        246,
+        343,
+        40,
+        53
+      ],
+      "samplePixel": [
+        267,
+        345
+      ],
+      "safeRadiusPixels": 3.0,
+      "largeArea": false
+    },
+    {
+      "id": 173,
+      "sourceComponentId": 454,
+      "bboxPixels": [
+        298,
+        344,
+        47,
+        23
+      ],
+      "samplePixel": [
+        301,
+        356
+      ],
+      "safeRadiusPixels": 2.828,
+      "largeArea": false
+    },
+    {
+      "id": 174,
+      "sourceComponentId": 459,
+      "bboxPixels": [
+        788,
+        345,
+        38,
+        53
+      ],
+      "samplePixel": [
+        801,
+        347
+      ],
+      "safeRadiusPixels": 3.0,
+      "largeArea": false
+    },
+    {
+      "id": 175,
+      "sourceComponentId": 466,
+      "bboxPixels": [
+        246,
+        351,
+        32,
+        47
+      ],
+      "samplePixel": [
+        264,
+        363
+      ],
+      "safeRadiusPixels": 12.083,
+      "largeArea": true
+    },
+    {
+      "id": 176,
+      "sourceComponentId": 467,
+      "bboxPixels": [
+        164,
+        352,
+        84,
+        116
+      ],
+      "samplePixel": [
+        183,
+        372
+      ],
+      "safeRadiusPixels": 2.236,
+      "largeArea": false
+    },
+    {
+      "id": 177,
+      "sourceComponentId": 471,
+      "bboxPixels": [
+        793,
+        352,
+        30,
+        49
+      ],
+      "samplePixel": [
+        806,
+        366
+      ],
+      "safeRadiusPixels": 12.53,
+      "largeArea": true
+    },
+    {
+      "id": 178,
+      "sourceComponentId": 473,
+      "bboxPixels": [
+        822,
+        353,
+        83,
+        116
+      ],
+      "samplePixel": [
+        858,
+        356
+      ],
+      "safeRadiusPixels": 2.236,
+      "largeArea": false
+    },
+    {
+      "id": 179,
+      "sourceComponentId": 480,
+      "bboxPixels": [
+        168,
+        357,
+        76,
+        105
+      ],
+      "samplePixel": [
+        185,
+        382
+      ],
+      "safeRadiusPixels": 4.472,
+      "largeArea": true
+    },
+    {
+      "id": 180,
+      "sourceComponentId": 484,
+      "bboxPixels": [
+        826,
+        359,
+        74,
+        105
+      ],
+      "samplePixel": [
+        888,
+        391
+      ],
+      "safeRadiusPixels": 4.123,
+      "largeArea": true
+    },
+    {
+      "id": 181,
+      "sourceComponentId": 488,
+      "bboxPixels": [
+        177,
+        363,
+        65,
+        91
+      ],
+      "samplePixel": [
+        223,
+        365
+      ],
+      "safeRadiusPixels": 3.0,
+      "largeArea": false
+    },
+    {
+      "id": 182,
+      "sourceComponentId": 490,
+      "bboxPixels": [
+        566,
+        364,
+        69,
+        72
+      ],
+      "samplePixel": [
+        626,
+        390
+      ],
+      "safeRadiusPixels": 8.944,
+      "largeArea": true
+    },
+    {
+      "id": 183,
+      "sourceComponentId": 492,
+      "bboxPixels": [
+        828,
+        367,
+        63,
+        91
+      ],
+      "samplePixel": [
+        887,
+        434
+      ],
+      "safeRadiusPixels": 3.162,
+      "largeArea": false
+    },
+    {
+      "id": 184,
+      "sourceComponentId": 493,
+      "bboxPixels": [
+        445,
+        368,
+        63,
+        67
+      ],
+      "samplePixel": [
+        452,
+        387
+      ],
+      "safeRadiusPixels": 6.403,
+      "largeArea": true
+    },
+    {
+      "id": 185,
+      "sourceComponentId": 494,
+      "bboxPixels": [
+        738,
+        368,
+        60,
+        85
+      ],
+      "samplePixel": [
+        743,
+        429
+      ],
+      "safeRadiusPixels": 5.385,
+      "largeArea": true
+    },
+    {
+      "id": 186,
+      "sourceComponentId": 495,
+      "bboxPixels": [
+        190,
+        370,
+        44,
+        31
+      ],
+      "samplePixel": [
+        210,
+        379
+      ],
+      "safeRadiusPixels": 4.472,
+      "largeArea": false
+    },
+    {
+      "id": 187,
+      "sourceComponentId": 496,
+      "bboxPixels": [
+        832,
+        372,
+        52,
+        80
+      ],
+      "samplePixel": [
+        862,
+        385
+      ],
+      "safeRadiusPixels": 5.831,
+      "largeArea": true
+    },
+    {
+      "id": 188,
+      "sourceComponentId": 501,
+      "bboxPixels": [
+        112,
+        375,
+        25,
+        99
+      ],
+      "samplePixel": [
+        118,
+        452
+      ],
+      "safeRadiusPixels": 4.0,
+      "largeArea": true
+    },
+    {
+      "id": 189,
+      "sourceComponentId": 505,
+      "bboxPixels": [
+        459,
+        379,
+        43,
+        53
+      ],
+      "samplePixel": [
+        483,
+        383
+      ],
+      "safeRadiusPixels": 4.472,
+      "largeArea": true
+    },
+    {
+      "id": 190,
+      "sourceComponentId": 506,
+      "bboxPixels": [
+        826,
+        379,
+        30,
+        33
+      ],
+      "samplePixel": [
+        844,
+        381
+      ],
+      "safeRadiusPixels": 3.0,
+      "largeArea": false
+    },
+    {
+      "id": 191,
+      "sourceComponentId": 508,
+      "bboxPixels": [
+        119,
+        381,
+        23,
+        88
+      ],
+      "samplePixel": [
+        126,
+        440
+      ],
+      "safeRadiusPixels": 4.0,
+      "largeArea": false
+    },
+    {
+      "id": 192,
+      "sourceComponentId": 511,
+      "bboxPixels": [
+        576,
+        382,
+        41,
+        50
+      ],
+      "samplePixel": [
+        590,
+        387
+      ],
+      "safeRadiusPixels": 4.123,
+      "largeArea": false
+    },
+    {
+      "id": 193,
+      "sourceComponentId": 512,
+      "bboxPixels": [
+        901,
+        382,
+        56,
+        95
+      ],
+      "samplePixel": [
+        948,
+        394
+      ],
+      "safeRadiusPixels": 3.162,
+      "largeArea": false
+    },
+    {
+      "id": 194,
+      "sourceComponentId": 516,
+      "bboxPixels": [
+        127,
+        386,
+        42,
+        77
+      ],
+      "samplePixel": [
+        143,
+        405
+      ],
+      "safeRadiusPixels": 16.763,
+      "largeArea": true
+    },
+    {
+      "id": 195,
+      "sourceComponentId": 517,
+      "bboxPixels": [
+        192,
+        386,
+        27,
+        43
+      ],
+      "samplePixel": [
+        199,
+        398
+      ],
+      "safeRadiusPixels": 2.828,
+      "largeArea": false
+    },
+    {
+      "id": 196,
+      "sourceComponentId": 519,
+      "bboxPixels": [
+        204,
+        388,
+        36,
+        48
+      ],
+      "samplePixel": [
+        212,
+        409
+      ],
+      "safeRadiusPixels": 7.071,
+      "largeArea": true
+    },
+    {
+      "id": 197,
+      "sourceComponentId": 520,
+      "bboxPixels": [
+        469,
+        388,
+        28,
+        42
+      ],
+      "samplePixel": [
+        477,
+        392
+      ],
+      "safeRadiusPixels": 4.472,
+      "largeArea": false
+    },
+    {
+      "id": 198,
+      "sourceComponentId": 521,
+      "bboxPixels": [
+        902,
+        388,
+        47,
+        84
+      ],
+      "samplePixel": [
+        938,
+        395
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 199,
+      "sourceComponentId": 524,
+      "bboxPixels": [
+        581,
+        390,
+        27,
+        39
+      ],
+      "samplePixel": [
+        598,
+        394
+      ],
+      "safeRadiusPixels": 5.0,
+      "largeArea": false
+    },
+    {
+      "id": 200,
+      "sourceComponentId": 527,
+      "bboxPixels": [
+        74,
+        391,
+        46,
+        70
+      ],
+      "samplePixel": [
+        87,
+        425
+      ],
+      "safeRadiusPixels": 12.0,
+      "largeArea": true
+    },
+    {
+      "id": 201,
+      "sourceComponentId": 529,
+      "bboxPixels": [
+        847,
+        391,
+        30,
+        41
+      ],
+      "samplePixel": [
+        874,
+        415
+      ],
+      "safeRadiusPixels": 2.828,
+      "largeArea": false
+    },
+    {
+      "id": 202,
+      "sourceComponentId": 530,
+      "bboxPixels": [
+        832,
+        393,
+        34,
+        49
+      ],
+      "samplePixel": [
+        856,
+        411
+      ],
+      "safeRadiusPixels": 7.0,
+      "largeArea": true
+    },
+    {
+      "id": 203,
+      "sourceComponentId": 531,
+      "bboxPixels": [
+        949,
+        394,
+        47,
+        69
+      ],
+      "samplePixel": [
+        980,
+        423
+      ],
+      "safeRadiusPixels": 11.662,
+      "largeArea": true
+    },
+    {
+      "id": 204,
+      "sourceComponentId": 532,
+      "bboxPixels": [
+        230,
+        395,
+        56,
+        68
+      ],
+      "samplePixel": [
+        276,
+        401
+      ],
+      "safeRadiusPixels": 2.828,
+      "largeArea": false
+    },
+    {
+      "id": 205,
+      "sourceComponentId": 533,
+      "bboxPixels": [
+        898,
+        395,
+        43,
+        72
+      ],
+      "samplePixel": [
+        924,
+        411
+      ],
+      "safeRadiusPixels": 16.125,
+      "largeArea": true
+    },
+    {
+      "id": 206,
+      "sourceComponentId": 535,
+      "bboxPixels": [
+        786,
+        397,
+        53,
+        69
+      ],
+      "samplePixel": [
+        813,
+        462
+      ],
+      "safeRadiusPixels": 4.0,
+      "largeArea": false
+    },
+    {
+      "id": 207,
+      "sourceComponentId": 536,
+      "bboxPixels": [
+        54,
+        398,
+        31,
+        53
+      ],
+      "samplePixel": [
+        70,
+        402
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 208,
+      "sourceComponentId": 538,
+      "bboxPixels": [
+        316,
+        398,
+        130,
+        146
+      ],
+      "samplePixel": [
+        381,
+        400
+      ],
+      "safeRadiusPixels": 3.0,
+      "largeArea": false
+    },
+    {
+      "id": 209,
+      "sourceComponentId": 541,
+      "bboxPixels": [
+        233,
+        400,
+        47,
+        57
+      ],
+      "samplePixel": [
+        260,
+        451
+      ],
+      "safeRadiusPixels": 3.162,
+      "largeArea": false
+    },
+    {
+      "id": 210,
+      "sourceComponentId": 543,
+      "bboxPixels": [
+        631,
+        401,
+        125,
+        146
+      ],
+      "samplePixel": [
+        684,
+        404
+      ],
+      "safeRadiusPixels": 2.236,
+      "largeArea": false
+    },
+    {
+      "id": 211,
+      "sourceComponentId": 545,
+      "bboxPixels": [
+        184,
+        402,
+        31,
+        50
+      ],
+      "samplePixel": [
+        188,
+        424
+      ],
+      "safeRadiusPixels": 5.0,
+      "largeArea": false
+    },
+    {
+      "id": 212,
+      "sourceComponentId": 546,
+      "bboxPixels": [
+        217,
+        402,
+        23,
+        26
+      ],
+      "samplePixel": [
+        225,
+        415
+      ],
+      "safeRadiusPixels": 3.0,
+      "largeArea": false
+    },
+    {
+      "id": 213,
+      "sourceComponentId": 548,
+      "bboxPixels": [
+        752,
+        402,
+        26,
+        42
+      ],
+      "samplePixel": [
+        762,
+        423
+      ],
+      "safeRadiusPixels": 7.81,
+      "largeArea": false
+    },
+    {
+      "id": 214,
+      "sourceComponentId": 549,
+      "bboxPixels": [
+        63,
+        403,
+        25,
+        44
+      ],
+      "samplePixel": [
+        71,
+        416
+      ],
+      "safeRadiusPixels": 4.123,
+      "largeArea": false
+    },
+    {
+      "id": 215,
+      "sourceComponentId": 550,
+      "bboxPixels": [
+        980,
+        403,
+        33,
+        50
+      ],
+      "samplePixel": [
+        1003,
+        414
+      ],
+      "safeRadiusPixels": 3.0,
+      "largeArea": false
+    },
+    {
+      "id": 216,
+      "sourceComponentId": 551,
+      "bboxPixels": [
+        792,
+        404,
+        45,
+        54
+      ],
+      "samplePixel": [
+        797,
+        411
+      ],
+      "safeRadiusPixels": 4.123,
+      "largeArea": false
+    },
+    {
+      "id": 217,
+      "sourceComponentId": 552,
+      "bboxPixels": [
+        320,
+        405,
+        123,
+        135
+      ],
+      "samplePixel": [
+        329,
+        523
+      ],
+      "safeRadiusPixels": 7.81,
+      "largeArea": true
+    },
+    {
+      "id": 218,
+      "sourceComponentId": 554,
+      "bboxPixels": [
+        235,
+        406,
+        38,
+        43
+      ],
+      "samplePixel": [
+        262,
+        418
+      ],
+      "safeRadiusPixels": 10.296,
+      "largeArea": true
+    },
+    {
+      "id": 219,
+      "sourceComponentId": 555,
+      "bboxPixels": [
+        634,
+        406,
+        118,
+        137
+      ],
+      "samplePixel": [
+        687,
+        415
+      ],
+      "safeRadiusPixels": 8.062,
+      "largeArea": true
+    },
+    {
+      "id": 220,
+      "sourceComponentId": 556,
+      "bboxPixels": [
+        831,
+        406,
+        22,
+        25
+      ],
+      "samplePixel": [
+        844,
+        408
+      ],
+      "safeRadiusPixels": 2.828,
+      "largeArea": false
+    },
+    {
+      "id": 221,
+      "sourceComponentId": 557,
+      "bboxPixels": [
+        981,
+        406,
+        24,
+        41
+      ],
+      "samplePixel": [
+        998,
+        432
+      ],
+      "safeRadiusPixels": 4.123,
+      "largeArea": false
+    },
+    {
+      "id": 222,
+      "sourceComponentId": 559,
+      "bboxPixels": [
+        801,
+        408,
+        35,
+        42
+      ],
+      "samplePixel": [
+        811,
+        419
+      ],
+      "safeRadiusPixels": 10.296,
+      "largeArea": true
+    },
+    {
+      "id": 223,
+      "sourceComponentId": 561,
+      "bboxPixels": [
+        287,
+        412,
+        29,
+        38
+      ],
+      "samplePixel": [
+        295,
+        421
+      ],
+      "safeRadiusPixels": 5.657,
+      "largeArea": false
+    },
+    {
+      "id": 224,
+      "sourceComponentId": 567,
+      "bboxPixels": [
+        411,
+        418,
+        256,
+        256
+      ],
+      "samplePixel": [
+        661,
+        539
+      ],
+      "safeRadiusPixels": 6.0,
+      "largeArea": true
+    },
+    {
+      "id": 225,
+      "sourceComponentId": 569,
+      "bboxPixels": [
+        334,
+        421,
+        104,
+        109
+      ],
+      "samplePixel": [
+        347,
+        510
+      ],
+      "safeRadiusPixels": 12.649,
+      "largeArea": true
+    },
+    {
+      "id": 226,
+      "sourceComponentId": 574,
+      "bboxPixels": [
+        640,
+        424,
+        98,
+        107
+      ],
+      "samplePixel": [
+        695,
+        436
+      ],
+      "safeRadiusPixels": 12.369,
+      "largeArea": true
+    },
+    {
+      "id": 227,
+      "sourceComponentId": 581,
+      "bboxPixels": [
+        194,
+        428,
+        35,
+        19
+      ],
+      "samplePixel": [
+        203,
+        434
+      ],
+      "safeRadiusPixels": 3.0,
+      "largeArea": false
+    },
+    {
+      "id": 228,
+      "sourceComponentId": 587,
+      "bboxPixels": [
+        422,
+        430,
+        233,
+        233
+      ],
+      "samplePixel": [
+        524,
+        655
+      ],
+      "safeRadiusPixels": 7.28,
+      "largeArea": true
+    },
+    {
+      "id": 229,
+      "sourceComponentId": 597,
+      "bboxPixels": [
+        259,
+        434,
+        58,
+        89
+      ],
+      "samplePixel": [
+        281,
+        495
+      ],
+      "safeRadiusPixels": 5.831,
+      "largeArea": true
+    },
+    {
+      "id": 230,
+      "sourceComponentId": 610,
+      "bboxPixels": [
+        202,
+        441,
+        41,
+        52
+      ],
+      "samplePixel": [
+        214,
+        479
+      ],
+      "safeRadiusPixels": 11.402,
+      "largeArea": true
+    },
+    {
+      "id": 231,
+      "sourceComponentId": 613,
+      "bboxPixels": [
+        827,
+        442,
+        40,
+        53
+      ],
+      "samplePixel": [
+        853,
+        481
+      ],
+      "safeRadiusPixels": 12.042,
+      "largeArea": true
+    },
+    {
+      "id": 232,
+      "sourceComponentId": 615,
+      "bboxPixels": [
+        437,
+        443,
+        203,
+        204
+      ],
+      "samplePixel": [
+        538,
+        544
+      ],
+      "safeRadiusPixels": 101.178,
+      "largeArea": true
+    },
+    {
+      "id": 233,
+      "sourceComponentId": 619,
+      "bboxPixels": [
+        151,
+        446,
+        135,
+        180
+      ],
+      "samplePixel": [
+        257,
+        590
+      ],
+      "safeRadiusPixels": 13.601,
+      "largeArea": true
+    },
+    {
+      "id": 234,
+      "sourceComponentId": 620,
+      "bboxPixels": [
+        357,
+        446,
+        74,
+        72
+      ],
+      "samplePixel": [
+        383,
+        454
+      ],
+      "safeRadiusPixels": 8.544,
+      "largeArea": true
+    },
+    {
+      "id": 235,
+      "sourceComponentId": 622,
+      "bboxPixels": [
+        277,
+        448,
+        24,
+        40
+      ],
+      "samplePixel": [
+        291,
+        460
+      ],
+      "safeRadiusPixels": 6.708,
+      "largeArea": false
+    },
+    {
+      "id": 236,
+      "sourceComponentId": 632,
+      "bboxPixels": [
+        131,
+        454,
+        78,
+        83
+      ],
+      "samplePixel": [
+        156,
+        515
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 237,
+      "sourceComponentId": 633,
+      "bboxPixels": [
+        757,
+        454,
+        48,
+        15
+      ],
+      "samplePixel": [
+        792,
+        462
+      ],
+      "safeRadiusPixels": 5.831,
+      "largeArea": false
+    },
+    {
+      "id": 238,
+      "sourceComponentId": 636,
+      "bboxPixels": [
+        650,
+        455,
+        62,
+        60
+      ],
+      "samplePixel": [
+        690,
+        461
+      ],
+      "safeRadiusPixels": 6.708,
+      "largeArea": true
+    },
+    {
+      "id": 239,
+      "sourceComponentId": 638,
+      "bboxPixels": [
+        859,
+        458,
+        75,
+        80
+      ],
+      "samplePixel": [
+        888,
+        534
+      ],
+      "safeRadiusPixels": 4.0,
+      "largeArea": true
+    },
+    {
+      "id": 240,
+      "sourceComponentId": 643,
+      "bboxPixels": [
+        138,
+        460,
+        66,
+        69
+      ],
+      "samplePixel": [
+        177,
+        524
+      ],
+      "safeRadiusPixels": 5.0,
+      "largeArea": true
+    },
+    {
+      "id": 241,
+      "sourceComponentId": 644,
+      "bboxPixels": [
+        865,
+        461,
+        62,
+        68
+      ],
+      "samplePixel": [
+        913,
+        509
+      ],
+      "safeRadiusPixels": 4.123,
+      "largeArea": false
+    },
+    {
+      "id": 242,
+      "sourceComponentId": 645,
+      "bboxPixels": [
+        196,
+        462,
+        54,
+        40
+      ],
+      "samplePixel": [
+        206,
+        496
+      ],
+      "safeRadiusPixels": 4.123,
+      "largeArea": false
+    },
+    {
+      "id": 243,
+      "sourceComponentId": 650,
+      "bboxPixels": [
+        147,
+        463,
+        52,
+        55
+      ],
+      "samplePixel": [
+        164,
+        486
+      ],
+      "safeRadiusPixels": 16.125,
+      "largeArea": true
+    },
+    {
+      "id": 244,
+      "sourceComponentId": 652,
+      "bboxPixels": [
+        374,
+        464,
+        51,
+        44
+      ],
+      "samplePixel": [
+        388,
+        468
+      ],
+      "safeRadiusPixels": 5.0,
+      "largeArea": true
+    },
+    {
+      "id": 245,
+      "sourceComponentId": 653,
+      "bboxPixels": [
+        871,
+        464,
+        48,
+        57
+      ],
+      "samplePixel": [
+        902,
+        489
+      ],
+      "safeRadiusPixels": 16.125,
+      "largeArea": true
+    },
+    {
+      "id": 246,
+      "sourceComponentId": 655,
+      "bboxPixels": [
+        192,
+        465,
+        65,
+        45
+      ],
+      "samplePixel": [
+        252,
+        475
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 247,
+      "sourceComponentId": 656,
+      "bboxPixels": [
+        794,
+        466,
+        127,
+        119
+      ],
+      "samplePixel": [
+        814,
+        499
+      ],
+      "safeRadiusPixels": 13.892,
+      "largeArea": true
+    },
+    {
+      "id": 248,
+      "sourceComponentId": 657,
+      "bboxPixels": [
+        820,
+        466,
+        51,
+        38
+      ],
+      "samplePixel": [
+        853,
+        500
+      ],
+      "safeRadiusPixels": 4.0,
+      "largeArea": false
+    },
+    {
+      "id": 249,
+      "sourceComponentId": 658,
+      "bboxPixels": [
+        815,
+        467,
+        63,
+        46
+      ],
+      "samplePixel": [
+        874,
+        494
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 250,
+      "sourceComponentId": 659,
+      "bboxPixels": [
+        653,
+        468,
+        46,
+        41
+      ],
+      "samplePixel": [
+        683,
+        472
+      ],
+      "safeRadiusPixels": 4.472,
+      "largeArea": false
+    },
+    {
+      "id": 251,
+      "sourceComponentId": 660,
+      "bboxPixels": [
+        774,
+        468,
+        27,
+        122
+      ],
+      "samplePixel": [
+        793,
+        535
+      ],
+      "safeRadiusPixels": 8.0,
+      "largeArea": true
+    },
+    {
+      "id": 252,
+      "sourceComponentId": 662,
+      "bboxPixels": [
+        382,
+        475,
+        41,
+        27
+      ],
+      "samplePixel": [
+        387,
+        481
+      ],
+      "safeRadiusPixels": 5.0,
+      "largeArea": false
+    },
+    {
+      "id": 253,
+      "sourceComponentId": 663,
+      "bboxPixels": [
+        655,
+        478,
+        35,
+        26
+      ],
+      "samplePixel": [
+        684,
+        484
+      ],
+      "safeRadiusPixels": 5.0,
+      "largeArea": false
+    },
+    {
+      "id": 254,
+      "sourceComponentId": 673,
+      "bboxPixels": [
+        58,
+        502,
+        60,
+        81
+      ],
+      "samplePixel": [
+        74,
+        552
+      ],
+      "safeRadiusPixels": 12.649,
+      "largeArea": true
+    },
+    {
+      "id": 255,
+      "sourceComponentId": 674,
+      "bboxPixels": [
+        271,
+        502,
+        24,
+        120
+      ],
+      "samplePixel": [
+        277,
+        531
+      ],
+      "safeRadiusPixels": 7.0,
+      "largeArea": true
+    },
+    {
+      "id": 256,
+      "sourceComponentId": 681,
+      "bboxPixels": [
+        39,
+        507,
+        37,
+        70
+      ],
+      "samplePixel": [
+        44,
+        538
+      ],
+      "safeRadiusPixels": 4.123,
+      "largeArea": true
+    },
+    {
+      "id": 257,
+      "sourceComponentId": 682,
+      "bboxPixels": [
+        950,
+        508,
+        59,
+        81
+      ],
+      "samplePixel": [
+        993,
+        537
+      ],
+      "safeRadiusPixels": 12.042,
+      "largeArea": true
+    },
+    {
+      "id": 258,
+      "sourceComponentId": 687,
+      "bboxPixels": [
+        49,
+        512,
+        29,
+        59
+      ],
+      "samplePixel": [
+        62,
+        518
+      ],
+      "safeRadiusPixels": 4.123,
+      "largeArea": false
+    },
+    {
+      "id": 259,
+      "sourceComponentId": 690,
+      "bboxPixels": [
+        208,
+        514,
+        31,
+        54
+      ],
+      "samplePixel": [
+        215,
+        552
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 260,
+      "sourceComponentId": 691,
+      "bboxPixels": [
+        992,
+        514,
+        35,
+        71
+      ],
+      "samplePixel": [
+        1008,
+        518
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 261,
+      "sourceComponentId": 697,
+      "bboxPixels": [
+        223,
+        518,
+        40,
+        49
+      ],
+      "samplePixel": [
+        235,
+        550
+      ],
+      "safeRadiusPixels": 8.544,
+      "largeArea": true
+    },
+    {
+      "id": 262,
+      "sourceComponentId": 699,
+      "bboxPixels": [
+        216,
+        520,
+        22,
+        44
+      ],
+      "samplePixel": [
+        223,
+        531
+      ],
+      "safeRadiusPixels": 3.0,
+      "largeArea": false
+    },
+    {
+      "id": 263,
+      "sourceComponentId": 700,
+      "bboxPixels": [
+        991,
+        520,
+        29,
+        58
+      ],
+      "samplePixel": [
+        1012,
+        553
+      ],
+      "safeRadiusPixels": 4.243,
+      "largeArea": false
+    },
+    {
+      "id": 264,
+      "sourceComponentId": 701,
+      "bboxPixels": [
+        110,
+        521,
+        51,
+        46
+      ],
+      "samplePixel": [
+        125,
+        542
+      ],
+      "safeRadiusPixels": 9.849,
+      "largeArea": true
+    },
+    {
+      "id": 265,
+      "sourceComponentId": 704,
+      "bboxPixels": [
+        809,
+        522,
+        38,
+        50
+      ],
+      "samplePixel": [
+        834,
+        538
+      ],
+      "safeRadiusPixels": 8.485,
+      "largeArea": true
+    },
+    {
+      "id": 266,
+      "sourceComponentId": 705,
+      "bboxPixels": [
+        832,
+        522,
+        32,
+        52
+      ],
+      "samplePixel": [
+        856,
+        538
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 267,
+      "sourceComponentId": 706,
+      "bboxPixels": [
+        86,
+        523,
+        30,
+        37
+      ],
+      "samplePixel": [
+        90,
+        542
+      ],
+      "safeRadiusPixels": 4.472,
+      "largeArea": false
+    },
+    {
+      "id": 268,
+      "sourceComponentId": 709,
+      "bboxPixels": [
+        909,
+        524,
+        49,
+        44
+      ],
+      "samplePixel": [
+        945,
+        547
+      ],
+      "safeRadiusPixels": 9.22,
+      "largeArea": true
+    },
+    {
+      "id": 269,
+      "sourceComponentId": 711,
+      "bboxPixels": [
+        833,
+        527,
+        23,
+        42
+      ],
+      "samplePixel": [
+        849,
+        552
+      ],
+      "safeRadiusPixels": 3.162,
+      "largeArea": false
+    },
+    {
+      "id": 270,
+      "sourceComponentId": 716,
+      "bboxPixels": [
+        954,
+        530,
+        28,
+        36
+      ],
+      "samplePixel": [
+        976,
+        544
+      ],
+      "safeRadiusPixels": 4.123,
+      "largeArea": false
+    },
+    {
+      "id": 271,
+      "sourceComponentId": 728,
+      "bboxPixels": [
+        315,
+        544,
+        131,
+        148
+      ],
+      "samplePixel": [
+        367,
+        686
+      ],
+      "safeRadiusPixels": 2.828,
+      "largeArea": false
+    },
+    {
+      "id": 272,
+      "sourceComponentId": 729,
+      "bboxPixels": [
+        37,
+        545,
+        496,
+        499
+      ],
+      "samplePixel": [
+        75,
+        821
+      ],
+      "safeRadiusPixels": 39.0,
+      "largeArea": true
+    },
+    {
+      "id": 273,
+      "sourceComponentId": 734,
+      "bboxPixels": [
+        321,
+        549,
+        122,
+        137
+      ],
+      "samplePixel": [
+        377,
+        676
+      ],
+      "safeRadiusPixels": 9.0,
+      "largeArea": true
+    },
+    {
+      "id": 274,
+      "sourceComponentId": 735,
+      "bboxPixels": [
+        631,
+        549,
+        125,
+        144
+      ],
+      "samplePixel": [
+        743,
+        554
+      ],
+      "safeRadiusPixels": 2.236,
+      "largeArea": false
+    },
+    {
+      "id": 275,
+      "sourceComponentId": 738,
+      "bboxPixels": [
+        137,
+        552,
+        73,
+        81
+      ],
+      "samplePixel": [
+        178,
+        554
+      ],
+      "safeRadiusPixels": 3.0,
+      "largeArea": false
+    },
+    {
+      "id": 276,
+      "sourceComponentId": 740,
+      "bboxPixels": [
+        633,
+        553,
+        118,
+        134
+      ],
+      "samplePixel": [
+        741,
+        568
+      ],
+      "safeRadiusPixels": 8.062,
+      "largeArea": true
+    },
+    {
+      "id": 277,
+      "sourceComponentId": 745,
+      "bboxPixels": [
+        861,
+        556,
+        75,
+        79
+      ],
+      "samplePixel": [
+        914,
+        576
+      ],
+      "safeRadiusPixels": 5.0,
+      "largeArea": true
+    },
+    {
+      "id": 278,
+      "sourceComponentId": 746,
+      "bboxPixels": [
+        535,
+        556,
+        492,
+        487
+      ],
+      "samplePixel": [
+        808,
+        1004
+      ],
+      "safeRadiusPixels": 37.736,
+      "largeArea": true
+    },
+    {
+      "id": 279,
+      "sourceComponentId": 749,
+      "bboxPixels": [
+        143,
+        559,
+        63,
+        70
+      ],
+      "samplePixel": [
+        153,
+        582
+      ],
+      "safeRadiusPixels": 5.0,
+      "largeArea": true
+    },
+    {
+      "id": 280,
+      "sourceComponentId": 752,
+      "bboxPixels": [
+        334,
+        561,
+        102,
+        106
+      ],
+      "samplePixel": [
+        346,
+        578
+      ],
+      "safeRadiusPixels": 12.042,
+      "largeArea": true
+    },
+    {
+      "id": 281,
+      "sourceComponentId": 755,
+      "bboxPixels": [
+        867,
+        562,
+        60,
+        70
+      ],
+      "samplePixel": [
+        885,
+        565
+      ],
+      "safeRadiusPixels": 3.162,
+      "largeArea": false
+    },
+    {
+      "id": 282,
+      "sourceComponentId": 756,
+      "bboxPixels": [
+        639,
+        563,
+        98,
+        108
+      ],
+      "samplePixel": [
+        723,
+        581
+      ],
+      "safeRadiusPixels": 12.042,
+      "largeArea": true
+    },
+    {
+      "id": 283,
+      "sourceComponentId": 761,
+      "bboxPixels": [
+        755,
+        567,
+        58,
+        89
+      ],
+      "samplePixel": [
+        760,
+        626
+      ],
+      "safeRadiusPixels": 5.831,
+      "largeArea": true
+    },
+    {
+      "id": 284,
+      "sourceComponentId": 762,
+      "bboxPixels": [
+        152,
+        568,
+        50,
+        58
+      ],
+      "samplePixel": [
+        169,
+        599
+      ],
+      "safeRadiusPixels": 16.401,
+      "largeArea": true
+    },
+    {
+      "id": 285,
+      "sourceComponentId": 764,
+      "bboxPixels": [
+        872,
+        570,
+        48,
+        57
+      ],
+      "samplePixel": [
+        903,
+        602
+      ],
+      "safeRadiusPixels": 16.279,
+      "largeArea": true
+    },
+    {
+      "id": 286,
+      "sourceComponentId": 768,
+      "bboxPixels": [
+        360,
+        576,
+        67,
+        63
+      ],
+      "samplePixel": [
+        380,
+        630
+      ],
+      "safeRadiusPixels": 6.708,
+      "largeArea": true
+    },
+    {
+      "id": 287,
+      "sourceComponentId": 769,
+      "bboxPixels": [
+        647,
+        576,
+        68,
+        69
+      ],
+      "samplePixel": [
+        704,
+        593
+      ],
+      "safeRadiusPixels": 8.485,
+      "largeArea": true
+    },
+    {
+      "id": 288,
+      "sourceComponentId": 773,
+      "bboxPixels": [
+        193,
+        579,
+        65,
+        44
+      ],
+      "samplePixel": [
+        210,
+        582
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 289,
+      "sourceComponentId": 774,
+      "bboxPixels": [
+        786,
+        579,
+        54,
+        66
+      ],
+      "samplePixel": [
+        818,
+        593
+      ],
+      "safeRadiusPixels": 9.434,
+      "largeArea": true
+    },
+    {
+      "id": 290,
+      "sourceComponentId": 776,
+      "bboxPixels": [
+        814,
+        581,
+        66,
+        44
+      ],
+      "samplePixel": [
+        853,
+        584
+      ],
+      "safeRadiusPixels": 4.0,
+      "largeArea": true
+    },
+    {
+      "id": 291,
+      "sourceComponentId": 777,
+      "bboxPixels": [
+        372,
+        582,
+        53,
+        43
+      ],
+      "samplePixel": [
+        387,
+        620
+      ],
+      "safeRadiusPixels": 4.472,
+      "largeArea": false
+    },
+    {
+      "id": 292,
+      "sourceComponentId": 781,
+      "bboxPixels": [
+        381,
+        586,
+        41,
+        29
+      ],
+      "samplePixel": [
+        385,
+        605
+      ],
+      "safeRadiusPixels": 5.0,
+      "largeArea": false
+    },
+    {
+      "id": 293,
+      "sourceComponentId": 782,
+      "bboxPixels": [
+        652,
+        586,
+        47,
+        42
+      ],
+      "samplePixel": [
+        683,
+        623
+      ],
+      "safeRadiusPixels": 4.472,
+      "largeArea": false
+    },
+    {
+      "id": 294,
+      "sourceComponentId": 786,
+      "bboxPixels": [
+        198,
+        587,
+        54,
+        37
+      ],
+      "samplePixel": [
+        208,
+        592
+      ],
+      "safeRadiusPixels": 3.162,
+      "largeArea": false
+    },
+    {
+      "id": 295,
+      "sourceComponentId": 787,
+      "bboxPixels": [
+        654,
+        590,
+        37,
+        27
+      ],
+      "samplePixel": [
+        686,
+        607
+      ],
+      "safeRadiusPixels": 5.0,
+      "largeArea": false
+    },
+    {
+      "id": 296,
+      "sourceComponentId": 788,
+      "bboxPixels": [
+        822,
+        590,
+        52,
+        37
+      ],
+      "samplePixel": [
+        857,
+        592
+      ],
+      "safeRadiusPixels": 3.0,
+      "largeArea": false
+    },
+    {
+      "id": 297,
+      "sourceComponentId": 790,
+      "bboxPixels": [
+        203,
+        595,
+        42,
+        52
+      ],
+      "samplePixel": [
+        217,
+        608
+      ],
+      "safeRadiusPixels": 12.649,
+      "largeArea": true
+    },
+    {
+      "id": 298,
+      "sourceComponentId": 792,
+      "bboxPixels": [
+        828,
+        596,
+        40,
+        56
+      ],
+      "samplePixel": [
+        855,
+        612
+      ],
+      "safeRadiusPixels": 12.0,
+      "largeArea": true
+    },
+    {
+      "id": 299,
+      "sourceComponentId": 793,
+      "bboxPixels": [
+        771,
+        600,
+        24,
+        43
+      ],
+      "samplePixel": [
+        782,
+        620
+      ],
+      "safeRadiusPixels": 7.28,
+      "largeArea": false
+    },
+    {
+      "id": 300,
+      "sourceComponentId": 795,
+      "bboxPixels": [
+        113,
+        613,
+        57,
+        96
+      ],
+      "samplePixel": [
+        117,
+        689
+      ],
+      "safeRadiusPixels": 3.162,
+      "largeArea": false
+    },
+    {
+      "id": 301,
+      "sourceComponentId": 802,
+      "bboxPixels": [
+        933,
+        616,
+        22,
+        98
+      ],
+      "samplePixel": [
+        950,
+        634
+      ],
+      "safeRadiusPixels": 3.0,
+      "largeArea": false
+    },
+    {
+      "id": 302,
+      "sourceComponentId": 803,
+      "bboxPixels": [
+        121,
+        618,
+        47,
+        85
+      ],
+      "samplePixel": [
+        132,
+        627
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 303,
+      "sourceComponentId": 806,
+      "bboxPixels": [
+        928,
+        621,
+        22,
+        87
+      ],
+      "samplePixel": [
+        942,
+        634
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 304,
+      "sourceComponentId": 811,
+      "bboxPixels": [
+        130,
+        623,
+        43,
+        73
+      ],
+      "samplePixel": [
+        147,
+        680
+      ],
+      "safeRadiusPixels": 15.524,
+      "largeArea": true
+    },
+    {
+      "id": 305,
+      "sourceComponentId": 813,
+      "bboxPixels": [
+        267,
+        623,
+        48,
+        14
+      ],
+      "samplePixel": [
+        279,
+        628
+      ],
+      "safeRadiusPixels": 6.0,
+      "largeArea": false
+    },
+    {
+      "id": 306,
+      "sourceComponentId": 814,
+      "bboxPixels": [
+        823,
+        623,
+        83,
+        116
+      ],
+      "samplePixel": [
+        887,
+        628
+      ],
+      "safeRadiusPixels": 2.236,
+      "largeArea": false
+    },
+    {
+      "id": 307,
+      "sourceComponentId": 816,
+      "bboxPixels": [
+        232,
+        624,
+        53,
+        68
+      ],
+      "samplePixel": [
+        251,
+        627
+      ],
+      "safeRadiusPixels": 3.0,
+      "largeArea": false
+    },
+    {
+      "id": 308,
+      "sourceComponentId": 818,
+      "bboxPixels": [
+        169,
+        625,
+        75,
+        108
+      ],
+      "samplePixel": [
+        173,
+        678
+      ],
+      "safeRadiusPixels": 4.472,
+      "largeArea": true
+    },
+    {
+      "id": 309,
+      "sourceComponentId": 821,
+      "bboxPixels": [
+        900,
+        626,
+        41,
+        78
+      ],
+      "samplePixel": [
+        924,
+        684
+      ],
+      "safeRadiusPixels": 16.401,
+      "largeArea": true
+    },
+    {
+      "id": 310,
+      "sourceComponentId": 823,
+      "bboxPixels": [
+        785,
+        627,
+        56,
+        68
+      ],
+      "samplePixel": [
+        789,
+        672
+      ],
+      "safeRadiusPixels": 4.0,
+      "largeArea": true
+    },
+    {
+      "id": 311,
+      "sourceComponentId": 826,
+      "bboxPixels": [
+        829,
+        628,
+        72,
+        106
+      ],
+      "samplePixel": [
+        894,
+        690
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 312,
+      "sourceComponentId": 828,
+      "bboxPixels": [
+        73,
+        629,
+        47,
+        68
+      ],
+      "samplePixel": [
+        87,
+        665
+      ],
+      "safeRadiusPixels": 12.207,
+      "largeArea": true
+    },
+    {
+      "id": 313,
+      "sourceComponentId": 831,
+      "bboxPixels": [
+        950,
+        629,
+        45,
+        68
+      ],
+      "samplePixel": [
+        981,
+        663
+      ],
+      "safeRadiusPixels": 12.042,
+      "largeArea": true
+    },
+    {
+      "id": 314,
+      "sourceComponentId": 833,
+      "bboxPixels": [
+        179,
+        632,
+        65,
+        93
+      ],
+      "samplePixel": [
+        184,
+        687
+      ],
+      "safeRadiusPixels": 3.162,
+      "largeArea": false
+    },
+    {
+      "id": 315,
+      "sourceComponentId": 834,
+      "bboxPixels": [
+        234,
+        632,
+        44,
+        55
+      ],
+      "samplePixel": [
+        251,
+        634
+      ],
+      "safeRadiusPixels": 3.0,
+      "largeArea": false
+    },
+    {
+      "id": 316,
+      "sourceComponentId": 841,
+      "bboxPixels": [
+        804,
+        635,
+        35,
+        28
+      ],
+      "samplePixel": [
+        814,
+        638
+      ],
+      "safeRadiusPixels": 3.0,
+      "largeArea": false
+    },
+    {
+      "id": 317,
+      "sourceComponentId": 843,
+      "bboxPixels": [
+        829,
+        635,
+        65,
+        92
+      ],
+      "samplePixel": [
+        887,
+        649
+      ],
+      "safeRadiusPixels": 3.162,
+      "largeArea": false
+    },
+    {
+      "id": 318,
+      "sourceComponentId": 846,
+      "bboxPixels": [
+        186,
+        637,
+        53,
+        81
+      ],
+      "samplePixel": [
+        190,
+        658
+      ],
+      "safeRadiusPixels": 5.0,
+      "largeArea": false
+    },
+    {
+      "id": 319,
+      "sourceComponentId": 849,
+      "bboxPixels": [
+        392,
+        638,
+        144,
+        131
+      ],
+      "samplePixel": [
+        409,
+        676
+      ],
+      "safeRadiusPixels": 2.236,
+      "largeArea": false
+    },
+    {
+      "id": 320,
+      "sourceComponentId": 850,
+      "bboxPixels": [
+        755,
+        638,
+        30,
+        40
+      ],
+      "samplePixel": [
+        773,
+        666
+      ],
+      "safeRadiusPixels": 5.0,
+      "largeArea": false
+    },
+    {
+      "id": 321,
+      "sourceComponentId": 853,
+      "bboxPixels": [
+        274,
+        639,
+        61,
+        84
+      ],
+      "samplePixel": [
+        328,
+        659
+      ],
+      "safeRadiusPixels": 6.0,
+      "largeArea": true
+    },
+    {
+      "id": 322,
+      "sourceComponentId": 854,
+      "bboxPixels": [
+        236,
+        640,
+        35,
+        42
+      ],
+      "samplePixel": [
+        252,
+        649
+      ],
+      "safeRadiusPixels": 10.0,
+      "largeArea": true
+    },
+    {
+      "id": 323,
+      "sourceComponentId": 855,
+      "bboxPixels": [
+        397,
+        640,
+        135,
+        123
+      ],
+      "samplePixel": [
+        520,
+        749
+      ],
+      "safeRadiusPixels": 8.062,
+      "largeArea": true
+    },
+    {
+      "id": 324,
+      "sourceComponentId": 856,
+      "bboxPixels": [
+        537,
+        640,
+        145,
+        128
+      ],
+      "samplePixel": [
+        676,
+        716
+      ],
+      "safeRadiusPixels": 2.828,
+      "largeArea": false
+    },
+    {
+      "id": 325,
+      "sourceComponentId": 860,
+      "bboxPixels": [
+        982,
+        640,
+        31,
+        50
+      ],
+      "samplePixel": [
+        1004,
+        653
+      ],
+      "safeRadiusPixels": 4.123,
+      "largeArea": false
+    },
+    {
+      "id": 326,
+      "sourceComponentId": 861,
+      "bboxPixels": [
+        56,
+        641,
+        31,
+        50
+      ],
+      "samplePixel": [
+        64,
+        675
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 327,
+      "sourceComponentId": 864,
+      "bboxPixels": [
+        847,
+        641,
+        31,
+        22
+      ],
+      "samplePixel": [
+        871,
+        647
+      ],
+      "safeRadiusPixels": 4.123,
+      "largeArea": false
+    },
+    {
+      "id": 328,
+      "sourceComponentId": 865,
+      "bboxPixels": [
+        872,
+        641,
+        14,
+        48
+      ],
+      "samplePixel": [
+        882,
+        663
+      ],
+      "safeRadiusPixels": 4.0,
+      "largeArea": false
+    },
+    {
+      "id": 329,
+      "sourceComponentId": 866,
+      "bboxPixels": [
+        540,
+        642,
+        136,
+        121
+      ],
+      "samplePixel": [
+        667,
+        699
+      ],
+      "safeRadiusPixels": 8.062,
+      "largeArea": true
+    },
+    {
+      "id": 330,
+      "sourceComponentId": 867,
+      "bboxPixels": [
+        800,
+        642,
+        36,
+        43
+      ],
+      "samplePixel": [
+        819,
+        652
+      ],
+      "safeRadiusPixels": 10.63,
+      "largeArea": true
+    },
+    {
+      "id": 331,
+      "sourceComponentId": 871,
+      "bboxPixels": [
+        981,
+        644,
+        23,
+        42
+      ],
+      "samplePixel": [
+        994,
+        675
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 332,
+      "sourceComponentId": 872,
+      "bboxPixels": [
+        64,
+        645,
+        26,
+        40
+      ],
+      "samplePixel": [
+        70,
+        658
+      ],
+      "safeRadiusPixels": 4.0,
+      "largeArea": false
+    },
+    {
+      "id": 333,
+      "sourceComponentId": 877,
+      "bboxPixels": [
+        414,
+        647,
+        107,
+        103
+      ],
+      "samplePixel": [
+        502,
+        736
+      ],
+      "safeRadiusPixels": 12.042,
+      "largeArea": true
+    },
+    {
+      "id": 334,
+      "sourceComponentId": 880,
+      "bboxPixels": [
+        205,
+        649,
+        36,
+        50
+      ],
+      "samplePixel": [
+        214,
+        677
+      ],
+      "safeRadiusPixels": 8.0,
+      "largeArea": true
+    },
+    {
+      "id": 335,
+      "sourceComponentId": 882,
+      "bboxPixels": [
+        294,
+        649,
+        25,
+        40
+      ],
+      "samplePixel": [
+        302,
+        657
+      ],
+      "safeRadiusPixels": 6.325,
+      "largeArea": false
+    },
+    {
+      "id": 336,
+      "sourceComponentId": 886,
+      "bboxPixels": [
+        553,
+        650,
+        105,
+        100
+      ],
+      "samplePixel": [
+        571,
+        737
+      ],
+      "safeRadiusPixels": 11.705,
+      "largeArea": true
+    },
+    {
+      "id": 337,
+      "sourceComponentId": 889,
+      "bboxPixels": [
+        833,
+        651,
+        34,
+        52
+      ],
+      "samplePixel": [
+        858,
+        680
+      ],
+      "safeRadiusPixels": 7.071,
+      "largeArea": true
+    },
+    {
+      "id": 338,
+      "sourceComponentId": 892,
+      "bboxPixels": [
+        439,
+        654,
+        69,
+        73
+      ],
+      "samplePixel": [
+        488,
+        717
+      ],
+      "safeRadiusPixels": 8.944,
+      "largeArea": true
+    },
+    {
+      "id": 339,
+      "sourceComponentId": 894,
+      "bboxPixels": [
+        262,
+        655,
+        148,
+        164
+      ],
+      "samplePixel": [
+        373,
+        776
+      ],
+      "safeRadiusPixels": 14.036,
+      "largeArea": true
+    },
+    {
+      "id": 340,
+      "sourceComponentId": 897,
+      "bboxPixels": [
+        565,
+        657,
+        69,
+        70
+      ],
+      "samplePixel": [
+        629,
+        707
+      ],
+      "safeRadiusPixels": 2.236,
+      "largeArea": false
+    },
+    {
+      "id": 341,
+      "sourceComponentId": 900,
+      "bboxPixels": [
+        569,
+        658,
+        60,
+        65
+      ],
+      "samplePixel": [
+        622,
+        700
+      ],
+      "safeRadiusPixels": 6.325,
+      "largeArea": true
+    },
+    {
+      "id": 342,
+      "sourceComponentId": 903,
+      "bboxPixels": [
+        457,
+        659,
+        42,
+        51
+      ],
+      "samplePixel": [
+        461,
+        696
+      ],
+      "safeRadiusPixels": 4.123,
+      "largeArea": false
+    },
+    {
+      "id": 343,
+      "sourceComponentId": 904,
+      "bboxPixels": [
+        679,
+        659,
+        90,
+        99
+      ],
+      "samplePixel": [
+        755,
+        680
+      ],
+      "safeRadiusPixels": 7.211,
+      "largeArea": true
+    },
+    {
+      "id": 344,
+      "sourceComponentId": 906,
+      "bboxPixels": [
+        193,
+        660,
+        29,
+        41
+      ],
+      "samplePixel": [
+        195,
+        676
+      ],
+      "safeRadiusPixels": 3.0,
+      "largeArea": false
+    },
+    {
+      "id": 345,
+      "sourceComponentId": 907,
+      "bboxPixels": [
+        217,
+        660,
+        23,
+        25
+      ],
+      "samplePixel": [
+        220,
+        663
+      ],
+      "safeRadiusPixels": 3.0,
+      "largeArea": false
+    },
+    {
+      "id": 346,
+      "sourceComponentId": 910,
+      "bboxPixels": [
+        574,
+        661,
+        41,
+        50
+      ],
+      "samplePixel": [
+        589,
+        705
+      ],
+      "safeRadiusPixels": 5.0,
+      "largeArea": false
+    },
+    {
+      "id": 347,
+      "sourceComponentId": 911,
+      "bboxPixels": [
+        850,
+        661,
+        28,
+        43
+      ],
+      "samplePixel": [
+        873,
+        665
+      ],
+      "safeRadiusPixels": 2.236,
+      "largeArea": false
+    },
+    {
+      "id": 348,
+      "sourceComponentId": 916,
+      "bboxPixels": [
+        467,
+        662,
+        27,
+        39
+      ],
+      "samplePixel": [
+        472,
+        695
+      ],
+      "safeRadiusPixels": 4.243,
+      "largeArea": false
+    },
+    {
+      "id": 349,
+      "sourceComponentId": 919,
+      "bboxPixels": [
+        833,
+        663,
+        22,
+        25
+      ],
+      "samplePixel": [
+        852,
+        668
+      ],
+      "safeRadiusPixels": 3.0,
+      "largeArea": false
+    },
+    {
+      "id": 350,
+      "sourceComponentId": 923,
+      "bboxPixels": [
+        579,
+        664,
+        27,
+        37
+      ],
+      "samplePixel": [
+        596,
+        697
+      ],
+      "safeRadiusPixels": 4.0,
+      "largeArea": false
+    },
+    {
+      "id": 351,
+      "sourceComponentId": 929,
+      "bboxPixels": [
+        644,
+        674,
+        165,
+        148
+      ],
+      "samplePixel": [
+        766,
+        709
+      ],
+      "safeRadiusPixels": 14.142,
+      "largeArea": true
+    },
+    {
+      "id": 352,
+      "sourceComponentId": 932,
+      "bboxPixels": [
+        214,
+        679,
+        32,
+        33
+      ],
+      "samplePixel": [
+        228,
+        709
+      ],
+      "safeRadiusPixels": 3.0,
+      "largeArea": false
+    },
+    {
+      "id": 353,
+      "sourceComponentId": 936,
+      "bboxPixels": [
+        168,
+        683,
+        81,
+        55
+      ],
+      "samplePixel": [
+        193,
+        724
+      ],
+      "safeRadiusPixels": 2.236,
+      "largeArea": false
+    },
+    {
+      "id": 354,
+      "sourceComponentId": 939,
+      "bboxPixels": [
+        243,
+        686,
+        50,
+        67
+      ],
+      "samplePixel": [
+        285,
+        691
+      ],
+      "safeRadiusPixels": 3.162,
+      "largeArea": false
+    },
+    {
+      "id": 355,
+      "sourceComponentId": 941,
+      "bboxPixels": [
+        248,
+        688,
+        30,
+        51
+      ],
+      "samplePixel": [
+        264,
+        725
+      ],
+      "safeRadiusPixels": 12.207,
+      "largeArea": true
+    },
+    {
+      "id": 356,
+      "sourceComponentId": 946,
+      "bboxPixels": [
+        781,
+        690,
+        48,
+        64
+      ],
+      "samplePixel": [
+        784,
+        703
+      ],
+      "safeRadiusPixels": 3.0,
+      "largeArea": false
+    },
+    {
+      "id": 357,
+      "sourceComponentId": 947,
+      "bboxPixels": [
+        835,
+        690,
+        46,
+        30
+      ],
+      "samplePixel": [
+        862,
+        708
+      ],
+      "safeRadiusPixels": 4.472,
+      "largeArea": false
+    },
+    {
+      "id": 358,
+      "sourceComponentId": 949,
+      "bboxPixels": [
+        246,
+        691,
+        39,
+        55
+      ],
+      "samplePixel": [
+        280,
+        697
+      ],
+      "safeRadiusPixels": 3.0,
+      "largeArea": false
+    },
+    {
+      "id": 359,
+      "sourceComponentId": 950,
+      "bboxPixels": [
+        325,
+        691,
+        98,
+        89
+      ],
+      "samplePixel": [
+        334,
+        708
+      ],
+      "safeRadiusPixels": 6.403,
+      "largeArea": true
+    },
+    {
+      "id": 360,
+      "sourceComponentId": 954,
+      "bboxPixels": [
+        793,
+        692,
+        32,
+        47
+      ],
+      "samplePixel": [
+        805,
+        726
+      ],
+      "safeRadiusPixels": 12.649,
+      "largeArea": true
+    },
+    {
+      "id": 361,
+      "sourceComponentId": 955,
+      "bboxPixels": [
+        786,
+        694,
+        40,
+        53
+      ],
+      "samplePixel": [
+        793,
+        740
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 362,
+      "sourceComponentId": 960,
+      "bboxPixels": [
+        866,
+        699,
+        73,
+        84
+      ],
+      "samplePixel": [
+        933,
+        739
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 363,
+      "sourceComponentId": 961,
+      "bboxPixels": [
+        146,
+        701,
+        68,
+        67
+      ],
+      "samplePixel": [
+        163,
+        724
+      ],
+      "safeRadiusPixels": 16.553,
+      "largeArea": true
+    },
+    {
+      "id": 364,
+      "sourceComponentId": 962,
+      "bboxPixels": [
+        868,
+        702,
+        63,
+        74
+      ],
+      "samplePixel": [
+        927,
+        728
+      ],
+      "safeRadiusPixels": 4.0,
+      "largeArea": true
+    },
+    {
+      "id": 365,
+      "sourceComponentId": 965,
+      "bboxPixels": [
+        857,
+        706,
+        65,
+        62
+      ],
+      "samplePixel": [
+        905,
+        726
+      ],
+      "safeRadiusPixels": 16.0,
+      "largeArea": true
+    },
+    {
+      "id": 366,
+      "sourceComponentId": 968,
+      "bboxPixels": [
+        130,
+        710,
+        75,
+        72
+      ],
+      "samplePixel": [
+        134,
+        733
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 367,
+      "sourceComponentId": 970,
+      "bboxPixels": [
+        139,
+        711,
+        65,
+        64
+      ],
+      "samplePixel": [
+        143,
+        733
+      ],
+      "safeRadiusPixels": 3.162,
+      "largeArea": false
+    },
+    {
+      "id": 368,
+      "sourceComponentId": 981,
+      "bboxPixels": [
+        302,
+        726,
+        43,
+        14
+      ],
+      "samplePixel": [
+        308,
+        731
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 369,
+      "sourceComponentId": 985,
+      "bboxPixels": [
+        309,
+        732,
+        41,
+        42
+      ],
+      "samplePixel": [
+        323,
+        761
+      ],
+      "safeRadiusPixels": 8.062,
+      "largeArea": true
+    },
+    {
+      "id": 370,
+      "sourceComponentId": 987,
+      "bboxPixels": [
+        218,
+        733,
+        57,
+        51
+      ],
+      "samplePixel": [
+        234,
+        765
+      ],
+      "safeRadiusPixels": 16.492,
+      "largeArea": true
+    },
+    {
+      "id": 371,
+      "sourceComponentId": 988,
+      "bboxPixels": [
+        722,
+        733,
+        39,
+        42
+      ],
+      "samplePixel": [
+        752,
+        754
+      ],
+      "safeRadiusPixels": 8.062,
+      "largeArea": true
+    },
+    {
+      "id": 372,
+      "sourceComponentId": 991,
+      "bboxPixels": [
+        796,
+        735,
+        55,
+        50
+      ],
+      "samplePixel": [
+        831,
+        767
+      ],
+      "safeRadiusPixels": 17.0,
+      "largeArea": true
+    },
+    {
+      "id": 373,
+      "sourceComponentId": 996,
+      "bboxPixels": [
+        113,
+        738,
+        64,
+        64
+      ],
+      "samplePixel": [
+        131,
+        777
+      ],
+      "safeRadiusPixels": 12.806,
+      "largeArea": true
+    },
+    {
+      "id": 374,
+      "sourceComponentId": 1003,
+      "bboxPixels": [
+        206,
+        740,
+        84,
+        59
+      ],
+      "samplePixel": [
+        280,
+        786
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 375,
+      "sourceComponentId": 1004,
+      "bboxPixels": [
+        211,
+        740,
+        71,
+        51
+      ],
+      "samplePixel": [
+        224,
+        785
+      ],
+      "safeRadiusPixels": 3.162,
+      "largeArea": false
+    },
+    {
+      "id": 376,
+      "sourceComponentId": 1005,
+      "bboxPixels": [
+        299,
+        740,
+        42,
+        45
+      ],
+      "samplePixel": [
+        305,
+        767
+      ],
+      "safeRadiusPixels": 3.162,
+      "largeArea": false
+    },
+    {
+      "id": 377,
+      "sourceComponentId": 1008,
+      "bboxPixels": [
+        785,
+        740,
+        82,
+        62
+      ],
+      "samplePixel": [
+        828,
+        797
+      ],
+      "safeRadiusPixels": 4.0,
+      "largeArea": true
+    },
+    {
+      "id": 378,
+      "sourceComponentId": 1009,
+      "bboxPixels": [
+        896,
+        740,
+        57,
+        59
+      ],
+      "samplePixel": [
+        937,
+        773
+      ],
+      "safeRadiusPixels": 11.705,
+      "largeArea": true
+    },
+    {
+      "id": 379,
+      "sourceComponentId": 1011,
+      "bboxPixels": [
+        790,
+        741,
+        69,
+        52
+      ],
+      "samplePixel": [
+        855,
+        769
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 380,
+      "sourceComponentId": 1018,
+      "bboxPixels": [
+        305,
+        743,
+        35,
+        35
+      ],
+      "samplePixel": [
+        307,
+        754
+      ],
+      "safeRadiusPixels": 2.236,
+      "largeArea": false
+    },
+    {
+      "id": 381,
+      "sourceComponentId": 1023,
+      "bboxPixels": [
+        730,
+        744,
+        43,
+        42
+      ],
+      "samplePixel": [
+        736,
+        781
+      ],
+      "safeRadiusPixels": 3.162,
+      "largeArea": false
+    },
+    {
+      "id": 382,
+      "sourceComponentId": 1029,
+      "bboxPixels": [
+        734,
+        746,
+        33,
+        32
+      ],
+      "samplePixel": [
+        764,
+        757
+      ],
+      "safeRadiusPixels": 2.828,
+      "largeArea": false
+    },
+    {
+      "id": 383,
+      "sourceComponentId": 1034,
+      "bboxPixels": [
+        630,
+        750,
+        83,
+        60
+      ],
+      "samplePixel": [
+        653,
+        754
+      ],
+      "safeRadiusPixels": 5.0,
+      "largeArea": true
+    },
+    {
+      "id": 384,
+      "sourceComponentId": 1049,
+      "bboxPixels": [
+        921,
+        762,
+        41,
+        46
+      ],
+      "samplePixel": [
+        959,
+        781
+      ],
+      "safeRadiusPixels": 3.0,
+      "largeArea": false
+    },
+    {
+      "id": 385,
+      "sourceComponentId": 1050,
+      "bboxPixels": [
+        105,
+        763,
+        44,
+        47
+      ],
+      "samplePixel": [
+        107,
+        781
+      ],
+      "safeRadiusPixels": 3.0,
+      "largeArea": false
+    },
+    {
+      "id": 386,
+      "sourceComponentId": 1051,
+      "bboxPixels": [
+        640,
+        763,
+        38,
+        25
+      ],
+      "samplePixel": [
+        664,
+        769
+      ],
+      "safeRadiusPixels": 6.708,
+      "largeArea": false
+    },
+    {
+      "id": 387,
+      "sourceComponentId": 1052,
+      "bboxPixels": [
+        921,
+        763,
+        35,
+        39
+      ],
+      "samplePixel": [
+        931,
+        798
+      ],
+      "safeRadiusPixels": 4.0,
+      "largeArea": false
+    },
+    {
+      "id": 388,
+      "sourceComponentId": 1054,
+      "bboxPixels": [
+        111,
+        766,
+        37,
+        37
+      ],
+      "samplePixel": [
+        129,
+        798
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 389,
+      "sourceComponentId": 1055,
+      "bboxPixels": [
+        615,
+        766,
+        14,
+        48
+      ],
+      "samplePixel": [
+        620,
+        803
+      ],
+      "safeRadiusPixels": 5.385,
+      "largeArea": false
+    },
+    {
+      "id": 390,
+      "sourceComponentId": 1056,
+      "bboxPixels": [
+        406,
+        768,
+        40,
+        31
+      ],
+      "samplePixel": [
+        427,
+        777
+      ],
+      "safeRadiusPixels": 5.0,
+      "largeArea": false
+    },
+    {
+      "id": 391,
+      "sourceComponentId": 1057,
+      "bboxPixels": [
+        427,
+        768,
+        87,
+        56
+      ],
+      "samplePixel": [
+        468,
+        775
+      ],
+      "safeRadiusPixels": 5.657,
+      "largeArea": true
+    },
+    {
+      "id": 392,
+      "sourceComponentId": 1062,
+      "bboxPixels": [
+        442,
+        783,
+        38,
+        21
+      ],
+      "samplePixel": [
+        452,
+        790
+      ],
+      "safeRadiusPixels": 6.325,
+      "largeArea": false
+    },
+    {
+      "id": 393,
+      "sourceComponentId": 1066,
+      "bboxPixels": [
+        492,
+        785,
+        123,
+        25
+      ],
+      "samplePixel": [
+        564,
+        802
+      ],
+      "safeRadiusPixels": 7.0,
+      "largeArea": true
+    },
+    {
+      "id": 394,
+      "sourceComponentId": 1069,
+      "bboxPixels": [
+        678,
+        792,
+        65,
+        48
+      ],
+      "samplePixel": [
+        689,
+        795
+      ],
+      "safeRadiusPixels": 4.0,
+      "largeArea": false
+    },
+    {
+      "id": 395,
+      "sourceComponentId": 1070,
+      "bboxPixels": [
+        329,
+        793,
+        66,
+        47
+      ],
+      "samplePixel": [
+        339,
+        799
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 396,
+      "sourceComponentId": 1071,
+      "bboxPixels": [
+        283,
+        795,
+        61,
+        83
+      ],
+      "samplePixel": [
+        290,
+        809
+      ],
+      "safeRadiusPixels": 4.123,
+      "largeArea": true
+    },
+    {
+      "id": 397,
+      "sourceComponentId": 1073,
+      "bboxPixels": [
+        729,
+        796,
+        61,
+        81
+      ],
+      "samplePixel": [
+        783,
+        837
+      ],
+      "safeRadiusPixels": 4.123,
+      "largeArea": true
+    },
+    {
+      "id": 398,
+      "sourceComponentId": 1077,
+      "bboxPixels": [
+        438,
+        797,
+        179,
+        137
+      ],
+      "samplePixel": [
+        583,
+        824
+      ],
+      "safeRadiusPixels": 14.866,
+      "largeArea": true
+    },
+    {
+      "id": 399,
+      "sourceComponentId": 1081,
+      "bboxPixels": [
+        788,
+        798,
+        50,
+        53
+      ],
+      "samplePixel": [
+        824,
+        837
+      ],
+      "safeRadiusPixels": 9.0,
+      "largeArea": true
+    },
+    {
+      "id": 400,
+      "sourceComponentId": 1083,
+      "bboxPixels": [
+        232,
+        799,
+        53,
+        52
+      ],
+      "samplePixel": [
+        246,
+        837
+      ],
+      "safeRadiusPixels": 9.055,
+      "largeArea": true
+    },
+    {
+      "id": 401,
+      "sourceComponentId": 1084,
+      "bboxPixels": [
+        390,
+        799,
+        67,
+        52
+      ],
+      "samplePixel": [
+        399,
+        803
+      ],
+      "safeRadiusPixels": 3.162,
+      "largeArea": false
+    },
+    {
+      "id": 402,
+      "sourceComponentId": 1085,
+      "bboxPixels": [
+        617,
+        799,
+        67,
+        52
+      ],
+      "samplePixel": [
+        620,
+        824
+      ],
+      "safeRadiusPixels": 4.0,
+      "largeArea": false
+    },
+    {
+      "id": 403,
+      "sourceComponentId": 1087,
+      "bboxPixels": [
+        336,
+        800,
+        55,
+        39
+      ],
+      "samplePixel": [
+        340,
+        810
+      ],
+      "safeRadiusPixels": 3.162,
+      "largeArea": false
+    },
+    {
+      "id": 404,
+      "sourceComponentId": 1088,
+      "bboxPixels": [
+        683,
+        800,
+        53,
+        37
+      ],
+      "samplePixel": [
+        733,
+        813
+      ],
+      "safeRadiusPixels": 3.0,
+      "largeArea": false
+    },
+    {
+      "id": 405,
+      "sourceComponentId": 1089,
+      "bboxPixels": [
+        290,
+        802,
+        52,
+        69
+      ],
+      "samplePixel": [
+        294,
+        840
+      ],
+      "safeRadiusPixels": 4.0,
+      "largeArea": true
+    },
+    {
+      "id": 406,
+      "sourceComponentId": 1090,
+      "bboxPixels": [
+        730,
+        802,
+        51,
+        70
+      ],
+      "samplePixel": [
+        776,
+        854
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 407,
+      "sourceComponentId": 1091,
+      "bboxPixels": [
+        625,
+        804,
+        54,
+        45
+      ],
+      "samplePixel": [
+        668,
+        807
+      ],
+      "safeRadiusPixels": 3.162,
+      "largeArea": false
+    },
+    {
+      "id": 408,
+      "sourceComponentId": 1092,
+      "bboxPixels": [
+        345,
+        805,
+        48,
+        32
+      ],
+      "samplePixel": [
+        357,
+        818
+      ],
+      "safeRadiusPixels": 12.369,
+      "largeArea": true
+    },
+    {
+      "id": 409,
+      "sourceComponentId": 1093,
+      "bboxPixels": [
+        681,
+        805,
+        48,
+        30
+      ],
+      "samplePixel": [
+        716,
+        818
+      ],
+      "safeRadiusPixels": 12.728,
+      "largeArea": true
+    },
+    {
+      "id": 410,
+      "sourceComponentId": 1094,
+      "bboxPixels": [
+        394,
+        806,
+        56,
+        45
+      ],
+      "samplePixel": [
+        445,
+        827
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 411,
+      "sourceComponentId": 1095,
+      "bboxPixels": [
+        300,
+        808,
+        50,
+        56
+      ],
+      "samplePixel": [
+        316,
+        843
+      ],
+      "safeRadiusPixels": 17.0,
+      "largeArea": true
+    },
+    {
+      "id": 412,
+      "sourceComponentId": 1096,
+      "bboxPixels": [
+        724,
+        808,
+        50,
+        57
+      ],
+      "samplePixel": [
+        756,
+        846
+      ],
+      "safeRadiusPixels": 16.401,
+      "largeArea": true
+    },
+    {
+      "id": 413,
+      "sourceComponentId": 1097,
+      "bboxPixels": [
+        632,
+        811,
+        41,
+        36
+      ],
+      "samplePixel": [
+        662,
+        822
+      ],
+      "safeRadiusPixels": 10.296,
+      "largeArea": true
+    },
+    {
+      "id": 414,
+      "sourceComponentId": 1098,
+      "bboxPixels": [
+        180,
+        812,
+        39,
+        15
+      ],
+      "samplePixel": [
+        187,
+        820
+      ],
+      "safeRadiusPixels": 4.243,
+      "largeArea": false
+    },
+    {
+      "id": 415,
+      "sourceComponentId": 1099,
+      "bboxPixels": [
+        399,
+        812,
+        42,
+        37
+      ],
+      "samplePixel": [
+        430,
+        832
+      ],
+      "safeRadiusPixels": 10.05,
+      "largeArea": true
+    },
+    {
+      "id": 416,
+      "sourceComponentId": 1119,
+      "bboxPixels": [
+        183,
+        822,
+        77,
+        76
+      ],
+      "samplePixel": [
+        220,
+        880
+      ],
+      "safeRadiusPixels": 12.806,
+      "largeArea": true
+    },
+    {
+      "id": 417,
+      "sourceComponentId": 1122,
+      "bboxPixels": [
+        511,
+        822,
+        49,
+        36
+      ],
+      "samplePixel": [
+        544,
+        846
+      ],
+      "safeRadiusPixels": 8.485,
+      "largeArea": true
+    },
+    {
+      "id": 418,
+      "sourceComponentId": 1135,
+      "bboxPixels": [
+        811,
+        824,
+        75,
+        75
+      ],
+      "samplePixel": [
+        866,
+        865
+      ],
+      "safeRadiusPixels": 12.166,
+      "largeArea": true
+    },
+    {
+      "id": 419,
+      "sourceComponentId": 1141,
+      "bboxPixels": [
+        571,
+        826,
+        44,
+        64
+      ],
+      "samplePixel": [
+        574,
+        863
+      ],
+      "safeRadiusPixels": 4.0,
+      "largeArea": false
+    },
+    {
+      "id": 420,
+      "sourceComponentId": 1144,
+      "bboxPixels": [
+        458,
+        827,
+        45,
+        65
+      ],
+      "samplePixel": [
+        497,
+        862
+      ],
+      "safeRadiusPixels": 4.0,
+      "largeArea": false
+    },
+    {
+      "id": 421,
+      "sourceComponentId": 1152,
+      "bboxPixels": [
+        580,
+        831,
+        36,
+        53
+      ],
+      "samplePixel": [
+        583,
+        869
+      ],
+      "safeRadiusPixels": 3.162,
+      "largeArea": false
+    },
+    {
+      "id": 422,
+      "sourceComponentId": 1156,
+      "bboxPixels": [
+        457,
+        833,
+        36,
+        54
+      ],
+      "samplePixel": [
+        461,
+        835
+      ],
+      "safeRadiusPixels": 2.828,
+      "largeArea": false
+    },
+    {
+      "id": 423,
+      "sourceComponentId": 1158,
+      "bboxPixels": [
+        614,
+        833,
+        114,
+        84
+      ],
+      "samplePixel": [
+        716,
+        839
+      ],
+      "safeRadiusPixels": 2.236,
+      "largeArea": false
+    },
+    {
+      "id": 424,
+      "sourceComponentId": 1162,
+      "bboxPixels": [
+        216,
+        835,
+        31,
+        32
+      ],
+      "samplePixel": [
+        220,
+        857
+      ],
+      "safeRadiusPixels": 5.0,
+      "largeArea": false
+    },
+    {
+      "id": 425,
+      "sourceComponentId": 1165,
+      "bboxPixels": [
+        823,
+        835,
+        32,
+        32
+      ],
+      "samplePixel": [
+        848,
+        861
+      ],
+      "safeRadiusPixels": 5.0,
+      "largeArea": false
+    },
+    {
+      "id": 426,
+      "sourceComponentId": 1167,
+      "bboxPixels": [
+        619,
+        836,
+        104,
+        76
+      ],
+      "samplePixel": [
+        685,
+        902
+      ],
+      "safeRadiusPixels": 4.123,
+      "largeArea": true
+    },
+    {
+      "id": 427,
+      "sourceComponentId": 1168,
+      "bboxPixels": [
+        588,
+        837,
+        49,
+        42
+      ],
+      "samplePixel": [
+        601,
+        865
+      ],
+      "safeRadiusPixels": 12.53,
+      "largeArea": true
+    },
+    {
+      "id": 428,
+      "sourceComponentId": 1170,
+      "bboxPixels": [
+        350,
+        838,
+        105,
+        76
+      ],
+      "samplePixel": [
+        376,
+        898
+      ],
+      "safeRadiusPixels": 4.472,
+      "largeArea": true
+    },
+    {
+      "id": 429,
+      "sourceComponentId": 1177,
+      "bboxPixels": [
+        625,
+        839,
+        90,
+        64
+      ],
+      "samplePixel": [
+        647,
+        900
+      ],
+      "safeRadiusPixels": 3.0,
+      "largeArea": false
+    },
+    {
+      "id": 430,
+      "sourceComponentId": 1179,
+      "bboxPixels": [
+        432,
+        840,
+        54,
+        43
+      ],
+      "samplePixel": [
+        471,
+        869
+      ],
+      "safeRadiusPixels": 13.153,
+      "largeArea": true
+    },
+    {
+      "id": 431,
+      "sourceComponentId": 1183,
+      "bboxPixels": [
+        357,
+        842,
+        92,
+        63
+      ],
+      "samplePixel": [
+        412,
+        902
+      ],
+      "safeRadiusPixels": 3.0,
+      "largeArea": false
+    },
+    {
+      "id": 432,
+      "sourceComponentId": 1185,
+      "bboxPixels": [
+        652,
+        842,
+        24,
+        23
+      ],
+      "samplePixel": [
+        660,
+        844
+      ],
+      "safeRadiusPixels": 3.0,
+      "largeArea": false
+    },
+    {
+      "id": 433,
+      "sourceComponentId": 1186,
+      "bboxPixels": [
+        640,
+        842,
+        50,
+        35
+      ],
+      "samplePixel": [
+        669,
+        868
+      ],
+      "safeRadiusPixels": 7.211,
+      "largeArea": true
+    },
+    {
+      "id": 434,
+      "sourceComponentId": 1188,
+      "bboxPixels": [
+        382,
+        844,
+        50,
+        35
+      ],
+      "samplePixel": [
+        402,
+        869
+      ],
+      "safeRadiusPixels": 7.81,
+      "largeArea": true
+    },
+    {
+      "id": 435,
+      "sourceComponentId": 1191,
+      "bboxPixels": [
+        395,
+        845,
+        26,
+        21
+      ],
+      "samplePixel": [
+        413,
+        847
+      ],
+      "safeRadiusPixels": 3.0,
+      "largeArea": false
+    },
+    {
+      "id": 436,
+      "sourceComponentId": 1192,
+      "bboxPixels": [
+        514,
+        845,
+        42,
+        20
+      ],
+      "samplePixel": [
+        524,
+        858
+      ],
+      "safeRadiusPixels": 3.0,
+      "largeArea": false
+    },
+    {
+      "id": 437,
+      "sourceComponentId": 1193,
+      "bboxPixels": [
+        630,
+        845,
+        80,
+        52
+      ],
+      "samplePixel": [
+        697,
+        872
+      ],
+      "safeRadiusPixels": 5.385,
+      "largeArea": true
+    },
+    {
+      "id": 438,
+      "sourceComponentId": 1199,
+      "bboxPixels": [
+        508,
+        847,
+        53,
+        28
+      ],
+      "samplePixel": [
+        513,
+        860
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 439,
+      "sourceComponentId": 1201,
+      "bboxPixels": [
+        363,
+        848,
+        30,
+        45
+      ],
+      "samplePixel": [
+        374,
+        874
+      ],
+      "safeRadiusPixels": 4.243,
+      "largeArea": false
+    },
+    {
+      "id": 440,
+      "sourceComponentId": 1214,
+      "bboxPixels": [
+        173,
+        851,
+        57,
+        56
+      ],
+      "samplePixel": [
+        196,
+        896
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 441,
+      "sourceComponentId": 1222,
+      "bboxPixels": [
+        182,
+        852,
+        46,
+        47
+      ],
+      "samplePixel": [
+        188,
+        873
+      ],
+      "safeRadiusPixels": 4.243,
+      "largeArea": false
+    },
+    {
+      "id": 442,
+      "sourceComponentId": 1234,
+      "bboxPixels": [
+        838,
+        852,
+        55,
+        56
+      ],
+      "samplePixel": [
+        855,
+        904
+      ],
+      "safeRadiusPixels": 4.0,
+      "largeArea": false
+    },
+    {
+      "id": 443,
+      "sourceComponentId": 1240,
+      "bboxPixels": [
+        839,
+        853,
+        47,
+        47
+      ],
+      "samplePixel": [
+        867,
+        890
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 444,
+      "sourceComponentId": 1258,
+      "bboxPixels": [
+        947,
+        858,
+        80,
+        93
+      ],
+      "samplePixel": [
+        1017,
+        865
+      ],
+      "safeRadiusPixels": 7.211,
+      "largeArea": true
+    },
+    {
+      "id": 445,
+      "sourceComponentId": 1261,
+      "bboxPixels": [
+        651,
+        859,
+        40,
+        31
+      ],
+      "samplePixel": [
+        683,
+        878
+      ],
+      "safeRadiusPixels": 3.162,
+      "largeArea": false
+    },
+    {
+      "id": 446,
+      "sourceComponentId": 1263,
+      "bboxPixels": [
+        37,
+        860,
+        85,
+        92
+      ],
+      "samplePixel": [
+        112,
+        885
+      ],
+      "safeRadiusPixels": 8.246,
+      "largeArea": true
+    },
+    {
+      "id": 447,
+      "sourceComponentId": 1268,
+      "bboxPixels": [
+        384,
+        862,
+        36,
+        23
+      ],
+      "samplePixel": [
+        388,
+        872
+      ],
+      "safeRadiusPixels": 2.828,
+      "largeArea": false
+    },
+    {
+      "id": 448,
+      "sourceComponentId": 1272,
+      "bboxPixels": [
+        380,
+        865,
+        42,
+        26
+      ],
+      "samplePixel": [
+        384,
+        876
+      ],
+      "safeRadiusPixels": 2.236,
+      "largeArea": false
+    },
+    {
+      "id": 449,
+      "sourceComponentId": 1275,
+      "bboxPixels": [
+        315,
+        867,
+        61,
+        69
+      ],
+      "samplePixel": [
+        356,
+        917
+      ],
+      "safeRadiusPixels": 17.0,
+      "largeArea": true
+    },
+    {
+      "id": 450,
+      "sourceComponentId": 1279,
+      "bboxPixels": [
+        690,
+        868,
+        67,
+        69
+      ],
+      "samplePixel": [
+        713,
+        918
+      ],
+      "safeRadiusPixels": 17.088,
+      "largeArea": true
+    },
+    {
+      "id": 451,
+      "sourceComponentId": 1280,
+      "bboxPixels": [
+        393,
+        872,
+        51,
+        26
+      ],
+      "samplePixel": [
+        418,
+        893
+      ],
+      "safeRadiusPixels": 5.0,
+      "largeArea": false
+    },
+    {
+      "id": 452,
+      "sourceComponentId": 1281,
+      "bboxPixels": [
+        545,
+        872,
+        80,
+        73
+      ],
+      "samplePixel": [
+        566,
+        931
+      ],
+      "safeRadiusPixels": 3.162,
+      "largeArea": false
+    },
+    {
+      "id": 453,
+      "sourceComponentId": 1282,
+      "bboxPixels": [
+        961,
+        872,
+        59,
+        76
+      ],
+      "samplePixel": [
+        968,
+        889
+      ],
+      "safeRadiusPixels": 7.28,
+      "largeArea": true
+    },
+    {
+      "id": 454,
+      "sourceComponentId": 1283,
+      "bboxPixels": [
+        45,
+        873,
+        59,
+        76
+      ],
+      "samplePixel": [
+        96,
+        890
+      ],
+      "safeRadiusPixels": 7.211,
+      "largeArea": true
+    },
+    {
+      "id": 455,
+      "sourceComponentId": 1285,
+      "bboxPixels": [
+        448,
+        874,
+        78,
+        75
+      ],
+      "samplePixel": [
+        501,
+        936
+      ],
+      "safeRadiusPixels": 4.123,
+      "largeArea": true
+    },
+    {
+      "id": 456,
+      "sourceComponentId": 1286,
+      "bboxPixels": [
+        552,
+        876,
+        68,
+        64
+      ],
+      "samplePixel": [
+        568,
+        917
+      ],
+      "safeRadiusPixels": 4.0,
+      "largeArea": true
+    },
+    {
+      "id": 457,
+      "sourceComponentId": 1287,
+      "bboxPixels": [
+        700,
+        877,
+        71,
+        74
+      ],
+      "samplePixel": [
+        762,
+        906
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 458,
+      "sourceComponentId": 1288,
+      "bboxPixels": [
+        300,
+        878,
+        85,
+        73
+      ],
+      "samplePixel": [
+        304,
+        900
+      ],
+      "safeRadiusPixels": 3.162,
+      "largeArea": false
+    },
+    {
+      "id": 459,
+      "sourceComponentId": 1290,
+      "bboxPixels": [
+        700,
+        878,
+        64,
+        66
+      ],
+      "samplePixel": [
+        761,
+        882
+      ],
+      "safeRadiusPixels": 3.0,
+      "largeArea": false
+    },
+    {
+      "id": 460,
+      "sourceComponentId": 1291,
+      "bboxPixels": [
+        308,
+        879,
+        72,
+        65
+      ],
+      "samplePixel": [
+        342,
+        936
+      ],
+      "safeRadiusPixels": 4.123,
+      "largeArea": true
+    },
+    {
+      "id": 461,
+      "sourceComponentId": 1292,
+      "bboxPixels": [
+        451,
+        879,
+        69,
+        61
+      ],
+      "samplePixel": [
+        514,
+        912
+      ],
+      "safeRadiusPixels": 2.828,
+      "largeArea": false
+    },
+    {
+      "id": 462,
+      "sourceComponentId": 1293,
+      "bboxPixels": [
+        359,
+        880,
+        100,
+        39
+      ],
+      "samplePixel": [
+        449,
+        904
+      ],
+      "safeRadiusPixels": 2.236,
+      "largeArea": false
+    },
+    {
+      "id": 463,
+      "sourceComponentId": 1294,
+      "bboxPixels": [
+        559,
+        881,
+        58,
+        51
+      ],
+      "samplePixel": [
+        591,
+        914
+      ],
+      "safeRadiusPixels": 17.205,
+      "largeArea": true
+    },
+    {
+      "id": 464,
+      "sourceComponentId": 1295,
+      "bboxPixels": [
+        455,
+        883,
+        59,
+        51
+      ],
+      "samplePixel": [
+        478,
+        917
+      ],
+      "safeRadiusPixels": 16.553,
+      "largeArea": true
+    },
+    {
+      "id": 465,
+      "sourceComponentId": 1296,
+      "bboxPixels": [
+        977,
+        883,
+        36,
+        63
+      ],
+      "samplePixel": [
+        998,
+        891
+      ],
+      "safeRadiusPixels": 7.211,
+      "largeArea": true
+    },
+    {
+      "id": 466,
+      "sourceComponentId": 1297,
+      "bboxPixels": [
+        52,
+        884,
+        37,
+        62
+      ],
+      "samplePixel": [
+        67,
+        893
+      ],
+      "safeRadiusPixels": 7.211,
+      "largeArea": true
+    },
+    {
+      "id": 467,
+      "sourceComponentId": 1299,
+      "bboxPixels": [
+        876,
+        889,
+        102,
+        102
+      ],
+      "samplePixel": [
+        884,
+        945
+      ],
+      "safeRadiusPixels": 8.0,
+      "largeArea": true
+    },
+    {
+      "id": 468,
+      "sourceComponentId": 1300,
+      "bboxPixels": [
+        90,
+        891,
+        102,
+        103
+      ],
+      "samplePixel": [
+        132,
+        898
+      ],
+      "safeRadiusPixels": 8.0,
+      "largeArea": true
+    },
+    {
+      "id": 469,
+      "sourceComponentId": 1304,
+      "bboxPixels": [
+        223,
+        892,
+        30,
+        22
+      ],
+      "samplePixel": [
+        242,
+        909
+      ],
+      "safeRadiusPixels": 3.0,
+      "largeArea": false
+    },
+    {
+      "id": 470,
+      "sourceComponentId": 1317,
+      "bboxPixels": [
+        727,
+        905,
+        62,
+        64
+      ],
+      "samplePixel": [
+        761,
+        950
+      ],
+      "safeRadiusPixels": 12.042,
+      "largeArea": true
+    },
+    {
+      "id": 471,
+      "sourceComponentId": 1318,
+      "bboxPixels": [
+        894,
+        905,
+        76,
+        79
+      ],
+      "samplePixel": [
+        932,
+        912
+      ],
+      "safeRadiusPixels": 7.071,
+      "largeArea": true
+    },
+    {
+      "id": 472,
+      "sourceComponentId": 1319,
+      "bboxPixels": [
+        283,
+        906,
+        60,
+        62
+      ],
+      "samplePixel": [
+        308,
+        950
+      ],
+      "safeRadiusPixels": 12.166,
+      "largeArea": true
+    },
+    {
+      "id": 473,
+      "sourceComponentId": 1320,
+      "bboxPixels": [
+        97,
+        908,
+        79,
+        78
+      ],
+      "samplePixel": [
+        168,
+        946
+      ],
+      "safeRadiusPixels": 7.071,
+      "largeArea": true
+    },
+    {
+      "id": 474,
+      "sourceComponentId": 1321,
+      "bboxPixels": [
+        614,
+        910,
+        72,
+        42
+      ],
+      "samplePixel": [
+        670,
+        935
+      ],
+      "safeRadiusPixels": 15.524,
+      "largeArea": true
+    },
+    {
+      "id": 475,
+      "sourceComponentId": 1322,
+      "bboxPixels": [
+        379,
+        912,
+        78,
+        44
+      ],
+      "samplePixel": [
+        398,
+        938
+      ],
+      "safeRadiusPixels": 17.088,
+      "largeArea": true
+    },
+    {
+      "id": 476,
+      "sourceComponentId": 1323,
+      "bboxPixels": [
+        602,
+        913,
+        97,
+        56
+      ],
+      "samplePixel": [
+        689,
+        957
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 477,
+      "sourceComponentId": 1329,
+      "bboxPixels": [
+        609,
+        915,
+        83,
+        45
+      ],
+      "samplePixel": [
+        622,
+        951
+      ],
+      "safeRadiusPixels": 4.0,
+      "largeArea": true
+    },
+    {
+      "id": 478,
+      "sourceComponentId": 1334,
+      "bboxPixels": [
+        513,
+        920,
+        46,
+        51
+      ],
+      "samplePixel": [
+        534,
+        957
+      ],
+      "safeRadiusPixels": 8.602,
+      "largeArea": true
+    },
+    {
+      "id": 479,
+      "sourceComponentId": 1335,
+      "bboxPixels": [
+        102,
+        921,
+        58,
+        42
+      ],
+      "samplePixel": [
+        138,
+        923
+      ],
+      "safeRadiusPixels": 2.236,
+      "largeArea": false
+    },
+    {
+      "id": 480,
+      "sourceComponentId": 1347,
+      "bboxPixels": [
+        913,
+        926,
+        49,
+        50
+      ],
+      "samplePixel": [
+        927,
+        930
+      ],
+      "safeRadiusPixels": 5.0,
+      "largeArea": true
+    },
+    {
+      "id": 481,
+      "sourceComponentId": 1349,
+      "bboxPixels": [
+        104,
+        927,
+        52,
+        51
+      ],
+      "samplePixel": [
+        140,
+        931
+      ],
+      "safeRadiusPixels": 5.0,
+      "largeArea": true
+    },
+    {
+      "id": 482,
+      "sourceComponentId": 1352,
+      "bboxPixels": [
+        283,
+        933,
+        38,
+        38
+      ],
+      "samplePixel": [
+        286,
+        949
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 483,
+      "sourceComponentId": 1353,
+      "bboxPixels": [
+        750,
+        933,
+        44,
+        43
+      ],
+      "samplePixel": [
+        790,
+        954
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 484,
+      "sourceComponentId": 1354,
+      "bboxPixels": [
+        275,
+        934,
+        47,
+        43
+      ],
+      "samplePixel": [
+        278,
+        944
+      ],
+      "safeRadiusPixels": 3.0,
+      "largeArea": false
+    },
+    {
+      "id": 485,
+      "sourceComponentId": 1355,
+      "bboxPixels": [
+        752,
+        934,
+        35,
+        35
+      ],
+      "samplePixel": [
+        774,
+        963
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 486,
+      "sourceComponentId": 1358,
+      "bboxPixels": [
+        113,
+        938,
+        31,
+        36
+      ],
+      "samplePixel": [
+        138,
+        943
+      ],
+      "safeRadiusPixels": 5.0,
+      "largeArea": false
+    },
+    {
+      "id": 487,
+      "sourceComponentId": 1359,
+      "bboxPixels": [
+        37,
+        941,
+        102,
+        103
+      ],
+      "samplePixel": [
+        69,
+        953
+      ],
+      "safeRadiusPixels": 7.071,
+      "largeArea": true
+    },
+    {
+      "id": 488,
+      "sourceComponentId": 1360,
+      "bboxPixels": [
+        374,
+        941,
+        88,
+        22
+      ],
+      "samplePixel": [
+        431,
+        956
+      ],
+      "safeRadiusPixels": 3.162,
+      "largeArea": false
+    },
+    {
+      "id": 489,
+      "sourceComponentId": 1362,
+      "bboxPixels": [
+        926,
+        941,
+        100,
+        101
+      ],
+      "samplePixel": [
+        963,
+        973
+      ],
+      "safeRadiusPixels": 6.403,
+      "largeArea": true
+    },
+    {
+      "id": 490,
+      "sourceComponentId": 1363,
+      "bboxPixels": [
+        370,
+        946,
+        97,
+        25
+      ],
+      "samplePixel": [
+        460,
+        954
+      ],
+      "safeRadiusPixels": 3.162,
+      "largeArea": false
+    },
+    {
+      "id": 491,
+      "sourceComponentId": 1374,
+      "bboxPixels": [
+        37,
+        956,
+        88,
+        88
+      ],
+      "samplePixel": [
+        117,
+        1032
+      ],
+      "safeRadiusPixels": 6.708,
+      "largeArea": true
+    },
+    {
+      "id": 492,
+      "sourceComponentId": 1375,
+      "bboxPixels": [
+        941,
+        956,
+        85,
+        86
+      ],
+      "samplePixel": [
+        1019,
+        962
+      ],
+      "safeRadiusPixels": 6.708,
+      "largeArea": true
+    },
+    {
+      "id": 493,
+      "sourceComponentId": 1379,
+      "bboxPixels": [
+        129,
+        960,
+        93,
+        84
+      ],
+      "samplePixel": [
+        196,
+        968
+      ],
+      "safeRadiusPixels": 7.81,
+      "largeArea": true
+    },
+    {
+      "id": 494,
+      "sourceComponentId": 1383,
+      "bboxPixels": [
+        846,
+        960,
+        92,
+        82
+      ],
+      "samplePixel": [
+        873,
+        967
+      ],
+      "safeRadiusPixels": 7.28,
+      "largeArea": true
+    },
+    {
+      "id": 495,
+      "sourceComponentId": 1384,
+      "bboxPixels": [
+        480,
+        961,
+        25,
+        35
+      ],
+      "samplePixel": [
+        483,
+        979
+      ],
+      "safeRadiusPixels": 3.0,
+      "largeArea": false
+    },
+    {
+      "id": 496,
+      "sourceComponentId": 1390,
+      "bboxPixels": [
+        619,
+        962,
+        68,
+        47
+      ],
+      "samplePixel": [
+        658,
+        993
+      ],
+      "safeRadiusPixels": 11.402,
+      "largeArea": true
+    },
+    {
+      "id": 497,
+      "sourceComponentId": 1391,
+      "bboxPixels": [
+        385,
+        963,
+        70,
+        46
+      ],
+      "samplePixel": [
+        416,
+        995
+      ],
+      "safeRadiusPixels": 11.705,
+      "largeArea": true
+    },
+    {
+      "id": 498,
+      "sourceComponentId": 1392,
+      "bboxPixels": [
+        493,
+        963,
+        81,
+        59
+      ],
+      "samplePixel": [
+        520,
+        1005
+      ],
+      "safeRadiusPixels": 11.705,
+      "largeArea": true
+    },
+    {
+      "id": 499,
+      "sourceComponentId": 1406,
+      "bboxPixels": [
+        515,
+        966,
+        38,
+        31
+      ],
+      "samplePixel": [
+        533,
+        991
+      ],
+      "safeRadiusPixels": 5.385,
+      "largeArea": false
+    },
+    {
+      "id": 500,
+      "sourceComponentId": 1415,
+      "bboxPixels": [
+        36,
+        970,
+        74,
+        74
+      ],
+      "samplePixel": [
+        58,
+        997
+      ],
+      "safeRadiusPixels": 21.932,
+      "largeArea": true
+    },
+    {
+      "id": 501,
+      "sourceComponentId": 1418,
+      "bboxPixels": [
+        954,
+        970,
+        72,
+        72
+      ],
+      "samplePixel": [
+        1003,
+        996
+      ],
+      "safeRadiusPixels": 21.024,
+      "largeArea": true
+    },
+    {
+      "id": 502,
+      "sourceComponentId": 1423,
+      "bboxPixels": [
+        859,
+        976,
+        75,
+        61
+      ],
+      "samplePixel": [
+        867,
+        1024
+      ],
+      "safeRadiusPixels": 7.071,
+      "largeArea": true
+    },
+    {
+      "id": 503,
+      "sourceComponentId": 1424,
+      "bboxPixels": [
+        132,
+        977,
+        77,
+        61
+      ],
+      "samplePixel": [
+        190,
+        984
+      ],
+      "safeRadiusPixels": 7.28,
+      "largeArea": true
+    },
+    {
+      "id": 504,
+      "sourceComponentId": 1436,
+      "bboxPixels": [
+        870,
+        990,
+        62,
+        38
+      ],
+      "samplePixel": [
+        878,
+        1012
+      ],
+      "safeRadiusPixels": 7.28,
+      "largeArea": true
+    },
+    {
+      "id": 505,
+      "sourceComponentId": 1439,
+      "bboxPixels": [
+        634,
+        991,
+        41,
+        26
+      ],
+      "samplePixel": [
+        645,
+        1009
+      ],
+      "safeRadiusPixels": 4.0,
+      "largeArea": false
+    },
+    {
+      "id": 506,
+      "sourceComponentId": 1440,
+      "bboxPixels": [
+        135,
+        992,
+        63,
+        39
+      ],
+      "samplePixel": [
+        188,
+        1015
+      ],
+      "safeRadiusPixels": 7.211,
+      "largeArea": true
+    },
+    {
+      "id": 507,
+      "sourceComponentId": 1444,
+      "bboxPixels": [
+        397,
+        993,
+        43,
+        26
+      ],
+      "samplePixel": [
+        401,
+        1006
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 508,
+      "sourceComponentId": 1449,
+      "bboxPixels": [
+        629,
+        994,
+        51,
+        31
+      ],
+      "samplePixel": [
+        670,
+        1013
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    },
+    {
+      "id": 509,
+      "sourceComponentId": 1450,
+      "bboxPixels": [
+        393,
+        995,
+        50,
+        32
+      ],
+      "samplePixel": [
+        409,
+        1019
+      ],
+      "safeRadiusPixels": 3.162,
+      "largeArea": false
+    },
+    {
+      "id": 510,
+      "sourceComponentId": 1455,
+      "bboxPixels": [
+        505,
+        1006,
+        58,
+        27
+      ],
+      "samplePixel": [
+        539,
+        1025
+      ],
+      "safeRadiusPixels": 4.472,
+      "largeArea": false
+    },
+    {
+      "id": 511,
+      "sourceComponentId": 1456,
+      "bboxPixels": [
+        499,
+        1007,
+        69,
+        34
+      ],
+      "samplePixel": [
+        546,
+        1033
+      ],
+      "safeRadiusPixels": 3.606,
+      "largeArea": false
+    }
+  ]
+}

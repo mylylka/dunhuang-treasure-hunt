@@ -1,0 +1,185 @@
+{
+  "version": "user-art-v001",
+  "date": "2026-10-28",
+  "assetCount": 15,
+  "processing": "PNG尺寸规范化；按钮按alpha可见范围裁透明留白、等比居中；B以A底在配置区域内用物象蒙版合成L02，右上大像区域内羽化10px，其他物象边缘模糊1.6px，六个圆心边缘0.6px。未生成或重画美术内容。",
+  "assets": [
+    {
+      "id": "bg-landscape",
+      "deliveryName": "U01.png",
+      "source": "art-source/shared/bg-landscape/v001/bg-landscape-source.png",
+      "sha256": "f32278daa7028ac824979ef69a5f2ee2220b7450157699b6f452850861695da1",
+      "sourceSize": [
+        1672,
+        941
+      ],
+      "alpha": false
+    },
+    {
+      "id": "bg-portrait",
+      "deliveryName": "U02.png",
+      "source": "art-source/shared/bg-portrait/v001/bg-portrait-source.png",
+      "sha256": "af05050c803378f770ef2596b96b18e3d28beb532f6693eefcd7b5fdd7c90514",
+      "sourceSize": [
+        941,
+        1672
+      ],
+      "alpha": false
+    },
+    {
+      "id": "panel",
+      "deliveryName": "U03.png",
+      "source": "art-source/shared/panel/v001/panel-source.png",
+      "sha256": "a8b025277894ad0c95b7e864f20a599480a69990d12be4a4d175ffae4975218c",
+      "sourceSize": [
+        1254,
+        1254
+      ],
+      "alpha": true
+    },
+    {
+      "id": "button-primary",
+      "deliveryName": "U04.png",
+      "source": "art-source/shared/button-primary/v001/button-primary-source.png",
+      "sha256": "a33545f64bbef720cdff73eb30694b4d2062fd70fa35cfe102e840f37a2d01cf",
+      "sourceSize": [
+        2172,
+        724
+      ],
+      "alpha": true,
+      "trimBox": [
+        20,
+        102,
+        2152,
+        615
+      ]
+    },
+    {
+      "id": "button-secondary",
+      "deliveryName": "U05.png",
+      "source": "art-source/shared/button-secondary/v001/button-secondary-source.png",
+      "sha256": "2ccd28134bcd95cb7ea179517a488231b69ab1382eac4911dc1f1ead094aa3f4",
+      "sourceSize": [
+        2171,
+        724
+      ],
+      "alpha": true,
+      "trimBox": [
+        16,
+        85,
+        2153,
+        600
+      ]
+    },
+    {
+      "id": "icon-back",
+      "deliveryName": "U06-back.png",
+      "source": "art-source/shared/icon-back/v001/icon-back-source.png",
+      "sha256": "4551b53537e5cec2147d6dfe157f8ac6203de8dea81d09c76951f123b0e1e17d",
+      "sourceSize": [
+        256,
+        256
+      ],
+      "alpha": true
+    },
+    {
+      "id": "icon-hint",
+      "deliveryName": "U06-hint.png",
+      "source": "art-source/shared/icon-hint/v001/icon-hint-source.png",
+      "sha256": "e34c273f6230081a037823da654cf25ce6eb718fd2b8c5045bf8f8c28316b5be",
+      "sourceSize": [
+        256,
+        256
+      ],
+      "alpha": true
+    },
+    {
+      "id": "icon-restart",
+      "deliveryName": "U06-retry.png",
+      "source": "art-source/shared/icon-restart/v001/icon-restart-source.png",
+      "sha256": "403935af53b65a78a9625c9378131da73fe38dcb5151bbb7ee9755687e99ee02",
+      "sourceSize": [
+        256,
+        256
+      ],
+      "alpha": true
+    },
+    {
+      "id": "icon-locked",
+      "deliveryName": "U06-lock.png",
+      "source": "art-source/shared/icon-locked/v001/icon-locked-source.png",
+      "sha256": "a40aa367212c2ace776a022f23f4e23f4fff39df70a43dc20c34d9b6559440f3",
+      "sourceSize": [
+        256,
+        256
+      ],
+      "alpha": true
+    },
+    {
+      "id": "icon-completed",
+      "deliveryName": "U06-complete.png",
+      "source": "art-source/shared/icon-completed/v001/icon-completed-source.png",
+      "sha256": "06148fde9ac5fd656f5e15915b5becad5573156dc6b5b0718d4e107b56aca385",
+      "sourceSize": [
+        256,
+        256
+      ],
+      "alpha": true
+    },
+    {
+      "id": "cover-patterns",
+      "deliveryName": "T01.png",
+      "source": "art-source/themes/patterns/v001/cover-patterns-source.png",
+      "sha256": "8ea3826bb3580d68651a316617db15155e43d1c534af1fe5237d1382e5628d97",
+      "sourceSize": [
+        1536,
+        1024
+      ],
+      "alpha": false
+    },
+    {
+      "id": "cover-music",
+      "deliveryName": "T02.png",
+      "source": "art-source/themes/music/v001/cover-music-source.png",
+      "sha256": "6519fc6dc7bd7595c12714d734f7c0dc65d306bdb138b20bbf93e85313c0797e",
+      "sourceSize": [
+        1536,
+        1024
+      ],
+      "alpha": false
+    },
+    {
+      "id": "cover-stories",
+      "deliveryName": "T03.png",
+      "source": "art-source/themes/stories/v001/cover-stories-source.png",
+      "sha256": "a43953007b62988cc684c82f9c85cadb19d9b9d2287defb7eb50f1ccf9245b97",
+      "sourceSize": [
+        1536,
+        1024
+      ],
+      "alpha": false
+    },
+    {
+      "id": "patterns-intro-a",
+      "deliveryName": "L01第一关 A 图.png",
+      "source": "art-source/levels/patterns-intro/v001/patterns-intro-a-source.png",
+      "sha256": "baaf4ff2c9855093d8adc1e61c8c15c1a74ef148ed9ac9dda0b1b8afe5ffc021",
+      "sourceSize": [
+        1536,
+        1024
+      ],
+      "alpha": false
+    },
+    {
+      "id": "patterns-intro-b",
+      "deliveryName": "L02.png",
+      "source": "art-source/levels/patterns-intro/v001/patterns-intro-b-source.png",
+      "sha256": "c2c53a4edd6dc60f985357eef0e30016e1d2a40a91b721f401f90ad0fb85f032",
+      "sourceSize": [
+        1536,
+        1024
+      ],
+      "alpha": false
+    }
+  ]
+}

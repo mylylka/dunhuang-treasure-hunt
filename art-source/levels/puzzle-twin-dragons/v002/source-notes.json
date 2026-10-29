@@ -1,0 +1,52 @@
+{
+  "tool": "built-in imagegen",
+  "date": "2026-10-29",
+  "authorization": "用户本轮明确要求去除拼图素材的小红书标识及账号。",
+  "input": "public/assets/levels/puzzle-twin-dragons/puzzle-twin-dragons-image-v001.png",
+  "prompt": "Use case: precise-object-edit. 输入是原画右下角420×180像素的精确局部，保持它同样的横向长方形构图和边界。仅移除叠加的白色/半透明“小红书”胶囊标识和“小红书号：423649365”文字，延续紧邻的原有线条、颜色和纹理。不要裁剪、位移、旋转、改变任何纹样的尺寸、位置和轮廓；已存在的所有图案都逐一保留，尤其标识周围尖角、曲线与重复装饰要精准衔接。不要柔化、模糊或统一质感；保留原图像的锐度和颗粒。输出同输入的完整横向局部，无文字、无新标记，只对叠字覆盖部分作小范围修补。",
+  "previousFullImagePrompt": "Use case: precise-object-edit. 这是一张敦煌主题游戏的原始拼图素材，用户明确要求删除右下角叠加的小红书水印。只删除右下角白色/半透明胶囊形“小红书”标识和其下方“小红书号：423649365”文字，以水印周围已有的纹样、线条、色块和纸张纹理自然衔接修补这两个小区域。保留原始全幅正方形构图、全部边饰、色调、人物/龙/兔、中心图案和既有裂痕、旧化细节。不要裁切、旋转、拉伸或重新设计，不添加其他文字和标识。输出与输入同样的完整正方形图；除水印覆盖区域外任何内容都不要变化。",
+  "candidateFilename": "retouch-candidate-detail.png",
+  "crop": {
+    "x": 1020,
+    "y": 1260,
+    "width": 420,
+    "height": 180
+  },
+  "previousPatch": {
+    "x": 1060,
+    "y": 1295,
+    "width": 360,
+    "height": 120,
+    "feather": 8
+  },
+  "patches": [
+    {
+      "x": 1287,
+      "y": 1301,
+      "width": 114,
+      "height": 60,
+      "feather": 4
+    },
+    {
+      "x": 1075,
+      "y": 1367,
+      "width": 334,
+      "height": 42,
+      "feather": 4
+    }
+  ],
+  "version": 2,
+  "levelId": "puzzle-twin-dragons",
+  "originalRuntimeSha256": "eb55e5ffc04a026f6005a7b695dc941bca0843453623363910c52f19205a494d",
+  "candidateSha256": "ed2586c3677218f35eee4e33012e6fe37bc7f6b16308203a5e9b8e3edd088642",
+  "runtimePath": "/assets/levels/puzzle-twin-dragons/puzzle-twin-dragons-image-v002.png",
+  "runtimeSha256": "f318ef543acb6f6e2a8e012f1dd09e1a6535cbf130e7e0d5319dea0f8fb666aa",
+  "width": 1440,
+  "height": 1440,
+  "candidateWidth": 1915,
+  "candidateHeight": 821,
+  "changedInside": 19686,
+  "changedOutside": 0,
+  "processing": "内置imagegen编辑右下角420×180局部，按原坐标采用标识及账号的两个独立小范围，以各范围登记的内缘羽化衔接；范围之外0像素变化。原稿、v001运行图、全图候选与局部候选均保留。",
+  "contentBoundary": "仅供游戏显示的局部去平台水印版本；补绘像素不作为历史纹样细节的考据。"
+}

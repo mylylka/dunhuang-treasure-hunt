@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "id": "patterns-intro",
+  "themeId": "patterns",
+  "gameType": "spot-difference",
+  "title": "藻井寻踪：寻找五处变化",
+  "subtitle": "纹样与色彩 · AI 教学示意",
+  "objective": "比较两幅藻井风格教学示意图，找出人物组合、乐器、装饰轮廓和圆饰配色的五处变化。",
+  "difficulty": "入门",
+  "estimatedMinutes": 5,
+  "thumbnailAssetId": "patterns-intro-a",
+  "baseAssetId": "patterns-intro-a",
+  "editedAssetId": "patterns-intro-b",
+  "teachingNote": "本关图像由开发者使用 AI 生成，用于观察藻井式构图；不是原壁画照片或历史原貌复原。",
+  "source": {
+    "title": "莫高窟第329窟初唐莲花飞天藻井",
+    "url": "https://www.dha.ac.cn/info/1425/3577.htm",
+    "note": "第329窟藻井以中央莲花、环绕飞天和层层边带组织画面，可从中心、方向与重复排列三个角度观察。"
+  },
+  "differences": [
+    {
+      "id": "buddha-composition",
+      "region": {
+        "x": 0.8983333333333333,
+        "y": 0.025,
+        "width": 0.10166666666666667,
+        "height": 0.225
+      },
+      "hint": "先看外围重复排列的人物图像，比较它们的大小与组合。",
+      "detailHint": "观察右上角：一幅是分格排列的小佛像，另一幅变为跨格的大佛像。"
+    },
+    {
+      "id": "harp-added",
+      "region": {
+        "x": 0.35,
+        "y": 0.065,
+        "width": 0.075,
+        "height": 0.085
+      },
+      "hint": "沿上方环带观察飞天附近，留意多出的乐器。",
+      "detailHint": "看上方偏左、约三分之一处：其中一幅多了一把箜篌形乐器。"
+    },
+    {
+      "id": "pipa-added",
+      "region": {
+        "x": 0.5633333333333334,
+        "y": 0.4,
+        "width": 0.09,
+        "height": 0.155
+      },
+      "hint": "观察中央方框内的飞天，比较手边与身体附近的内容。",
+      "detailHint": "看中央方框内部右侧：其中一幅多了一把黄色琵琶。"
+    },
+    {
+      "id": "leaf-outline",
+      "region": {
+        "x": 0.6766666666666666,
+        "y": 0.16,
+        "width": 0.08,
+        "height": 0.12
+      },
+      "hint": "沿中央方框外缘寻找蓝绿色装饰，比较尖角的轮廓。",
+      "detailHint": "看中央装饰框右上侧：尖锐三角形与圆润叶片的轮廓不同。"
+    },
+    {
+      "id": "bead-colors",
+      "region": {
+        "x": 0.125,
+        "y": 0.79,
+        "width": 0.145,
+        "height": 0.21
+      },
+      "hint": "比较左下斜向边饰中连续的圆饰，留意圆心配色。",
+      "detailHint": "看左下角斜向蓝色饰带：其中多个圆心改成了青绿色。可用“放大观察”仔细比较。"
+    }
+  ]
+}

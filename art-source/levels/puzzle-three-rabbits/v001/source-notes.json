@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "levelId": "puzzle-three-rabbits",
+  "originalFilename": "三兔飞天藻井.JPG",
+  "originalArchive": "art-source/levels/puzzle-three-rabbits/v001/三兔飞天藻井.JPG",
+  "originalSha256": "44938b4b827e3d007318d424075e1c78dd54d348ee83be7a6869e76e5cae07ee",
+  "originalDimensions": [
+    1440,
+    1440
+  ],
+  "originalMode": "RGB",
+  "exifOrientation": 1,
+  "runtimePath": "/assets/levels/puzzle-three-rabbits/puzzle-three-rabbits-image-v001.png",
+  "runtimeDimensions": [
+    1440,
+    1440
+  ],
+  "runtimeSha256": "a2853f55f3d552baa98fdd8725001504a31e8dff4ba0f068bf0319a2c00b0510",
+  "decodedRgbSha256": "491b73674ebb58cae17b27e347ba663dda0e02f800f907f6290f61bf7f945509",
+  "runtimePixelsEqualExifOrientedOriginal": true,
+  "watermark": {
+    "present": true,
+    "platform": "小红书",
+    "description": "三张原图右下角均有平台标识和账号字样，原样保留；不是开发者署名。",
+    "reviewRegionNormalized": {
+      "x": 0.72,
+      "y": 0.89,
+      "width": 0.28,
+      "height": 0.11
+    },
+    "removedOrCropped": false
+  },
+  "provenance": "开发者本机交付的JPG；原贴链接、摄影或临摹作者、具体洞窟和年代未随本批材料提供。文件名用于资源映射，不作为学术认定。",
+  "processing": "原JPG字节完整归档；按EXIF方向读取并转RGB PNG，不裁切、不缩放、不调色、不去水印，不使用AI或绘图工具重画。拼片由运行时代码裁切蒙版生成，不另存内容性改图。",
+  "puzzle": {
+    "mode": "jigsaw",
+    "rows": 3,
+    "columns": 4,
+    "pieceCount": 12,
+    "seed": 407012
+  },
+  "relatedCultureReference": {
+    "title": "敦煌研究院：莫高窟第407窟三兔共耳构图参考",
+    "url": "https://www.dha.ac.cn/info/1425/3569.htm",
+    "note": "第407窟资料可用于延伸观察三兔共耳与围绕中心的组织方式；本关图像由开发者提供，不能据此链接认定交付图的洞窟、年代或作者。"
+  }
+}
