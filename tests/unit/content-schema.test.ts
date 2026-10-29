@@ -40,6 +40,32 @@ describe('内容目录校验', () => {
     const catalog = makeCatalog(); catalog.levels[0].differences[1].region = { ...catalog.levels[0].differences[0].region };
     expect(() => parseCatalog(catalog)).toThrow(/区域重叠/);
   });
+  it('保留同一差异的附加区域，允许它与本差异主区域重叠', () => {
+    const catalog = makeCatalog();
+    catalog.levels[0].differences[0].additionalRegions = [
+      { x: 0.2, y: 0.2, width: 0.2, height: 0.2 },
+      { x: 0.4, y: 0.1, width: 0.1, height: 0.2 },
+    ];
+    const parsed = parseCatalog(catalog);
+    if (parsed.levels[0].gameType !== 'spot-difference') throw new Error('测试关类型错误');
+    expect(parsed.levels[0].differences[0].additionalRegions).toEqual(catalog.levels[0].differences[0].additionalRegions);
+  });
+  it('拒绝附加差异区域越界', () => {
+    const catalog = makeCatalog();
+    catalog.levels[0].differences[0].additionalRegions = [{ x: 0.95, y: 0.2, width: 0.1, height: 0.1 }];
+    expect(() => parseCatalog(catalog)).toThrow(/test-one.*越界/);
+  });
+  it('拒绝附加区域覆盖另一差异的主区域', () => {
+    const catalog = makeCatalog();
+    catalog.levels[0].differences[0].additionalRegions = [{ ...catalog.levels[0].differences[1].region }];
+    expect(() => parseCatalog(catalog)).toThrow(/test-one.*test-two.*区域重叠/);
+  });
+  it('拒绝不同差异的附加区域互相覆盖', () => {
+    const catalog = makeCatalog();
+    catalog.levels[0].differences[0].additionalRegions = [{ x: 0.4, y: 0.4, width: 0.1, height: 0.1 }];
+    catalog.levels[0].differences[1].additionalRegions = [{ x: 0.45, y: 0.45, width: 0.1, height: 0.1 }];
+    expect(() => parseCatalog(catalog)).toThrow(/test-one.*test-two.*区域重叠/);
+  });
   it('存在已制作关卡的主题必须有本主题入门关', () => {
     const catalog = makeCatalog(); catalog.themes[0].introLevelId = 'another-intro';
     expect(() => parseCatalog(catalog)).toThrow(/入门关.*不存在或不属于本主题/);

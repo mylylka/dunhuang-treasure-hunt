@@ -4,7 +4,7 @@ import { calculateLayout, type GameLayout } from '../../runtime/layout';
 import type { Viewport } from '../../runtime/geometry';
 import {
   containsPoint, createInitialState, discoverDifference, findDifferenceAtPoint,
-  getNextHint, regionToRectangle,
+  getDifferenceRegions, getNextHint, regionToRectangle,
 } from './rules';
 
 type PhaserModule = typeof import('phaser');
@@ -150,11 +150,13 @@ export function createSpotDifferenceScene(Phaser: PhaserModule, options: SpotDif
           .setDisplaySize(rectangle.width, rectangle.height);
       }
       // Both sides share A. Only configured source rectangles can expose pixels from B.
-      for (const { region } of options.level.differences) {
-        this.add.image(this.layout.edited.x, this.layout.edited.y, 'edited')
-          .setOrigin(0).setDisplaySize(this.layout.edited.width, this.layout.edited.height)
-          .setCrop(region.x * this.sourceWidth, region.y * this.sourceHeight,
-            region.width * this.sourceWidth, region.height * this.sourceHeight);
+      for (const difference of options.level.differences) {
+        for (const region of getDifferenceRegions(difference)) {
+          this.add.image(this.layout.edited.x, this.layout.edited.y, 'edited')
+            .setOrigin(0).setDisplaySize(this.layout.edited.width, this.layout.edited.height)
+            .setCrop(region.x * this.sourceWidth, region.y * this.sourceHeight,
+              region.width * this.sourceWidth, region.height * this.sourceHeight);
+        }
       }
       const borders = this.add.graphics().lineStyle(1, 0x998b70, 0.7);
       for (const rectangle of [this.layout.reference, this.layout.edited]) {

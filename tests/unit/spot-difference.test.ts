@@ -3,6 +3,7 @@ import {
   createInitialState,
   discoverDifference,
   findDifferenceAtPoint,
+  getDifferenceRegions,
   getNextHint,
   regionToRectangle,
   type Rectangle,
@@ -131,6 +132,14 @@ describe('点击容错与图像坐标', () => {
     expect(findDifferenceAtPoint([...neighbours].reverse(), image, { x: 60, y: 50 })).toBeUndefined();
   });
 
+  it('同一差异的两个容错区域等距时仍可命中，只按差异编号比较距离', () => {
+    const split = {
+      ...target('split', { x: 0.35, y: 0.45, width: 0.1, height: 0.1 }),
+      additionalRegions: [{ x: 0.65, y: 0.45, width: 0.1, height: 0.1 }],
+    };
+    expect(findDifferenceAtPoint([split], image, { x: 55, y: 50 })?.id).toBe('split');
+  });
+
   it('靠边目标的容错不能延伸到图片外的留白', () => {
     const edge = target('edge', { x: 0, y: 0.45, width: 0.02, height: 0.1 });
     expect(findDifferenceAtPoint([edge], image, { x: -1, y: 50 })).toBeUndefined();
@@ -153,6 +162,46 @@ describe('点击容错与图像坐标', () => {
       { x: 0.1, y: 0.2, width: 0.3, height: 0.4 },
       { x: 18, y: 37, width: 300, height: 200 },
     )).toEqual({ x: 48, y: 77, width: 90, height: 80 });
+  });
+});
+
+describe('同一处差异的多个区域', () => {
+  const image: Rectangle = { x: 20, y: 30, width: 1000, height: 1000 };
+  const ring: DifferenceDefinition = {
+    ...target('petal-ring', { x: 0.25, y: 0.18, width: 0.5, height: 0.1 }),
+    additionalRegions: [
+      { x: 0.18, y: 0.28, width: 0.1, height: 0.44 },
+      { x: 0.72, y: 0.28, width: 0.1, height: 0.44 },
+      { x: 0.25, y: 0.72, width: 0.5, height: 0.1 },
+    ],
+  };
+  const center = target('center-flower', { x: 0.44, y: 0.44, width: 0.12, height: 0.12 });
+  const differences = [ring, center];
+
+  it('旧单区域配置和多区域配置都返回完整区域列表', () => {
+    expect(getDifferenceRegions(center)).toEqual([center.region]);
+    expect(getDifferenceRegions(ring)).toEqual([ring.region, ...ring.additionalRegions!]);
+  });
+
+  it.each([[0.5, 0.23], [0.23, 0.5], [0.77, 0.5], [0.5, 0.77]])(
+    '点击上下左右任一区域(%s,%s)都命中同一个差异', (x, y) => {
+      expect(findDifferenceAtPoint(differences, image, pointInImage(image, x, y))?.id).toBe('petal-ring');
+    },
+  );
+
+  it('中央小花仍然独立，环带与中心之间的留白不计为发现', () => {
+    expect(findDifferenceAtPoint(differences, image, pointInImage(image, 0.5, 0.5))?.id).toBe('center-flower');
+    expect(findDifferenceAtPoint(differences, image, pointInImage(image, 0.35, 0.35))).toBeUndefined();
+  });
+
+  it('在多个区域重复点击只记一处，中央差异完成后才通关', () => {
+    const top = findDifferenceAtPoint(differences, image, pointInImage(image, 0.5, 0.23))!;
+    const bottom = findDifferenceAtPoint(differences, image, pointInImage(image, 0.5, 0.77))!;
+    const first = discoverDifference(createInitialState(), top.id, differences);
+    const repeated = discoverDifference(first.state, bottom.id, differences);
+    expect(repeated).toMatchObject({ newlyFound: false, justCompleted: false, state: { foundIds: ['petal-ring'], completed: false } });
+    const completed = discoverDifference(repeated.state, center.id, differences);
+    expect(completed).toMatchObject({ newlyFound: true, justCompleted: true, state: { foundIds: ['petal-ring', 'center-flower'], completed: true } });
   });
 });
 

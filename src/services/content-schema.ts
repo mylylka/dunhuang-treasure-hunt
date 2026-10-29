@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import type { ContentCatalog } from '../types';
+import { getDifferenceRegions } from '../games/spot-difference/rules';
 
 const gameType = z.enum(['spot-difference', 'hidden-object', 'shadow-match', 'puzzle', 'coloring']);
 const id = z.string().regex(/^[a-z][a-z0-9-]*$/, '编号须为英文小写及连字符');
@@ -25,7 +26,7 @@ const metadata = {
 };
 export const spotDifferenceSchema = z.object({
   ...metadata, gameType: z.literal('spot-difference'), baseAssetId: id, editedAssetId: id,
-  differences: z.array(z.object({ id, region: regionSchema, hint: z.string().min(1), detailHint: z.string().min(1), explanation: z.string().min(1).optional() })).min(1),
+  differences: z.array(z.object({ id, region: regionSchema, additionalRegions: z.array(regionSchema).optional(), hint: z.string().min(1), detailHint: z.string().min(1), explanation: z.string().min(1).optional() })).min(1),
 });
 export const coloringSchema = z.object({
   ...metadata, gameType: z.literal('coloring'), referenceAssetId: id, lineAssetId: id, regionMapAssetId: id,
@@ -105,13 +106,16 @@ export function parseCatalog(input: unknown): ContentCatalog {
     if (a && b && (a.width !== b.width || a.height !== b.height)) issues.push(`关卡 ${level.id}：A/B 尺寸不一致`);
     checkUnique(level.differences, `关卡 ${level.id} 的差异`);
     for (const difference of level.differences) {
-      const { x, y, width, height } = difference.region;
-      if (x + width > 1.000001 || y + height > 1.000001) issues.push(`关卡 ${level.id} / ${difference.id}：差异区域越界`);
+      for (const { x, y, width, height } of getDifferenceRegions(difference)) {
+        if (x + width > 1.000001 || y + height > 1.000001) issues.push(`关卡 ${level.id} / ${difference.id}：差异区域越界`);
+      }
     }
     for (let i = 0; i < level.differences.length; i++) {
       for (let j = i + 1; j < level.differences.length; j++) {
         const a = level.differences[i], b = level.differences[j];
-        if (a.region.x < b.region.x + b.region.width && a.region.x + a.region.width > b.region.x && a.region.y < b.region.y + b.region.height && a.region.y + a.region.height > b.region.y) {
+        if (getDifferenceRegions(a).some(aRegion => getDifferenceRegions(b).some(bRegion =>
+          aRegion.x < bRegion.x + bRegion.width && aRegion.x + aRegion.width > bRegion.x
+          && aRegion.y < bRegion.y + bRegion.height && aRegion.y + aRegion.height > bRegion.y))) {
           issues.push(`关卡 ${level.id}：${a.id} 与 ${b.id} 区域重叠`);
         }
       }

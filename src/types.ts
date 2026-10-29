@@ -24,6 +24,7 @@ export interface NormalizedRegion { x: number; y: number; width: number; height:
 export interface DifferenceDefinition {
   id: string;
   region: NormalizedRegion;
+  additionalRegions?: NormalizedRegion[];
   hint: string;
   detailHint: string;
   explanation?: string;

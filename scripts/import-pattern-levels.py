@@ -12,7 +12,7 @@ import json
 from pathlib import Path
 from shutil import copy2
 
-from PIL import Image, ImageChops
+from PIL import Image, ImageChops, ImageFilter
 
 ROOT = Path(__file__).resolve().parents[1]
 VERSION = "user-patterns-v001"
@@ -49,9 +49,10 @@ SPECS = [
              "比较左下角放射状花叶。", "看左下：黑叶团变成了带红心的红色太阳状花。"),
             ("lower-right-leaves", [927, 911, 1094, 1084], [1013, 994], 12,
              "比较右下角放射状花叶的颜色。", "看右下：黑色叶团变成了金黄色花叶。"),
-            ("upper-red-petal-tip", [588, 402, 667, 488], [625, 433], 8,
-             "比较中央上侧红色花瓣的尖端。", "看中央上方、约三分之一高度：红瓣顶端的突出轮廓略有不同，可放大观察。"),
+            ("upper-red-petal-tip", [440, 328, 814, 500], [516, 353], 8,
+             "比较中央一圈红色花瓣的轮廓。", "参照图 A 的红瓣外缘带小尖角，变化图 B 是圆润的弧形；上、下、左、右任一红瓣均可点击。"),
         ],
+        "petalAdditionalBoxes": [[336, 440, 490, 812], [760, 440, 920, 812], [440, 752, 814, 910]],
     },
 ]
 
@@ -103,6 +104,52 @@ def normalized_region(box: list[int], size: tuple[int, int]) -> dict[str, float]
             "width": (right - x) / size[0], "height": (bottom - y) / size[1]}
 
 
+def red_petal_components(image: Image.Image) -> tuple[Image.Image, list[list[int]]]:
+    """Find the eight large red petals in the delivered pixels, without painting art.
+
+    Small neighbouring red flourishes are deliberately excluded. The returned
+    support is used only to select existing B pixels for the local composite.
+    """
+    left, top, right, bottom = 320, 320, 930, 930
+    width, height = right - left, bottom - top
+    pixels = image.load()
+    candidates = bytearray(width * height)
+    for y in range(height):
+        for x in range(width):
+            r, g, b = pixels[x + left, y + top]
+            radius2 = (x + left - 625) ** 2 + (y + top - 624) ** 2
+            candidates[y * width + x] = int(200 ** 2 <= radius2 <= 310 ** 2
+                                             and r > 80 and r > g * 1.25 and r > b * 1.3)
+    components = []
+    for start in range(len(candidates)):
+        if not candidates[start]:
+            continue
+        candidates[start] = 0
+        stack, component = [start], []
+        while stack:
+            index = stack.pop()
+            component.append(index)
+            x, y = index % width, index // width
+            for nx, ny in [(x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1)]:
+                neighbour = ny * width + nx
+                if 0 <= nx < width and 0 <= ny < height and candidates[neighbour]:
+                    candidates[neighbour] = 0
+                    stack.append(neighbour)
+        if len(component) > 4000:
+            components.append(component)
+    if len(components) != 8:
+        raise RuntimeError(f"忍冬红瓣识别应为8瓣，实际{len(components)}；须重新复核原图")
+    support = Image.new("L", image.size)
+    output = support.load()
+    tips = []
+    for component in components:
+        points = [(index % width + left, index // width + top) for index in component]
+        for point in points:
+            output[point] = 255
+        tips.append(list(max(points, key=lambda p: (p[0] - 625) ** 2 + (p[1] - 624) ** 2)))
+    return support, tips
+
+
 def main() -> None:
     (ROOT / 'work').mkdir(exist_ok=True)
     parser = argparse.ArgumentParser(description=__doc__)
@@ -134,41 +181,84 @@ def main() -> None:
         union = Image.new("L", reference.size)
         target_records = []
         differences = []
+        ring_mask, petal_samples = None, []
+        if level_id == "patterns-scrolls":
+            a_petals, petal_samples = red_petal_components(reference)
+            b_petals, _ = red_petal_components(aligned)
+            # Include the original A tips so they are completely replaced by
+            # B's rounded edge and its existing surrounding background.
+            ring_mask = ImageChops.lighter(a_petals, b_petals).filter(ImageFilter.MaxFilter(19)).filter(ImageFilter.GaussianBlur(2))
+            # The cream/black radial strokes belong to the same petals. Keep
+            # their whole band opaque; fading across individual strokes would
+            # produce doubled edges after the small source registration drift.
+            band = Image.new("L", reference.size)
+            band_pixels = band.load()
+            for y in range(320, 930):
+                for x in range(320, 930):
+                    radius = ((x - 625) ** 2 + (y - 624) ** 2) ** .5
+                    value = min(1, max(0, (radius - 174) / 12), max(0, (250 - radius) / 12))
+                    band_pixels[x, y] = round(255 * value * value * (3 - 2 * value))
+            ring_mask = ImageChops.lighter(ring_mask, band)
         for target_id, box, center, feather, hint, detail_hint in spec["targets"]:
-            mask = inward_mask((box[2] - box[0], box[3] - box[1]), feather)
-            composite.paste(aligned.crop(box), box[:2], mask)
-            union.paste(255, box)
-            differences.append({"id": target_id, "region": normalized_region(box, reference.size),
-                                "hint": hint, "detailHint": detail_hint})
-            target_records.append({"id": target_id, "pixelBox": box, "semanticCenterPixels": center,
-                                   "inwardFeatherPixels": feather})
+            additional = spec.get("petalAdditionalBoxes", []) if target_id == "upper-red-petal-tip" else []
+            local_mask = Image.new("L", reference.size)
+            for area in [box, *additional]:
+                rectangle_mask = Image.new("L", reference.size)
+                rectangle_mask.paste(inward_mask((area[2] - area[0], area[3] - area[1]), feather), area[:2])
+                local_mask = ImageChops.lighter(local_mask, rectangle_mask)
+                union.paste(255, area)
+            if additional:
+                local_mask = ImageChops.darker(local_mask, ring_mask)
+                ring_mask = local_mask
+            composite.paste(aligned, (0, 0), local_mask)
+            difference = {"id": target_id, "region": normalized_region(box, reference.size),
+                          "hint": hint, "detailHint": detail_hint}
+            record = {"id": target_id, "pixelBox": box, "semanticCenterPixels": center,
+                      "inwardFeatherPixels": feather}
+            if additional:
+                difference["additionalRegions"] = [normalized_region(area, reference.size) for area in additional]
+                record["additionalPixelBoxes"] = additional
+            differences.append(difference)
+            target_records.append(record)
         delta = ImageChops.difference(reference, composite)
         outside = Image.composite(Image.new("RGB", reference.size), delta, union)
         if outside.getbbox() is not None:
             raise RuntimeError(f"{level_id}：配置区域外出现变化")
         for record in target_records:
-            crop = delta.crop(record["pixelBox"])
+            target_mask = Image.new("L", reference.size)
+            for area in [record["pixelBox"], *record.get("additionalPixelBoxes", [])]:
+                target_mask.paste(255, area)
+            crop = Image.composite(delta, Image.new("RGB", reference.size), target_mask)
             red, green, blue = crop.split()
             maximum_delta = ImageChops.lighter(ImageChops.lighter(red, green), blue)
             changed = crop.width * crop.height - maximum_delta.histogram()[0]
             if changed == 0:
                 raise RuntimeError(f"{level_id}/{record['id']}：目标在合成中消失")
             record["changedPixels"] = changed
-        # The subtle scrolls target has an opaque interior, including the small
-        # tip. Check the complete local region, rather than a single same-colour pixel.
         if level_id == "patterns-scrolls":
-            tip_box = (615, 418, 637, 446)
-            if ImageChops.difference(composite.crop(tip_box), aligned.crop(tip_box)).getbbox() is not None:
-                raise RuntimeError("忍冬第五处尖端未完整保留")
+            for x, y in petal_samples:
+                sample = (x - 2, y - 2, x + 3, y + 3)
+                if ImageChops.difference(composite.crop(sample), aligned.crop(sample)).getbbox() is not None:
+                    raise RuntimeError(f"忍冬红瓣原尖角({x},{y})未完整采用B的圆润轮廓")
+            previous = Image.open(runtime_dir / "patterns-scrolls-b-v001.png").convert("RGB")
+            fifth_mask = Image.new("L", reference.size)
+            for area in [target_records[-1]["pixelBox"], *spec["petalAdditionalBoxes"]]:
+                fifth_mask.paste(255, area)
+            untouched = Image.composite(Image.new("RGB", reference.size), ImageChops.difference(previous, composite), fifth_mask)
+            if untouched.getbbox() is not None:
+                raise RuntimeError("忍冬红瓣以外的原有四处差异发生了变化")
         for side, image in [("a", reference), ("b", composite)]:
             asset_id = f"{level_id}-{side}"
-            filename = f"{asset_id}-v001.png"
+            corrected = level_id == "patterns-scrolls" and side == "b"
+            filename = f"{asset_id}-{'v002' if corrected else 'v001'}.png"
             image.save(runtime_dir / filename, optimize=True)
             assets.append({"id": asset_id, "path": f"/assets/levels/{level_id}/{filename}",
                            "width": image.width, "height": image.height, "kind": "level",
-                           "placeholder": False, "version": VERSION,
+                           "placeholder": False, "version": "user-patterns-v002" if corrected else VERSION,
                            "sourceNote": "开发者使用 AI 生成并交付的教学示意，非原壁画照片或历史原貌复原。"
-                           + (" A 保持原尺寸与构图。" if side == "a" else " 以 A 为底，仅在五个确认区域合成配准后的 B，内向羽化；区域外像素与 A 完全一致。")})
+                           + (" A 保持原尺寸与构图。" if side == "a" else
+                              " 以 A 为底，原四处差异保持；第五处采用原B的整圈圆润红瓣，8个原尖角均已替换。仅合成登记区域，区域外与A完全一致。" if corrected else
+                              " 以 A 为底，仅在五个确认区域合成配准后的 B，内向羽化；区域外像素与 A 完全一致。")})
         level = {"schemaVersion": 1, "id": level_id, "themeId": "patterns", "gameType": "spot-difference",
                  "title": spec["title"], "subtitle": "纹样与色彩 · AI 教学示意", "objective": spec["objective"],
                  "difficulty": "细察", "estimatedMinutes": 5, "thumbnailAssetId": f"{level_id}-a",
@@ -184,8 +274,19 @@ def main() -> None:
                  "processing": "保留原稿字节与原尺寸。使用已审查的 B→A 相似变换配准，双三次重采样；以 A 为底，仅在五个确认矩形内合入 B。蒙版从矩形边缘零透明度向内以 smoothstep 增至不透明，羽化不越出区域；未裁切画幅、强拉比例、生成、修复或重画美术内容。",
                  "registrationBToA": spec["registration"], "targets": target_records,
                  "outsideRegionChangedPixels": 0,
-                 "fifthTargetNote": "中央上侧红瓣尖端在两图中都存在，B突出轮廓略有不同；变化较细，建议放大观察。" if level_id == "patterns-scrolls" else None}
-        write_json(archive_dir / "source-notes.json", notes)
+                 "fifthTargetNote": "原A整圈红瓣带尖角，原B为圆润弧形。第五处主区域及三个关联区域共同对应这一圈，只计一次。" if level_id == "patterns-scrolls" else None}
+        notes_dir = archive_dir
+        if level_id == "patterns-scrolls":
+            notes_dir = archive_dir.parent / "v002"
+            notes_dir.mkdir(exist_ok=True)
+            ring_mask.save(notes_dir / "red-petal-ring-mask.png", optimize=True)
+            notes.update({"version": "user-patterns-v002", "correctedOn": "2026-10-29",
+                          "processing": "从v001归档原A/B重新配准。保留前四处局部合成；第五处识别原A/B的8个大红瓣连通分量（中心距200～310像素内、RGB红色阈值、分量>4000像素），合并支撑蒙版，外扩9像素并以2像素高斯过渡；同心环带174～250像素、内外各12像素过渡，保证花瓣内黑白放射纹采用同一原B而不重影。限制在四个登记区域内。仅复制原B像素，未生成或重画内容；A和v001运行图保留。",
+                          "petalMask": "art-source/levels/patterns-scrolls/v002/red-petal-ring-mask.png",
+                          "originalTipSamples": petal_samples, "tipSamplePatchSize": [5, 5],
+                          "checks": {"allEightTipPatchesMatchAlignedB": True, "outsideFifthTargetMatchesPreviousRuntime": True,
+                                     "firstFourDifferencesUnchanged": True, "outsideRegionChangedPixels": 0}})
+        write_json(notes_dir / "source-notes.json", notes)
         report.append({"id": level_id, "size": list(reference.size), "targets": target_records,
                        "outsideRegionChangedPixels": 0})
         print(f"{level_id}: {reference.width}×{reference.height}, 5处差异, 区域外0变化")

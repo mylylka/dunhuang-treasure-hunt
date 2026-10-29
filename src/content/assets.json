@@ -329,13 +329,13 @@
   },
   {
     "id": "patterns-scrolls-b",
-    "path": "/assets/levels/patterns-scrolls/patterns-scrolls-b-v001.png",
+    "path": "/assets/levels/patterns-scrolls/patterns-scrolls-b-v002.png",
     "width": 1254,
     "height": 1254,
     "kind": "level",
     "placeholder": false,
-    "version": "user-patterns-v001",
-    "sourceNote": "开发者使用 AI 生成并交付的教学示意，非原壁画照片或历史原貌复原。 以 A 为底，仅在五个确认区域合成配准后的 B，内向羽化；区域外像素与 A 完全一致。"
+    "version": "user-patterns-v002",
+    "sourceNote": "开发者使用 AI 生成并交付的教学示意，非原壁画照片或历史原貌复原。 以 A 为底，原四处差异保持；第五处采用原B的整圈圆润红瓣，8个原尖角均已替换。仅合成登记区域，区域外与A完全一致。"
   },
   {
     "id": "coloring-three-rabbits-reference",

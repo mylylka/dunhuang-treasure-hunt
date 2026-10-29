@@ -1,0 +1,184 @@
+{
+  "version": "user-patterns-v002",
+  "receivedOn": "2026-10-28",
+  "creator": "开发者",
+  "originals": [
+    {
+      "filename": "忍冬卷草A.png",
+      "path": "art-source/levels/patterns-scrolls/v001/忍冬卷草A.png",
+      "sha256": "67a0764561c8a0acc4c99b20ee47b11221b0ee3dfc3c95d313b76d266b6752f5"
+    },
+    {
+      "filename": "忍冬卷草B.png",
+      "path": "art-source/levels/patterns-scrolls/v001/忍冬卷草B.png",
+      "sha256": "3517189419174819b93ef84257d35ae2935ad0ec981365d1e4edce3bbb039923"
+    }
+  ],
+  "sourceSize": [
+    1254,
+    1254
+  ],
+  "runtimeSize": [
+    1254,
+    1254
+  ],
+  "cultureStatus": "AI 教学示意；用户未提供对应具体洞窟的原始图源，不添加洞窟归属或历史配色断言。",
+  "processing": "从v001归档原A/B重新配准。保留前四处局部合成；第五处识别原A/B的8个大红瓣连通分量（中心距200～310像素内、RGB红色阈值、分量>4000像素），合并支撑蒙版，外扩9像素并以2像素高斯过渡；同心环带174～250像素、内外各12像素过渡，保证花瓣内黑白放射纹采用同一原B而不重影。限制在四个登记区域内。仅复制原B像素，未生成或重画内容；A和v001运行图保留。",
+  "registrationBToA": [
+    [
+      0.9981141348902367,
+      -0.0007254216220994904,
+      1.705178236561076
+    ],
+    [
+      0.0007254216220994904,
+      0.9981141348902367,
+      0.21172518808841356
+    ]
+  ],
+  "targets": [
+    {
+      "id": "upper-left-figure",
+      "pixelBox": [
+        271,
+        273,
+        425,
+        425
+      ],
+      "semanticCenterPixels": [
+        375,
+        381
+      ],
+      "inwardFeatherPixels": 12,
+      "changedPixels": 22092
+    },
+    {
+      "id": "central-flower",
+      "pixelBox": [
+        570,
+        568,
+        681,
+        680
+      ],
+      "semanticCenterPixels": [
+        625,
+        623
+      ],
+      "inwardFeatherPixels": 10,
+      "changedPixels": 11408
+    },
+    {
+      "id": "lower-left-flower",
+      "pixelBox": [
+        159,
+        904,
+        319,
+        1065
+      ],
+      "semanticCenterPixels": [
+        232,
+        984
+      ],
+      "inwardFeatherPixels": 12,
+      "changedPixels": 24202
+    },
+    {
+      "id": "lower-right-leaves",
+      "pixelBox": [
+        927,
+        911,
+        1094,
+        1084
+      ],
+      "semanticCenterPixels": [
+        1013,
+        994
+      ],
+      "inwardFeatherPixels": 12,
+      "changedPixels": 27300
+    },
+    {
+      "id": "upper-red-petal-tip",
+      "pixelBox": [
+        440,
+        328,
+        814,
+        500
+      ],
+      "semanticCenterPixels": [
+        516,
+        353
+      ],
+      "inwardFeatherPixels": 8,
+      "additionalPixelBoxes": [
+        [
+          336,
+          440,
+          490,
+          812
+        ],
+        [
+          760,
+          440,
+          920,
+          812
+        ],
+        [
+          440,
+          752,
+          814,
+          910
+        ]
+      ],
+      "changedPixels": 160318
+    }
+  ],
+  "outsideRegionChangedPixels": 0,
+  "fifthTargetNote": "原A整圈红瓣带尖角，原B为圆润弧形。第五处主区域及三个关联区域共同对应这一圈，只计一次。",
+  "correctedOn": "2026-10-29",
+  "petalMask": "art-source/levels/patterns-scrolls/v002/red-petal-ring-mask.png",
+  "originalTipSamples": [
+    [
+      515,
+      350
+    ],
+    [
+      738,
+      351
+    ],
+    [
+      357,
+      512
+    ],
+    [
+      895,
+      512
+    ],
+    [
+      358,
+      731
+    ],
+    [
+      895,
+      731
+    ],
+    [
+      515,
+      888
+    ],
+    [
+      738,
+      889
+    ]
+  ],
+  "tipSamplePatchSize": [
+    5,
+    5
+  ],
+  "checks": {
+    "allEightTipPatchesMatchAlignedB": true,
+    "outsideFifthTargetMatchesPreviousRuntime": true,
+    "firstFourDifferencesUnchanged": true,
+    "outsideRegionChangedPixels": 0
+  }
+}

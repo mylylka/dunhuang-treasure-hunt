@@ -40,9 +40,13 @@
 | 关卡／稳定素材ID | 交付原名 | 原稿与运行尺寸 | 状态 |
 |---|---|---:|---|
 | 莲瓣与团花：`patterns-lotus-a`、`patterns-lotus-b` | 莲瓣团花A.png／莲瓣团花B.png | 1254×1254 | 5处已确认目标 |
-| 忍冬与卷草：`patterns-scrolls-a`、`patterns-scrolls-b` | 忍冬卷草A.png／忍冬卷草B.png | 1254×1254 | 5处已确认目标，第五处宜放大观察 |
+| 忍冬与卷草：`patterns-scrolls-a`、`patterns-scrolls-b` | 忍冬卷草A.png／忍冬卷草B.png | 1254×1254 | 5处已确认目标，B的整圈红瓣采用v002圆润轮廓 |
 
-原稿及 `source-notes.json` 在 `art-source/levels/<level-id>/v001/`；运行PNG在 `public/assets/levels/<level-id>/`。原稿保持原始字节、文件名和1:1构图，不能强拉成旧首关的3:2。两组B原稿有全图AI漂移，运行版以A为底，仅合入五个确认区域：先用登记的B→A矩阵小幅配准，再在矩形内以8～12px内向羽化过渡。两组运行图在配置区域外均为0像素变化；忍冬第五处尖端位于不透明内部，未被羽化抹掉。
+原稿及旧 `source-notes.json` 在 `art-source/levels/<level-id>/v001/`；运行PNG在 `public/assets/levels/<level-id>/`。原稿保持原始字节、文件名和1:1构图，不能强拉成旧首关的3:2。两组B原稿有全图AI漂移，运行版以A为底，仅合入五组确认区域：先用登记的B→A矩阵小幅配准，再在矩形内以8～12px内向羽化过渡。运行图在全部配置区域之外均与A逐像素相同。
+
+忍冬卷草v002修正第五处：原A的8瓣红花带外角尖突，原B为圆润弧线；旧v001只合成上方中间的小框，未覆盖花瓣外轮廓。v002从归档原图提取红瓣支撑蒙版，并完整采用原B的放射纹环带，避免细线重影；只复制原B像素，不生成或重画内容。处理配方、蒙版与8个原尖角的5×5像素核对点登记在 `art-source/levels/patterns-scrolls/v002/`，原稿与v001运行文件保留，稳定素材ID指向 `patterns-scrolls-b-v002.png`。其余四处差异及第五处范围外与旧运行图完全一致。
+
+第五处仍沿用 `upper-red-petal-tip` 稳定ID：顶部 `region` 配三个 `additionalRegions` 覆盖左、右、下方红瓣，任何一瓣均算同一处，重复点击不增加计数。中央小花不在这组命中区域内；主区域用于提示与发现标记。渲染裁切、命中及内容校验均使用全部区域。
 
 `python3 scripts/import-pattern-levels.py` 可复现归档和导出；已有归档原稿内容不同会拒绝覆盖。每关JSON存比例区域和短提示，精确像素框、语义中心、配准矩阵、羽化参数与校验值保存在对应来源登记。人物形体、花形与配色变化均为AI教学观察题，不据此认定洞窟或年代。
 

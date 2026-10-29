@@ -900,6 +900,90 @@ test('隔离的两处差异配置生效，B的区域外像素不进入游戏', a
   expect(Object.keys(completed)).toEqual([testId]);
 });
 
+test('忍冬卷草圆润红瓣：变化图的主区域与附加区域都渲染B', async ({ page }) => {
+  const scrolls = allLevels.find(item => item.id === 'patterns-scrolls') as SpotDifferenceLevel;
+  const changedAsset = assets.find(asset => asset.id === scrolls.editedAssetId)!;
+  expect(changedAsset.path).toMatch(/patterns-scrolls-b-v002\.png$/);
+  const petal = scrolls.differences.find(item => item.id === 'upper-red-petal-tip')!;
+  expect(petal.additionalRegions).toHaveLength(3);
+  const sourcePoints = [{ x: 516, y: 353 }, { x: 360, y: 515 }, { x: 890, y: 730 }, { x: 740, y: 885 }];
+  const outsidePoint = { x: 1060, y: 150 };
+  const assetRoute = `**${changedAsset.path}*`;
+  // The real level keeps its five IDs and regions. A temporary solid B makes
+  // omitted extra crops visible even when the phone renders the petals small.
+  await page.route(assetRoute, async route => {
+    await route.fulfill({ contentType: 'image/svg+xml', body: `<svg xmlns="http://www.w3.org/2000/svg" width="${changedAsset.width}" height="${changedAsset.height}"><rect width="100%" height="100%" fill="#ff00ff"/></svg>` });
+  });
+  await page.addInitScript(key => localStorage.setItem(key, JSON.stringify({ version: 1, completed: {}, settings: { reducedMotion: true } })), progressKey);
+  await page.goto(`/#/play/${scrolls.id}`);
+  await expect(page.getByRole('button', { name: '给我提示' })).toBeEnabled({ timeout: imageLoadTimeout });
+  const host = page.getByTestId('phaser-player');
+  const canvas = host.locator('canvas');
+  const sourcePosition = async (point: { x: number; y: number }, side: 'reference' | 'edited') => {
+    const layout = JSON.parse((await host.getAttribute('data-layout'))!) as Layout;
+    const image = layout[side];
+    return { x: image.x + point.x / changedAsset.width * image.width,
+      y: image.y + point.y / changedAsset.height * image.height };
+  };
+  const renderedSamples = await Promise.all([...sourcePoints, outsidePoint].map(point => sourcePosition(point, 'edited')));
+  const screenshot = await canvas.screenshot({ scale: 'css', animations: 'disabled' });
+  const pixels = await page.evaluate(async ({ png, points }) => {
+    const image = new Image(); image.src = `data:image/png;base64,${png}`; await image.decode();
+    const surface = document.createElement('canvas'); surface.width = image.width; surface.height = image.height;
+    const context = surface.getContext('2d')!; context.drawImage(image, 0, 0);
+    return points.map(point => [...context.getImageData(Math.floor(point.x), Math.floor(point.y), 1, 1).data].slice(0, 3));
+  }, { png: screenshot.toString('base64'), points: renderedSamples });
+  for (const pixel of pixels.slice(0, 4)) expect(pixel).toEqual([255, 0, 255]);
+  expect(pixels[4]).not.toEqual([255, 0, 255]);
+});
+
+test('忍冬卷草圆润红瓣：四边首次点击共用第五处且中央独立，五处可完成', async ({ page }, testInfo) => {
+  const scrolls = allLevels.find(item => item.id === 'patterns-scrolls') as SpotDifferenceLevel;
+  const changedAsset = assets.find(asset => asset.id === scrolls.editedAssetId)!;
+  expect(changedAsset.path).toMatch(/patterns-scrolls-b-v002\.png$/);
+  const sourcePoints = [{ x: 516, y: 353 }, { x: 360, y: 515 }, { x: 890, y: 730 }, { x: 740, y: 885 }];
+  await page.addInitScript(key => localStorage.setItem(key, JSON.stringify({ version: 1, completed: {}, settings: { reducedMotion: true } })), progressKey);
+  const actualImage = page.waitForResponse(response => new URL(response.url()).pathname === changedAsset.path && response.status() === 200);
+  await page.goto(`/#/play/${scrolls.id}`);
+  await actualImage;
+  await expect(page.getByRole('button', { name: '给我提示' })).toBeEnabled({ timeout: imageLoadTimeout });
+  await expectDocumentFits(page);
+  const host = page.getByTestId('phaser-player');
+  const canvas = host.locator('canvas');
+  const clickPoint = async (point: { x: number; y: number }, side: 'reference' | 'edited') => {
+    const layout = JSON.parse((await host.getAttribute('data-layout'))!) as Layout;
+    const image = layout[side];
+    const position = { x: image.x + point.x / changedAsset.width * image.width,
+      y: image.y + point.y / changedAsset.height * image.height };
+    if (testInfo.project.name === 'mobile-chromium') await canvas.tap({ position });
+    else await canvas.click({ position });
+  };
+  const center = scrolls.differences.find(item => item.id === 'central-flower')!.region;
+  const centerPoint = { x: (center.x + center.width / 2) * changedAsset.width,
+    y: (center.y + center.height / 2) * changedAsset.height };
+  for (const [index, firstPoint] of sourcePoints.entries()) {
+    if (index > 0) await page.getByRole('button', { name: '重新开始', exact: true }).click();
+    await expect(page.getByTestId('game-progress')).toHaveAttribute('aria-label', progressLabel(0, 5));
+    const side = index % 2 ? 'reference' : 'edited';
+    await clickPoint(firstPoint, side);
+    await expect(page.getByTestId('game-progress')).toHaveAttribute('aria-label', progressLabel(1, 5));
+    await clickPoint(sourcePoints[(index + 1) % sourcePoints.length], side === 'edited' ? 'reference' : 'edited');
+    await expect(page.getByTestId('game-progress')).toHaveAttribute('aria-label', progressLabel(1, 5));
+    await clickPoint(centerPoint, 'edited');
+    await expect(page.getByTestId('game-progress')).toHaveAttribute('aria-label', progressLabel(2, 5));
+  }
+  const remaining = scrolls.differences.filter(item => !['upper-red-petal-tip', 'central-flower'].includes(item.id));
+  for (const [index, difference] of remaining.entries()) {
+    const region = difference.region;
+    await clickPoint({ x: (region.x + region.width / 2) * changedAsset.width,
+      y: (region.y + region.height / 2) * changedAsset.height }, index % 2 ? 'reference' : 'edited');
+    if (index < remaining.length - 1) await expect(page.getByTestId('game-progress')).toHaveAttribute('aria-label', progressLabel(index + 3, 5));
+  }
+  await expect(page).toHaveURL(/#\/result\/patterns-scrolls$/);
+  await expect(page.locator('.result-count')).toContainText('5');
+  expect(await page.evaluate(key => Object.keys(JSON.parse(localStorage.getItem(key)!).completed), progressKey)).toEqual([scrolls.id]);
+});
+
 for (const viewport of [
   { name: '小竖屏', width: 360, height: 640 },
   { name: '手机横屏', width: 844, height: 390 },

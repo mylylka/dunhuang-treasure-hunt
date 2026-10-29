@@ -28,6 +28,11 @@ export function regionToRectangle(region: NormalizedRegion, image: Rectangle): R
   };
 }
 
+/** One semantic difference may span several separate parts of the image. */
+export function getDifferenceRegions(difference: DifferenceDefinition): NormalizedRegion[] {
+  return [difference.region, ...(difference.additionalRegions ?? [])];
+}
+
 /** The image's CSS dimensions are the input space, regardless of source resolution. */
 export function findDifferenceAtPoint(
   differences: readonly DifferenceDefinition[],
@@ -36,21 +41,25 @@ export function findDifferenceAtPoint(
   minimumTargetSize = 44,
 ): DifferenceDefinition | undefined {
   if (!containsPoint(image, point) || image.width <= 0 || image.height <= 0) return undefined;
-  const targets = differences.map((difference) => ({
+  const targets = differences.flatMap((difference) => getDifferenceRegions(difference).map(region => ({
     difference,
-    rectangle: regionToRectangle(difference.region, image),
-  }));
+    rectangle: regionToRectangle(region, image),
+  })));
   // Real regions always take precedence, so a neighbouring enlarged target cannot steal a hit.
   const exact = targets.find(({ rectangle }) => containsPoint(rectangle, point));
   if (exact) return exact.difference;
 
-  const expanded = targets.flatMap(({ difference, rectangle }) => {
+  const nearestByDifference = new Map<string, { difference: DifferenceDefinition; distance: number }>();
+  for (const { difference, rectangle } of targets) {
     const width = Math.max(minimumTargetSize, rectangle.width);
     const height = Math.max(minimumTargetSize, rectangle.height);
     const center = { x: rectangle.x + rectangle.width / 2, y: rectangle.y + rectangle.height / 2 };
-    if (!containsPoint({ x: center.x - width / 2, y: center.y - height / 2, width, height }, point)) return [];
-    return [{ difference, distance: (point.x - center.x) ** 2 + (point.y - center.y) ** 2 }];
-  }).sort((a, b) => a.distance - b.distance);
+    if (!containsPoint({ x: center.x - width / 2, y: center.y - height / 2, width, height }, point)) continue;
+    const distance = (point.x - center.x) ** 2 + (point.y - center.y) ** 2;
+    const nearest = nearestByDifference.get(difference.id);
+    if (!nearest || distance < nearest.distance) nearestByDifference.set(difference.id, { difference, distance });
+  }
+  const expanded = [...nearestByDifference.values()].sort((a, b) => a.distance - b.distance);
   // Equidistant overlap is deliberately ignored rather than choosing an arbitrary target.
   if (expanded.length > 1 && Math.abs(expanded[0].distance - expanded[1].distance) < 0.001) return undefined;
   return expanded[0]?.difference;
