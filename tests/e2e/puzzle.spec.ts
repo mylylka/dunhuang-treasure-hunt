@@ -417,8 +417,8 @@ test('图片加载失败保留真实重试入口，恢复后不用刷新页面',
   await expect.poll(async () => (await layout(page)).pieces[0].turns).toBe((before + 1) % 4);
 });
 
-test('三关找不同使用清晰HTML标签，坐标与画布布局一致且没有重复实例', async ({ page }) => {
-  expect(observations).toHaveLength(3);
+test('四关找不同使用清晰HTML标签，坐标与画布布局一致且没有重复实例', async ({ page }) => {
+  expect(observations).toHaveLength(4);
   for (const level of observations) {
     await page.goto(`/#/play/${level.id}`);
     await expect(page.getByRole('button', { name: '给我提示', exact: true })).toBeEnabled({ timeout: imageLoadTimeout });

@@ -2,6 +2,7 @@ import { chromium, expect } from '@playwright/test';
 import { readFile, readdir } from 'node:fs/promises';
 import { spawn } from 'node:child_process';
 import { createHash } from 'node:crypto';
+import { fileURLToPath } from 'node:url';
 
 const baseUrl = 'http://localhost:4186';
 const level = JSON.parse(await readFile(new URL('../src/content/levels/patterns-intro.json', import.meta.url), 'utf8'));
@@ -25,7 +26,7 @@ async function isReady() {
 }
 try {
   if (!await isReady()) {
-    server = spawn(process.execPath, [new URL('./serve-preview.mjs', import.meta.url).pathname, '--no-open'], { stdio: 'pipe' });
+    server = spawn(process.execPath, [fileURLToPath(new URL('./serve-preview.mjs', import.meta.url)), '--no-open'], { stdio: 'pipe' });
     for (let i = 0; i < 60 && !await isReady(); i++) await new Promise(resolve => setTimeout(resolve, 100));
     if (!await isReady()) throw new Error('生产预览服务未能启动');
   }
@@ -541,6 +542,16 @@ try {
     expect([image.width, image.height]).toEqual([1254, 1254]);
     await verifyGameFits(image.width / image.height);
     await captureScreenshot(`outputs/${square.id}-找不同预览.png`);
+    if (square.id === 'patterns-geometry') {
+      for (const viewport of [{ width: 935, height: 604 }, { width: 360, height: 640 }, { width: 844, height: 390 }]) {
+        await page.setViewportSize(viewport);
+        await verifyGameFits(image.width / image.height);
+        await expect(page.getByTestId('game-progress')).toHaveAttribute('aria-label', '已找到 0 处，共 4 处');
+        await captureScreenshot(`outputs/${viewport.width === 935 ? '紧凑窗口' : viewport.width === 360 ? '手机' : '手机横屏'}联珠与几何预览.png`);
+      }
+      await page.setViewportSize({ width: 1440, height: 1000 });
+      await verifyGameFits(image.width / image.height);
+    }
     for (let index = 0; index < square.differences.length; index++) await hit(index, index % 2 ? 'edited' : 'reference', square);
     await expect(page).toHaveURL(new RegExp(`result/${square.id}$`));
     await verifyScreen(`${square.title}结果`);
@@ -738,7 +749,7 @@ try {
     }
   }
   if (errors.length) throw new Error(errors.join('\n'));
-  console.log('生产构建验证通过：七屏教学、三关找不同清晰标签、四关同屏参考填色及PNG、9块旋转与12/20片不规则拼图；电脑/手机横竖屏布局、碎片区连续滚动、封面和标题入口、真实点击拖拽与独立通关保存。');
+  console.log(`生产构建验证通过：七屏教学、${availableDifferenceCount}关找不同清晰标签、四关同屏参考填色及PNG、9块旋转与12/20片不规则拼图；电脑/手机横竖屏布局、碎片区连续滚动、封面和标题入口、真实点击拖拽与独立通关保存。`);
   }
 } finally {
   await browser?.close();

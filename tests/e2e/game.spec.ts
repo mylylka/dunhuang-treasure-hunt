@@ -425,7 +425,15 @@ async function inspectStaticScreens(page: Page) {
   await expectDocumentFits(page);
 
   await page.goto('/#/settings');
-  await expectInsideViewport(page, page.getByRole('checkbox', { name: '减少动效' }));
+  const motionSetting = page.getByRole('checkbox', { name: '减少动效' });
+  // Sound controls can fill a short viewport. Scroll only the settings pane,
+  // then retain the same complete-control and zero-document-scroll assertions.
+  await motionSetting.evaluate(element => {
+    const pane = element.closest('.text-scroll');
+    if (!(pane instanceof HTMLElement)) throw new Error('设置应在独立的可滚动内容区内');
+    pane.scrollTop += Math.max(0, element.getBoundingClientRect().bottom - pane.getBoundingClientRect().bottom + 1);
+  });
+  await expectInsideViewport(page, motionSetting);
   await expectDocumentFits(page);
 
   await page.goto('/#/missing-screen');

@@ -17,7 +17,7 @@ export const levelRoadmap: readonly LevelRoadmapEntry[] = [
   { id: 'patterns-intro', themeId: 'patterns', gameType: 'spot-difference', title: '藻井寻踪', plannedDifferenceCount: 5, learningFocus: '中心与外圈', motif: 'caisson' },
   { id: 'patterns-lotus', themeId: 'patterns', gameType: 'spot-difference', title: '莲瓣与团花', plannedDifferenceCount: 5, learningFocus: '花瓣层次', motif: 'lotus' },
   { id: 'patterns-scrolls', themeId: 'patterns', gameType: 'spot-difference', title: '忍冬与卷草', plannedDifferenceCount: 5, learningFocus: '叶形曲线', motif: 'scroll' },
-  { id: 'patterns-geometry', themeId: 'patterns', gameType: 'spot-difference', title: '联珠与几何', plannedDifferenceCount: 5, learningFocus: '重复单元', motif: 'beads' },
+  { id: 'patterns-geometry', themeId: 'patterns', gameType: 'spot-difference', title: '联珠与几何', plannedDifferenceCount: 4, learningFocus: '重复单元', motif: 'beads' },
   { id: 'patterns-rabbits', themeId: 'patterns', gameType: 'spot-difference', title: '三兔与旋转', plannedDifferenceCount: 5, learningFocus: '共用轮廓与方向', motif: 'rabbits' },
   { id: 'patterns-colors', themeId: 'patterns', gameType: 'spot-difference', title: '色彩与层次', plannedDifferenceCount: 6, learningFocus: '冷暖与明暗', motif: 'colors' },
 ];

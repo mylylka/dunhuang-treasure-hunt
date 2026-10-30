@@ -486,5 +486,25 @@
     "placeholder": false,
     "version": "user-puzzle-v002",
     "sourceNote": "开发者交付拼图图像，用户授权局部去除右下平台水印。仅采用登记范围，其他像素保持不变。原稿及处理记录见art-source/levels/puzzle-twin-dragons/v002/source-notes.json。"
+  },
+  {
+    "id": "patterns-geometry-a",
+    "path": "/assets/levels/patterns-geometry/patterns-geometry-a-v001.png",
+    "width": 1254,
+    "height": 1254,
+    "kind": "level",
+    "placeholder": false,
+    "version": "user-geometry-v001",
+    "sourceNote": "开发者交付的 AI 教学示意，原稿完整归档；不声称对应特定洞窟或历史原貌。 A保持原稿像素与完整比例。"
+  },
+  {
+    "id": "patterns-geometry-b",
+    "path": "/assets/levels/patterns-geometry/patterns-geometry-b-v001.png",
+    "width": 1254,
+    "height": 1254,
+    "kind": "level",
+    "placeholder": false,
+    "version": "user-geometry-v001",
+    "sourceNote": "开发者交付的 AI 教学示意，原稿完整归档；不声称对应特定洞窟或历史原貌。 以A为底，仅合入四类已确认纹样的原B像素，内向羽化；关联区域之外与A完全一致。"
   }
 ]

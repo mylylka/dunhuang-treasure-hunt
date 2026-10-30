@@ -87,9 +87,9 @@ async function recordedAnimation(page: Page) {
   return page.evaluate(() => (window as unknown as { __coloringAnimationRecord: { values: string[] } }).__coloringAnimationRecord.values);
 }
 
-test('真实目录开放三关找不同、三关拼图和四关填色', async ({ page }) => {
+test('真实目录开放四关找不同、三关拼图和四关填色', async ({ page }) => {
   expect(coloringLevels).toHaveLength(4);
-  expect(squareLevels).toHaveLength(2);
+  expect(squareLevels).toHaveLength(3);
   await page.goto('/#/theme/patterns/games');
   await expect(page.getByRole('link', { name: '填色', exact: true })).toBeVisible();
   await expect(page.getByRole('link', { name: '拼图', exact: true })).toBeVisible();
@@ -317,7 +317,7 @@ test('方图上侧4倍观察保持原生比例，返回游戏不增加发现', a
 });
 
 for (const level of squareLevels) {
-  test(`${level.title}保持1254方图原比例，可发现五处并单独保存`, async ({ page }) => {
+  test(`${level.title}保持1254方图原比例，可按配置差异数完成并单独保存`, async ({ page }) => {
     const source = assets.find(asset => asset.id === level.baseAssetId)!;
     expect([source.width, source.height]).toEqual([1254, 1254]);
     await page.goto(`/#/play/${level.id}`);
@@ -335,7 +335,7 @@ for (const level of squareLevels) {
       const image = current[index % 2 ? 'edited' : 'reference'], region = level.differences[index].region;
       await host.locator('canvas').click({ position: { x: image.x + (region.x + region.width / 2) * image.width,
         y: image.y + (region.y + region.height / 2) * image.height } });
-      if (index < level.differences.length - 1) await expect(page.getByTestId('game-progress')).toHaveAttribute('aria-label', `已找到 ${index + 1} 处，共 5 处`);
+      if (index < level.differences.length - 1) await expect(page.getByTestId('game-progress')).toHaveAttribute('aria-label', `已找到 ${index + 1} 处，共 ${level.differences.length} 处`);
     }
     await expect(page).toHaveURL(new RegExp(`/#/result/${level.id}$`));
     expect(await page.evaluate(key => Object.keys(JSON.parse(localStorage.getItem(key)!).completed), progressKey)).toEqual([level.id]);

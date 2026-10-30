@@ -9,7 +9,7 @@ describe('规划关卡与正式关卡分开管理', () => {
     const choices = getLevelChoices({ levels: [] }, 'patterns', 'spot-difference');
     expect(choices.map(choice => choice.title)).toEqual(['藻井寻踪', '莲瓣与团花', '忍冬与卷草', '联珠与几何', '三兔与旋转', '色彩与层次']);
     expect(choices.every(choice => choice.status === 'planned' && !('level' in choice))).toBe(true);
-    expect(levelRoadmap.map(entry => entry.plannedDifferenceCount)).toEqual([5, 5, 5, 5, 5, 6]);
+    expect(levelRoadmap.map(entry => entry.plannedDifferenceCount)).toEqual([5, 5, 5, 4, 5, 6]);
   });
 
   it('只按实际目录开放首关，差异数量和图片来自正式内容', () => {
