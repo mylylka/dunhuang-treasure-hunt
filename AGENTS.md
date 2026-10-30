@@ -47,6 +47,7 @@
 - `art-source/`：用户提供的原尺寸美术与图源说明；按 `shared/<asset-id>/vNNN/`、`themes/<theme-id>/vNNN/`、`levels/<level-id>/vNNN/` 保存，原稿保留版本，不覆盖或删除。
 - `tests/`：规则测试、浏览器测试与独立测试素材；测试关不得进入正式目录或正式存档。
 - `scripts/`：内容校验、构建辅助和打包工具。
+- `.github/workflows/`：GitHub Actions 自动化配置，仅存放当前使用的工作流；文件采用英文 kebab-case 和 `.yml` 后缀。部署工作流必须按需授予最小权限，密钥只从 GitHub Secrets 读取，不写入仓库。
 - `docs/`：架构、素材接入与维护说明。
 - `work/`：中间脚本、检查结果、截图、日志和测试缓存；清理前遵守用户的删除审批要求。
 - `outputs/`：用户可取用的构建结果、交付文档和源码包；不放临时文件。
