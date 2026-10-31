@@ -70,12 +70,13 @@ export default function WorldScreen(props: Props) {
         initial: checkpoint.current, reducedMotion: callbacks.current.reducedMotion || window.matchMedia('(prefers-reduced-motion: reduce)').matches,
         onSnapshot: next => { if (!disposed) setSnapshot(next); },
         onInteract: startInteraction,
+        onReady: () => { if (!disposed) setReady(true); },
         onError: message => { if (!disposed) { setError(message); setReady(false); } },
       });
       if (disposed) { instance.dispose(); return; }
       runtime.current = instance;
       instance.setPaused(flags.current.locked);
-      setReady(true);
+
     }).catch(() => { if (!disposed) setError('3D画面暂时无法启动。可以重试，或直接进入文化主题。'); });
     return () => {
       disposed = true;
@@ -170,10 +171,10 @@ export default function WorldScreen(props: Props) {
     <div className="world-host" ref={host} data-testid="world-host" data-ready={ready} aria-label="3D探索世界" inert={locked || view === 'story' ? true : undefined} />
     <output hidden data-testid="world-position" data-x={snapshot.checkpoint.position.x.toFixed(3)} data-z={snapshot.checkpoint.position.z.toFixed(3)} />
     <div className="world-hud" inert={view === 'story' || locked ? true : undefined}>
-      <header className="world-topbar"><div className="world-heading"><p>灰模试玩 · 美术待替换</p><h1>敦煌寻宝记</h1><span data-testid="world-location">{snapshot.location}</span></div>
+      <header className="world-topbar"><div className="world-heading"><p>美术样片 · 待确认</p><h1>敦煌寻宝记</h1><span data-testid="world-location">{snapshot.location}</span></div>
         <nav aria-label="世界导航"><a href="#/themes" onClick={persist}>直接选主题</a><button type="button" aria-expanded={showMap} onClick={() => setShowMap(value => !value)}>路线</button><a href="#/settings" onClick={persist}>设置</a><button type="button" onClick={pauseExploration} data-testid="world-pause">暂停</button></nav>
       </header>
-      {showMap && <aside className="world-map" aria-label="灰模路线图"><h2>沿路进入纹彩院</h2><svg viewBox="0 0 160 150" role="img" aria-label="左侧纹彩院，庭院右侧故事测试点；远方两处场景筹备中"><path d="M36.5 89.6H16.2V16.8H74.2V89.6H53.9" fill="none" stroke="#ab7660" strokeWidth="2"/><polyline points={COURTYARD_ROAD.filter(({ center }) => center.z <= 18).map(({ center }) => `${80 + center.x * 2.9},${84 + center.z * 2.8}`).join(' ')} fill="none" stroke="#bc9a68" strokeWidth="5" /><rect x="22" y="12" width="46" height="34" fill="#ab7660"/><text x="45" y="8" textAnchor="middle">纹彩院</text><circle cx="65" cy="65" r="5" fill="#4b7973"/><text x="80" y="65">故事测试点</text><circle cx={80 + snapshot.checkpoint.position.x * 2.9} cy={84 + snapshot.checkpoint.position.z * 2.8} r="4" fill="#a13d2e" stroke="white" strokeWidth="2"/></svg><p>乐舞馆、洞窟在后续阶段开放</p></aside>}
+      {showMap && <aside className="world-map" aria-label="探索路线图"><h2>沿路进入纹彩院</h2><svg viewBox="0 0 160 150" role="img" aria-label="左侧纹彩院，庭院右侧故事测试点；远方两处场景筹备中"><path d="M36.5 89.6H16.2V16.8H74.2V89.6H53.9" fill="none" stroke="#ab7660" strokeWidth="2"/><polyline points={COURTYARD_ROAD.filter(({ center }) => center.z <= 18).map(({ center }) => `${80 + center.x * 2.9},${84 + center.z * 2.8}`).join(' ')} fill="none" stroke="#bc9a68" strokeWidth="5" /><rect x="22" y="12" width="46" height="34" fill="#ab7660"/><text x="45" y="8" textAnchor="middle">纹彩院</text><circle cx="65" cy="65" r="5" fill="#4b7973"/><text x="80" y="65">故事测试点</text><circle cx={80 + snapshot.checkpoint.position.x * 2.9} cy={84 + snapshot.checkpoint.position.z * 2.8} r="4" fill="#a13d2e" stroke="white" strokeWidth="2"/></svg><p>乐舞馆、洞窟在后续阶段开放</p></aside>}
       {view === 'follow' && <>
         <div className="world-direction">纹彩院 <span aria-hidden="true">↖</span><small>沿路前行，左转入院</small></div>
         {ready && snapshot.nearby && <button type="button" className="world-discovery world-primary" data-testid="world-interact" onClick={startInteraction}>{snapshot.nearby === 'caisson' ? '抬头看看' : '试看九色鹿故事'}<kbd>F</kbd></button>}
@@ -183,7 +184,7 @@ export default function WorldScreen(props: Props) {
           <span style={{ transform: `translate(${stick.x * 30}px, ${stick.y * 30}px)` }} /><small>拖动行走</small>
         </div>
       </>}
-      {view === 'caisson' && <section className="world-observation" data-testid="world-observation" aria-label="藻井观察"><p>纹彩院 · 藻井厅</p><h2>抬头，发现头顶的纹样</h2><p>这里先用几何结构验证观察视角，正式藻井图案将在美术阶段接入。</p><div><button type="button" className="world-primary" data-testid="world-enter-theme" onClick={goToPatterns}>了解藻井的秘密</button><button type="button" onClick={finishEvent}>继续漫游</button><button type="button" onClick={() => dispatch({ type: event.mode === 'observing' && event.paused ? 'resume' : 'pause' })}>{event.mode === 'observing' && event.paused ? '继续镜头' : '暂停镜头'}</button></div></section>}
+      {view === 'caisson' && <section className="world-observation" data-testid="world-observation" aria-label="藻井观察"><p>纹彩院 · 藻井厅</p><h2>抬头，发现头顶的纹样</h2><p>观察藻井的层次、纹样与色彩。AI教学示意，非洞窟复原。</p><div><button type="button" className="world-primary" data-testid="world-enter-theme" onClick={goToPatterns}>了解藻井的秘密</button><button type="button" onClick={finishEvent}>继续漫游</button><button type="button" onClick={() => dispatch({ type: event.mode === 'observing' && event.paused ? 'resume' : 'pause' })}>{event.mode === 'observing' && event.paused ? '继续镜头' : '暂停镜头'}</button></div></section>}
     </div>
     {props.saveWarning && <div className="world-save-warning" role="status"><p>{props.saveWarning}</p><button type="button" onClick={persist}>重试保存</button></div>}
     {!ready && !error && <div className="world-cover" onKeyDown={trapCoverFocus} tabIndex={-1}><h2>正在准备探索世界…</h2><a href="#/themes">直接选择文化主题</a></div>}

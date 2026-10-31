@@ -12,3 +12,9 @@ export interface WorldStoryImage {
   height: number;
   alt: string;
 }
+
+/** Approved first art sample; later regions keep their own versioned assets. */
+export const WORLD_ART_SAMPLE = {
+  courtyard: 'courtyard/v001/courtyard.glb',
+  traveler: 'shared/v001/traveler.glb',
+} as const;

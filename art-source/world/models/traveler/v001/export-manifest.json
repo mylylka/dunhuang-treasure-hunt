@@ -1,0 +1,25 @@
+{
+  "asset": "traveler",
+  "version": "v001",
+  "reference": "小旅人三视图.png",
+  "referenceArchive": "art-source/world/art-sample/v001",
+  "referenceSha256": "e836552e427e951f6ffee1d11c4bb93b5fd4a76c95b098e7eb172b41f1f40c0d",
+  "status": "art sample awaiting user confirmation",
+  "generator": "scripts/build-world-traveler.py",
+  "coordinateSystem": "Blender Z-up, +Y facing; glTF Y-up, -Z facing; feet origin",
+  "heightMeters": 2.017,
+  "skin": "one explicit-weight deform skeleton; overlapping clothing components; no cloth simulation",
+  "animations": [
+    "Idle",
+    "Walk",
+    "Run"
+  ],
+  "triangles": 22248,
+  "bytes": 1115792,
+  "sha256": "4bb4ced7f062c25a5829a4551c60c78e739666d8209684bac4dc4e9455bf52d9",
+  "materials": "standard PBR, solid colors and geometric woven trim; no texture baking or AI modification",
+  "knownLimitations": [
+    "Stylized first sculpt; silhouette and face require user art approval",
+    "Scarf ends and backpack are attached to chest; no cloth physics"
+  ]
+}

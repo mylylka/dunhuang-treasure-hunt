@@ -31,4 +31,5 @@ export interface WorldRuntimeOptions {
   onSnapshot(snapshot: WorldSnapshot): void;
   onInteract(): void;
   onError(message: string): void;
+  onReady?(): void;
 }

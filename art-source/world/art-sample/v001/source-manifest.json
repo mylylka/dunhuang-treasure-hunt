@@ -1,0 +1,76 @@
+{
+  "date": "2026-10-31",
+  "stage": "art-sample-v001-awaiting-confirmation",
+  "sourceLibrary": "/Users/liujing/Downloads/3d视觉素材库",
+  "sourceIdentity": "User supplied AI concept references; not archaeological reconstruction",
+  "sources": [
+    {
+      "filename": "最新沙漠世界高空总览图.png",
+      "sha256": "bbb0d445fd5bd0df8c3e362c58651bb168b4c4e4fe555c50cb9854b53de00dd9",
+      "pixels": [
+        1672,
+        941
+      ],
+      "bytes": 2566304
+    },
+    {
+      "filename": "原始小旅人出生点第三人称开场图.png",
+      "sha256": "ecc3b219463f767c6797179076f7454a10780a114c8b2c7589e8934935c05440",
+      "pixels": [
+        1672,
+        941
+      ],
+      "bytes": 2022580
+    },
+    {
+      "filename": "最新纹彩院庭院图.png",
+      "sha256": "8610b670056f8d06b4d948ffcafaa8fc4a987e29d5d654d5386f79b8aac57a13",
+      "pixels": [
+        1672,
+        941
+      ],
+      "bytes": 2347555
+    },
+    {
+      "filename": "半开放藻井观赏厅内部图.png",
+      "sha256": "7a428a95cd40acec3ba3c5d087dd8255bb9a1f391826e71160b4730cb5e585ee",
+      "pixels": [
+        1672,
+        941
+      ],
+      "bytes": 2331690
+    },
+    {
+      "filename": "藻井独立正视图.jpeg",
+      "sha256": "01b8308d2bbefcedae697e49674d3667443bfd42c6717ed23921a6d2e99d64c3",
+      "pixels": [
+        1440,
+        1440
+      ],
+      "bytes": 1017460
+    },
+    {
+      "filename": "小旅人三视图.png",
+      "sha256": "e836552e427e951f6ffee1d11c4bb93b5fd4a76c95b098e7eb172b41f1f40c0d",
+      "pixels": [
+        1536,
+        1024
+      ],
+      "bytes": 1770867
+    },
+    {
+      "filename": "环境小品和树木资产设定板.png",
+      "sha256": "7b36a95f7e35653093c90f8eab8524ab92b2dec25f63609698d528ace918a6f7",
+      "pixels": [
+        1536,
+        1024
+      ],
+      "bytes": 2171458
+    }
+  ],
+  "derivative": {
+    "path": "public/assets/world/courtyard/v001/caisson.png",
+    "processing": "EXIF orientation, RGB conversion, complete-image resize to 1024 square; no content edits or watermark removal",
+    "sha256": "e292514af9987201e8a82e0b3c912334f046a75d97d072328312b9a2ded55030"
+  }
+}

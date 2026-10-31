@@ -7,7 +7,8 @@ export { WORLD_BOUNDS } from './layout';
 export interface WorldCollider { minX: number; maxX: number; minZ: number; maxZ: number; height: number }
 export const WORLD_SPAWN: WorldPoint = { x: 0, z: 18 };
 export const CAISSON_SAFE_POINT: WorldPoint = { x: -12, z: -13 };
-export const PLAYER_RADIUS = 0.36;
+// The sample avatar's full animated silhouette reaches 0.677 m, including sleeves.
+export const PLAYER_RADIUS = 0.69;
 export const WALK_SPEED = 3.2;
 export const RUN_SPEED = 5.7;
 export const CAMERA_YAW_LIMIT = Math.PI * 0.34;

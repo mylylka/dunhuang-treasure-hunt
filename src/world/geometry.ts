@@ -10,10 +10,10 @@ export interface GrayboxScene {
 }
 
 /** All geometry is a deliberately untextured spatial study; no formal artwork. */
-export function createGrayboxScene(): GrayboxScene {
+export function createGrayboxScene({ artSample = false }: { artSample?: boolean } = {}): GrayboxScene {
   const scene = new THREE.Scene();
-  scene.background = new THREE.Color('#d9ded8');
-  scene.fog = new THREE.Fog('#d9ded8', 46, 115);
+  scene.background = new THREE.Color(artSample ? '#afcfdf' : '#d9ded8');
+  scene.fog = new THREE.Fog(artSample ? '#d9d6c3' : '#d9ded8', 46, 115);
   const materials = {
     sand: new THREE.MeshStandardMaterial({ color: '#c9c4ae', roughness: 1 }),
     dune: new THREE.MeshStandardMaterial({ color: '#bcbba8', roughness: 1, flatShading: true }),
@@ -29,8 +29,16 @@ export function createGrayboxScene(): GrayboxScene {
     skin: new THREE.MeshStandardMaterial({ color: '#cfb590', roughness: 1 }),
     marker: new THREE.MeshStandardMaterial({ color: '#c9a45f', emissive: '#715628', emissiveIntensity: .25, roughness: .6 }),
   };
+  if (artSample) {
+    materials.sand.color.set('#dfbd83'); materials.dune.color.set('#cfa36b');
+    materials.path.color.set('#efd5a0'); materials.wall.color.set('#dfc5a1');
+    materials.stone.color.set('#ae8c68'); materials.beam.color.set('#714a36');
+    materials.roof.color.set('#557a72'); materials.trim.color.set('#b79052');
+    materials.green.color.set('#8a9b65');
+    materials.dune.flatShading = false;
+  }
   const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
-  const sphereGeometry = new THREE.IcosahedronGeometry(1, 1);
+  const sphereGeometry = new THREE.IcosahedronGeometry(1, artSample ? 3 : 1);
   const cylinderGeometry = new THREE.CylinderGeometry(1, 1, 1, 10);
   const geometries = new Set<THREE.BufferGeometry>([boxGeometry, sphereGeometry, cylinderGeometry]);
   function mesh(geometry: THREE.BufferGeometry, material: THREE.Material, x: number, y: number, z: number, sx = 1, sy = 1, sz = 1, parent: THREE.Object3D = scene) {
@@ -72,6 +80,7 @@ export function createGrayboxScene(): GrayboxScene {
   for (const item of [...WORLD_DUNES, ...WORLD_BOUNDARY_STONES]) {
     mesh(sphereGeometry, materials.dune, item.x, item.y, item.z, item.radiusX, item.radiusY, item.radiusZ).name = item.id;
   }
+  if (!artSample) {
   box(-12, .015, -10.8, 19.7, .05, 25.5, materials.path);
   // Courtyard perimeter and the two gate piers.
   box(-22, 1.35, -11, .6, 2.7, 26);
@@ -113,11 +122,14 @@ export function createGrayboxScene(): GrayboxScene {
   box(-18, .9, -7.5, 3.3, .22, 1.4, materials.beam);
   for (const x of [-19.3, -16.7]) for (const z of [-8, -7]) box(x, .46, z, .14, .9, .14, materials.beam);
   for (let i = 0; i < 3; i++) mesh(cylinderGeometry, materials.trim, -19 + i, 1.1, -7.5, .18, .18, .18);
+  }
   // Story screen is a test stand in this stage, not a reconstructed mural.
   box(-4.4, 1.35, -7.8, .35, 2.7, 3, materials.roof);
   box(-4.61, 1.5, -7.8, .04, 1.6, 2.4, materials.trim);
+  if (!artSample) {
   tree(-18, -2, .9); tree(-6, -2, .85); tree(-6, -11, .8);
   tree(5, 13, .65); tree(-6, 12, .65); tree(7, 3, .8); tree(-27, -10, .9);
+  }
   // Keep loose roadside pebbles on the straight approach, clear of the gate turn.
   for (let i = 0; i < 8; i++) {
     const x = i % 2 === 0 ? 4.5 : -4.5;
@@ -130,7 +142,8 @@ export function createGrayboxScene(): GrayboxScene {
     mesh(sphereGeometry, materials.stone, item.x, item.y, item.z, item.radiusX, item.radiusY, item.radiusZ).name = item.id;
   }
 
-  const traveler = new THREE.Group(); scene.add(traveler);
+  const traveler = new THREE.Group();
+  if (!artSample) scene.add(traveler);
   mesh(cylinderGeometry, materials.cloth, 0, 1.03, 0, .34, .72, .29, traveler);
   const head = mesh(sphereGeometry, materials.skin, 0, 1.62, 0, .23, .26, .23, traveler);
   mesh(cylinderGeometry, materials.dark, 0, 1.83, .01, .34, .12, .34, traveler);
@@ -143,9 +156,9 @@ export function createGrayboxScene(): GrayboxScene {
   box(0, -.23, 0, .15, .48, .17, materials.cloth, leftArm); box(0, -.23, 0, .15, .48, .17, materials.cloth, rightArm);
   // Small scarf is rigid in graybox; formal cloth/skin is a later visual milestone.
   box(-.13, 1.35, .45, .16, .1, .55, materials.trim, traveler);
-  const hemi = new THREE.HemisphereLight('#f6f1dc', '#797d70', 2.3); scene.add(hemi);
+  const hemi = new THREE.HemisphereLight(artSample ? '#fff2d7' : '#f6f1dc', artSample ? '#ab825a' : '#797d70', artSample ? 1.65 : 2.3); scene.add(hemi);
   const sun = new THREE.DirectionalLight('#fff2d6', 2.4); sun.position.set(-18, 35, 18); sun.castShadow = true;
-  sun.shadow.mapSize.set(1024, 1024); sun.shadow.camera.left = -40; sun.shadow.camera.right = 40;
+  sun.shadow.mapSize.set(artSample ? 2048 : 1024, artSample ? 2048 : 1024); sun.shadow.camera.left = -40; sun.shadow.camera.right = 40;
   sun.shadow.camera.top = 40; sun.shadow.camera.bottom = -40; sun.shadow.camera.near = 1; sun.shadow.camera.far = 100;
   sun.shadow.normalBias = .04; sun.shadow.bias = -.0002; scene.add(sun); sun.target.position.set(-4, 0, -4); scene.add(sun.target);
   return {

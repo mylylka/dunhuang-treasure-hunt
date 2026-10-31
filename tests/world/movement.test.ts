@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { CAMERA_YAW_LIMIT, clampCameraYaw, isWalkable, movePlayer, movementVector, sanitizePosition, surfaceHeight, WORLD_SPAWN } from '../../src/world/movement';
+import { CAMERA_YAW_LIMIT, clampCameraYaw, isWalkable, movePlayer, movementVector, PLAYER_RADIUS, sanitizePosition, surfaceHeight, WORLD_SPAWN } from '../../src/world/movement';
 
 describe('world movement and safe anchors', () => {
   it('rejects corrupt or wall-embedded checkpoints', () => {
@@ -18,8 +18,11 @@ describe('world movement and safe anchors', () => {
     expect(isWalkable(result)).toBe(true);
   });
   it('slides along walls instead of sticking both axes', () => {
-    const result = movePlayer({ x: -21.3, z: -7 }, { x: -2, z: -2 });
-    expect(result.x).toBeGreaterThan(-21.4);
+    const start = { x: -21.7 + PLAYER_RADIUS + .01, z: -7 };
+    expect(isWalkable(start)).toBe(true);
+    const result = movePlayer(start, { x: -2, z: -2 });
+    expect(result.x).toBeGreaterThanOrEqual(-21.7 + PLAYER_RADIUS - .00001);
+    expect(isWalkable(result)).toBe(true);
     expect(result.z).toBeCloseTo(-9);
   });
   it('bounds diagonal speed and rotates movement with the camera', () => {
