@@ -5,6 +5,12 @@ import { createGrayboxScene, type GrayboxScene } from './geometry';
 import { RUN_SPEED, WALK_SPEED } from './movement';
 
 type TravelerAction = 'Idle' | 'Walk' | 'Run';
+export interface ArtSampleSceneOptions {
+  /** Explicit isolated-preview override; normal game entry keeps the approved asset. */
+  travelerPath?: string;
+  /** Clip playback rate at the existing reference movement speeds. */
+  animationRates?: { walk: number; run: number };
+}
 export interface ArtSampleScene extends GrayboxScene {
   ready: Promise<void>;
   animationName(): TravelerAction;
@@ -38,7 +44,7 @@ function releaseModel(model: THREE.Object3D) {
   model.removeFromParent(); model.clear();
 }
 
-export function createArtSampleScene(): ArtSampleScene {
+export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSampleScene {
   const environment = createGrayboxScene({ artSample: true });
   const traveler = new THREE.Group(); traveler.name = 'traveler';
   environment.scene.add(traveler);
@@ -84,7 +90,7 @@ export function createArtSampleScene(): ArtSampleScene {
   }
   const loading = Promise.all([
     loadModel(WORLD_ART_SAMPLE.courtyard),
-    loadModel(WORLD_ART_SAMPLE.traveler),
+    loadModel(options.travelerPath ?? WORLD_ART_SAMPLE.traveler),
   ]);
   const deadline = new Promise<never>((_, reject) => {
     timeout = setTimeout(() => reject(new Error('model-loading-timeout')), 30_000);
@@ -155,8 +161,10 @@ export function createArtSampleScene(): ArtSampleScene {
         else old.crossFadeTo(action, .18, false);
         actionName = next;
       }
-      const pace = next === 'Walk' ? 1.5 * speed / WALK_SPEED : next === 'Run' ? 1.25 * speed / RUN_SPEED : 1;
-      actions.get(next)!.setEffectiveTimeScale(next === 'Idle' ? 1 : THREE.MathUtils.clamp(pace, .35, 1.8));
+      const rate = next === 'Walk' ? options.animationRates?.walk ?? 1.5 : options.animationRates?.run ?? 1.25;
+      const pace = next === 'Walk' ? rate * speed / WALK_SPEED : next === 'Run' ? rate * speed / RUN_SPEED : 1;
+      const maxPace = options.animationRates ? rate * 1.8 : 1.8;
+      actions.get(next)!.setEffectiveTimeScale(next === 'Idle' ? 1 : THREE.MathUtils.clamp(pace, .35, maxPace));
       mixer.update(reduced ? 0 : dt);
     },
     dispose,

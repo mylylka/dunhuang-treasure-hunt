@@ -1,0 +1,8 @@
+/* The character preview keeps its selectors above the scene on small screens. */
+@media (max-width: 1150px) {
+  #preview[data-traveler-preview] .preview-toolbar { bottom: auto; }
+}
+@media (max-width: 1150px) and (orientation: landscape) {
+  #preview[data-traveler-preview] .preview-toolbar { flex-direction: row; gap: 12px; }
+  #preview[data-traveler-preview] .preview-controls { max-width: calc(100% - 210px); justify-content: flex-end; }
+}

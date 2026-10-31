@@ -4,17 +4,30 @@ import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { createArtSampleScene } from './art-sample';
 import { createWorldInput } from './input';
 import { COURTYARD_ROAD } from './road';
-import { movementVector, movePlayer, WORLD_COLLIDERS, type WorldCollider } from './movement';
+import { movementVector, movePlayer, PLAYER_RADIUS, WORLD_COLLIDERS, type WorldCollider } from './movement';
 import { worldAssetUrl } from '../content/world/assets';
 import './environment-preview.css';
 import './environment-preview-v003.css';
 
+const root = document.getElementById('preview')!;
+const travelerPreview = root.dataset.travelerPreview === 'tripo';
+const query = new URLSearchParams(location.search);
+const travelerVariant = travelerPreview && query.get('traveler') !== 'original' ? 'tripo' : 'original';
+const travelerPath = travelerVariant === 'tripo' ? 'traveler-tripo/v001/traveler.glb' : 'shared/v001/traveler.glb';
+// At the exported 2.017 m height the source strides measure 1.20591 / 4.39490 m/s.
+// Only this isolated character preview uses 1.8 / 4.4 m/s (also for the old model
+// comparison). The approved environment preview retains its 3.2 m/s movement.
+const previewWalkSpeed = travelerPreview ? 1.8 : 3.2;
+const previewRunSpeed = 4.4;
+// The supplied Run clip reaches 0.8764 m from its root. Keep the shared mover
+// unchanged and expand this preview's obstacles by the extra clearance only.
+const playerCollisionRadius = travelerPreview ? .9 : PLAYER_RADIUS;
 type Variant = 'a' | 'b' | 'c';
 const variants: Variant[] = ['a', 'b', 'c'];
 const treePaths: Record<Variant, string> = { a: 'environment-sample/v002/tree-a.glb', b: 'environment-sample/v003/tree-b.glb', c: 'environment-sample/v003/tree-c.glb' };
 const shrubPaths: Record<Variant, string> = { a: 'environment-sample/v002/shrub-a.glb', b: 'environment-sample/v003/shrub-b.glb', c: 'environment-sample/v003/shrub-c.glb' };
 const dunePath = 'environment-sample/v002/dunes.glb';
-const views = {
+const environmentViews = {
   road: '道路旁 · 第三人称', 'road-tree': '道路旁 · 树', 'shrub-road': '道路旁 · 灌木',
   'tree-front': '树 · 正面', 'tree-side': '树 · 侧面', 'tree-diagonal': '树 · 斜面',
   'tree-near': '树 · 近看', 'tree-far': '树 · 远看', 'tree-lineup': '三种树 · 同尺度并排',
@@ -22,12 +35,18 @@ const views = {
   'shrub-diagonal': '灌木 · 斜面', 'shrub-lineup': '三种灌木 · 同尺度并排',
   dunes: '沙丘 · 第三人称', 'dunes-oblique': '沙丘 · 端部斜看', 'dunes-model': '沙丘 · 全貌', 'dunes-side': '沙丘 · 侧面', 'dunes-diagonal': '沙丘 · 斜面',
 };
-type View = keyof typeof views;
+const travelerViews = {
+  'traveler-front': '人物 · 正面', 'traveler-back': '人物 · 背面', 'traveler-side': '人物 · 侧面',
+  'traveler-diagonal': '人物 · 斜面', 'traveler-walk': '人物 · 行走动作', 'traveler-run': '人物 · 跑步动作',
+};
+type View = keyof typeof environmentViews | keyof typeof travelerViews;
+const views: Partial<Record<View, string>> = travelerPreview
+  ? { road: environmentViews.road, ...travelerViews, dunes: environmentViews.dunes, 'dunes-oblique': environmentViews['dunes-oblique'] }
+  : environmentViews;
 interface ModelInfo { id: string; path: string; bytes: number; triangles: number; bounds: { min: number[]; max: number[]; size: number[] } }
 interface ModelInstance { id: string; path: string; role: 'road' | 'study' | 'lineup'; object: THREE.Object3D }
 const variantLabel = (family: 'tree' | 'shrub', variant: Variant) => `${variant.toUpperCase()} · ${family === 'shrub' || variant === 'a' ? '已确认' : '待验收'}`;
 const variantOptions = (family: 'tree' | 'shrub') => variants.map(variant => `<option value="${variant}">${variantLabel(family, variant)}</option>`).join('');
-const root = document.getElementById('preview')!;
 root.classList.add('preview-v003');
 root.innerHTML = `<div class="preview-host"></div><header class="preview-toolbar"><h1 class="preview-title">独立植被样片 v003</h1><div class="preview-controls"><select aria-label="观察视图" data-testid="environment-view">${Object.entries(views).map(([id, text]) => `<option value="${id}">${text}</option>`).join('')}</select><label class="preview-variant">树<select aria-label="树形选择" data-testid="environment-tree">${variantOptions('tree')}</select></label><label class="preview-variant">灌木<select aria-label="灌木选择" data-testid="environment-shrub">${variantOptions('shrub')}</select></label><button data-testid="environment-reset">重置视角</button></div></header><footer class="preview-footer"><p class="preview-help">WASD / 方向键 行走 · Q / E 转镜头<br>切换树形与灌木，保持同机位、同光照。</p><div class="preview-touch" aria-label="触屏行走"><button data-move="0,-1" aria-label="前进">↑</button><button data-move="-1,0" aria-label="向左">←</button><button data-move="0,1" aria-label="后退">↓</button><button data-move="1,0" aria-label="向右">→</button></div><p class="preview-view-label" data-testid="environment-label"></p></footer><section class="preview-status" data-testid="environment-loading"><div><h2>正在加载独立样片…</h2><p>正在加载环境模型。</p></div></section><section class="preview-status" data-testid="environment-error" role="alert" hidden><div><h2>样片暂未加载完成</h2><p>请重试加载；已有游戏预览可继续使用。</p><button data-testid="environment-retry">重新加载</button></div></section>`;
 const host = root.querySelector<HTMLDivElement>('.preview-host')!;
@@ -37,8 +56,18 @@ const shrubSelect = root.querySelector<HTMLSelectElement>('[data-testid=environm
 const loadingCover = root.querySelector<HTMLElement>('[data-testid=environment-loading]')!;
 const errorCover = root.querySelector<HTMLElement>('[data-testid=environment-error]')!;
 const label = root.querySelector<HTMLElement>('[data-testid=environment-label]')!;
+if (travelerPreview) {
+  root.querySelector<HTMLElement>('.preview-title')!.textContent = '人物模型预览 · 待确认';
+  treeSelect.closest<HTMLElement>('.preview-variant')!.style.display = 'none';
+  shrubSelect.closest<HTMLElement>('.preview-variant')!.style.display = 'none';
+  const travelerControl = document.createElement('label');
+  travelerControl.className = 'preview-variant';
+  travelerControl.innerHTML = '人物<select aria-label="人物模型选择" data-testid="traveler-select"><option value="tripo">用户模型</option><option value="original">原人物</option></select>';
+  root.querySelector<HTMLElement>('.preview-controls')!.insertBefore(travelerControl, root.querySelector('[data-testid=environment-reset]'));
+  travelerControl.querySelector('select')!.value = travelerVariant;
+  loadingCover.querySelector('p')!.textContent = '正在加载人物与环境模型。';
+}
 let ready = false, error: string | null = null, view: View = 'road', treeVariant: Variant = 'a', shrubVariant: Variant = 'a';
-const query = new URLSearchParams(location.search);
 const initialView = query.get('view');
 if (initialView && Object.hasOwn(views, initialView)) view = initialView as View;
 const isVariant = (name: string | null): name is Variant => name === 'a' || name === 'b' || name === 'c';
@@ -52,6 +81,12 @@ const api = {
   setView(name: string) { if (!Object.hasOwn(views, name)) throw new Error('Unknown preview view'); view = name as View; setViewImpl(view); },
   setTreeVariant(name: string) { if (!isVariant(name)) throw new Error('Unknown tree variant'); treeVariant = name; setSelectionImpl(); },
   setShrubVariant(name: string) { if (!isVariant(name)) throw new Error('Unknown shrub variant'); shrubVariant = name; setSelectionImpl(); },
+  setTravelerVariant(name: string) {
+    if (!travelerPreview || (name !== 'original' && name !== 'tripo')) throw new Error('Unknown traveler preview variant');
+    if (name === travelerVariant) return;
+    const url = new URL(location.href); url.searchParams.set('traveler', name); url.searchParams.set('view', view);
+    location.assign(url.href);
+  },
   snapshot: () => ({ view, selection: { tree: treeVariant, shrub: shrubVariant }, ready, error, ...snapshotImpl() }),
   stats: () => statsImpl(),
 };
@@ -59,6 +94,7 @@ Object.assign(window, { __environmentPreview: api });
 select.addEventListener('change', () => api.setView(select.value));
 treeSelect.addEventListener('change', () => api.setTreeVariant(treeSelect.value));
 shrubSelect.addEventListener('change', () => api.setShrubVariant(shrubSelect.value));
+root.querySelector<HTMLSelectElement>('[data-testid=traveler-select]')?.addEventListener('change', event => api.setTravelerVariant((event.target as HTMLSelectElement).value));
 root.querySelector('[data-testid=environment-reset]')!.addEventListener('click', () => api.setView(view));
 root.querySelector('[data-testid=environment-retry]')!.addEventListener('click', () => location.reload());
 
@@ -179,7 +215,9 @@ async function start() {
   renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2)); renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFShadowMap;
   renderer.outputColorSpace = THREE.SRGBColorSpace; renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.08;
   renderer.domElement.tabIndex = 0; renderer.domElement.setAttribute('aria-label', '独立自然环境样片画面'); host.appendChild(renderer.domElement);
-  const world = createArtSampleScene(); // A separate instance; all old assets remain unchanged on disk.
+  const world = createArtSampleScene(travelerVariant === 'tripo'
+    ? { travelerPath, animationRates: { walk: 3.2 / 1.20591, run: 5.7 / 4.39490 } }
+    : undefined); // The ordinary environment entry retains the loader's old defaults.
   const camera = new THREE.PerspectiveCamera(49, 1, .1, 300), target = new THREE.Vector3();
   const oldFog = world.scene.fog, oldBackground = world.scene.background;
   const owned: THREE.Object3D[] = [], modelInfo: ModelInfo[] = [];
@@ -262,23 +300,24 @@ async function start() {
     };
     const oldRoot = contextNodes.find(node => node.type === 'Group' && node !== world.traveler);
     if (oldRoot) referenceInfo('courtyard-reference', 'courtyard/v002/courtyard.glb', oldRoot);
-    referenceInfo('traveler-reference', 'shared/v001/traveler.glb', world.traveler);
+    referenceInfo('traveler-reference', travelerPath, world.traveler);
     const isWalkingView = () => view === 'road' || view === 'dunes';
+    const isTravelerStudy = () => travelerPreview && view.startsWith('traveler-');
     const isStudy = () => !isWalkingView() && view !== 'road-tree' && view !== 'shrub-road' && view !== 'dunes-oblique';
     function visibility() {
       const study = isStudy();
       for (const node of contextNodes) node.visible = !study;
       // Original map vegetation/mountains never participate in the variant comparison.
       for (const node of oldNatural) node.visible = false;
-      world.traveler.visible = !study; pavingGroup.visible = !study; neutral.visible = study;
+      world.traveler.visible = !study || isTravelerStudy(); pavingGroup.visible = !study; neutral.visible = study;
       for (const instance of instances) instance.object.visible = false;
-      if (study) {
+      if (study && !isTravelerStudy()) {
         if (view === 'tree-lineup') for (const variant of variants) treeLineup[variant].visible = true;
         else if (view === 'shrub-lineup') for (const variant of variants) shrubLineup[variant].visible = true;
         else if (view.startsWith('tree')) treeStudies[treeVariant].visible = true;
         else if (view.startsWith('shrub')) shrubStudies[shrubVariant].visible = true;
         else duneStudy.visible = true;
-      } else {
+      } else if (!study) {
         dunes.visible = true;
         if (!view.startsWith('dunes')) { trees[treeVariant].visible = true; shrubs[shrubVariant].visible = true; }
       }
@@ -288,6 +327,7 @@ async function start() {
         : view.startsWith('shrub') ? `${views[view]} · ${variantLabel('shrub', shrubVariant)}`
         : view === 'road' ? `树 ${variantLabel('tree', treeVariant)} · 灌木 ${variantLabel('shrub', shrubVariant)}`
         : `${views[view]} · ${variantLabel('tree', treeVariant)}`;
+      if (travelerPreview) label.textContent = `${views[view]} · ${travelerVariant === 'tripo' ? '用户模型' : '原人物'}`;
       treeSelect.value = treeVariant; shrubSelect.value = shrubVariant;
       input.setEnabled(isWalkingView() && ready);
       root.querySelector<HTMLElement>('.preview-touch')!.hidden = !isWalkingView();
@@ -296,6 +336,9 @@ async function start() {
         : view === 'tree-lineup' ? '从左到右 A / B / C，均为原尺寸。<br>A 已确认；B / C 待验收。'
         : view === 'shrub-lineup' ? '从左到右 A / B / C，均为原尺寸。<br>三种灌木均已确认。'
         : '切换树形与灌木，保持同机位、同光照。';
+      if (travelerPreview) root.querySelector<HTMLElement>('.preview-help')!.innerHTML = isWalkingView()
+        ? 'WASD / 方向键 行走 · Shift 跑步 · Q / E 转镜头<br>原人物与用户模型保持同机位、同光照。'
+        : '切换角度与动作查看。<br>原人物与用户模型保持同机位、同光照。';
     }
     function pose(position: number[], lookAt: number[]) { camera.position.fromArray(position); target.fromArray(lookAt); camera.lookAt(target); }
     // Only the two new lineup views fit the shared, unscaled group envelope.
@@ -326,6 +369,14 @@ async function start() {
       else if (name === 'dunes-oblique') { Object.assign(player, { x: 24, z: 25, heading: -Math.PI / 2 + .4 }); updateFollow(); }
       else if (name === 'road-tree') { Object.assign(player, { x: 0, z: 18, heading: 0 }); updateFollow(); pose([13, 4.5, 22], [4.8, 2.7, 13]); }
       else if (name === 'shrub-road') { Object.assign(player, { x: 0, z: 18, heading: 0 }); updateFollow(); pose([-5.9, 1.3, 19.7], [-2.9, .4, 16.2]); }
+      else if (name.startsWith('traveler-')) {
+        Object.assign(player, { x: 0, z: 0, heading: 0 }); updateFollow();
+        // Both models face -Z. Studio comparisons share camera and physical scale.
+        if (name === 'traveler-front') pose([0, 1.35, -5], [0, 1.05, 0]);
+        else if (name === 'traveler-back') pose([0, 1.35, 5], [0, 1.05, 0]);
+        else if (name === 'traveler-side') pose([5, 1.35, 0], [0, 1.05, 0]);
+        else pose([-3.8, 1.5, -4.4], [0, 1.05, 0]);
+      }
       else if (name === 'tree-front') pose([0, 3.4, 12], [0, 3, 0]);
       else if (name === 'tree-side') pose([12, 3.4, 0], [0, 3, 0]);
       else if (name === 'tree-diagonal') pose([9, 4.2, 10], [0, 3, 0]);
@@ -357,7 +408,13 @@ async function start() {
       maxZ: 13 + Math.max(...Object.values(envelopes).map(item => item.maxZ)),
     };
     const staticColliders = WORLD_COLLIDERS.filter(item => !item.id?.startsWith('tree-'));
-    const colliders = [...staticColliders, walkingCollider];
+    const collisionPadding = playerCollisionRadius - PLAYER_RADIUS;
+    const colliders = [...staticColliders, walkingCollider].map(collider => collisionPadding > 0 ? {
+      ...collider,
+      minX: collider.minX - collisionPadding, maxX: collider.maxX + collisionPadding,
+      minZ: collider.minZ - collisionPadding, maxZ: collider.maxZ + collisionPadding,
+      ...(collider.circle ? { circle: { ...collider.circle, radius: collider.circle.radius + collisionPadding } } : {}),
+    } : collider);
     root.querySelectorAll<HTMLButtonElement>('[data-move]').forEach(button => {
       const [x, y] = button.dataset.move!.split(',').map(Number);
       button.addEventListener('pointerdown', event => { button.setPointerCapture(event.pointerId); input.setJoystick(x, y); });
@@ -365,10 +422,18 @@ async function start() {
     });
     const instanceSnapshot = ({ id, path, role, object }: ModelInstance) => ({ id, path, role,
       position: object.position.toArray(), rotation: object.rotation.toArray().slice(0, 3), scale: object.scale.toArray() });
+    const boneSnapshot = () => {
+      const bones: { name: string; position: number[]; quaternion: number[] }[] = [];
+      world.traveler.traverse(object => {
+        if (object instanceof THREE.Bone) bones.push({ name: object.name, position: object.position.toArray(), quaternion: object.quaternion.toArray() });
+      });
+      return bones;
+    };
     snapshotImpl = () => ({ camera: { position: camera.position.toArray(), target: target.toArray(), fov: camera.fov }, player: { ...player },
+      actualAnimation: world.animationName(), travelerPath, travelerVariant, bones: boneSnapshot(),
       lighting: lightingSnapshot(world.scene, renderer),
       fog: world.scene.fog instanceof THREE.Fog ? { color: world.scene.fog.color.getHexString(), near: world.scene.fog.near, far: world.scene.fog.far } : null,
-      collisionRadii, walkingCollisionRadius, walkingCollider,
+      collisionRadii, walkingCollisionRadius, walkingCollider, playerCollisionRadius,
       placements: instances.map(instanceSnapshot),
       activeModels: instances.filter(instance => instance.object.visible).map(instanceSnapshot),
     });
@@ -388,7 +453,8 @@ async function start() {
       if (isWalkingView() && !document.hidden) {
         const control = input.read(); yaw = THREE.MathUtils.clamp(yaw + control.camera * dt * .65, -1.05, 1.05);
         const direction = movementVector(control.x, control.y, worldYaw());
-        const moved = movePlayer(player, { x: direction.x * 3.2 * dt, z: direction.z * 3.2 * dt }, colliders);
+        const movementSpeed = travelerPreview && control.run ? previewRunSpeed : previewWalkSpeed;
+        const moved = movePlayer(player, { x: direction.x * movementSpeed * dt, z: direction.z * movementSpeed * dt }, colliders);
         const x = THREE.MathUtils.clamp(moved.x, view === 'dunes' ? 12 : -14, view === 'dunes' ? 26 : 11);
         const z = THREE.MathUtils.clamp(moved.z, view === 'dunes' ? -8 : 5, view === 'dunes' ? 8 : 25);
         speed = dt ? Math.hypot(x - player.x, z - player.z) / dt : 0;
@@ -396,6 +462,8 @@ async function start() {
         if (speed > .02) player.heading = Math.atan2(-direction.x, -direction.z);
         updateFollow();
       }
+      if (travelerPreview && view === 'traveler-walk') speed = previewWalkSpeed;
+      else if (travelerPreview && view === 'traveler-run') speed = previewRunSpeed;
       world.animateTraveler(speed, elapsed, false);
       renderer.render(world.scene, camera); raf = requestAnimationFrame(frame);
     }

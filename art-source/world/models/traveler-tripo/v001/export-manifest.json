@@ -1,0 +1,269 @@
+{
+  "asset": "traveler-tripo",
+  "version": "v001",
+  "status": "technical conversion validated in independent web preview; visual approval pending",
+  "generator": "scripts/import-world-traveler-tripo-v001.py",
+  "source": "art-source/world/models/traveler-tripo/v001/traveler.blend",
+  "runtime": "public/assets/world/traveler-tripo/v001/traveler.glb",
+  "sourceFiles": [
+    {
+      "original": "/Users/liujing/Downloads/chibi character 3d model/tripo_convert_922978cb-73db-49b2-970f-d8f672980b0b.fbx",
+      "archive": "art-source/world/traveler-tripo/v001/tripo_convert_922978cb-73db-49b2-970f-d8f672980b0b.fbx",
+      "bytes": 4067884,
+      "sha256": "0e284180f5750f2186ab0ae03f2049237326b8532e54b4a5113baee026aa4126"
+    },
+    {
+      "original": "/Users/liujing/Downloads/chibi character 3d model/tripo_convert_922978cb-73db-49b2-970f-d8f672980b0b.fbm/tripo_rgb_0a1c53b3-5801-4f53-8a4e-873134eace22.jpg",
+      "archive": "art-source/world/traveler-tripo/v001/tripo_convert_922978cb-73db-49b2-970f-d8f672980b0b.fbm/tripo_rgb_0a1c53b3-5801-4f53-8a4e-873134eace22.jpg",
+      "bytes": 3603375,
+      "sha256": "cc464c867905e951e2ed466c412962b4f7e17313f40847ad283948edd3411d06"
+    }
+  ],
+  "axisConversion": "Source faces Blender -Y; one parent rotation pi about Z makes Blender +Y / glTF -Z. GLB Y-up metres; ground origin.",
+  "sourceRestBoundsBlenderZUp": {
+    "min": [
+      -0.36254870891571045,
+      -0.12817378342151642,
+      8.003575402426577e-08
+    ],
+    "max": [
+      0.36254894733428955,
+      0.12817387282848358,
+      0.99951171875
+    ]
+  },
+  "nominalHeightMeters": 2.017,
+  "uniformScale": 2.017985464746515,
+  "meshPolicy": "No remodeling, decimation, UV edits or texture resizing. Original vertex/UV hashes checked unchanged before export.",
+  "meshFingerprints": {
+    "vertexPositions": "011d8f1bd440d1a79343373f613c490d09f49c33062724c4bdfb56697457490f",
+    "uvCoordinates": "f07c5a0ce48b51d53cea122c0c69b4fb2afa6aa61bd31325c35456a7539c3c11"
+  },
+  "vertices": 27308,
+  "triangles": 52689,
+  "bones": 65,
+  "weightedVertices": 27308,
+  "meshes": 1,
+  "materials": 1,
+  "skins": 1,
+  "materialsPolicy": "Imported standard Principled material retained: metallic 0, roughness 0.9, source sRGB base-color JPEG. No artistic recoloring.",
+  "textures": [
+    {
+      "mimeType": "image/jpeg",
+      "bytes": 3603375,
+      "sha256": "cc464c867905e951e2ed466c412962b4f7e17313f40847ad283948edd3411d06",
+      "resolution": [
+        4096,
+        4096
+      ]
+    }
+  ],
+  "animations": [
+    {
+      "clip": "LookAround",
+      "sourceAction": "source-look_around",
+      "frameStart": 1,
+      "frameEnd": 375,
+      "fps": 24,
+      "durationSeconds": 15.583333333333334,
+      "originalHipsDeltaBlender": [
+        0.0014039207017049193,
+        -0.000783359631896019,
+        -1.4513731002807617e-05
+      ],
+      "removedInitialHorizontalHipsOffsetBlender": [
+        0.0019522608490660787,
+        -0.013665161095559597
+      ],
+      "rootMotionMethod": "Subtract initial horizontal Hips offset and linear start-to-end XY travel in source world coordinates, converted into the Hips local basis; retain residual side sway and vertical motion.",
+      "loopCorrectionTailFrames": 8,
+      "loopCorrectionMethod": "Smoothstep applies endpoint rotation/location differences over the existing final frames; source motion trajectory is retained. Walk only aligns its already matching endpoint.",
+      "maxGroundPenetrationCorrectionMeters": 0.018166734155628805,
+      "groundCorrectionMethod": "Lift Hips only when actual evaluated skinned vertices penetrate Z=0; positive airborne height is preserved.",
+      "naturalSpeedMetersPerSecondAtTargetHeight": 0.00020818919144926303,
+      "animatedBoundsYUp": {
+        "min": [
+          -0.37422797083854675,
+          -1.4951302773624775e-07,
+          -0.4036615788936615
+        ],
+        "max": [
+          0.5300979614257812,
+          2.033331871032715,
+          0.30042335391044617
+        ]
+      },
+      "maxAnimatedHorizontalRadius": 0.5310375094413757,
+      "loopMeshSeamMeters": {
+        "rms": 9.006348022921884e-08,
+        "max": 4.924151539853483e-07
+      },
+      "sampledEveryFrame": true
+    },
+    {
+      "clip": "Run",
+      "sourceAction": "source-run",
+      "frameStart": 1,
+      "frameEnd": 31,
+      "fps": 24,
+      "durationSeconds": 1.25,
+      "originalHipsDeltaBlender": [
+        0.0013459883630275726,
+        -2.72233247756958,
+        0.006562024354934692
+      ],
+      "removedInitialHorizontalHipsOffsetBlender": [
+        -0.026062574237585068,
+        -0.5066450834274292
+      ],
+      "rootMotionMethod": "Subtract initial horizontal Hips offset and linear start-to-end XY travel in source world coordinates, converted into the Hips local basis; retain residual side sway and vertical motion.",
+      "loopCorrectionTailFrames": 4,
+      "loopCorrectionMethod": "Smoothstep applies endpoint rotation/location differences over the existing final frames; source motion trajectory is retained. Walk only aligns its already matching endpoint.",
+      "maxGroundPenetrationCorrectionMeters": 0.029922717101459936,
+      "groundCorrectionMethod": "Lift Hips only when actual evaluated skinned vertices penetrate Z=0; positive airborne height is preserved.",
+      "naturalSpeedMetersPerSecondAtTargetHeight": 4.394902433133741,
+      "animatedBoundsYUp": {
+        "min": [
+          -0.4240506589412689,
+          -5.266108615842313e-08,
+          -0.5823281407356262
+        ],
+        "max": [
+          0.4776372015476227,
+          1.8363600969314575,
+          0.8754872679710388
+        ]
+      },
+      "maxAnimatedHorizontalRadius": 0.8763636946678162,
+      "loopMeshSeamMeters": {
+        "rms": 1.4216350052720372e-07,
+        "max": 4.73331823513945e-07
+      },
+      "sampledEveryFrame": true
+    },
+    {
+      "clip": "Idle",
+      "sourceAction": "source-standing_relax",
+      "frameStart": 1,
+      "frameEnd": 423,
+      "fps": 24,
+      "durationSeconds": 17.583333333333332,
+      "originalHipsDeltaBlender": [
+        -0.00011972908396273851,
+        0.0006849626079201698,
+        -0.001086115837097168
+      ],
+      "removedInitialHorizontalHipsOffsetBlender": [
+        0.0009539651218801737,
+        -0.014151334762573242
+      ],
+      "rootMotionMethod": "Subtract initial horizontal Hips offset and linear start-to-end XY travel in source world coordinates, converted into the Hips local basis; retain residual side sway and vertical motion.",
+      "loopCorrectionTailFrames": 6,
+      "loopCorrectionMethod": "Smoothstep applies endpoint rotation/location differences over the existing final frames; source motion trajectory is retained. Walk only aligns its already matching endpoint.",
+      "maxGroundPenetrationCorrectionMeters": 0.019821417781577078,
+      "groundCorrectionMethod": "Lift Hips only when actual evaluated skinned vertices penetrate Z=0; positive airborne height is preserved.",
+      "naturalSpeedMetersPerSecondAtTargetHeight": 7.980296517320754e-05,
+      "animatedBoundsYUp": {
+        "min": [
+          -0.5642690658569336,
+          -1.8088611852817849e-07,
+          -0.32239392399787903
+        ],
+        "max": [
+          0.304471880197525,
+          2.031466245651245,
+          0.32616326212882996
+        ]
+      },
+      "maxAnimatedHorizontalRadius": 0.568493127822876,
+      "loopMeshSeamMeters": {
+        "rms": 5.3524246368397144e-08,
+        "max": 3.816559512870299e-07
+      },
+      "sampledEveryFrame": true
+    },
+    {
+      "clip": "Walk",
+      "sourceAction": "source-walk",
+      "frameStart": 1,
+      "frameEnd": 57,
+      "fps": 24,
+      "durationSeconds": 2.3333333333333335,
+      "originalHipsDeltaBlender": [
+        -5.1872339099645615e-06,
+        -1.3943531513214111,
+        4.947185516357422e-06
+      ],
+      "removedInitialHorizontalHipsOffsetBlender": [
+        0.0019523075316101313,
+        -0.013665108941495419
+      ],
+      "rootMotionMethod": "Subtract initial horizontal Hips offset and linear start-to-end XY travel in source world coordinates, converted into the Hips local basis; retain residual side sway and vertical motion.",
+      "loopCorrectionTailFrames": 0,
+      "loopCorrectionMethod": "Smoothstep applies endpoint rotation/location differences over the existing final frames; source motion trajectory is retained. Walk only aligns its already matching endpoint.",
+      "maxGroundPenetrationCorrectionMeters": 0.019598658680800903,
+      "groundCorrectionMethod": "Lift Hips only when actual evaluated skinned vertices penetrate Z=0; positive airborne height is preserved.",
+      "naturalSpeedMetersPerSecondAtTargetHeight": 1.2059075966183899,
+      "animatedBoundsYUp": {
+        "min": [
+          -0.3046879470348358,
+          -1.0053749122107547e-07,
+          -0.6057826280593872
+        ],
+        "max": [
+          0.3537279963493347,
+          2.0269663333892822,
+          0.529477596282959
+        ]
+      },
+      "maxAnimatedHorizontalRadius": 0.621522843837738,
+      "loopMeshSeamMeters": {
+        "rms": 4.7261121238761916e-08,
+        "max": 3.2098083124765253e-07
+      },
+      "sampledEveryFrame": true
+    }
+  ],
+  "runtimePacing": {
+    "formula": "timeScale = movementSpeed / naturalSpeedMetersPerSecondAtTargetHeight",
+    "suggestedPreviewWalkSpeed": 1.8,
+    "suggestedPreviewRunSpeed": 4.4,
+    "walkTimeScaleAt1_8": 1.4926516799857352,
+    "runTimeScaleAt4_4": 1.0011598816910765
+  },
+  "bytes": 7817436,
+  "sha256": "7d70e06fa0edfc3053290b245d6222015caa3182c7feb166420288e97891cd72",
+  "protectedSourceHashes": {
+    "public/assets/world/shared/v001/traveler.glb": "4bb4ced7f062c25a5829a4551c60c78e739666d8209684bac4dc4e9455bf52d9",
+    "public/assets/world/environment-sample/v002/tree-a.glb": "816d562f2af98262b94aa253b7fc89f81b554d3f044cf9251d97d75e50c0d012",
+    "public/assets/world/environment-sample/v002/shrub-a.glb": "5efbc4290bb513829e2b5dee90c3e7e8d2b124b6b2947e233de20b9fd204f60d",
+    "public/assets/world/environment-sample/v002/dunes.glb": "e32b7db2a5d8315c94e96d72d95bf9e1d6a866c88432bb0188be9b3caae468b4",
+    "public/assets/world/environment-sample/v003/shrub-b.glb": "5fd7295ec93a3a1c4f94e0869bbecb38460f2fdf99a67701bcd9e1ecbe51bdf3",
+    "public/assets/world/environment-sample/v003/shrub-c.glb": "0d2ab0912c61887c39b619f036105d06e5e058d36f37491bf630ad0ee80260ce",
+    "art-source/world/models/traveler/v001/traveler.blend": "ac40acc1dd4d0cc694df64ec1fa021616eeaba7b43e754db80ae5240c51d7536"
+  },
+  "limitations": [
+    "Four real skeletal clips retained; short tail corrections only address loop seams and do not add new performances.",
+    "Original 4096 JPEG and 52689 triangles intentionally retained; this version is not mobile-optimized.",
+    "Source mesh includes open boundaries and disconnected accessories; renderability does not require watertight topology.",
+    "Web camera, keyboard walk/run, actual skeletal motion, tree clearance, mobile landscape touch and failed-load retry validated by scripts/verify-traveler-preview-v001.mjs; physical-phone performance not measured."
+  ],
+  "exportedClipTimingSeconds": {
+    "LookAround": {
+      "start": 0,
+      "end": 15.583333333333334
+    },
+    "Run": {
+      "start": 0,
+      "end": 1.25
+    },
+    "Idle": {
+      "start": 0,
+      "end": 17.583333333333332
+    },
+    "Walk": {
+      "start": 0,
+      "end": 2.3333333333333335
+    }
+  }
+}
