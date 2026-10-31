@@ -95,7 +95,7 @@ test('默认温润木石无自动播放，主动试听才启动真实音频，�
   await page.reload();
   await expect(page.getByTestId('sound-enabled')).not.toBeChecked();
   await expect(page.getByTestId('sound-volume')).toHaveValue('23');
-  await page.getByRole('link', { name: '首页', exact: true }).click();
+  await page.getByRole('link', { name: '主题', exact: true }).click();
   await page.getByRole('link', { name: '设置', exact: true }).click();
   await page.waitForTimeout(350);
   expect(await recorded(page)).toEqual([]);

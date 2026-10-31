@@ -1,4 +1,7 @@
-import { useCallback, useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
+import { loadWorldSession, saveWorldSession } from '../world/session';
+import type { WorldCheckpoint } from '../world/types';
+import { WorldBoundary } from './WorldBoundary';
 import { getAssetUrl } from '../content';
 import { getLessonBook } from '../content/lessons';
 import { getLevelChoices } from '../content/level-roadmap';
@@ -19,6 +22,8 @@ import { artworkColors, hasOlderArtwork, loadArtworks, saveArtworks, withArtwork
 import { PhaserPlayer } from '../runtime/PhaserPlayer';
 import { loadProgress, saveProgress, withCompletedLevel } from '../services/progress';
 import type { ContentCatalog, GameCommand, GameEvent, Level, LevelMetadata, ProgressData, RegionColors, ThemeDefinition } from '../types';
+
+const WorldScreen = lazy(() => import('./WorldScreen'));
 
 function hasPlaceholder(catalog: ContentCatalog, ids: string[]) {
   return catalog.assets.some((asset) => ids.includes(asset.id) && asset.placeholder);
@@ -73,6 +78,15 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
   const commandSequence = useRef(0);
   const completedThisRun = useRef(false);
   const mainRef = useRef<HTMLElement>(null);
+  const [initialWorld] = useState(() => loadWorldSession());
+  const worldCheckpoint = useRef(initialWorld.data);
+  const [worldWarning, setWorldWarning] = useState(initialWorld.warning);
+  const enteredFromWorld = useRef(false);
+  const persistWorld = useCallback((next: WorldCheckpoint) => {
+    worldCheckpoint.current = next;
+    const saved = saveWorldSession(next);
+    setWorldWarning(saved.ok ? null : saved.message);
+  }, []);
 
   const persist = useCallback((next: ProgressData) => {
     progressRef.current = next;
@@ -90,6 +104,7 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
 
   const routeKey = getRouteKey(route);
   useEffect(() => {
+    if (route.page === 'themes') enteredFromWorld.current = false;
     window.scrollTo({ top: 0, behavior: 'instant' });
     mainRef.current?.focus({ preventScroll: true });
     setCommand(null);
@@ -176,7 +191,7 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
     const record = lessonRecord(learning, book);
     return <TeachingScreen key={book.id} book={book} catalog={catalog} completed={isLessonCompleted(learning, book)}
       initialVisitedIds={record.visitedIds}
-      onBack={() => goTo('/')}
+      onBack={() => goTo(enteredFromWorld.current ? '/' : '/themes')}
       onSkip={() => goTo(gamesPath(book.themeId))}
       onUnitChange={unitId => {
         const next = withVisitedUnit(learningRef.current, book, unitId);
@@ -192,7 +207,7 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
   function renderTheme(theme: ThemeDefinition) {
     const book = getLessonBook(theme.id);
     if (book) return renderTeaching(book);
-    return <div className="page unavailable-theme"><Breadcrumb catalog={catalog} items={[{ label: '首页', href: '#/' }]} />
+    return <div className="page unavailable-theme"><Breadcrumb catalog={catalog} items={[{ label: '首页', href: '#/themes' }]} />
       <h1>{theme.title}</h1><div className="unavailable-theme-content">
         <Asset catalog={catalog} id={theme.coverAssetId} alt={`${theme.title}主题封面`} eager />
         <p>主题尚未开放</p></div></div>;
@@ -255,7 +270,10 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
   }
 
   let page: ReactNode;
-  if (route.page === 'home') page = renderHome();
+  if (route.page === 'home') page = <WorldBoundary><Suspense fallback={<div className="page empty-state"><h1>正在准备探索世界…</h1><a className="button button-secondary" href="#/themes">直接选择文化主题</a></div>}><WorldScreen
+    initial={worldCheckpoint.current} saveWarning={worldWarning} reducedMotion={progress.settings.reducedMotion} sound={sound.preferences}
+    onCheckpoint={persistWorld} onEnterTheme={(id, next) => { persistWorld(next); enteredFromWorld.current = true; goTo(themePath(id)); }} /></Suspense></WorldBoundary>;
+  else if (route.page === 'themes') page = renderHome();
   else if (route.page === 'help') page = renderHelp();
   else if (route.page === 'settings') page = renderSettings();
   else if (route.page === 'theme') {
@@ -282,7 +300,7 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
 
   return <div className="app-shell" data-screen={route.page} data-reduced-motion={progress.settings.reducedMotion ? 'true' : 'false'} style={assetStyle} onClickCapture={sound.onInterfaceClick}>
     <a className="skip-link" href="#main-content" onClick={(event) => { event.preventDefault(); mainRef.current?.focus(); }}>跳到主要内容</a>
-    <header className="site-header"><a className="brand" href="#/" aria-label="敦煌寻宝记，返回首页"><span className="brand-mark" aria-hidden="true">敦</span><strong>敦煌寻宝记</strong></a><nav className="header-nav" aria-label="主导航"><a href="#/" aria-current={route.page === 'home' ? 'page' : undefined}>首页</a><a href="#/help" aria-current={route.page === 'help' ? 'page' : undefined}>指南</a><a href="#/settings" aria-current={route.page === 'settings' ? 'page' : undefined}>设置</a></nav></header>
+    <header className="site-header"><a className="brand" href="#/" aria-label="敦煌寻宝记，返回首页"><span className="brand-mark" aria-hidden="true">敦</span><strong>敦煌寻宝记</strong></a><nav className="header-nav" aria-label="主导航"><a href="#/" data-testid="world-return" aria-label="返回探索世界" aria-current={route.page === 'home' ? 'page' : undefined}>探索</a><a href="#/themes" aria-current={route.page === 'themes' ? 'page' : undefined}>主题</a><a href="#/help" aria-current={route.page === 'help' ? 'page' : undefined}>指南</a><a href="#/settings" aria-current={route.page === 'settings' ? 'page' : undefined}>设置</a></nav></header>
     {loadWarning && <div className="global-notice notice" role="status"><p>{loadWarning}</p><button className="text-link" onClick={() => setLoadWarning(null)} type="button">知道了</button></div>}
     {saveError && route.page !== 'result' && route.page !== 'settings' && <div className="global-notice">{renderSaveNotice(true)}</div>}
     {learningSaveError && <div className="global-notice notice notice-error" role="alert" data-testid="learning-save-error"><p>{learningSaveError}</p><button className="button button-secondary button-small" type="button" onClick={() => persistLearning(learningRef.current)}>重试保存学习记录</button></div>}

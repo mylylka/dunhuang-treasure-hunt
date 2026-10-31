@@ -138,8 +138,8 @@
 }
 
 /* A local calligraphic title sits above the three equal exploration covers. */
-.app-shell[data-screen=home]>.site-header{justify-content:flex-end;height:62px}
-.app-shell[data-screen=home]>.site-header .brand{display:none}
+.app-shell[data-screen=themes]>.site-header{justify-content:flex-end;height:62px}
+.app-shell[data-screen=themes]>.site-header .brand{display:none}
 .theme-select-screen{gap:24px}
 .home-title-block{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;flex:none;padding-top:clamp(14px,3.5vh,36px)}
 .home-title-block h1{font:400 clamp(58px,6.2vw,86px)/1.2 "Dunhuang Title","Kaiti SC","STKaiti",serif;letter-spacing:.14em;padding-left:.14em;color:#963a2b;text-shadow:0 1px 0 #fff3ce,0 3px 12px #834c2720}
@@ -148,7 +148,7 @@
 .theme-select-screen .theme-choice-stage{align-items:start;padding-top:clamp(26px,6vh,64px);padding-bottom:0}
 .theme-select-screen .theme-choice-grid{max-width:min(1200px,calc((100dvh - 365px)*4.5 + 56px))}
 @media(max-width:680px){
- .app-shell[data-screen=home]>.site-header{height:48px}
+ .app-shell[data-screen=themes]>.site-header{height:48px}
  .theme-select-screen{gap:16px}
  .home-title-block{gap:12px;padding-top:12px}
  .home-title-block h1{font-size:clamp(39px,10.8vw,56px);letter-spacing:.08em;padding-left:.08em}
@@ -158,7 +158,7 @@
  .theme-select-screen .theme-choice-grid{max-width:420px;width:min(100%,calc((100dvh - 330px)*1.5))}
 }
 @media(max-height:560px) and (min-width:681px){
- .app-shell[data-screen=home]>.site-header{height:40px}
+ .app-shell[data-screen=themes]>.site-header{height:40px}
  .theme-select-screen{gap:9px}
  .home-title-block{gap:5px;padding-top:0}
  .home-title-block h1{font-size:44px;line-height:1.1}

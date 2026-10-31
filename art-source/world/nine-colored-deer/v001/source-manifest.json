@@ -1,0 +1,74 @@
+{
+  "version": 1,
+  "stage": "graybox-two-segment-technical-preview",
+  "providedBy": "开发者",
+  "sourceLibraryName": "3d视觉素材库",
+  "creator": null,
+  "imageIdentity": "用户提供的九色鹿故事图；摄影、临摹或其他复制图像的身份及原作者尚未确认。",
+  "storyReference": {
+    "title": "敦煌研究院：莫高窟第257窟",
+    "url": "https://www.dha.ac.cn/info/1425/3548.htm"
+  },
+  "referenceScope": "仅核对故事题材与情节，不作为用户文件权属或洞窟3D陈设的认定。",
+  "pillowVersion": "12.2.0",
+  "files": [
+    {
+      "id": "nine-colored-deer-scroll",
+      "sourceFile": "九色鹿全图.jpg",
+      "sourceSha256": "9e02ef42a87e854956b701f1befdc9e6cdca53d30dec465c9437e2720334648f",
+      "sourceWidth": 12918,
+      "sourceHeight": 2150,
+      "sourceBytes": 10064380,
+      "runtimeFile": "assets/world/story/v001/full-scroll.webp",
+      "runtimeSha256": "ba43a099993108787b46d56799fdaf097ee9854814a0ca2d15893f90e841f1b5",
+      "runtimeWidth": 4096,
+      "runtimeHeight": 682,
+      "runtimeBytes": 905126,
+      "fullScrollCorrespondence": null,
+      "processing": "EXIF orientation, RGB conversion, Lanczos fit without crop, WebP quality 88; no content edits",
+      "visualReview": "No obvious platform watermark in the three preview images; cracks and losses retained"
+    },
+    {
+      "id": "nine-colored-deer-rescue",
+      "sourceFile": "鹿王救人+溺水者立誓.jpg",
+      "sourceSha256": "3aa7a6ea89789ff8791993793fecf08fe1a58f3fb897c0335c953d924b01424d",
+      "sourceWidth": 2994,
+      "sourceHeight": 2150,
+      "sourceBytes": 2222659,
+      "runtimeFile": "assets/world/story/v001/rescue-and-promise.webp",
+      "runtimeSha256": "f51e40d416d08613ee9f61ab9c5f4e1172ebc671a755fc407011ceea40e61f79",
+      "runtimeWidth": 1400,
+      "runtimeHeight": 1005,
+      "runtimeBytes": 366728,
+      "fullScrollCorrespondence": {
+        "x": 6,
+        "y": 0,
+        "width": 2994,
+        "height": 2150
+      },
+      "processing": "EXIF orientation, RGB conversion, Lanczos fit without crop, WebP quality 88; no content edits",
+      "visualReview": "No obvious platform watermark in the three preview images; cracks and losses retained"
+    },
+    {
+      "id": "nine-colored-deer-appeal",
+      "sourceFile": "鹿王陈情.jpg",
+      "sourceSha256": "15b33847f3f83aca4fa282c47998503d857adb00705499a105fe0bf457fcd0e6",
+      "sourceWidth": 2507,
+      "sourceHeight": 2150,
+      "sourceBytes": 2075109,
+      "runtimeFile": "assets/world/story/v001/appeal-to-the-king.webp",
+      "runtimeSha256": "2b07c6b620bc9907975f8f1a2aee0f6072f1360c837a9976b9babf63976f78e5",
+      "runtimeWidth": 1400,
+      "runtimeHeight": 1201,
+      "runtimeBytes": 463206,
+      "fullScrollCorrespondence": {
+        "x": 3398,
+        "y": 0,
+        "width": 2507,
+        "height": 2150
+      },
+      "processing": "EXIF orientation, RGB conversion, Lanczos fit without crop, WebP quality 88; no content edits",
+      "visualReview": "No obvious platform watermark in the three preview images; cracks and losses retained"
+    }
+  ]
+}

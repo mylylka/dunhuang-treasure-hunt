@@ -398,7 +398,7 @@ async function inspectArtwork(page: Page) {
 }
 
 async function inspectStaticScreens(page: Page) {
-  await page.goto('/');
+  await page.goto('/#/themes');
   await expectHomeTitle(page);
   await expectInsideViewport(page, page.locator('.theme-patterns'));
   await expectDocumentFits(page);
@@ -483,7 +483,7 @@ test.describe('首次学习与游戏层级', () => {
   });
 
   test('首页进入主题先展示教学，顶部可直接玩，跳过小考不会伪记学完', async ({ page }) => {
-    await page.goto('/'); await expectHomeTitle(page);
+    await page.goto('/#/themes'); await expectHomeTitle(page);
     await expect(page.locator('.theme-patterns')).toHaveAttribute('href', '#/theme/patterns');
     await page.locator('.theme-patterns').click();
     await expectTeachingFits(page, 0);
@@ -492,7 +492,7 @@ test.describe('首次学习与游戏层级', () => {
     let record = await page.evaluate(({ key, id }) => JSON.parse(localStorage.getItem(key)!).books[id], { key: learningKey, id: patternLesson.id });
     expect(record.completedAt).toBeUndefined();
     expect(await page.evaluate(key => localStorage.getItem(key), progressKey)).toBeNull();
-    await page.goto('/'); await expectHomeTitle(page);
+    await page.goto('/#/themes'); await expectHomeTitle(page);
     await page.locator('.theme-patterns').click();
     await expect(page).toHaveURL(/#\/theme\/patterns$/);
     await page.getByRole('navigation', { name: '教学章节' }).getByRole('button').last().click();
@@ -531,7 +531,7 @@ test.describe('首次学习与游戏层级', () => {
     test.setTimeout(90_000);
     const errors: string[] = [];
     page.on('pageerror', error => errors.push(error.message));
-    await page.goto('/');
+    await page.goto('/#/themes');
     await page.locator('.theme-patterns').click();
     await expect(page).toHaveURL(/#\/theme\/patterns$/);
     await completeTeaching(page, true);
@@ -631,7 +631,7 @@ test.describe('首次学习与游戏层级', () => {
 test.describe('已完成导览的再次访问', () => {
   test.use({ lessonReady: true });
   test('已有学习记录也从首页进入教学，直接玩不改写原完成时间', async ({ page }) => {
-    await page.goto('/'); await expectHomeTitle(page);
+    await page.goto('/#/themes'); await expectHomeTitle(page);
     await expect(page.locator('.theme-patterns')).toHaveAttribute('href', '#/theme/patterns');
     await page.locator('.theme-patterns').click();
     await expectTeachingFits(page, 0);
@@ -645,7 +645,7 @@ test.describe('已完成导览的再次访问', () => {
 
 test('1279×925 首页三幅图尺寸相等、保持3:2，题名紧跟图片且按钮正文居中', async ({ page }) => {
   await page.setViewportSize({ width: 1279, height: 925 });
-  await page.goto('/');
+  await page.goto('/#/themes');
   await expectHomeTitle(page);
   const cards = page.locator('.select-theme-card');
   await expect(cards).toHaveCount(3);
@@ -679,7 +679,7 @@ test('1279×925 首页三幅图尺寸相等、保持3:2，题名紧跟图片且�
 
 test('首页主题、三个玩法与关卡分别导航，未开放内容没有假入口', async ({ page }) => {
   const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
-  await page.goto('/');
+  await page.goto('/#/themes');
   await expect(page.getByRole('heading', { level: 1, name: '敦煌寻宝记' })).toBeVisible();
   await expect(page.locator('a[href*="/play/"]')).toHaveCount(0);
   await expect(page.getByText('开始第一次观察')).toHaveCount(0);
@@ -694,7 +694,7 @@ test('首页主题、三个玩法与关卡分别导航，未开放内容没有�
   await expect(page.getByRole('link', { name: /^开始观察/ }).first()).toHaveCount(0);
   const back = page.getByRole('link', { name: '返回首页', exact: true });
   await back.locator('img').click();
-  await expect(page).toHaveURL(/#\/$/);
+  await expect(page).toHaveURL(/#\/themes$/);
   // Hash navigation updates the URL before React renders the home screen.
   // Wait for that screen before asking whether its mobile-only switch exists.
   await expect(page.getByRole('heading', { level: 1, name: '敦煌寻宝记' })).toBeVisible();
@@ -1051,7 +1051,7 @@ test('增加关卡后按实际空间分页，每关均能通过按钮访问', as
   });
   for (const viewport of [{ width: 1000, height: 600 }, { width: 360, height: 640 }, { width: 844, height: 390 }]) {
     await page.setViewportSize(viewport);
-    await page.goto('/');
+    await page.goto('/#/themes');
     await page.locator('.theme-patterns').click();
     await page.getByRole('button', { name: '直接玩游戏', exact: true }).click();
     await page.getByRole('link', { name: '找不同', exact: true }).click();

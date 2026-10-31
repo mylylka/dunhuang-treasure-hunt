@@ -8,7 +8,7 @@ import { spawn } from 'node:child_process';
 const webRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../outputs/web');
 const port = 4186;
 const localUrl = `http://localhost:${port}`;
-const mime = { '.html': 'text/html; charset=utf-8', '.js': 'application/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.svg': 'image/svg+xml', '.png': 'image/png', '.wav': 'audio/wav', '.mp3': 'audio/mpeg', '.json': 'application/json; charset=utf-8', '.woff': 'font/woff', '.woff2': 'font/woff2', '.txt': 'text/plain; charset=utf-8' };
+const mime = { '.html': 'text/html; charset=utf-8', '.js': 'application/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.svg': 'image/svg+xml', '.png': 'image/png', '.jpg': 'image/jpeg', '.webp': 'image/webp', '.wav': 'audio/wav', '.mp3': 'audio/mpeg', '.json': 'application/json; charset=utf-8', '.woff': 'font/woff', '.woff2': 'font/woff2', '.txt': 'text/plain; charset=utf-8' };
 const openBrowser = () => {
   if (!process.argv.includes('--no-open') && process.platform === 'darwin') spawn('open', [localUrl], { stdio: 'ignore' }).unref();
 };

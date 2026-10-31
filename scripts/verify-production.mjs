@@ -412,7 +412,7 @@ try {
   await expect(page.getByRole('button', { name: '给我提示' })).toBeEnabled({ timeout: imageLoadTimeout });
   expect(await page.evaluate(key => localStorage.getItem(key), learningKey)).toBeNull();
   expect(await page.evaluate(key => localStorage.getItem(key), progressKey)).toBeNull();
-  await page.goto(baseUrl); await verifyHomeTitle();
+  await page.goto(`${baseUrl}/#/themes`); await verifyHomeTitle();
   await expect(page.locator('.theme-row')).toHaveCount(3);
   await expect(page.locator('a[href*="/play/"]')).toHaveCount(0);
   await expect(page.getByText('开始第一次观察')).toHaveCount(0);
@@ -428,7 +428,7 @@ try {
   const skipped = await page.evaluate(key => Object.values(JSON.parse(localStorage.getItem(key) ?? '{"books":{}}').books)[0] ?? {}, learningKey);
   expect(skipped.completedAt).toBeUndefined();
   expect(await page.evaluate(key => localStorage.getItem(key), progressKey)).toBeNull();
-  await page.goto(baseUrl); await verifyHomeTitle(); await page.locator('.theme-patterns').click();
+  await page.goto(`${baseUrl}/#/themes`); await verifyHomeTitle(); await page.locator('.theme-patterns').click();
   await walkTeaching(true, true);
   const learned = await page.evaluate(key => JSON.parse(localStorage.getItem(key)), learningKey);
   const learningRecords = Object.values(learned.books);
@@ -514,7 +514,7 @@ try {
   await page.getByRole('link', { name: '返回关卡', exact: true }).click();
   await verifyButtonCentered(page.getByRole('link', { name: '再次观察', exact: true }));
   await page.getByRole('button', { name: '返回游戏选择', exact: true }).click();
-  await page.goto(baseUrl); await verifyHomeTitle();
+  await page.goto(`${baseUrl}/#/themes`); await verifyHomeTitle();
   await expect(page.locator('.theme-patterns')).toHaveAttribute('href', '#/theme/patterns');
   await page.locator('.theme-patterns').click();
   await expect(page.getByTestId('teaching-screen')).toHaveAttribute('data-unit-id', 'locations');
@@ -526,7 +526,7 @@ try {
     await verifyVisible(page.getByRole('link', { name: '再次观察', exact: true }));
     await verifyButtonCentered(page.getByRole('link', { name: '再次观察', exact: true }));
     await verifyScreen('手机关卡选择');
-    for (const route of ['/', '/theme/music', '/help', '/settings']) {
+    for (const route of ['/themes', '/theme/music', '/help', '/settings']) {
       await page.goto(`${baseUrl}/#${route}`);
       await verifyScreen(`${viewport.width}×${viewport.height} ${route}`);
     }
