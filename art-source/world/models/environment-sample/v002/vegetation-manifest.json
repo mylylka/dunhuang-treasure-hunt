@@ -1,0 +1,70 @@
+{
+  "version": "v002",
+  "status": "awaiting user visual review",
+  "method": "Python-authored, branch-driven layered closed cloud boughs with explicitly shaped non-spherical contours and directed surface bulges. Twelve independently editable tree boughs and six grounded shrub boughs retain overlap boundaries. No random placement or leaf cards. Existing v001 woody mesh loaded read-only and upper ends folded inside the foliage.",
+  "sourceV001Sha256": "caf64c26edd5351cf96cade3d92bd8976a94ecd0d3faa1059a4e91aea735bc42",
+  "assets": [
+    {
+      "asset": "tree-a",
+      "triangles": 17658,
+      "crownTopology": {
+        "cloudBoughs": 12,
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "vertices": 7224,
+        "faces": 7680
+      },
+      "boundsYUp": {
+        "min": [
+          -2.588886260986328,
+          0.0,
+          -2.1339142322540283
+        ],
+        "max": [
+          2.5611138343811035,
+          4.800000190734863,
+          2.0148065090179443
+        ]
+      },
+      "bytes": 344340,
+      "sha256": "816d562f2af98262b94aa253b7fc89f81b554d3f044cf9251d97d75e50c0d012",
+      "meshes": 13,
+      "primitives": 14,
+      "materials": 3
+    },
+    {
+      "asset": "shrub-a",
+      "triangles": 7200,
+      "crownTopology": {
+        "cloudBoughs": 6,
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0,
+        "vertices": 3612,
+        "faces": 3840
+      },
+      "boundsYUp": {
+        "min": [
+          -0.8251516222953796,
+          0.0,
+          -0.6337295770645142
+        ],
+        "max": [
+          0.8248484134674072,
+          0.6800000071525574,
+          0.611915647983551
+        ]
+      },
+      "bytes": 142984,
+      "sha256": "5efbc4290bb513829e2b5dee90c3e7e8d2b124b6b2947e233de20b9fd204f60d",
+      "meshes": 6,
+      "primitives": 6,
+      "materials": 1
+    }
+  ],
+  "limitations": [
+    "Layered cloud boughs match the reviewed direction, but close views remain smooth and abstracted; the reference leaf-cluster detail is not achieved and final art approval remains with the user.",
+    "No leaf animation in this static sample."
+  ],
+  "reviewedCandidate": "candidate-02",
+  "geometryPolicy": "Keep the reviewed candidate-02 geometry and normals unchanged; decimation deferred until user review."
+}

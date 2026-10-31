@@ -1,0 +1,210 @@
+{
+  "asset": "independent-dunes",
+  "version": "v002",
+  "status": "awaiting user visual review",
+  "generator": "scripts/build-world-environment-dunes-v002.py",
+  "source": "art-source/world/models/environment-sample/v002/dunes.blend",
+  "runtime": "public/assets/world/environment-sample/v002/dunes.glb",
+  "references": [
+    "W01",
+    "W02"
+  ],
+  "referenceArchive": "art-source/world/art-sample/v001/",
+  "origin": "ground rectangle center",
+  "units": "metres",
+  "upAxis": "Y",
+  "bounds": {
+    "min": [
+      -50,
+      -0.35,
+      -17.5
+    ],
+    "max": [
+      50,
+      9.049999999999999,
+      17.5
+    ]
+  },
+  "triangles": 4110,
+  "vertices": 2057,
+  "meshCount": 1,
+  "materialCount": 1,
+  "bytes": 226564,
+  "sha256": "e32b7db2a5d8315c94e96d72d95bf9e1d6a866c88432bb0188be9b3caae468b4",
+  "shape": "directly authored cross-section loft; unequal crescent and S crest, broad independent low valley floors; no noise/envelope summation",
+  "lightingIntent": "Camera-visible -X slip faces oppose actual local sun (+22,+35,+14); long +X slopes receive sunlight",
+  "albedo": "constant PBR sand; no baked shading or face-color shadow trick",
+  "crestControls": {
+    "left-crescent": {
+      "x": [
+        -44,
+        -40,
+        -33,
+        -27,
+        -30,
+        -39,
+        -45
+      ],
+      "h": [
+        0,
+        1.4,
+        4.3,
+        6.2,
+        5.3,
+        2.0,
+        0
+      ]
+    },
+    "main-s-crest": {
+      "x": [
+        -5,
+        -4,
+        0,
+        2,
+        6,
+        11,
+        8
+      ],
+      "h": [
+        0,
+        3.0,
+        7.9,
+        9.2,
+        7.6,
+        3.0,
+        0
+      ]
+    },
+    "right-shoulder": {
+      "x": [
+        29,
+        32,
+        37,
+        36,
+        31,
+        29,
+        35
+      ],
+      "h": [
+        0,
+        2.5,
+        5.0,
+        5.7,
+        3.2,
+        1.0,
+        0
+      ]
+    }
+  },
+  "valleyControls": {
+    "left": [
+      0,
+      0.1,
+      0.32,
+      0.55,
+      0.42,
+      0.1,
+      0
+    ],
+    "right": [
+      0,
+      0.15,
+      0.45,
+      0.72,
+      0.4,
+      0.1,
+      0
+    ]
+  },
+  "zControls": [
+    -17.5,
+    -13,
+    -7,
+    0,
+    7,
+    13,
+    17.5
+  ],
+  "actualFaceSamples": [
+    {
+      "name": "main-lee",
+      "localPoint": [
+        -1.5,
+        4.2761,
+        0
+      ],
+      "normalYup": [
+        -0.7909,
+        0.5509,
+        0.2663
+      ],
+      "sunDot": 0.1285
+    },
+    {
+      "name": "main-lit",
+      "localPoint": [
+        12,
+        5.8603,
+        0
+      ],
+      "normalYup": [
+        0.3888,
+        0.9187,
+        -0.0696
+      ],
+      "sunDot": 0.9104
+    },
+    {
+      "name": "left-valley",
+      "localPoint": [
+        -7,
+        0.4,
+        0
+      ],
+      "normalYup": [
+        0.0,
+        1.0,
+        0.0034
+      ],
+      "sunDot": 0.803
+    },
+    {
+      "name": "right-lee",
+      "localPoint": [
+        32,
+        2.4006,
+        0
+      ],
+      "normalYup": [
+        -0.5846,
+        0.7983,
+        -0.1448
+      ],
+      "sunDot": 0.2991
+    },
+    {
+      "name": "right-lit",
+      "localPoint": [
+        42,
+        3.1614,
+        0
+      ],
+      "normalYup": [
+        0.3823,
+        0.9236,
+        0.0291
+      ],
+      "sunDot": 0.9427
+    }
+  ],
+  "remainingVisualGaps": [
+    "The fixed low camera mainly shows one dominant dune and hides part of the valley floors",
+    "Large triangular facets remain visible at close range",
+    "The connected forms and their endings remain more simplified and regular than the continuous natural rhythm of W01/W02"
+  ],
+  "limits": [
+    "Independent candidate only; no production map update",
+    "Blender preview matches sun direction and energy; final brightness judgement uses unchanged browser hemi/ACES",
+    "No collision or walkable terrain supplied"
+  ]
+}
