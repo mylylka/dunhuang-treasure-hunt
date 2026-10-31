@@ -1,0 +1,41 @@
+{
+  "version": "v002",
+  "status": "art sample pending user approval",
+  "worldOrigin": [
+    -12,
+    0,
+    2
+  ],
+  "upAxis": "Y",
+  "units": "metres",
+  "model": "courtyard.glb",
+  "bytes": 7294164,
+  "sha256": "8a771cacfc7c0ac6ca09803cdf9841d46839b915442dc328079bd79f22173bbe",
+  "triangles": 71070,
+  "meshCount": 182,
+  "materials": 28,
+  "referenceArchive": "art-source/world/art-sample/v001/",
+  "caissonSource": "藻井独立正视图.jpeg",
+  "embeddedImageDimensions": [
+    1024,
+    1024
+  ],
+  "caissonHeight": 4.78,
+  "caissonProcessing": "Full original composition, downsampled to 1024, embedded JPEG quality 90; no repaint or watermark removal.",
+  "collision": "Accepted architecture footprint plus shared courtyard-props.json circular prop colliders and per-structure cameraBoxes.",
+  "sharedLayout": "src/content/world/courtyard-props.json",
+  "wallArtSourceManifest": "art-source/world/wall-decoration/v001/source-manifest.json",
+  "cameraBoxCount": 56,
+  "rockNormals": "Outward wound closed mesh, zero duplicate triangles.",
+  "rockShrubs": "Raycast against actual rock triangle surface plus 0.02 metres.",
+  "references": [
+    "最新纹彩院庭院图.png",
+    "半开放藻井观赏厅内部图.png",
+    "环境小品和树木资产设定板.png",
+    "最新沙漠世界高空总览图.png"
+  ],
+  "limitations": [
+    "Simplified 3D interpretation pending art review, not a historical reconstruction.",
+    "Small shrubs and grasses remain passable; tree trunks, ceramic pots and rocks have shared full-radius collision data."
+  ]
+}

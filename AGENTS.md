@@ -30,6 +30,7 @@
 - 采用 Phaser 4.2.1、React、TypeScript、Vite；项目内 npm 依赖，本地 CLI 开发。
 
 ## 3D探索世界（2026-10-31批准）
+- 样片v002按用户试玩反馈修复柱脚共面闪烁、树木/道具穿模及屋檐/廊顶镜头遮挡。角色与镜头需覆盖正式模型实际范围，镜头碰撞在平滑更新后再次约束，不能只沿用灰模屋顶代理。岩石与远山采用几何切面、连绵且高低错落；近岩有单体和大小石组，灌木黄绿多形态；树高和树冠尺寸有差异。内外墙装饰以用户参考图的纹样密度为目标，不能用重复简单菱形假称达到参考图；现有图无法提供清晰纹理时交付明确素材规格。
 - 用户于2026-10-31明确确认灰模验收完成，现进入正式美术样片v001：一段沙丘道路及植被、纹彩院入口与藻井厅、小旅人Idle/Walk/Run。样片须网页可操作、标注“美术样片 · 待确认”；用户确认画风后再扩展乐舞馆和洞窟。现有灰模通路与交互约束继续有效。
 - 专用分支 `codex/3d-world`；Three.js负责3D、React负责交互界面，现有Phaser小游戏保持独立。先交付灰模闭环与两段故事播放器技术验证，用户试玩确认后进入正式美术样片；样片确认后再扩展乐舞馆与洞窟。
 - 灰模必须明确标记“灰模试玩 · 美术待替换”。不把占位场景当作正式敦煌美术或已完成的三场景。
@@ -52,6 +53,7 @@
 - `public/assets/world/<region-or-shared>/vNNN/`：网页运行模型、纹理、音频，英文文件名、带版本、按区域按需加载。
 - `art-source/world/<asset-id>/vNNN/`：3D概念原图与母图、处理登记；`art-source/world/models/`：Blender源文件及导出规范，构建脚本放 `scripts/`。灰模优先用程序几何，不生成正式美术占位交付。
 - 美术样片参考归档至`art-source/world/art-sample/v001/`，保留源文件名和SHA登记；模型源文件存`art-source/world/models/<asset-id>/vNNN/`（`.blend`及导出登记），运行模型存`public/assets/world/courtyard/v001/`和`public/assets/world/shared/v001/`；脚本使用`build-world-<asset-id>.py`。版本确认后新增版本，不覆盖已交付版本；中间预览与检查仍放`work/world/`，不自动清理。Agent依据用户既有概念图进行Blender建模，AI原图内容性改绘仍遵守美术边界。
+- v002院落模型存`art-source/world/models/courtyard/v002/`和`public/assets/world/courtyard/v002/`，保留v001；树木、岩组和道具布局以`src/content/world/courtyard-props.json`共享给Blender建模与碰撞规则。纹理技术提取与登记放`art-source/world/wall-decoration/v001/`，派生运行贴图放院落v002；无法提取的图样需求放`docs/world-decoration-request.md`。构建脚本支持版本化参数；验证截图和模型检查仍放`work/world/`。
 - `tests/world/`：世界规则、会话、事件及浏览器回归；截图、测量和日志放 `work/world/`；阶段交付与缺素材清单放 `docs/`。
 - `src/games/`：按玩法隔离规则、场景和局内状态。
 - `src/games/coloring/`：填色状态、区域命中、颜色渲染和Phaser场景；不得复用找不同的差异字段伪装填色。`src/runtime/`共用引擎生命周期，玩法分别提供自己的控制器与布局。

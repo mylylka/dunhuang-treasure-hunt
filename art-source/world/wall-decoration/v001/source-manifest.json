@@ -1,0 +1,57 @@
+{
+  "version": "v001",
+  "status": "existing approved artwork reused for sample wall decoration",
+  "method": "Complete square artwork scaled proportionally; border is an explicitly recorded rectangular crop. JPEG92. No AI generation, repainting, perspective reconstruction, or watermark removal.",
+  "meaning": "Decorative use of user-supplied teaching illustrations, not a reconstruction of a historical building or an exact extraction of the concept mural.",
+  "items": [
+    {
+      "output": "public/assets/world/courtyard/v002/wall-floral-panel.jpg",
+      "source": "public/assets/levels/coloring-grape-lotus/coloring-grape-lotus-reference-v002.png",
+      "sourceSha256": "8def928cce0a93b6922c1a329db58835d4c5661405204511d316c34f2b8690f6",
+      "cropXYXY": null,
+      "pixels": [
+        1024,
+        1024
+      ],
+      "outputSha256": "5415bbdbd9622b3fd6c381627abc16339df61f4104d748a9b1413ff9d10c19eb"
+    },
+    {
+      "output": "public/assets/world/courtyard/v002/wall-lotus-panel.jpg",
+      "source": "public/assets/levels/patterns-lotus/patterns-lotus-a-v001.png",
+      "sourceSha256": "71b9904852281983456cb8fb16353cad2a4c35e6170f029308db7806b3d44ee9",
+      "cropXYXY": null,
+      "pixels": [
+        1024,
+        1024
+      ],
+      "outputSha256": "f04f5da9ece348362c358f1825407538f20dbc4d389a48afae56f65b085dadfe"
+    },
+    {
+      "output": "public/assets/world/courtyard/v002/wall-vine-panel.jpg",
+      "source": "public/assets/levels/coloring-grape-pomegranate/coloring-grape-pomegranate-reference-v002.png",
+      "sourceSha256": "cfa76362f247d1ba5f51a9b212f741d7876825d0f8d443236410fb19b5271781",
+      "cropXYXY": null,
+      "pixels": [
+        1024,
+        1024
+      ],
+      "outputSha256": "5333f019f2d74475e8339245d44766bbf0c4382252f01bf349607c53ec079fce"
+    },
+    {
+      "output": "public/assets/world/courtyard/v002/wall-floral-border.jpg",
+      "source": "public/assets/levels/coloring-grape-lotus/coloring-grape-lotus-reference-v002.png",
+      "sourceSha256": "8def928cce0a93b6922c1a329db58835d4c5661405204511d316c34f2b8690f6",
+      "cropXYXY": [
+        120,
+        14,
+        1133,
+        111
+      ],
+      "pixels": [
+        1013,
+        97
+      ],
+      "outputSha256": "9b1f127d208c8fd76e90fb99cb1d4b3a9044666522073e1d0f8b346ca0dcb60b"
+    }
+  ]
+}

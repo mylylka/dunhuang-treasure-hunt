@@ -8,6 +8,7 @@ type TravelerAction = 'Idle' | 'Walk' | 'Run';
 export interface ArtSampleScene extends GrayboxScene {
   ready: Promise<void>;
   animationName(): TravelerAction;
+  updateCameraVisibility(target: THREE.Vector3, position: THREE.Vector3, dt: number, immediate: boolean): void;
 }
 
 /** One scene owns every loaded model, including results delivered after unmount. */
@@ -47,6 +48,8 @@ export function createArtSampleScene(): ArtSampleScene {
   let actionName: TravelerAction = 'Idle';
   let previousElapsed: number | null = null;
   const models: THREE.Object3D[] = [];
+  const canopyMaterials = new Set<THREE.Material>();
+  const canopies: { bounds: THREE.Box3; materials: THREE.Material[]; opacity: number }[] = [];
   const actions = new Map<TravelerAction, THREE.AnimationAction>();
   const loader = new GLTFLoader();
   const controller = new AbortController();
@@ -59,6 +62,8 @@ export function createArtSampleScene(): ArtSampleScene {
     actions.clear(); mixer = null; character = null;
     for (const model of models) releaseModel(model);
     models.length = 0;
+    for (const material of canopyMaterials) material.dispose();
+    canopyMaterials.clear(); canopies.length = 0;
     environment.dispose();
   }
   async function loadModel(path: string): Promise<GLTF> {
@@ -99,6 +104,18 @@ export function createArtSampleScene(): ArtSampleScene {
     }
     courtyard.scene.position.set(-12, 0, 2);
     environment.scene.add(courtyard.scene);
+    courtyard.scene.updateMatrixWorld(true);
+    courtyard.scene.traverse(object => {
+      if (!(object instanceof THREE.Mesh) || (object.userData.cameraRole !== 'canopy' && !object.name.includes('-canopy'))) return;
+      const originals = Array.isArray(object.material) ? object.material : [object.material];
+      const materials = originals.map(material => {
+        canopyMaterials.add(material);
+        const copy = material.clone(); copy.transparent = true;
+        return copy;
+      });
+      object.material = Array.isArray(object.material) ? materials : materials[0];
+      canopies.push({ bounds: new THREE.Box3().setFromObject(object, true).expandByScalar(.2), materials, opacity: 1 });
+    });
     character = avatar.scene; traveler.add(character);
     mixer = new THREE.AnimationMixer(character);
     for (const name of required) actions.set(name, mixer.clipAction(avatar.animations.find(clip => clip.name === name)!));
@@ -112,6 +129,19 @@ export function createArtSampleScene(): ArtSampleScene {
   return {
     scene: environment.scene, traveler, ready,
     animationName: () => actionName,
+    updateCameraVisibility(target, position, dt, immediate) {
+      const direction = position.clone().sub(target);
+      const distance = direction.length();
+      const ray = new THREE.Ray(target, direction.normalize());
+      const hit = new THREE.Vector3();
+      for (const canopy of canopies) {
+        const intersects = ray.intersectBox(canopy.bounds, hit);
+        const obscures = canopy.bounds.containsPoint(position) || !!intersects && target.distanceTo(hit) < distance + .3;
+        const desired = obscures ? .12 : 1;
+        canopy.opacity = immediate ? desired : THREE.MathUtils.lerp(canopy.opacity, desired, 1 - Math.exp(-dt * 14));
+        for (const material of canopy.materials) { material.opacity = canopy.opacity; material.depthWrite = canopy.opacity > .98; }
+      }
+    },
     animateTraveler(speed, elapsed, reduced) {
       const dt = previousElapsed === null ? 0 : Math.min(.05, Math.max(0, elapsed - previousElapsed));
       previousElapsed = elapsed;

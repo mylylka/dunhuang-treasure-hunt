@@ -1,13 +1,15 @@
 import { afterAll, describe, expect, it } from 'vitest';
-import { Box3, Ray, Vector3 } from 'three';
+import { Box3, Mesh, MeshStandardMaterial, Ray, Vector3 } from 'three';
 import { createGrayboxScene } from '../../src/world/geometry';
 import { followCameraPose } from '../../src/world/camera';
 import { CAMERA_YAW_LIMIT, isWalkable, PLAYER_RADIUS, WORLD_BOUNDS, WORLD_COLLIDERS } from '../../src/world/movement';
 import { DUNE_CAMERA_CLEARANCE, WORLD_BOUNDARY_STONES, WORLD_CLIFFS, WORLD_DUNES } from '../../src/world/scenery';
 
 const world = createGrayboxScene();
+const artWorld = createGrayboxScene({ artSample: true });
 world.scene.updateMatrixWorld(true);
-afterAll(() => world.dispose());
+artWorld.scene.updateMatrixWorld(true);
+afterAll(() => { world.dispose(); artWorld.dispose(); });
 
 function renderedBounds(id: string): Box3 {
   const object = world.scene.getObjectByName(id);
@@ -24,6 +26,40 @@ describe('scenery and walkable-ground agreement', () => {
     expect(WORLD_DUNES).toHaveLength(18);
     for (const dune of WORLD_DUNES) {
       expect(renderedBounds(dune.id).intersectsBox(protectedArea(DUNE_CAMERA_CLEARANCE - .001)), dune.id).toBe(false);
+      const artBounds = new Box3().setFromObject(artWorld.scene.getObjectByName(dune.id)!, true);
+      expect(artBounds.intersectsBox(protectedArea(DUNE_CAMERA_CLEARANCE - .001)), `sample ${dune.id}`).toBe(false);
+    }
+  });
+
+  it('joins the horizon ridge footprints without gaps and varies peak height', () => {
+    for (const direction of ['north', 'south', 'east', 'west']) {
+      const axis = direction === 'north' || direction === 'south' ? 'x' : 'z';
+      const ridges = WORLD_DUNES.filter(item => item.id.startsWith(`dune-${direction}-`))
+        .map(item => renderedBounds(item.id)).sort((a, b) => a.min[axis] - b.min[axis]);
+      expect(ridges.length).toBeGreaterThanOrEqual(4);
+      for (let i = 1; i < ridges.length; i++) expect(ridges[i].min[axis]).toBeLessThan(ridges[i - 1].max[axis]);
+      expect(new Set(ridges.map(bounds => Math.round(bounds.max.y))).size).toBeGreaterThanOrEqual(3);
+    }
+  });
+
+  it('uses separate flat triangle normals and bounded irregular meshes in the art sample', () => {
+    for (const item of [...WORLD_DUNES, ...WORLD_CLIFFS, ...WORLD_BOUNDARY_STONES]) {
+      const object = artWorld.scene.getObjectByName(item.id) as Mesh;
+      expect(object.isMesh).toBe(true);
+      expect((object.material as MeshStandardMaterial).flatShading).toBe(true);
+      expect(object.geometry.index).toBeNull();
+      const positions = object.geometry.getAttribute('position');
+      const normals = object.geometry.getAttribute('normal');
+      const faceDirections = new Set<string>();
+      for (let i = 0; i < positions.count; i++) {
+        for (const value of [positions.getX(i), positions.getY(i), positions.getZ(i)]) {
+          expect(Number.isFinite(value)).toBe(true);
+          expect(Math.abs(value)).toBeLessThanOrEqual(1.000001);
+        }
+        if (i % 3 === 0) faceDirections.add([normals.getX(i), normals.getY(i), normals.getZ(i)].map(n => n.toFixed(2)).join(','));
+        else expect(new Vector3().fromBufferAttribute(normals, i).distanceTo(new Vector3().fromBufferAttribute(normals, i - i % 3))).toBeLessThan(.000001);
+      }
+      expect(faceDirections.size, item.id).toBeGreaterThan(12);
     }
   });
 

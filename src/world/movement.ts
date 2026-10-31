@@ -1,10 +1,11 @@
 import type { WorldPoint } from './types';
 import { WORLD_BOUNDS } from './layout';
 import { WORLD_CLIFFS } from './scenery';
+import courtyardProps from '../content/world/courtyard-props.json';
 
 export { WORLD_BOUNDS } from './layout';
 
-export interface WorldCollider { minX: number; maxX: number; minZ: number; maxZ: number; height: number }
+export interface WorldCollider { minX: number; maxX: number; minZ: number; maxZ: number; height: number; id?: string; circle?: { x: number; z: number; radius: number } }
 export const WORLD_SPAWN: WorldPoint = { x: 0, z: 18 };
 export const CAISSON_SAFE_POINT: WorldPoint = { x: -12, z: -13 };
 // The sample avatar's full animated silhouette reaches 0.677 m, including sleeves.
@@ -13,6 +14,11 @@ export const WALK_SPEED = 3.2;
 export const RUN_SPEED = 5.7;
 export const CAMERA_YAW_LIMIT = Math.PI * 0.34;
 const wall = (x: number, z: number, w: number, d: number, height: number): WorldCollider => ({ minX: x - w / 2, maxX: x + w / 2, minZ: z - d / 2, maxZ: z + d / 2, height });
+export const WORLD_PROP_COLLIDERS: WorldCollider[] = courtyardProps.props.filter(prop => prop.collidable !== false).map(prop => ({
+  id: prop.id, minX: prop.x - prop.radius, maxX: prop.x + prop.radius,
+  minZ: prop.z - prop.radius, maxZ: prop.z + prop.radius, height: prop.y + prop.height,
+  circle: { x: prop.x, z: prop.z, radius: prop.radius },
+}));
 export const WORLD_COLLIDERS: WorldCollider[] = [
   // Courtyard entrance is a six-metre opening. Upper floors have no walk surface.
   wall(-22, -11, .6, 26, 2.7), wall(-2, -11, .6, 26, 2.7), wall(-12, -24, 20, .6, 4.5),
@@ -23,6 +29,7 @@ export const WORLD_COLLIDERS: WorldCollider[] = [
   ...[-18, -6].flatMap(x => [-14, -20].map(z => wall(x, z, .65, .65, 5.4))),
   // Work table and story display are deliberately coarse collision proxies.
   wall(-18, -7.5, 3.3, 1.4, 1.1), wall(-4.4, -7.8, .35, 3, 2.7),
+  ...WORLD_PROP_COLLIDERS,
   // Distant regions are visible only in this stage, without enterable false content.
   wall(18, -18, 14, 12, 8),
   ...WORLD_CLIFFS.map(item => wall(item.x, item.z, item.radiusX * 2, item.radiusZ * 2, item.y + item.radiusY)),
@@ -34,6 +41,7 @@ export function isWalkable(point: WorldPoint, colliders: readonly WorldCollider[
   const r = PLAYER_RADIUS;
   if (point.x < WORLD_BOUNDS.minX + r || point.x > WORLD_BOUNDS.maxX - r || point.z < WORLD_BOUNDS.minZ + r || point.z > WORLD_BOUNDS.maxZ - r) return false;
   return !colliders.some(box => {
+    if (box.circle) return Math.hypot(point.x - box.circle.x, point.z - box.circle.z) < r + box.circle.radius - .00001;
     const x = Math.max(box.minX, Math.min(point.x, box.maxX));
     const z = Math.max(box.minZ, Math.min(point.z, box.maxZ));
     return Math.hypot(x - point.x, z - point.z) < r - .00001;

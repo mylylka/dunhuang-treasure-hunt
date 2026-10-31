@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { WORLD_BOUNDARY_STONES, WORLD_CLIFFS, WORLD_DUNES } from './scenery';
 import { COURTYARD_ROAD } from './road';
+import { createBoundaryStoneGeometry, createRidgeGeometry } from './scenery-mesh';
 
 export interface GrayboxScene {
   scene: THREE.Scene;
@@ -19,7 +20,7 @@ export function createGrayboxScene({ artSample = false }: { artSample?: boolean 
     dune: new THREE.MeshStandardMaterial({ color: '#bcbba8', roughness: 1, flatShading: true }),
     path: new THREE.MeshStandardMaterial({ color: '#e3dcca', roughness: 1 }),
     wall: new THREE.MeshStandardMaterial({ color: '#e7e1d4', roughness: .95 }),
-    stone: new THREE.MeshStandardMaterial({ color: '#a3a79c', roughness: .95 }),
+    stone: new THREE.MeshStandardMaterial({ color: '#a3a79c', roughness: .95, flatShading: true }),
     beam: new THREE.MeshStandardMaterial({ color: '#888b7e', roughness: 1 }),
     roof: new THREE.MeshStandardMaterial({ color: '#717e78', roughness: 1 }),
     trim: new THREE.MeshStandardMaterial({ color: '#c2ac8c', roughness: .9 }),
@@ -35,7 +36,6 @@ export function createGrayboxScene({ artSample = false }: { artSample?: boolean 
     materials.stone.color.set('#ae8c68'); materials.beam.color.set('#714a36');
     materials.roof.color.set('#557a72'); materials.trim.color.set('#b79052');
     materials.green.color.set('#8a9b65');
-    materials.dune.flatShading = false;
   }
   const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
   const sphereGeometry = new THREE.IcosahedronGeometry(1, artSample ? 3 : 1);
@@ -77,8 +77,13 @@ export function createGrayboxScene({ artSample = false }: { artSample?: boolean 
   mesh(pathGeometry, materials.path, 0, 0, 0).name = 'courtyard-road';
   // Shared placement data keeps complete scenery meshes outside the walking
   // surface; distant dunes also leave room for the follow camera behind it.
-  for (const item of [...WORLD_DUNES, ...WORLD_BOUNDARY_STONES]) {
-    mesh(sphereGeometry, materials.dune, item.x, item.y, item.z, item.radiusX, item.radiusY, item.radiusZ).name = item.id;
+  for (const [index, item] of WORLD_DUNES.entries()) {
+    const geometry = createRidgeGeometry(index, item.ridgeAxis); geometries.add(geometry);
+    mesh(geometry, materials.dune, item.x, item.y, item.z, item.radiusX, item.radiusY, item.radiusZ).name = item.id;
+  }
+  for (const [index, item] of WORLD_BOUNDARY_STONES.entries()) {
+    const geometry = createBoundaryStoneGeometry(index); geometries.add(geometry);
+    mesh(geometry, materials.stone, item.x, item.y, item.z, item.radiusX, item.radiusY, item.radiusZ).name = item.id;
   }
   if (!artSample) {
   box(-12, .015, -10.8, 19.7, .05, 25.5, materials.path);
@@ -130,16 +135,19 @@ export function createGrayboxScene({ artSample = false }: { artSample?: boolean 
   tree(-18, -2, .9); tree(-6, -2, .85); tree(-6, -11, .8);
   tree(5, 13, .65); tree(-6, 12, .65); tree(7, 3, .8); tree(-27, -10, .9);
   }
-  // Keep loose roadside pebbles on the straight approach, clear of the gate turn.
-  for (let i = 0; i < 8; i++) {
-    const x = i % 2 === 0 ? 4.5 : -4.5;
-    mesh(sphereGeometry, materials.stone, x, .16, 26 - i * 1.7, .26, .25, .3);
+  // The art sample supplies its roadside stone groups in the courtyard GLB.
+  if (!artSample) {
+    for (let i = 0; i < 8; i++) {
+      const x = i % 2 === 0 ? 4.5 : -4.5;
+      mesh(sphereGeometry, materials.stone, x, .16, 26 - i * 1.7, .26, .25, .3);
+    }
   }
   // Honest distant block masses reserve space for later stage work.
   box(18, 3.3, -18, 14, 6.6, 12, materials.wall); roof(18, -18, 6.7, 15.5, 13);
   for (let x = 12; x <= 24; x += 3) box(x, 5.1, -11.94, 1.5, 2.3, .1, materials.roof);
-  for (const item of WORLD_CLIFFS) {
-    mesh(sphereGeometry, materials.stone, item.x, item.y, item.z, item.radiusX, item.radiusY, item.radiusZ).name = item.id;
+  for (const [index, item] of WORLD_CLIFFS.entries()) {
+    const geometry = createRidgeGeometry(index + 31, 'x', true); geometries.add(geometry);
+    mesh(geometry, materials.stone, item.x, item.y, item.z, item.radiusX, item.radiusY, item.radiusZ).name = item.id;
   }
 
   const traveler = new THREE.Group();

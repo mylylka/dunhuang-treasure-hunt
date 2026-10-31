@@ -4,40 +4,45 @@ export interface SceneryPlacement {
   id: string;
   x: number; y: number; z: number;
   radiusX: number; radiusY: number; radiusZ: number;
+  ridgeAxis?: 'x' | 'z';
 }
 
 // The whole dune footprint, not merely its centre, stays beyond the player's
 // bounds and the longest follow-camera arm. Dunes are scenery, not walk surfaces.
 export const DUNE_CAMERA_CLEARANCE = FOLLOW_CAMERA_DISTANCE + .5;
-const centerX = (WORLD_BOUNDS.minX + WORLD_BOUNDS.maxX) / 2;
-const centerZ = (WORLD_BOUNDS.minZ + WORLD_BOUNDS.maxZ) / 2;
-const halfWidth = (WORLD_BOUNDS.maxX - WORLD_BOUNDS.minX) / 2;
-const halfDepth = (WORLD_BOUNDS.maxZ - WORLD_BOUNDS.minZ) / 2;
-
-export const WORLD_DUNES: readonly SceneryPlacement[] = Array.from({ length: 18 }, (_, i) => {
-  const angle = i * 2.39996;
-  const directionX = Math.cos(angle), directionZ = Math.sin(angle);
-  const radiusX = 13 + i % 3 * 4, radiusZ = 10 + i % 4 * 2;
-  const distance = Math.min(
-    (halfWidth + DUNE_CAMERA_CLEARANCE + radiusX) / Math.abs(directionX),
-    (halfDepth + DUNE_CAMERA_CLEARANCE + radiusZ) / Math.abs(directionZ),
-  ) + i % 3 * 3;
-  return { id: `dune-${i}`, x: centerX + directionX * distance, y: -1.3, z: centerZ + directionZ * distance,
-    radiusX, radiusY: 4 + i % 4, radiusZ };
-});
+// Overlapping broad ridges form a continuous horizon. Each full rectangular
+// footprint is outside the camera envelope; the geometry never exceeds it.
+export const WORLD_DUNES: readonly SceneryPlacement[] = [
+  ...[-63, -21, 21, 63].flatMap((x, i): SceneryPlacement[] => [
+    { id: `dune-north-${i}`, x, y: -1.3, z: WORLD_BOUNDS.minZ - DUNE_CAMERA_CLEARANCE - 20.5,
+      radiusX: 25, radiusY: [15, 23, 17, 27][i], radiusZ: 19, ridgeAxis: 'x' },
+    { id: `dune-south-${i}`, x, y: -1.3, z: WORLD_BOUNDS.maxZ + DUNE_CAMERA_CLEARANCE + 19.5,
+      radiusX: 25, radiusY: [18, 12, 21, 15][i], radiusZ: 18, ridgeAxis: 'x' },
+  ]),
+  ...[-67, -35, -3, 29, 61].flatMap((z, i): SceneryPlacement[] => [
+    { id: `dune-west-${i}`, x: WORLD_BOUNDS.minX - DUNE_CAMERA_CLEARANCE - 21.5, y: -1.3, z,
+      radiusX: 20, radiusY: [21, 15, 24, 13, 19][i], radiusZ: 21, ridgeAxis: 'z' },
+    { id: `dune-east-${i}`, x: WORLD_BOUNDS.maxX + DUNE_CAMERA_CLEARANCE + 21.5, y: -1.3, z,
+      radiusX: 20, radiusY: [16, 25, 14, 21, 17][i], radiusZ: 21, ridgeAxis: 'z' },
+  ]),
+];
 
 const boundaryStones: SceneryPlacement[] = [];
 const edgeGap = .12;
 for (let z = WORLD_BOUNDS.minZ + 2; z <= WORLD_BOUNDS.maxZ - 2; z += 5) {
+  const variant = (z - WORLD_BOUNDS.minZ - 2) / 5 % 4;
+  const radiusX = 1.45 + variant * .22;
   boundaryStones.push(
-    { id: `boundary-stone-west-${z}`, x: WORLD_BOUNDS.minX - 2 - edgeGap, y: -.2, z, radiusX: 2, radiusY: 1.2, radiusZ: 2.5 },
-    { id: `boundary-stone-east-${z}`, x: WORLD_BOUNDS.maxX + 2 + edgeGap, y: -.2, z, radiusX: 2, radiusY: 1.1, radiusZ: 2.5 },
+    { id: `boundary-stone-west-${z}`, x: WORLD_BOUNDS.minX - radiusX - edgeGap, y: -.2, z, radiusX, radiusY: .65 + variant * .16, radiusZ: 1.8 + variant * .2 },
+    { id: `boundary-stone-east-${z}`, x: WORLD_BOUNDS.maxX + radiusX + edgeGap, y: -.2, z, radiusX, radiusY: 1.15 - variant * .13, radiusZ: 2.3 - variant * .16 },
   );
 }
 for (let x = WORLD_BOUNDS.minX + 3; x <= WORLD_BOUNDS.maxX - 3; x += 5) {
+  const variant = (x - WORLD_BOUNDS.minX - 3) / 5 % 4;
+  const radiusZ = 1.5 + variant * .2;
   boundaryStones.push(
-    { id: `boundary-stone-south-${x}`, x, y: -.2, z: WORLD_BOUNDS.maxZ + 2 + edgeGap, radiusX: 2.7, radiusY: 1.1, radiusZ: 2 },
-    { id: `boundary-stone-north-${x}`, x, y: -.2, z: WORLD_BOUNDS.minZ - 2 - edgeGap, radiusX: 2.7, radiusY: 1.1, radiusZ: 2 },
+    { id: `boundary-stone-south-${x}`, x, y: -.2, z: WORLD_BOUNDS.maxZ + radiusZ + edgeGap, radiusX: 1.9 + variant * .22, radiusY: .7 + variant * .13, radiusZ },
+    { id: `boundary-stone-north-${x}`, x, y: -.2, z: WORLD_BOUNDS.minZ - radiusZ - edgeGap, radiusX: 2.6 - variant * .15, radiusY: 1.15 - variant * .15, radiusZ },
   );
 }
 export const WORLD_BOUNDARY_STONES: readonly SceneryPlacement[] = boundaryStones;
@@ -45,6 +50,6 @@ export const WORLD_BOUNDARY_STONES: readonly SceneryPlacement[] = boundaryStones
 // These cliff masses remain close enough to mark the future cave region.
 // Unlike distant dunes, their full footprints participate in collisions.
 export const WORLD_CLIFFS: readonly SceneryPlacement[] = Array.from({ length: 8 }, (_, i) => ({
-  id: `cliff-${i}`, x: -8 + i * 5, y: 2.8, z: -34,
-  radiusX: 4, radiusY: 6 + i % 3, radiusZ: 4,
+  id: `cliff-${i}`, x: -18 + i * 6.5, y: 2.8, z: -34,
+  radiusX: 5.2, radiusY: [7.5, 10.5, 8, 13, 9, 11.5, 8.5, 10][i], radiusZ: 4,
 }));

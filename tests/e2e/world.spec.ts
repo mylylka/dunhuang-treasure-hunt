@@ -56,7 +56,7 @@ async function walkTo(page: Page, target: { x: number; z: number }) {
 test('沿道路从出生点转入真实院门并走到藻井，不从围墙穿行', async ({ page }, testInfo) => {
   await page.goto('/#/'); await ready(page);
   for (const [x, z] of [[0, 12], [-1.9, 9.8], [-6, 9], [-10.1, 8.2], [-12, 6]]) await walkTo(page, { x, z });
-  await page.screenshot({ path: `work/world/art-sample-road-gate-${testInfo.project.name}.png` });
+  await page.screenshot({ path: `work/world/art-sample-v002-road-gate-${testInfo.project.name}.png` });
   await walkTo(page, { x: -12, z: 1 });
   await expect(page.getByTestId('world-location')).toHaveText('纹彩院');
   await walkTo(page, { x: -12, z: -17 });
@@ -75,9 +75,9 @@ for (const edge of [{ name: 'east', x: 30, z: 25.5, key: 'd', limit: 34.31 }, { 
     await hold(page, edge.key, 500);
     expect(await position(page)).toEqual(reached);
     await hold(page, 'q', 1900);
-    await page.screenshot({ path: `work/world/art-sample-dune-${edge.name}-left-${testInfo.project.name}.png` });
+    await page.screenshot({ path: `work/world/art-sample-v002-dune-${edge.name}-left-${testInfo.project.name}.png` });
     await hold(page, 'e', 3500);
-    await page.screenshot({ path: `work/world/art-sample-dune-${edge.name}-right-${testInfo.project.name}.png` });
+    await page.screenshot({ path: `work/world/art-sample-v002-dune-${edge.name}-right-${testInfo.project.name}.png` });
     expect(await position(page)).toEqual(reached);
     await fits(page);
   });
@@ -220,7 +220,7 @@ test('WebGL2 不可用时保留重试和直接选择文化主题的入口', asyn
 });
 
 test('正式模型加载失败可重试，恢复后显示完整样片', async ({ page }) => {
-  const model = '**/assets/world/courtyard/v001/courtyard.glb';
+  const model = '**/assets/world/courtyard/v002/courtyard.glb';
   await page.route(model, route => route.abort());
   await page.goto('/#/');
   await expect(page.getByTestId('world-error')).toBeVisible({ timeout: readyTimeout });
@@ -235,14 +235,14 @@ test('正式模型加载失败可重试，恢复后显示完整样片', async ({
 });
 
 test('模型尚在加载时离开，晚到的资源不会复活世界', async ({ page }) => {
-  const modelBody = await readFile('public/assets/world/courtyard/v001/courtyard.glb');
+  const modelBody = await readFile('public/assets/world/courtyard/v002/courtyard.glb');
   let release!: () => void;
   const pending = new Promise<void>(resolve => { release = resolve; });
   let intercepted!: () => void;
   const requested = new Promise<void>(resolve => { intercepted = resolve; });
   const errors: string[] = [];
   page.on('pageerror', error => errors.push(error.message));
-  await page.route('**/assets/world/courtyard/v001/courtyard.glb', async route => {
+  await page.route('**/assets/world/courtyard/v002/courtyard.glb', async route => {
     intercepted();
     await pending;
     await route.fulfill({ status: 200, contentType: 'model/gltf-binary', body: modelBody });
@@ -263,7 +263,7 @@ test('模型尚在加载时离开，晚到的资源不会复活世界', async ({
 
 test('一个模型失败时不被另一个挂起请求阻塞', async ({ page }) => {
   let held: Route | undefined;
-  await page.route('**/assets/world/courtyard/v001/courtyard.glb', route => { held = route; });
+  await page.route('**/assets/world/courtyard/v002/courtyard.glb', route => { held = route; });
   await page.route('**/assets/world/shared/v001/traveler.glb', route => route.abort());
   await page.goto('/#/');
   await expect(page.getByTestId('world-error')).toBeVisible({ timeout: 5000 });

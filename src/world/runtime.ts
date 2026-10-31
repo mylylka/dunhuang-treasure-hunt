@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { createArtSampleScene } from './art-sample';
 import { createWorldInput } from './input';
-import { caissonCameraPose, clearCameraPosition, followCameraPose } from './camera';
+import { caissonCameraPose, followCameraPose, settleFollowCamera } from './camera';
 import { clampCameraYaw, movePlayer, movementVector, RUN_SPEED, sanitizePosition, surfaceHeight, WALK_SPEED, WORLD_SPAWN } from './movement';
 import type { DiscoveryId, WorldCheckpoint, WorldRuntime, WorldRuntimeOptions, WorldSnapshot, WorldView } from './types';
 
@@ -100,9 +100,13 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     updateTraveler(speed);
     const desiredPose = view === 'caisson' ? caissonCameraPose() : followCameraPose(checkpoint.position.x, surfaceHeight(checkpoint.position), checkpoint.position.z, checkpoint.cameraYaw);
     const damping = reduced ? 1 : 1 - Math.exp(-dt * (view === 'caisson' ? 2 : 10));
-    cameraTarget.lerp(desiredPose.target, damping);
+    // Follow the current valid player anchor; easing an old anchor can cut through
+    // an inside corner even when the player's collision path goes around it.
+    if (view === 'follow') cameraTarget.copy(desiredPose.target);
+    else cameraTarget.lerp(desiredPose.target, damping);
     camera.position.lerp(desiredPose.position, damping);
-    if (view === 'follow') camera.position.copy(clearCameraPosition(cameraTarget, camera.position));
+    if (view === 'follow') camera.position.copy(settleFollowCamera(cameraTarget, camera.position, desiredPose.position));
+    world.updateCameraVisibility(cameraTarget, camera.position, dt, reduced);
     camera.lookAt(cameraTarget);
     poseSettled = camera.position.distanceToSquared(desiredPose.position) < .00002 && cameraTarget.distanceToSquared(desiredPose.target) < .00002;
     render();
@@ -131,7 +135,11 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   void world.ready.then(() => {
     if (disposed || failed) return;
     loaded = true; input.clear(); input.setEnabled(loaded && !paused && view === 'follow');
-    updateTraveler(0); render();
+    updateTraveler(0);
+    const loadedPose = followCameraPose(checkpoint.position.x, surfaceHeight(checkpoint.position), checkpoint.position.z, checkpoint.cameraYaw);
+    camera.position.copy(loadedPose.position); cameraTarget.copy(loadedPose.target); camera.lookAt(cameraTarget);
+    world.updateCameraVisibility(cameraTarget, camera.position, 0, true);
+    render();
     if (failed) return;
     emit(); options.onReady?.(); schedule();
   }).catch(error => {

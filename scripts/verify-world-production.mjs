@@ -22,7 +22,7 @@ const server = http.createServer(async (req, res) => {
 await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
 const base = `http://127.0.0.1:${server.address().port}${prefix}`;
 let browser;
-const report = { stage: 'art-sample-v001', environment: 'local automated Chromium, not a real-phone performance acceptance', checks: [], metrics: {} };
+const report = { stage: 'art-sample-v002', environment: 'local automated Chromium, not a real-phone performance acceptance', checks: [], metrics: {} };
 try {
   browser = await chromium.launch({ channel: process.platform === 'darwin' ? 'chrome' : undefined, args: ['--enable-unsafe-swiftshader'] });
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
@@ -51,10 +51,10 @@ try {
   await page.keyboard.up('w'); await page.keyboard.up('Shift');
   await expect(avatarCanvas).toHaveAttribute('data-animation', 'Idle');
   const modelResources = await page.evaluate(() => performance.getEntriesByType('resource').filter(entry => entry.name.endsWith('.glb')).map(entry => entry.name));
-  expect(modelResources.some(url => url.includes('/dunhuang-preview/assets/world/courtyard/v001/courtyard.glb'))).toBe(true);
+  expect(modelResources.some(url => url.includes('/dunhuang-preview/assets/world/courtyard/v002/courtyard.glb'))).toBe(true);
   expect(modelResources.some(url => url.includes('/dunhuang-preview/assets/world/shared/v001/traveler.glb'))).toBe(true);
   report.checks.push('Both real GLB assets load under subdirectory; Idle/Walk/Run switch with player input');
-  await page.screenshot({ path: `${output}/art-sample-world-spawn.png` });
+  await page.screenshot({ path: `${output}/art-sample-v002-world-spawn.png` });
   report.metrics.frameIntervals = await page.evaluate(async () => {
     const samples = []; let last = performance.now();
     await new Promise(resolve => {
@@ -100,7 +100,7 @@ try {
   const stoppedZ = Number(await mobile.getByTestId('world-position').getAttribute('data-z'));
   await mobile.waitForTimeout(250);
   expect(Number(await mobile.getByTestId('world-position').getAttribute('data-z'))).toBe(stoppedZ);
-  await mobile.screenshot({ path: `${output}/art-sample-world-mobile.png` });
+  await mobile.screenshot({ path: `${output}/art-sample-v002-world-mobile.png` });
   report.checks.push('Real dispatched touch drag moves joystick; release stops movement');
   await touch.close();
 
@@ -119,7 +119,7 @@ try {
       expect(await screen.locator('.world-story-art img').getAttribute('src')).toContain('assets/world/story/v001/');
     }
     await screen.waitForTimeout(100);
-    await screen.screenshot({ path: `${output}/art-sample-world-${name}.png` });
+    await screen.screenshot({ path: `${output}/art-sample-v002-world-${name}.png` });
     expect(await screen.evaluate(() => ({ w: document.documentElement.scrollWidth, h: document.documentElement.scrollHeight }))).toEqual({ w: 1440, h: 900 });
     await context.close();
   }
@@ -136,6 +136,6 @@ try {
   expect(errors).toEqual([]);
   report.checks.push('No unexpected page errors or failed production asset responses');
   report.passed = true;
-  await writeFile(`${output}/art-sample-production-report.json`, JSON.stringify(report, null, 2) + '\n');
+  await writeFile(`${output}/art-sample-v002-production-report.json`, JSON.stringify(report, null, 2) + '\n');
   console.log(JSON.stringify(report, null, 2));
 } finally { await browser?.close(); await new Promise(resolve => server.close(resolve)); }
