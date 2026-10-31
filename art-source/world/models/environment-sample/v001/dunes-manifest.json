@@ -1,0 +1,257 @@
+{
+  "asset": "independent-dunes",
+  "version": "v001",
+  "status": "visual study awaiting user approval",
+  "source": "art-source/world/models/environment-sample/v001/dunes.blend",
+  "generator": "scripts/build-world-environment-dunes.py",
+  "runtime": "public/assets/world/environment-sample/v001/dunes.glb",
+  "references": [
+    "W01 最新沙漠世界高空总览图.png",
+    "W02 原始小旅人出生点第三人称开场图.png"
+  ],
+  "referenceArchive": "art-source/world/art-sample/v001/",
+  "origin": "ground rectangle center",
+  "units": "metres",
+  "upAxis": "Y",
+  "frontAxis": "+Z",
+  "bounds": {
+    "min": [
+      -50,
+      -0.35,
+      -17.5
+    ],
+    "max": [
+      50,
+      8.549999999999999,
+      17.5
+    ]
+  },
+  "triangles": 4404,
+  "vertices": 2204,
+  "meshCount": 1,
+  "materialCount": 1,
+  "bytes": 428824,
+  "sha256": "df46b9e8a8ee74e41100cb1a26af728cf3cfdd547779ad84c906d28244f1d0a3",
+  "topology": "one closed connected surface with buried skirt and bottom; shared ridge and valley vertices",
+  "shape": "three offset curved crests with distinct lengths; smooth continuous height envelope and asymmetric cross-slopes; no noise",
+  "crestControls": [
+    {
+      "id": "far-crest",
+      "x": [
+        -47,
+        -34,
+        -18,
+        0,
+        18,
+        35,
+        48
+      ],
+      "z": [
+        -12,
+        -12.8,
+        -10.5,
+        -8.3,
+        -9.0,
+        -11,
+        -12
+      ],
+      "height": [
+        0,
+        3.2,
+        7.4,
+        8.7,
+        7.5,
+        3.8,
+        0
+      ],
+      "frontWidth": 12,
+      "backWidth": 7.5
+    },
+    {
+      "id": "middle-crest",
+      "x": [
+        -16,
+        -7,
+        5,
+        17,
+        32,
+        45
+      ],
+      "z": [
+        1.5,
+        0.5,
+        -1,
+        -0.2,
+        2.5,
+        3
+      ],
+      "height": [
+        0,
+        3.4,
+        6.2,
+        6.8,
+        3.5,
+        0
+      ],
+      "frontWidth": 12,
+      "backWidth": 7
+    },
+    {
+      "id": "near-crest",
+      "x": [
+        -45,
+        -32,
+        -20,
+        -9,
+        4,
+        18
+      ],
+      "z": [
+        7,
+        8.5,
+        10,
+        9,
+        6,
+        5
+      ],
+      "height": [
+        0,
+        3.5,
+        4.6,
+        3.9,
+        1.8,
+        0
+      ],
+      "frontWidth": 8.5,
+      "backWidth": 6.9
+    }
+  ],
+  "lastShapeAdjustment": "Far crest frontWidth 18.5m to 12m only; crest elevations, footprint and other crest controls retained",
+  "crossSectionsFromActualMesh": [
+    {
+      "x": -20,
+      "crests": [
+        {
+          "id": "far-crest",
+          "z": -10.8011,
+          "height": 6.9431
+        },
+        {
+          "id": "middle-crest",
+          "z": 1.5,
+          "height": -0.15
+        },
+        {
+          "id": "near-crest",
+          "z": 10.0,
+          "height": 4.4413
+        }
+      ],
+      "valleys": [
+        {
+          "between": [
+            "far-crest",
+            "middle-crest"
+          ],
+          "z": 1.5,
+          "height": -0.15,
+          "dropFromLowerCrest": -0.0
+        },
+        {
+          "between": [
+            "middle-crest",
+            "near-crest"
+          ],
+          "z": 1.67,
+          "height": -0.15,
+          "dropFromLowerCrest": 0.0
+        }
+      ]
+    },
+    {
+      "x": 0,
+      "crests": [
+        {
+          "id": "far-crest",
+          "z": -8.3,
+          "height": 8.55
+        },
+        {
+          "id": "middle-crest",
+          "z": -0.5787,
+          "height": 5.219
+        },
+        {
+          "id": "near-crest",
+          "z": 6.7753,
+          "height": 2.3515
+        }
+      ],
+      "valleys": [
+        {
+          "between": [
+            "far-crest",
+            "middle-crest"
+          ],
+          "z": -2.6635,
+          "height": 3.9028,
+          "dropFromLowerCrest": 1.3162
+        },
+        {
+          "between": [
+            "middle-crest",
+            "near-crest"
+          ],
+          "z": 5.5251,
+          "height": 2.071,
+          "dropFromLowerCrest": 0.2805
+        }
+      ]
+    },
+    {
+      "x": 17,
+      "crests": [
+        {
+          "id": "far-crest",
+          "z": -8.9416,
+          "height": 7.4515
+        },
+        {
+          "id": "middle-crest",
+          "z": -0.2,
+          "height": 6.6477
+        },
+        {
+          "id": "near-crest",
+          "z": 5.0689,
+          "height": 2.6938
+        }
+      ],
+      "valleys": [
+        {
+          "between": [
+            "far-crest",
+            "middle-crest"
+          ],
+          "z": -4.0463,
+          "height": 3.564,
+          "dropFromLowerCrest": 3.0837
+        },
+        {
+          "between": [
+            "middle-crest",
+            "near-crest"
+          ],
+          "z": 5.0689,
+          "height": 2.6938,
+          "dropFromLowerCrest": -0.0
+        }
+      ]
+    }
+  ],
+  "knownLimits": [
+    "Standalone art study, not installed in the production world",
+    "Three authored crest regions share one surface; no distant mountain or cliff model",
+    "No terrain walk surface or collision proxy is supplied"
+  ]
+}

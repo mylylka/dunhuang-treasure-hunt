@@ -1,0 +1,62 @@
+{
+  "stage": "Independent sample, pending visual acceptance",
+  "unit": "metre",
+  "upAxis": "Y",
+  "origin": "ground at stem foot",
+  "assets": [
+    {
+      "asset": "tree-a",
+      "bytes": 499916,
+      "sha256": "48da9d7861f0916dc869440a933d81b7a9cd2c90a4d487d2acce3b0095e44c47",
+      "triangles": 17358,
+      "meshes": 3,
+      "primitives": 7,
+      "materials": 6,
+      "boundsYUp": {
+        "min": [
+          -2.0096683502197266,
+          0.0,
+          -1.3263607025146484
+        ],
+        "max": [
+          2.0403316020965576,
+          4.800000190734863,
+          1.3674795627593994
+        ]
+      },
+      "leafCount": 800
+    },
+    {
+      "asset": "shrub-a",
+      "bytes": 116100,
+      "sha256": "a2b3bb2db98974a6469e3580cd6a138f9c00294afd6c17afdc8843c9799aa2d2",
+      "triangles": 3720,
+      "meshes": 2,
+      "primitives": 5,
+      "materials": 5,
+      "boundsYUp": {
+        "min": [
+          -0.7236671447753906,
+          0.0,
+          -0.5043721199035645
+        ],
+        "max": [
+          0.7763328552246094,
+          0.6399999856948853,
+          0.5149458646774292
+        ]
+      },
+      "leafCount": 200
+    }
+  ],
+  "references": [
+    "环境小品和树木资产设定板.png",
+    "原始小旅人出生点第三人称开场图.png"
+  ],
+  "modeling": "Authored curved tapered branch graph with continuous Skin/Subdivision junctions; real 16-triangle rounded leaf silhouettes placed on composed shoots. No icospheres or sphere canopy masses.",
+  "limitations": [
+    "Leaf motion is not part of this static visual sample.",
+    "Source concept uses painterly shading; this sample uses portable matte PBR materials.",
+    "Visual self-review: foliage still reads as individual thin leaf surfaces at close range; the side silhouette is narrower and twig rhythm more regular than the concept art. This is a reviewable sample, not final-map art approval."
+  ]
+}
