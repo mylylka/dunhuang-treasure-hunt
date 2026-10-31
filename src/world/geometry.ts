@@ -1,4 +1,6 @@
 import * as THREE from 'three';
+import { WORLD_BOUNDARY_STONES, WORLD_CLIFFS, WORLD_DUNES } from './scenery';
+import { COURTYARD_ROAD } from './road';
 
 export interface GrayboxScene {
   scene: THREE.Scene;
@@ -56,29 +58,19 @@ export function createGrayboxScene(): GrayboxScene {
     mesh(sphereGeometry, materials.green, x + .55 * scale, 1.8 * scale, z + .18, .7 * scale, 1 * scale, .75 * scale);
   }
   const ground = box(0, -.22, -5, 180, .4, 180, materials.sand); ground.castShadow = false;
-  const pathCurve = new THREE.CatmullRomCurve3([new THREE.Vector3(0, 0, 26), new THREE.Vector3(0, 0, 14), new THREE.Vector3(0, 0, 5), new THREE.Vector3(-3, 0, 0), new THREE.Vector3(-12, 0, 0), new THREE.Vector3(-12, 0, -13)]);
   const pathVertices: number[] = []; const pathIndices: number[] = [];
-  for (let i = 0; i <= 80; i++) {
-    const p = pathCurve.getPoint(i / 80); const t = pathCurve.getTangent(i / 80); const width = 1.65;
-    pathVertices.push(p.x - t.z * width, .005, p.z + t.x * width, p.x + t.z * width, .005, p.z - t.x * width);
-    if (i < 80) { const n = i * 2; pathIndices.push(n, n + 2, n + 1, n + 1, n + 2, n + 3); }
+  for (let i = 0; i < COURTYARD_ROAD.length; i++) {
+    const { left, right } = COURTYARD_ROAD[i];
+    pathVertices.push(left.x, .005, left.z, right.x, .005, right.z);
+    if (i < COURTYARD_ROAD.length - 1) { const n = i * 2; pathIndices.push(n, n + 2, n + 1, n + 1, n + 2, n + 3); }
   }
   const pathGeometry = new THREE.BufferGeometry(); geometries.add(pathGeometry);
   pathGeometry.setAttribute('position', new THREE.Float32BufferAttribute(pathVertices, 3)); pathGeometry.setIndex(pathIndices); pathGeometry.computeVertexNormals();
-  mesh(pathGeometry, materials.path, 0, 0, 0);
-  // Low faceted dunes stay outside the playable bounds; no invisible climb surfaces.
-  for (let i = 0; i < 18; i++) {
-    const a = i * 2.39996;
-    mesh(sphereGeometry, materials.dune, Math.cos(a) * (48 + i % 3 * 7), -1.3, Math.sin(a) * (46 + i % 4 * 5) - 4, 13 + i % 3 * 4, 4 + i % 4, 10 + i % 4 * 2);
-  }
-  // Physical boundary stones echo the limits instead of an invisible endless desert.
-  for (let z = -34; z <= 26; z += 5) {
-    mesh(sphereGeometry, materials.dune, -34, -.2, z, 2, 1.2, 2.5);
-    mesh(sphereGeometry, materials.dune, 36, -.2, z, 2, 1.1, 2.5);
-  }
-  for (let x = -30; x <= 32; x += 5) {
-    mesh(sphereGeometry, materials.dune, x, -.2, 29, 2.7, 1.1, 2);
-    mesh(sphereGeometry, materials.dune, x, -.2, -37, 2.7, 1.1, 2);
+  mesh(pathGeometry, materials.path, 0, 0, 0).name = 'courtyard-road';
+  // Shared placement data keeps complete scenery meshes outside the walking
+  // surface; distant dunes also leave room for the follow camera behind it.
+  for (const item of [...WORLD_DUNES, ...WORLD_BOUNDARY_STONES]) {
+    mesh(sphereGeometry, materials.dune, item.x, item.y, item.z, item.radiusX, item.radiusY, item.radiusZ).name = item.id;
   }
   box(-12, .015, -10.8, 19.7, .05, 25.5, materials.path);
   // Courtyard perimeter and the two gate piers.
@@ -126,14 +118,17 @@ export function createGrayboxScene(): GrayboxScene {
   box(-4.61, 1.5, -7.8, .04, 1.6, 2.4, materials.trim);
   tree(-18, -2, .9); tree(-6, -2, .85); tree(-6, -11, .8);
   tree(5, 13, .65); tree(-6, 12, .65); tree(7, 3, .8); tree(-27, -10, .9);
-  for (let i = 0; i < 11; i++) {
+  // Keep loose roadside pebbles on the straight approach, clear of the gate turn.
+  for (let i = 0; i < 8; i++) {
     const x = i % 2 === 0 ? 4.5 : -4.5;
-    mesh(sphereGeometry, materials.stone, x, .16, 23 - i * 2, .26, .25, .3);
+    mesh(sphereGeometry, materials.stone, x, .16, 26 - i * 1.7, .26, .25, .3);
   }
   // Honest distant block masses reserve space for later stage work.
   box(18, 3.3, -18, 14, 6.6, 12, materials.wall); roof(18, -18, 6.7, 15.5, 13);
   for (let x = 12; x <= 24; x += 3) box(x, 5.1, -11.94, 1.5, 2.3, .1, materials.roof);
-  for (let i = 0; i < 8; i++) mesh(sphereGeometry, materials.stone, -8 + i * 5, 2.8, -34, 4, 6 + i % 3, 4);
+  for (const item of WORLD_CLIFFS) {
+    mesh(sphereGeometry, materials.stone, item.x, item.y, item.z, item.radiusX, item.radiusY, item.radiusZ).name = item.id;
+  }
 
   const traveler = new THREE.Group(); scene.add(traveler);
   mesh(cylinderGeometry, materials.cloth, 0, 1.03, 0, .34, .72, .29, traveler);

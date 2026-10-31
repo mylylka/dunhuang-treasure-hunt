@@ -33,6 +33,55 @@ async function hold(page: Page, key: string, duration: number) {
   await page.keyboard.up(key);
 }
 
+async function walkTo(page: Page, target: { x: number; z: number }) {
+  let pressed = new Set<string>();
+  const deadline = Date.now() + 15_000;
+  try {
+    while (Date.now() < deadline) {
+      const p = await position(page), dx = target.x - p.x, dz = target.z - p.z;
+      if (Math.hypot(dx, dz) < .45) return;
+      const next = new Set<string>();
+      if (Math.abs(dx) > .22) next.add(dx > 0 ? 'd' : 'a');
+      if (Math.abs(dz) > .22) next.add(dz > 0 ? 's' : 'w');
+      for (const key of pressed) if (!next.has(key)) await page.keyboard.up(key);
+      for (const key of next) if (!pressed.has(key)) await page.keyboard.down(key);
+      pressed = next;
+      await page.waitForTimeout(90);
+    }
+    throw new Error(`Walking to ${JSON.stringify(target)} stopped at ${JSON.stringify(await position(page))}`);
+  } finally { for (const key of pressed) await page.keyboard.up(key); }
+}
+
+test('沿道路从出生点转入真实院门并走到藻井，不从围墙穿行', async ({ page }, testInfo) => {
+  await page.goto('/#/'); await ready(page);
+  for (const [x, z] of [[0, 12], [-1.9, 9.8], [-6, 9], [-10.1, 8.2], [-12, 6]]) await walkTo(page, { x, z });
+  await page.screenshot({ path: `work/world/road-gate-${testInfo.project.name}.png` });
+  await walkTo(page, { x: -12, z: 1 });
+  await expect(page.getByTestId('world-location')).toHaveText('纹彩院');
+  await walkTo(page, { x: -12, z: -17 });
+  await expect(page.getByTestId('world-interact')).toHaveText(/抬头看看/);
+  await expect(page.getByTestId('world-location')).toHaveText('藻井观赏厅');
+});
+
+for (const edge of [{ name: 'east', x: 30, z: 25.5, key: 'd', limit: 34.64 }, { name: 'west', x: -29, z: 27.5, key: 'a', limit: -32.64 }]) {
+  test(`沙丘${edge.name}旧穿模点可行走，边界限制与转镜头保持有效`, async ({ page }, testInfo) => {
+    await seedPosition(page, edge.x, edge.z);
+    await page.goto('/#/'); await ready(page);
+    await hold(page, edge.key, 2200);
+    const reached = await position(page);
+    expect(reached.x).toBeCloseTo(edge.limit, 0);
+    expect(reached.z).toBeCloseTo(edge.z, 2);
+    await hold(page, edge.key, 500);
+    expect(await position(page)).toEqual(reached);
+    await hold(page, 'q', 1900);
+    await page.screenshot({ path: `work/world/dune-${edge.name}-left-${testInfo.project.name}.png` });
+    await hold(page, 'e', 3500);
+    await page.screenshot({ path: `work/world/dune-${edge.name}-right-${testInfo.project.name}.png` });
+    expect(await position(page)).toEqual(reached);
+    await fits(page);
+  });
+}
+
 test.beforeEach(async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 800 });
   await page.emulateMedia({ reducedMotion: 'reduce' });

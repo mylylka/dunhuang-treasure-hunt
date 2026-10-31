@@ -4,6 +4,7 @@ import { discoveryReducer, discoveryView, initialDiscoveryState } from '../world
 import { themeReturnCheckpoint, withVisitedDiscovery } from '../world/session';
 import type { WorldCheckpoint, WorldRuntime, WorldSnapshot } from '../world/types';
 import { WorldStoryPlayer } from './WorldStoryPlayer';
+import { COURTYARD_ROAD } from '../world/road';
 import '../styles/world.css';
 
 interface Props {
@@ -172,7 +173,7 @@ export default function WorldScreen(props: Props) {
       <header className="world-topbar"><div className="world-heading"><p>灰模试玩 · 美术待替换</p><h1>敦煌寻宝记</h1><span data-testid="world-location">{snapshot.location}</span></div>
         <nav aria-label="世界导航"><a href="#/themes" onClick={persist}>直接选主题</a><button type="button" aria-expanded={showMap} onClick={() => setShowMap(value => !value)}>路线</button><a href="#/settings" onClick={persist}>设置</a><button type="button" onClick={pauseExploration} data-testid="world-pause">暂停</button></nav>
       </header>
-      {showMap && <aside className="world-map" aria-label="灰模路线图"><h2>沿路进入纹彩院</h2><svg viewBox="0 0 160 150" role="img" aria-label="左侧纹彩院，庭院右侧故事测试点；远方两处场景筹备中"><path d="M80 135V85H45V30" fill="none" stroke="#bc9a68" strokeWidth="5" /><rect x="22" y="12" width="46" height="34" fill="#ab7660"/><text x="45" y="8" textAnchor="middle">纹彩院</text><circle cx="65" cy="65" r="5" fill="#4b7973"/><text x="80" y="65">故事测试点</text><circle cx={80 + snapshot.checkpoint.position.x * 2.9} cy={84 + snapshot.checkpoint.position.z * 2.8} r="4" fill="#a13d2e" stroke="white" strokeWidth="2"/></svg><p>乐舞馆、洞窟在后续阶段开放</p></aside>}
+      {showMap && <aside className="world-map" aria-label="灰模路线图"><h2>沿路进入纹彩院</h2><svg viewBox="0 0 160 150" role="img" aria-label="左侧纹彩院，庭院右侧故事测试点；远方两处场景筹备中"><path d="M36.5 89.6H16.2V16.8H74.2V89.6H53.9" fill="none" stroke="#ab7660" strokeWidth="2"/><polyline points={COURTYARD_ROAD.filter(({ center }) => center.z <= 18).map(({ center }) => `${80 + center.x * 2.9},${84 + center.z * 2.8}`).join(' ')} fill="none" stroke="#bc9a68" strokeWidth="5" /><rect x="22" y="12" width="46" height="34" fill="#ab7660"/><text x="45" y="8" textAnchor="middle">纹彩院</text><circle cx="65" cy="65" r="5" fill="#4b7973"/><text x="80" y="65">故事测试点</text><circle cx={80 + snapshot.checkpoint.position.x * 2.9} cy={84 + snapshot.checkpoint.position.z * 2.8} r="4" fill="#a13d2e" stroke="white" strokeWidth="2"/></svg><p>乐舞馆、洞窟在后续阶段开放</p></aside>}
       {view === 'follow' && <>
         <div className="world-direction">纹彩院 <span aria-hidden="true">↖</span><small>沿路前行，左转入院</small></div>
         {ready && snapshot.nearby && <button type="button" className="world-discovery world-primary" data-testid="world-interact" onClick={startInteraction}>{snapshot.nearby === 'caisson' ? '抬头看看' : '试看九色鹿故事'}<kbd>F</kbd></button>}

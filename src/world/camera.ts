@@ -1,5 +1,8 @@
 import * as THREE from 'three';
 import { WORLD_COLLIDERS } from './movement';
+import { FOLLOW_CAMERA_DISTANCE } from './layout';
+
+export { FOLLOW_CAMERA_DISTANCE } from './layout';
 
 // Expanded proxy boxes keep the near plane clear; camera and character do not share a radius.
 const cameraBoxes = WORLD_COLLIDERS.map(box => new THREE.Box3(
@@ -28,7 +31,7 @@ export function clearCameraPosition(target: THREE.Vector3, desired: THREE.Vector
 export function followCameraPose(x: number, y: number, z: number, yaw: number) {
   // A lower, longer arm leaves a readable horizon and keeps the traveler near 20% screen height.
   const target = new THREE.Vector3(x, y + 1.8, z);
-  const desired = target.clone().add(new THREE.Vector3(Math.sin(yaw) * 9.2, 2.7, Math.cos(yaw) * 9.2));
+  const desired = target.clone().add(new THREE.Vector3(Math.sin(yaw) * FOLLOW_CAMERA_DISTANCE, 2.7, Math.cos(yaw) * FOLLOW_CAMERA_DISTANCE));
   return { target, position: clearCameraPosition(target, desired) };
 }
 

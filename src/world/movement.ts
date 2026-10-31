@@ -1,7 +1,10 @@
 import type { WorldPoint } from './types';
+import { WORLD_BOUNDS } from './layout';
+import { WORLD_CLIFFS } from './scenery';
+
+export { WORLD_BOUNDS } from './layout';
 
 export interface WorldCollider { minX: number; maxX: number; minZ: number; maxZ: number; height: number }
-export const WORLD_BOUNDS = { minX: -33, maxX: 35, minZ: -36, maxZ: 28 };
 export const WORLD_SPAWN: WorldPoint = { x: 0, z: 18 };
 export const CAISSON_SAFE_POINT: WorldPoint = { x: -12, z: -13 };
 export const PLAYER_RADIUS = 0.36;
@@ -20,7 +23,8 @@ export const WORLD_COLLIDERS: WorldCollider[] = [
   // Work table and story display are deliberately coarse collision proxies.
   wall(-18, -7.5, 3.3, 1.4, 1.1), wall(-4.4, -7.8, .35, 3, 2.7),
   // Distant regions are visible only in this stage, without enterable false content.
-  wall(18, -18, 14, 12, 8), wall(10, -32, 38, 4, 10),
+  wall(18, -18, 14, 12, 8),
+  ...WORLD_CLIFFS.map(item => wall(item.x, item.z, item.radiusX * 2, item.radiusZ * 2, item.y + item.radiusY)),
 ];
 
 export function clampCameraYaw(yaw: number) { return Math.max(-CAMERA_YAW_LIMIT, Math.min(CAMERA_YAW_LIMIT, Number.isFinite(yaw) ? yaw : 0)); }

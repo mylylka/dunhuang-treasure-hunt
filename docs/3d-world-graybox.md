@@ -34,6 +34,8 @@
 | `src/app/WorldStoryPlayer.tsx` | 图片、字幕与可选音频的统一控制 |
 | `src/world/runtime.ts` | Three.js绘制、调度、视图切换与释放 |
 | `src/world/geometry.ts` | 本阶段程序灰模；正式模型阶段替换 |
+| `src/world/road.ts` | 道路中心与完整路宽，场景、路线图和通路验收共用 |
+| `src/world/layout.ts`、`src/world/scenery.ts` | 行走范围、镜头距离与沙丘/边界石/岩柱完整尺寸；渲染和碰撞共用 |
 | `src/world/movement.ts` | 纯移动/碰撞/坡道规则与安全位置 |
 | `src/world/camera.ts` | 跟随、遮挡、藻井观察预设 |
 | `src/world/input.ts` | 键盘与鼠标输入，禁用时清空 |
@@ -59,3 +61,10 @@
 - 生产构建位于`outputs/web`；测试截图与指标位于`work/world/production-*.png`及`production-report.json`。构建保留旧输出，不自动删除历史文件；本轮未推送或部署。
 
 需要用户确认的第一阶段重点：行走速度与距离、角色屏占比、院门和厅堂是否方便进入、抬头镜头是否完整、从教学回世界的操作是否顺畅。颜色、人物细节与纹样贴图属于下一阶段正式美术验收。
+
+### 2026-10-31 道路与地形穿模修正
+
+- 道路提前在院墙外转弯，再沿院门中心直行进入；3.3米完整路宽避开门柱与围墙，路线图同步使用同一组坐标。
+- 沙丘按完整网格范围移出可行走区域，并留出跟随镜头空间。边界石不侵入行走地面；远景岩柱的碰撞代理覆盖两端、背面和高度。未通过抬高角色掩盖地形问题。
+- `npm run test`共204项通过；新增道路全宽、连续行走及真实地形网格范围回归。桌面世界E2E共9项通过，实际键盘走完起点—院门—藻井厅，并在东西两侧边界分别转动镜头复核人物全身可见。
+- `npm run build`与`node scripts/verify-world-production.mjs`通过。修正截图位于`work/world/road-gate-desktop-chromium.png`和`dune-*-desktop-chromium.png`；本机4186静态预览使用最新构建。
