@@ -1,6 +1,6 @@
 # 独立自然环境样片 v002
 
-本轮只修整 A 型树、低矮灌木及一组沙丘。状态为待用户视觉验收；不扩展树木变体、远山、崖壁，不接入正式地图。
+本轮只修整 A 型树、低矮灌木及一组沙丘。用户于2026-10-31确认“这下可以了”，三项独立样片视觉验收通过，作为后续造型基准。对应文件与确认范围见 `docs/environment-sample-v002-acceptance.md`。本轮未扩展树木变体、远山、崖壁，未接入正式地图。
 
 ## 查看
 
@@ -31,7 +31,7 @@
 
 沙丘在相同网页光照下已可区分亮坡与背光坡，主丘与两侧形成高低错落。低机位仍主要呈现一座主丘，部分谷底被前坡遮挡；近景三角切面较明显，连续起伏的节奏比概念图简化。模型使用单一哑光材质，未烘焙或涂画阴影，也没有新增灯光、雾或后处理。
 
-网页截面对照和固定场景信息记录于 `work/world/environment-sample-v002-verification.json`；视觉判断记录于 `work/world/environment-sample-v002-visual-review.json`。本轮不再扩展资产，等待用户验收。
+网页截面对照和固定场景信息记录于 `work/world/environment-sample-v002-verification.json`；视觉判断记录于 `work/world/environment-sample-v002-visual-review.json`。本轮交付后已获得用户视觉确认；交付时的截图及技术记录保持原样。
 
 ## 已完成验证
 

@@ -1,0 +1,99 @@
+{
+  "version": "v003",
+  "status": "candidate awaiting real-web and user visual review",
+  "generator": "scripts/build-world-environment-shrubs-v003.py",
+  "source": "art-source/world/models/environment-sample/v003/shrubs.blend",
+  "sharedFormHelper": "scripts/environment-cloud-forms.py",
+  "referenceArchive": "art-source/world/art-sample/v001/",
+  "styleBaseline": "docs/environment-sample-v002-acceptance.md",
+  "method": "Separately authored B/C arrangements of six closed cloud boughs each; no random placement and no imported or globally transformed shrub A. Export joins copies sharing one material without decimation; editable source boughs remain separate.",
+  "sourceDisplayOffsetsX": {
+    "shrub-b": -1.25,
+    "shrub-c": 1.25
+  },
+  "runtimeOrigin": "ground center",
+  "runtimeUpAxis": "Y",
+  "units": "metres",
+  "palette": "accepted olive-sage vertex-color ramp, equal tone within each group; C uniformly 1.5% darker",
+  "assets": [
+    {
+      "asset": "shrub-b",
+      "node": "shrub-b",
+      "shape": "low asymmetric spread; heavier left shoulder and descending right wing",
+      "boundsYUp": {
+        "min": [
+          -0.949999988079071,
+          0.0,
+          -0.550000011920929
+        ],
+        "max": [
+          0.949999988079071,
+          0.5,
+          0.550000011920929
+        ]
+      },
+      "dimensionsWidthDepthHeight": [
+        1.9,
+        1.1,
+        0.5
+      ],
+      "triangles": 7200,
+      "topology": {
+        "boughs": 6,
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0
+      },
+      "meshes": 1,
+      "primitives": 1,
+      "materials": 1,
+      "bytes": 174844,
+      "sha256": "5fd7295ec93a3a1c4f94e0869bbecb38460f2fdf99a67701bcd9e1ecbe51bdf3"
+    },
+    {
+      "asset": "shrub-c",
+      "node": "shrub-c",
+      "shape": "compact double shoulder; rear high boughs and stepped lower foreground",
+      "boundsYUp": {
+        "min": [
+          -0.6499999761581421,
+          0.0,
+          -0.6000000238418579
+        ],
+        "max": [
+          0.6499999761581421,
+          0.8500000238418579,
+          0.6000000238418579
+        ]
+      },
+      "dimensionsWidthDepthHeight": [
+        1.3,
+        1.2,
+        0.85
+      ],
+      "triangles": 7200,
+      "topology": {
+        "boughs": 6,
+        "boundaryEdges": 0,
+        "nonManifoldEdges": 0
+      },
+      "meshes": 1,
+      "primitives": 1,
+      "materials": 1,
+      "bytes": 174864,
+      "sha256": "0d2ab0912c61887c39b619f036105d06e5e058d36f37491bf630ad0ee80260ce"
+    }
+  ],
+  "protectedSourceHashes": {
+    "art-source/world/models/environment-sample/v002/vegetation.blend": "78fcb53b40e13ec80b5df2f4a799aa88a8e5f670570b881f678c0e9203e8e8ff",
+    "art-source/world/models/environment-sample/v002/dunes.blend": "cd504b21f2c835e5a63a7c0afe6fe63772ec52c65f11cc0fe9ae429b474d4043",
+    "public/assets/world/environment-sample/v002/tree-a.glb": "816d562f2af98262b94aa253b7fc89f81b554d3f044cf9251d97d75e50c0d012",
+    "public/assets/world/environment-sample/v002/shrub-a.glb": "5efbc4290bb513829e2b5dee90c3e7e8d2b124b6b2947e233de20b9fd204f60d",
+    "public/assets/world/environment-sample/v002/dunes.glb": "e32b7db2a5d8315c94e96d72d95bf9e1d6a866c88432bb0188be9b3caae468b4",
+    "scripts/environment-cloud-forms.py": "40677e857216912249fb518987bc1f2254b110dceabb2a1e08b80f454e4bc25c"
+  },
+  "limitations": [
+    "Static stylized leaf-cluster volumes; individual leaves and animation are not supplied.",
+    "B/C are new variants awaiting visual review; approval of A does not automatically approve these variants.",
+    "Closed overlapping boughs preserve visible layering; export joining does not boolean-union their volumes."
+  ]
+}

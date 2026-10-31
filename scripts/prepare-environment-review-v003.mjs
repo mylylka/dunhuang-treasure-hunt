@@ -1,0 +1,25 @@
+import { copyFile, readFile, writeFile } from 'node:fs/promises';
+import { resolve } from 'node:path';
+
+const out = resolve('outputs/environment-preview/v003'), prefix = 'environment-sample-v003';
+const report = JSON.parse(await readFile(`work/world/${prefix}-verification.json`, 'utf8'));
+if (!report.technicalChecksPassed) throw new Error('Complete independent preview verification before preparing the review');
+const modelShots = ['tree-b', 'tree-c', 'shrub-b', 'shrub-c'].flatMap(asset => ['front', 'side', 'oblique'].map(view => `${asset}-${view}`));
+for (const shot of modelShots) await copyFile(`work/world/${prefix}-${shot}.png`, resolve(out, `${prefix}-${shot}.png`));
+for (const entry of report.views) await copyFile(entry.path, resolve(out, entry.path.split('/').at(-1)));
+const fig = (shot, caption) => `<figure><a href="${prefix}-${shot}.png" target="_blank"><img loading="lazy" src="${prefix}-${shot}.png" alt="${caption}"></a><figcaption>${caption}</figcaption></figure>`;
+const familyTitle = { tree: '树', shrub: '灌木' };
+const variants = ['a', 'b', 'c'];
+const caption = (family, variant) => `${variant.toUpperCase()} 型${familyTitle[family]} · ${variant === 'a' ? '已确认基准' : family === 'shrub' ? '已确认' : '新变体，待验收'}`;
+const compare = (family, view) => `<div class="grid three">${variants.map(variant => fig(`web-${family}-${variant}-${view}`, caption(family, variant))).join('')}</div>`;
+const model = asset => `<div class="grid three">${['front', 'side', 'oblique'].map((view, i) => fig(`${asset}-${view}`, `Blender · ${['正面', '侧面', '斜侧面'][i]}`)).join('')}</div>`;
+const live = (view, tree = 'a', shrub = 'a') => `<a class="live" href="./?view=${view}&tree=${tree}&shrub=${shrub}">在实际网页中切换查看 →</a>`;
+const page = `<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>植被变体 · 独立验收图册</title><style>
+:root{font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#f4f0e5;color:#393c2e}*{box-sizing:border-box}body{margin:0}main{max-width:1500px;margin:auto;padding:42px 28px 70px}header{border-bottom:1px solid #c5bea8;padding-bottom:26px}h1{font-family:serif;font-size:35px;font-weight:500}h2{font-size:25px;font-weight:500}h3{font-size:19px;font-weight:500;margin-top:32px}p{max-width:1000px;line-height:1.8}a{color:#596444;text-underline-offset:4px}nav{display:flex;flex-wrap:wrap;gap:22px}.tag{font-size:12px;letter-spacing:.12em;color:#8a6749}section{margin:55px 0}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.three{grid-template-columns:repeat(3,minmax(0,1fr))}figure{margin:0;min-width:0}img{display:block;width:100%;height:auto;background:#ddd8c9}figcaption{font-size:13px;color:#776f59;margin:10px 0 20px}.live{display:inline-block;font-size:14px;margin-bottom:22px}.note{padding:16px 22px;background:#e7e9da;border-left:3px solid #8d9870}details{border-top:1px solid #cdc6b5;padding:18px 0}summary{cursor:pointer}footer{border-top:1px solid #c5bea8;padding-top:20px;font-size:13px;color:#746b59}@media(max-width:750px){main{padding:25px 16px}.grid,.three{grid-template-columns:1fr}h1{font-size:28px}}
+</style></head><body><main><header><span class="tag">DUNHUANG · VEGETATION VARIANTS 03</span><h1>三种树形、三种灌木轮廓</h1><p>A 为已经确认的 v002 基准；当前 B、C 灌木已获用户确认，无需继续加厚或修改。B、C 树仍待确认。沿用层叠、饱满的云状叶团，分别设计主干、分叉及叶团组合。模型按实际尺寸比较，正侧斜视与道路机位使用相同光照和曝光。</p><nav><a href="./">打开可操作预览 →</a><a href="#trees">树木</a><a href="#shrubs">灌木</a><a href="#angles">更多角度</a></nav></header>
+<section id="trees"><h2>树木 · A舒展 / B矮紧凑 / C倾斜偏冠</h2>${fig('web-tree-a-tree-lineup', '左 A 已确认 / 中 B、右 C 待验收，原尺寸并排')}${live('tree-lineup')}<h3>道路旁同机位</h3>${compare('tree', 'road-tree')}${live('road-tree', 'b')}<h3>B型 · 低分叉、低重心、紧凑饱满</h3>${model('tree-b')}<h3>C型 · 倾斜主干与不对称树冠</h3>${model('tree-c')}<p class="note">B、C的枝图和叶团位置分别设计，保持与A相同的造型语言。叶团仍为已确认的概括云状体块；B、C 树是否符合整套风格，仍待用户视觉验收。</p></section>
+<section id="shrubs"><h2>灌木 · A饱满 / B低矮横展 / C双肩错落</h2>${fig('web-shrub-a-shrub-lineup', '左 A / 中 B / 右 C，均已确认，原尺寸并排')}${live('shrub-lineup')}<h3>道路旁同机位</h3>${compare('shrub', 'shrub-road')}${live('shrub-road', 'a', 'b')}<h3>B型 · 向一侧逐级压低伸展</h3>${model('shrub-b')}<h3>C型 · 双肩、前后高低层次</h3>${model('shrub-c')}<p class="note">用户已确认“现在灌木挺好了 不用改了”。B、C 灌木保持当前贴地、饱满的轮廓和厚度，无需继续加厚；已确认模型与可编辑 Blender 源工程原样保留。</p></section>
+<section id="angles"><h2>更多同机位角度</h2>${[['tree', 'tree-front', '树正面'], ['tree', 'tree-side', '树侧面'], ['tree', 'tree-diagonal', '树斜侧面'], ['tree', 'tree-near', '树近看'], ['tree', 'tree-far', '树远看'], ['shrub', 'shrub-front', '灌木正面'], ['shrub', 'shrub-side', '灌木侧面'], ['shrub', 'shrub-diagonal', '灌木斜侧面'], ['shrub', 'shrub-near', '灌木近看']].map(([family, view, label]) => `<details><summary>${label}</summary>${compare(family, view)}${live(view)}</details>`).join('')}</section>
+<footer><p>技术检查：${report.views.length}个网页画面、${report.comparisons.length}组与A同机位比较，${report.protectedFilesUnchanged}个受保护文件未变化。正式地图、已批准的A和沙丘保持原样。当前 B/C 灌木已确认，B/C 树仍待确认；截图摄于灌木确认前，其中旧“待验收”标签为拍摄交付时记录，当前状态以本页最新说明为准。</p></footer></main></body></html>`;
+await writeFile(resolve(out, 'review.html'), page);
+console.log('Review gallery: http://localhost:4191/review.html');

@@ -1,0 +1,310 @@
+{
+  "version": "v003",
+  "status": "awaiting visual review",
+  "method": "New explicitly authored connected branch graphs; accepted shared cloud mesh shape reused in independent bough arrangements. Source keeps editable branch graph, wood mesh and separate boughs; export merges only copies of boughs without changing geometry or normals.",
+  "helper": "scripts/environment-cloud-forms.py",
+  "helperSha256": "40677e857216912249fb518987bc1f2254b110dceabb2a1e08b80f454e4bc25c",
+  "reference": "docs/environment-sample-v002-acceptance.md",
+  "assets": [
+    {
+      "asset": "tree-b",
+      "status": "awaiting visual review",
+      "design": "low compact tree with early three-way forks",
+      "cloudBoughs": 9,
+      "boundsYUp": {
+        "min": [
+          -1.9393647909164429,
+          0.0,
+          -1.5218528509140015
+        ],
+        "max": [
+          1.9606351852416992,
+          3.299999952316284,
+          1.646627426147461
+        ]
+      },
+      "triangles": 12154,
+      "bytes": 292536,
+      "sha256": "dde595130e80f38b0fb32cb9464048803517b6515d7ffccb7116f68dedcfa01e",
+      "meshes": 2,
+      "primitives": 3,
+      "materials": 3,
+      "woodRadiusBelow2_1m": 1.1781147431411623,
+      "closedCloudBoughs": true,
+      "branchSupportsYUp": [
+        {
+          "bough": "left-low",
+          "node": 14,
+          "endpoint": [
+            -1.1621876963414222,
+            1.8474679114253516,
+            0.12452011032229522
+          ]
+        },
+        {
+          "bough": "front-left",
+          "node": 17,
+          "endpoint": [
+            -0.6018471998910936,
+            1.9530375063639434,
+            0.8197573929551103
+          ]
+        },
+        {
+          "bough": "front-right",
+          "node": 20,
+          "endpoint": [
+            0.5707171723105199,
+            1.9952653443393797,
+            0.7886273653745365
+          ]
+        },
+        {
+          "bough": "right-low",
+          "node": 21,
+          "endpoint": [
+            1.1725643722016132,
+            2.005822303833239,
+            -0.05188337930095635
+          ]
+        },
+        {
+          "bough": "back-left",
+          "node": 23,
+          "endpoint": [
+            -0.7782506895143452,
+            2.164176696241126,
+            -0.6433539033318587
+          ]
+        },
+        {
+          "bough": "back-right",
+          "node": 25,
+          "endpoint": [
+            0.7056139584930063,
+            2.2380754126981404,
+            -0.6744839309124325
+          ]
+        },
+        {
+          "bough": "upper-left",
+          "node": 28,
+          "endpoint": [
+            -0.4980804412891809,
+            2.7236955494156616,
+            -0.0
+          ]
+        },
+        {
+          "bough": "upper-right",
+          "node": 30,
+          "endpoint": [
+            0.695237282632815,
+            2.649796832958647,
+            -0.1037667586019127
+          ]
+        },
+        {
+          "bough": "upper-front",
+          "node": 32,
+          "endpoint": [
+            0.05188337930095635,
+            2.4808854810569008,
+            0.4773270895687984
+          ]
+        }
+      ],
+      "allNormalsPresent": true
+    },
+    {
+      "asset": "tree-c",
+      "status": "awaiting visual review",
+      "design": "curved leaning trunk with a larger right-hand crown and a small return bough",
+      "cloudBoughs": 11,
+      "boundsYUp": {
+        "min": [
+          -1.650647521018982,
+          0.0,
+          -1.9206410646438599
+        ],
+        "max": [
+          3.149352550506592,
+          4.300000190734863,
+          1.8641412258148193
+        ]
+      },
+      "triangles": 15048,
+      "bytes": 357520,
+      "sha256": "9e1aa9d3a13d09d6f5f5802d450d540262d96457371c7922c453d8c122cb0133",
+      "meshes": 2,
+      "primitives": 3,
+      "materials": 3,
+      "woodRadiusBelow2_1m": 1.2423678280592383,
+      "closedCloudBoughs": true,
+      "branchSupportsYUp": [
+        {
+          "bough": "left-return",
+          "node": 15,
+          "endpoint": [
+            -0.7933392995146861,
+            2.489232519219619,
+            0.15866785990293722
+          ]
+        },
+        {
+          "bough": "left-back",
+          "node": 17,
+          "endpoint": [
+            -0.31733571980587444,
+            2.837725071910366,
+            -0.7616057275340986
+          ]
+        },
+        {
+          "bough": "front-middle",
+          "node": 20,
+          "endpoint": [
+            0.5817821529774365,
+            2.7879404215259735,
+            0.8991178727833109
+          ]
+        },
+        {
+          "bough": "right-front",
+          "node": 23,
+          "endpoint": [
+            1.692457172297997,
+            2.6385864703727964,
+            0.7933392995146861
+          ]
+        },
+        {
+          "bough": "right-low",
+          "node": 24,
+          "endpoint": [
+            2.115571465372496,
+            2.837725071910366,
+            -0.15866785990293722
+          ]
+        },
+        {
+          "bough": "right-back",
+          "node": 26,
+          "endpoint": [
+            1.7453464589323093,
+            3.0368636734479355,
+            -0.8673843008027233
+          ]
+        },
+        {
+          "bough": "back-middle",
+          "node": 29,
+          "endpoint": [
+            0.5817821529774365,
+            3.126476044139842,
+            -1.057785732686248
+          ]
+        },
+        {
+          "bough": "left-middle",
+          "node": 32,
+          "endpoint": [
+            -0.264446433171562,
+            3.086648323832328,
+            0.03173357198058744
+          ]
+        },
+        {
+          "bough": "middle",
+          "node": 33,
+          "endpoint": [
+            0.8991178727833109,
+            3.435140876523075,
+            -0.05288928663431241
+          ]
+        },
+        {
+          "bough": "upper-right",
+          "node": 36,
+          "endpoint": [
+            1.9040143188352465,
+            3.5347101772918594,
+            -0.10577857326862482
+          ]
+        },
+        {
+          "bough": "upper-back",
+          "node": 38,
+          "endpoint": [
+            1.0048964460519356,
+            3.6641502682912797,
+            -0.5817821529774365
+          ]
+        }
+      ],
+      "allNormalsPresent": true
+    }
+  ],
+  "limitations": [
+    "Static stylized cloud foliage; no individual leaves or animation.",
+    "These new variants require their own visual review."
+  ],
+  "unit": "metres",
+  "exportUpAxis": "Y",
+  "origin": "ground at trunk base; minimum Y=0",
+  "sourceEditable": {
+    "independentBranchGraphs": 2,
+    "individualCloudBoughs": 20,
+    "woodMeshes": 2
+  },
+  "validation": {
+    "glb": [
+      {
+        "asset": "tree-b",
+        "sha256": "dde595130e80f38b0fb32cb9464048803517b6515d7ffccb7116f68dedcfa01e",
+        "allGeometryFinite": true,
+        "normalLengthMin": 0.9999999237349096,
+        "normalLengthMax": 1.000000129448639,
+        "actualBoundsYUp": {
+          "min": [
+            -1.9393647909164429,
+            0.0,
+            -1.5218528509140015
+          ],
+          "max": [
+            1.9606351852416992,
+            3.299999952316284,
+            1.646627426147461
+          ]
+        },
+        "groundY": 0.0,
+        "triangles": 12154,
+        "primitives": 3
+      },
+      {
+        "asset": "tree-c",
+        "sha256": "9e1aa9d3a13d09d6f5f5802d450d540262d96457371c7922c453d8c122cb0133",
+        "allGeometryFinite": true,
+        "normalLengthMin": 0.9999999113465025,
+        "normalLengthMax": 1.000000127305129,
+        "actualBoundsYUp": {
+          "min": [
+            -1.650647521018982,
+            0.0,
+            -1.9206410646438599
+          ],
+          "max": [
+            3.149352550506592,
+            4.300000190734863,
+            1.8641412258148193
+          ]
+        },
+        "groundY": 0.0,
+        "triangles": 15048,
+        "primitives": 3
+      }
+    ],
+    "protectedHashCount": 152,
+    "protectedChanges": []
+  }
+}
