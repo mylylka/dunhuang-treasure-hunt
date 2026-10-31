@@ -3,17 +3,22 @@ import { GLTFLoader, type GLTF } from 'three/addons/loaders/GLTFLoader.js';
 import { WORLD_ART_SAMPLE, worldAssetUrl } from '../content/world/assets';
 import { createGrayboxScene, type GrayboxScene } from './geometry';
 import { RUN_SPEED, WALK_SPEED } from './movement';
+import { createPreviewPaving } from './preview-paving';
 
-type TravelerAction = 'Idle' | 'Walk' | 'Run';
+type TravelerAction = 'Idle' | 'Walk' | 'Run' | 'Greeting' | 'HallLookUp';
 export interface ArtSampleSceneOptions {
   /** Explicit isolated-preview override; normal game entry keeps the approved asset. */
   travelerPath?: string;
   /** Clip playback rate at the existing reference movement speeds. */
   animationRates?: { walk: number; run: number };
+  presentationClips?: boolean;
+  sampleNature?: boolean;
 }
 export interface ArtSampleScene extends GrayboxScene {
   ready: Promise<void>;
   animationName(): TravelerAction;
+  animatePresentation(name: 'Greeting' | 'HallLookUp', time: number): void;
+  inspectTraveler(): { animation: string; time: number; joints: { name: string; position: number[] }[] };
   updateCameraVisibility(target: THREE.Vector3, position: THREE.Vector3, dt: number, immediate: boolean): void;
 }
 
@@ -91,14 +96,16 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
   const loading = Promise.all([
     loadModel(WORLD_ART_SAMPLE.courtyard),
     loadModel(options.travelerPath ?? WORLD_ART_SAMPLE.traveler),
+    ...(options.sampleNature ? ['tree-a', 'shrub-a', 'dunes'].map(name => loadModel(`environment-sample/v002/${name}.glb`)) : []),
   ]);
   const deadline = new Promise<never>((_, reject) => {
     timeout = setTimeout(() => reject(new Error('model-loading-timeout')), 30_000);
   });
   // Fail promptly if either model fails; release/abort its sibling immediately.
-  const ready = Promise.race([loading, deadline]).then(([courtyard, avatar]) => {
+  const ready = Promise.race([loading, deadline]).then(([courtyard, avatar, tree, shrub, dunes]) => {
     if (disposed) return;
     const required: TravelerAction[] = ['Idle', 'Walk', 'Run'];
+    if (options.presentationClips) required.push('Greeting', 'HallLookUp');
     if (required.some(name => !avatar.animations.some(clip => clip.name === name))) {
       throw new Error('model-animation-incomplete');
     }
@@ -110,6 +117,19 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
     }
     courtyard.scene.position.set(-12, 0, 2);
     environment.scene.add(courtyard.scene);
+    if (options.sampleNature) {
+      environment.scene.traverse(object => {
+        const name = String(object.userData.semanticGroup ?? object.name);
+        if (/^(tree-|shrub-|road-grass|dune-|cliff-|boundary-)/.test(name)) object.visible = false;
+      });
+      for (const model of [tree, shrub, dunes]) {
+        model.scene.traverse(object => { if (object instanceof THREE.Mesh) { object.castShadow = true; object.receiveShadow = true; } });
+        environment.scene.add(model.scene);
+      }
+      tree.scene.position.set(4.8, 0, 13); shrub.scene.position.set(-2.9, 0, 16.2);
+      dunes.scene.position.set(55, 0, 12); dunes.scene.rotation.y = -Math.PI / 2;
+      const paving = createPreviewPaving(); models.push(paving); environment.scene.add(paving);
+    }
     courtyard.scene.updateMatrixWorld(true);
     courtyard.scene.traverse(object => {
       if (!(object instanceof THREE.Mesh) || (object.userData.cameraRole !== 'canopy' && !object.name.includes('-canopy'))) return;
@@ -135,6 +155,19 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
   return {
     scene: environment.scene, traveler, ready,
     animationName: () => actionName,
+    animatePresentation(name, time) {
+      if (!mixer) return;
+      const action = actions.get(name);
+      if (!action) throw new Error('Required character presentation clip is missing');
+      if (actionName !== name) { mixer.stopAllAction(); action.reset().setLoop(THREE.LoopOnce, 1).play(); action.clampWhenFinished = true; actionName = name; }
+      action.setEffectiveWeight(1); action.setEffectiveTimeScale(0); action.time = Math.min(time, action.getClip().duration); mixer.update(0);
+    },
+    inspectTraveler() {
+      const joints: { name: string; position: number[] }[] = [];
+      traveler.updateMatrixWorld(true);
+      traveler.traverse(object => { if (object instanceof THREE.Bone && /(?:Head|RightHand|RightForeArm|Neck)$/.test(object.name)) joints.push({ name: object.name, position: object.getWorldPosition(new THREE.Vector3()).toArray() }); });
+      return { animation: actionName, time: actions.get(actionName)?.time ?? 0, joints };
+    },
     updateCameraVisibility(target, position, dt, immediate) {
       const direction = position.clone().sub(target);
       const distance = direction.length();

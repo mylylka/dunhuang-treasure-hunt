@@ -5,6 +5,7 @@ import { themeReturnCheckpoint, withVisitedDiscovery } from '../world/session';
 import type { WorldCheckpoint, WorldRuntime, WorldSnapshot } from '../world/types';
 import { WorldStoryPlayer } from './WorldStoryPlayer';
 import { COURTYARD_ROAD } from '../world/road';
+import { loadCinematicSeen, saveCinematicSeen } from '../world/character-cinematics';
 import '../styles/world.css';
 
 interface Props {
@@ -17,6 +18,7 @@ interface Props {
 }
 
 export default function WorldScreen(props: Props) {
+  const cinematicPreview = document.getElementById('root')?.dataset.characterCinematics === 'v001';
   const screen = useRef<HTMLDivElement>(null);
   const host = useRef<HTMLDivElement>(null);
   const wasLocked = useRef(false);
@@ -68,6 +70,10 @@ export default function WorldScreen(props: Props) {
       if (disposed || !host.current) return;
       instance = createWorldRuntime(host.current, {
         initial: checkpoint.current, reducedMotion: callbacks.current.reducedMotion || window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+        ...(cinematicPreview ? { cinematics: {
+          seen: (() => { try { return loadCinematicSeen(window.sessionStorage); } catch { return { opening: false, hall: false }; } })(),
+          onSeen: (seen: { opening: boolean; hall: boolean }) => { try { saveCinematicSeen(window.sessionStorage, seen); } catch { /* Browser storage access can itself be denied. */ } },
+        } } : {}),
         onSnapshot: next => { if (!disposed) setSnapshot(next); },
         onInteract: startInteraction,
         onReady: () => { if (!disposed) setReady(true); },
@@ -75,6 +81,7 @@ export default function WorldScreen(props: Props) {
       });
       if (disposed) { instance.dispose(); return; }
       runtime.current = instance;
+      if (cinematicPreview) Object.assign(window, { __characterCinematics: { inspect: () => instance?.inspect(), skip: () => instance?.skipCinematic() } });
       instance.setPaused(flags.current.locked);
 
     }).catch(() => { if (!disposed) setError('3D画面暂时无法启动。可以重试，或直接进入文化主题。'); });
@@ -119,6 +126,7 @@ export default function WorldScreen(props: Props) {
       if (e.key !== 'Escape' || e.repeat) return;
       // Escape belongs to the topmost global pause, not the inert story beneath it.
       if (flags.current.paused) setPaused(false);
+      else if (runtime.current?.snapshot().cinematic) runtime.current.skipCinematic();
       else if (flags.current.event.mode === 'observing') dispatch({ type: 'exit' });
       else pauseExploration();
     };
@@ -171,11 +179,12 @@ export default function WorldScreen(props: Props) {
     <div className="world-host" ref={host} data-testid="world-host" data-ready={ready} aria-label="3D探索世界" inert={locked || view === 'story' ? true : undefined} />
     <output hidden data-testid="world-position" data-x={snapshot.checkpoint.position.x.toFixed(3)} data-z={snapshot.checkpoint.position.z.toFixed(3)} />
     <div className="world-hud" inert={view === 'story' || locked ? true : undefined}>
-      <header className="world-topbar"><div className="world-heading"><p>美术样片 · 待确认</p><h1>敦煌寻宝记</h1><span data-testid="world-location">{snapshot.location}</span></div>
+      <header className="world-topbar"><div className="world-heading"><p>{cinematicPreview ? '角色镜头样片 · 待确认' : '美术样片 · 待确认'}</p><h1>敦煌寻宝记</h1><span data-testid="world-location">{snapshot.location}</span></div>
         <nav aria-label="世界导航"><a href="#/themes" onClick={persist}>直接选主题</a><button type="button" aria-expanded={showMap} onClick={() => setShowMap(value => !value)}>路线</button><a href="#/settings" onClick={persist}>设置</a><button type="button" onClick={pauseExploration} data-testid="world-pause">暂停</button></nav>
       </header>
       {showMap && <aside className="world-map" aria-label="探索路线图"><h2>沿路进入纹彩院</h2><svg viewBox="0 0 160 150" role="img" aria-label="左侧纹彩院，庭院右侧故事测试点；远方两处场景筹备中"><path d="M36.5 89.6H16.2V16.8H74.2V89.6H53.9" fill="none" stroke="#ab7660" strokeWidth="2"/><polyline points={COURTYARD_ROAD.filter(({ center }) => center.z <= 18).map(({ center }) => `${80 + center.x * 2.9},${84 + center.z * 2.8}`).join(' ')} fill="none" stroke="#bc9a68" strokeWidth="5" /><rect x="22" y="12" width="46" height="34" fill="#ab7660"/><text x="45" y="8" textAnchor="middle">纹彩院</text><circle cx="65" cy="65" r="5" fill="#4b7973"/><text x="80" y="65">故事测试点</text><circle cx={80 + snapshot.checkpoint.position.x * 2.9} cy={84 + snapshot.checkpoint.position.z * 2.8} r="4" fill="#a13d2e" stroke="white" strokeWidth="2"/></svg><p>乐舞馆、洞窟在后续阶段开放</p></aside>}
       {view === 'follow' && <>
+        {snapshot.cinematic && <button type="button" className="world-cinematic-skip" data-testid="world-cinematic-skip" onClick={() => runtime.current?.skipCinematic()}>跳过 <kbd>Esc</kbd></button>}
         <div className="world-direction">纹彩院 <span aria-hidden="true">↖</span><small>沿路前行，左转入院</small></div>
         {ready && snapshot.nearby && <button type="button" className="world-discovery world-primary" data-testid="world-interact" onClick={startInteraction}>{snapshot.nearby === 'caisson' ? '抬头看看' : '试看九色鹿故事'}<kbd>F</kbd></button>}
         <div className="world-controls"><p className="world-keyboard-hint"><kbd>W A S D</kbd> 行走　<kbd>Shift</kbd> 跑步　<kbd>Q / E</kbd> 转镜头</p><div className="world-camera-controls"><button type="button" aria-label="镜头向左" onClick={() => runtime.current?.turnCamera(-.12)}>↶</button><button type="button" aria-label="镜头向右" onClick={() => runtime.current?.turnCamera(.12)}>↷</button></div></div>

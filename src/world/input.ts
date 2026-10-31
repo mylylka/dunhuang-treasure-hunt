@@ -1,5 +1,5 @@
 /** DOM input is deliberately separate from scene movement and React controls. */
-export function createWorldInput(canvas: HTMLCanvasElement, onInteract: () => void, onCamera: (delta: number) => void) {
+export function createWorldInput(canvas: HTMLCanvasElement, onInteract: () => void, onCamera: (delta: number) => void, onIntent?: () => void) {
   const keys = new Set<string>();
   let enabled = true;
   let dragging = false;
@@ -9,7 +9,9 @@ export function createWorldInput(canvas: HTMLCanvasElement, onInteract: () => vo
   const isTyping = (target: EventTarget | null) => target instanceof Element && !!target.closest('input, textarea, select, [contenteditable=true], dialog, [role=dialog]');
   function clear() { keys.clear(); dragging = false; joystick = { x: 0, y: 0 }; }
   function down(event: KeyboardEvent) {
-    if (!enabled || isTyping(event.target)) return;
+    if (isTyping(event.target)) return;
+    if (relevant.has(event.code)) onIntent?.();
+    if (!enabled) return;
     if (relevant.has(event.code)) event.preventDefault();
     // Enter on a focused button belongs to React, not a second world action.
     if ((event.code === 'KeyF' || (event.code === 'Enter' && event.target === canvas)) && !event.repeat) onInteract();
@@ -18,6 +20,7 @@ export function createWorldInput(canvas: HTMLCanvasElement, onInteract: () => vo
   function up(event: KeyboardEvent) { keys.delete(event.code); }
   function pointerDown(event: PointerEvent) {
     if (!enabled || event.button !== 2) return;
+    onIntent?.();
     dragging = true; lastX = event.clientX; canvas.setPointerCapture(event.pointerId);
   }
   function pointerMove(event: PointerEvent) {
@@ -38,7 +41,7 @@ export function createWorldInput(canvas: HTMLCanvasElement, onInteract: () => vo
   return {
     clear,
     setEnabled(value: boolean) { enabled = value; clear(); },
-    setJoystick(x: number, y: number) { if (enabled) joystick = { x: Math.max(-1, Math.min(1, x)), y: Math.max(-1, Math.min(1, y)) }; },
+    setJoystick(x: number, y: number) { if (Math.hypot(x, y) > .08) onIntent?.(); if (enabled) joystick = { x: Math.max(-1, Math.min(1, x)), y: Math.max(-1, Math.min(1, y)) }; },
     read() {
       const keyX = Number(keys.has('KeyD') || keys.has('ArrowRight')) - Number(keys.has('KeyA') || keys.has('ArrowLeft'));
       const keyY = Number(keys.has('KeyS') || keys.has('ArrowDown')) - Number(keys.has('KeyW') || keys.has('ArrowUp'));

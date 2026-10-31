@@ -1,8 +1,9 @@
 import * as THREE from 'three';
 import { createArtSampleScene } from './art-sample';
 import { createWorldInput } from './input';
+import { characterCameraPose, createCinematicDirector, openingHeading, openingDistance } from './character-cinematics';
 import { caissonCameraPose, followCameraPose, settleFollowCamera } from './camera';
-import { clampCameraYaw, movePlayer, movementVector, RUN_SPEED, sanitizePosition, surfaceHeight, WALK_SPEED, WORLD_SPAWN } from './movement';
+import { clampCameraYaw, movePlayer, movementVector, RUN_SPEED, sanitizePosition, surfaceHeight, WALK_SPEED, WORLD_SPAWN, WORLD_COLLIDERS } from './movement';
 import type { DiscoveryId, WorldCheckpoint, WorldRuntime, WorldRuntimeOptions, WorldSnapshot, WorldView } from './types';
 
 export function createWorldRuntime(container: HTMLElement, options: WorldRuntimeOptions): WorldRuntime {
@@ -30,12 +31,25 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   canvas.tabIndex = 0; canvas.setAttribute('aria-label', '3D探索画面，WASD或方向键移动，F键互动');
   canvas.dataset.worldCanvas = 'true';
   canvas.style.display = 'block'; canvas.style.width = '100%'; canvas.style.height = '100%';
-  const world = createArtSampleScene();
+  const cinematicPreview = !!options.cinematics;
+  const director = options.cinematics ? createCinematicDirector(options.cinematics.seen, options.cinematics.onSeen) : null;
+  let earlyIntent = false, shotHeading = checkpoint.heading, snapFollow = false;
+  const world = createArtSampleScene(cinematicPreview ? { travelerPath: 'traveler-tripo/v002/traveler.glb',
+    animationRates: { walk: WALK_SPEED / 1.20591, run: RUN_SPEED / 4.39490 }, presentationClips: true, sampleNature: true } : undefined);
+  // The isolated scene displays only approved tree A. Its low geometry reaches
+  // 1.01 m from the trunk (measured below 2.1 m in the environment sample).
+  // Remove hidden reference-tree obstacles along with those hidden models.
+  const sampleColliders = [...WORLD_COLLIDERS.filter(box => !box.id?.startsWith('tree-')),
+    { id: 'sample-tree-a', minX: 3.79, maxX: 5.81, minZ: 11.99, maxZ: 14.01, height: 2.1, circle: { x: 4.8, z: 13, radius: 1.01 } }];
+  const colliders = cinematicPreview ? sampleColliders.map(box => ({ ...box,
+    minX: box.minX - .21, maxX: box.maxX + .21, minZ: box.minZ - .21, maxZ: box.maxZ + .21,
+    ...(box.circle ? { circle: { ...box.circle, radius: box.circle.radius + .21 } } : {}),
+  })) : WORLD_COLLIDERS;
   const camera = new THREE.PerspectiveCamera(49, 1, .1, 150);
   const cameraTarget = new THREE.Vector3();
   const spawnPose = followCameraPose(checkpoint.position.x, surfaceHeight(checkpoint.position), checkpoint.position.z, checkpoint.cameraYaw);
   camera.position.copy(spawnPose.position); cameraTarget.copy(spawnPose.target); camera.lookAt(cameraTarget);
-  const input = createWorldInput(canvas, () => { if (loaded && !paused && view === 'follow') options.onInteract(); }, delta => turnCamera(delta));
+  const input = createWorldInput(canvas, () => { if (loaded && !paused && view === 'follow') options.onInteract(); }, delta => turnCamera(delta), () => { earlyIntent = true; skipCinematic(); });
   input.setEnabled(false);
   container.appendChild(canvas);
 
@@ -51,14 +65,26 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     const location = p.x < -2 && p.x > -22 && p.z < 2 && p.z > -24
       ? p.z < -12.3 ? '藻井观赏厅' : '纹彩院'
       : p.z < -25 ? '洞窟远景 · 待制作' : p.x > 10 && p.z < -8 ? '乐舞馆远景 · 待制作' : '沙漠道路';
-    return { checkpoint: { ...checkpoint, position: { ...p }, visitedEvents: [...checkpoint.visitedEvents] }, nearby: nearestDiscovery(), location, moving };
+    return { checkpoint: { ...checkpoint, position: { ...p }, visitedEvents: [...checkpoint.visitedEvents] }, nearby: nearestDiscovery(), location, moving, cinematic: director?.state ?? null };
   }
   function emit() { options.onSnapshot(snapshot()); }
   function updateTraveler(speed: number) {
     world.traveler.position.set(checkpoint.position.x, surfaceHeight(checkpoint.position), checkpoint.position.z);
-    world.traveler.rotation.y = checkpoint.heading;
-    world.animateTraveler(speed, elapsed, reduced);
+    const shot = director?.state;
+    world.traveler.rotation.y = shot?.id === 'opening' ? openingHeading(shot.time) : checkpoint.heading;
+    if (shot?.id === 'opening' && shot.time < 1.75) world.animatePresentation('Greeting', shot.time);
+    else if (shot?.id === 'hall') world.animatePresentation('HallLookUp', shot.time);
+    else world.animateTraveler(speed, elapsed, reduced);
     canvas.dataset.animation = world.animationName();
+  }
+  function skipCinematic() {
+    if (!director?.state) { director?.skip(); return; }
+    director.skip(); snapFollow = true;
+    if (loaded) { updateTraveler(0); restoreFollow(); render(); emit(); }
+  }
+  function restoreFollow() {
+    const pose = followCameraPose(checkpoint.position.x, surfaceHeight(checkpoint.position), checkpoint.position.z, checkpoint.cameraYaw);
+    camera.position.copy(pose.position); cameraTarget.copy(pose.target); camera.lookAt(cameraTarget); snapFollow = false;
   }
   function stop() { if (raf) cancelAnimationFrame(raf); raf = 0; previousTime = 0; }
   function canAnimate() { return loaded && !disposed && !failed && !paused && !document.hidden && view !== 'story'; }
@@ -85,8 +111,8 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
       const control = input.read();
       checkpoint.cameraYaw = clampCameraYaw(checkpoint.cameraYaw + control.camera * dt * .65);
       const vector = movementVector(control.x, control.y, checkpoint.cameraYaw);
-      const desiredSpeed = control.run ? RUN_SPEED : WALK_SPEED;
-      const next = movePlayer(checkpoint.position, { x: vector.x * desiredSpeed * dt, z: vector.z * desiredSpeed * dt });
+      const desiredSpeed = cinematicPreview ? control.run ? 4.4 : 1.8 : control.run ? RUN_SPEED : WALK_SPEED;
+      const next = movePlayer(checkpoint.position, { x: vector.x * desiredSpeed * dt, z: vector.z * desiredSpeed * dt }, colliders);
       const distance = Math.hypot(next.x - checkpoint.position.x, next.z - checkpoint.position.z);
       speed = dt ? distance / dt : 0;
       if (speed > .05) {
@@ -97,6 +123,23 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
       checkpoint.position = next;
       moving = speed > .05;
     } else moving = false;
+    const beforeShot = director?.state;
+    if (director && view === 'follow') {
+      const control = input.read();
+      const intent = Math.hypot(control.x, control.y) > .01 || control.camera !== 0;
+      const nearHall = nearestDiscovery() === 'caisson';
+      const safeHall = nearHall && !director.seen.hall && !!characterCameraPose('hall', 0, checkpoint.position, surfaceHeight(checkpoint.position), checkpoint.heading, checkpoint.cameraYaw);
+      director.update(dt, nearHall, intent, reduced, safeHall);
+      const shot = director.state;
+      if (shot && !beforeShot) shotHeading = checkpoint.heading;
+      if (shot?.id === 'opening') {
+        const distance = openingDistance(shot.time) - openingDistance(beforeShot?.time ?? 0);
+        const next = movePlayer(checkpoint.position, { x: 0, z: -distance }, colliders);
+        speed = dt ? Math.hypot(next.x - checkpoint.position.x, next.z - checkpoint.position.z) / dt : 0;
+        checkpoint.position = next; moving = speed > .05;
+      }
+      if (shot && shot.time >= shot.duration) { director.finish(); snapFollow = true; }
+    }
     updateTraveler(speed);
     const desiredPose = view === 'caisson' ? caissonCameraPose() : followCameraPose(checkpoint.position.x, surfaceHeight(checkpoint.position), checkpoint.position.z, checkpoint.cameraYaw);
     const damping = reduced ? 1 : 1 - Math.exp(-dt * (view === 'caisson' ? 2 : 10));
@@ -106,6 +149,13 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     else cameraTarget.lerp(desiredPose.target, damping);
     camera.position.lerp(desiredPose.position, damping);
     if (view === 'follow') camera.position.copy(settleFollowCamera(cameraTarget, camera.position, desiredPose.position));
+    const shot = director?.state;
+    if (shot) {
+      const pose = characterCameraPose(shot.id, shot.time, checkpoint.position, surfaceHeight(checkpoint.position), shotHeading, checkpoint.cameraYaw);
+      if (pose) { camera.position.copy(pose.position); cameraTarget.copy(pose.target); }
+      else { director?.skip(); snapFollow = true; }
+    }
+    if (snapFollow && view === 'follow') restoreFollow();
     world.updateCameraVisibility(cameraTarget, camera.position, dt, reduced);
     camera.lookAt(cameraTarget);
     poseSettled = camera.position.distanceToSquared(desiredPose.position) < .00002 && cameraTarget.distanceToSquared(desiredPose.target) < .00002;
@@ -121,13 +171,15 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   }
   function turnCamera(delta: number) {
     if (!loaded || paused || view !== 'follow' || disposed) return;
-    checkpoint.cameraYaw = clampCameraYaw(checkpoint.cameraYaw + delta); schedule();
+    skipCinematic(); checkpoint.cameraYaw = clampCameraYaw(checkpoint.cameraYaw + delta); schedule();
   }
   function visibility() {
     input.clear(); moving = false; previousTime = 0;
-    if (document.hidden) { stop(); emit(); } else schedule();
+    if (document.hidden) { skipCinematic(); stop(); emit(); } else schedule();
   }
   function contextLost(event: Event) { event.preventDefault(); fail('浏览器暂停了3D画面。请重新加载，或直接选择文化主题。'); }
+  const blur = () => { skipCinematic(); input.clear(); };
+  window.addEventListener('blur', blur);
   const resizeObserver = new ResizeObserver(resize); resizeObserver.observe(container);
   document.addEventListener('visibilitychange', visibility);
   canvas.addEventListener('webglcontextlost', contextLost);
@@ -139,6 +191,15 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     const loadedPose = followCameraPose(checkpoint.position.x, surfaceHeight(checkpoint.position), checkpoint.position.z, checkpoint.cameraYaw);
     camera.position.copy(loadedPose.position); cameraTarget.copy(loadedPose.target); camera.lookAt(cameraTarget);
     world.updateCameraVisibility(cameraTarget, camera.position, 0, true);
+    director?.opening(Math.hypot(checkpoint.position.x - WORLD_SPAWN.x, checkpoint.position.z - WORLD_SPAWN.z) < .5, reduced, earlyIntent || paused);
+    shotHeading = checkpoint.heading;
+    const firstShot = director?.state;
+    if (firstShot) {
+      updateTraveler(0);
+      const pose = characterCameraPose('opening', 0, checkpoint.position, surfaceHeight(checkpoint.position), checkpoint.heading, checkpoint.cameraYaw);
+      if (pose) { camera.position.copy(pose.position); cameraTarget.copy(pose.target); camera.lookAt(cameraTarget); }
+      else director?.skip();
+    }
     render();
     if (failed) return;
     emit(); options.onReady?.(); schedule();
@@ -146,14 +207,20 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     fail(error instanceof Error ? error.message : '美术模型加载失败。请重新加载，或直接选择文化主题。');
   });
   return {
-    snapshot,
+    snapshot, skipCinematic,
+    inspect: () => ({ ...snapshot(), view, paused, loaded, camera: { position: camera.position.toArray(), target: cameraTarget.toArray() },
+      traveler: world.inspectTraveler(), seen: director?.seen, stats: { triangles: renderer.info.render.triangles, calls: renderer.info.render.calls } }),
     setPaused(value) {
-      if (disposed) return;
+      // React publishes readiness after model loading; an identical pause state
+      // must not clear a key the player pressed during that handoff.
+      if (disposed || paused === value) return;
+      if (value) skipCinematic();
       paused = value; input.setEnabled(loaded && !paused && view === 'follow'); moving = false; previousTime = 0;
       if (paused) stop(); else schedule(); emit();
     },
     setView(next) {
       if (disposed || view === next) return;
+      skipCinematic(); if (next === 'caisson') director?.skipHall();
       view = next; input.setEnabled(loaded && !paused && view === 'follow'); moving = false; poseSettled = false; previousTime = 0;
       if (view === 'story') { stop(); updateTraveler(0); render(); }
       else schedule();
@@ -161,8 +228,9 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     },
     setJoystick(x, y) { if (loaded) input.setJoystick(x, y); },
     turnCamera,
-    setReducedMotion(value) { reduced = value; schedule(); },
+    setReducedMotion(value) { reduced = value; if (value) skipCinematic(); schedule(); },
     resetToStart() {
+      skipCinematic();
       checkpoint = { ...checkpoint, position: { ...WORLD_SPAWN }, heading: 0, cameraYaw: 0 };
       view = 'follow'; input.setEnabled(loaded && !paused); moving = false;
       const pose = followCameraPose(WORLD_SPAWN.x, 0, WORLD_SPAWN.z, 0);
@@ -172,6 +240,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     dispose() {
       if (disposed) return;
       disposed = true; stop(); input.dispose(); resizeObserver.disconnect();
+      window.removeEventListener('blur', blur);
       document.removeEventListener('visibilitychange', visibility); canvas.removeEventListener('webglcontextlost', contextLost);
       world.dispose(); renderer.renderLists.dispose(); renderer.dispose(); renderer.forceContextLoss();
       canvas.remove();

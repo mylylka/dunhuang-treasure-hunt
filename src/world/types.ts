@@ -14,6 +14,7 @@ export interface WorldSnapshot {
   nearby: DiscoveryId | null;
   location: string;
   moving: boolean;
+  cinematic?: import('./character-cinematics').CinematicState | null;
 }
 export interface WorldRuntime {
   setPaused(paused: boolean): void;
@@ -22,6 +23,8 @@ export interface WorldRuntime {
   turnCamera(delta: number): void;
   setReducedMotion(reduced: boolean): void;
   resetToStart(): void;
+  skipCinematic(): void;
+  inspect(): unknown;
   snapshot(): WorldSnapshot;
   dispose(): void;
 }
@@ -32,4 +35,5 @@ export interface WorldRuntimeOptions {
   onInteract(): void;
   onError(message: string): void;
   onReady?(): void;
+  cinematics?: { seen: import('./character-cinematics').CinematicSeen; onSeen(seen: import('./character-cinematics').CinematicSeen): void };
 }
