@@ -59,6 +59,7 @@ export interface CameraSpace {
   cylinders: readonly CameraCylinder[];
   shelters?: readonly (readonly [number,number,number,number])[];
   landmarkFraming?: { bounds: readonly [number,number,number,number]; targetLift: number };
+  subjectHeight?: number;
 }
 const defaultSpace: CameraSpace = { boxes: cameraBoxes, cylinders: WORLD_CAMERA_CYLINDERS };
 
@@ -99,8 +100,9 @@ export function followCameraPose(x: number, y: number, z: number, yaw: number, s
   const target = new THREE.Vector3(x, y + 1.8 - sheltered * .35 + lift, z);
   const arm = FOLLOW_CAMERA_DISTANCE - sheltered * 3.5;
   const rise = 2.7 - sheltered * 1.1 - lift;
-  const candidate = (angle: number, length: number, height: number) => clearCameraPosition(target,
-    target.clone().add(new THREE.Vector3(Math.sin(angle) * length, height, Math.cos(angle) * length)), space);
+  const subjectTarget=space.subjectHeight===undefined?undefined:new THREE.Vector3(x,y+space.subjectHeight,z);
+  const candidate = (angle: number, length: number, height: number) => clearSubjectPosition(target,
+    clearCameraPosition(target,target.clone().add(new THREE.Vector3(Math.sin(angle) * length, height, Math.cos(angle) * length)),space),space,subjectTarget);
   let position = candidate(yaw, arm, rise);
   // Near a wall/pillar, try a low shoulder offset before collapsing into the avatar.
   // Prefer the user's yaw whenever it still leaves a readable third-person view.
@@ -112,15 +114,29 @@ export function followCameraPose(x: number, y: number, z: number, yaw: number, s
       if (nextScore > score + .05) { position = alternative; score = nextScore; }
     }
   }
-  return { target, position };
+  if(subjectTarget&&lift>0){
+    // Once the wall shortens the camera arm, frame the whole traveler rather
+    // than retaining the distant-building aim and cropping their feet.
+    target.y-=(lift+.25)*(1-THREE.MathUtils.smoothstep(position.distanceTo(target),5.5,8.5));
+  }
+  return { target, position, subjectTarget };
+}
+
+/** A high wall can hide the body even when the raised look-at anchor is clear. */
+function clearSubjectPosition(target:THREE.Vector3, position:THREE.Vector3, space:CameraSpace, subject?:THREE.Vector3) {
+  if(!subject)return position;
+  const full=subject.distanceTo(position);
+  if(full<.001)return position;
+  const clear=clearCameraPosition(subject,position,space).distanceTo(subject);
+  return clear<full-.001?target.clone().lerp(position,Math.max(0,clear/full-.015)):position;
 }
 
 /** Apply after easing: an interpolation between two safe poses can cross a beam. */
-export function settleFollowCamera(target: THREE.Vector3, interpolated: THREE.Vector3, desired: THREE.Vector3, space: CameraSpace = defaultSpace) {
-  const safe = clearCameraPosition(target, interpolated, space);
+export function settleFollowCamera(target: THREE.Vector3, interpolated: THREE.Vector3, desired: THREE.Vector3, space: CameraSpace = defaultSpace, subject?: THREE.Vector3) {
+  const safe = clearSubjectPosition(target,clearCameraPosition(target, interpolated, space),space,subject);
   // Retreat from a new obstruction immediately, then ease out on subsequent frames.
   return safe.distanceTo(target) < 3.4 && desired.distanceTo(target) > safe.distanceTo(target) + .8
-    ? clearCameraPosition(target, desired, space) : safe;
+    ? clearSubjectPosition(target,clearCameraPosition(target, desired, space),space,subject) : safe;
 }
 
 export function caissonCameraPose() {

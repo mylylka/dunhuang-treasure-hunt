@@ -5,7 +5,8 @@ import courtyardProps from '../content/world/courtyard-props.json';
 
 export { WORLD_BOUNDS } from './layout';
 
-export interface WorldCollider { minX: number; maxX: number; minZ: number; maxZ: number; height: number; id?: string; circle?: { x: number; z: number; radius: number } }
+export interface WorldBounds { minX: number; maxX: number; minZ: number; maxZ: number }
+export interface WorldCollider { padding?: number; polygon?: readonly (readonly number[])[]; minX: number; maxX: number; minZ: number; maxZ: number; height: number; id?: string; circle?: { x: number; z: number; radius: number } }
 export const WORLD_SPAWN: WorldPoint = { x: 0, z: 18 };
 export const CAISSON_SAFE_POINT: WorldPoint = { x: -12, z: -13 };
 // The sample avatar's full animated silhouette reaches 0.677 m, including sleeves.
@@ -36,23 +37,24 @@ export const WORLD_COLLIDERS: WorldCollider[] = [
 ];
 
 export function clampCameraYaw(yaw: number) { return Math.max(-CAMERA_YAW_LIMIT, Math.min(CAMERA_YAW_LIMIT, Number.isFinite(yaw) ? yaw : 0)); }
-export function isWalkable(point: WorldPoint, colliders: readonly WorldCollider[] = WORLD_COLLIDERS): boolean {
+export function isWalkable(point: WorldPoint, colliders: readonly WorldCollider[] = WORLD_COLLIDERS, bounds: WorldBounds = WORLD_BOUNDS): boolean {
   if (!Number.isFinite(point.x) || !Number.isFinite(point.z)) return false;
   const r = PLAYER_RADIUS;
-  if (point.x < WORLD_BOUNDS.minX + r || point.x > WORLD_BOUNDS.maxX - r || point.z < WORLD_BOUNDS.minZ + r || point.z > WORLD_BOUNDS.maxZ - r) return false;
+  if (point.x < bounds.minX + r || point.x > bounds.maxX - r || point.z < bounds.minZ + r || point.z > bounds.maxZ - r) return false;
   return !colliders.some(box => {
+    if (box.polygon) return overlapsPolygon(point, box.polygon, r+(box.padding??0));
     if (box.circle) return Math.hypot(point.x - box.circle.x, point.z - box.circle.z) < r + box.circle.radius - .00001;
     const x = Math.max(box.minX, Math.min(point.x, box.maxX));
     const z = Math.max(box.minZ, Math.min(point.z, box.maxZ));
     return Math.hypot(x - point.x, z - point.z) < r - .00001;
   });
 }
-export function sanitizePosition(point?: WorldPoint, colliders: readonly WorldCollider[] = WORLD_COLLIDERS): WorldPoint {
-  return point && isWalkable(point, colliders) ? { ...point } : { ...WORLD_SPAWN };
+export function sanitizePosition(point?: WorldPoint, colliders: readonly WorldCollider[] = WORLD_COLLIDERS, bounds: WorldBounds = WORLD_BOUNDS): WorldPoint {
+  return point && isWalkable(point, colliders, bounds) ? { ...point } : { ...WORLD_SPAWN };
 }
 
 /** Small deterministic steps prevent tunnelling; independent axes allow wall sliding. */
-export function movePlayer(position: WorldPoint, delta: WorldPoint, colliders: readonly WorldCollider[] = WORLD_COLLIDERS): WorldPoint {
+export function movePlayer(position: WorldPoint, delta: WorldPoint, colliders: readonly WorldCollider[] = WORLD_COLLIDERS, bounds: WorldBounds = WORLD_BOUNDS): WorldPoint {
   let result = { ...position };
   const length = Math.hypot(delta.x, delta.z);
   if (!Number.isFinite(length) || length === 0) return result;
@@ -62,9 +64,9 @@ export function movePlayer(position: WorldPoint, delta: WorldPoint, colliders: r
   const scale = Math.min(1, 128 / count);
   for (let i = 0; i < steps; i++) {
     const nextX = { x: result.x + delta.x * scale / steps, z: result.z };
-    if (isWalkable(nextX, colliders)) result = nextX;
+    if (isWalkable(nextX, colliders, bounds)) result = nextX;
     const nextZ = { x: result.x, z: result.z + delta.z * scale / steps };
-    if (isWalkable(nextZ, colliders)) result = nextZ;
+    if (isWalkable(nextZ, colliders, bounds)) result = nextZ;
   }
   return result;
 }
@@ -79,4 +81,17 @@ export function surfaceHeight(position: WorldPoint): number {
   // Ramp proxy over two shallow visual steps, not collision boxes.
   if (position.x > -20.2 && position.x < -3.8 && position.z < -12.3 && position.z > -23.2) return Math.min(.28, Math.max(0, (-position.z - 12.3) * .28 / 1.2));
   return 0;
+}
+
+/** Whole authored landform footprint, with the traveler's radius along its edge. */
+export function overlapsPolygon(point: WorldPoint, polygon: readonly (readonly number[])[], radius: number) {
+  let inside = false;
+  for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+    const [ax,az] = polygon[j], [bx,bz] = polygon[i];
+    if ((az > point.z) !== (bz > point.z) && point.x < (bx-ax)*(point.z-az)/(bz-az)+ax) inside = !inside;
+    const dx=bx-ax, dz=bz-az, length=dx*dx+dz*dz;
+    const t=length ? Math.max(0,Math.min(1,((point.x-ax)*dx+(point.z-az)*dz)/length)) : 0;
+    if (Math.hypot(point.x-ax-t*dx,point.z-az-t*dz)<radius-.00001) return true;
+  }
+  return inside;
 }

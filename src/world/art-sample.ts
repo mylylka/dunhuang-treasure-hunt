@@ -4,6 +4,8 @@ import { WORLD_ART_SAMPLE, worldAssetUrl } from '../content/world/assets';
 import { createGrayboxScene, type GrayboxScene } from './geometry';
 import { RUN_SPEED, WALK_SPEED } from './movement';
 import { createPreviewPaving } from './preview-paving';
+import { createMusicPavilionV2 } from './music-pavilion-v002';
+import { MUSIC_LAYOUT_V2, MUSIC_ROAD_V2 } from './music-pavilion-rules-v002';
 import { createMusicPavilion } from './music-pavilion';
 import { MUSIC_LAYOUT, MUSIC_ROAD } from './music-pavilion-rules';
 
@@ -16,10 +18,11 @@ export interface ArtSampleSceneOptions {
   presentationClips?: boolean;
   sampleNature?: boolean;
   musicPavilion?: boolean;
+  musicVersion?: 'v001' | 'v002';
   flyingAwakened?: boolean;
 }
 export interface ArtSampleScene extends GrayboxScene {
-  music: ReturnType<typeof createMusicPavilion> | null;
+  music: ReturnType<typeof createMusicPavilion> | ReturnType<typeof createMusicPavilionV2> | null;
   ready: Promise<void>;
   animationName(): TravelerAction;
   animatePresentation(name: 'Greeting' | 'HallLookUp', time: number): void;
@@ -55,8 +58,10 @@ function releaseModel(model: THREE.Object3D) {
 }
 
 export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSampleScene {
-  const environment = createGrayboxScene({ artSample: true, musicPreview: options.musicPavilion });
-  const music = options.musicPavilion ? createMusicPavilion(environment.scene, !!options.flyingAwakened) : null;
+  const environment = createGrayboxScene({ artSample: true, musicPreview: options.musicPavilion, extendedMusic: options.musicVersion === 'v002' });
+  const v2=options.musicVersion==='v002';
+  const music = options.musicPavilion ? (v2?createMusicPavilionV2:createMusicPavilion)(environment.scene, !!options.flyingAwakened) : null;
+  const regionLayout=v2?MUSIC_LAYOUT_V2:MUSIC_LAYOUT;
   const traveler = new THREE.Group(); traveler.name = 'traveler';
   environment.scene.add(traveler);
   let disposed = false;
@@ -65,6 +70,7 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
   let actionName: TravelerAction = 'Idle';
   let previousElapsed: number | null = null;
   const models: THREE.Object3D[] = [];
+  const treesForCamera: THREE.Object3D[] = [];
   const canopyMaterials = new Set<THREE.Material>();
   const canopies: { bounds: THREE.Box3; materials: THREE.Material[]; opacity: number }[] = [];
   const actions = new Map<TravelerAction, THREE.AnimationAction>();
@@ -133,20 +139,21 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
         model.scene.traverse(object => { if (object instanceof THREE.Mesh) { object.castShadow = true; object.receiveShadow = true; } });
         environment.scene.add(model.scene);
       }
-      tree.scene.position.set(4.8, 0, 13); shrub.scene.position.set(-2.9, 0, 16.2);
-      dunes.scene.position.set(55, 0, 12); dunes.scene.rotation.y = -Math.PI / 2;
+      if(v2)treesForCamera.push(tree.scene);
+      tree.scene.position.set(v2?3:4.8, 0, v2?5:13); shrub.scene.position.set(-2.9, 0, 16.2);
+      dunes.scene.position.set(v2?105:55, 0, v2?0:12); dunes.scene.rotation.y = -Math.PI / 2;
       const paving = createPreviewPaving(); models.push(paving); environment.scene.add(paving);
       if (options.musicPavilion) {
         // Geometry and materials stay shared with the approved A assets. The
         // source model remains their one resource owner, clones are scene-only.
-        for (const [x,z,scale] of MUSIC_LAYOUT.trees) {
-          const instance=tree.scene.clone(true);instance.position.set(x,0,z);instance.scale.setScalar(scale);environment.scene.add(instance);
+        for (const [x,z,scale] of regionLayout.trees) {
+          const instance=tree.scene.clone(true);instance.position.set(x,0,z);instance.scale.setScalar(scale);environment.scene.add(instance);if(v2)treesForCamera.push(instance);
         }
-        for (const [x,z,scale] of MUSIC_LAYOUT.shrubs) {
+        for (const [x,z,scale] of regionLayout.shrubs) {
           const instance=shrub.scene.clone(true);instance.position.set(x,0,z);instance.scale.setScalar(scale);environment.scene.add(instance);
         }
-        const northDunes=dunes.scene.clone(true);northDunes.position.set(0,0,-65);northDunes.rotation.y=0;environment.scene.add(northDunes);
-        const branch=createPreviewPaving(MUSIC_ROAD.filter(section=>section.center.z> -2.55),true);models.push(branch);environment.scene.add(branch);
+        const northDunes=dunes.scene.clone(true);northDunes.position.set(v2?20:0,0,-65);northDunes.rotation.y=0;environment.scene.add(northDunes);
+        const branch=createPreviewPaving((v2?MUSIC_ROAD_V2:MUSIC_ROAD).filter(section=>section.center.z> (v2?-8.55:-2.55)),true);models.push(branch);environment.scene.add(branch);
       }
     }
     courtyard.scene.updateMatrixWorld(true);
@@ -161,6 +168,22 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
       object.material = Array.isArray(object.material) ? materials : materials[0];
       canopies.push({ bounds: new THREE.Box3().setFromObject(object, true).expandByScalar(.2), materials, opacity: 1 });
     });
+    for(const treeRoot of treesForCamera){
+      treeRoot.updateMatrixWorld(true);
+      const bounds=new THREE.Box3(),copies=new Map<THREE.Material,THREE.Material>();
+      treeRoot.traverse(object=>{
+        if(!(object instanceof THREE.Mesh)||!object.name.includes('-canopy-'))return;
+        bounds.union(new THREE.Box3().setFromObject(object,true));
+        const original=Array.isArray(object.material)?object.material:[object.material];
+        const mapped=original.map(material=>{
+          if(!copies.has(material)){const copy=material.clone();copy.transparent=true;copies.set(material,copy);
+            canopyMaterials.add(material);if(treeRoot!==tree.scene)canopyMaterials.add(copy);}
+          return copies.get(material)!;
+        });
+        object.material=Array.isArray(object.material)?mapped:mapped[0];
+      });
+      if(!bounds.isEmpty())canopies.push({bounds:bounds.expandByScalar(.2),materials:[...copies.values()],opacity:1});
+    }
     character = avatar.scene; traveler.add(character);
     mixer = new THREE.AnimationMixer(character);
     for (const name of required) actions.set(name, mixer.clipAction(avatar.animations.find(clip => clip.name === name)!));
@@ -188,6 +211,13 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
       return { animation: actionName, time: actions.get(actionName)?.time ?? 0, joints };
     },
     updateCameraVisibility(target, position, dt, immediate) {
+      if(v2){
+        // Translate the existing sun/shadow volume without changing its angle,
+        // intensity or adding lights. Stable texel steps avoid shadow shimmer.
+        const sun=environment.scene.children.find(item=>item instanceof THREE.DirectionalLight) as THREE.DirectionalLight|undefined;
+        if(sun){const x=Math.round(target.x*25.6)/25.6,z=Math.round(target.z*25.6)/25.6;
+          sun.target.position.set(x,0,z);sun.position.set(x-14,35,z+22);}
+      }
       const direction = position.clone().sub(target);
       const distance = direction.length();
       const ray = new THREE.Ray(target, direction.normalize());

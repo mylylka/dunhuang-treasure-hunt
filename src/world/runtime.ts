@@ -1,3 +1,8 @@
+import { MUSIC_PLAYER_COLLIDERS_V2, MUSIC_LAYOUT_V2, nearFlyingMuralV2, musicSurfaceHeightV2, inMusicCourtV2 } from './music-pavilion-rules-v002';
+import { musicCameraSpaceV2, flyingCameraPoseV2 } from './music-pavilion-v002';
+import { createTravelCamera, normalizedYaw } from './travel-camera';
+import { createMusicArrivalAudio } from './music-arrival-audio';
+import { defaultSoundPreferences } from '../services/sound-settings';
 import * as THREE from 'three';
 import { MUSIC_PLAYER_COLLIDERS, nearFlyingMural, musicSurfaceHeight } from './music-pavilion-rules';
 import { musicCameraSpace, flyingCameraPose } from './music-pavilion';
@@ -16,10 +21,17 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   let view: WorldView = 'follow';
   let reduced = options.reducedMotion;
   const musicPreview=!!options.musicPavilion;
-  const cameraSpace=musicPreview?musicCameraSpace():undefined;
-  const heightAt=(p: {x:number;z:number})=>surfaceHeight(p)+(musicPreview?musicSurfaceHeight(p):0);
+  const musicV2=musicPreview&&options.musicVersion==='v002';
+  const travelCamera=musicV2?createTravelCamera():null;
+  const yawLimit=musicV2?normalizedYaw:clampCameraYaw;
+  const bounds=musicV2?MUSIC_LAYOUT_V2.bounds:undefined;
+  const regionColliders=musicV2?MUSIC_PLAYER_COLLIDERS_V2:MUSIC_PLAYER_COLLIDERS;
+  const flyingPose=musicV2?flyingCameraPoseV2:flyingCameraPose;
+  const nearMural=musicV2?nearFlyingMuralV2:nearFlyingMural;
+  const cameraSpace=musicPreview?(musicV2?musicCameraSpaceV2():musicCameraSpace()):undefined;
+  const heightAt=(p: {x:number;z:number})=>surfaceHeight(p)+(musicPreview?(musicV2?musicSurfaceHeightV2:musicSurfaceHeight)(p):0);
   const followPose=(x:number,y:number,z:number,yaw:number)=>followCameraPose(x,y,z,yaw,cameraSpace);
-  let checkpoint: WorldCheckpoint = { ...options.initial, position: sanitizePosition(options.initial.position, musicPreview ? MUSIC_PLAYER_COLLIDERS : undefined), cameraYaw: clampCameraYaw(options.initial.cameraYaw), visitedEvents: [...options.initial.visitedEvents] };
+  let checkpoint: WorldCheckpoint = { ...options.initial, position: sanitizePosition(options.initial.position, musicPreview ? regionColliders : undefined, bounds), cameraYaw: yawLimit(options.initial.cameraYaw), visitedEvents: [...options.initial.visitedEvents] };
   let moving = false;
   let raf = 0;
   let previousTime = 0;
@@ -41,13 +53,13 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   const director = options.cinematics ? createCinematicDirector(options.cinematics.seen, options.cinematics.onSeen) : null;
   let earlyIntent = false, shotHeading = checkpoint.heading, snapFollow = false;
   const world = createArtSampleScene(cinematicPreview ? { travelerPath: 'traveler-tripo/v002/traveler.glb',
-    animationRates: { walk: WALK_SPEED / 1.20591, run: RUN_SPEED / 4.39490 }, presentationClips: true, sampleNature: true, musicPavilion: musicPreview, flyingAwakened: checkpoint.visitedEvents.includes('flying') } : undefined);
+    animationRates: { walk: WALK_SPEED / 1.20591, run: RUN_SPEED / 4.39490 }, presentationClips: true, sampleNature: true, musicPavilion: musicPreview, musicVersion: options.musicVersion, flyingAwakened: checkpoint.visitedEvents.includes('flying') } : undefined);
   // The isolated scene displays only approved tree A. Its low geometry reaches
   // 1.01 m from the trunk (measured below 2.1 m in the environment sample).
   // Remove hidden reference-tree obstacles along with those hidden models.
   const sampleColliders = [...WORLD_COLLIDERS.filter(box => !box.id?.startsWith('tree-')),
     { id: 'sample-tree-a', minX: 3.79, maxX: 5.81, minZ: 11.99, maxZ: 14.01, height: 2.1, circle: { x: 4.8, z: 13, radius: 1.01 } }];
-  const colliders = musicPreview ? MUSIC_PLAYER_COLLIDERS : cinematicPreview ? sampleColliders.map(box => ({ ...box,
+  const colliders = musicPreview ? regionColliders : cinematicPreview ? sampleColliders.map(box => ({ ...box,
     minX: box.minX - .21, maxX: box.maxX + .21, minZ: box.minZ - .21, maxZ: box.maxZ + .21,
     ...(box.circle ? { circle: { ...box.circle, radius: box.circle.radius + .21 } } : {}),
   })) : WORLD_COLLIDERS;
@@ -58,11 +70,13 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   const input = createWorldInput(canvas, () => { if (loaded && !paused && view === 'follow') options.onInteract(); }, delta => turnCamera(delta), () => { earlyIntent = true; skipCinematic(); });
   input.setEnabled(false);
   container.appendChild(canvas);
+  const audio=musicV2?createMusicArrivalAudio(options.sound??defaultSoundPreferences()):null;
+
 
   function nearestDiscovery(): DiscoveryId | null {
     if (!loaded) return null;
     const p = checkpoint.position;
-    if (musicPreview && nearFlyingMural(p)) return 'flying';
+    if (musicPreview && nearMural(p)) return 'flying';
     if (Math.hypot(p.x + 12, p.z + 17) < 2.6) return 'caisson';
     if (Math.hypot(p.x + 5, p.z + 6) < 2.25) return 'story-demo';
     return null;
@@ -71,8 +85,8 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     const p = checkpoint.position;
     const location = p.x < -2 && p.x > -22 && p.z < 2 && p.z > -24
       ? p.z < -12.3 ? '藻井观赏厅' : '纹彩院'
-      : musicPreview && p.x>8 && p.x<28 && p.z< -2 && p.z> -23 ? '乐舞馆' : p.z < -25 ? '洞窟远景 · 待制作' : p.x > 10 && p.z < -8 ? '乐舞馆远景 · 待制作' : '沙漠道路';
-    return { checkpoint: { ...checkpoint, position: { ...p }, visitedEvents: [...checkpoint.visitedEvents] }, nearby: nearestDiscovery(), location, moving, cinematic: director?.state ?? null, flying: world.music?.inspect() };
+      : musicPreview && (musicV2?inMusicCourtV2(p):p.x>8 && p.x<28 && p.z< -2 && p.z> -23) ? '乐舞馆' : p.z < -25 ? '洞窟远景 · 待制作' : !musicPreview && p.x > 10 && p.z < -8 ? '乐舞馆远景 · 待制作' : '沙漠道路';
+    return { checkpoint: { ...checkpoint, position: { ...p }, visitedEvents: [...checkpoint.visitedEvents] }, nearby: nearestDiscovery(), location, moving, cinematic: director?.state ?? null, flying: world.music?.inspect(), musicAudio: audio?.inspect() };
   }
   function emit() { options.onSnapshot(snapshot()); }
   function updateTraveler(speed: number) {
@@ -103,7 +117,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   }
   function fail(message: string) {
     if (disposed || failed) return;
-    failed = true; moving = false; stop(); input.setEnabled(false);
+    failed = true; moving = false; audio?.setBlocked(true); stop(); input.setEnabled(false);
     world.dispose(); renderer.renderLists.dispose();
     emit(); options.onError(message);
   }
@@ -116,10 +130,11 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     let speed = 0;
     if (view === 'follow') {
       const control = input.read();
-      checkpoint.cameraYaw = clampCameraYaw(checkpoint.cameraYaw + control.camera * dt * .65);
-      const vector = movementVector(control.x, control.y, checkpoint.cameraYaw);
+      if(control.camera)travelCamera?.manual();
+      checkpoint.cameraYaw = yawLimit(checkpoint.cameraYaw + control.camera * dt * .65);
+      const vector = travelCamera?travelCamera.vector(control.x,control.y,checkpoint.cameraYaw,dt):movementVector(control.x, control.y, checkpoint.cameraYaw);
       const desiredSpeed = cinematicPreview ? control.run ? 4.4 : 1.8 : control.run ? RUN_SPEED : WALK_SPEED;
-      const next = movePlayer(checkpoint.position, { x: vector.x * desiredSpeed * dt, z: vector.z * desiredSpeed * dt }, colliders);
+      const next = movePlayer(checkpoint.position, { x: vector.x * desiredSpeed * dt, z: vector.z * desiredSpeed * dt }, colliders, bounds);
       const distance = Math.hypot(next.x - checkpoint.position.x, next.z - checkpoint.position.z);
       speed = dt ? distance / dt : 0;
       if (speed > .05) {
@@ -129,6 +144,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
       }
       checkpoint.position = next;
       moving = speed > .05;
+      if(travelCamera)checkpoint.cameraYaw=travelCamera.yaw(checkpoint.cameraYaw,checkpoint.heading,moving,dt,reduced);
     } else moving = false;
     const beforeShot = director?.state;
     if (director && view === 'follow') {
@@ -141,23 +157,24 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
       if (shot && !beforeShot) shotHeading = checkpoint.heading;
       if (shot?.id === 'opening') {
         const distance = openingDistance(shot.time) - openingDistance(beforeShot?.time ?? 0);
-        const next = movePlayer(checkpoint.position, { x: 0, z: -distance }, colliders);
+        const next = movePlayer(checkpoint.position, { x: 0, z: -distance }, colliders, bounds);
         speed = dt ? Math.hypot(next.x - checkpoint.position.x, next.z - checkpoint.position.z) / dt : 0;
         checkpoint.position = next; moving = speed > .05;
       }
       if (shot && shot.time >= shot.duration) { director.finish(); snapFollow = true; }
     }
     world.music?.update(dt,reduced);
+    audio?.update(checkpoint.position,checkpoint.cameraYaw);
     if(world.music?.inspect().awakened && !checkpoint.visitedEvents.includes('flying')) checkpoint.visitedEvents.push('flying');
     updateTraveler(speed);
-    const desiredPose = view === 'caisson' ? caissonCameraPose() : view === 'flying' ? flyingCameraPose(camera.aspect) : followPose(checkpoint.position.x, heightAt(checkpoint.position), checkpoint.position.z, checkpoint.cameraYaw);
+    const desiredPose = view === 'caisson' ? caissonCameraPose() : view === 'flying' ? flyingPose(camera.aspect) : followPose(checkpoint.position.x, heightAt(checkpoint.position), checkpoint.position.z, checkpoint.cameraYaw);
     const damping = reduced ? 1 : 1 - Math.exp(-dt * (view === 'caisson' ? 2 : 10));
     // Follow the current valid player anchor; easing an old anchor can cut through
     // an inside corner even when the player's collision path goes around it.
     if (view === 'follow') cameraTarget.copy(desiredPose.target);
     else cameraTarget.lerp(desiredPose.target, damping);
     camera.position.lerp(desiredPose.position, damping);
-    if (view === 'follow') camera.position.copy(settleFollowCamera(cameraTarget, camera.position, desiredPose.position, cameraSpace));
+    if (view === 'follow') camera.position.copy(settleFollowCamera(cameraTarget, camera.position, desiredPose.position, cameraSpace, cameraSpace?.subjectHeight===undefined?undefined:new THREE.Vector3(checkpoint.position.x,heightAt(checkpoint.position)+cameraSpace.subjectHeight,checkpoint.position.z)));
     const shot = director?.state;
     if (shot) {
       const pose = characterCameraPose(shot.id, shot.time, checkpoint.position, heightAt(checkpoint.position), shotHeading, checkpoint.cameraYaw);
@@ -180,14 +197,14 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   }
   function turnCamera(delta: number) {
     if (!loaded || paused || view !== 'follow' || disposed) return;
-    skipCinematic(); checkpoint.cameraYaw = clampCameraYaw(checkpoint.cameraYaw + delta); schedule();
+    skipCinematic(); travelCamera?.manual(); checkpoint.cameraYaw = yawLimit(checkpoint.cameraYaw + delta); schedule();
   }
   function visibility() {
-    input.clear(); moving = false; previousTime = 0;
+    input.clear(); travelCamera?.reset(); audio?.setBlocked(document.hidden||paused||view==='story'); moving = false; previousTime = 0;
     if (document.hidden) { skipCinematic(); stop(); emit(); } else schedule();
   }
   function contextLost(event: Event) { event.preventDefault(); fail('浏览器暂停了3D画面。请重新加载，或直接选择文化主题。'); }
-  const blur = () => { skipCinematic(); input.clear(); };
+  const blur = () => { skipCinematic(); input.clear(); travelCamera?.reset(); audio?.setBlocked(true); };
   window.addEventListener('blur', blur);
   const resizeObserver = new ResizeObserver(resize); resizeObserver.observe(container);
   document.addEventListener('visibilitychange', visibility);
@@ -217,15 +234,18 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   });
   return {
     snapshot, skipCinematic,
+    setSound:preferences=>audio?.setPreferences(preferences),
+    retrySound:()=>audio?.retry(),
+    recordingAudio:()=>audio?.recordingStream()??null,
     replayObservation() { if(view==='flying') { world.music?.replay(); emit(); schedule(); } },
     inspect: () => ({ ...snapshot(), view, paused, loaded, camera: { position: camera.position.toArray(), target: cameraTarget.toArray() },
-      traveler: world.inspectTraveler(), seen: director?.seen, stats: { triangles: renderer.info.render.triangles, calls: renderer.info.render.calls } }),
+      landmarkSight: world.music&&'auditSight' in world.music?world.music.auditSight(camera):undefined, traveler: world.inspectTraveler(), seen: director?.seen, stats: { triangles: renderer.info.render.triangles, calls: renderer.info.render.calls } }),
     setPaused(value) {
       // React publishes readiness after model loading; an identical pause state
       // must not clear a key the player pressed during that handoff.
       if (disposed || paused === value) return;
       if (value) skipCinematic();
-      paused = value; input.setEnabled(loaded && !paused && view === 'follow'); moving = false; previousTime = 0;
+      paused = value; travelCamera?.reset(); audio?.setBlocked(paused||document.hidden||view==='story'); input.setEnabled(loaded && !paused && view === 'follow'); moving = false; previousTime = 0;
       if (paused) stop(); else schedule(); emit();
     },
     setView(next) {
@@ -233,8 +253,8 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
       skipCinematic(); if (next === 'caisson') director?.skipHall();
       const exitingFlying = view === 'flying';
       if(exitingFlying) world.music?.exit();
-      if(next==='flying') { world.music?.update(0,reduced); world.music?.enter(); const pose=flyingCameraPose(camera.aspect);camera.position.copy(pose.position);cameraTarget.copy(pose.target);camera.lookAt(cameraTarget); }
-      view = next; if(next==='follow' && exitingFlying) restoreFollow(); input.setEnabled(loaded && !paused && view === 'follow'); moving = false; poseSettled = false; previousTime = 0;
+      if(next==='flying') { world.music?.update(0,reduced); world.music?.enter(); const pose=flyingPose(camera.aspect);camera.position.copy(pose.position);cameraTarget.copy(pose.target);camera.lookAt(cameraTarget); }
+      view = next; travelCamera?.reset(); audio?.setBlocked(paused||document.hidden||view==='story'); if(next==='follow' && exitingFlying) restoreFollow(); input.setEnabled(loaded && !paused && view === 'follow'); moving = false; poseSettled = false; previousTime = 0;
       if (view === 'story') { stop(); updateTraveler(0); render(); }
       else schedule();
       emit();
@@ -244,7 +264,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     setReducedMotion(value) { reduced = value; if (value) skipCinematic(); schedule(); },
     resetToStart() {
       skipCinematic();
-      world.music?.exit();
+      world.music?.exit(); travelCamera?.reset();
       checkpoint = { ...checkpoint, position: { ...WORLD_SPAWN }, heading: 0, cameraYaw: 0 };
       view = 'follow'; input.setEnabled(loaded && !paused); moving = false;
       const pose = followPose(WORLD_SPAWN.x, 0, WORLD_SPAWN.z, 0);
@@ -253,7 +273,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     },
     dispose() {
       if (disposed) return;
-      disposed = true; stop(); input.dispose(); resizeObserver.disconnect();
+      disposed = true; audio?.dispose(); stop(); input.dispose(); resizeObserver.disconnect();
       window.removeEventListener('blur', blur);
       document.removeEventListener('visibilitychange', visibility); canvas.removeEventListener('webglcontextlost', contextLost);
       world.dispose(); renderer.renderLists.dispose(); renderer.dispose(); renderer.forceContextLoss();

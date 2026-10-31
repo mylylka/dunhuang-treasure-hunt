@@ -15,6 +15,7 @@ export interface WorldSnapshot {
   location: string;
   moving: boolean;
   cinematic?: import('./character-cinematics').CinematicState | null;
+  musicAudio?: { status: 'loading' | 'ready' | 'error'; unlocked: boolean; gain: number; playing: boolean; currentTime: number };
   flying?: { time: number; color: number; complete: boolean; awakened: boolean };
 }
 export interface WorldRuntime {
@@ -26,6 +27,9 @@ export interface WorldRuntime {
   resetToStart(): void;
   skipCinematic(): void;
   replayObservation(): void;
+  setSound?(preferences: import('../services/sound-settings').SoundPreferences): void;
+  retrySound?(): void;
+  recordingAudio?(): MediaStream | null;
   inspect(): unknown;
   snapshot(): WorldSnapshot;
   dispose(): void;
@@ -38,5 +42,7 @@ export interface WorldRuntimeOptions {
   onError(message: string): void;
   onReady?(): void;
   musicPavilion?: boolean;
+  musicVersion?: 'v001' | 'v002';
+  sound?: import('../services/sound-settings').SoundPreferences;
   cinematics?: { seen: import('./character-cinematics').CinematicSeen; onSeen(seen: import('./character-cinematics').CinematicSeen): void };
 }

@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import type { StorageLike } from '../services/progress';
 import type { DiscoveryId, WorldCheckpoint } from './types';
-import { sanitizePosition, clampCameraYaw, type WorldCollider } from './movement';
+import { sanitizePosition, clampCameraYaw, type WorldBounds, type WorldCollider } from './movement';
 
 export const WORLD_SESSION_KEY = 'dunhuang:world-session:v1';
 const schema = z.object({
@@ -10,15 +10,15 @@ const schema = z.object({
   heading: z.number().finite(), cameraYaw: z.number().finite(),
   visitedEvents: z.array(z.enum(['caisson', 'story-demo', 'flying'])),
 });
-interface WorldSessionOptions { key?: string; colliders?: readonly WorldCollider[] }
+interface WorldSessionOptions { key?: string; colliders?: readonly WorldCollider[]; bounds?: WorldBounds; freeYaw?: boolean }
 export function defaultWorldCheckpoint(): WorldCheckpoint {
   return { version: 1, position: { x: 0, z: 18 }, heading: 0, cameraYaw: 0, visitedEvents: [] };
 }
-export function sanitizeCheckpoint(value: unknown, colliders?: readonly WorldCollider[]): WorldCheckpoint {
+export function sanitizeCheckpoint(value: unknown, colliders?: readonly WorldCollider[], bounds?: WorldBounds, freeYaw = false): WorldCheckpoint {
   const parsed = schema.safeParse(value);
   if (!parsed.success) return defaultWorldCheckpoint();
-  return { ...parsed.data, position: sanitizePosition(parsed.data.position, colliders),
-    cameraYaw: clampCameraYaw(parsed.data.cameraYaw),
+  return { ...parsed.data, position: sanitizePosition(parsed.data.position, colliders, bounds),
+    cameraYaw: freeYaw ? Math.atan2(Math.sin(parsed.data.cameraYaw), Math.cos(parsed.data.cameraYaw)) : clampCameraYaw(parsed.data.cameraYaw),
     heading: Math.atan2(Math.sin(parsed.data.heading), Math.cos(parsed.data.heading)),
     visitedEvents: [...new Set(parsed.data.visitedEvents)] };
 }
@@ -28,7 +28,7 @@ export function loadWorldSession(storage?: StorageLike, options: WorldSessionOpt
     if (!raw) return { data: defaultWorldCheckpoint(), warning: null };
     const value: unknown = JSON.parse(raw);
     if (!schema.safeParse(value).success) throw new Error('Unsupported checkpoint');
-    return { data: sanitizeCheckpoint(value, options.colliders), warning: null };
+    return { data: sanitizeCheckpoint(value, options.colliders, options.bounds, options.freeYaw), warning: null };
   } catch {
     return { data: defaultWorldCheckpoint(), warning: '探索位置暂时无法读取，已回到起点。原记录已保留。' };
   }
@@ -47,7 +47,7 @@ export function saveWorldSession(checkpoint: WorldCheckpoint, storage?: StorageL
         target.setItem(`${key}:unreadable:${suffix}`, raw);
       }
     }
-    target.setItem(key, JSON.stringify(sanitizeCheckpoint(checkpoint, options.colliders)));
+    target.setItem(key, JSON.stringify(sanitizeCheckpoint(checkpoint, options.colliders, options.bounds, options.freeYaw)));
     return { ok: true };
   } catch {
     return { ok: false, message: '探索位置尚未保存，本次仍可继续；刷新后可能回到起点。' };

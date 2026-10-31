@@ -1,0 +1,162 @@
+{
+  "version": "v002",
+  "originalSource": "art-source/world/music-pavilion/v001",
+  "motion": "Two anchored free ends, larger visible curvature; original figure and instrument remain static",
+  "layering": {
+    "contoursPx": [
+      [
+        [
+          78,
+          106
+        ],
+        [
+          115,
+          134
+        ],
+        [
+          145,
+          180
+        ],
+        [
+          167,
+          222
+        ],
+        [
+          200,
+          263
+        ],
+        [
+          244,
+          290
+        ],
+        [
+          284,
+          308
+        ],
+        [
+          285,
+          354
+        ],
+        [
+          246,
+          341
+        ],
+        [
+          207,
+          322
+        ],
+        [
+          177,
+          300
+        ],
+        [
+          149,
+          274
+        ],
+        [
+          128,
+          240
+        ],
+        [
+          108,
+          203
+        ],
+        [
+          93,
+          166
+        ],
+        [
+          84,
+          132
+        ]
+      ],
+      [
+        [
+          94,
+          369
+        ],
+        [
+          111,
+          382
+        ],
+        [
+          121,
+          407
+        ],
+        [
+          140,
+          428
+        ],
+        [
+          168,
+          441
+        ],
+        [
+          194,
+          447
+        ],
+        [
+          222,
+          438
+        ],
+        [
+          249,
+          422
+        ],
+        [
+          279,
+          411
+        ],
+        [
+          279,
+          451
+        ],
+        [
+          253,
+          463
+        ],
+        [
+          225,
+          477
+        ],
+        [
+          200,
+          478
+        ],
+        [
+          170,
+          470
+        ],
+        [
+          143,
+          456
+        ],
+        [
+          120,
+          433
+        ],
+        [
+          105,
+          407
+        ]
+      ]
+    ],
+    "motionMaxPixels": 20,
+    "staticRightOfPixel": 285,
+    "changedUnderlayPixels": 20633,
+    "changesOutsideMask": 0,
+    "method": "Original pixels only for moving ends; local supplied repair underlay; no full-image replacement",
+    "patchCropPx": [
+      48,
+      60,
+      320,
+      520
+    ],
+    "originalAspect": 1.3333333333333333,
+    "runtime": [
+      "mural-original.png",
+      "mural-underlay-crop.png",
+      "ribbon-masks-crop.png"
+    ]
+  }
+}
