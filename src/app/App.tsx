@@ -1,5 +1,6 @@
 import { lazy, Suspense, useCallback, useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import { loadWorldSession, saveWorldSession } from '../world/session';
+import { MUSIC_PLAYER_COLLIDERS, MUSIC_SESSION_KEY } from '../world/music-pavilion-rules';
 import type { WorldCheckpoint } from '../world/types';
 import { WorldBoundary } from './WorldBoundary';
 import { getAssetUrl } from '../content';
@@ -78,13 +79,15 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
   const commandSequence = useRef(0);
   const completedThisRun = useRef(false);
   const mainRef = useRef<HTMLElement>(null);
-  const [initialWorld] = useState(() => loadWorldSession());
+  const [worldSessionOptions] = useState(() => document.getElementById('root')?.dataset.musicPavilion === 'v001'
+    ? { key: MUSIC_SESSION_KEY, colliders: MUSIC_PLAYER_COLLIDERS } : {});
+  const [initialWorld] = useState(() => loadWorldSession(undefined, worldSessionOptions));
   const worldCheckpoint = useRef(initialWorld.data);
   const [worldWarning, setWorldWarning] = useState(initialWorld.warning);
   const enteredFromWorld = useRef(false);
   const persistWorld = useCallback((next: WorldCheckpoint) => {
     worldCheckpoint.current = next;
-    const saved = saveWorldSession(next);
+    const saved = saveWorldSession(next, undefined, worldSessionOptions);
     setWorldWarning(saved.ok ? null : saved.message);
   }, []);
 

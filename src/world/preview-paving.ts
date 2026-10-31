@@ -1,16 +1,16 @@
 import * as THREE from 'three';
 import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
-import { COURTYARD_ROAD } from './road';
+import { COURTYARD_ROAD, type RoadSection } from './road';
 
 /** Paving follows the accepted road ribbon; large irregular slabs, not gravel. */
-export function createPreviewPaving() {
+export function createPreviewPaving(road: readonly RoadSection[] = COURTYARD_ROAD, fullRoute = false) {
   const group = new THREE.Group(); group.name = 'preview-only-stone-paving';
   const materials = ['#c6b498', '#d1bea0', '#bcaa8d', '#d8c7a9'].map(color => new THREE.MeshStandardMaterial({ color, roughness: 1 }));
   let distance = 0, stone = 0;
-  for (let index = 1; index < COURTYARD_ROAD.length; index++) {
-    const a = COURTYARD_ROAD[index - 1], b = COURTYARD_ROAD[index];
+  for (let index = 1; index < road.length; index++) {
+    const a = road[index - 1], b = road[index];
     distance += Math.hypot(b.center.x - a.center.x, b.center.z - a.center.z);
-    if (distance < .95 || b.center.z < 3) continue;
+    if (distance < .95 || (!fullRoute && b.center.z < 3)) continue;
     distance = 0;
     const angle = Math.atan2(b.center.x - a.center.x, b.center.z - a.center.z);
     for (let column = 0; column < 3; column++) {

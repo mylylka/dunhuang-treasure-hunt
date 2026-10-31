@@ -11,7 +11,7 @@ export interface GrayboxScene {
 }
 
 /** All geometry is a deliberately untextured spatial study; no formal artwork. */
-export function createGrayboxScene({ artSample = false }: { artSample?: boolean } = {}): GrayboxScene {
+export function createGrayboxScene({ artSample = false, musicPreview = false }: { artSample?: boolean; musicPreview?: boolean } = {}): GrayboxScene {
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(artSample ? '#afcfdf' : '#d9ded8');
   scene.fog = new THREE.Fog(artSample ? '#d9d6c3' : '#d9ded8', 46, 115);
@@ -77,11 +77,11 @@ export function createGrayboxScene({ artSample = false }: { artSample?: boolean 
   mesh(pathGeometry, materials.path, 0, 0, 0).name = 'courtyard-road';
   // Shared placement data keeps complete scenery meshes outside the walking
   // surface; distant dunes also leave room for the follow camera behind it.
-  for (const [index, item] of WORLD_DUNES.entries()) {
+  for (const [index, item] of (musicPreview ? [] : WORLD_DUNES).entries()) {
     const geometry = createRidgeGeometry(index, item.ridgeAxis); geometries.add(geometry);
     mesh(geometry, materials.dune, item.x, item.y, item.z, item.radiusX, item.radiusY, item.radiusZ).name = item.id;
   }
-  for (const [index, item] of WORLD_BOUNDARY_STONES.entries()) {
+  for (const [index, item] of (musicPreview ? [] : WORLD_BOUNDARY_STONES).entries()) {
     const geometry = createBoundaryStoneGeometry(index); geometries.add(geometry);
     mesh(geometry, materials.stone, item.x, item.y, item.z, item.radiusX, item.radiusY, item.radiusZ).name = item.id;
   }
@@ -143,9 +143,11 @@ export function createGrayboxScene({ artSample = false }: { artSample?: boolean 
     }
   }
   // Honest distant block masses reserve space for later stage work.
+  if (!musicPreview) {
   box(18, 3.3, -18, 14, 6.6, 12, materials.wall); roof(18, -18, 6.7, 15.5, 13);
   for (let x = 12; x <= 24; x += 3) box(x, 5.1, -11.94, 1.5, 2.3, .1, materials.roof);
-  for (const [index, item] of WORLD_CLIFFS.entries()) {
+  }
+  for (const [index, item] of (musicPreview ? [] : WORLD_CLIFFS).entries()) {
     const geometry = createRidgeGeometry(index + 31, 'x', true); geometries.add(geometry);
     mesh(geometry, materials.stone, item.x, item.y, item.z, item.radiusX, item.radiusY, item.radiusZ).name = item.id;
   }

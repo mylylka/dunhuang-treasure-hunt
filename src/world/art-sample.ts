@@ -4,6 +4,8 @@ import { WORLD_ART_SAMPLE, worldAssetUrl } from '../content/world/assets';
 import { createGrayboxScene, type GrayboxScene } from './geometry';
 import { RUN_SPEED, WALK_SPEED } from './movement';
 import { createPreviewPaving } from './preview-paving';
+import { createMusicPavilion } from './music-pavilion';
+import { MUSIC_LAYOUT, MUSIC_ROAD } from './music-pavilion-rules';
 
 type TravelerAction = 'Idle' | 'Walk' | 'Run' | 'Greeting' | 'HallLookUp';
 export interface ArtSampleSceneOptions {
@@ -13,8 +15,11 @@ export interface ArtSampleSceneOptions {
   animationRates?: { walk: number; run: number };
   presentationClips?: boolean;
   sampleNature?: boolean;
+  musicPavilion?: boolean;
+  flyingAwakened?: boolean;
 }
 export interface ArtSampleScene extends GrayboxScene {
+  music: ReturnType<typeof createMusicPavilion> | null;
   ready: Promise<void>;
   animationName(): TravelerAction;
   animatePresentation(name: 'Greeting' | 'HallLookUp', time: number): void;
@@ -50,7 +55,8 @@ function releaseModel(model: THREE.Object3D) {
 }
 
 export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSampleScene {
-  const environment = createGrayboxScene({ artSample: true });
+  const environment = createGrayboxScene({ artSample: true, musicPreview: options.musicPavilion });
+  const music = options.musicPavilion ? createMusicPavilion(environment.scene, !!options.flyingAwakened) : null;
   const traveler = new THREE.Group(); traveler.name = 'traveler';
   environment.scene.add(traveler);
   let disposed = false;
@@ -68,6 +74,7 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
   function dispose() {
     if (disposed) return;
     disposed = true;
+    music?.dispose();
     clearTimeout(timeout); controller.abort();
     if (mixer && character) { mixer.stopAllAction(); mixer.uncacheRoot(character); }
     actions.clear(); mixer = null; character = null;
@@ -102,7 +109,7 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
     timeout = setTimeout(() => reject(new Error('model-loading-timeout')), 30_000);
   });
   // Fail promptly if either model fails; release/abort its sibling immediately.
-  const ready = Promise.race([loading, deadline]).then(([courtyard, avatar, tree, shrub, dunes]) => {
+  const ready = Promise.all([Promise.race([loading, deadline]), music?.ready]).then(([[courtyard, avatar, tree, shrub, dunes]]) => {
     if (disposed) return;
     const required: TravelerAction[] = ['Idle', 'Walk', 'Run'];
     if (options.presentationClips) required.push('Greeting', 'HallLookUp');
@@ -129,6 +136,18 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
       tree.scene.position.set(4.8, 0, 13); shrub.scene.position.set(-2.9, 0, 16.2);
       dunes.scene.position.set(55, 0, 12); dunes.scene.rotation.y = -Math.PI / 2;
       const paving = createPreviewPaving(); models.push(paving); environment.scene.add(paving);
+      if (options.musicPavilion) {
+        // Geometry and materials stay shared with the approved A assets. The
+        // source model remains their one resource owner, clones are scene-only.
+        for (const [x,z,scale] of MUSIC_LAYOUT.trees) {
+          const instance=tree.scene.clone(true);instance.position.set(x,0,z);instance.scale.setScalar(scale);environment.scene.add(instance);
+        }
+        for (const [x,z,scale] of MUSIC_LAYOUT.shrubs) {
+          const instance=shrub.scene.clone(true);instance.position.set(x,0,z);instance.scale.setScalar(scale);environment.scene.add(instance);
+        }
+        const northDunes=dunes.scene.clone(true);northDunes.position.set(0,0,-65);northDunes.rotation.y=0;environment.scene.add(northDunes);
+        const branch=createPreviewPaving(MUSIC_ROAD.filter(section=>section.center.z> -2.55),true);models.push(branch);environment.scene.add(branch);
+      }
     }
     courtyard.scene.updateMatrixWorld(true);
     courtyard.scene.traverse(object => {
@@ -153,7 +172,7 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
     throw new Error('美术模型加载失败。请重新加载，或直接选择文化主题。');
   });
   return {
-    scene: environment.scene, traveler, ready,
+    scene: environment.scene, traveler, ready, music,
     animationName: () => actionName,
     animatePresentation(name, time) {
       if (!mixer) return;

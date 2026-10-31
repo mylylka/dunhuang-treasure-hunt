@@ -1,0 +1,211 @@
+{
+  "version": "v001",
+  "source": "user supplied Downloads/3d视觉素材库",
+  "files": [
+    {
+      "name": "二楼改为开放乐廊的最新外景图.png",
+      "sha256": "6f6080a98095dec72a603fa13c8952a48d9c14ec4cba4cd5bec4e7cd1b9c1729",
+      "size": [
+        1672,
+        941
+      ]
+    },
+    {
+      "name": "玩家进入前庭壁画仍然为灰色的图.png",
+      "sha256": "f41cb10c189310eedaf773787813c3752e119537ddb00399d21e68db5393de97",
+      "size": [
+        1672,
+        941
+      ]
+    },
+    {
+      "name": "玩家走到灰色飞天壁画前的图.png",
+      "sha256": "1edc37ddc7578c2f180dfd83703e202e7b7b68211df799b9179c3c829e15b145",
+      "size": [
+        1672,
+        941
+      ]
+    },
+    {
+      "name": "飞天壁画唤醒后的效果图.png",
+      "sha256": "0547d8a5562817ccced795f15551ba03dccb46b2a22373a5e9c2e1032f213aef",
+      "size": [
+        1536,
+        864
+      ]
+    },
+    {
+      "name": "独立彩色飞天主壁画母图.png",
+      "sha256": "b1e0966e7957f1855eabc9e36b8187c34cf85cfcbc0fddf86382717a247b803f",
+      "size": [
+        1448,
+        1086
+      ]
+    },
+    {
+      "name": "飞天飘带补底图-v001.png",
+      "sha256": "f70bd35fa2cad50500b1482871d1475caadc7aee20f8569346f9e051b69b1654",
+      "size": [
+        1448,
+        1086
+      ]
+    }
+  ],
+  "layering": {
+    "contoursPx": [
+      [
+        [
+          78,
+          106
+        ],
+        [
+          115,
+          134
+        ],
+        [
+          145,
+          180
+        ],
+        [
+          167,
+          222
+        ],
+        [
+          200,
+          263
+        ],
+        [
+          244,
+          290
+        ],
+        [
+          284,
+          308
+        ],
+        [
+          285,
+          354
+        ],
+        [
+          246,
+          341
+        ],
+        [
+          207,
+          322
+        ],
+        [
+          177,
+          300
+        ],
+        [
+          149,
+          274
+        ],
+        [
+          128,
+          240
+        ],
+        [
+          108,
+          203
+        ],
+        [
+          93,
+          166
+        ],
+        [
+          84,
+          132
+        ]
+      ],
+      [
+        [
+          94,
+          369
+        ],
+        [
+          111,
+          382
+        ],
+        [
+          121,
+          407
+        ],
+        [
+          140,
+          428
+        ],
+        [
+          168,
+          441
+        ],
+        [
+          194,
+          447
+        ],
+        [
+          222,
+          438
+        ],
+        [
+          249,
+          422
+        ],
+        [
+          279,
+          411
+        ],
+        [
+          279,
+          451
+        ],
+        [
+          253,
+          463
+        ],
+        [
+          225,
+          477
+        ],
+        [
+          200,
+          478
+        ],
+        [
+          170,
+          470
+        ],
+        [
+          143,
+          456
+        ],
+        [
+          120,
+          433
+        ],
+        [
+          105,
+          407
+        ]
+      ]
+    ],
+    "motionMaxPixels": 2.2,
+    "staticRightOfPixel": 285,
+    "changedUnderlayPixels": 20633,
+    "changesOutsideMask": 0,
+    "method": "Original pixels only for moving ends; local supplied repair underlay; no full-image replacement",
+    "patchCropPx": [
+      60,
+      85,
+      294,
+      491
+    ],
+    "originalAspect": 1.3333333333333333,
+    "runtime": [
+      "mural-original.png",
+      "mural-underlay-crop.png",
+      "ribbon-masks-crop.png"
+    ]
+  }
+}

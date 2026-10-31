@@ -14,5 +14,5 @@ export function discoveryReducer(state: DiscoveryState, action: DiscoveryAction)
   return { ...state, paused: action.type === 'pause' };
 }
 export function discoveryView(state: DiscoveryState): WorldView {
-  return state.mode === 'exploring' ? 'follow' : state.id === 'caisson' ? 'caisson' : 'story';
+  return state.mode === 'exploring' ? 'follow' : state.id === 'caisson' ? 'caisson' : state.id === 'flying' ? 'flying' : 'story';
 }

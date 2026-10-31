@@ -54,22 +54,29 @@ export function intersectCameraCylinder(ray: THREE.Ray, cylinder: CameraCylinder
   return Number.isFinite(nearest) ? nearest : null;
 }
 const cameraBoxes = WORLD_CAMERA_OBSTACLES.map(box => box.clone().expandByScalar(CAMERA_CLEARANCE));
+export interface CameraSpace {
+  boxes: readonly THREE.Box3[];
+  cylinders: readonly CameraCylinder[];
+  shelters?: readonly (readonly [number,number,number,number])[];
+  landmarkFraming?: { bounds: readonly [number,number,number,number]; targetLift: number };
+}
+const defaultSpace: CameraSpace = { boxes: cameraBoxes, cylinders: WORLD_CAMERA_CYLINDERS };
 
 /** Sweep a small camera volume, not merely its centre, from a valid player anchor. */
-export function clearCameraPosition(target: THREE.Vector3, desired: THREE.Vector3): THREE.Vector3 {
+export function clearCameraPosition(target: THREE.Vector3, desired: THREE.Vector3, space: CameraSpace = defaultSpace): THREE.Vector3 {
   const direction = desired.clone().sub(target);
   let distance = direction.length();
   if (distance < .00001) return desired.clone();
   const ray = new THREE.Ray(target, direction.normalize());
   const intersection = new THREE.Vector3();
-  for (const box of cameraBoxes) {
+  for (const box of space.boxes) {
     // A contained target can occur only with an invalid/stale anchor. Do not jump
     // to the far exit of a solid and pretend that it is a clear line of sight.
     if (box.containsPoint(target)) { distance = 0; break; }
     const hit = ray.intersectBox(box, intersection);
     if (hit) distance = Math.min(distance, Math.max(0, target.distanceTo(hit) - .04));
   }
-  for (const cylinder of WORLD_CAMERA_CYLINDERS) {
+  for (const cylinder of space.cylinders) {
     const hit = intersectCameraCylinder(ray, cylinder, CAMERA_CLEARANCE);
     if (hit !== null) distance = Math.min(distance, Math.max(0, hit - .04));
   }
@@ -81,15 +88,19 @@ function areaBlend(x: number, z: number, minX: number, maxX: number, minZ: numbe
   return THREE.MathUtils.smoothstep(edge, -2.5, 1);
 }
 
-export function followCameraPose(x: number, y: number, z: number, yaw: number) {
+export function followCameraPose(x: number, y: number, z: number, yaw: number, space: CameraSpace = defaultSpace) {
   // Anticipate the doorway and hall while the camera is still outside them.
   // A low shoulder view keeps both the traveler and the route below lintels.
-  const sheltered = Math.max(areaBlend(x, z, -16, -8, -7, 7), areaBlend(x, z, -20.5, -3.5, -24, -10));
-  const target = new THREE.Vector3(x, y + 1.8 - sheltered * .35, z);
+  const sheltered = Math.max(areaBlend(x, z, -16, -8, -7, 7), areaBlend(x, z, -20.5, -3.5, -24, -10),
+    ...(space.shelters ?? []).map(bounds=>areaBlend(x,z,...bounds)));
+  // A tall landmark needs a slightly higher aim while approaching; keep the
+  // camera height and ordinary controls, and blend back beneath its porch.
+  const lift = space.landmarkFraming ? areaBlend(x,z,...space.landmarkFraming.bounds)*space.landmarkFraming.targetLift*(1-sheltered) : 0;
+  const target = new THREE.Vector3(x, y + 1.8 - sheltered * .35 + lift, z);
   const arm = FOLLOW_CAMERA_DISTANCE - sheltered * 3.5;
-  const rise = 2.7 - sheltered * 1.1;
+  const rise = 2.7 - sheltered * 1.1 - lift;
   const candidate = (angle: number, length: number, height: number) => clearCameraPosition(target,
-    target.clone().add(new THREE.Vector3(Math.sin(angle) * length, height, Math.cos(angle) * length)));
+    target.clone().add(new THREE.Vector3(Math.sin(angle) * length, height, Math.cos(angle) * length)), space);
   let position = candidate(yaw, arm, rise);
   // Near a wall/pillar, try a low shoulder offset before collapsing into the avatar.
   // Prefer the user's yaw whenever it still leaves a readable third-person view.
@@ -105,11 +116,11 @@ export function followCameraPose(x: number, y: number, z: number, yaw: number) {
 }
 
 /** Apply after easing: an interpolation between two safe poses can cross a beam. */
-export function settleFollowCamera(target: THREE.Vector3, interpolated: THREE.Vector3, desired: THREE.Vector3) {
-  const safe = clearCameraPosition(target, interpolated);
+export function settleFollowCamera(target: THREE.Vector3, interpolated: THREE.Vector3, desired: THREE.Vector3, space: CameraSpace = defaultSpace) {
+  const safe = clearCameraPosition(target, interpolated, space);
   // Retreat from a new obstruction immediately, then ease out on subsequent frames.
   return safe.distanceTo(target) < 3.4 && desired.distanceTo(target) > safe.distanceTo(target) + .8
-    ? clearCameraPosition(target, desired) : safe;
+    ? clearCameraPosition(target, desired, space) : safe;
 }
 
 export function caissonCameraPose() {

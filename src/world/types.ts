@@ -1,7 +1,7 @@
 /** World contract: metres, Y up; horizontal positions use X/Z. No Phaser types. */
 export interface WorldPoint { x: number; z: number }
-export type DiscoveryId = 'caisson' | 'story-demo';
-export type WorldView = 'follow' | 'caisson' | 'story';
+export type DiscoveryId = 'caisson' | 'story-demo' | 'flying';
+export type WorldView = 'follow' | 'caisson' | 'story' | 'flying';
 export interface WorldCheckpoint {
   version: 1;
   position: WorldPoint;
@@ -15,6 +15,7 @@ export interface WorldSnapshot {
   location: string;
   moving: boolean;
   cinematic?: import('./character-cinematics').CinematicState | null;
+  flying?: { time: number; color: number; complete: boolean; awakened: boolean };
 }
 export interface WorldRuntime {
   setPaused(paused: boolean): void;
@@ -24,6 +25,7 @@ export interface WorldRuntime {
   setReducedMotion(reduced: boolean): void;
   resetToStart(): void;
   skipCinematic(): void;
+  replayObservation(): void;
   inspect(): unknown;
   snapshot(): WorldSnapshot;
   dispose(): void;
@@ -35,5 +37,6 @@ export interface WorldRuntimeOptions {
   onInteract(): void;
   onError(message: string): void;
   onReady?(): void;
+  musicPavilion?: boolean;
   cinematics?: { seen: import('./character-cinematics').CinematicSeen; onSeen(seen: import('./character-cinematics').CinematicSeen): void };
 }

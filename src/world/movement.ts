@@ -31,7 +31,7 @@ export const WORLD_COLLIDERS: WorldCollider[] = [
   wall(-18, -7.5, 3.3, 1.4, 1.1), wall(-4.4, -7.8, .35, 3, 2.7),
   ...WORLD_PROP_COLLIDERS,
   // Distant regions are visible only in this stage, without enterable false content.
-  wall(18, -18, 14, 12, 8),
+  { ...wall(18, -18, 14, 12, 8), id: 'music-placeholder' },
   ...WORLD_CLIFFS.map(item => wall(item.x, item.z, item.radiusX * 2, item.radiusZ * 2, item.y + item.radiusY)),
 ];
 
@@ -47,8 +47,8 @@ export function isWalkable(point: WorldPoint, colliders: readonly WorldCollider[
     return Math.hypot(x - point.x, z - point.z) < r - .00001;
   });
 }
-export function sanitizePosition(point?: WorldPoint): WorldPoint {
-  return point && isWalkable(point) ? { ...point } : { ...WORLD_SPAWN };
+export function sanitizePosition(point?: WorldPoint, colliders: readonly WorldCollider[] = WORLD_COLLIDERS): WorldPoint {
+  return point && isWalkable(point, colliders) ? { ...point } : { ...WORLD_SPAWN };
 }
 
 /** Small deterministic steps prevent tunnelling; independent axes allow wall sliding. */

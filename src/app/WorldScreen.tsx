@@ -3,6 +3,8 @@ import type { SoundPreferences } from '../services/sound-settings';
 import { discoveryReducer, discoveryView, initialDiscoveryState } from '../world/events';
 import { themeReturnCheckpoint, withVisitedDiscovery } from '../world/session';
 import type { WorldCheckpoint, WorldRuntime, WorldSnapshot } from '../world/types';
+import { WorldFlyingObservation } from './WorldFlyingObservation';
+import { MUSIC_ROAD } from '../world/music-pavilion-rules';
 import { WorldStoryPlayer } from './WorldStoryPlayer';
 import { COURTYARD_ROAD } from '../world/road';
 import { loadCinematicSeen, saveCinematicSeen } from '../world/character-cinematics';
@@ -18,7 +20,8 @@ interface Props {
 }
 
 export default function WorldScreen(props: Props) {
-  const cinematicPreview = document.getElementById('root')?.dataset.characterCinematics === 'v001';
+  const musicPreview = document.getElementById('root')?.dataset.musicPavilion === 'v001';
+  const cinematicPreview = document.getElementById('root')?.dataset.characterCinematics === 'v001' || musicPreview;
   const screen = useRef<HTMLDivElement>(null);
   const host = useRef<HTMLDivElement>(null);
   const wasLocked = useRef(false);
@@ -49,7 +52,7 @@ export default function WorldScreen(props: Props) {
   const currentCheckpoint = useCallback(() => {
     if (leavingToTheme.current) return checkpoint.current;
     const latest = runtime.current?.snapshot().checkpoint ?? checkpoint.current;
-    return { ...latest, visitedEvents: checkpoint.current.visitedEvents };
+    return { ...latest, visitedEvents: [...new Set([...latest.visitedEvents,...checkpoint.current.visitedEvents])] };
   }, []);
   const persist = useCallback(() => {
     checkpoint.current = currentCheckpoint(); callbacks.current.onCheckpoint(checkpoint.current);
@@ -69,7 +72,7 @@ export default function WorldScreen(props: Props) {
     void import('../world/runtime').then(({ createWorldRuntime }) => {
       if (disposed || !host.current) return;
       instance = createWorldRuntime(host.current, {
-        initial: checkpoint.current, reducedMotion: callbacks.current.reducedMotion || window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+        musicPavilion: musicPreview, initial: checkpoint.current, reducedMotion: callbacks.current.reducedMotion || window.matchMedia('(prefers-reduced-motion: reduce)').matches,
         ...(cinematicPreview ? { cinematics: {
           seen: (() => { try { return loadCinematicSeen(window.sessionStorage); } catch { return { opening: false, hall: false }; } })(),
           onSeen: (seen: { opening: boolean; hall: boolean }) => { try { saveCinematicSeen(window.sessionStorage, seen); } catch { /* Browser storage access can itself be denied. */ } },
@@ -81,6 +84,7 @@ export default function WorldScreen(props: Props) {
       });
       if (disposed) { instance.dispose(); return; }
       runtime.current = instance;
+      if (musicPreview) Object.assign(window, { __musicPavilion: { inspect: () => instance?.inspect() } });
       if (cinematicPreview) Object.assign(window, { __characterCinematics: { inspect: () => instance?.inspect(), skip: () => instance?.skipCinematic() } });
       instance.setPaused(flags.current.locked);
 
@@ -89,11 +93,13 @@ export default function WorldScreen(props: Props) {
       disposed = true;
       if (instance) {
         const latest = instance.snapshot().checkpoint;
-        checkpoint.current = leavingToTheme.current ? checkpoint.current : { ...latest, visitedEvents: checkpoint.current.visitedEvents };
+        checkpoint.current = leavingToTheme.current ? checkpoint.current : { ...latest, visitedEvents: [...new Set([...latest.visitedEvents,...checkpoint.current.visitedEvents])] };
         callbacks.current.onCheckpoint(checkpoint.current);
         instance.dispose();
       }
       runtime.current = null;
+      if (musicPreview) Reflect.deleteProperty(window, '__musicPavilion');
+      if (cinematicPreview) Reflect.deleteProperty(window, '__characterCinematics');
     };
   }, [attempt, startInteraction]);
 
@@ -144,7 +150,7 @@ export default function WorldScreen(props: Props) {
   }, [persist, pauseExploration]);
 
   function finishEvent() {
-    if (event.mode === 'observing') checkpoint.current = withVisitedDiscovery(currentCheckpoint(), event.id);
+    if (event.mode === 'observing' && (event.id !== 'flying' || runtime.current?.snapshot().flying?.complete)) checkpoint.current = withVisitedDiscovery(currentCheckpoint(), event.id);
     dispatch({ type: 'exit' }); persist(); host.current?.querySelector('canvas')?.focus();
   }
   function goToPatterns() {
@@ -175,24 +181,25 @@ export default function WorldScreen(props: Props) {
       : (current + (event.shiftKey ? -1 : 1) + controls.length) % controls.length;
     controls[next].focus({ preventScroll: true });
   }
-  return <div ref={screen} className={`world-screen${view === 'story' ? ' is-story' : ''}`} data-testid="world-screen" data-view={view}>
+  return <div ref={screen} className={`world-screen${view === 'story' ? ' is-story' : view === 'flying' ? ' is-flying' : ''}`} data-testid="world-screen" data-view={view}>
     <div className="world-host" ref={host} data-testid="world-host" data-ready={ready} aria-label="3D探索世界" inert={locked || view === 'story' ? true : undefined} />
     <output hidden data-testid="world-position" data-x={snapshot.checkpoint.position.x.toFixed(3)} data-z={snapshot.checkpoint.position.z.toFixed(3)} />
     <div className="world-hud" inert={view === 'story' || locked ? true : undefined}>
-      <header className="world-topbar"><div className="world-heading"><p>{cinematicPreview ? '角色镜头样片 · 待确认' : '美术样片 · 待确认'}</p><h1>敦煌寻宝记</h1><span data-testid="world-location">{snapshot.location}</span></div>
+      <header className="world-topbar"><div className="world-heading"><p>{musicPreview ? '乐舞馆样片 · 待确认' : cinematicPreview ? '角色镜头样片 · 待确认' : '美术样片 · 待确认'}</p><h1>敦煌寻宝记</h1><span data-testid="world-location">{snapshot.location}</span></div>
         <nav aria-label="世界导航"><a href="#/themes" onClick={persist}>直接选主题</a><button type="button" aria-expanded={showMap} onClick={() => setShowMap(value => !value)}>路线</button><a href="#/settings" onClick={persist}>设置</a><button type="button" onClick={pauseExploration} data-testid="world-pause">暂停</button></nav>
       </header>
-      {showMap && <aside className="world-map" aria-label="探索路线图"><h2>沿路进入纹彩院</h2><svg viewBox="0 0 160 150" role="img" aria-label="左侧纹彩院，庭院右侧故事测试点；远方两处场景筹备中"><path d="M36.5 89.6H16.2V16.8H74.2V89.6H53.9" fill="none" stroke="#ab7660" strokeWidth="2"/><polyline points={COURTYARD_ROAD.filter(({ center }) => center.z <= 18).map(({ center }) => `${80 + center.x * 2.9},${84 + center.z * 2.8}`).join(' ')} fill="none" stroke="#bc9a68" strokeWidth="5" /><rect x="22" y="12" width="46" height="34" fill="#ab7660"/><text x="45" y="8" textAnchor="middle">纹彩院</text><circle cx="65" cy="65" r="5" fill="#4b7973"/><text x="80" y="65">故事测试点</text><circle cx={80 + snapshot.checkpoint.position.x * 2.9} cy={84 + snapshot.checkpoint.position.z * 2.8} r="4" fill="#a13d2e" stroke="white" strokeWidth="2"/></svg><p>乐舞馆、洞窟在后续阶段开放</p></aside>}
+      {showMap && <aside className="world-map" aria-label="探索路线图"><h2>{musicPreview?'纹彩院 · 乐舞馆':'沿路进入纹彩院'}</h2><svg viewBox="0 0 160 150" role="img" aria-label={musicPreview?'左侧纹彩院，右侧乐舞馆，由石板路连接':'左侧纹彩院，庭院右侧故事测试点；远方两处场景筹备中'}><path d="M36.5 89.6H16.2V16.8H74.2V89.6H53.9" fill="none" stroke="#ab7660" strokeWidth="2"/><polyline points={COURTYARD_ROAD.filter(({ center }) => center.z <= 18).map(({ center }) => `${80 + center.x * 2.9},${84 + center.z * 2.8}`).join(' ')} fill="none" stroke="#bc9a68" strokeWidth="5" /><rect x="22" y="12" width="46" height="34" fill="#ab7660"/><text x="45" y="8" textAnchor="middle">纹彩院</text>{musicPreview?<><polyline points={MUSIC_ROAD.map(({center})=>`${80+center.x*2.9},${84+center.z*2.8}`).join(' ')} fill="none" stroke="#bc9a68" strokeWidth="5"/><rect x="109" y="22" width="46" height="30" fill="#77958a"/><text x="132" y="18" textAnchor="middle">乐舞馆</text></>:<><circle cx="65" cy="65" r="5" fill="#4b7973"/><text x="80" y="65">故事测试点</text></>}<circle cx={80 + snapshot.checkpoint.position.x * 2.9} cy={84 + snapshot.checkpoint.position.z * 2.8} r="4" fill="#a13d2e" stroke="white" strokeWidth="2"/></svg><p>{musicPreview?'沿石板支路前往乐舞馆；洞窟后续开放。':'乐舞馆、洞窟在后续阶段开放'}</p></aside>}
       {view === 'follow' && <>
         {snapshot.cinematic && <button type="button" className="world-cinematic-skip" data-testid="world-cinematic-skip" onClick={() => runtime.current?.skipCinematic()}>跳过 <kbd>Esc</kbd></button>}
-        <div className="world-direction">纹彩院 <span aria-hidden="true">↖</span><small>沿路前行，左转入院</small></div>
-        {ready && snapshot.nearby && <button type="button" className="world-discovery world-primary" data-testid="world-interact" onClick={startInteraction}>{snapshot.nearby === 'caisson' ? '抬头看看' : '试看九色鹿故事'}<kbd>F</kbd></button>}
+        <div className="world-direction">{musicPreview?(snapshot.checkpoint.position.x>8?'飞天壁画':'乐舞馆'):'纹彩院'} <span aria-hidden="true">{musicPreview?'↗':'↖'}</span><small>{musicPreview?(snapshot.checkpoint.position.x>8?'前庭右侧，走近后按 F 观察':snapshot.checkpoint.position.x< -2&&snapshot.checkpoint.position.z<3?'从院门返回岔路，沿石板支路前行':'沿石板支路，前往右侧馆舍'):'沿路前行，左转入院'}</small></div>
+        {ready && snapshot.nearby && <button type="button" className="world-discovery world-primary" data-testid="world-interact" onClick={startInteraction}>{snapshot.nearby === 'caisson' ? '抬头看看' : snapshot.nearby === 'flying' ? snapshot.flying?.awakened ? '再看飞天壁画' : '唤醒飞天壁画' : '试看九色鹿故事'}<kbd>F</kbd></button>}
         <div className="world-controls"><p className="world-keyboard-hint"><kbd>W A S D</kbd> 行走　<kbd>Shift</kbd> 跑步　<kbd>Q / E</kbd> 转镜头</p><div className="world-camera-controls"><button type="button" aria-label="镜头向左" onClick={() => runtime.current?.turnCamera(-.12)}>↶</button><button type="button" aria-label="镜头向右" onClick={() => runtime.current?.turnCamera(.12)}>↷</button></div></div>
         <div className="world-joystick" role="group" aria-label="拖动摇杆行走" data-sound="none"
           onPointerDown={e => { if (locked) return; pointer.current = e.pointerId; e.currentTarget.setPointerCapture(e.pointerId); changeStick(e); }} onPointerMove={changeStick} onPointerUp={releaseStick} onPointerCancel={releaseStick} onLostPointerCapture={releaseStick}>
           <span style={{ transform: `translate(${stick.x * 30}px, ${stick.y * 30}px)` }} /><small>拖动行走</small>
         </div>
       </>}
+      {view === 'flying' && <WorldFlyingObservation state={snapshot.flying} paused={event.mode === 'observing' && event.paused} onPause={() => dispatch({type:event.mode === 'observing' && event.paused?'resume':'pause'})} onReplay={() => {runtime.current?.replayObservation();dispatch({type:'resume'});}} onClose={finishEvent} />}
       {view === 'caisson' && <section className="world-observation" data-testid="world-observation" aria-label="藻井观察"><p>纹彩院 · 藻井厅</p><h2>抬头，发现头顶的纹样</h2><p>观察藻井的层次、纹样与色彩。AI教学示意，非洞窟复原。</p><div><button type="button" className="world-primary" data-testid="world-enter-theme" onClick={goToPatterns}>了解藻井的秘密</button><button type="button" onClick={finishEvent}>继续漫游</button><button type="button" onClick={() => dispatch({ type: event.mode === 'observing' && event.paused ? 'resume' : 'pause' })}>{event.mode === 'observing' && event.paused ? '继续镜头' : '暂停镜头'}</button></div></section>}
     </div>
     {props.saveWarning && <div className="world-save-warning" role="status"><p>{props.saveWarning}</p><button type="button" onClick={persist}>重试保存</button></div>}
