@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+<title>bg-landscape · 占位素材 / 非正式美术</title>
+<desc>Agent 创建的几何技术占位，仅供布局和交互验证；不是正式敦煌美术或文物复原。</desc>
+<defs><pattern id="grid" width="80" height="80" patternUnits="userSpaceOnUse"><path d="M80 0H0V80" fill="none" stroke="#bba57b" stroke-opacity=".12" stroke-width="1"/></pattern></defs>
+<rect width="1600" height="900" fill="#f3ecde"/><rect width="1600" height="900" fill="url(#grid)"/>
+<path d="M0 780Q560.0 680 1040.0 800T1600 730" fill="none" stroke="#417479" stroke-opacity=".08" stroke-width="80"/>
+<text x="1548" y="862" text-anchor="end" fill="#514a42" opacity=".25" font-size="20" font-family="sans-serif">占位素材 · 非正式美术</text>
+</svg>
