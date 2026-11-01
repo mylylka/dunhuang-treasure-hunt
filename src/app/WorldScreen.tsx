@@ -22,6 +22,7 @@ interface Props {
 }
 
 export default function WorldScreen(props: Props) {
+  const flyingVoicePreview=document.getElementById('root')?.dataset.flyingVoice==='v001';
   const musicVersion = document.getElementById('root')?.dataset.musicPavilion;
   const musicV3=musicVersion==='v003';
   const musicV2=musicVersion==='v002'||musicV3;
@@ -77,7 +78,7 @@ export default function WorldScreen(props: Props) {
     void import('../world/runtime').then(({ createWorldRuntime }) => {
       if (disposed || !host.current) return;
       instance = createWorldRuntime(host.current, {
-        musicPavilion: musicPreview, musicVersion: musicV3?'v003':musicV2?'v002':'v001', sound: callbacks.current.sound, initial: checkpoint.current, reducedMotion: callbacks.current.reducedMotion || window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+        flyingVoice: flyingVoicePreview, musicPavilion: musicPreview, musicVersion: musicV3?'v003':musicV2?'v002':'v001', sound: callbacks.current.sound, initial: checkpoint.current, reducedMotion: callbacks.current.reducedMotion || window.matchMedia('(prefers-reduced-motion: reduce)').matches,
         ...(cinematicPreview ? { cinematics: {
           seen: (() => { try { return loadCinematicSeen(window.sessionStorage); } catch { return { opening: false, hall: false }; } })(),
           onSeen: (seen: { opening: boolean; hall: boolean }) => { try { saveCinematicSeen(window.sessionStorage, seen); } catch { /* Browser storage access can itself be denied. */ } },
@@ -205,7 +206,7 @@ export default function WorldScreen(props: Props) {
           <span style={{ transform: `translate(${stick.x * 30}px, ${stick.y * 30}px)` }} /><small>拖动行走</small>
         </div>
       </>}
-      {view === 'flying' && <WorldFlyingObservation state={snapshot.flying} paused={event.mode === 'observing' && event.paused} onPause={() => dispatch({type:event.mode === 'observing' && event.paused?'resume':'pause'})} onReplay={() => {runtime.current?.replayObservation();dispatch({type:'resume'});}} onClose={finishEvent} />}
+      {view === 'flying' && <WorldFlyingObservation voice={snapshot.flyingVoice} onRetryVoice={() => runtime.current?.retryVoice?.()} state={snapshot.flying} paused={event.mode === 'observing' && event.paused} onPause={() => dispatch({type:event.mode === 'observing' && event.paused?'resume':'pause'})} onReplay={() => {runtime.current?.replayObservation();dispatch({type:'resume'});}} onClose={finishEvent} />}
       {view === 'caisson' && <section className="world-observation" data-testid="world-observation" aria-label="藻井观察"><p>纹彩院 · 藻井厅</p><h2>抬头，发现头顶的纹样</h2><p>观察藻井的层次、纹样与色彩。AI教学示意，非洞窟复原。</p><div><button type="button" className="world-primary" data-testid="world-enter-theme" onClick={goToPatterns}>了解藻井的秘密</button><button type="button" onClick={finishEvent}>继续漫游</button><button type="button" onClick={() => dispatch({ type: event.mode === 'observing' && event.paused ? 'resume' : 'pause' })}>{event.mode === 'observing' && event.paused ? '继续镜头' : '暂停镜头'}</button></div></section>}
     </div>
     {musicV2 && snapshot.musicAudio?.status==='error' && <aside className="world-audio-warning" role="status">乐声暂未加载。<button type="button" onClick={()=>runtime.current?.retrySound?.()}>重试乐声</button></aside>}

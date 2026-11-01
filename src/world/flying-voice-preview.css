@@ -1,0 +1,14 @@
+.world-flying-observation.has-dialogue{align-items:center;gap:24px}
+.flying-dialogue{min-width:0;max-width:760px}
+.flying-speaker{font:18px/1.4 var(--serif);color:#8b4e37;margin-bottom:5px}
+.flying-subtitle{font:19px/1.65 var(--serif);color:#443527;text-wrap:pretty;margin:0}
+.flying-voice-note{font-size:11px;line-height:1.5;color:#816c56;margin-top:6px}
+.flying-voice-note button{font-size:12px;padding:2px 8px;min-height:30px;margin-left:4px}
+@media(max-height:600px){
+  .world-flying-observation.has-dialogue{left:12px;right:12px;bottom:8px;padding:8px 12px;gap:12px}
+  .flying-speaker{font-size:14px;margin-bottom:2px}
+  .flying-subtitle{font-size:15px;line-height:1.5}
+  .flying-voice-note{font-size:10px;margin-top:3px}
+  .has-dialogue .flying-actions{flex-wrap:nowrap;justify-content:flex-end}
+  .has-dialogue .flying-actions button{padding:7px 8px}
+}

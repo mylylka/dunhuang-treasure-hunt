@@ -1,3 +1,4 @@
+import { FLYING_VOICE_SESSION_KEY } from '../content/world/flying-dialogue';
 import { MUSIC_SESSION_OPTIONS_V2 } from '../world/music-pavilion-rules-v002';
 import { MUSIC_SESSION_OPTIONS_V3 } from '../world/music-pavilion-rules-v003';
 import { lazy, Suspense, useCallback, useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
@@ -81,7 +82,7 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
   const commandSequence = useRef(0);
   const completedThisRun = useRef(false);
   const mainRef = useRef<HTMLElement>(null);
-  const [worldSessionOptions] = useState(() => document.getElementById('root')?.dataset.musicPavilion === 'v003' ? MUSIC_SESSION_OPTIONS_V3 : document.getElementById('root')?.dataset.musicPavilion === 'v002' ? MUSIC_SESSION_OPTIONS_V2 : document.getElementById('root')?.dataset.musicPavilion === 'v001'
+  const [worldSessionOptions] = useState(() => document.getElementById('root')?.dataset.flyingVoice === 'v001' ? { ...MUSIC_SESSION_OPTIONS_V3, key: FLYING_VOICE_SESSION_KEY } : document.getElementById('root')?.dataset.musicPavilion === 'v003' ? MUSIC_SESSION_OPTIONS_V3 : document.getElementById('root')?.dataset.musicPavilion === 'v002' ? MUSIC_SESSION_OPTIONS_V2 : document.getElementById('root')?.dataset.musicPavilion === 'v001'
     ? { key: MUSIC_SESSION_KEY, colliders: MUSIC_PLAYER_COLLIDERS } : {});
   const [initialWorld] = useState(() => loadWorldSession(undefined, worldSessionOptions));
   const worldCheckpoint = useRef(initialWorld.data);
