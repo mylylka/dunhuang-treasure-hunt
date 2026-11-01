@@ -16,6 +16,7 @@ export function WorldFlyingObservation({state,voice,onRetryVoice,paused,onPause,
       <p className="flying-speaker">{flyingDialogue.speaker}</p>
       <p className="flying-subtitle" data-testid="flying-subtitle">{flyingDialogue.text}</p>
       {voice.status==='missing' && <p className="flying-voice-note" role="status">字幕预览 · 神女配音待接入</p>}
+      {(voice.status==='loading'||voice.status==='ready') && <p className="flying-voice-note">{flyingDialogue.voiceLabel}</p>}
       {(voice.status==='error'||voice.status==='blocked') && <p className="flying-voice-note" role="status">{voice.status==='blocked'?'点击即可播放飞天语音。':'语音暂未加载，可继续阅读字幕。'} <button type="button" onClick={onRetryVoice}>重试语音</button></p>}
     </div> : <div className="flying-caption"><p>乐舞馆 · 飞天壁画</p><h2>{state?.complete?'让视线跟随飘带':'壁画的色彩正在浮现'}</h2>
       <p>看看人物的姿态、手中的乐器，以及飘带的方向。<span>AI教学示意</span></p></div>}

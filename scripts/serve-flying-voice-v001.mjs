@@ -24,7 +24,21 @@ const server = http.createServer(async (request, response) => {
       const source = resolve(publicRoot, `.${pathname}`);
       if (!source.startsWith(`${publicRoot}${sep}`)) throw error;
       bytes = await readFile(source);
-    } response.writeHead(200, { 'Content-Type': mime[extname(file)] ?? 'application/octet-stream' }); response.end(bytes);
+    }
+    const headers = { 'Content-Type': mime[extname(file)] ?? 'application/octet-stream', 'Accept-Ranges': 'bytes' };
+    // Safari requests byte ranges to establish audio duration and seek on replay.
+    // A chunked-only response makes a finite MP3 look like an unseekable stream.
+    if (request.headers.range) {
+      const match = /^bytes=(\d*)-(\d*)$/.exec(request.headers.range);
+      const start = match?.[1] ? Number(match[1]) : Math.max(0, bytes.length - Number(match?.[2]));
+      const end = match?.[1] && match?.[2] ? Math.min(bytes.length - 1, Number(match[2])) : bytes.length - 1;
+      if (!match || (!match[1] && !match[2]) || !Number.isSafeInteger(start) || !Number.isSafeInteger(end) || start > end || start >= bytes.length) {
+        response.writeHead(416, { ...headers, 'Content-Range': `bytes */${bytes.length}`, 'Content-Length': 0 }); response.end(); return;
+      }
+      response.writeHead(206, { ...headers, 'Content-Range': `bytes ${start}-${end}/${bytes.length}`, 'Content-Length': end - start + 1 });
+      response.end(request.method === 'HEAD' ? undefined : bytes.subarray(start, end + 1)); return;
+    }
+    response.writeHead(200, { ...headers, 'Content-Length': bytes.length }); response.end(request.method === 'HEAD' ? undefined : bytes);
   } catch { response.writeHead(404); response.end('Preview file not found'); }
 });
 server.on('error', async error => {

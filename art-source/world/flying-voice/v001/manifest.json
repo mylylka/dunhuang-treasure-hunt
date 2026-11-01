@@ -1,0 +1,41 @@
+{
+  "id": "flying-question-native-v001",
+  "status": "local-voice-audition-not-final",
+  "authorization": "User explicitly selected local female voice audition on 2026-11-01.",
+  "source": "macOS built-in say / installed Tingting zh_CN voice",
+  "scriptSource": "User product plan, section 5.6 飞天提问",
+  "text": "我没有翅膀，却能在天空中自由飞翔。你知道画师是怎样让我看起来像在飞吗？",
+  "voice": "Tingting",
+  "rate": 165,
+  "processing": "Integrated loudness target -18 LUFS; true peak limit -2 dBTP; mono MP3, no reverb or pitch change.",
+  "audio": "public/assets/world/flying-voice/v001/flying-question-native.mp3",
+  "probe": {
+    "programs": [],
+    "stream_groups": [],
+    "streams": [
+      {
+        "codec_name": "mp3",
+        "sample_rate": "44100",
+        "channels": 1
+      }
+    ],
+    "format": {
+      "duration": "7.810612",
+      "size": "125430"
+    }
+  },
+  "files": {
+    "art-source/world/flying-voice/v001/dialogue.txt": {
+      "bytes": 106,
+      "sha256": "da110d936ddd6a543181188c0145b0f869f1d4ed08fa821d5b0380ca5accf3ec"
+    },
+    "art-source/world/flying-voice/v001/flying-question-native.aiff": {
+      "bytes": 346284,
+      "sha256": "572f1af3d9a5a4de738c2dd6d8176b350e03f120d996b252a6921a02c4690e4f"
+    },
+    "public/assets/world/flying-voice/v001/flying-question-native.mp3": {
+      "bytes": 125430,
+      "sha256": "2f1ed658e2f226e508d06041d482858dd61eb43f92a9a2a20b3eb7afecac0839"
+    }
+  }
+}
