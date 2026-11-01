@@ -1,4 +1,4 @@
-import { createMusicEncounters } from './music-encounters';
+import { createMusicEncounters, nearMuralSteps } from './music-encounters';
 import { musicEncounters } from '../content/world/music-encounters';
 import { registerSpeechSkip } from '../services/speech-skip';
 import { MUSIC_PLAYER_COLLIDERS_V4, MUSIC_LAYOUT_V4, nearFlyingMuralV4, musicSurfaceHeightV4, inMusicCourtV4 } from './music-pavilion-rules-v004';
@@ -31,7 +31,8 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   let view: WorldView = 'follow';
   let reduced = options.reducedMotion;
   const musicPreview=!!options.musicPavilion;
-  const musicV5=musicPreview&&options.musicVersion==='v005';
+  const musicV6=musicPreview&&options.musicVersion==='v006';
+  const musicV5=musicPreview&&(options.musicVersion==='v005'||musicV6);
   const musicV4=musicPreview&&(options.musicVersion==='v004'||musicV5);
   const musicV3=musicPreview&&options.musicVersion==='v003';
   const musicV2=musicPreview&&(options.musicVersion==='v002'||musicV3||musicV4);
@@ -40,7 +41,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   const bounds=musicV4?MUSIC_LAYOUT_V4.bounds:musicV3?MUSIC_LAYOUT_V3.bounds:musicV2?MUSIC_LAYOUT_V2.bounds:undefined;
   const regionColliders=musicV4?MUSIC_PLAYER_COLLIDERS_V4:musicV3?MUSIC_PLAYER_COLLIDERS_V3:musicV2?MUSIC_PLAYER_COLLIDERS_V2:MUSIC_PLAYER_COLLIDERS;
   const flyingPose=musicV4?flyingCameraPoseV4:musicV3?flyingCameraPoseV3:musicV2?flyingCameraPoseV2:flyingCameraPose;
-  const nearMural=musicV4?nearFlyingMuralV4:musicV2?nearFlyingMuralV2:nearFlyingMural;
+  const nearMural=musicV6?nearMuralSteps:musicV4?nearFlyingMuralV4:musicV2?nearFlyingMuralV2:nearFlyingMural;
   const cameraSpace=musicPreview?(musicV4?musicCameraSpaceV4():musicV3?musicCameraSpaceV3():musicV2?musicCameraSpaceV2():musicCameraSpace()):undefined;
   const heightAt=(p: {x:number;z:number})=>surfaceHeight(p)+(musicPreview?(musicV4?musicSurfaceHeightV4:musicV2?musicSurfaceHeightV2:musicSurfaceHeight)(p):0);
   const followPose=(x:number,y:number,z:number,yaw:number)=>followCameraPose(x,y,z,yaw,cameraSpace);
@@ -48,7 +49,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   let moving = false;
   let raf = 0;
   let previousTime = 0;
-  let elapsed = 0;
+  let elapsed = 0, observationTime=0;
   let lastEmit = -Infinity;
   let poseSettled = false;
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: 'high-performance' });
@@ -84,7 +85,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   input.setEnabled(false);
   container.appendChild(canvas);
   const audio=musicV2?createMusicArrivalAudio(options.sound??defaultSoundPreferences(),musicV4?MUSIC_LAYOUT_V4.audio:undefined):null;
-  const encounters=musicV5?createMusicEncounters(checkpoint.position):null;
+  const encounters=musicV5?createMusicEncounters(checkpoint.position,musicV6):null;
   const encounterVoices=musicV5?{
     music:createFlyingVoice(new Audio(worldAssetUrl(musicEncounters.music.audioPath)),options.sound??defaultSoundPreferences()),
     mural:createFlyingVoice(new Audio(worldAssetUrl(musicEncounters.mural.audioPath)),options.sound??defaultSoundPreferences()),
@@ -115,7 +116,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     const location = p.x < -2 && p.x > -22 && p.z < 2 && p.z > -24
       ? p.z < -12.3 ? '藻井观赏厅' : '纹彩院'
       : musicPreview && (musicV4?inMusicCourtV4(p):musicV3?inMusicCourtV3(p):musicV2?inMusicCourtV2(p):p.x>8 && p.x<28 && p.z< -2 && p.z> -23) ? '乐舞馆' : p.z < -25 ? '洞窟远景 · 待制作' : !musicPreview && p.x > 10 && p.z < -8 ? '乐舞馆远景 · 待制作' : '沙漠道路';
-    return { checkpoint: { ...checkpoint, position: { ...p }, visitedEvents: [...checkpoint.visitedEvents] }, nearby: nearestDiscovery(), location, moving, encounter:encounters?.state, encounterVoice:currentEncounterVoice()?.inspect(), cinematic: director?.state ?? null, flying: world.music?.inspect(), musicAudio: audio?.inspect(), flyingVoice: voice?.inspect() };
+    return { checkpoint: { ...checkpoint, position: { ...p }, visitedEvents: [...checkpoint.visitedEvents] }, nearby: nearestDiscovery(), location, moving, observationTime, encounter:encounters?.state, encounterVoice:currentEncounterVoice()?.inspect(), cinematic: director?.state ?? null, flying: world.music?.inspect(), musicAudio: audio?.inspect(), flyingVoice: voice?.inspect() };
   }
   function emit() { options.onSnapshot(snapshot()); }
   function updateTraveler(speed: number) {
@@ -156,7 +157,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     raf = 0;
     if (!canAnimate()) return;
     const dt = previousTime ? Math.min((time - previousTime) / 1000, .05) : 0;
-    previousTime = time; elapsed += dt;
+    previousTime = time; elapsed += dt; if(view!=='follow')observationTime+=dt;
     const wasMoving = moving;
     let speed = 0;
     if (view === 'follow' && !encounters?.state) {
@@ -179,7 +180,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     } else moving = false;
     if(encounters && view==='follow'){
       const before=encounters.state, speech=currentEncounterVoice()?.inspect();
-      const done=!speech||speech.ended||speech.status==='missing'||speech.status==='error'||speech.status==='blocked';
+      const done=musicV6?!!speech?.ended:!speech||speech.ended||speech.status==='missing'||speech.status==='error'||speech.status==='blocked';
       encounters.update(checkpoint.position,dt,done);
       const after=encounters.state;
       if(after&&!before){
@@ -235,7 +236,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     render();
     if (time - lastEmit > 100 || moving !== wasMoving) { lastEmit = time; emit(); }
     // Caisson is static once the observation camera arrives; avoid wasteful idle renders.
-    if (!(view === 'caisson' && poseSettled)) schedule();
+    if (!(view === 'caisson' && poseSettled && observationTime>3.2)) schedule();
   }
   function resize() {
     if (disposed) return;
@@ -306,7 +307,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
       const exitingFlying = view === 'flying';
       if(exitingFlying) {world.music?.exit();voice?.exit();audio?.setDucked(false);}
       if(next==='flying') { world.music?.update(0,reduced); world.music?.enter(); voice?.enter(); const pose=flyingPose(camera.aspect);camera.position.copy(pose.position);cameraTarget.copy(pose.target);camera.lookAt(cameraTarget); }
-      view = next; blockEncounterVoices(paused||document.hidden||view!=='follow'); travelCamera?.reset(); voice?.setBlocked(paused||document.hidden||view!=='flying'); audio?.setBlocked(paused||document.hidden||view==='story'); if(next==='follow' && exitingFlying) restoreFollow(); input.setEnabled(loaded && !paused && view === 'follow' && !encounters?.state); moving = false; poseSettled = false; previousTime = 0;
+      view = next; observationTime=0; blockEncounterVoices(paused||document.hidden||view!=='follow'); travelCamera?.reset(); voice?.setBlocked(paused||document.hidden||view!=='flying'); audio?.setBlocked(paused||document.hidden||view==='story'); if(next==='follow' && exitingFlying) restoreFollow(); input.setEnabled(loaded && !paused && view === 'follow' && !encounters?.state); moving = false; poseSettled = false; previousTime = 0;
       if (view === 'story') { stop(); updateTraveler(0); render(); }
       else schedule();
       emit();

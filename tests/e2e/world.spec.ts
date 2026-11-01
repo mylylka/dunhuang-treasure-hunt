@@ -115,12 +115,15 @@ test('靠近只提示，藻井观察进入教学后释放世界并安全返回',
   await page.goto('/#/');
   await ready(page);
   await expect(page.getByTestId('world-interact')).toBeVisible();
-  await expect(page.getByTestId('world-observation')).toHaveCount(0);
+  await expect(page.getByTestId('world-screen')).toHaveAttribute('data-view', 'follow');
   await page.getByTestId('world-interact').click();
-  await expect(page.getByTestId('world-observation')).toBeVisible();
+  await expect(page.getByTestId('world-screen')).toHaveAttribute('data-view', 'caisson');
+  await expect(page.locator('.world-subtitle')).toHaveCount(0);
   const still = await position(page);
   await hold(page, 'w', 350);
   expect(await position(page)).toEqual(still);
+  await expect(page.getByTestId('world-culture-choice')).toBeVisible();
+  await expect(page.getByTestId('world-culture-choice').getByRole('button')).toHaveCount(2);
   await page.getByTestId('world-enter-theme').click();
   await expect(page).toHaveURL(/#\/theme\/patterns$/);
   await expect(page.getByTestId('teaching-screen')).toBeVisible();
@@ -131,11 +134,11 @@ test('靠近只提示，藻井观察进入教学后释放世界并安全返回',
   const restored = await position(page);
   expect(restored.x).toBeCloseTo(-12, 1);
   expect(restored.z).toBeCloseTo(-13, 1);
-  await expect(page.getByTestId('world-observation')).toHaveCount(0);
+  await expect(page.getByTestId('world-screen')).toHaveAttribute('data-view', 'follow');
   await page.reload();
   await ready(page);
   expect(await position(page)).toEqual(restored);
-  await expect(page.getByTestId('world-observation')).toHaveCount(0);
+  await expect(page.getByTestId('world-screen')).toHaveAttribute('data-view', 'follow');
   await fits(page);
 });
 

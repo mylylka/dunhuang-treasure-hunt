@@ -23,7 +23,7 @@ export interface ArtSampleSceneOptions {
   presentationClips?: boolean;
   sampleNature?: boolean;
   musicPavilion?: boolean;
-  musicVersion?: 'v001' | 'v002' | 'v003' | 'v004' | 'v005';
+  musicVersion?: 'v001' | 'v002' | 'v003' | 'v004' | 'v005' | 'v006';
   flyingAwakened?: boolean;
 }
 export interface ArtSampleScene extends GrayboxScene {
@@ -63,7 +63,7 @@ function releaseModel(model: THREE.Object3D) {
 }
 
 export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSampleScene {
-  const v5=options.musicVersion==='v005',v4=options.musicVersion==='v004'||v5,v3=options.musicVersion==='v003',v2=options.musicVersion==='v002'||v3||v4;
+  const v5=options.musicVersion==='v005'||options.musicVersion==='v006',v4=options.musicVersion==='v004'||v5,v3=options.musicVersion==='v003',v2=options.musicVersion==='v002'||v3||v4;
   const environment = createGrayboxScene({ artSample: true, musicPreview: options.musicPavilion, extendedMusic: v2 });
   const music = options.musicPavilion ? (v5?createMusicPavilionV5:v4?createMusicPavilionV4:v3?createMusicPavilionV3:v2?createMusicPavilionV2:createMusicPavilion)(environment.scene, !!options.flyingAwakened) : null;
   const regionLayout=v4?MUSIC_LAYOUT_V4:v3?MUSIC_LAYOUT_V3:v2?MUSIC_LAYOUT_V2:MUSIC_LAYOUT;

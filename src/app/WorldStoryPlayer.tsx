@@ -1,12 +1,13 @@
+import { WorldSubtitle } from './WorldSubtitle';
 import { registerSpeechSkip } from '../services/speech-skip';
 import { useEffect, useRef, useState } from 'react';
 import { worldStoryPreview } from '../content/world/stories';
 import type { SoundPreferences } from '../services/sound-settings';
 
-interface Props { paused: boolean; blocked?: boolean; sound: SoundPreferences; onClose(): void; onPause(paused: boolean): void }
+interface Props { paused: boolean; blocked?: boolean; sound: SoundPreferences; onClose(): void; onComplete():void; onPause(paused: boolean): void }
 
 /** The scene behind this overlay is frozen by WorldScreen. Images keep their original ratio. */
-export function WorldStoryPlayer({ paused, blocked = false, sound, onClose, onPause }: Props) {
+export function WorldStoryPlayer({ paused, blocked = false, sound, onClose, onComplete, onPause }: Props) {
   const [index, setIndex] = useState(-1);
   const [elapsed, setElapsed] = useState(0);
   const [replay, setReplay] = useState(0);
@@ -55,7 +56,7 @@ export function WorldStoryPlayer({ paused, blocked = false, sound, onClose, onPa
   skipRef.current=()=>{
     if(!segment||blocked||paused)return false;
     audioRef.current?.pause();
-    if(index<worldStoryPreview.segments.length-1)move(index+1);else onClose();
+    if(index<worldStoryPreview.segments.length-1)move(index+1);else onComplete();
     return true;
   };
   useEffect(()=>registerSpeechSkip(()=>skipRef.current()),[]);
@@ -76,18 +77,16 @@ export function WorldStoryPlayer({ paused, blocked = false, sound, onClose, onPa
       <img key={`${artwork.url}-${replay}`} src={artwork.url} alt={artwork.alt} onError={() => setImageError(true)} />
       {imageError && <div className="world-media-error" role="alert"><p>画面暂未加载，仍可阅读故事。</p><button type="button" onClick={() => setReplay(value => value + 1)}>重试图片</button></div>}
     </figure>
-    <div className="world-story-caption" data-testid="world-story-step" data-index={index} aria-live="polite">
-      <h3>{segment ? `${String(index + 1).padStart(2, '0')}　${segment.title}` : '先看完整长卷'}</h3>
-      <p>{segment?.text ?? worldStoryPreview.subtitle}</p>
-      {audioError && <p className="world-audio-note" role="status">旁白暂不可用，可读字幕并手动翻页。</p>}
-    </div>
+    <div hidden data-testid="world-story-step" data-index={index}/>
+    {segment&&!blocked&&<WorldSubtitle text={segment.text} onSkip={()=>skipRef.current()}/>}
+    {audioError&&!blocked&&<div className="world-speech-error" role="status">旁白暂不可用，可按空格继续。</div>}
     <footer className="world-story-controls">
       {segment ? <>
         <button type="button" disabled={index === 0} onClick={() => move(index - 1)}>上一段</button>
         <button type="button" onClick={() => onPause(!paused)}>{paused ? '继续播放' : '暂停'}</button>
         <button type="button" onClick={() => { setReplay(value => value + 1); onPause(false); }}>重播</button>
         <div className="world-story-progress" aria-label={`第${index + 1}段，共2段`}><span>{index + 1} / 2 · 空格跳过当前段</span><progress value={elapsed} max={readingDuration} /></div>
-        {index < worldStoryPreview.segments.length - 1 ? <button type="button" className="world-primary" onClick={() => move(index + 1)}>下一段</button> : <button type="button" className="world-primary" onClick={onClose}>结束预览</button>}
+        {index < worldStoryPreview.segments.length - 1 ? <button type="button" className="world-primary" onClick={() => move(index + 1)}>下一段</button> : <button type="button" className="world-primary" onClick={onComplete}>结束预览</button>}
       </> : <button type="button" className="world-primary" data-testid="world-story-start" onClick={() => move(0)}>开始两段预览</button>}
     </footer>
   </section>;

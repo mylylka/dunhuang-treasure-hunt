@@ -14,6 +14,7 @@ export interface WorldSnapshot {
   nearby: DiscoveryId | null;
   location: string;
   moving: boolean;
+  observationTime?:number;
   encounter?: import('./music-encounters').MusicEncounterState | null;
   encounterVoice?: import('./flying-voice').FlyingVoiceState;
   cinematic?: import('./character-cinematics').CinematicState | null;
@@ -49,7 +50,7 @@ export interface WorldRuntimeOptions {
   onError(message: string): void;
   onReady?(): void;
   musicPavilion?: boolean;
-  musicVersion?: 'v001' | 'v002' | 'v003' | 'v004' | 'v005';
+  musicVersion?: 'v001' | 'v002' | 'v003' | 'v004' | 'v005' | 'v006';
   flyingVoice?: boolean;
   sound?: import('../services/sound-settings').SoundPreferences;
   cinematics?: { seen: import('./character-cinematics').CinematicSeen; onSeen(seen: import('./character-cinematics').CinematicSeen): void };
