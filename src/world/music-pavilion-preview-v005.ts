@@ -20,6 +20,6 @@ if(view&&views[view]){
   query.delete('view');history.replaceState(null,'',`${location.pathname}${query.size?`?${query}`:''}${location.hash}`);
 }
 const links=document.createElement('nav');links.className='music-review-tools';links.setAttribute('aria-label','乐舞馆样片复看');
-links.innerHTML='<a href="?view=start#/">从开场试玩</a><a href="?view=courtyard#/">从纹彩院出发</a><a href="?view=approach#/">看院内铺地</a><a href="?view=music-road#/">听见乐声</a><a href="?view=mural#/">到壁画前</a>';
+links.innerHTML='<a href="?view=start#/">从开场试玩</a><a href="?view=courtyard#/">从纹彩院出发</a><a href="?view=courtyard-wide#/">看院内铺地</a><a href="?view=music-road#/">听见乐声</a><a href="?view=mural#/">到壁画前</a>';
 document.body.appendChild(links);
 void import('../main');
