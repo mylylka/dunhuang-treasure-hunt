@@ -25,7 +25,8 @@ interface Props {
 export default function WorldScreen(props: Props) {
   const flyingVoicePreview=document.getElementById('root')?.dataset.flyingVoice==='v001';
   const musicVersion = document.getElementById('root')?.dataset.musicPavilion;
-  const musicV4=musicVersion==='v004';
+  const musicV5=musicVersion==='v005';
+  const musicV4=musicVersion==='v004'||musicV5;
   const inCurrentMusicCourt=musicV4?inMusicCourtV4:inMusicCourtV2;
   const musicV3=musicVersion==='v003';
   const musicV2=musicVersion==='v002'||musicV3||musicV4;
@@ -81,7 +82,7 @@ export default function WorldScreen(props: Props) {
     void import('../world/runtime').then(({ createWorldRuntime }) => {
       if (disposed || !host.current) return;
       instance = createWorldRuntime(host.current, {
-        flyingVoice: flyingVoicePreview, musicPavilion: musicPreview, musicVersion: musicV4?'v004':musicV3?'v003':musicV2?'v002':'v001', sound: callbacks.current.sound, initial: checkpoint.current, reducedMotion: callbacks.current.reducedMotion || window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+        flyingVoice: flyingVoicePreview, musicPavilion: musicPreview, musicVersion: musicV5?'v005':musicV4?'v004':musicV3?'v003':musicV2?'v002':'v001', sound: callbacks.current.sound, initial: checkpoint.current, reducedMotion: callbacks.current.reducedMotion || window.matchMedia('(prefers-reduced-motion: reduce)').matches,
         ...(cinematicPreview ? { cinematics: {
           seen: (() => { try { return loadCinematicSeen(window.sessionStorage); } catch { return { opening: false, hall: false }; } })(),
           onSeen: (seen: { opening: boolean; hall: boolean }) => { try { saveCinematicSeen(window.sessionStorage, seen); } catch { /* Browser storage access can itself be denied. */ } },
@@ -200,6 +201,7 @@ export default function WorldScreen(props: Props) {
       </header>
       {showMap && (musicV2 ? <WorldMusicRouteMap position={snapshot.checkpoint.position} version={musicV4?'v004':musicV3?'v003':'v002'}/> : <aside className="world-map" aria-label="探索路线图"><h2>{musicPreview?'纹彩院 · 乐舞馆':'沿路进入纹彩院'}</h2><svg viewBox="0 0 160 150" role="img" aria-label={musicPreview?'左侧纹彩院，右侧乐舞馆，由石板路连接':'左侧纹彩院，庭院右侧故事测试点；远方两处场景筹备中'}><path d="M36.5 89.6H16.2V16.8H74.2V89.6H53.9" fill="none" stroke="#ab7660" strokeWidth="2"/><polyline points={COURTYARD_ROAD.filter(({ center }) => center.z <= 18).map(({ center }) => `${80 + center.x * 2.9},${84 + center.z * 2.8}`).join(' ')} fill="none" stroke="#bc9a68" strokeWidth="5" /><rect x="22" y="12" width="46" height="34" fill="#ab7660"/><text x="45" y="8" textAnchor="middle">纹彩院</text>{musicPreview?<><polyline points={MUSIC_ROAD.map(({center})=>`${80+center.x*2.9},${84+center.z*2.8}`).join(' ')} fill="none" stroke="#bc9a68" strokeWidth="5"/><rect x="109" y="22" width="46" height="30" fill="#77958a"/><text x="132" y="18" textAnchor="middle">乐舞馆</text></>:<><circle cx="65" cy="65" r="5" fill="#4b7973"/><text x="80" y="65">故事测试点</text></>}<circle cx={80 + snapshot.checkpoint.position.x * 2.9} cy={84 + snapshot.checkpoint.position.z * 2.8} r="4" fill="#a13d2e" stroke="white" strokeWidth="2"/></svg><p>{musicPreview?'沿石板支路前往乐舞馆；洞窟后续开放。':'乐舞馆、洞窟在后续阶段开放'}</p></aside>)}
       {view === 'follow' && <>
+        {snapshot.encounter && snapshot.encounter.time>=(snapshot.encounter.id==='music'?.35:.1) && <aside className="world-encounter" data-testid="world-encounter" aria-live="polite"><div><p>{snapshot.encounter.text}</p><small>本机语音试听{snapshot.encounterVoice?.status==='blocked'||snapshot.encounterVoice?.status==='error'?<> · 语音暂不可用 <button type="button" onClick={()=>runtime.current?.retryEncounter?.()}>重试语音</button></>:null}</small></div><button type="button" data-testid="encounter-skip" onClick={()=>runtime.current?.skipEncounter?.()}>跳过 <kbd>空格</kbd></button></aside>}
         {snapshot.cinematic && <button type="button" className="world-cinematic-skip" data-testid="world-cinematic-skip" onClick={() => runtime.current?.skipCinematic()}>跳过 <kbd>Esc</kbd></button>}
         <div className="world-direction">{musicV2?(inCurrentMusicCourt(snapshot.checkpoint.position)?'飞天壁画':snapshot.musicAudio?.playing&&snapshot.musicAudio.gain>.015?'乐声来处':'乐舞馆'):musicPreview?(snapshot.checkpoint.position.x>8?'飞天壁画':'乐舞馆'):'纹彩院'} <span aria-hidden="true">{musicV2?(snapshot.musicAudio?.playing&&snapshot.musicAudio.gain>.015?'♪':''):musicPreview?'↗':'↖'}</span><small>{musicV2?(inCurrentMusicCourt(snapshot.checkpoint.position)?'前庭右侧，走近后按 F 观察':'沿石板曲径前行'):musicPreview?(snapshot.checkpoint.position.x>8?'前庭右侧，走近后按 F 观察':snapshot.checkpoint.position.x< -2&&snapshot.checkpoint.position.z<3?'从院门返回岔路，沿石板支路前行':'沿石板支路，前往右侧馆舍'):'沿路前行，左转入院'}</small></div>
         {ready && snapshot.nearby && <button type="button" className="world-discovery world-primary" data-testid="world-interact" onClick={startInteraction}>{snapshot.nearby === 'caisson' ? '抬头看看' : snapshot.nearby === 'flying' ? snapshot.flying?.awakened && !musicV2 ? '再看飞天壁画' : '唤醒飞天壁画' : '试看九色鹿故事'}<kbd>F</kbd></button>}
@@ -209,7 +211,7 @@ export default function WorldScreen(props: Props) {
           <span style={{ transform: `translate(${stick.x * 30}px, ${stick.y * 30}px)` }} /><small>拖动行走</small>
         </div>
       </>}
-      {view === 'flying' && <WorldFlyingObservation voice={snapshot.flyingVoice} onRetryVoice={() => runtime.current?.retryVoice?.()} state={snapshot.flying} paused={event.mode === 'observing' && event.paused} onPause={() => dispatch({type:event.mode === 'observing' && event.paused?'resume':'pause'})} onReplay={() => {runtime.current?.replayObservation();dispatch({type:'resume'});}} onClose={finishEvent} />}
+      {view === 'flying' && <WorldFlyingObservation waitForColor={musicV5} onSkipVoice={()=>runtime.current?.skipVoice?.()} voice={snapshot.flyingVoice} onRetryVoice={() => runtime.current?.retryVoice?.()} state={snapshot.flying} paused={event.mode === 'observing' && event.paused} onPause={() => dispatch({type:event.mode === 'observing' && event.paused?'resume':'pause'})} onReplay={() => {runtime.current?.replayObservation();dispatch({type:'resume'});}} onClose={finishEvent} />}
       {view === 'caisson' && <section className="world-observation" data-testid="world-observation" aria-label="藻井观察"><p>纹彩院 · 藻井厅</p><h2>抬头，发现头顶的纹样</h2><p>观察藻井的层次、纹样与色彩。AI教学示意，非洞窟复原。</p><div><button type="button" className="world-primary" data-testid="world-enter-theme" onClick={goToPatterns}>了解藻井的秘密</button><button type="button" onClick={finishEvent}>继续漫游</button><button type="button" onClick={() => dispatch({ type: event.mode === 'observing' && event.paused ? 'resume' : 'pause' })}>{event.mode === 'observing' && event.paused ? '继续镜头' : '暂停镜头'}</button></div></section>}
     </div>
     {musicV2 && snapshot.musicAudio?.status==='error' && <aside className="world-audio-warning" role="status">乐声暂未加载。<button type="button" onClick={()=>runtime.current?.retrySound?.()}>重试乐声</button></aside>}

@@ -2,6 +2,8 @@ import type { WorldSnapshot } from '../world/types';
 import { flyingDialogue } from '../content/world/flying-dialogue';
 
 interface Props {
+  waitForColor?: boolean;
+  onSkipVoice?(): void;
   state: WorldSnapshot['flying'];
   voice?: WorldSnapshot['flyingVoice'];
   onRetryVoice?(): void;
@@ -10,11 +12,13 @@ interface Props {
   onReplay(): void;
   onClose(): void;
 }
-export function WorldFlyingObservation({state,voice,onRetryVoice,paused,onPause,onReplay,onClose}:Props) {
+export function WorldFlyingObservation({state,voice,waitForColor,onSkipVoice,onRetryVoice,paused,onPause,onReplay,onClose}:Props) {
+  const speaking=!!voice&&(!waitForColor||state?.complete)&&!voice.ended;
   return <section className={`world-flying-observation${voice?' has-dialogue':''}`} data-testid="world-flying-observation" aria-label="飞天壁画观察">
-    {voice ? <div className="flying-dialogue">
+    {speaking && voice ? <div className="flying-dialogue">
       <p className="flying-speaker">{flyingDialogue.speaker}</p>
       <p className="flying-subtitle" data-testid="flying-subtitle">{flyingDialogue.text}</p>
+      <button type="button" className="speech-skip-inline" data-testid="flying-skip-voice" disabled={paused} onClick={onSkipVoice}>跳过语音 <kbd>空格</kbd></button>
       {voice.status==='missing' && <p className="flying-voice-note" role="status">字幕预览 · 神女配音待接入</p>}
       {(voice.status==='loading'||voice.status==='ready') && <p className="flying-voice-note">{flyingDialogue.voiceLabel}</p>}
       {(voice.status==='error'||voice.status==='blocked') && <p className="flying-voice-note" role="status">{voice.status==='blocked'?'点击即可播放飞天语音。':'语音暂未加载，可继续阅读字幕。'} <button type="button" onClick={onRetryVoice}>重试语音</button></p>}

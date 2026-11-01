@@ -1,3 +1,6 @@
+import { createMusicEncounters } from './music-encounters';
+import { musicEncounters } from '../content/world/music-encounters';
+import { registerSpeechSkip } from '../services/speech-skip';
 import { MUSIC_PLAYER_COLLIDERS_V4, MUSIC_LAYOUT_V4, nearFlyingMuralV4, musicSurfaceHeightV4, inMusicCourtV4 } from './music-pavilion-rules-v004';
 import { musicCameraSpaceV4, flyingCameraPoseV4 } from './music-pavilion-v004';
 import { MUSIC_PLAYER_COLLIDERS_V2, MUSIC_LAYOUT_V2, nearFlyingMuralV2, musicSurfaceHeightV2, inMusicCourtV2 } from './music-pavilion-rules-v002';
@@ -28,7 +31,8 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   let view: WorldView = 'follow';
   let reduced = options.reducedMotion;
   const musicPreview=!!options.musicPavilion;
-  const musicV4=musicPreview&&options.musicVersion==='v004';
+  const musicV5=musicPreview&&options.musicVersion==='v005';
+  const musicV4=musicPreview&&(options.musicVersion==='v004'||musicV5);
   const musicV3=musicPreview&&options.musicVersion==='v003';
   const musicV2=musicPreview&&(options.musicVersion==='v002'||musicV3||musicV4);
   const travelCamera=musicV2?createTravelCamera():null;
@@ -80,13 +84,28 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   input.setEnabled(false);
   container.appendChild(canvas);
   const audio=musicV2?createMusicArrivalAudio(options.sound??defaultSoundPreferences(),musicV4?MUSIC_LAYOUT_V4.audio:undefined):null;
+  const encounters=musicV5?createMusicEncounters(checkpoint.position):null;
+  const encounterVoices=musicV5?{
+    music:createFlyingVoice(new Audio(worldAssetUrl(musicEncounters.music.audioPath)),options.sound??defaultSoundPreferences()),
+    mural:createFlyingVoice(new Audio(worldAssetUrl(musicEncounters.mural.audioPath)),options.sound??defaultSoundPreferences()),
+  }:null;
+  audio?.setEnabled(!encounters||encounters.musicHeard);
   const voice=options.flyingVoice?createFlyingVoice(flyingDialogue.audioPath?new Audio(worldAssetUrl(flyingDialogue.audioPath)):null,options.sound??defaultSoundPreferences()):null;
 
-
+  const unregisterEncounterSkip=registerSpeechSkip(()=>{
+    if(!encounters?.state||paused||view!=='follow')return false;
+    skipEncounter();return true;
+  });
+  function currentEncounterVoice(){const id=encounters?.state?.id;return id?encounterVoices?.[id]:undefined;}
+  function skipEncounter(){
+    currentEncounterVoice()?.exit();encounters?.skip();
+    input.setEnabled(loaded&&!paused&&view==='follow');travelCamera?.reset();moving=false;emit();
+  }
+  function blockEncounterVoices(blocked:boolean){encounterVoices?.music.setBlocked(blocked);encounterVoices?.mural.setBlocked(blocked);}
   function nearestDiscovery(): DiscoveryId | null {
     if (!loaded) return null;
     const p = checkpoint.position;
-    if (musicPreview && nearMural(p)) return 'flying';
+    if (musicPreview && nearMural(p) && (!encounters||encounters.muralReady)) return 'flying';
     if (Math.hypot(p.x + 12, p.z + 17) < 2.6) return 'caisson';
     if (Math.hypot(p.x + 5, p.z + 6) < 2.25) return 'story-demo';
     return null;
@@ -96,14 +115,16 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     const location = p.x < -2 && p.x > -22 && p.z < 2 && p.z > -24
       ? p.z < -12.3 ? '藻井观赏厅' : '纹彩院'
       : musicPreview && (musicV4?inMusicCourtV4(p):musicV3?inMusicCourtV3(p):musicV2?inMusicCourtV2(p):p.x>8 && p.x<28 && p.z< -2 && p.z> -23) ? '乐舞馆' : p.z < -25 ? '洞窟远景 · 待制作' : !musicPreview && p.x > 10 && p.z < -8 ? '乐舞馆远景 · 待制作' : '沙漠道路';
-    return { checkpoint: { ...checkpoint, position: { ...p }, visitedEvents: [...checkpoint.visitedEvents] }, nearby: nearestDiscovery(), location, moving, cinematic: director?.state ?? null, flying: world.music?.inspect(), musicAudio: audio?.inspect(), flyingVoice: voice?.inspect() };
+    return { checkpoint: { ...checkpoint, position: { ...p }, visitedEvents: [...checkpoint.visitedEvents] }, nearby: nearestDiscovery(), location, moving, encounter:encounters?.state, encounterVoice:currentEncounterVoice()?.inspect(), cinematic: director?.state ?? null, flying: world.music?.inspect(), musicAudio: audio?.inspect(), flyingVoice: voice?.inspect() };
   }
   function emit() { options.onSnapshot(snapshot()); }
   function updateTraveler(speed: number) {
     world.traveler.position.set(checkpoint.position.x, heightAt(checkpoint.position), checkpoint.position.z);
     const shot = director?.state;
     world.traveler.rotation.y = shot?.id === 'opening' ? openingHeading(shot.time) : checkpoint.heading;
-    if (shot?.id === 'opening' && shot.time < 1.75) world.animatePresentation('Greeting', shot.time);
+    const encounter=encounters?.state;
+    if(encounter && !reduced) world.animatePresentation(encounter.id==='music'?'LookAround':'HallLookUp',encounter.id==='music'?3.5+Math.min(1,encounter.time/2.8)*8.4:Math.min(encounter.time,2.25));
+    else if (shot?.id === 'opening' && shot.time < 1.75) world.animatePresentation('Greeting', shot.time);
     else if (shot?.id === 'hall') world.animatePresentation('HallLookUp', shot.time);
     else world.animateTraveler(speed, elapsed, reduced);
     canvas.dataset.animation = world.animationName();
@@ -127,7 +148,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   }
   function fail(message: string) {
     if (disposed || failed) return;
-    failed = true; moving = false; voice?.setBlocked(true); audio?.setDucked(false); audio?.setBlocked(true); stop(); input.setEnabled(false);
+    failed = true; moving = false; blockEncounterVoices(true); voice?.setBlocked(true); audio?.setDucked(false); audio?.setBlocked(true); stop(); input.setEnabled(false);
     world.dispose(); renderer.renderLists.dispose();
     emit(); options.onError(message);
   }
@@ -138,7 +159,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     previousTime = time; elapsed += dt;
     const wasMoving = moving;
     let speed = 0;
-    if (view === 'follow') {
+    if (view === 'follow' && !encounters?.state) {
       const control = input.read();
       if(control.camera)travelCamera?.manual();
       checkpoint.cameraYaw = yawLimit(checkpoint.cameraYaw + control.camera * dt * .65);
@@ -156,8 +177,22 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
       moving = speed > .05;
       if(travelCamera)checkpoint.cameraYaw=travelCamera.yaw(checkpoint.cameraYaw,checkpoint.heading,moving,dt,reduced);
     } else moving = false;
+    if(encounters && view==='follow'){
+      const before=encounters.state, speech=currentEncounterVoice()?.inspect();
+      const done=!speech||speech.ended||speech.status==='missing'||speech.status==='error'||speech.status==='blocked';
+      encounters.update(checkpoint.position,dt,done);
+      const after=encounters.state;
+      if(after&&!before){
+        director?.skip();input.setEnabled(false);travelCamera?.reset();speed=0;moving=false;
+        encounterVoices?.[after.id].enter();
+      }else if(before&&!after){
+        encounterVoices?.[before.id].exit();input.setEnabled(loaded&&!paused);travelCamera?.reset();
+      }
+      if(after){speed=0;moving=false;currentEncounterVoice()?.update(after.time>=(after.id==='music'?.35:.1));}
+      audio?.setEnabled(encounters.musicHeard);
+    }
     const beforeShot = director?.state;
-    if (director && view === 'follow') {
+    if (director && view === 'follow' && !encounters?.state) {
       const control = input.read();
       const intent = Math.hypot(control.x, control.y) > .01 || control.camera !== 0;
       const nearHall = nearestDiscovery() === 'caisson';
@@ -174,8 +209,8 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
       if (shot && shot.time >= shot.duration) { director.finish(); snapFollow = true; }
     }
     world.music?.update(dt,reduced);
-    voice?.update(view==='flying'&&(world.music?.inspect().time??0)>=flyingDialogue.startAt);
-    audio?.setDucked(voice?.inspect().playing??false);
+    voice?.update(view==='flying'&&(musicV5?!!world.music?.inspect().complete:(world.music?.inspect().time??0)>=flyingDialogue.startAt));
+    audio?.setDucked(!!voice?.inspect().playing||!!currentEncounterVoice()?.inspect().playing);
     audio?.update(checkpoint.position,checkpoint.cameraYaw);
     if(world.music?.inspect().awakened && !checkpoint.visitedEvents.includes('flying')) checkpoint.visitedEvents.push('flying');
     updateTraveler(speed);
@@ -208,15 +243,16 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     renderer.setSize(width, height, false); camera.aspect = width / height; camera.updateProjectionMatrix(); render();
   }
   function turnCamera(delta: number) {
-    if (!loaded || paused || view !== 'follow' || disposed) return;
+    if (!loaded || paused || view !== 'follow' || disposed || encounters?.state) return;
     skipCinematic(); travelCamera?.manual(); checkpoint.cameraYaw = yawLimit(checkpoint.cameraYaw + delta); schedule();
   }
   function visibility() {
-    input.clear(); travelCamera?.reset(); voice?.setBlocked(document.hidden||paused||view!=='flying'); audio?.setDucked(voice?.inspect().playing??false); audio?.setBlocked(document.hidden||paused||view==='story'); moving = false; previousTime = 0;
+    blockEncounterVoices(document.hidden||paused||view!=='follow');
+    input.clear(); travelCamera?.reset(); voice?.setBlocked(document.hidden||paused||view!=='flying'); audio?.setDucked(!!voice?.inspect().playing||!!currentEncounterVoice()?.inspect().playing); audio?.setBlocked(document.hidden||paused||view==='story'); moving = false; previousTime = 0;
     if (document.hidden) { skipCinematic(); stop(); emit(); } else schedule();
   }
   function contextLost(event: Event) { event.preventDefault(); fail('浏览器暂停了3D画面。请重新加载，或直接选择文化主题。'); }
-  const blur = () => { skipCinematic(); input.clear(); travelCamera?.reset(); voice?.setBlocked(true); audio?.setDucked(false); audio?.setBlocked(true); };
+  const blur = () => { blockEncounterVoices(true); skipCinematic(); input.clear(); travelCamera?.reset(); voice?.setBlocked(true); audio?.setDucked(false); audio?.setBlocked(true); };
   window.addEventListener('blur', blur);
   const resizeObserver = new ResizeObserver(resize); resizeObserver.observe(container);
   document.addEventListener('visibilitychange', visibility);
@@ -224,7 +260,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   updateTraveler(0); resize(); emit();
   void world.ready.then(() => {
     if (disposed || failed) return;
-    loaded = true; input.clear(); input.setEnabled(loaded && !paused && view === 'follow');
+    loaded = true; input.clear(); input.setEnabled(loaded && !paused && view === 'follow' && !encounters?.state);
     updateTraveler(0);
     const loadedPose = followPose(checkpoint.position.x, heightAt(checkpoint.position), checkpoint.position.z, checkpoint.cameraYaw);
     camera.position.copy(loadedPose.position); cameraTarget.copy(loadedPose.target); camera.lookAt(cameraTarget);
@@ -246,7 +282,9 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   });
   return {
     snapshot, skipCinematic,
-    setSound:preferences=>{voice?.setPreferences(preferences);audio?.setPreferences(preferences);audio?.setDucked(voice?.inspect().playing??false);},
+    setSound:preferences=>{encounterVoices?.music.setPreferences(preferences);encounterVoices?.mural.setPreferences(preferences);voice?.setPreferences(preferences);audio?.setPreferences(preferences);audio?.setDucked(!!voice?.inspect().playing||!!currentEncounterVoice()?.inspect().playing);},
+    skipVoice:()=>{voice?.skip();emit();},
+    skipEncounter, retryEncounter:()=>currentEncounterVoice()?.retry(),
     retryVoice:()=>voice?.retry(),
     retrySound:()=>audio?.retry(),
     recordingAudio:()=>audio?.recordingStream()??null,
@@ -258,16 +296,17 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
       // must not clear a key the player pressed during that handoff.
       if (disposed || paused === value) return;
       if (value) skipCinematic();
-      paused = value; travelCamera?.reset(); voice?.setBlocked(paused||document.hidden||view!=='flying'); audio?.setDucked(voice?.inspect().playing??false); audio?.setBlocked(paused||document.hidden||view==='story'); input.setEnabled(loaded && !paused && view === 'follow'); moving = false; previousTime = 0;
+      paused = value; blockEncounterVoices(paused||document.hidden||view!=='follow'); travelCamera?.reset(); voice?.setBlocked(paused||document.hidden||view!=='flying'); audio?.setDucked(!!voice?.inspect().playing||!!currentEncounterVoice()?.inspect().playing); audio?.setBlocked(paused||document.hidden||view==='story'); input.setEnabled(loaded && !paused && view === 'follow' && !encounters?.state); moving = false; previousTime = 0;
       if (paused) stop(); else schedule(); emit();
     },
     setView(next) {
       if (disposed || view === next) return;
+      if(encounters?.state)skipEncounter();
       skipCinematic(); if (next === 'caisson') director?.skipHall();
       const exitingFlying = view === 'flying';
       if(exitingFlying) {world.music?.exit();voice?.exit();audio?.setDucked(false);}
       if(next==='flying') { world.music?.update(0,reduced); world.music?.enter(); voice?.enter(); const pose=flyingPose(camera.aspect);camera.position.copy(pose.position);cameraTarget.copy(pose.target);camera.lookAt(cameraTarget); }
-      view = next; travelCamera?.reset(); voice?.setBlocked(paused||document.hidden||view!=='flying'); audio?.setBlocked(paused||document.hidden||view==='story'); if(next==='follow' && exitingFlying) restoreFollow(); input.setEnabled(loaded && !paused && view === 'follow'); moving = false; poseSettled = false; previousTime = 0;
+      view = next; blockEncounterVoices(paused||document.hidden||view!=='follow'); travelCamera?.reset(); voice?.setBlocked(paused||document.hidden||view!=='flying'); audio?.setBlocked(paused||document.hidden||view==='story'); if(next==='follow' && exitingFlying) restoreFollow(); input.setEnabled(loaded && !paused && view === 'follow' && !encounters?.state); moving = false; poseSettled = false; previousTime = 0;
       if (view === 'story') { stop(); updateTraveler(0); render(); }
       else schedule();
       emit();
@@ -276,6 +315,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     turnCamera,
     setReducedMotion(value) { reduced = value; if (value) skipCinematic(); schedule(); },
     resetToStart() {
+      currentEncounterVoice()?.exit();encounters?.reset();audio?.setEnabled(!encounters);
       skipCinematic();
       world.music?.exit(); voice?.exit(); audio?.setDucked(false); travelCamera?.reset();
       checkpoint = { ...checkpoint, position: { ...WORLD_SPAWN }, heading: 0, cameraYaw: 0 };
@@ -286,7 +326,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     },
     dispose() {
       if (disposed) return;
-      disposed = true; voice?.dispose(); audio?.dispose(); stop(); input.dispose(); resizeObserver.disconnect();
+      disposed = true; unregisterEncounterSkip();encounterVoices?.music.dispose();encounterVoices?.mural.dispose();voice?.dispose(); audio?.dispose(); stop(); input.dispose(); resizeObserver.disconnect();
       window.removeEventListener('blur', blur);
       document.removeEventListener('visibilitychange', visibility); canvas.removeEventListener('webglcontextlost', contextLost);
       world.dispose(); renderer.renderLists.dispose(); renderer.dispose(); renderer.forceContextLoss();

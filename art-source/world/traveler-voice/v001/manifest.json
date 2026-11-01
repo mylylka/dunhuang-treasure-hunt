@@ -1,0 +1,19 @@
+{
+  "status": "local-voice-audition-not-final",
+  "source": "macOS installed Tingting, rate 190; no pitch or timbre alteration",
+  "authorization": "User selected local voice audition, then requested these two spoken lines.",
+  "entries": [
+    {
+      "id": "music-question",
+      "text": "哪里来的音乐声？",
+      "duration": 1.38449,
+      "sha256": "33ac47984fcef4aaa66727b2fdb80612a9b8e298df77ee26dc225fa003b729eb"
+    },
+    {
+      "id": "mural-admiration",
+      "text": "好美的飞天啊！",
+      "duration": 1.227755,
+      "sha256": "610379c2235961e8cf6faaa42981abdb7b0bedc019df38cd75588613239be6e2"
+    }
+  ]
+}

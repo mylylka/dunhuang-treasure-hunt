@@ -1,3 +1,4 @@
+import { createMusicPavilionV5 } from './music-pavilion-v005';
 import { createMusicPavilionV4 } from './music-pavilion-v004';
 import { MUSIC_LAYOUT_V4, MUSIC_ROAD_V4 } from './music-pavilion-rules-v004';
 import * as THREE from 'three';
@@ -13,7 +14,7 @@ import { MUSIC_LAYOUT_V2, MUSIC_ROAD_V2 } from './music-pavilion-rules-v002';
 import { createMusicPavilion } from './music-pavilion';
 import { MUSIC_LAYOUT, MUSIC_ROAD } from './music-pavilion-rules';
 
-type TravelerAction = 'Idle' | 'Walk' | 'Run' | 'Greeting' | 'HallLookUp';
+type TravelerAction = 'Idle' | 'Walk' | 'Run' | 'Greeting' | 'HallLookUp' | 'LookAround';
 export interface ArtSampleSceneOptions {
   /** Explicit isolated-preview override; normal game entry keeps the approved asset. */
   travelerPath?: string;
@@ -22,14 +23,14 @@ export interface ArtSampleSceneOptions {
   presentationClips?: boolean;
   sampleNature?: boolean;
   musicPavilion?: boolean;
-  musicVersion?: 'v001' | 'v002' | 'v003' | 'v004';
+  musicVersion?: 'v001' | 'v002' | 'v003' | 'v004' | 'v005';
   flyingAwakened?: boolean;
 }
 export interface ArtSampleScene extends GrayboxScene {
   music: ReturnType<typeof createMusicPavilion> | ReturnType<typeof createMusicPavilionV2> | null;
   ready: Promise<void>;
   animationName(): TravelerAction;
-  animatePresentation(name: 'Greeting' | 'HallLookUp', time: number): void;
+  animatePresentation(name: 'Greeting' | 'HallLookUp' | 'LookAround', time: number): void;
   inspectTraveler(): { animation: string; time: number; joints: { name: string; position: number[] }[] };
   updateCameraVisibility(target: THREE.Vector3, position: THREE.Vector3, dt: number, immediate: boolean): void;
 }
@@ -62,9 +63,9 @@ function releaseModel(model: THREE.Object3D) {
 }
 
 export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSampleScene {
-  const v4=options.musicVersion==='v004',v3=options.musicVersion==='v003',v2=options.musicVersion==='v002'||v3||v4;
+  const v5=options.musicVersion==='v005',v4=options.musicVersion==='v004'||v5,v3=options.musicVersion==='v003',v2=options.musicVersion==='v002'||v3||v4;
   const environment = createGrayboxScene({ artSample: true, musicPreview: options.musicPavilion, extendedMusic: v2 });
-  const music = options.musicPavilion ? (v4?createMusicPavilionV4:v3?createMusicPavilionV3:v2?createMusicPavilionV2:createMusicPavilion)(environment.scene, !!options.flyingAwakened) : null;
+  const music = options.musicPavilion ? (v5?createMusicPavilionV5:v4?createMusicPavilionV4:v3?createMusicPavilionV3:v2?createMusicPavilionV2:createMusicPavilion)(environment.scene, !!options.flyingAwakened) : null;
   const regionLayout=v4?MUSIC_LAYOUT_V4:v3?MUSIC_LAYOUT_V3:v2?MUSIC_LAYOUT_V2:MUSIC_LAYOUT;
   const traveler = new THREE.Group(); traveler.name = 'traveler';
   environment.scene.add(traveler);
@@ -123,6 +124,7 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
     if (disposed) return;
     const required: TravelerAction[] = ['Idle', 'Walk', 'Run'];
     if (options.presentationClips) required.push('Greeting', 'HallLookUp');
+    if (v5) required.push('LookAround');
     if (required.some(name => !avatar.animations.some(clip => clip.name === name))) {
       throw new Error('model-animation-incomplete');
     }

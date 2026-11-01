@@ -65,4 +65,13 @@ describe('flying narration lifecycle',()=>{
     expect(voice.inspect()).toMatchObject({status:'missing',playing:false,currentTime:0});
     voice.exit();voice.dispose();
   });
+  it('skip stops the current line, including a late play promise, without restarting on future frames',async()=>{
+    const {media,voice}=fixture();let resolve!:()=>void;
+    media.play.mockImplementationOnce(()=>new Promise<void>(r=>{resolve=()=>{media.paused=false;r();};}));
+    voice.enter();expect(voice.skip()).toBe(false);voice.update(true);expect(voice.skip()).toBe(true);
+    resolve();await settle();expect(media.paused).toBe(true);expect(voice.inspect().ended).toBe(true);
+    voice.update(true);expect(media.play).toHaveBeenCalledTimes(1);
+    voice.enter();voice.update(true);await settle();expect(voice.inspect().playing).toBe(true);voice.dispose();
+  });
+
 });

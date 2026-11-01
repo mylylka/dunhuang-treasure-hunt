@@ -14,6 +14,8 @@ export interface WorldSnapshot {
   nearby: DiscoveryId | null;
   location: string;
   moving: boolean;
+  encounter?: import('./music-encounters').MusicEncounterState | null;
+  encounterVoice?: import('./flying-voice').FlyingVoiceState;
   cinematic?: import('./character-cinematics').CinematicState | null;
   musicAudio?: { status: 'loading' | 'ready' | 'error'; unlocked: boolean; gain: number; playing: boolean; currentTime: number };
   flying?: { time: number; color: number; complete: boolean; awakened: boolean };
@@ -31,6 +33,9 @@ export interface WorldRuntime {
   setSound?(preferences: import('../services/sound-settings').SoundPreferences): void;
   retrySound?(): void;
   retryVoice?(): void;
+  skipVoice?(): void;
+  skipEncounter?(): void;
+  retryEncounter?(): void;
   recordingAudio?(): MediaStream | null;
   inspect(): unknown;
   snapshot(): WorldSnapshot;
@@ -44,7 +49,7 @@ export interface WorldRuntimeOptions {
   onError(message: string): void;
   onReady?(): void;
   musicPavilion?: boolean;
-  musicVersion?: 'v001' | 'v002' | 'v003' | 'v004';
+  musicVersion?: 'v001' | 'v002' | 'v003' | 'v004' | 'v005';
   flyingVoice?: boolean;
   sound?: import('../services/sound-settings').SoundPreferences;
   cinematics?: { seen: import('./character-cinematics').CinematicSeen; onSeen(seen: import('./character-cinematics').CinematicSeen): void };

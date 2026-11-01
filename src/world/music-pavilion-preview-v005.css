@@ -1,0 +1,6 @@
+.world-encounter{position:absolute;z-index:6;left:50%;bottom:104px;transform:translateX(-50%);width:min(560px,calc(100% - 40px));padding:16px 22px;background:#f7f0e3f2;border:1px solid #d5c4a9;box-shadow:0 8px 26px #68452d19;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.world-encounter p{margin:0;font:22px/1.5 var(--serif);color:#503b2a}
+.world-encounter small{display:block;margin-top:4px;color:#8d765f;font-size:11px}
+.world-encounter button{white-space:nowrap;padding:8px 12px;background:#f8f3e7;border:1px solid #d7c5a9;color:#69533d;min-height:36px}
+.speech-skip-inline{display:inline-flex;align-items:center;gap:5px;margin-left:12px;font-size:12px;padding:3px 8px}
+@media(max-height:600px){.world-encounter{bottom:60px;width:470px;padding:10px 16px}.world-encounter p{font-size:17px}.world-encounter small{font-size:10px}}

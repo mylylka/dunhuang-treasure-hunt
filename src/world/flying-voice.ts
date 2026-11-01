@@ -1,3 +1,4 @@
+import { registerSpeechSkip } from '../services/speech-skip';
 import type { SoundPreferences } from '../services/sound-settings';
 
 export interface FlyingVoiceState {
@@ -14,6 +15,11 @@ export function createFlyingVoice(media: HTMLAudioElement | null, initial: Sound
   let active = false, due = false, blocked = false, disposed = false, ended = false;
   let status: FlyingVoiceState['status'] = media ? 'loading' : 'missing';
   let preferences = initial, pending = false, generation = 0;
+  function skip() {
+    if (!active || !due || blocked || disposed || ended) return false;
+    generation++; ended = true; media?.pause(); return true;
+  }
+  const unregisterSkip = registerSpeechSkip(skip);
   const allowed = () => active && due && !blocked && !disposed && !ended;
   function apply() {
     if (!media || disposed) return;
@@ -45,6 +51,7 @@ export function createFlyingVoice(media: HTMLAudioElement | null, initial: Sound
     media.addEventListener('ended', finish);
   }
   return {
+    skip,
     enter() {
       if (disposed) return;
       generation++; active = true; due = false; ended = false;
@@ -77,7 +84,7 @@ export function createFlyingVoice(media: HTMLAudioElement | null, initial: Sound
     },
     dispose() {
       if (disposed) return;
-      disposed = true; active = false; generation++;
+      disposed = true; active = false; generation++; unregisterSkip();
       if (media) {
         media.pause(); media.removeEventListener('canplay', ready);
         media.removeEventListener('error', failed); media.removeEventListener('ended', finish);

@@ -1,0 +1,23 @@
+{
+  "version": "v005",
+  "status": "awaiting visual approval",
+  "source": "art-source/world/models/music-pavilion/v004/music-pavilion.blend",
+  "sourceUnchanged": true,
+  "sourceSha256": "e4f0f709b76a7908081a1988d1abfd398f67da9c040c1b5a67d32ab4cf710082",
+  "triangles": 113816,
+  "meshBatches": 57,
+  "bytes": 5274232,
+  "sha256": "4c0f06a442b97d132765df6fe7cd9f684151aaa43f0a33595f9d2009378dde57",
+  "floor": {
+    "slabSize": [
+      1.2,
+      0.8
+    ],
+    "jointWidth": 0.016,
+    "jointRecess": 0.005,
+    "topHeight": 0.035,
+    "tiles": 1501,
+    "sidewalls": false
+  },
+  "preserved": "all architecture, openwork, mural frame, stairs, props and exterior road"
+}

@@ -1,3 +1,4 @@
+import { registerSpeechSkip } from '../services/speech-skip';
 import { useEffect, useRef, useState } from 'react';
 import { worldStoryPreview } from '../content/world/stories';
 import type { SoundPreferences } from '../services/sound-settings';
@@ -50,6 +51,14 @@ export function WorldStoryPlayer({ paused, blocked = false, sound, onClose, onPa
     }, 200);
     return () => clearInterval(timer);
   }, [paused, segment, replay, readingDuration]);
+  const skipRef=useRef<()=>boolean>(()=>false);
+  skipRef.current=()=>{
+    if(!segment||blocked||paused)return false;
+    audioRef.current?.pause();
+    if(index<worldStoryPreview.segments.length-1)move(index+1);else onClose();
+    return true;
+  };
+  useEffect(()=>registerSpeechSkip(()=>skipRef.current()),[]);
   function move(next: number) { setIndex(next); onPause(false); }
   return <section className="world-story" role="dialog" aria-modal="true" aria-labelledby="world-story-title" tabIndex={-1} ref={panel} data-testid="world-story" inert={blocked ? true : undefined}
     onKeyDown={event => {
@@ -77,7 +86,7 @@ export function WorldStoryPlayer({ paused, blocked = false, sound, onClose, onPa
         <button type="button" disabled={index === 0} onClick={() => move(index - 1)}>上一段</button>
         <button type="button" onClick={() => onPause(!paused)}>{paused ? '继续播放' : '暂停'}</button>
         <button type="button" onClick={() => { setReplay(value => value + 1); onPause(false); }}>重播</button>
-        <div className="world-story-progress" aria-label={`第${index + 1}段，共2段`}><span>{index + 1} / 2 · 字幕预览</span><progress value={elapsed} max={readingDuration} /></div>
+        <div className="world-story-progress" aria-label={`第${index + 1}段，共2段`}><span>{index + 1} / 2 · 空格跳过当前段</span><progress value={elapsed} max={readingDuration} /></div>
         {index < worldStoryPreview.segments.length - 1 ? <button type="button" className="world-primary" onClick={() => move(index + 1)}>下一段</button> : <button type="button" className="world-primary" onClick={onClose}>结束预览</button>}
       </> : <button type="button" className="world-primary" data-testid="world-story-start" onClick={() => move(0)}>开始两段预览</button>}
     </footer>

@@ -18,7 +18,7 @@ export function musicSpatialGain(p:WorldPoint,spatial:MusicSpatialAudio){
 /** Region-owned long audio. It never uses or crowds the shared UI effects pool. */
 export function createMusicArrivalAudio(initial: SoundPreferences, spatial:MusicSpatialAudio = MUSIC_LAYOUT_V2.audio) {
   let disposed=false,unlocked=false,blocked=false,status:'loading'|'ready'|'error'='loading';
-  let preferences=initial,point:WorldPoint={x:0,z:18},yaw=0,gainValue=0,ducked=false;
+  let preferences=initial,point:WorldPoint={x:0,z:18},yaw=0,gainValue=0,ducked=false,enabled=true;
   let context:AudioContext|null=null,buffer:AudioBuffer|null=null,source:AudioBufferSourceNode|null=null;
   let gain:GainNode|null=null,pan:StereoPannerNode|null=null,recording:MediaStreamAudioDestinationNode|null=null;
   let bytes:ArrayBuffer|null=null,pending:Promise<void>|null=null;
@@ -51,7 +51,7 @@ export function createMusicArrivalAudio(initial: SoundPreferences, spatial:Music
     await pending;
   }
   function apply(){
-    const silent=blocked||document.hidden||!preferences.enabled;
+    const silent=!enabled||blocked||document.hidden||!preferences.enabled;
     gainValue=silent?0:musicSpatialGain(point,spatial)*preferences.volume*(ducked ? .22 : 1);
     if(!context)return;
     if(gain){gain.gain.cancelScheduledValues(context.currentTime);gain.gain.setTargetAtTime(gainValue,context.currentTime,silent ? .008 : .12);}
@@ -70,6 +70,7 @@ export function createMusicArrivalAudio(initial: SoundPreferences, spatial:Music
   void load();
   return {
     update(next:WorldPoint,cameraYaw:number){point=next;yaw=cameraYaw;apply();},
+    setEnabled(value:boolean){enabled=value;apply();},
     setBlocked(value:boolean){blocked=value;apply();},
     setDucked(value:boolean){if(value!==ducked){ducked=value;apply();}},
     setPreferences(value:SoundPreferences){preferences=value;apply();},
