@@ -1,0 +1,15 @@
+{
+  "version": "v004",
+  "status": "awaiting visual approval",
+  "triangles": 126492,
+  "meshBatches": 58,
+  "bytes": 5858100,
+  "sha256": "d9a45e82d21116bafcc1293dda3e1a9f0838e24ba7024726cb1cb3b25917d037",
+  "previousSourceUnchanged": true,
+  "muralAreaRatio": 3.490997229916897,
+  "wallTop": 4.71,
+  "openworkHeight": 1.6,
+  "platformHeight": 1.8,
+  "floorHeight": 6.089999999999999,
+  "humanNominalHeight": 2.017
+}

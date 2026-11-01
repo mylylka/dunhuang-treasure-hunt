@@ -1,10 +1,22 @@
 import { worldAssetUrl } from '../content/world/assets';
 import type { SoundPreferences } from '../services/sound-settings';
-import { arrivalGain, MUSIC_LAYOUT_V2 } from './music-pavilion-rules-v002';
+import { MUSIC_LAYOUT_V2 } from './music-pavilion-rules-v002';
 import type { WorldPoint } from './types';
 
+export interface MusicSpatialAudio {
+  source: readonly number[]; outerRadius: number; innerRadius: number;
+  departureFade?: { maxX:number; startZ:number; endZ:number };
+}
+export function musicSpatialGain(p:WorldPoint,spatial:MusicSpatialAudio){
+  const distance=Math.hypot(p.x-spatial.source[0],p.z-spatial.source[2]);
+  const t=Math.max(0,Math.min(1,(spatial.outerRadius-distance)/(spatial.outerRadius-spatial.innerRadius)));
+  const fade=spatial.departureFade;
+  const departure=fade&&p.x<fade.maxX?Math.max(0,Math.min(1,(p.z-fade.startZ)/(fade.endZ-fade.startZ))):1;
+  return t*t*(3-2*t)*departure*departure*(3-2*departure);
+}
+
 /** Region-owned long audio. It never uses or crowds the shared UI effects pool. */
-export function createMusicArrivalAudio(initial: SoundPreferences) {
+export function createMusicArrivalAudio(initial: SoundPreferences, spatial:MusicSpatialAudio = MUSIC_LAYOUT_V2.audio) {
   let disposed=false,unlocked=false,blocked=false,status:'loading'|'ready'|'error'='loading';
   let preferences=initial,point:WorldPoint={x:0,z:18},yaw=0,gainValue=0,ducked=false;
   let context:AudioContext|null=null,buffer:AudioBuffer|null=null,source:AudioBufferSourceNode|null=null;
@@ -40,10 +52,10 @@ export function createMusicArrivalAudio(initial: SoundPreferences) {
   }
   function apply(){
     const silent=blocked||document.hidden||!preferences.enabled;
-    gainValue=silent?0:arrivalGain(point)*preferences.volume*(ducked ? .22 : 1);
+    gainValue=silent?0:musicSpatialGain(point,spatial)*preferences.volume*(ducked ? .22 : 1);
     if(!context)return;
     if(gain){gain.gain.cancelScheduledValues(context.currentTime);gain.gain.setTargetAtTime(gainValue,context.currentTime,silent ? .008 : .12);}
-    if(pan){const dx=MUSIC_LAYOUT_V2.audio.source[0]-point.x,dz=MUSIC_LAYOUT_V2.audio.source[2]-point.z;
+    if(pan){const dx=spatial.source[0]-point.x,dz=spatial.source[2]-point.z;
       pan.pan.setTargetAtTime(Math.max(-.65,Math.min(.65,(dx*Math.cos(yaw)-dz*Math.sin(yaw))/Math.max(1,Math.hypot(dx,dz)))),context.currentTime,.2);}
     if(silent&&context.state==='running')void context.suspend().catch(()=>{});
     else if(!silent&&unlocked&&context.state==='suspended')void context.resume().catch(()=>{});

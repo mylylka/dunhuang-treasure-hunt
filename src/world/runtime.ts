@@ -1,3 +1,5 @@
+import { MUSIC_PLAYER_COLLIDERS_V4, MUSIC_LAYOUT_V4, nearFlyingMuralV4, musicSurfaceHeightV4, inMusicCourtV4 } from './music-pavilion-rules-v004';
+import { musicCameraSpaceV4, flyingCameraPoseV4 } from './music-pavilion-v004';
 import { MUSIC_PLAYER_COLLIDERS_V2, MUSIC_LAYOUT_V2, nearFlyingMuralV2, musicSurfaceHeightV2, inMusicCourtV2 } from './music-pavilion-rules-v002';
 import { MUSIC_PLAYER_COLLIDERS_V3, MUSIC_LAYOUT_V3, inMusicCourtV3 } from './music-pavilion-rules-v003';
 import { musicCameraSpaceV3, flyingCameraPoseV3 } from './music-pavilion-v003';
@@ -26,16 +28,17 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   let view: WorldView = 'follow';
   let reduced = options.reducedMotion;
   const musicPreview=!!options.musicPavilion;
+  const musicV4=musicPreview&&options.musicVersion==='v004';
   const musicV3=musicPreview&&options.musicVersion==='v003';
-  const musicV2=musicPreview&&(options.musicVersion==='v002'||musicV3);
+  const musicV2=musicPreview&&(options.musicVersion==='v002'||musicV3||musicV4);
   const travelCamera=musicV2?createTravelCamera():null;
   const yawLimit=musicV2?normalizedYaw:clampCameraYaw;
-  const bounds=musicV3?MUSIC_LAYOUT_V3.bounds:musicV2?MUSIC_LAYOUT_V2.bounds:undefined;
-  const regionColliders=musicV3?MUSIC_PLAYER_COLLIDERS_V3:musicV2?MUSIC_PLAYER_COLLIDERS_V2:MUSIC_PLAYER_COLLIDERS;
-  const flyingPose=musicV3?flyingCameraPoseV3:musicV2?flyingCameraPoseV2:flyingCameraPose;
-  const nearMural=musicV2?nearFlyingMuralV2:nearFlyingMural;
-  const cameraSpace=musicPreview?(musicV3?musicCameraSpaceV3():musicV2?musicCameraSpaceV2():musicCameraSpace()):undefined;
-  const heightAt=(p: {x:number;z:number})=>surfaceHeight(p)+(musicPreview?(musicV2?musicSurfaceHeightV2:musicSurfaceHeight)(p):0);
+  const bounds=musicV4?MUSIC_LAYOUT_V4.bounds:musicV3?MUSIC_LAYOUT_V3.bounds:musicV2?MUSIC_LAYOUT_V2.bounds:undefined;
+  const regionColliders=musicV4?MUSIC_PLAYER_COLLIDERS_V4:musicV3?MUSIC_PLAYER_COLLIDERS_V3:musicV2?MUSIC_PLAYER_COLLIDERS_V2:MUSIC_PLAYER_COLLIDERS;
+  const flyingPose=musicV4?flyingCameraPoseV4:musicV3?flyingCameraPoseV3:musicV2?flyingCameraPoseV2:flyingCameraPose;
+  const nearMural=musicV4?nearFlyingMuralV4:musicV2?nearFlyingMuralV2:nearFlyingMural;
+  const cameraSpace=musicPreview?(musicV4?musicCameraSpaceV4():musicV3?musicCameraSpaceV3():musicV2?musicCameraSpaceV2():musicCameraSpace()):undefined;
+  const heightAt=(p: {x:number;z:number})=>surfaceHeight(p)+(musicPreview?(musicV4?musicSurfaceHeightV4:musicV2?musicSurfaceHeightV2:musicSurfaceHeight)(p):0);
   const followPose=(x:number,y:number,z:number,yaw:number)=>followCameraPose(x,y,z,yaw,cameraSpace);
   let checkpoint: WorldCheckpoint = { ...options.initial, position: sanitizePosition(options.initial.position, musicPreview ? regionColliders : undefined, bounds), cameraYaw: yawLimit(options.initial.cameraYaw), visitedEvents: [...options.initial.visitedEvents] };
   let moving = false;
@@ -76,7 +79,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   const input = createWorldInput(canvas, () => { if (loaded && !paused && view === 'follow') options.onInteract(); }, delta => turnCamera(delta), () => { earlyIntent = true; skipCinematic(); });
   input.setEnabled(false);
   container.appendChild(canvas);
-  const audio=musicV2?createMusicArrivalAudio(options.sound??defaultSoundPreferences()):null;
+  const audio=musicV2?createMusicArrivalAudio(options.sound??defaultSoundPreferences(),musicV4?MUSIC_LAYOUT_V4.audio:undefined):null;
   const voice=options.flyingVoice?createFlyingVoice(flyingDialogue.audioPath?new Audio(worldAssetUrl(flyingDialogue.audioPath)):null,options.sound??defaultSoundPreferences()):null;
 
 
@@ -92,7 +95,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     const p = checkpoint.position;
     const location = p.x < -2 && p.x > -22 && p.z < 2 && p.z > -24
       ? p.z < -12.3 ? '藻井观赏厅' : '纹彩院'
-      : musicPreview && (musicV3?inMusicCourtV3(p):musicV2?inMusicCourtV2(p):p.x>8 && p.x<28 && p.z< -2 && p.z> -23) ? '乐舞馆' : p.z < -25 ? '洞窟远景 · 待制作' : !musicPreview && p.x > 10 && p.z < -8 ? '乐舞馆远景 · 待制作' : '沙漠道路';
+      : musicPreview && (musicV4?inMusicCourtV4(p):musicV3?inMusicCourtV3(p):musicV2?inMusicCourtV2(p):p.x>8 && p.x<28 && p.z< -2 && p.z> -23) ? '乐舞馆' : p.z < -25 ? '洞窟远景 · 待制作' : !musicPreview && p.x > 10 && p.z < -8 ? '乐舞馆远景 · 待制作' : '沙漠道路';
     return { checkpoint: { ...checkpoint, position: { ...p }, visitedEvents: [...checkpoint.visitedEvents] }, nearby: nearestDiscovery(), location, moving, cinematic: director?.state ?? null, flying: world.music?.inspect(), musicAudio: audio?.inspect(), flyingVoice: voice?.inspect() };
   }
   function emit() { options.onSnapshot(snapshot()); }

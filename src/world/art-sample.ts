@@ -1,3 +1,5 @@
+import { createMusicPavilionV4 } from './music-pavilion-v004';
+import { MUSIC_LAYOUT_V4, MUSIC_ROAD_V4 } from './music-pavilion-rules-v004';
 import * as THREE from 'three';
 import { GLTFLoader, type GLTF } from 'three/addons/loaders/GLTFLoader.js';
 import { WORLD_ART_SAMPLE, worldAssetUrl } from '../content/world/assets';
@@ -20,7 +22,7 @@ export interface ArtSampleSceneOptions {
   presentationClips?: boolean;
   sampleNature?: boolean;
   musicPavilion?: boolean;
-  musicVersion?: 'v001' | 'v002' | 'v003';
+  musicVersion?: 'v001' | 'v002' | 'v003' | 'v004';
   flyingAwakened?: boolean;
 }
 export interface ArtSampleScene extends GrayboxScene {
@@ -60,10 +62,10 @@ function releaseModel(model: THREE.Object3D) {
 }
 
 export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSampleScene {
-  const v3=options.musicVersion==='v003',v2=options.musicVersion==='v002'||v3;
+  const v4=options.musicVersion==='v004',v3=options.musicVersion==='v003',v2=options.musicVersion==='v002'||v3||v4;
   const environment = createGrayboxScene({ artSample: true, musicPreview: options.musicPavilion, extendedMusic: v2 });
-  const music = options.musicPavilion ? (v3?createMusicPavilionV3:v2?createMusicPavilionV2:createMusicPavilion)(environment.scene, !!options.flyingAwakened) : null;
-  const regionLayout=v3?MUSIC_LAYOUT_V3:v2?MUSIC_LAYOUT_V2:MUSIC_LAYOUT;
+  const music = options.musicPavilion ? (v4?createMusicPavilionV4:v3?createMusicPavilionV3:v2?createMusicPavilionV2:createMusicPavilion)(environment.scene, !!options.flyingAwakened) : null;
+  const regionLayout=v4?MUSIC_LAYOUT_V4:v3?MUSIC_LAYOUT_V3:v2?MUSIC_LAYOUT_V2:MUSIC_LAYOUT;
   const traveler = new THREE.Group(); traveler.name = 'traveler';
   environment.scene.add(traveler);
   let disposed = false;
@@ -155,7 +157,7 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
           const instance=shrub.scene.clone(true);instance.position.set(x,0,z);instance.scale.setScalar(scale);environment.scene.add(instance);
         }
         const northDunes=dunes.scene.clone(true);northDunes.position.set(v2?20:0,0,-65);northDunes.rotation.y=0;environment.scene.add(northDunes);
-        const branch=createPreviewPaving((v2?MUSIC_ROAD_V2:MUSIC_ROAD).filter(section=>section.center.z> (v2?-8.55:-2.55)),true);models.push(branch);environment.scene.add(branch);
+        const branch=createPreviewPaving((v4?MUSIC_ROAD_V4:v2?MUSIC_ROAD_V2:MUSIC_ROAD).filter(section=>section.center.z> (v4?2.8:v2?-8.55:-2.55)),true);models.push(branch);environment.scene.add(branch);
       }
     }
     courtyard.scene.updateMatrixWorld(true);
