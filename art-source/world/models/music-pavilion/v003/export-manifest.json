@@ -1,0 +1,16 @@
+{
+  "version": "v003",
+  "origin": [
+    46,
+    0,
+    -9
+  ],
+  "triangles": 62340,
+  "meshBatches": 50,
+  "materials": 18,
+  "sha256": "aa074058c06f47e1f1e8dcd8df1ef7ce4e7dd84c5c4464217c89b9c749a1309b",
+  "bytes": 3148988,
+  "layoutSha256": "16a44d5ce876983dd290e2c49b68f39b7e1d1676e2a9a497fbdd0e2911aa79e5",
+  "source": "Open-gallery and forecourt references; original full-aspect mural is added at runtime",
+  "status": "awaiting visual approval"
+}

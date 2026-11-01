@@ -42,7 +42,7 @@ export interface WorldRuntimeOptions {
   onError(message: string): void;
   onReady?(): void;
   musicPavilion?: boolean;
-  musicVersion?: 'v001' | 'v002';
+  musicVersion?: 'v001' | 'v002' | 'v003';
   sound?: import('../services/sound-settings').SoundPreferences;
   cinematics?: { seen: import('./character-cinematics').CinematicSeen; onSeen(seen: import('./character-cinematics').CinematicSeen): void };
 }

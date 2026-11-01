@@ -1,4 +1,6 @@
 import { MUSIC_PLAYER_COLLIDERS_V2, MUSIC_LAYOUT_V2, nearFlyingMuralV2, musicSurfaceHeightV2, inMusicCourtV2 } from './music-pavilion-rules-v002';
+import { MUSIC_PLAYER_COLLIDERS_V3, MUSIC_LAYOUT_V3, inMusicCourtV3 } from './music-pavilion-rules-v003';
+import { musicCameraSpaceV3, flyingCameraPoseV3 } from './music-pavilion-v003';
 import { musicCameraSpaceV2, flyingCameraPoseV2 } from './music-pavilion-v002';
 import { createTravelCamera, normalizedYaw } from './travel-camera';
 import { createMusicArrivalAudio } from './music-arrival-audio';
@@ -21,14 +23,15 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   let view: WorldView = 'follow';
   let reduced = options.reducedMotion;
   const musicPreview=!!options.musicPavilion;
-  const musicV2=musicPreview&&options.musicVersion==='v002';
+  const musicV3=musicPreview&&options.musicVersion==='v003';
+  const musicV2=musicPreview&&(options.musicVersion==='v002'||musicV3);
   const travelCamera=musicV2?createTravelCamera():null;
   const yawLimit=musicV2?normalizedYaw:clampCameraYaw;
-  const bounds=musicV2?MUSIC_LAYOUT_V2.bounds:undefined;
-  const regionColliders=musicV2?MUSIC_PLAYER_COLLIDERS_V2:MUSIC_PLAYER_COLLIDERS;
-  const flyingPose=musicV2?flyingCameraPoseV2:flyingCameraPose;
+  const bounds=musicV3?MUSIC_LAYOUT_V3.bounds:musicV2?MUSIC_LAYOUT_V2.bounds:undefined;
+  const regionColliders=musicV3?MUSIC_PLAYER_COLLIDERS_V3:musicV2?MUSIC_PLAYER_COLLIDERS_V2:MUSIC_PLAYER_COLLIDERS;
+  const flyingPose=musicV3?flyingCameraPoseV3:musicV2?flyingCameraPoseV2:flyingCameraPose;
   const nearMural=musicV2?nearFlyingMuralV2:nearFlyingMural;
-  const cameraSpace=musicPreview?(musicV2?musicCameraSpaceV2():musicCameraSpace()):undefined;
+  const cameraSpace=musicPreview?(musicV3?musicCameraSpaceV3():musicV2?musicCameraSpaceV2():musicCameraSpace()):undefined;
   const heightAt=(p: {x:number;z:number})=>surfaceHeight(p)+(musicPreview?(musicV2?musicSurfaceHeightV2:musicSurfaceHeight)(p):0);
   const followPose=(x:number,y:number,z:number,yaw:number)=>followCameraPose(x,y,z,yaw,cameraSpace);
   let checkpoint: WorldCheckpoint = { ...options.initial, position: sanitizePosition(options.initial.position, musicPreview ? regionColliders : undefined, bounds), cameraYaw: yawLimit(options.initial.cameraYaw), visitedEvents: [...options.initial.visitedEvents] };
@@ -85,7 +88,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     const p = checkpoint.position;
     const location = p.x < -2 && p.x > -22 && p.z < 2 && p.z > -24
       ? p.z < -12.3 ? '藻井观赏厅' : '纹彩院'
-      : musicPreview && (musicV2?inMusicCourtV2(p):p.x>8 && p.x<28 && p.z< -2 && p.z> -23) ? '乐舞馆' : p.z < -25 ? '洞窟远景 · 待制作' : !musicPreview && p.x > 10 && p.z < -8 ? '乐舞馆远景 · 待制作' : '沙漠道路';
+      : musicPreview && (musicV3?inMusicCourtV3(p):musicV2?inMusicCourtV2(p):p.x>8 && p.x<28 && p.z< -2 && p.z> -23) ? '乐舞馆' : p.z < -25 ? '洞窟远景 · 待制作' : !musicPreview && p.x > 10 && p.z < -8 ? '乐舞馆远景 · 待制作' : '沙漠道路';
     return { checkpoint: { ...checkpoint, position: { ...p }, visitedEvents: [...checkpoint.visitedEvents] }, nearby: nearestDiscovery(), location, moving, cinematic: director?.state ?? null, flying: world.music?.inspect(), musicAudio: audio?.inspect() };
   }
   function emit() { options.onSnapshot(snapshot()); }

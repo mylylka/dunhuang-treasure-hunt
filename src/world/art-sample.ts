@@ -5,6 +5,8 @@ import { createGrayboxScene, type GrayboxScene } from './geometry';
 import { RUN_SPEED, WALK_SPEED } from './movement';
 import { createPreviewPaving } from './preview-paving';
 import { createMusicPavilionV2 } from './music-pavilion-v002';
+import { createMusicPavilionV3 } from './music-pavilion-v003';
+import { MUSIC_LAYOUT_V3 } from './music-pavilion-rules-v003';
 import { MUSIC_LAYOUT_V2, MUSIC_ROAD_V2 } from './music-pavilion-rules-v002';
 import { createMusicPavilion } from './music-pavilion';
 import { MUSIC_LAYOUT, MUSIC_ROAD } from './music-pavilion-rules';
@@ -18,7 +20,7 @@ export interface ArtSampleSceneOptions {
   presentationClips?: boolean;
   sampleNature?: boolean;
   musicPavilion?: boolean;
-  musicVersion?: 'v001' | 'v002';
+  musicVersion?: 'v001' | 'v002' | 'v003';
   flyingAwakened?: boolean;
 }
 export interface ArtSampleScene extends GrayboxScene {
@@ -58,10 +60,10 @@ function releaseModel(model: THREE.Object3D) {
 }
 
 export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSampleScene {
-  const environment = createGrayboxScene({ artSample: true, musicPreview: options.musicPavilion, extendedMusic: options.musicVersion === 'v002' });
-  const v2=options.musicVersion==='v002';
-  const music = options.musicPavilion ? (v2?createMusicPavilionV2:createMusicPavilion)(environment.scene, !!options.flyingAwakened) : null;
-  const regionLayout=v2?MUSIC_LAYOUT_V2:MUSIC_LAYOUT;
+  const v3=options.musicVersion==='v003',v2=options.musicVersion==='v002'||v3;
+  const environment = createGrayboxScene({ artSample: true, musicPreview: options.musicPavilion, extendedMusic: v2 });
+  const music = options.musicPavilion ? (v3?createMusicPavilionV3:v2?createMusicPavilionV2:createMusicPavilion)(environment.scene, !!options.flyingAwakened) : null;
+  const regionLayout=v3?MUSIC_LAYOUT_V3:v2?MUSIC_LAYOUT_V2:MUSIC_LAYOUT;
   const traveler = new THREE.Group(); traveler.name = 'traveler';
   environment.scene.add(traveler);
   let disposed = false;
