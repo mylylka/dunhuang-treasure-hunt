@@ -1,0 +1,134 @@
+{
+  "version": "v003",
+  "status": "square hall implementation; awaiting visual acceptance",
+  "worldOrigin": [
+    -12,
+    0,
+    2
+  ],
+  "units": "metres",
+  "upAxis": "Y",
+  "model": "courtyard.glb",
+  "bytes": 8658076,
+  "sha256": "52ab203772be64ea0fbf537b4e8c2b2cf7e52fcaa3cf425dd09d7855fc7e4761",
+  "triangles": 71790,
+  "meshCount": 400,
+  "materials": 34,
+  "hallAxes": {
+    "minX": -20.5,
+    "maxX": -3.5,
+    "minZ": -23.5,
+    "maxZ": -6.5
+  },
+  "caisson": "Existing v002 objects retained in place without edits; terrain preview hides caisson-* while the tall interior is reviewed.",
+  "interior": {
+    "kind": "single open volume",
+    "noIntermediateFloor": true,
+    "ceilingBottom": 8.05,
+    "netHeight": 7.77,
+    "lowerEaveOpening": [
+      -20,
+      -4,
+      -23,
+      -7
+    ]
+  },
+  "textures": {
+    "mural": {
+      "file": "hall-lotus-mural.jpg",
+      "sha256": "8b94cbd0c00174b95dbba371d60599667961cd857a20a063ba568bc992e7dd6b"
+    },
+    "banner": {
+      "file": "hall-banner.jpg",
+      "sha256": "fd9f153e1f133406edb5a97f020c4e5de89964b7e81c477d49d6a25ad6632975"
+    },
+    "border": {
+      "file": "hall-floral-border.jpg",
+      "sha256": "9b1f127d208c8fd76e90fb99cb1d4b3a9044666522073e1d0f8b346ca0dcb60b"
+    }
+  },
+  "muralSize": [
+    7,
+    3.9395933014354068
+  ],
+  "bannerSize": [
+    0.9,
+    2.5682926829268293
+  ],
+  "bannerStatus": "82x234 native low-resolution perspective extraction; replacement pending",
+  "fabricThickness": 0.01,
+  "platformPaving": {
+    "stones": 169,
+    "materialBatches": 3,
+    "pitch": 1.3076923076923077,
+    "grout": 0.026,
+    "top": 0.285
+  },
+  "geometryLayout": "src/content/world/courtyard-hall-v003.json",
+  "cameraBoxCount": 255,
+  "playerSolidCount": 41,
+  "retiredNodes": [
+    "courtyard-rear-wall",
+    "crossbeam-teal-inlay",
+    "crossbeam-teal-inlay-001",
+    "hall-back-wall",
+    "hall-beam-original-border",
+    "hall-beam-original-border-001",
+    "hall-beam-original-border-002",
+    "hall-beam-original-border-003",
+    "hall-beam-original-border-004",
+    "hall-beam-original-border-005",
+    "hall-beam-original-border-006",
+    "hall-beam-original-border-007",
+    "hall-beam-original-border-008",
+    "hall-beam-original-border-009",
+    "hall-ceiling",
+    "hall-central-floral-art",
+    "hall-column-18-14",
+    "hall-column-18-20",
+    "hall-column-6-14",
+    "hall-column-6-20",
+    "hall-crossbeam",
+    "hall-crossbeam-001",
+    "hall-front-step",
+    "hall-long-beam",
+    "hall-long-beam-001",
+    "hall-lower-roof",
+    "hall-mural-border",
+    "hall-mural-border-001",
+    "hall-mural-border-002",
+    "hall-mural-border-003",
+    "hall-platform",
+    "hall-side-art",
+    "hall-side-art-001",
+    "hall-side-wall",
+    "hall-side-wall-001",
+    "hall-sidewall-art",
+    "hall-sidewall-art-001",
+    "hall-sidewall-art-002",
+    "hall-sidewall-art-003",
+    "hall-upper-roof",
+    "upper-beam-original-border",
+    "upper-beam-original-border-001",
+    "upper-beam-original-border-002",
+    "upper-beam-original-border-003",
+    "upper-beam-original-border-004",
+    "upper-floor",
+    "upper-painted-beam",
+    "upper-post",
+    "upper-post-001",
+    "upper-post-002",
+    "upper-post-003",
+    "upper-post-004",
+    "window-decoration"
+  ],
+  "oldSourceHashes": {
+    "art-source/world/models/courtyard/v002/courtyard.blend": "c119c8996b2899241ba1ffd01cabedf1298c43afe9c4431909af7b723085cd6e",
+    "public/assets/world/courtyard/v002/courtyard.glb": "8a771cacfc7c0ac6ca09803cdf9841d46839b915442dc328079bd79f22173bbe",
+    "src/content/world/courtyard-props.json": "2a7f815f90cadc3067cef2daf41350de219f4efa46e2db9431cd303f1bcf10f0"
+  },
+  "runtimeExpansion": {
+    "unchangedCourtyardNeedsExpansion": true,
+    "rearWallAlreadyExpanded": true
+  }
+}

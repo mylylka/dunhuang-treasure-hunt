@@ -1,0 +1,20 @@
+{
+  "version": "v002",
+  "scope": "User-authorized wide mural edit, no other generated art",
+  "generator": "built-in image_gen image edit",
+  "prompt": "wide-mural-prompt.txt",
+  "input": "../v001/对称古韵莲花壁画.png",
+  "candidatePath": "/Users/liujing/.codex/generated_images/01a19a71-f619-7c11-89ed-033bcd94ce36/exec-9f18bec6-3b3f-4701-9b86-a255de9b1b83.png",
+  "archive": "hall-lotus-wide-generated.png",
+  "archiveSha256": "03e151db0a8ed6d4acb08da9b2c88afbd4ecd72231f4cad27c1a282d02fc2ee7",
+  "runtime": "public/assets/world/courtyard/v004/hall-lotus-wide.jpg",
+  "runtimeSha256": "a3783cb9041ba279a5e956d3f004dc6d18def05ba3db90ead3619d38ebbf8bc3",
+  "pixels": [
+    2172,
+    724
+  ],
+  "aspect": 3.0,
+  "physicalWidth": 12.5,
+  "physicalHeight": 4.166666666666667,
+  "processing": "Full canvas, original aspect, native resolution; RGB JPEG quality95 subsampling0; no crop, stretch, sharpening or added pixels. AI generated lateral floral extension and revised painted border; not a historical reconstruction."
+}

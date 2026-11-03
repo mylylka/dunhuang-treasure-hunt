@@ -1,0 +1,26 @@
+{
+  "sources": [
+    {
+      "role": "structure",
+      "filename": "ChatGPT 图像 2026年11月2日 20_05_39.png",
+      "source": "/Users/liujing/Downloads/ChatGPT 图像 2026年11月2日 20_05_39.png",
+      "sha256": "fed71069a3753f0c3ef44cad4b16290744ebf628d6c26021a73b594d0ad5158e",
+      "bytes": 1899166
+    },
+    {
+      "role": "center",
+      "filename": "三兔飞天藻井_中心部分.jpg",
+      "source": "/Users/liujing/Downloads/敦煌/藻井/三兔飞天藻井_中心部分.jpg",
+      "sha256": "68110c4f8935b7bb515c1818110086d5d18cd22576eeba7da49c7482096a0399",
+      "bytes": 448195
+    },
+    {
+      "role": "concept",
+      "filename": "绘彩馆立体藻井.png",
+      "source": "/Users/liujing/Downloads/敦煌/3d视觉素材库/绘彩馆立体藻井.png",
+      "sha256": "569a71c9d78163b66987d63e284257504f5efed266e079e99551ef11d2930198",
+      "bytes": 3996245
+    }
+  ],
+  "processing": "Original files unchanged. Center copied byte-for-byte. Beam art uses UV windows on the supplied concept image; no AI redraw."
+}

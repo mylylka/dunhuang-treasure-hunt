@@ -56,6 +56,8 @@ export function intersectCameraCylinder(ray: THREE.Ray, cylinder: CameraCylinder
 const cameraBoxes = WORLD_CAMERA_OBSTACLES.map(box => box.clone().expandByScalar(CAMERA_CLEARANCE));
 export interface CameraSpace {
   boxes: readonly THREE.Box3[];
+  /** Rigid region transforms keep rotated walls exact instead of expanding AABBs. */
+  orientedBoxes?: readonly { bounds:THREE.Box3; inverse:THREE.Matrix4 }[];
   cylinders: readonly CameraCylinder[];
   shelters?: readonly (readonly [number,number,number,number])[];
   landmarkFraming?: { bounds: readonly [number,number,number,number]; targetLift: number };
@@ -76,6 +78,14 @@ export function clearCameraPosition(target: THREE.Vector3, desired: THREE.Vector
     if (box.containsPoint(target)) { distance = 0; break; }
     const hit = ray.intersectBox(box, intersection);
     if (hit) distance = Math.min(distance, Math.max(0, target.distanceTo(hit) - .04));
+  }
+  for (const item of space.orientedBoxes ?? []) {
+    const localRay=ray.clone().applyMatrix4(item.inverse);
+    if(item.bounds.containsPoint(localRay.origin)){distance=0;break;}
+    const hit=localRay.intersectBox(item.bounds,intersection);
+    // Region matrices contain rotation and translation only, so ray distances
+    // are identical in local metres and world metres.
+    if(hit)distance=Math.min(distance,Math.max(0,localRay.origin.distanceTo(hit)-.04));
   }
   for (const cylinder of space.cylinders) {
     const hit = intersectCameraCylinder(ray, cylinder, CAMERA_CLEARANCE);

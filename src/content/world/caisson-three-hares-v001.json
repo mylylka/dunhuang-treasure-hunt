@@ -1,0 +1,26 @@
+{
+  "version": "v001",
+  "asset": "caisson-three-hares/v001/three-hares-caisson.glb",
+  "sourcePlacement": {"x": -12, "y": 5.55, "z": -15},
+  "outerWidth": 15.2,
+  "depth": 2.43,
+  "levels": [
+    {"shape": "square", "width": 15.2, "cut": 0, "beamWidth": 0.56, "bottom": 0, "thickness": 0.24},
+    {"shape": "octagon", "width": 12.7, "cut": 2.1, "beamWidth": 0.48, "bottom": 0.52, "thickness": 0.22},
+    {"shape": "square", "width": 10.25, "cut": 0, "beamWidth": 0.44, "bottom": 1.1, "thickness": 0.24},
+    {"shape": "octagon", "width": 7.9, "cut": 1.25, "beamWidth": 0.38, "bottom": 1.68, "thickness": 0.23},
+    {"shape": "square", "width": 5.6, "cut": 0, "beamWidth": 0.31, "bottom": 2.19, "thickness": 0.2}
+  ],
+  "centerPanel": {
+    "nodeId": "three-hares-caisson-center-panel",
+    "materialId": "three-hares-caisson-center-art",
+    "texture": "caisson-three-hares/v001/three-hares-center.jpg",
+    "width": 4.95,
+    "faceHeight": 2.35,
+    "thickness": 0.08,
+    "fit": "contain",
+    "rotation": 0
+  },
+  "geometry": "caisson-three-hares/v001/geometry.json",
+  "retainedRoofLining": "hall-v003-high-roof-lining"
+}

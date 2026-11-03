@@ -1,0 +1,213 @@
+{
+  "version": 1,
+  "scope": "User-provided trees for the two sides of the nine-storey tower",
+  "originalsPreserved": true,
+  "records": [
+    {
+      "sourceName": "stylized tree 3d model (6).glb",
+      "sourcePath": "/Users/liujing/Downloads/3d视觉素材库/3D模型/stylized tree 3d model (6).glb",
+      "sourceBytes": 5306356,
+      "sourceSha256": "6a273da090c39f216d40c922c2ff35b9a27eac2cd383b06c9300237f834f1404",
+      "runtimeFile": "stylized-tree.glb",
+      "runtimeBytes": 3681388,
+      "runtimeSha256": "b77cf3eabe2abd4875c273e37a04965f1c68de70875c3071e5a47288ea87bdb8",
+      "generator": "Tripo",
+      "upAxis": "Y",
+      "groundY": 0.0,
+      "vertices": 67817,
+      "triangles": 45490,
+      "materials": 1,
+      "originalBounds": {
+        "min": [
+          -0.272705078125,
+          0.0,
+          -0.248291015625
+        ],
+        "max": [
+          0.272705078125,
+          0.99951171875,
+          0.248291015625
+        ]
+      },
+      "targetHeight": 25,
+      "uniformScale": 25.01221299462628,
+      "boundsAt25m": {
+        "min": [
+          -6.8209574987787,
+          0.0,
+          -6.210307767464582
+        ],
+        "max": [
+          6.8209574987787,
+          25.0,
+          6.210307767464582
+        ]
+      },
+      "lowBoundsAt25m": {
+        "min": [
+          -3.07156889393205,
+          0.0,
+          -1.2640448506424702
+        ],
+        "max": [
+          2.106741013967181,
+          2.4,
+          4.329506595017098
+        ]
+      },
+      "playerGeometryRadius": 4.679991883636098,
+      "fullGeometryRadius": 7.983791615211098,
+      "textures": [
+        {
+          "name": "stylized_tree_3d_model_basecolor.jpg",
+          "sourceSize": [
+            4096,
+            4096
+          ],
+          "runtimeSize": [
+            2048,
+            2048
+          ],
+          "sourceSha256": "4597547fca0febbbc053498f5076473b495b4518ffd6869c7c59e08913931c9b",
+          "runtimeSha256": "ed912fc8f3e7a9a7b5b2764f0a90f15f88faf6855003fbd92b629d40562aa631",
+          "runtimeBytes": 963479,
+          "operation": "LANCZOS downsample to 2048px; JPEG quality 92, 4:4:4; no repaint, crop, recolor or AI processing"
+        }
+      ],
+      "unchangedGeometryBufferViews": [
+        {
+          "index": 1,
+          "bytes": 813804,
+          "sha256": "40d0f2290c66d7f435e58ac1bc6f748036e3d56ffd831ede9a53faa2e5bfe47c"
+        },
+        {
+          "index": 2,
+          "bytes": 813804,
+          "sha256": "1a2f7be42f1361a79108c1e10ea318dbdba0cfb0d6f1f4f42e673f9147f4e19a"
+        },
+        {
+          "index": 3,
+          "bytes": 542536,
+          "sha256": "46590c8d6aeeb24e1159550499b87b4320e8d3854c31508156e83638a1d54207"
+        },
+        {
+          "index": 4,
+          "bytes": 545880,
+          "sha256": "e723b6679990e554b12ee62301a16f6963de8607db102fb502a631519a0aa74e"
+        }
+      ],
+      "preserved": [
+        "positions",
+        "normals",
+        "UV coordinates",
+        "triangle indices",
+        "node transforms",
+        "material factors",
+        "mesh names"
+      ]
+    },
+    {
+      "sourceName": "low-poly tree 3d model (2).glb",
+      "sourcePath": "/Users/liujing/Downloads/3d视觉素材库/3D模型/low-poly tree 3d model (2).glb",
+      "sourceBytes": 4850048,
+      "sourceSha256": "61f9d0be8661e8db81cb07c76fd4d8744c7ad995ce0120a6af0af3ad34aa1964",
+      "runtimeFile": "broad-tree.glb",
+      "runtimeBytes": 3492444,
+      "runtimeSha256": "e5acab2b961f644ec290e8cae391b38336531b71225e0818bcde8d8c09249fad",
+      "generator": "Tripo",
+      "upAxis": "Y",
+      "groundY": 0.0,
+      "vertices": 64278,
+      "triangles": 58726,
+      "materials": 1,
+      "originalBounds": {
+        "min": [
+          -0.437255859375,
+          0.0,
+          -0.309814453125
+        ],
+        "max": [
+          0.437255859375,
+          0.99951171875,
+          0.309814453125
+        ]
+      },
+      "targetHeight": 25,
+      "uniformScale": 25.01221299462628,
+      "boundsAt25m": {
+        "min": [
+          -10.936736687835857,
+          0.0,
+          -7.74914509037616
+        ],
+        "max": [
+          10.936736687835857,
+          25.0,
+          7.74914509037616
+        ]
+      },
+      "lowBoundsAt25m": {
+        "min": [
+          -3.8654127992183684,
+          0.0,
+          -3.218124084025403
+        ],
+        "max": [
+          3.902052155808233,
+          2.4,
+          4.7569614069369806
+        ]
+      },
+      "playerGeometryRadius": 5.458409409507474,
+      "fullGeometryRadius": 10.949632458403439,
+      "textures": [
+        {
+          "name": "low-poly_tree_3d_model_basecolor.jpg",
+          "sourceSize": [
+            4096,
+            4096
+          ],
+          "runtimeSize": [
+            2048,
+            2048
+          ],
+          "sourceSha256": "0023cf97567c95e7c168d35146f2a6bb27c54a0008375645bc55293ca3c622f1",
+          "runtimeSha256": "e154d469648cb72565c0ea9b1aa6d0fc192dae20d1e9a6751f11e7d92b302857",
+          "runtimeBytes": 728922,
+          "operation": "LANCZOS downsample to 2048px; JPEG quality 92, 4:4:4; no repaint, crop, recolor or AI processing"
+        }
+      ],
+      "unchangedGeometryBufferViews": [
+        {
+          "index": 1,
+          "bytes": 771336,
+          "sha256": "5dd784ae69fb971c31067d82a4da0d0fcdf74298f710d899edbc8a35fd487f4a"
+        },
+        {
+          "index": 2,
+          "bytes": 771336,
+          "sha256": "5853bd30f37773c6b92499a6de0dc682e1f0d5e05bc97b03f58a73ceac10f7ab"
+        },
+        {
+          "index": 3,
+          "bytes": 514224,
+          "sha256": "25238eb908d61226906ae590da3c97234eb5c43ce24760dd9f238515c017c28c"
+        },
+        {
+          "index": 4,
+          "bytes": 704712,
+          "sha256": "128654c5d5701f6066648e9ce3de09d38c690a3d27f745e2a18b98e566798dad"
+        }
+      ],
+      "preserved": [
+        "positions",
+        "normals",
+        "UV coordinates",
+        "triangle indices",
+        "node transforms",
+        "material factors",
+        "mesh names"
+      ]
+    }
+  ]
+}

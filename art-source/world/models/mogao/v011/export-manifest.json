@@ -1,0 +1,37 @@
+{
+  "originalsUnchanged": true,
+  "originalHashes": {
+    "public/assets/world/mogao/v010/entry.glb": "b42615f949a9c831c9acab256c462ad6a0b18c096d48bcd7c92124f455503a67",
+    "public/assets/world/mogao/v009/mountain.glb": "fbdf7628d4a0e5d1eec7224fb24130b916079cb7fd407a15fbeb4b093ad49aff",
+    "public/assets/world/mogao/v010/interior.glb": "34819fc24a2baa7d56560fe7ff9f8f1977dc34a56529566292a88fc6c1030108",
+    "public/assets/world/mogao-massing/v003/tower.glb": "52c47a43f5e78fc394e2a7d9f927c073a7114115f8d5d920fe51ddb9505dfeca"
+  },
+  "recessFloorVerticesLowered": 961,
+  "recessFloorBefore": 6.85546875,
+  "recessFloorAfter": 6.73546875,
+  "changes": [
+    "one closed 30-tread stair profile; no stacked coplanar sides",
+    "stair rear ends at plinth front, y=-10.2",
+    "passage floor begins at plinth cut y=-9; same floor height"
+  ],
+  "UVAndTextures": "existing rock UV and all baked textures retained; plain stair material retained",
+  "stairs": {
+    "front": -29,
+    "back": -10.2,
+    "width": 10.4,
+    "rise": 6.85546875,
+    "steps": 30
+  },
+  "playerCollidersChanged": false,
+  "mainEntranceChanged": false,
+  "exports": {
+    "entry": {
+      "bytes": 20280,
+      "sha256": "d2ffe5ede4135a0657e49dfab6b896880026ff030889d1f1603b7d869117af31"
+    },
+    "mountain": {
+      "bytes": 33787036,
+      "sha256": "d9e3bd36167a3bf1eb4d91c3c3bea79d6242cdf84e3b913f2e4c4cb90efa4146"
+    }
+  }
+}

@@ -1,0 +1,56 @@
+[
+  {
+    "id": "c01",
+    "title": "C01 · 连续山崖、窟口与栈道",
+    "source": "/Users/liujing/Downloads/3d视觉素材库/莫高窟远景.png",
+    "file": "references/c01.png",
+    "sha256": "d0954fa994e62515a0c44a2c1b4df35bb85120db471d3f1077acbe68edc0f222",
+    "identity": "用户提供的概念图；非新制作模型截图",
+    "processing": "原字节复制，无裁切、调色或内容改绘"
+  },
+  {
+    "id": "c02",
+    "title": "C02 · 厚实窟口、宽台阶与木构窟檐",
+    "source": "/Users/liujing/Downloads/3d视觉素材库/接近主要洞窟入口.png",
+    "file": "references/c02.png",
+    "sha256": "99b16ed8c9d57ebfe25f8546f75c4f82b068e0b4836dcc6ace9b17c94913219e",
+    "identity": "用户提供的概念图；非新制作模型截图",
+    "processing": "原字节复制，无裁切、调色或内容改绘"
+  },
+  {
+    "id": "c03",
+    "title": "C03 · 高顶、中央柱体与绕行空间",
+    "source": "/Users/liujing/Downloads/3d视觉素材库/进入洞窟.png",
+    "file": "references/c03.png",
+    "sha256": "d8d566b8d3397df8077d89a01d8e35c7af0077b9817f9233a7c3b8ece40ab0bb",
+    "identity": "用户提供的概念图；非新制作模型截图",
+    "processing": "原字节复制，无裁切、调色或内容改绘"
+  },
+  {
+    "id": "c04",
+    "title": "C04 · 连续长卷、仰望尺度与侧向入光",
+    "source": "/Users/liujing/Downloads/3d视觉素材库/靠近西壁九色鹿壁画.png",
+    "file": "references/c04.png",
+    "sha256": "585729ea436027f2cb17f3f0904fd57ba693e0137dd33af848090b67be59754b",
+    "identity": "用户提供的概念图；非新制作模型截图",
+    "processing": "原字节复制，无裁切、调色或内容改绘"
+  },
+  {
+    "id": "w01",
+    "title": "W01 · 三目的地的远近关系",
+    "source": "/Users/liujing/Downloads/3d视觉素材库/最新沙漠世界高空总览图.png",
+    "file": "references/w01.png",
+    "sha256": "bbb0d445fd5bd0df8c3e362c58651bb168b4c4e4fe555c50cb9854b53de00dd9",
+    "identity": "用户提供的概念图；非新制作模型截图",
+    "processing": "原字节复制，无裁切、调色或内容改绘"
+  },
+  {
+    "id": "performance",
+    "title": "长卷悬浮参考 · 这是演出图，不是另一套洞窟结构",
+    "source": "/Users/liujing/Downloads/3d视觉素材库/洞窟古寺中的敦煌壁画ાન્ય.png",
+    "file": "references/performance.png",
+    "sha256": "bdee1456b461ae3f202c5120a0dd7250bbd402554fd3a2800f3a318e478edcae",
+    "identity": "用户提供的概念图；非新制作模型截图",
+    "processing": "原字节复制，无裁切、调色或内容改绘"
+  }
+]

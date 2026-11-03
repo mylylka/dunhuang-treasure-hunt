@@ -1,0 +1,41 @@
+{
+  "status": "temporary-local-elder-voice",
+  "voice": "macOS Grandpa zh_CN, 175 words/min",
+  "tracks": {
+    "introduction": {
+      "file": "introduction.mp3",
+      "duration": 8.097959,
+      "sha256": "24d79b5827930fea2aa4cb619112387aef27922860c27d1f7ee0a485295fd6ab"
+    },
+    "ordination": {
+      "file": "ordination.mp3",
+      "duration": 28.995918,
+      "sha256": "785a3ed0dea61a1b6244a70a00ab19e3471b657119ad58f0168ec94916c27760"
+    },
+    "novice-and-girl": {
+      "file": "novice-and-girl.mp3",
+      "duration": 18.964898,
+      "sha256": "6b8375cc911a727b5e1b8d892da6db73f65abf7ce6efe7daaae03a60e2cd3c6c"
+    },
+    "confession": {
+      "file": "confession.mp3",
+      "duration": 6.713469,
+      "sha256": "fe04b37f37d57490ddf70ec86f76a6d6d428101d170cabb57e9a196f6bf577cd"
+    },
+    "fine": {
+      "file": "fine.mp3",
+      "duration": 18.834286,
+      "sha256": "72a3e39084a2b07ca881868da3ca4aa655d3695060840954da4e493b533bb854"
+    },
+    "cremation": {
+      "file": "cremation.mp3",
+      "duration": 9.351837,
+      "sha256": "abe454d72ca94302c2e11d8ffa2138002288e8f3611c9cdd4febc4bc65e8e217"
+    },
+    "ending": {
+      "file": "ending.mp3",
+      "duration": 5.485714,
+      "sha256": "6f7e3cd6889c383d164278f420d693f35861c2a72443d40a582675729e017509"
+    }
+  }
+}

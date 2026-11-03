@@ -1,0 +1,70 @@
+{
+  "version": 1,
+  "selection": "tree 3d model.glb",
+  "selectionReason": "More upright main trunk and broad upper crown; offline silhouette comparison and building-envelope placement checks.",
+  "runtimeFile": "music-courtyard-tree.glb",
+  "runtimeSha256": "f71e07fbb7076f5c5b8539c1acd248b8835bb51279c77459c21d4466ce725b2b",
+  "processing": "Original GLB bytes copied unchanged. Embedded texture is already 2048x2048; no image resampling, repaint, geometry or material change.",
+  "runtimePlacement": {
+    "sourcePosition": [
+      31.3,
+      0.035,
+      -8.5
+    ],
+    "yawDegrees": 180,
+    "height": 34,
+    "rootAnchor": [
+      0.009765625,
+      0,
+      -0.013916015625
+    ]
+  },
+  "candidates": [
+    {
+      "sourceName": "tree 3d model.glb",
+      "sourceSha256": "f71e07fbb7076f5c5b8539c1acd248b8835bb51279c77459c21d4466ce725b2b",
+      "sourceBytes": 4150860,
+      "bounds": {
+        "min": [
+          -0.499755859375,
+          0,
+          -0.465087890625
+        ],
+        "max": [
+          0.499755859375,
+          0.95068359375,
+          0.465087890625
+        ]
+      },
+      "triangles": 51801,
+      "textureSize": [
+        2048,
+        2048
+      ],
+      "selected": true
+    },
+    {
+      "sourceName": "stylized tree 3d model.glb",
+      "sourceSha256": "4ea0cb5311fdc84d453ab35efb33a998934594b741efbe81f645e8048610d181",
+      "sourceBytes": 2880892,
+      "bounds": {
+        "min": [
+          -0.479736328125,
+          0,
+          -0.321533203125
+        ],
+        "max": [
+          0.479736328125,
+          0.99951171875,
+          0.321533203125
+        ]
+      },
+      "triangles": 37987,
+      "textureSize": [
+        2048,
+        2048
+      ],
+      "selected": false
+    }
+  ]
+}

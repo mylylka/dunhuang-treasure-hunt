@@ -1,0 +1,129 @@
+{
+  "status": "temporary-synthetic-elder-narration",
+  "voice": "macOS installed Grandpa (zh_CN), rate175, no voice cloning",
+  "processing": "per-phrase speech concatenated, measured PCM timecodes, -18LUFS mono MP3; replace with user recording later",
+  "tracks": {
+    "rescue-and-promise": {
+      "file": "rescue-and-promise.mp3",
+      "duration": 11.755102,
+      "cues": [
+        {
+          "start": 0,
+          "end": 3.8225,
+          "text": "有一人掉入恒河，美丽的九色鹿将他救上岸，"
+        },
+        {
+          "start": 3.8225,
+          "end": 7.3569,
+          "text": "溺水人因之许诺不将九色鹿之事向外泄露，"
+        },
+        {
+          "start": 7.3569,
+          "end": 11.7176,
+          "text": "并发誓若违背诺言，让他口吐白沫周身生疮。"
+        }
+      ],
+      "sha256": "1edfce19d87873976eecad67bfed21d9c75cbab9742e7086c35ce4e006b42c0e"
+    },
+    "queen-and-betrayal": {
+      "file": "queen-and-betrayal.mp3",
+      "duration": 11.467755,
+      "cues": [
+        {
+          "start": 0,
+          "end": 3.1025,
+          "text": "后来，这个国家的王后梦见九色鹿，"
+        },
+        {
+          "start": 3.1025,
+          "end": 7.005,
+          "text": "她要求国王捕捉九色鹿，要用鹿皮做衣服。"
+        },
+        {
+          "start": 7.005,
+          "end": 11.4296,
+          "text": "国王布告悬赏，溺水人见利忘义，到宫廷告密。"
+        }
+      ],
+      "sha256": "9e9ae5a0ce7ae90ac77bad60779f09c07132d1d62297faa109de8bd644922b6e"
+    },
+    "hunt-and-sleep": {
+      "file": "hunt-and-sleep.mp3",
+      "duration": 9.142857,
+      "cues": [
+        {
+          "start": 0,
+          "end": 2.5526,
+          "text": "国王和王后在负心人的带领下，"
+        },
+        {
+          "start": 2.5526,
+          "end": 5.3991,
+          "text": "同乘一辆马车前往围猎九色鹿，"
+        },
+        {
+          "start": 5.3991,
+          "end": 9.1096,
+          "text": "此时九色鹿正在山中入睡，一无所知。"
+        }
+      ],
+      "sha256": "ef70043dd912b984c0e5014e74afbc8ceddb8ad55ff94c0f359999a5d40ed3e8"
+    },
+    "appeal-to-the-king": {
+      "file": "appeal-to-the-king.mp3",
+      "duration": 14.994286,
+      "cues": [
+        {
+          "start": 0,
+          "end": 4.4303,
+          "text": "溺水人带国王及大队人马已到面前，九色鹿被惊醒，"
+        },
+        {
+          "start": 4.4303,
+          "end": 8.9567,
+          "text": "但它毫无畏惧，向国王诉说了溺水人忘恩负义的经过。"
+        },
+        {
+          "start": 8.9567,
+          "end": 11.6852,
+          "text": "国王深受感动，放了九色鹿，"
+        },
+        {
+          "start": 11.6852,
+          "end": 14.958,
+          "text": "并下令全国保护这只美丽的九色鹿。"
+        }
+      ],
+      "sha256": "48ae9d60c31b18778482b447e4209671cad7c79a3e2051ac782863552398e1d1"
+    },
+    "broken-oath": {
+      "file": "broken-oath.mp3",
+      "duration": 5.302857,
+      "cues": [
+        {
+          "start": 0,
+          "end": 2.3023,
+          "text": "落水人因违背了自己的誓言，"
+        },
+        {
+          "start": 2.3023,
+          "end": 5.2549,
+          "text": "口吐白沫、全身生疮而死。"
+        }
+      ],
+      "sha256": "8e1f4178b7833fecd0bfabf3c547a79a8a12acc004628481f76648017734abf9"
+    },
+    "invitation": {
+      "file": "invitation.mp3",
+      "duration": 5.485714,
+      "cues": [
+        {
+          "start": 0,
+          "end": 5.4543,
+          "text": "敦煌的壁画里，还藏着许多这样的故事。想继续看看吗？"
+        }
+      ],
+      "sha256": "0ce44c7355bfcb2ae7fd92d28df7ea052ea79b4a3457700e0c4e2a9e1889e6c0"
+    }
+  }
+}

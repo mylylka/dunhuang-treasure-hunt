@@ -1,0 +1,10 @@
+import {build} from 'vite';
+import {cp,mkdir,copyFile} from 'node:fs/promises';
+import {resolve,dirname} from 'node:path';
+import {fileURLToPath} from 'node:url';
+const root=resolve(dirname(fileURLToPath(import.meta.url)),'..'),out=resolve(root,'outputs/sandstone-study/v001');
+await build({configFile:false,root,base:'./',publicDir:false,build:{outDir:out,emptyOutDir:false,chunkSizeWarningLimit:2000,rollupOptions:{input:resolve(root,'sandstone-study-v001.html')}}});
+await mkdir(resolve(out,'assets/world'),{recursive:true});
+for(const asset of ['sandstone-study/v001','traveler-tripo/v002'])await cp(resolve(root,'public/assets/world',asset),resolve(out,'assets/world',asset),{recursive:true});
+await copyFile(resolve(out,'sandstone-study-v001.html'),resolve(out,'index.html'));
+console.log(out);

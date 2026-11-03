@@ -18,3 +18,6 @@ export const WORLD_ART_SAMPLE = {
   courtyard: 'courtyard/v002/courtyard.glb',
   traveler: 'shared/v001/traveler.glb',
 } as const;
+
+/** Square hall revision for the terrain preview, retaining the approved v002 asset. */
+export const TERRAIN_COURTYARD_MODEL = 'courtyard/v006/courtyard.glb';

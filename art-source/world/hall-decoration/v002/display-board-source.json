@@ -1,0 +1,108 @@
+{
+  "version": "v001",
+  "archiveVersion": "v002",
+  "date": "2026-11-02",
+  "authorization": "User annotation 9: use first-row second display from the supplied setting board; technical extraction only.",
+  "script": "scripts/prepare-hall-display-v001.py",
+  "source": {
+    "requestedPath": "/Users/liujing/Downloads/3d视觉素材库/纹样馆工作区小品设定板.png",
+    "originalPath": "/Users/liujing/Downloads/敦煌/3d视觉素材库/纹样馆工作区小品设定板.png",
+    "archivePath": "art-source/world/hall-decoration/v002/纹样馆工作区小品设定板.png",
+    "sha256": "53e513832491cb17084241dbad4124c09ba0abd6b918b4669c8df4dd91f23df6",
+    "archiveSha256": "53e513832491cb17084241dbad4124c09ba0abd6b918b4669c8df4dd91f23df6",
+    "byteIdentical": true,
+    "pixels": [
+      1536,
+      1024
+    ],
+    "bytes": 2187566
+  },
+  "selection": {
+    "item": "first row, second object: six-panel painted display",
+    "panelArrangement": "three columns, two rows; original unequal column widths retained",
+    "quadClockwiseTLTRBRBL": [
+      [
+        367,
+        79
+      ],
+      [
+        615,
+        66
+      ],
+      [
+        655,
+        277
+      ],
+      [
+        406,
+        304
+      ]
+    ],
+    "sourceEdgeLengthsPixels": [
+      248.34049206683954,
+      214.75800334329801,
+      250.4595775769016,
+      228.35498680782078
+    ],
+    "inversePerspectiveCoefficients": [
+      1.1599761669701822,
+      0.15496276689477315,
+      367.0,
+      -0.03525118082239746,
+      1.0309752976739832,
+      79.0,
+      0.0002601238487320034,
+      -6.719266935820805e-05
+    ],
+    "includes": [
+      "all six original tile faces",
+      "original internal seams and small tile borders",
+      "baked paper shading and tiny corner marks"
+    ],
+    "excludes": [
+      "outer wood perimeter",
+      "support crossbars",
+      "A-frame legs",
+      "other objects on the setting board"
+    ]
+  },
+  "runtime": {
+    "path": "public/assets/world/courtyard/v004/display-board-art.jpg",
+    "sha256": "2e88a05435b0f8665bd6b0f5789f5ba49d2d4858dfeb0031fbf5477853d42ca5",
+    "pixels": [
+      248,
+      214
+    ],
+    "bytes": 49954,
+    "mode": "RGB",
+    "colorSpace": "sRGB",
+    "alpha": false,
+    "aspectRatio": 1.158878504672897,
+    "suggestedFaceSizeMeters": [
+      0.84,
+      0.7248387096774194
+    ],
+    "wholeObjectHeightMeters": 0.98,
+    "method": "Single inverse homography; bicubic resampling at native effective resolution; JPEG97 4:4:4. No sharpening, reconstruction, repainting, new flowers or watermark changes.",
+    "aspectNote": "Output ratio derives conservatively from the source face edge lengths; this single illustration is not a calibrated physical survey.",
+    "uv": "Whole 0–1 texture on one separate face; keep the output aspect ratio. Model outer wood framing and support legs separately."
+  },
+  "reviewOnly": [
+    {
+      "path": "art-source/world/hall-decoration/v002/display-board-source-preview.png",
+      "note": "3x source crop with extraction boundary, no added detail."
+    },
+    {
+      "path": "art-source/world/hall-decoration/v002/display-board-extraction-preview.jpg",
+      "note": "Labeled comparison collage, not a runtime texture."
+    }
+  ],
+  "validation": {
+    "originalByteIdentical": true,
+    "nativeEffectiveResolution": true,
+    "allSixPanelsPreserved": true,
+    "outerWoodFrameExcluded": true,
+    "modelsModified": false
+  },
+  "limits": "Source artwork is small and contains perspective/baked shading. Do not claim independently supplied HD artwork or invent missing detail."
+}

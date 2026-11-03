@@ -1,0 +1,37 @@
+{
+  "status": "Awaiting visual acceptance",
+  "sizeMetersBlenderXYZ": [
+    7.676743745803833,
+    4.26111364364624,
+    4.600743502378464
+  ],
+  "lowTriangles": 36784,
+  "highTriangles": 1471408,
+  "uvLayers": [
+    "UVMap"
+  ],
+  "bake": {
+    "method": "Cycles selected-to-active",
+    "resolution": 2048,
+    "marginPixels": 12,
+    "cageExtrusion": 0.025,
+    "maxRayDistance": 0.07,
+    "maps": [
+      "basecolor",
+      "normal",
+      "ao",
+      "roughness",
+      "orm"
+    ]
+  },
+  "glb": {
+    "bytes": 13814592,
+    "sha256": "ba61599d2122a1567beef88408f017f678a8e55374163cf68020f9f6a3df4241"
+  },
+  "protectedAssets": {
+    "public/assets/world/mogao/v006/exterior.glb": "150dc39585dc6c49df5d3552a88b8d8885c1f60e00a00de3022450f03e620eb4",
+    "public/assets/world/mogao/v003/interior.glb": "c812045802172ab4d6c430d1cf7297462be51f8533c3811e2f6b2bd21186f7c4",
+    "public/assets/world/traveler-tripo/v002/traveler.glb": "81b6b7c5a02fb6e84fd807be2f003e5e99f8f92daaeb7788dd62eec1ca084609"
+  },
+  "materials": 1
+}

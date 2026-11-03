@@ -114,9 +114,9 @@ try {
     await expect(screen.getByTestId('world-host')).toHaveAttribute('data-ready', 'true');
     if (name !== 'courtyard') await screen.getByTestId('world-interact').click();
     if (name === 'story') {
-      await screen.getByTestId('world-story-start').click();
-      await screen.locator('.world-story-art img').evaluate(img => img.decode());
-      expect(await screen.locator('.world-story-art img').getAttribute('src')).toContain('assets/world/story/v001/');
+      await expect(screen.getByTestId('world-story')).toHaveAttribute('data-phase','narration');
+      await screen.locator('.deer-story-detail').evaluate(img => img.decode());
+      expect(await screen.locator('.deer-story-detail').getAttribute('src')).toContain('assets/world/story/v002/');
     }
     await screen.waitForTimeout(100);
     await screen.screenshot({ path: `${output}/art-sample-v002-world-${name}.png` });

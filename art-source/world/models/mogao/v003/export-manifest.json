@@ -1,0 +1,36 @@
+{
+  "source": "art-source/world/mogao/v003/imported/石窟.fbx",
+  "uniformScale": 120.0,
+  "floorWorldHeight": 6.85546875,
+  "exports": {
+    "exterior": {
+      "triangles": 60432,
+      "batches": 2,
+      "bytes": 5113276,
+      "sha256": "7bd049ffbc821997a9677c46db9c5769433d2020fb28489ce20b1da18e5c3a8e"
+    },
+    "interior": {
+      "triangles": 2488,
+      "batches": 7,
+      "bytes": 15213540,
+      "sha256": "c812045802172ab4d6c430d1cf7297462be51f8533c3811e2f6b2bd21186f7c4"
+    }
+  },
+  "mapping": {
+    "sourceSize": [
+      12918,
+      2150
+    ],
+    "shownEndX": 12900,
+    "wallsMetres": [
+      30,
+      24,
+      30,
+      24
+    ],
+    "heightMetres": 18,
+    "readingDirection": "left → far wall → right → entry wall (east to west)",
+    "doorOpening": "entry wall lower middle remains physically open; full mother image is available in story player"
+  },
+  "geometryChanges": "Preserve source front, stairs, pillars and other openings. Open only central rear closure and carve hidden accepted chamber volume."
+}

@@ -1,0 +1,185 @@
+{
+  "version": "v006",
+  "status": "measured export; awaiting visual acceptance",
+  "worldOrigin": [
+    -12,
+    0,
+    2
+  ],
+  "units": "metres",
+  "upAxis": "Y",
+  "model": "courtyard.glb",
+  "bytes": 14856316,
+  "sha256": "d18ac5b5e239ae29a252f6dc91d5a566b962214d88652610aeabfe8537270102",
+  "triangles": 195947,
+  "meshCount": 466,
+  "materials": 56,
+  "workshop": {
+    "stand": {
+      "x": -18.9,
+      "z": -1.3
+    },
+    "paintPoint": {
+      "x": -18.9,
+      "z": -1.3
+    },
+    "takeColorPoint": {
+      "x": -21.8,
+      "z": -1.85
+    },
+    "referencePoint": {
+      "x": -19.4,
+      "z": -0.3
+    },
+    "accessPath": [
+      {
+        "x": -15.8,
+        "z": 0.1
+      },
+      {
+        "x": -17,
+        "z": -0.3
+      },
+      {
+        "x": -18.2,
+        "z": -0.6
+      },
+      {
+        "x": -18.9,
+        "z": -1.3
+      }
+    ],
+    "takeColorPath": [
+      {
+        "x": -18.9,
+        "z": -1.3
+      },
+      {
+        "x": -20.3,
+        "z": -1.3
+      },
+      {
+        "x": -21.8,
+        "z": -1.3
+      },
+      {
+        "x": -21.8,
+        "z": -1.85
+      }
+    ],
+    "referencePath": [
+      {
+        "x": -18.9,
+        "z": -1.3
+      },
+      {
+        "x": -19.4,
+        "z": -0.3
+      }
+    ],
+    "tableLegContact": {
+      "oldMinY": 0.0,
+      "newMinY": 0.0,
+      "pavingTop": 0.003
+    },
+    "braceConnections": {
+      "crossSpan": 0.84,
+      "centerSpan": 2.44,
+      "legSpanX": 2.6,
+      "legSpanZ": 1.0,
+      "legThickness": 0.16,
+      "contact": "shared boundary faces"
+    },
+    "paper": {
+      "id": "hall-v003-workshop-paper-art",
+      "width": 0.96,
+      "depth": 0.638,
+      "image": "display-board-art.jpg",
+      "patternWidth": 0.62,
+      "patternHeight": 0.535
+    },
+    "validation": "pending-production-rule-verification"
+  },
+  "display": {
+    "id": "hall-v003-pattern-display",
+    "x": -20.7,
+    "z": 0.35,
+    "height": 0.98,
+    "width": 1.05,
+    "depth": 0.4,
+    "facing": "toward-workstation",
+    "bounds": {
+      "min": [
+        -21.100704,
+        0.0,
+        -0.188431
+      ],
+      "max": [
+        -20.292412,
+        0.982109,
+        0.844041
+      ]
+    },
+    "image": "display-board-art.jpg",
+    "artWidth": 0.84,
+    "artHeight": 0.7248387096774194,
+    "facingYaw": 2.0943951023931953
+  },
+  "pigmentRack": {
+    "id": "hall-v003-pigment-rack",
+    "x": -23.05,
+    "z": -1.85,
+    "height": 1.5,
+    "bounds": {
+      "min": [
+        -23.30711,
+        0.0,
+        -2.574565
+      ],
+      "max": [
+        -22.792896,
+        1.5,
+        -1.125425
+      ]
+    },
+    "facing": "+x",
+    "sourceAsset": "pigment-rack/v001/pigment-rack.glb",
+    "sourceSha256": "e987f76facbdb4d7373fdbc317e22d9be64b32ad5a21ebaad0003ba43437149a",
+    "facingYaw": 1.5707963267948966
+  },
+  "workshopShrubs": {
+    "id": "hall-v003-workshop-shrubs",
+    "x": -22.65,
+    "z": 0.55,
+    "height": 0.85,
+    "bounds": {
+      "min": [
+        -23.384155,
+        0.0,
+        -0.184156
+      ],
+      "max": [
+        -21.915844,
+        0.85,
+        1.284156
+      ]
+    },
+    "sourceAsset": "workshop-shrubs/v001/workshop-shrubs.glb",
+    "sourceSha256": "2f77553dd449df33cbc01dba013c98505caf95088044f285aa2147a588bdbc93"
+  },
+  "wallBodyBottom": 0.5,
+  "plinthHalfWidth": 0.3,
+  "oldSourceHashes": {
+    "art-source/world/models/courtyard/v004/courtyard.blend": "6c47f08c071aa2bd066aefac53f701848ef57571155b5d6b73145d885e16c872",
+    "public/assets/world/courtyard/v004/courtyard.glb": "e28ba291740f0c63c2ad6c5d20c8d784cf5d386f26aa3ded211ec70197834226",
+    "art-source/world/models/courtyard/v005/courtyard.blend": "d75982b8be26c3f2bb7330435e4eb91e947defd791677ecd4e3c25f4b29ba650",
+    "public/assets/world/courtyard/v005/courtyard.glb": "df2b1f4d7933f1a95990a6adf6b8f7ef651bd476bbc6957b48283c53b1ee6c2f",
+    "src/content/world/courtyard-hall-v005.json": "f81a0300fe0e16a32c8a4a3bbe0b450f2faadc969d588933553c518bbfe384e9",
+    "src/content/world/courtyard-props.json": "2a7f815f90cadc3067cef2daf41350de219f4efa46e2db9431cd303f1bcf10f0",
+    "public/assets/world/workshop-shrubs/v001/workshop-shrubs.glb": "2f77553dd449df33cbc01dba013c98505caf95088044f285aa2147a588bdbc93"
+  },
+  "geometryLayout": "src/content/world/courtyard-hall-v006.json",
+  "cameraBoxCount": 347,
+  "playerSolidCount": 40,
+  "unchanged": "All approved hall geometry, caisson, wall art, curtains and unrelated props remain unchanged."
+}

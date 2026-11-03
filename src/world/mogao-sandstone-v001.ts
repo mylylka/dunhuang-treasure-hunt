@@ -1,0 +1,70 @@
+import * as THREE from 'three';
+import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+import './mogao-sandstone-v001.css';
+
+// Dedicated inspection scene: no App, gameplay, collision or persistent state.
+const viewport=document.querySelector<HTMLDivElement>('#viewport')!;
+const status=document.querySelector<HTMLSpanElement>('#status')!;
+const buttons=[...document.querySelectorAll<HTMLButtonElement>('button')];buttons.forEach(b=>b.disabled=true);
+const scene=new THREE.Scene();scene.background=new THREE.Color('#afcfdf');
+const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFShadowMap;
+renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.08;viewport.append(renderer.domElement);
+const camera=new THREE.PerspectiveCamera(49,1,.1,2000);
+const controls=new OrbitControls(camera,renderer.domElement);controls.enableDamping=true;controls.minDistance=8;controls.maxDistance=350;controls.maxPolarAngle=Math.PI*.495;
+scene.add(new THREE.HemisphereLight('#fff2d7','#ab825a',1.65));
+// Same direction, colour, intensity and exposure as the current game. Shadow
+// coverage and bias scale to the 126m scene; no fog or postprocessing.
+const sun=new THREE.DirectionalLight('#fff2d6',2.4);sun.position.set(-42,105,66);sun.target.position.set(0,0,0);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);
+Object.assign(sun.shadow.camera,{left:-95,right:95,top:95,bottom:-95,near:1,far:250});sun.shadow.normalBias=.14;sun.shadow.bias=-.0003;scene.add(sun,sun.target);
+const ground=new THREE.Mesh(new THREE.PlaneGeometry(2000,2000),new THREE.MeshStandardMaterial({color:'#dfbd83',roughness:1}));ground.rotation.x=-Math.PI/2;ground.position.y=-.1;ground.receiveShadow=true;scene.add(ground);
+const platform=6.85546875;
+const views:Record<string,{eye:[number,number,number];target:[number,number,number]}>= {
+ front:{eye:[0,40,129],target:[0,27,-8]},
+ left:{eye:[-82,57,113],target:[0,25,-8]},
+ right:{eye:[82,57,113],target:[0,25,-8]},
+ back:{eye:[-85,65,-105],target:[0,24,-15]},
+ near:{eye:[-34,13,31],target:[-36,16,7]},
+ third:{eye:[0,3.5,47],target:[0,7,0]},
+};
+let mountain:THREE.Group,oldMountain:THREE.Group,tower:THREE.Group,foundation:THREE.Group,traveler:THREE.Group,mixer:THREE.AnimationMixer;
+let loaded=false,currentView='front',showTower=true,groundY=0,personHeight=0,compareBefore=false;
+const ruler=new THREE.Group();ruler.visible=false;scene.add(ruler);
+function scaleLine(x:number,bottom:number,height:number,interval:number){
+ const points=[new THREE.Vector3(x,bottom,10),new THREE.Vector3(x,bottom+height,10)];
+ for(let h=0;h<=height+.001;h+=interval)points.push(new THREE.Vector3(x-.5,bottom+h,10),new THREE.Vector3(x+.5,bottom+h,10));
+ const line=new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(points),new THREE.LineBasicMaterial({color:'#fff1cf',depthTest:false}));line.renderOrder=10;ruler.add(line);
+}
+scaleLine(16,platform,45,5);scaleLine(2,0,1.8,.3);
+function view(name:string){
+ currentView=name;controls.maxPolarAngle=(name==='third'||name==='near')?Math.PI*.65:Math.PI*.495;camera.position.set(...views[name].eye);controls.target.set(...views[name].target);controls.update();
+ if(traveler){traveler.position.set(name==='third'?0:3,groundY,name==='third'?32:31);traveler.rotation.y=0;}
+ for(const b of document.querySelectorAll<HTMLButtonElement>('[data-view]'))b.setAttribute('aria-pressed',String(b.dataset.view===name));
+}
+for(const b of document.querySelectorAll<HTMLButtonElement>('[data-view]'))b.onclick=()=>view(b.dataset.view!);
+document.querySelector<HTMLButtonElement>('#tower')!.onclick=()=>{showTower=!showTower;tower.visible=showTower;const b=document.querySelector<HTMLButtonElement>('#tower')!;b.textContent=showTower?'隐藏九层楼':'显示九层楼';b.setAttribute('aria-pressed',String(showTower));};
+document.querySelector<HTMLButtonElement>('#ruler')!.onclick=()=>{ruler.visible=!ruler.visible;document.querySelector('#ruler')!.setAttribute('aria-pressed',String(ruler.visible));};
+document.querySelector<HTMLButtonElement>('#comparison')!.onclick=()=>{
+ compareBefore=!compareBefore;oldMountain.visible=compareBefore;mountain.visible=!compareBefore;
+ const b=document.querySelector<HTMLButtonElement>('#comparison')!;b.textContent=compareBefore?'查看修改后':'查看修改前';b.setAttribute('aria-pressed',String(compareBefore));
+ status.textContent=compareBefore?'修改前 · 同机位对照':'砂岩材质样片 · 待验收';
+};
+const loader=new GLTFLoader();const asset=(s:string)=>new URL(`${import.meta.env.BASE_URL}assets/world/${s}`,document.baseURI).href;
+const materialMaps:Record<string,unknown>[]=[];
+function textureSize(t:THREE.Texture|null){const im=t?.image;return im && typeof im==='object' && 'width' in im && 'height' in im?[im.width,im.height]:null;}
+function addModel(g:THREE.Group){scene.add(g);g.traverse(o=>{if(o instanceof THREE.Mesh){o.castShadow=true;o.receiveShadow=true;for(const m of (Array.isArray(o.material)?o.material:[o.material])){if(m instanceof THREE.MeshStandardMaterial){for(const t of [m.map,m.normalMap,m.roughnessMap,m.aoMap])if(t)t.anisotropy=Math.min(renderer.capabilities.getMaxAnisotropy(),8);if(m.name.startsWith('sandstone-baked'))materialMaps.push({name:m.name,color:textureSize(m.map),normal:textureSize(m.normalMap),roughness:Boolean(m.roughnessMap),ao:Boolean(m.aoMap),tangents:Boolean(o.geometry.attributes.tangent)});}}}});return g;}
+Promise.all([loader.loadAsync(asset('mogao-sandstone/v001/mountain.glb')),loader.loadAsync(asset('mogao-massing/v003/tower.glb')),loader.loadAsync(asset('mogao-massing/v003/foundation.glb')),loader.loadAsync(asset('traveler-tripo/v002/traveler.glb')),loader.loadAsync(asset('mogao-massing/v003/mountain.glb'))]).then(([a,b,c,p,old])=>{
+ mountain=addModel(a.scene);tower=addModel(b.scene);foundation=addModel(c.scene);traveler=addModel(p.scene);oldMountain=addModel(old.scene);oldMountain.visible=false;
+ mixer=new THREE.AnimationMixer(traveler);const idle=p.animations.find(c=>c.name==='Idle');if(idle)mixer.clipAction(idle).play();mixer.update(0);
+ traveler.updateMatrixWorld(true);const box=new THREE.Box3().setFromObject(traveler,true);const scale=1.8/(box.max.y-box.min.y);traveler.scale.multiplyScalar(scale);groundY=-box.min.y*scale;
+ traveler.updateMatrixWorld(true);const measured=new THREE.Box3().setFromObject(traveler,true);personHeight=measured.max.y-measured.min.y;
+ const crest=new THREE.Box3().setFromObject(mountain).max.y;
+ document.querySelector('#measure')!.textContent=`山顶 ${crest.toFixed(1)} 米 · 楼高 45 米 · 人物 1.8 米 · 25∶1`;
+ loaded=true;buttons.forEach(b=>b.disabled=false);status.textContent='砂岩材质样片 · 待验收';
+ const requested=new URLSearchParams(location.search).get('view')??'front';view(views[requested]?requested:'front');
+}).catch(error=>{status.textContent='模型加载失败，请刷新重试';console.error(error);});
+function resize(){camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);}addEventListener('resize',resize);resize();view('front');
+let frame=0;const clock=new THREE.Clock();function tick(){frame=requestAnimationFrame(tick);const dt=Math.min(clock.getDelta(),.04);if(!document.hidden)mixer?.update(dt);controls.update();renderer.render(scene,camera);}tick();
+Object.assign(window,{__mogaoSandstone:{inspect:()=>({loaded,materialMaps,view:currentView,showTower,compareBefore,ruler:ruler.visible,personHeight,towerHeight:tower?new THREE.Box3().setFromObject(tower).max.y-platform:null,mountainBounds:mountain?new THREE.Box3().setFromObject(mountain):null,camera:camera.position.toArray(),render:renderer.info.render})}});
+addEventListener('pagehide',()=>{cancelAnimationFrame(frame);controls.dispose();scene.traverse(o=>{if(o instanceof THREE.Mesh){o.geometry.dispose();for(const m of Array.isArray(o.material)?o.material:[o.material])m.dispose();}});renderer.dispose();});

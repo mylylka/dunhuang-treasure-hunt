@@ -1,0 +1,35 @@
+{
+  "exports": {
+    "interior": {
+      "triangles": 174,
+      "bytes": 15337788
+    },
+    "buddha": {
+      "triangles": 228056,
+      "bytes": 7500312
+    },
+    "mountain": {
+      "triangles": 163591,
+      "bytes": 33756720
+    }
+  },
+  "originalHashes": {
+    "public/assets/world/mogao-sandstone/v001/mountain.glb": "60b08fe0502774f5d69e59d45507fbdcf72b79ed91156628d27dc670616e66c3",
+    "public/assets/world/mogao-massing/v003/tower.glb": "52c47a43f5e78fc394e2a7d9f927c073a7114115f8d5d920fe51ddb9505dfeca",
+    "public/assets/world/mogao/v007/entry.glb": "0b9781e177985783480a831f3808337488d973c91c5e2139ebe257bcb8433fb8",
+    "public/assets/world/mogao/v003/interior.glb": "c812045802172ab4d6c430d1cf7297462be51f8533c3811e2f6b2bd21186f7c4"
+  },
+  "originalsUnchanged": true,
+  "buddhaHeight": 35,
+  "minimumBuddhaVaultClearance": 2.221013259887698,
+  "buddhaUV": "original UV and textures retained; decimated separate copy",
+  "roofProfile": {
+    "type": "four sloping planes of a square truncated pyramid",
+    "summit": 39.2,
+    "summitSize": 4,
+    "centerY": 24,
+    "sideAt14m": 24.2
+  },
+  "wallHeight": 4.1,
+  "entryFront": 7
+}

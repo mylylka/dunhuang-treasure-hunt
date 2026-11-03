@@ -1,0 +1,78 @@
+{
+  "sources": [
+    {
+      "source": "/Users/liujing/Downloads/3D模型/古代佛像3d模型.glb",
+      "archive": "art-source/world/mogao/v008/古代佛像3d模型.glb",
+      "sha256": "4a57838a80219bf7106ded205733d8423ebd5b9b0d59bb6d6ff4ac7a2d1cd372"
+    },
+    {
+      "source": "/Users/liujing/Downloads/3d视觉素材库/九层楼内大佛从下往上看的视角.png",
+      "archive": "art-source/world/mogao/v008/九层楼内大佛从下往上看的视角.png",
+      "sha256": "5247dd0389c700ce4c4cd686c564bf8794430ff8c79baf14799992d8efc4f3b4"
+    },
+    {
+      "source": "/Users/liujing/Downloads/3d视觉素材库/九色鹿壁画和上面千佛的连接.png",
+      "archive": "art-source/world/mogao/v008/九色鹿壁画和上面千佛的连接.png",
+      "sha256": "ec0dc68cd8ae310cfd0b493fa7f08753e3d5a99da87c852b265896790a740395"
+    },
+    {
+      "source": "/Users/liujing/Downloads/3d视觉素材库/千佛洞素材红色1.png",
+      "archive": "art-source/world/mogao/v008/千佛洞素材红色1.png",
+      "sha256": "d8229189602c62f2f492ab06b62746a26d5dbc122b5275ba3406a3c992b98106"
+    },
+    {
+      "source": "/Users/liujing/Downloads/3d视觉素材库/沙弥壁画素材/沙弥守戒自杀品.png",
+      "archive": "art-source/world/novice-story/v001/沙弥守戒自杀品.png",
+      "sha256": "2c3242a7eecff0277766114bb35af1340daa3ac38217480477d909744f04947a"
+    },
+    {
+      "source": "/Users/liujing/Downloads/3d视觉素材库/沙弥壁画素材/1沙弥剃度.png",
+      "archive": "art-source/world/novice-story/v001/1沙弥剃度.png",
+      "sha256": "b3f091756641abd714d4e4e1f3fb75b90eb63805fafee89de87df9de73fbac44"
+    },
+    {
+      "source": "/Users/liujing/Downloads/3d视觉素材库/沙弥壁画素材/2沙弥与少女.png",
+      "archive": "art-source/world/novice-story/v001/2沙弥与少女.png",
+      "sha256": "d2cf244949be3933f8e7e5933a194a80618f910b9387dae50ace968589c7716a"
+    },
+    {
+      "source": "/Users/liujing/Downloads/3d视觉素材库/沙弥壁画素材/3少女向父哭诉.jpeg",
+      "archive": "art-source/world/novice-story/v001/3少女向父哭诉.jpeg",
+      "sha256": "7751c77776066609f7e4fca4fd7cbb7a49ac606c69613b0a9d67195f8ecd5f9d"
+    },
+    {
+      "source": "/Users/liujing/Downloads/3d视觉素材库/沙弥壁画素材/4少女之父向国王交罚金.jpeg",
+      "archive": "art-source/world/novice-story/v001/4少女之父向国王交罚金.jpeg",
+      "sha256": "50358ebc7168a5ffd7fa5e9ddcb40ad4696d97ea72912dde5a2a8d64cb687d66"
+    },
+    {
+      "source": "/Users/liujing/Downloads/3d视觉素材库/沙弥壁画素材/5火化和供养.jpeg",
+      "archive": "art-source/world/novice-story/v001/5火化和供养.jpeg",
+      "sha256": "0318f5603581ce24d3c6910b44a8097b137164af178d0cad9f11a8a34ba9fef1"
+    },
+    {
+      "source": "/var/folders/v4/5w5w475926b0_g74_gftn8mr0000gn/T/codex-clipboard-ce00a40e-7791-401c-892f-634b4f8b915e.png",
+      "archive": "art-source/world/mogao/v008/用户覆斗顶参考.png",
+      "sha256": "ea258bcb20eb6a60ad11dc0eeb078d878ce495be1ecb4222bc0ceb7245f4459b"
+    }
+  ],
+  "thousandBuddhas": {
+    "rows": [
+      225,
+      650,
+      1094
+    ],
+    "cropX": [
+      116,
+      652
+    ],
+    "rowHeight": 222,
+    "seam": "4px vertical and 3px outer horizontal plaster-edge equalization; intact figures, no mirroring"
+  },
+  "noviceWallCrop": [
+    0,
+    168,
+    2172,
+    526
+  ]
+}

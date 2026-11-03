@@ -1,0 +1,66 @@
+{
+  "status": "Baked sandstone candidate; awaiting visual acceptance",
+  "source": "mogao-massing/v003 approved composition",
+  "low": {
+    "triangles": 172312,
+    "vertices": 86158,
+    "boundary": 0,
+    "nonManifold": 0
+  },
+  "high": {
+    "triangles": 1033872,
+    "vertices": 516938,
+    "boundary": 0,
+    "nonManifold": 0
+  },
+  "tower": {
+    "source": "art-source/world/models/mogao/v006/mogao.blend",
+    "uniformScale": 0.6907717215326498,
+    "platform": 6.85546875,
+    "top": 51.85546875,
+    "heightFromPlatform": 45.0,
+    "storeys": 9,
+    "targetPerson": 1.8,
+    "ratio": 25
+  },
+  "bake": {
+    "engine": "Cycles",
+    "colorNormalResolution": {
+      "near": 4096,
+      "upper": 2048,
+      "rear": 1024
+    },
+    "ormResolution": {
+      "near": 2048,
+      "upper": 1024,
+      "rear": 1024
+    },
+    "maps": [
+      "basecolor",
+      "normal",
+      "ao",
+      "roughness",
+      "orm"
+    ],
+    "cageExtrusion": 0.14,
+    "rayDistance": 0.3,
+    "margin": 16,
+    "colorAoRoughnessMethod": "selected-to-active high-to-low",
+    "normalMethod": "direct material-relief bake in final low-mesh tangent frame"
+  },
+  "glb": {
+    "bytes": 35014776,
+    "sha256": "60b08fe0502774f5d69e59d45507fbdcf72b79ed91156628d27dc670616e66c3"
+  },
+  "protectedAssets": {
+    "art-source/world/models/mogao-massing/v003/mogao-massing.blend": "0f640bd0dd269bc06bceb682ac733a5b8d175a609f5b590316a6a6ecf57bf8b0",
+    "public/assets/world/mogao-massing/v003/mountain.glb": "1b589499e2a37413364127909d7ed3b778622c9b5ad6ff856401c1c9c9699842",
+    "public/assets/world/mogao-massing/v003/tower.glb": "52c47a43f5e78fc394e2a7d9f927c073a7114115f8d5d920fe51ddb9505dfeca",
+    "public/assets/world/mogao-massing/v003/foundation.glb": "818d7804b374cfa4fecb2a0cf8fe81ed68b1a83008e4a4abaaa79a7b7aa1bc5e",
+    "public/assets/world/traveler-tripo/v002/traveler.glb": "81b6b7c5a02fb6e84fd807be2f003e5e99f8f92daaeb7788dd62eec1ca084609",
+    "public/assets/world/mogao/v003/interior.glb": "c812045802172ab4d6c430d1cf7297462be51f8533c3811e2f6b2bd21186f7c4",
+    "public/assets/world/sandstone-study/v001/sandstone.glb": "ba61599d2122a1567beef88408f017f678a8e55374163cf68020f9f6a3df4241",
+    "art-source/world/models/sandstone-study/v001/sandstone.blend": "91be987668603d01766d7173afdfcd72b521a36553ff0dd6b3cc1bea1c6315ef"
+  },
+  "mapIntegration": false
+}

@@ -1,0 +1,2 @@
+.world-screen .world-topbar nav{flex-wrap:wrap;justify-content:flex-end}
+@media(max-height:600px){.world-screen .world-topbar nav{gap:5px;max-width:68vw}.world-screen .world-topbar nav button,.world-screen .world-topbar nav a{padding:6px 9px;font-size:12px}.world-screen .world-map{max-height:52vh;overflow:auto}}

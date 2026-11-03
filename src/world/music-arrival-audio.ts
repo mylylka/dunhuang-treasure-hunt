@@ -6,13 +6,32 @@ import type { WorldPoint } from './types';
 export interface MusicSpatialAudio {
   source: readonly number[]; outerRadius: number; innerRadius: number;
   departureFade?: { maxX:number; startZ:number; endZ:number };
+  /** Raise smooth distance gain to make distant notes softer without shortening range. */
+  falloffExponent?: number;
+  /** Optional region-specific departure mask, using the same local coordinates. */
+  gainMultiplier?(point:WorldPoint):number;
+}
+export const MIN_AUDIBLE_MUSIC_GAIN = .0025;
+/** Counts the Web Audio playback clock only across observed audible intervals. */
+export function createAudibleMusicClock() {
+  let previousTime:number|null=null,previouslyAudible=false,seconds=0;
+  return {
+    sample(time:number,audible:boolean) {
+      if(!Number.isFinite(time))return seconds;
+      if(previousTime!==null&&previouslyAudible&&audible&&time>=previousTime)seconds+=time-previousTime;
+      previousTime=time;previouslyAudible=audible;return seconds;
+    },
+    get seconds(){return seconds;},
+  };
 }
 export function musicSpatialGain(p:WorldPoint,spatial:MusicSpatialAudio){
   const distance=Math.hypot(p.x-spatial.source[0],p.z-spatial.source[2]);
   const t=Math.max(0,Math.min(1,(spatial.outerRadius-distance)/(spatial.outerRadius-spatial.innerRadius)));
   const fade=spatial.departureFade;
   const departure=fade&&p.x<fade.maxX?Math.max(0,Math.min(1,(p.z-fade.startZ)/(fade.endZ-fade.startZ))):1;
-  return t*t*(3-2*t)*departure*departure*(3-2*departure);
+  const distanceGain=Math.pow(t*t*(3-2*t),Math.max(.1,spatial.falloffExponent??1));
+  const multiplier=Math.max(0,Math.min(1,spatial.gainMultiplier?.(p)??1));
+  return distanceGain*departure*departure*(3-2*departure)*multiplier;
 }
 
 /** Region-owned long audio. It never uses or crowds the shared UI effects pool. */
@@ -23,6 +42,10 @@ export function createMusicArrivalAudio(initial: SoundPreferences, spatial:Music
   let gain:GainNode|null=null,pan:StereoPannerNode|null=null,recording:MediaStreamAudioDestinationNode|null=null;
   let bytes:ArrayBuffer|null=null,pending:Promise<void>|null=null;
   const abort=new AbortController();
+  const audibleClock=createAudibleMusicClock();
+  const playing=()=>!disposed&&!!source&&status==='ready'&&context?.state==='running'&&enabled&&!blocked&&!document.hidden&&preferences.enabled&&preferences.volume>0&&gainValue>0;
+  const audible=()=>!!playing()&&Math.min(gainValue,gain?.gain.value??0)>=MIN_AUDIBLE_MUSIC_GAIN;
+  function sampleAudibleClock(){if(context)audibleClock.sample(context.currentTime,audible());}
   async function load(){
     status='loading';
     try{
@@ -51,6 +74,7 @@ export function createMusicArrivalAudio(initial: SoundPreferences, spatial:Music
     await pending;
   }
   function apply(){
+    sampleAudibleClock();
     const silent=!enabled||blocked||document.hidden||!preferences.enabled;
     gainValue=silent?0:musicSpatialGain(point,spatial)*preferences.volume*(ducked ? .22 : 1);
     if(!context)return;
@@ -59,6 +83,7 @@ export function createMusicArrivalAudio(initial: SoundPreferences, spatial:Music
       pan.pan.setTargetAtTime(Math.max(-.65,Math.min(.65,(dx*Math.cos(yaw)-dz*Math.sin(yaw))/Math.max(1,Math.hypot(dx,dz)))),context.currentTime,.2);}
     if(silent&&context.state==='running')void context.suspend().catch(()=>{});
     else if(!silent&&unlocked&&context.state==='suspended')void context.resume().catch(()=>{});
+    sampleAudibleClock();
   }
   function unlock(event:Event){
     if(disposed||unlocked||!(event instanceof PointerEvent||event instanceof KeyboardEvent))return;
@@ -75,7 +100,7 @@ export function createMusicArrivalAudio(initial: SoundPreferences, spatial:Music
     setDucked(value:boolean){if(value!==ducked){ducked=value;apply();}},
     setPreferences(value:SoundPreferences){preferences=value;apply();},
     retry(){if(status==='error'){bytes=null;buffer=null;void load();}},
-    inspect:()=>({status,unlocked,gain:gainValue,playing:!!source&&context?.state==='running'&&gainValue>0,currentTime:context?.currentTime??0}),
+    inspect:()=>{sampleAudibleClock();return {status,unlocked,gain:gainValue,playing:!!playing(),audible:audible(),audibleTime:audibleClock.seconds,currentTime:context?.currentTime??0};},
     // Preview capture reads the real mix after attenuation; it cannot mutate audio.
     recordingStream:()=>recording?.stream??null,
     dispose(){if(disposed)return;disposed=true;abort.abort();window.removeEventListener('pointerdown',unlock);window.removeEventListener('keydown',unlock);

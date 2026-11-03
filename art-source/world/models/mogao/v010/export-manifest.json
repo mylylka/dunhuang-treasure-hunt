@@ -1,0 +1,31 @@
+{
+  "originalsUnchanged": true,
+  "originalHashes": {
+    "public/assets/world/mogao/v007/entry.glb": "0b9781e177985783480a831f3808337488d973c91c5e2139ebe257bcb8433fb8",
+    "public/assets/world/mogao/v009/interior.glb": "715d0ee75134abfc6a0856fd3b44f71e07f08beeb87405bf46f722b6a054458e",
+    "public/assets/world/mogao/v009/buddha.glb": "d622ebf6856f9a055a39c83b77500d3c499316c84151359fcfddad5d202c5e47",
+    "public/assets/world/mogao/v009/mountain.glb": "fbdf7628d4a0e5d1eec7224fb24130b916079cb7fd407a15fbeb4b093ad49aff",
+    "art-source/world/models/mogao/v009/buddha-hall.blend": "cd117168041906e5b55334ac0528812b5aa2a2b989396cda284e319b8836b669"
+  },
+  "cause": "old screen underside and passage ceiling both at F+6.28; new/old ceiling also had a joint at y=3.1",
+  "ceiling": {
+    "bottom": 6.28,
+    "top": 6.52,
+    "fromY": -2.6,
+    "toY": 7,
+    "pieces": 1
+  },
+  "screenBottom": 6.52,
+  "collisionChanges": false,
+  "UVAndTextures": "retained; repaired roof plain plaster",
+  "exports": {
+    "entry": {
+      "bytes": 29332,
+      "sha256": "b42615f949a9c831c9acab256c462ad6a0b18c096d48bcd7c92124f455503a67"
+    },
+    "interior": {
+      "bytes": 15361640,
+      "sha256": "34819fc24a2baa7d56560fe7ff9f8f1977dc34a56529566292a88fc6c1030108"
+    }
+  }
+}

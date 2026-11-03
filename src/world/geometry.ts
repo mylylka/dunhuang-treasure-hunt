@@ -65,7 +65,7 @@ export function createGrayboxScene({ artSample = false, musicPreview = false, ex
     mesh(sphereGeometry, materials.green, x - .23 * scale, 2.05 * scale, z, 1 * scale, 1.25 * scale, .85 * scale);
     mesh(sphereGeometry, materials.green, x + .55 * scale, 1.8 * scale, z + .18, .7 * scale, 1 * scale, .75 * scale);
   }
-  const ground = box(extendedMusic?25:0, -.22, -5, extendedMusic?240:180, .4, 180, materials.sand); ground.castShadow = false;
+  const ground = box(extendedMusic?25:0, -.22, -5, extendedMusic?240:180, .4, 180, materials.sand); ground.castShadow = false; ground.name = 'world-ground';
   const pathVertices: number[] = []; const pathIndices: number[] = [];
   for (let i = 0; i < COURTYARD_ROAD.length; i++) {
     const { left, right } = COURTYARD_ROAD[i];

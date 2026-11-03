@@ -1,0 +1,178 @@
+{
+  "version": "v001",
+  "units": "metres",
+  "blenderAxes": "XY plane, +Z depth",
+  "gltfAxes": "Y up",
+  "bytes": 4954928,
+  "sha256": "e5225caead89836fc1cb510a50f885018fdeaa94ba5e1e7a2f70736234c248ae",
+  "triangles": 8222,
+  "meshes": 57,
+  "boundsBlender": {
+    "min": [
+      -7.6,
+      -7.6,
+      0.0
+    ],
+    "max": [
+      7.6,
+      7.6,
+      2.43
+    ]
+  },
+  "geometrySymmetryMissing": 0,
+  "centerVisibility": [
+    {
+      "x": -2,
+      "y": -2,
+      "firstHit": "three-hares-caisson-center-panel",
+      "height": 2.35
+    },
+    {
+      "x": -2,
+      "y": 0,
+      "firstHit": "three-hares-caisson-center-panel",
+      "height": 2.35
+    },
+    {
+      "x": -2,
+      "y": 2,
+      "firstHit": "three-hares-caisson-center-panel",
+      "height": 2.35
+    },
+    {
+      "x": 0,
+      "y": -2,
+      "firstHit": "three-hares-caisson-center-panel",
+      "height": 2.35
+    },
+    {
+      "x": 0,
+      "y": 0,
+      "firstHit": "three-hares-caisson-center-panel",
+      "height": 2.35
+    },
+    {
+      "x": 0,
+      "y": 2,
+      "firstHit": "three-hares-caisson-center-panel",
+      "height": 2.35
+    },
+    {
+      "x": 2,
+      "y": -2,
+      "firstHit": "three-hares-caisson-center-panel",
+      "height": 2.35
+    },
+    {
+      "x": 2,
+      "y": 0,
+      "firstHit": "three-hares-caisson-center-panel",
+      "height": 2.35
+    },
+    {
+      "x": 2,
+      "y": 2,
+      "firstHit": "three-hares-caisson-center-panel",
+      "height": 2.35
+    }
+  ],
+  "imageUVPixels": {
+    "green-beam": [
+      268,
+      177,
+      988,
+      229
+    ],
+    "blue-beam": [
+      378,
+      322,
+      876,
+      365
+    ],
+    "corner": [
+      192,
+      180,
+      248,
+      232
+    ],
+    "border": [
+      446,
+      432,
+      801,
+      458
+    ]
+  },
+  "centerImage": {
+    "file": "three-hares-center.jpg",
+    "sha256": "68110c4f8935b7bb515c1818110086d5d18cd22576eeba7da49c7482096a0399",
+    "width": 4.95,
+    "height": 4.94354628422425,
+    "untouchedOriginal": true
+  },
+  "layout": {
+    "version": "v001",
+    "asset": "caisson-three-hares/v001/three-hares-caisson.glb",
+    "sourcePlacement": {
+      "x": -12,
+      "y": 5.55,
+      "z": -15
+    },
+    "outerWidth": 15.2,
+    "depth": 2.43,
+    "levels": [
+      {
+        "shape": "square",
+        "width": 15.2,
+        "cut": 0,
+        "beamWidth": 0.56,
+        "bottom": 0,
+        "thickness": 0.24
+      },
+      {
+        "shape": "octagon",
+        "width": 12.7,
+        "cut": 2.1,
+        "beamWidth": 0.48,
+        "bottom": 0.52,
+        "thickness": 0.22
+      },
+      {
+        "shape": "square",
+        "width": 10.25,
+        "cut": 0,
+        "beamWidth": 0.44,
+        "bottom": 1.1,
+        "thickness": 0.24
+      },
+      {
+        "shape": "octagon",
+        "width": 7.9,
+        "cut": 1.25,
+        "beamWidth": 0.38,
+        "bottom": 1.68,
+        "thickness": 0.23
+      },
+      {
+        "shape": "square",
+        "width": 5.6,
+        "cut": 0,
+        "beamWidth": 0.31,
+        "bottom": 2.19,
+        "thickness": 0.2
+      }
+    ],
+    "centerPanel": {
+      "nodeId": "three-hares-caisson-center-panel",
+      "materialId": "three-hares-caisson-center-art",
+      "texture": "caisson-three-hares/v001/three-hares-center.jpg",
+      "width": 4.95,
+      "faceHeight": 2.35,
+      "thickness": 0.08,
+      "fit": "contain",
+      "rotation": 0
+    },
+    "geometry": "caisson-three-hares/v001/geometry.json",
+    "retainedRoofLining": "hall-v003-high-roof-lining"
+  },
+  "generation": "Real open frames, diagonal struts, sloping solid side panels and individual narrow timbers. Original image UVs only, no AI redraw or procedural flower patterns."
+}

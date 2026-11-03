@@ -1,0 +1,332 @@
+{
+  "source": "v004/mogao.blend",
+  "method": "Bounded polygon skin removal and four connected hand-authored surfaces: broad sandstone planes, a horizontal ledge, fixed ray-sampled seams. No global remesh/noise/decimation.",
+  "regions": [
+    [
+      "large-rock",
+      [
+        [
+          -38.1,
+          3.5
+        ],
+        [
+          -35.4,
+          2.2
+        ],
+        [
+          -31.4,
+          1.45
+        ],
+        [
+          -27.7,
+          2.2
+        ],
+        [
+          -25.4,
+          3.7
+        ],
+        [
+          -25.45,
+          7.9
+        ],
+        [
+          -26.2,
+          10.1
+        ],
+        [
+          -29,
+          10.65
+        ],
+        [
+          -35.7,
+          10.4
+        ],
+        [
+          -38,
+          9.6
+        ],
+        [
+          -38.6,
+          6
+        ]
+      ],
+      -10.5
+    ],
+    [
+      "horizontal-ledge",
+      [
+        [
+          -35.6,
+          18.45
+        ],
+        [
+          -28.1,
+          18.3
+        ],
+        [
+          -21.25,
+          18.45
+        ],
+        [
+          -21.1,
+          20.7
+        ],
+        [
+          -22,
+          21.35
+        ],
+        [
+          -29.1,
+          21.2
+        ],
+        [
+          -34.5,
+          21.3
+        ],
+        [
+          -35.5,
+          20.9
+        ]
+      ],
+      -15.3
+    ],
+    [
+      "right-jamb",
+      [
+        [
+          -25.4,
+          11
+        ],
+        [
+          -22.1,
+          10.7
+        ],
+        [
+          -21.35,
+          11.1
+        ],
+        [
+          -21.1,
+          16.9
+        ],
+        [
+          -21.7,
+          18.15
+        ],
+        [
+          -24.7,
+          18.2
+        ],
+        [
+          -25.35,
+          17.8
+        ]
+      ],
+      -15.1
+    ],
+    [
+      "left-jamb",
+      [
+        [
+          -35.5,
+          12.8
+        ],
+        [
+          -32.1,
+          12.65
+        ],
+        [
+          -31.5,
+          13.1
+        ],
+        [
+          -31.55,
+          18.15
+        ],
+        [
+          -34.6,
+          18.2
+        ],
+        [
+          -35.3,
+          17.8
+        ]
+      ],
+      -15.1
+    ]
+  ],
+  "profiles": [
+    {
+      "name": "large-rock",
+      "outlineXZ": [
+        [
+          -38.1,
+          3.5
+        ],
+        [
+          -35.4,
+          2.2
+        ],
+        [
+          -31.4,
+          1.45
+        ],
+        [
+          -27.7,
+          2.2
+        ],
+        [
+          -25.4,
+          3.7
+        ],
+        [
+          -25.45,
+          7.9
+        ],
+        [
+          -26.2,
+          10.1
+        ],
+        [
+          -29,
+          10.65
+        ],
+        [
+          -35.7,
+          10.4
+        ],
+        [
+          -38,
+          9.6
+        ],
+        [
+          -38.6,
+          6
+        ]
+      ],
+      "seamWidth": 0.65,
+      "vertices": 133
+    },
+    {
+      "name": "horizontal-ledge",
+      "outlineXZ": [
+        [
+          -35.6,
+          18.45
+        ],
+        [
+          -28.1,
+          18.3
+        ],
+        [
+          -21.25,
+          18.45
+        ],
+        [
+          -21.1,
+          20.7
+        ],
+        [
+          -22,
+          21.35
+        ],
+        [
+          -29.1,
+          21.2
+        ],
+        [
+          -34.5,
+          21.3
+        ],
+        [
+          -35.5,
+          20.9
+        ]
+      ],
+      "seamWidth": 0.3,
+      "vertices": 71
+    },
+    {
+      "name": "right-jamb",
+      "outlineXZ": [
+        [
+          -25.4,
+          11
+        ],
+        [
+          -22.1,
+          10.7
+        ],
+        [
+          -21.35,
+          11.1
+        ],
+        [
+          -21.1,
+          16.9
+        ],
+        [
+          -21.7,
+          18.15
+        ],
+        [
+          -24.7,
+          18.2
+        ],
+        [
+          -25.35,
+          17.8
+        ]
+      ],
+      "seamWidth": 0.3,
+      "vertices": 56
+    },
+    {
+      "name": "left-jamb",
+      "outlineXZ": [
+        [
+          -35.5,
+          12.8
+        ],
+        [
+          -32.1,
+          12.65
+        ],
+        [
+          -31.5,
+          13.1
+        ],
+        [
+          -31.55,
+          18.15
+        ],
+        [
+          -34.6,
+          18.2
+        ],
+        [
+          -35.3,
+          17.8
+        ]
+      ],
+      "seamWidth": 0.3,
+      "vertices": 50
+    }
+  ],
+  "sourceFacesUnchanged": 37639,
+  "sourceFacesClippedOrRemoved": 613,
+  "protectedTimberVertices": 44,
+  "preservedOutsideVertices": 30862,
+  "missingOutsideVertices": 0,
+  "uv": "Retained original faces preserve both UV layers; intersections interpolate UVs. Four new local surfaces use a shared matte vertex-color material, original albedo sampled at the seam and plain sandstone on new planes.",
+  "texture": "Original v004 color master unchanged",
+  "exteriorTriangles": 77042,
+  "triangleBatches": {
+    "export-user-cliff-facade": 60044,
+    "export-sandstone-large-rock-v005": 474,
+    "export-regional-sand-base.001": 16524
+  },
+  "bytes": 4659764,
+  "sha256": "74e6aa62bdd84af9b49ee0cef1f24fad048183303c845df8537655bc9323ab0f",
+  "protected": "Original main entrance, steps, recessed timber, railings, interior, collision and sand retained"
+}

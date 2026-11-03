@@ -1,0 +1,3 @@
+@import './mogao-massing-v003.css';
+nav{gap:5px}nav button{padding:10px 12px}
+@media(max-width:900px){nav{gap:3px}nav button{font-size:11px;padding:7px 6px}}

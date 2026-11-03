@@ -1,0 +1,27 @@
+{
+  "status": "playable integration candidate",
+  "upstream": {
+    "public/assets/world/mogao-sandstone/v001/mountain.glb": "60b08fe0502774f5d69e59d45507fbdcf72b79ed91156628d27dc670616e66c3",
+    "art-source/world/models/mogao-sandstone/v001/mogao-sandstone.blend": "c038de62a15fb65db5131ce65403cb5a448b4512f16e6e7cabb6c25df61101ad",
+    "public/assets/world/mogao-massing/v003/tower.glb": "52c47a43f5e78fc394e2a7d9f927c073a7114115f8d5d920fe51ddb9505dfeca",
+    "public/assets/world/mogao-massing/v003/foundation.glb": "818d7804b374cfa4fecb2a0cf8fe81ed68b1a83008e4a4abaaa79a7b7aa1bc5e",
+    "art-source/world/models/mogao-massing/v003/mogao-massing.blend": "0f640bd0dd269bc06bceb682ac733a5b8d175a609f5b590316a6a6ecf57bf8b0",
+    "public/assets/world/mogao/v006/exterior.glb": "150dc39585dc6c49df5d3552a88b8d8885c1f60e00a00de3022450f03e620eb4",
+    "public/assets/world/mogao/v003/interior.glb": "c812045802172ab4d6c430d1cf7297462be51f8533c3811e2f6b2bd21186f7c4",
+    "public/assets/world/traveler-tripo/v002/traveler.glb": "81b6b7c5a02fb6e84fd807be2f003e5e99f8f92daaeb7788dd62eec1ca084609"
+  },
+  "entry": {
+    "sha256": "0b9781e177985783480a831f3808337488d973c91c5e2139ebe257bcb8433fb8",
+    "bytes": 30848
+  },
+  "changes": [
+    "static dark back panel excluded from new export",
+    "short passage floor, returns and head connect retained chamber",
+    "accepted tower and mountain referenced unchanged"
+  ],
+  "sourceBlend": "entry-assembly.blend",
+  "coordinateSystem": "Blender Z up; runtime exterior origin [122,0,-68]; interior floor +6.85546875",
+  "collisionBands": 103,
+  "sandTriangles": 192,
+  "protectedAssetsUnchanged": true
+}

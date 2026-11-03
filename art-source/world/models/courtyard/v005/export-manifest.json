@@ -1,0 +1,335 @@
+{
+  "version": "v005",
+  "status": "measured export; awaiting in-game visual acceptance",
+  "model": "courtyard.glb",
+  "worldOrigin": [
+    -12,
+    0,
+    2
+  ],
+  "units": "metres",
+  "upAxis": "Y",
+  "bytes": 10440416,
+  "sha256": "df2b1f4d7933f1a95990a6adf6b8f7ef651bd476bbc6957b48283c53b1ee6c2f",
+  "triangles": 134956,
+  "meshCount": 464,
+  "materials": 55,
+  "unchangedHall": "v004 geometry retained, except two cloth materials",
+  "entranceMurals": [
+    {
+      "id": "courtyard-v005-entrance-mural-art-west",
+      "center": [
+        -19.6,
+        1.475,
+        2.345
+      ],
+      "width": 8.2,
+      "height": 1.4988029465930017,
+      "image": "entrance-lotus-wide.jpg",
+      "imagePixels": [
+        2172,
+        397
+      ],
+      "uv": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "wallClearance": 0.045
+    },
+    {
+      "id": "courtyard-v005-entrance-mural-art-east",
+      "center": [
+        -4.4,
+        1.475,
+        2.345
+      ],
+      "width": 8.2,
+      "height": 1.4988029465930017,
+      "image": "entrance-lotus-wide.jpg",
+      "imagePixels": [
+        2172,
+        397
+      ],
+      "uv": [
+        0,
+        0,
+        1,
+        1
+      ],
+      "wallClearance": 0.045
+    }
+  ],
+  "pigmentRack": {
+    "id": "hall-v003-pigment-rack",
+    "x": -0.9,
+    "z": -4.55,
+    "height": 1.5,
+    "bounds": {
+      "min": [
+        -1.157105,
+        0.0,
+        -5.27457
+      ],
+      "max": [
+        -0.642894,
+        1.5,
+        -3.82543
+      ]
+    },
+    "facing": "-x",
+    "sourceAsset": "pigment-rack/v001/pigment-rack.glb",
+    "sourceSha256": "e987f76facbdb4d7373fdbc317e22d9be64b32ad5a21ebaad0003ba43437149a"
+  },
+  "leftCurtains": {
+    "ids": [
+      "hall-v003-left-curtain-0",
+      "hall-v003-left-curtain-1"
+    ],
+    "colorSRGB": "#87b4c0"
+  },
+  "perimeterRepair": {
+    "sections": [
+      {
+        "id": "courtyard-v005-side-plinth-west",
+        "polygon": [
+          [
+            -24.32,
+            -24
+          ],
+          [
+            -23.68,
+            -24
+          ],
+          [
+            -23.68,
+            1.68
+          ],
+          [
+            -24.32,
+            2.32
+          ]
+        ],
+        "minY": 0,
+        "maxY": 0.5
+      },
+      {
+        "id": "courtyard-v005-wing-plinth-west",
+        "polygon": [
+          [
+            -24.32,
+            2.32
+          ],
+          [
+            -23.68,
+            1.68
+          ],
+          [
+            -15,
+            1.68
+          ],
+          [
+            -15,
+            2.32
+          ]
+        ],
+        "minY": 0,
+        "maxY": 0.5
+      },
+      {
+        "id": "courtyard-v005-side-coping-west",
+        "polygon": [
+          [
+            -24.4,
+            -24
+          ],
+          [
+            -23.6,
+            -24
+          ],
+          [
+            -23.6,
+            1.6
+          ],
+          [
+            -24.4,
+            2.4
+          ]
+        ],
+        "minY": 2.635,
+        "maxY": 2.805
+      },
+      {
+        "id": "courtyard-v005-wing-coping-west",
+        "polygon": [
+          [
+            -24.4,
+            2.4
+          ],
+          [
+            -23.6,
+            1.6
+          ],
+          [
+            -14.9,
+            1.6
+          ],
+          [
+            -14.9,
+            2.4
+          ]
+        ],
+        "minY": 2.635,
+        "maxY": 2.805
+      },
+      {
+        "id": "courtyard-v005-side-plinth-east",
+        "polygon": [
+          [
+            0.3200000000000003,
+            -24
+          ],
+          [
+            -0.3200000000000003,
+            -24
+          ],
+          [
+            -0.3200000000000003,
+            1.68
+          ],
+          [
+            0.3200000000000003,
+            2.32
+          ]
+        ],
+        "minY": 0,
+        "maxY": 0.5
+      },
+      {
+        "id": "courtyard-v005-wing-plinth-east",
+        "polygon": [
+          [
+            0.3200000000000003,
+            2.32
+          ],
+          [
+            -0.3200000000000003,
+            1.68
+          ],
+          [
+            -9,
+            1.68
+          ],
+          [
+            -9,
+            2.32
+          ]
+        ],
+        "minY": 0,
+        "maxY": 0.5
+      },
+      {
+        "id": "courtyard-v005-side-coping-east",
+        "polygon": [
+          [
+            0.3999999999999986,
+            -24
+          ],
+          [
+            -0.3999999999999986,
+            -24
+          ],
+          [
+            -0.3999999999999986,
+            1.6
+          ],
+          [
+            0.3999999999999986,
+            2.4
+          ]
+        ],
+        "minY": 2.635,
+        "maxY": 2.805
+      },
+      {
+        "id": "courtyard-v005-wing-coping-east",
+        "polygon": [
+          [
+            0.3999999999999986,
+            2.4
+          ],
+          [
+            -0.3999999999999986,
+            1.6
+          ],
+          [
+            -9.1,
+            1.6
+          ],
+          [
+            -9.1,
+            2.4
+          ]
+        ],
+        "minY": 2.635,
+        "maxY": 2.805
+      }
+    ],
+    "footTop": 0.5,
+    "capBottom": 2.635,
+    "capTop": 2.805,
+    "sourceCoordinatesAlreadyExpanded": true
+  },
+  "retiredNodes": [
+    "courtyard-wall-coping",
+    "courtyard-wall-coping-001",
+    "courtyard-wall-plinth",
+    "courtyard-wall-plinth-001",
+    "entrance-outer-art",
+    "entrance-outer-art-001",
+    "entrance-outer-art-002",
+    "entrance-outer-art-003",
+    "entrance-outer-art-004",
+    "entrance-outer-art-005",
+    "entrance-stone-base",
+    "entrance-stone-base-001",
+    "entrance-wing-coping",
+    "entrance-wing-coping-001"
+  ],
+  "retiredCameraIds": [
+    "courtyard-wall-coping",
+    "courtyard-wall-coping-001",
+    "courtyard-wall-plinth",
+    "courtyard-wall-plinth-001",
+    "entrance-stone-base",
+    "entrance-stone-base-001",
+    "entrance-wing-coping",
+    "entrance-wing-coping-001"
+  ],
+  "geometryLayout": "src/content/world/courtyard-hall-v005.json",
+  "cameraBoxCount": 346,
+  "playerSolidCount": 39,
+  "textures": {
+    "hall-lotus-wide.jpg": "a3783cb9041ba279a5e956d3f004dc6d18def05ba3db90ead3619d38ebbf8bc3",
+    "hall-banner.jpg": "fd9f153e1f133406edb5a97f020c4e5de89964b7e81c477d49d6a25ad6632975",
+    "hall-floral-border.jpg": "9b1f127d208c8fd76e90fb99cb1d4b3a9044666522073e1d0f8b346ca0dcb60b",
+    "display-board-art.jpg": "2e88a05435b0f8665bd6b0f5789f5ba49d2d4858dfeb0031fbf5477853d42ca5",
+    "entrance-lotus-wide.jpg": "805e9952677ff29085bd753e66b40f0244cfc351b9cd93b2782db87cbe2b98f2"
+  },
+  "oldSourceHashes": {
+    "art-source/world/models/courtyard/v002/courtyard.blend": "c119c8996b2899241ba1ffd01cabedf1298c43afe9c4431909af7b723085cd6e",
+    "public/assets/world/courtyard/v002/courtyard.glb": "8a771cacfc7c0ac6ca09803cdf9841d46839b915442dc328079bd79f22173bbe",
+    "art-source/world/models/courtyard/v003/courtyard.blend": "87eee4bfd819a48a75c863b168ca9f4c861f92d81db23e2dc4c7016dda93188a",
+    "public/assets/world/courtyard/v003/courtyard.glb": "52ab203772be64ea0fbf537b4e8c2b2cf7e52fcaa3cf425dd09d7855fc7e4761",
+    "art-source/world/models/courtyard/v004/courtyard.blend": "6c47f08c071aa2bd066aefac53f701848ef57571155b5d6b73145d885e16c872",
+    "public/assets/world/courtyard/v004/courtyard.glb": "e28ba291740f0c63c2ad6c5d20c8d784cf5d386f26aa3ded211ec70197834226",
+    "src/content/world/courtyard-props.json": "2a7f815f90cadc3067cef2daf41350de219f4efa46e2db9431cd303f1bcf10f0",
+    "src/content/world/courtyard-hall-v004.json": "e86e36fdbed347655941d8ea5a4dd6db6643db45ab9e0d7eb4e9ab1eea01ad1f",
+    "public/assets/world/pigment-rack/v001/pigment-rack.glb": "e987f76facbdb4d7373fdbc317e22d9be64b32ad5a21ebaad0003ba43437149a"
+  },
+  "runtimeExpansion": {
+    "unchangedCourtyardNeedsExpansion": true,
+    "rearWallAlreadyExpanded": true
+  }
+}

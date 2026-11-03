@@ -1,0 +1,12 @@
+{
+  "type": "baked Blender PBR surface",
+  "scaleMetres": 4,
+  "paletteAnchor": "#6f5746",
+  "source": "九色鹿全图.jpg, subdued dark umber samples, median RGB 111/87/70",
+  "textures": [
+    "floor-albedo.png",
+    "floor-normal.png"
+  ],
+  "geometry": "flat continuous cave floor; no extra per-pebble meshes",
+  "authoring": "periodic 4D noise for fine sand; bounded Voronoi masks for small embedded stones; albedo and tangent normals baked in Blender; no painted light or AI content edits"
+}

@@ -1,0 +1,6 @@
+/* The tall vault remains visible behind compact, readable corner controls. */
+#root[data-mogao] .world-topbar{background:none}
+#root[data-mogao] .world-heading{padding:8px 14px;background:#f7efdfd4;border:1px solid #dbc7a04a}
+#root[data-mogao] .world-heading h1{font-size:30px}
+#root[data-mogao] .world-direction{top:200px;font-size:21px}
+@media(max-height:600px){#root[data-mogao] .world-heading{padding:3px 9px}#root[data-mogao] .world-heading h1{font-size:23px}#root[data-mogao] .world-direction{top:120px;font-size:17px}}

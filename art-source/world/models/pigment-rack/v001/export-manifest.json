@@ -1,0 +1,308 @@
+{
+  "version": "v001",
+  "date": "2026-11-02",
+  "assetId": "pigment-rack-v001",
+  "source": {
+    "originalPath": "/Users/liujing/Downloads/调料架.glb",
+    "archive": "art-source/world/models/pigment-rack/v001/调料架.glb",
+    "bytes": 2460648,
+    "sha256": "ea8805c32627955279744cc8369896d03f42000ef5e8933b8e3d0054db70f4b5",
+    "byteIdentical": true
+  },
+  "runtime": {
+    "path": "public/assets/world/pigment-rack/v001/pigment-rack.glb",
+    "bytes": 2460904,
+    "sha256": "e987f76facbdb4d7373fdbc317e22d9be64b32ad5a21ebaad0003ba43437149a",
+    "bounds": {
+      "min": [
+        -0.7245699167251587,
+        0.0,
+        -0.2571054697036743
+      ],
+      "max": [
+        0.7245699167251587,
+        1.5,
+        0.2571054995059967
+      ],
+      "size": [
+        1.4491398334503174,
+        1.5,
+        0.514210969209671
+      ],
+      "center": [
+        0.0,
+        0.75,
+        1.4901161193847656e-08
+      ]
+    },
+    "units": "metres",
+    "up": "+Y",
+    "front": "+Z",
+    "groundY": 0
+  },
+  "blend": "art-source/world/models/pigment-rack/v001/pigment-rack.blend",
+  "normalization": {
+    "method": "One new root with uniform scale and translation; all original nodes and resource arrays unchanged.",
+    "uniformScale": 1.168661196963373,
+    "sourceAnchor": [
+      0.0,
+      0.0,
+      0.009999997913837433
+    ],
+    "translation": [
+      -0.0,
+      -0.0,
+      -0.011686609531616486
+    ],
+    "yawDegrees": 0,
+    "sourceBounds": {
+      "min": [
+        -0.6199999451637268,
+        0.0,
+        -0.21000000834465027
+      ],
+      "max": [
+        0.6199999451637268,
+        1.283519983291626,
+        0.23000000417232513
+      ],
+      "size": [
+        1.2399998903274536,
+        1.283519983291626,
+        0.4400000125169754
+      ],
+      "center": [
+        0.0,
+        0.641759991645813,
+        0.009999997913837433
+      ]
+    },
+    "frontEvidence": "Original named front shelf rails frail_0..3 are at source +Z=0.193; front and rear offline previews also reviewed."
+  },
+  "geometry": {
+    "originalMeshNodes": 99,
+    "meshes": 99,
+    "triangles": 62064,
+    "materials": 19,
+    "images": 17,
+    "animations": 0
+  },
+  "images": [
+    {
+      "name": "bowl_blue",
+      "mimeType": "image/png",
+      "pixels": [
+        512,
+        256
+      ],
+      "bytes": 52807,
+      "sha256": "a293150ed83bb192ebe6e5f5a85765c1fa157ccb9d35007047fbaf6360bc6bea",
+      "preservedByteForByte": true
+    },
+    {
+      "name": "bowl_cream",
+      "mimeType": "image/png",
+      "pixels": [
+        512,
+        256
+      ],
+      "bytes": 58881,
+      "sha256": "c55d3ee4b32e7dd1f5ad84e8aa1a0f0647a74e712b8cb7abbec955db6b4187c2",
+      "preservedByteForByte": true
+    },
+    {
+      "name": "bowl_pale",
+      "mimeType": "image/png",
+      "pixels": [
+        512,
+        256
+      ],
+      "bytes": 53904,
+      "sha256": "7944a465a27bd6ef100ce0675b834072eb601d6d535613dff967792b011502ed",
+      "preservedByteForByte": true
+    },
+    {
+      "name": "bowl_red",
+      "mimeType": "image/png",
+      "pixels": [
+        512,
+        256
+      ],
+      "bytes": 48945,
+      "sha256": "752c60f0b035025e5bb5f32398ecbd11fe34bb0c5932095e93c31e524354f39d",
+      "preservedByteForByte": true
+    },
+    {
+      "name": "bowl_tan",
+      "mimeType": "image/png",
+      "pixels": [
+        512,
+        256
+      ],
+      "bytes": 55302,
+      "sha256": "c6a5d6f8ca3ad352bf797b253604663b887687277ea45e39cbe950a28a6e2549",
+      "preservedByteForByte": true
+    },
+    {
+      "name": "bowl_teal",
+      "mimeType": "image/png",
+      "pixels": [
+        512,
+        256
+      ],
+      "bytes": 45902,
+      "sha256": "30d484598794af39dc14950f36da7a443b967f351ab234bf045cdadd731a88af",
+      "preservedByteForByte": true
+    },
+    {
+      "name": "wood_light",
+      "mimeType": "image/png",
+      "pixels": [
+        512,
+        512
+      ],
+      "bytes": 151481,
+      "sha256": "7852f07556970a501f54fc20bc15069c8f357d2c9cb082415d7dcab72c83677f",
+      "preservedByteForByte": true
+    },
+    {
+      "name": "wood",
+      "mimeType": "image/png",
+      "pixels": [
+        512,
+        512
+      ],
+      "bytes": 145351,
+      "sha256": "a39a8f80dd9da78a514f3697a5a8675b97b66e8d8cfe73b38595fd17c480ecbd",
+      "preservedByteForByte": true
+    },
+    {
+      "name": "holder",
+      "mimeType": "image/png",
+      "pixels": [
+        512,
+        256
+      ],
+      "bytes": 20446,
+      "sha256": "00462f3909630d42175ff4e9dfd4600c348ae68b0b1981b8afa6d2b805ff661f",
+      "preservedByteForByte": true
+    },
+    {
+      "name": "jar",
+      "mimeType": "image/png",
+      "pixels": [
+        512,
+        512
+      ],
+      "bytes": 152188,
+      "sha256": "6b0c7deb243f093da09d14f85a5d85d0068628b73c53dbbd86cfd2b5c2e078c1",
+      "preservedByteForByte": true
+    },
+    {
+      "name": "pow_blue",
+      "mimeType": "image/png",
+      "pixels": [
+        128,
+        128
+      ],
+      "bytes": 15809,
+      "sha256": "ed26337e5181f874a74ce5752132f64922d6cb139d41d61d128821f652d3d81d",
+      "preservedByteForByte": true
+    },
+    {
+      "name": "pow_brown",
+      "mimeType": "image/png",
+      "pixels": [
+        128,
+        128
+      ],
+      "bytes": 15155,
+      "sha256": "26dd42158ce4a049d0c73d7218651f3e3e9cca851e64b728d1da8fd087accc53",
+      "preservedByteForByte": true
+    },
+    {
+      "name": "pow_cream",
+      "mimeType": "image/png",
+      "pixels": [
+        128,
+        128
+      ],
+      "bytes": 19416,
+      "sha256": "2e83fbf9e0854e767588f62c86bb8c6b51b2d9ef74d7ef5936be2c96506e6ff9",
+      "preservedByteForByte": true
+    },
+    {
+      "name": "pow_ochre",
+      "mimeType": "image/png",
+      "pixels": [
+        128,
+        128
+      ],
+      "bytes": 17017,
+      "sha256": "ab468456c5aa0a6758a2b51499b92c999417627d21253af06bb80fc575a3f1dc",
+      "preservedByteForByte": true
+    },
+    {
+      "name": "pow_rust",
+      "mimeType": "image/png",
+      "pixels": [
+        128,
+        128
+      ],
+      "bytes": 14920,
+      "sha256": "5b7df54a034edd50998258de9b972c63a958e9a06ddb8d8889ad019d387b2a90",
+      "preservedByteForByte": true
+    },
+    {
+      "name": "pow_slate",
+      "mimeType": "image/png",
+      "pixels": [
+        128,
+        128
+      ],
+      "bytes": 13778,
+      "sha256": "5ae8b6449a4f2210410b57223e75c240eea3399ba29ee04455cd0596a7b7bfdd",
+      "preservedByteForByte": true
+    },
+    {
+      "name": "vase",
+      "mimeType": "image/png",
+      "pixels": [
+        512,
+        512
+      ],
+      "bytes": 71469,
+      "sha256": "9e3e32f93f8c4f174a99202c813a89d7d9ed6ce0e67b4aed23724e6fc08480d7",
+      "preservedByteForByte": true
+    }
+  ],
+  "materialPolicy": "All original PBR and KHR_materials_specular JSON is preserved exactly, including original double-sided flags. No recoloring, texture resampling, repainting or material simplification.",
+  "validation": {
+    "sourceArchiveBytesIdentical": true,
+    "originalNodesUnchanged": true,
+    "geometryUVBufferBytesIdentical": true,
+    "materialsTexturesImagesUnchanged": true,
+    "runtimeHeightWithin0_01mm": true,
+    "runtimeGroundWithin0_01mm": true,
+    "binarySha256": "cb1dc5d7b883bbbef995c57aa0edf91f095fcdbc3bf8fc0969f5cd6c753376a9"
+  },
+  "integration": {
+    "note": "Import this GLB and preserve the root transform/children. Orient the entire asset at its parent. +Z is its front; use Y-axis -90deg to face source -X.",
+    "boundingBoxSize": [
+      1.4491398334503174,
+      1.5,
+      0.514210969209671
+    ],
+    "floorAnchor": [
+      0,
+      0,
+      0
+    ],
+    "suggestedCollider": "Use the actual whole rack bounds as a simple static solid; brushes and bowls remain original geometry."
+  },
+  "previews": [
+    "work/world/pigment-rack-v001-front.png",
+    "work/world/pigment-rack-v001-back.png",
+    "work/world/pigment-rack-v001-front-straight.png"
+  ]
+}

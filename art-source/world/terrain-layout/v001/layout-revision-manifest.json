@@ -1,0 +1,23 @@
+{
+  "date": "2026-11-02",
+  "source": "/tmp/codex-remote-attachments/01a19a71-f619-7c11-89ed-033bcd94ce36/6745ACF1-A7FB-4CB9-8D5B-BAA26296C8F4/1-照片-1.jpg",
+  "archive": "照片1-布局批注.jpg",
+  "sha256": "5bd826469232c01ac1fe263366442e495d5f7c7ce88717bbe116e30adf9a552a",
+  "instruction": "Move cliff/tower to foreground right red circle, front toward upper-left arrow. Give courtyard and music courtyard different doorway directions.",
+  "plannedTransforms": {
+    "cliff": {
+      "position": [
+        330,
+        10,
+        90
+      ],
+      "yawDegrees": -160
+    },
+    "courtyard": {
+      "yawDegrees": 24
+    },
+    "music": {
+      "yawDegrees": -12
+    }
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "source": "art-source/world/nine-colored-deer/v001/九色鹿全图.jpg",
+  "sourceSha256": "9e02ef42a87e854956b701f1befdc9e6cdca53d30dec465c9437e2720334648f",
+  "originalSize": [
+    12918,
+    2150
+  ],
+  "runtime": "public/assets/world/mogao/v001/three-wall-scroll.jpg",
+  "runtimeSize": [
+    6144,
+    1023
+  ],
+  "runtimeSha256": "d3ec8f46a0490a907034d9a47cc16e7b6ada9099527c963c0e2bf74321488432",
+  "processing": "EXIF orientation; full-image Lanczos downscale; JPEG quality 93, no chroma subsampling. No crop, repaint or altered content.",
+  "threeWallUV": {
+    "left": [
+      0,
+      0.2773907209578366
+    ],
+    "front": [
+      0.2773907209578366,
+      0.4993032977241059
+    ],
+    "right": [
+      0.4993032977241059,
+      0.7766940186819425
+    ]
+  },
+  "wallWidthsMetres": [
+    30,
+    24,
+    30
+  ],
+  "heightMetres": 18,
+  "displayedSourcePixels": [
+    0,
+    0,
+    10033.333333333334,
+    2150
+  ],
+  "fullOriginalPreserved": "Unchanged full scroll remains available in the story player. User authorized a continuous partial excerpt on the three cave walls.",
+  "readingDirection": "enter the chamber: left wall front-to-back; front wall left-to-right; right wall back-to-front"
+}

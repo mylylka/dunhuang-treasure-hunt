@@ -1,0 +1,102 @@
+{
+  "processing": "EXIF, RGB, proportional downsize, WebP93; no crop, upscaling or content edits",
+  "filenameAlias": "User described 王后要皮+溺水人告密(1).jpg; actual supplied file without (1) visually checked against full scroll.",
+  "images": {
+    "full-scroll": {
+      "file": "full-scroll.webp",
+      "width": 4096,
+      "height": 682,
+      "sourceFile": "九色鹿全图.jpg",
+      "sourceSize": [
+        12918,
+        2150
+      ],
+      "sourceSha256": "9e02ef42a87e854956b701f1befdc9e6cdca53d30dec465c9437e2720334648f",
+      "runtimeSha256": "e33c225588c28fa87154edc061c9759fa1acb45659667078c1d2f34d3abe3fc6"
+    },
+    "background": {
+      "file": "background.webp",
+      "width": 1920,
+      "height": 1080,
+      "sourceFile": "高度虚化洞窟背景完整长卷浮现.png",
+      "sourceSize": [
+        1920,
+        1080
+      ],
+      "sourceSha256": "4817211e51152c99a12c522cdb9d015b86705ee1b6d7886fcca179d22b7e5bdb",
+      "runtimeSha256": "d4169241bdf8d681a8c8eb152bd43268d9b0eb12e6c66ec78090069df3dd3757"
+    },
+    "rescue-and-promise": {
+      "file": "rescue-and-promise.webp",
+      "width": 2000,
+      "height": 1436,
+      "sourceFile": "鹿王救人+溺水者立誓.jpg",
+      "sourceSize": [
+        2994,
+        2150
+      ],
+      "sourceSha256": "3aa7a6ea89789ff8791993793fecf08fe1a58f3fb897c0335c953d924b01424d",
+      "runtimeSha256": "e49004f529459a2033e1576bfebb5c0a95744e4916c911dc86a7e3f6f8f4d10e"
+    },
+    "queen-and-betrayal": {
+      "file": "queen-and-betrayal.webp",
+      "width": 2000,
+      "height": 1243,
+      "sourceFile": "王后要皮+溺水人告密.jpg",
+      "sourceSize": [
+        3459,
+        2150
+      ],
+      "sourceSha256": "7c78dcc6c7fd1047281b20d349ad35c611ac7caf34b7fabe3ef88d799b9350d3",
+      "runtimeSha256": "c2b08d445afd7c1d328e670c15ec5788eacb73386dcfb55c912909486f1c5fa0"
+    },
+    "king-hunts": {
+      "file": "king-hunts.webp",
+      "width": 1800,
+      "height": 1691,
+      "sourceFile": "国王捕鹿.jpg",
+      "sourceSize": [
+        2286,
+        2148
+      ],
+      "sourceSha256": "84b5490c90a81ca83a154c466d56ce4a0f26b8d08c5720079bb6022f7ff222d3",
+      "runtimeSha256": "99a6ab885f5c552797c34a094850a314ed5c36668d77e962735001036994aa2f"
+    },
+    "deer-sleeps": {
+      "file": "deer-sleeps.webp",
+      "width": 1306,
+      "height": 674,
+      "sourceFile": "鹿王酣睡.jpg",
+      "sourceSize": [
+        1306,
+        674
+      ],
+      "sourceSha256": "dde980e8d854f71c5309557986f745c10bb73c1ec44dfbb4981baea1b5465396",
+      "runtimeSha256": "29f6bb7aed41c3b55c471d28b23ba6b0df1c6e2290a4ffeed8a52d143bec0306"
+    },
+    "appeal-to-the-king": {
+      "file": "appeal-to-the-king.webp",
+      "width": 2000,
+      "height": 1715,
+      "sourceFile": "鹿王陈情.jpg",
+      "sourceSize": [
+        2507,
+        2150
+      ],
+      "sourceSha256": "15b33847f3f83aca4fa282c47998503d857adb00705499a105fe0bf457fcd0e6",
+      "runtimeSha256": "629753e4bd22e61ff65f8f47ece54820eeee81ab23e4fafe4d2c73fda78864d0"
+    },
+    "broken-oath": {
+      "file": "broken-oath.webp",
+      "width": 1376,
+      "height": 2000,
+      "sourceFile": "溺水者生疮.jpg",
+      "sourceSize": [
+        1478,
+        2148
+      ],
+      "sourceSha256": "4567ac9df55a1f171291866ecd00d40fc828738a5a325c59e861205fcb1974c6",
+      "runtimeSha256": "80b2430d0fd793eb43a35d1929d56a6a8cfa98709baac814349563da81aa5174"
+    }
+  }
+}

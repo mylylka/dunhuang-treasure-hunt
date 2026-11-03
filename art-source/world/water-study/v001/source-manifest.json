@@ -1,0 +1,48 @@
+{
+  "date": "2026-11-02",
+  "status": "material-study-awaiting-user-review",
+  "type": "procedural-water-shader-and-reused-models",
+  "modelOriginalsModified": false,
+  "mainWorldModified": false,
+  "userFeedback": [
+    "First lake curved too far like horseshoe; reduce curvature, deepen water color.",
+    "Second lake too thin; retain outer arc and water color, widen middle from 12 to 18 meters."
+  ],
+  "shape": {
+    "tipToTipMeters": 68,
+    "midWidthMeters": 18,
+    "purpose": "material study only; not final world scale"
+  },
+  "normalTexture": {
+    "path": "water-normal-256.png",
+    "size": [
+      256,
+      256
+    ],
+    "channels": "RGB tangent-space normal, alpha 255",
+    "method": "periodic sum of analytic wave gradients; shader samples at three scales",
+    "reflection": "real-time planar reflection; no painted trees/buildings"
+  },
+  "files": [
+    {
+      "path": "src/world/water-study-v001.ts",
+      "sha256": "07c955340a403cb8ec354c0cb18c5a2ca3f14cae9ce73e23f1dfff85752cb75b"
+    },
+    {
+      "path": "src/world/water-study-v001.css",
+      "sha256": "0f159a7fc626eb3615aa4eaca892d541c0a150cb8a9c113324d83376f446a9e1"
+    },
+    {
+      "path": "public/assets/world/environment-sample/v002/tree-a.glb",
+      "sha256": "816d562f2af98262b94aa253b7fc89f81b554d3f044cf9251d97d75e50c0d012"
+    },
+    {
+      "path": "public/assets/world/environment-sample/v002/shrub-a.glb",
+      "sha256": "5efbc4290bb513829e2b5dee90c3e7e8d2b124b6b2947e233de20b9fd204f60d"
+    },
+    {
+      "path": "public/assets/world/music-pavilion/v005/music-pavilion.glb",
+      "sha256": "4c0f06a442b97d132765df6fe7cd9f684151aaa43f0a33595f9d2009378dde57"
+    }
+  ]
+}

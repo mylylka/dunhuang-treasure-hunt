@@ -1,0 +1,219 @@
+{
+  "version": "v001",
+  "date": "2026-11-02",
+  "assetId": "workshop-shrubs-v001",
+  "source": {
+    "originalPath": "/Users/liujing/Downloads/l统一团团三个小灌木.glb",
+    "archive": "art-source/world/models/workshop-shrubs/v001/l统一团团三个小灌木.glb",
+    "bytes": 4347168,
+    "sha256": "6a04c71c114d6e39702f99e909109500fa472ee09656bb13074031e8d8b21230",
+    "byteIdentical": true
+  },
+  "runtime": {
+    "path": "public/assets/world/workshop-shrubs/v001/workshop-shrubs.glb",
+    "bytes": 4347416,
+    "sha256": "2f77553dd449df33cbc01dba013c98505caf95088044f285aa2147a588bdbc93",
+    "bounds": {
+      "min": [
+        -0.7341561317443848,
+        0.0,
+        -0.7341561317443848
+      ],
+      "max": [
+        0.7341561317443848,
+        0.8500000238418579,
+        0.7341561317443848
+      ],
+      "size": [
+        1.4683122634887695,
+        0.8500000238418579,
+        1.4683122634887695
+      ],
+      "center": [
+        0.0,
+        0.42500001192092896,
+        0.0
+      ]
+    },
+    "units": "metres",
+    "up": "+Y",
+    "front": "+Z",
+    "groundY": 0
+  },
+  "blend": "art-source/world/models/workshop-shrubs/v001/workshop-shrubs.blend",
+  "normalization": {
+    "method": "One new root with uniform scale and translation; all original nodes and resource arrays unchanged.",
+    "uniformScale": 1.469029535864979,
+    "sourceAnchor": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "translation": [
+      -0.0,
+      -0.0,
+      -0.0
+    ],
+    "yawDegrees": 0,
+    "sourceBounds": {
+      "min": [
+        -0.499755859375,
+        0.0,
+        -0.499755859375
+      ],
+      "max": [
+        0.499755859375,
+        0.57861328125,
+        0.499755859375
+      ],
+      "size": [
+        0.99951171875,
+        0.57861328125,
+        0.99951171875
+      ],
+      "center": [
+        0.0,
+        0.289306640625,
+        0.0
+      ]
+    },
+    "frontEvidence": "Organic three-shrub group has no built architectural front. Original yaw is retained; +Z is the presentation convention, checked with one offline preview."
+  },
+  "geometry": {
+    "originalMeshNodes": 1,
+    "meshes": 1,
+    "triangles": 60965,
+    "materials": 1,
+    "images": 1,
+    "animations": 0,
+    "connectedComponentsAudit": {
+      "method": "Read-only vertex-weld at 1e-6 original units, triangle connectivity; no geometry edits. Components are technical islands, not guaranteed botanical plants.",
+      "count": 49,
+      "largestNormalizedBounds": [
+        {
+          "vertices": 3238,
+          "min": [
+            0.18757383966244726,
+            0.2567932489451477,
+            0.2772362431393394
+          ],
+          "max": [
+            0.5325949367088608,
+            0.5544725738396624,
+            0.5942826128609573
+          ]
+        },
+        {
+          "vertices": 3208,
+          "min": [
+            -0.0957595374513779,
+            0.3206329113924051,
+            -0.16533758557798492
+          ],
+          "max": [
+            0.3152531207764702,
+            0.6584810126582279,
+            0.18040081104648767
+          ]
+        },
+        {
+          "vertices": 3197,
+          "min": [
+            -0.48381860918133573,
+            0.20945147679324896,
+            -0.1997679324894515
+          ],
+          "max": [
+            -0.06706755432901504,
+            0.590337552742616,
+            0.18255274261603377
+          ]
+        },
+        {
+          "vertices": 3183,
+          "min": [
+            -0.0326372101538292,
+            0.06886075949367089,
+            -0.6695991561181435
+          ],
+          "max": [
+            0.3991771276288898,
+            0.41675105485232067,
+            -0.33533759652310785
+          ]
+        },
+        {
+          "vertices": 3161,
+          "min": [
+            -0.019725819116906275,
+            0.3866244725738397,
+            -0.6358860759493671
+          ],
+          "max": [
+            0.33103366771327797,
+            0.6821518987341773,
+            -0.33605489610116696
+          ]
+        },
+        {
+          "vertices": 3147,
+          "min": [
+            -0.7147891170968487,
+            0.07890295358649789,
+            -0.6394725738396625
+          ],
+          "max": [
+            -0.2815401719491693,
+            0.4339662447257384,
+            -0.29229955616882586
+          ]
+        }
+      ]
+    }
+  },
+  "images": [
+    {
+      "name": "tripo_image_2b5df9ab-1e80-4a96-a945-303a55a40989_0_0",
+      "mimeType": "image/jpeg",
+      "pixels": [
+        2048,
+        2048
+      ],
+      "bytes": 1007760,
+      "sha256": "c3ab713903e8114d1abd0574b8fddfd4ceb7149559fa4550f25c743fed164937",
+      "preservedByteForByte": true
+    }
+  ],
+  "materialPolicy": "All original PBR and KHR_materials_specular JSON is preserved exactly, including original double-sided flags. No recoloring, texture resampling, repainting or material simplification.",
+  "validation": {
+    "sourceArchiveBytesIdentical": true,
+    "originalNodesUnchanged": true,
+    "geometryUVBufferBytesIdentical": true,
+    "materialsTexturesImagesUnchanged": true,
+    "runtimeHeightWithin0_01mm": true,
+    "runtimeGroundWithin0_01mm": true,
+    "binarySha256": "dda6b42bf9278c738f467b67994c3a21d84cc3bd6b34839d77c144ed5a757e34"
+  },
+  "integration": {
+    "note": "Import this GLB and preserve the root transform/children. Orient the entire asset at its parent. +Z is its front; use Y-axis -90deg to face source -X.",
+    "boundingBoxSize": [
+      1.4683122634887695,
+      0.8500000238418579,
+      1.4683122634887695
+    ],
+    "floorAnchor": [
+      0,
+      0,
+      0
+    ],
+    "suggestedCollider": "One original mesh contains the complete group. Retain its new root transform; place the whole group, do not independently reposition individual shrubs. Use the actual group bounds only if a static collision proxy is required."
+  },
+  "previews": [
+    "work/world/workshop-shrubs-v001-front.png"
+  ],
+  "visualReview": {
+    "preview": "work/world/workshop-shrubs-v001-front.png",
+    "backgroundOrBaseObserved": false,
+    "appearance": "Three original shrub clusters with leaves and brown stems, no display plinth or background geometry observed. Original relative plant placement retained."
+  }
+}

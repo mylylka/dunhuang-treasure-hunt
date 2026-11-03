@@ -159,15 +159,15 @@ test('人物不能穿过庭院后墙，重置能回到可行走位置', async ({
   expect((await position(page)).x).toBeCloseTo(0, 1);
 });
 
-test('两段故事可手动前后切换、暂停重播与退出，世界保持冻结', async ({ page }) => {
+test('五段故事自动展开，可跳段、暂停重播与退出，世界保持冻结', async ({ page }) => {
   await seedPosition(page, -5.3, -5.8);
   await page.goto('/#/');
   await ready(page);
   await page.getByTestId('world-interact').click();
   const story = page.getByTestId('world-story');
   await expect(story).toBeVisible();
-  await expect(story).toContainText('预览');
-  await story.getByTestId('world-story-start').click();
+  await expect(story).toHaveAttribute('data-phase', 'narration');
+  await page.waitForFunction(()=>Number(document.querySelector<HTMLAudioElement>('[data-testid="story-audio"]')?.currentTime)>.1);
   await expect(story.getByTestId('world-story-step')).toHaveAttribute('data-index', '0');
   // Losing window focus opens the global pause cover, which must own keyboard
   // focus instead of leaving Tab trapped inside the covered story dialog.
@@ -187,15 +187,14 @@ test('两段故事可手动前后切换、暂停重播与退出，世界保持�
   const frozen = await position(page);
   await hold(page, 'w', 350);
   expect(await position(page)).toEqual(frozen);
-  await story.getByRole('button', { name: '下一段', exact: true }).click();
+  await story.getByRole('button', { name: '跳过本段', exact: true }).click();
   await expect(story.getByTestId('world-story-step')).toHaveAttribute('data-index', '1');
-  await story.getByRole('button', { name: '上一段', exact: true }).click();
-  await expect(story.getByTestId('world-story-step')).toHaveAttribute('data-index', '0');
+
   await story.getByRole('button', { name: '暂停', exact: true }).click();
   await expect(story.getByRole('button', { name: '继续播放', exact: true })).toBeVisible();
   await story.getByRole('button', { name: '继续播放', exact: true }).click();
   await story.getByRole('button', { name: '重播', exact: true }).click();
-  await expect(story.getByTestId('world-story-step')).toHaveAttribute('data-index', '0');
+  await expect(story.getByTestId('world-story-step')).toHaveAttribute('data-index', '1');
   await story.getByRole('button', { name: '退出故事', exact: true }).click();
   await expect(story).toHaveCount(0);
   expect(await position(page)).toEqual(frozen);

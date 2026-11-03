@@ -1,0 +1,34 @@
+{
+  "version": "v001",
+  "generator": "built-in image_gen, reference-image edit",
+  "scope": "Explicit user-authorized expansion for the two exterior entrance wing walls only",
+  "original": "复古对称莲花壁画装饰.png",
+  "originalSha256": "7bd64939db6734ffca21175785af415c0e500a3ff43699273f48b0aedcaad836",
+  "candidate": "entrance-lotus-generated.png",
+  "candidateSha256": "f9b4c02feb814cf9bd54cb35ddb07a21ae77ecc8a52917696730f568d03119bb",
+  "prompt": "entrance-mural-prompt.txt",
+  "nativePixels": [
+    2172,
+    724
+  ],
+  "cropBox": [
+    0,
+    165,
+    2172,
+    562
+  ],
+  "runtimePixels": [
+    2172,
+    397
+  ],
+  "runtime": "public/assets/world/courtyard/v005/entrance-lotus-wide.jpg",
+  "runtimeSha256": "805e9952677ff29085bd753e66b40f0244cfc351b9cd93b2782db87cbe2b98f2",
+  "physicalWidth": 8.2,
+  "physicalHeight": 1.4988029465930017,
+  "wallOpening": {
+    "unobstructedWidth": 8.3,
+    "clearHeight": 1.54,
+    "centerY": 1.475
+  },
+  "processing": "Crop generated neutral padding and outer painted border edges; main lotus and lateral foliage retained. Native pixels, no resize, stretch, sharpening or repaint. RGB JPEG95. No historical reconstruction claim."
+}

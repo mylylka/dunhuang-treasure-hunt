@@ -1,3 +1,15 @@
+import { TERRAIN_SESSION_OPTIONS } from '../world/terrain-rules-v001';
+import {MOGAO_SESSION_OPTIONS as MOGAO_SESSION_OPTIONS_V13} from '../world/mogao-rules-v013';
+import {MOGAO_SESSION_OPTIONS as MOGAO_SESSION_OPTIONS_V12} from '../world/mogao-rules-v012';
+import {MOGAO_SESSION_OPTIONS as MOGAO_SESSION_OPTIONS_V11} from '../world/mogao-rules-v011';
+import {MOGAO_SESSION_OPTIONS as MOGAO_SESSION_OPTIONS_V10} from '../world/mogao-rules-v010';
+import {MOGAO_SESSION_OPTIONS as MOGAO_SESSION_OPTIONS_V9} from '../world/mogao-rules-v009';
+import {MOGAO_SESSION_OPTIONS as MOGAO_SESSION_OPTIONS_V8} from '../world/mogao-rules-v008';
+import { MOGAO_SESSION_OPTIONS as MOGAO_SESSION_OPTIONS_V7 } from '../world/mogao-rules-v007';
+import { MOGAO_SESSION_OPTIONS as MOGAO_SESSION_OPTIONS_V6 } from '../world/mogao-rules-v006';
+import { MOGAO_SESSION_OPTIONS as MOGAO_SESSION_OPTIONS_V3 } from '../world/mogao-rules-v003';
+import { MOGAO_SESSION_OPTIONS as MOGAO_SESSION_OPTIONS_V2 } from '../world/mogao-rules-v002';
+import { MOGAO_SESSION_OPTIONS } from '../world/mogao-rules-v001';
 import { MUSIC_SESSION_OPTIONS_V4 } from '../world/music-pavilion-rules-v004';
 import { FLYING_VOICE_SESSION_KEY } from '../content/world/flying-dialogue';
 import { MUSIC_SESSION_OPTIONS_V2 } from '../world/music-pavilion-rules-v002';
@@ -83,7 +95,7 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
   const commandSequence = useRef(0);
   const completedThisRun = useRef(false);
   const mainRef = useRef<HTMLElement>(null);
-  const [worldSessionOptions] = useState(() => document.getElementById('root')?.dataset.musicPavilion === 'v006' ? { ...MUSIC_SESSION_OPTIONS_V4, key: 'dunhuang:music-pavilion-preview:v6' } : document.getElementById('root')?.dataset.musicPavilion === 'v005' ? { ...MUSIC_SESSION_OPTIONS_V4, key: 'dunhuang:music-pavilion-preview:v5' } : document.getElementById('root')?.dataset.musicPavilion === 'v004' ? MUSIC_SESSION_OPTIONS_V4 : document.getElementById('root')?.dataset.flyingVoice === 'v001' ? { ...MUSIC_SESSION_OPTIONS_V3, key: FLYING_VOICE_SESSION_KEY } : document.getElementById('root')?.dataset.musicPavilion === 'v003' ? MUSIC_SESSION_OPTIONS_V3 : document.getElementById('root')?.dataset.musicPavilion === 'v002' ? MUSIC_SESSION_OPTIONS_V2 : document.getElementById('root')?.dataset.musicPavilion === 'v001'
+  const [worldSessionOptions] = useState(() => document.getElementById('root')?.dataset.terrain === 'v001' ? TERRAIN_SESSION_OPTIONS : document.getElementById('root')?.dataset.flowRevision === 'v013' ? MOGAO_SESSION_OPTIONS_V13 : document.getElementById('root')?.dataset.mogao === 'v012' ? MOGAO_SESSION_OPTIONS_V12 : document.getElementById('root')?.dataset.mogao === 'v011' ? MOGAO_SESSION_OPTIONS_V11 : document.getElementById('root')?.dataset.mogao === 'v010' ? MOGAO_SESSION_OPTIONS_V10 : document.getElementById('root')?.dataset.mogao === 'v009' ? MOGAO_SESSION_OPTIONS_V9 : document.getElementById('root')?.dataset.mogao === 'v008' ? MOGAO_SESSION_OPTIONS_V8 : document.getElementById('root')?.dataset.mogao === 'v007' ? MOGAO_SESSION_OPTIONS_V7 : document.getElementById('root')?.dataset.mogao === 'v006' ? MOGAO_SESSION_OPTIONS_V6 : document.getElementById('root')?.dataset.mogao === 'v003' ? MOGAO_SESSION_OPTIONS_V3 : document.getElementById('root')?.dataset.mogao === 'v002' ? MOGAO_SESSION_OPTIONS_V2 : document.getElementById('root')?.dataset.mogao === 'v001' ? MOGAO_SESSION_OPTIONS : document.getElementById('root')?.dataset.musicPavilion === 'v006' ? { ...MUSIC_SESSION_OPTIONS_V4, key: 'dunhuang:music-pavilion-preview:v6' } : document.getElementById('root')?.dataset.musicPavilion === 'v005' ? { ...MUSIC_SESSION_OPTIONS_V4, key: 'dunhuang:music-pavilion-preview:v5' } : document.getElementById('root')?.dataset.musicPavilion === 'v004' ? MUSIC_SESSION_OPTIONS_V4 : document.getElementById('root')?.dataset.flyingVoice === 'v001' ? { ...MUSIC_SESSION_OPTIONS_V3, key: FLYING_VOICE_SESSION_KEY } : document.getElementById('root')?.dataset.musicPavilion === 'v003' ? MUSIC_SESSION_OPTIONS_V3 : document.getElementById('root')?.dataset.musicPavilion === 'v002' ? MUSIC_SESSION_OPTIONS_V2 : document.getElementById('root')?.dataset.musicPavilion === 'v001'
     ? { key: MUSIC_SESSION_KEY, colliders: MUSIC_PLAYER_COLLIDERS } : {});
   const [initialWorld] = useState(() => loadWorldSession(undefined, worldSessionOptions));
   const worldCheckpoint = useRef(initialWorld.data);
@@ -214,7 +226,7 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
   function renderTheme(theme: ThemeDefinition) {
     const book = getLessonBook(theme.id);
     if (book) return renderTeaching(book);
-    return <div className="page unavailable-theme"><Breadcrumb catalog={catalog} items={[{ label: '首页', href: '#/themes' }]} />
+    return <div className="page unavailable-theme"><Breadcrumb catalog={catalog} items={[{ label: enteredFromWorld.current ? '探索世界' : '首页', href: enteredFromWorld.current ? '#/' : '#/themes' }]} />
       <h1>{theme.title}</h1><div className="unavailable-theme-content">
         <Asset catalog={catalog} id={theme.coverAssetId} alt={`${theme.title}主题封面`} eager />
         <p>主题尚未开放</p></div></div>;

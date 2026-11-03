@@ -1,0 +1,20 @@
+{
+  "references": [
+    {
+      "original": "/Users/liujing/Downloads/ChatGPT 图像 2026年11月1日 18_37_55-4.png",
+      "archive": "ChatGPT 图像 2026年11月1日 18_37_55-4.png",
+      "sha256": "787be7ca2effd23e2879625cc63e234700b3ca93b47c3544511cf1b20aa62449"
+    },
+    {
+      "original": "/Users/liujing/Downloads/ChatGPT 图像 2026年11月1日 18_37_56-5.png",
+      "archive": "ChatGPT 图像 2026年11月1日 18_37_56-5.png",
+      "sha256": "d060171bca44c033b756cd68763a340785f93da539eca0b2eb1bffcd86b705f9"
+    },
+    {
+      "original": "/Users/liujing/Downloads/ChatGPT 图像 2026年11月1日 18_37_52-1.png",
+      "archive": "ChatGPT 图像 2026年11月1日 18_37_52-1.png",
+      "sha256": "20bc742c6ad7d94a1ac0c75754e3c667573fe303f7e416295821b72c7a8a7749"
+    }
+  ],
+  "use": "Visual reference only; no image projection or repainting"
+}
