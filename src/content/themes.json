@@ -17,10 +17,10 @@
     "id": "music",
     "title": "飞天、乐舞与服饰",
     "subtitle": "看见姿态与节奏",
-    "description": "从人物姿态、乐器与服饰细节进入敦煌图像。主题内容筹备中。",
+    "description": "观察器形、乐舞与飞天轮廓。现开放计时找物与影子配对各一关，其他玩法筹备中。",
     "number": "02",
     "coverAssetId": "cover-music",
-    "introLevelId": null,
+    "introLevelId": "music-hidden-objects-intro",
     "allowedGameTypes": [
       "hidden-object",
       "spot-difference",

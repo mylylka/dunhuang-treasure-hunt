@@ -4,6 +4,7 @@ import { assertShellAssets, parseCatalog } from '../src/services/content-schema'
 import { lessonBooks } from '../src/content/lessons';
 import { parseLessonBook } from '../src/services/lesson-schema';
 import { readPng } from './read-png';
+import hiddenObjectPool from '../src/content/hidden-object/pool.json';
 
 const projectRoot = process.cwd();
 const contentRoot = resolve(projectRoot, 'src/content');
@@ -16,10 +17,21 @@ async function main() {
     readJson(resolve(contentRoot, 'assets.json')),
     Promise.all(levelNames.map(name => readJson(resolve(contentRoot, 'levels', name)))),
   ]);
-  const catalog = parseCatalog({ schemaVersion: 1, themes, assets, levels });
+  const catalog = parseCatalog({ schemaVersion: 1, themes, assets, levels }, hiddenObjectPool);
   assertShellAssets(catalog);
   for (const book of lessonBooks) parseLessonBook(book, catalog);
   const errors: string[] = [];
+  const poolIds = new Set<string>();
+  for (const sprite of hiddenObjectPool.sprites) {
+    if (poolIds.has(sprite.id)) errors.push(`找物素材 ${sprite.id}：编号重复`);
+    poolIds.add(sprite.id);
+    if (!/^\/assets\/shared\/hidden-object\/v\d{3}\/[a-z0-9-]+\.png$/.test(sprite.path)) errors.push(`找物素材 ${sprite.id}：运行路径无效`);
+    try {
+      const data = await readFile(resolve(projectRoot, 'public', sprite.path.slice(1)));
+      if (data.subarray(1, 4).toString() !== 'PNG' || data.readUInt32BE(16) !== sprite.width || data.readUInt32BE(20) !== sprite.height) errors.push(`找物素材 ${sprite.id}：尺寸与登记不一致`);
+      if (sprite.hitPoint.x < 0 || sprite.hitPoint.x > 1 || sprite.hitPoint.y < 0 || sprite.hitPoint.y > 1) errors.push(`找物素材 ${sprite.id}：安全点击点越界`);
+    } catch { errors.push(`找物素材 ${sprite.id}：无法读取 ${sprite.path}`); }
+  }
   for (const asset of catalog.assets) {
     const path = resolve(projectRoot, 'public', asset.path.slice(1));
     try {
@@ -40,6 +52,29 @@ async function main() {
     }
   }
   for (const level of catalog.levels) {
+    if (level.gameType === 'shadow-match') {
+      const images = await Promise.all([level.referenceAssetId, ...level.options.map(option => option.assetId)].map(async id => {
+        const asset = catalog.assets.find(item => item.id === id)!;
+        return readPng(await readFile(resolve(projectRoot, 'public', asset.path.slice(1))));
+      }));
+      if (images.some(image => image.channels !== 4)) { errors.push(`${level.id}：影子与参照须为透明RGBA图片，不得使用带白底标注图`); continue; }
+      const masks = images.map(image => {
+        const mask = new Uint8Array(image.width * image.height);
+        for (let i = 0; i < mask.length; i++) mask[i] = image.pixels[i * 4 + 3] >= 128 ? 1 : 0;
+        return mask;
+      });
+      if (!masks[0].some(Boolean) || masks[0].every(Boolean)) errors.push(`${level.id}：参照图须具有可辨识的透明轮廓`);
+      const equal = (a: Uint8Array, b: Uint8Array) => a.length === b.length && a.every((value, i) => value === b[i]);
+      const matches = level.options.filter((_, index) => equal(masks[0], masks[index + 1]));
+      if (matches.length !== 1 || matches[0].id !== level.correctOptionId) errors.push(`${level.id}：必须且仅有配置答案的轮廓与参照完全一致`);
+      for (let i = 1; i < images.length; i++) {
+        const image = images[i];
+        if (image.pixels.some((value, index) => index % 4 !== 3 && image.pixels[Math.floor(index / 4) * 4 + 3] > 0 && value !== 0)) errors.push(`${level.id}：选项 ${level.options[i - 1].id} 不是纯黑透明剪影`);
+        if (!masks[i].some(Boolean)) errors.push(`${level.id}：选项 ${level.options[i - 1].id} 为空白`);
+        for (let j = i + 1; j < images.length; j++) if (equal(masks[i], masks[j])) errors.push(`${level.id}：影子选项轮廓重复`);
+      }
+      continue;
+    }
     if (level.gameType !== 'coloring') continue;
     const asset = catalog.assets.find(item => item.id === level.regionMapAssetId)!;
     const map = readPng(await readFile(resolve(projectRoot, 'public', asset.path.slice(1))));
@@ -73,6 +108,7 @@ async function main() {
   console.log(`内容校验通过：${catalog.themes.length} 个主题、${catalog.levels.length} 个正式关卡、${catalog.assets.length} 个素材。`);
   console.log(`其中 ${catalog.assets.filter(asset => asset.placeholder).length} 个为明确标注的待替换占位素材。`);
   console.log(`教学校验通过：${lessonBooks.length} 个主题导览、${lessonBooks.reduce((total, book) => total + book.units.length, 0)} 个章节。`);
+  console.log(`找物素材池校验通过：${hiddenObjectPool.sprites.length} 张独立贴纸，按局加载。`);
 }
 
 main().catch(error => { console.error(`内容校验失败：\n${error instanceof Error ? error.message : String(error)}`); process.exitCode = 1; });

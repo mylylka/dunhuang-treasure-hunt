@@ -12,11 +12,11 @@ export interface GameSelectScreenProps {
 
 const names: Record<GameType, string> = {
   'spot-difference': '找不同', puzzle: '拼图', coloring: '填色',
-  'hidden-object': '线索找物', 'shadow-match': '影子配对',
+  'hidden-object': '计时找物', 'shadow-match': '影子配对',
 };
 
 function GamePreview({ catalog, theme, type }: { catalog: ContentCatalog; theme: ThemeDefinition; type: GameType }) {
-  const previewLevel = (type === 'coloring' || type === 'puzzle')
+  const previewLevel = (type === 'coloring' || type === 'puzzle' || type === 'shadow-match')
     && catalog.levels.find(level => level.themeId === theme.id && level.gameType === type);
   const image = getAssetUrl(catalog, previewLevel ? previewLevel.thumbnailAssetId : theme.coverAssetId);
   return <div className={`game-choice-picture preview-${type}`}>
@@ -37,7 +37,7 @@ export function GameSelectScreen({ catalog, theme, onBack, onReview, hrefForGame
       <button className="selection-review" type="button" onClick={onReview}>重看教学</button>
     </header>
     <div className="game-choice-stage">
-      <div className="game-choice-grid" aria-label={`${theme.title}小游戏`}>
+      <div className="game-choice-grid" data-game-count={theme.allowedGameTypes.length} aria-label={`${theme.title}小游戏`}>
         {theme.allowedGameTypes.map(type => {
           const available = catalog.levels.some(level => level.themeId === theme.id && level.gameType === type);
           const content = <><GamePreview catalog={catalog} theme={theme} type={type} /><h2>{names[type]}</h2>{!available && <span className="selection-state">未开放</span>}</>;

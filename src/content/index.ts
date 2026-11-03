@@ -4,11 +4,12 @@ import { assertShellAssets, parseCatalog } from '../services/content-schema';
 import type { ContentCatalog } from '../types';
 import { lessonBooks } from './lessons';
 import { parseLessonBook } from '../services/lesson-schema';
+import { hiddenObjectPool } from './hidden-object';
 
 const levelFiles = import.meta.glob('./levels/*.json', { eager: true, import: 'default' });
 
 export function loadCatalog(): ContentCatalog {
-  const catalog = parseCatalog({ schemaVersion: 1, themes, assets, levels: Object.values(levelFiles) });
+  const catalog = parseCatalog({ schemaVersion: 1, themes, assets, levels: Object.values(levelFiles) }, hiddenObjectPool);
   assertShellAssets(catalog);
   for (const book of lessonBooks) parseLessonBook(book, catalog);
   return catalog;

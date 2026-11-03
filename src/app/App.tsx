@@ -32,6 +32,8 @@ import { isLessonCompleted, lessonRecord, loadLearning, saveLearning, withComple
 import { ArtInspector } from './ArtInspector';
 import { ColoringScreen } from './ColoringScreen';
 import { PuzzleScreen } from './PuzzleScreen';
+import { HiddenObjectScreen } from './HiddenObjectScreen';
+import { ShadowMatchScreen } from './ShadowMatchScreen';
 import { ColoringResult } from './ColoringResult';
 import { SoundSettings } from './SoundSettings';
 import { useSound } from './useSound';
@@ -237,6 +239,12 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
   }
 
   function renderLevel(level: Level, theme: ThemeDefinition) {
+    if (level.gameType === 'shadow-match') return <ShadowMatchScreen key={level.id} level={level} catalog={catalog}
+      reducedMotion={progress.settings.reducedMotion} onEvent={onGameEvent}
+      onBack={() => goTo(levelsPath(theme.id, 'shadow-match'))} />;
+    if (level.gameType === 'hidden-object') return <HiddenObjectScreen key={level.id} level={level} catalog={catalog}
+      reducedMotion={progress.settings.reducedMotion} onEvent={onGameEvent}
+      onBack={() => goTo(levelsPath(theme.id, 'hidden-object'))} />;
     if (level.gameType === 'puzzle') return <PuzzleScreen key={level.id} level={level} catalog={catalog}
       reducedMotion={progress.settings.reducedMotion} onEvent={onGameEvent}
       onBack={() => goTo(levelsPath(theme.id, 'puzzle'))} />;
@@ -269,6 +277,24 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
     const nextPuzzle = puzzleIndex >= 0 ? playablePuzzles[puzzleIndex + 1]?.level : undefined;
     if (isPuzzle && !progress.completed[level.id]) return <div className="page narrow-page empty-state"><h1>先完成拼图，再查看全图</h1><a className="button button-primary" href={`#${playPath(level.id)}`}>前往拼图</a></div>;
     if (!progress.completed[level.id]) return <div className="page narrow-page empty-state"><h1>{isColoring ? '先完成活动，再回看作品' : '先完成活动，再回看发现'}</h1><a className="button button-primary" href={`#${playPath(level.id)}`}>{isColoring ? '前往填色' : '前往观察'}</a></div>;
+    if (level.gameType === 'hidden-object') return <div className="page page-result">
+      <Breadcrumb catalog={catalog} items={[{ label: '找物关卡', href: `#${levelsPath(theme.id, 'hidden-object')}` }]} />
+      <header className="result-heading"><h1>寻宝完成</h1></header>{renderSaveNotice()}
+      <section className="result-review"><div className="result-image"><Asset catalog={catalog} id={level.thumbnailAssetId} alt="乐舞主题教学示意" eager /></div>
+        <div className="result-summary"><SourceNote level={level} /></div></section>
+      <div className="result-actions"><a className="button button-primary" href={`#${levelsPath(theme.id, 'hidden-object')}`}>返回关卡</a>
+        <button type="button" className="button button-secondary" onClick={() => replay(level.id)}><span className="button-label">再找一局</span></button></div>
+    </div>;
+    if (level.gameType === 'shadow-match') return <div className="page page-result shadow-result-screen">
+      <Breadcrumb catalog={catalog} items={[{ label: '影子配对关卡', href: `#${levelsPath(theme.id, 'shadow-match')}` }]} />
+      <header className="result-heading"><h1>配对完成</h1></header>{renderSaveNotice()}
+      <section className="result-review"><div className="result-image shadow-result-images">
+        <figure><Asset catalog={catalog} id={level.referenceAssetId} alt="彩色飞天完整图" eager /><figcaption>彩色飞天</figcaption></figure>
+        <figure><Asset catalog={catalog} id={level.options.find(option => option.id === level.correctOptionId)!.assetId} alt="与飞天轮廓完全对应的影子" eager /><figcaption>对应影子</figcaption></figure>
+      </div><div className="result-summary"><SourceNote level={level} /></div></section>
+      <div className="result-actions"><a className="button button-primary" href={`#${levelsPath(theme.id, 'shadow-match')}`}><span className="button-label">返回关卡</span></a>
+        <button type="button" className="button button-secondary" onClick={() => replay(level.id)}><span className="button-label">再配一次</span></button></div>
+    </div>;
     if (level.gameType === 'coloring' && !Object.keys(artworkColors(artworks, level)).length) return <div className="page narrow-page empty-state"><h1>{hasOlderArtwork(artworks, level) ? '线稿已更新，旧作品已保留' : '当前作品还未着色'}</h1>{renderArtworkNotice()}<a className="button button-primary" href={`#${playPath(level.id)}`}>继续填色</a></div>;
     return <div className={`page page-result${isColoring || isPuzzle ? ' is-coloring-result' : ''}`}>
       <Breadcrumb catalog={catalog} items={[{ label: `${gameNames[level.gameType]}关卡`, href: `#${levelsPath(theme.id, level.gameType)}` }]} />

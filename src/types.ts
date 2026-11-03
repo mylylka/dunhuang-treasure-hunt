@@ -1,3 +1,6 @@
+import type { HiddenObjectRecipe } from './games/hidden-object/types';
+import type { ShadowMatchSnapshot } from './games/shadow-match/types';
+
 export type GameType = 'spot-difference' | 'hidden-object' | 'shadow-match' | 'puzzle' | 'coloring';
 export interface AssetDefinition {
   id: string;
@@ -72,7 +75,28 @@ export interface PuzzleLevel extends LevelMetadata {
   columns: number;
   seed: number;
 }
-export type Level = SpotDifferenceLevel | ColoringLevel | PuzzleLevel;
+export interface HiddenObjectLevel extends LevelMetadata, HiddenObjectRecipe {
+  gameType: 'hidden-object';
+}
+export interface ShadowMatchLevel extends LevelMetadata {
+  gameType: 'shadow-match';
+  referenceAssetId: string;
+  options: { id: string; assetId: string }[];
+  correctOptionId: string;
+  hints: { text: string; region: NormalizedRegion }[];
+}
+export interface HiddenObjectSnapshot {
+  status: 'ready' | 'running' | 'paused' | 'won' | 'timeout';
+  remainingMs: number;
+  foundCount: number;
+  totalTargets: number;
+  tasks: { id: string; label: string; required: number; found: number; previewSpriteId: string }[];
+  selectedTaskId: string;
+  zoom: 1 | 2 | 3;
+  scrollTop: number;
+  scrollMax: number;
+}
+export type Level = SpotDifferenceLevel | ColoringLevel | PuzzleLevel | HiddenObjectLevel | ShadowMatchLevel;
 export type RegionColors = Record<string, string>;
 export type SoundCue = 'button' | 'rotate' | 'success' | 'error' | 'fill' | 'hint' | 'complete';
 export interface ContentCatalog {
@@ -88,6 +112,10 @@ export interface ProgressData {
 }
 export type GameCommand =
   | { type: 'hint' | 'restart' | 'undo' | 'finish'; sequence: number }
+  | { type: 'hidden-start' | 'hidden-pause' | 'hidden-resume' | 'hidden-new-round'; sequence: number }
+  | { type: 'hidden-select-task'; taskId: string; sequence: number }
+  | { type: 'shadow-select'; optionId: string; sequence: number }
+  | { type: 'hidden-scroll'; offset: number; sequence: number }
   | { type: 'select-color'; color: string | null; sequence: number }
   | { type: 'set-zoom'; zoom: 1 | 2 | 3; sequence: number }
   | { type: 'puzzle-scroll'; offset: number; sequence: number }
@@ -99,5 +127,7 @@ export type GameEvent =
   | { type: 'hint'; message: string }
   | { type: 'coloring-change'; colors: RegionColors; paintedCount: number; canUndo: boolean; zoom: 1 | 2 | 3 }
   | { type: 'puzzle-change'; placedCount: number; total: number }
+  | { type: 'hidden-object-change'; snapshot: HiddenObjectSnapshot }
+  | { type: 'shadow-match-change'; snapshot: ShadowMatchSnapshot }
   | { type: 'completed'; levelId: string }
   | { type: 'error'; message: string };

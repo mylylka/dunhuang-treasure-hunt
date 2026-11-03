@@ -2,6 +2,8 @@ import { chromium, expect } from '@playwright/test';
 import { readFile, readdir } from 'node:fs/promises';
 import { spawn } from 'node:child_process';
 import { createHash } from 'node:crypto';
+import { verifyHiddenObjectProduction } from './verify-hidden-object-production.mjs';
+import { verifyShadowMatchProduction } from './verify-shadow-match-production.mjs';
 
 const baseUrl = 'http://localhost:4186';
 const level = JSON.parse(await readFile(new URL('../src/content/levels/patterns-intro.json', import.meta.url), 'utf8'));
@@ -737,8 +739,21 @@ try {
       await expect(page.getByRole('button', { name: '拼图提示', exact: true })).toBeEnabled({ timeout: imageLoadTimeout });
     }
   }
+  const hiddenContext = await browser.newContext({
+    viewport: { width: 1440, height: 1000 }, deviceScaleFactor: 2,
+    storageState: await page.context().storageState(),
+  });
+  await page.close();
+  try {
+    const hiddenPage = await hiddenContext.newPage();
+    await verifyHiddenObjectProduction(hiddenPage, baseUrl);
+    const shadowPage = await hiddenContext.newPage();
+    await hiddenPage.close();
+    await verifyShadowMatchProduction(shadowPage, baseUrl);
+  }
+  finally { await hiddenContext.close(); }
   if (errors.length) throw new Error(errors.join('\n'));
-  console.log('生产构建验证通过：七屏教学、三关找不同清晰标签、四关同屏参考填色及PNG、9块旋转与12/20片不规则拼图；电脑/手机横竖屏布局、碎片区连续滚动、封面和标题入口、真实点击拖拽与独立通关保存。');
+  console.log('生产构建验证通过：七屏教学、三关找不同、四关填色及PNG、三关拼图、一关计时找物及一关飞天影子配对；电脑/手机横竖屏布局、内部滚动、真实操作、放大对照与独立通关保存。');
   }
 } finally {
   await browser?.close();

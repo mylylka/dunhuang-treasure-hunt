@@ -1,0 +1,30 @@
+/* The artwork is the stage; controls and spoken subtitles never share a panel. */
+.world-story.deer-story{display:block;padding:0;overflow:hidden;background:#302116;isolation:isolate}
+.deer-story-atmosphere{position:absolute;inset:-25px;background-size:cover;background-position:center;filter:blur(18px) brightness(.68);z-index:-1}
+.deer-story-background{position:absolute;object-fit:contain;pointer-events:none;user-select:none;mask-image:linear-gradient(transparent,#000 3%,#000 97%,transparent)}
+.deer-story-stage{position:absolute;inset:76px 26px max(110px,calc(var(--story-caption-height,70px) + 40px));pointer-events:none}
+.deer-story-detail{position:absolute;object-fit:contain;pointer-events:none;user-select:none;z-index:2}
+.deer-story-highlight{position:absolute;border:3px solid #f2d58d;border-radius:8px;box-shadow:0 0 20px #efc45b7a,inset 0 0 15px #efc45b38;z-index:1;pointer-events:none}
+.deer-story-toolbar{position:absolute;z-index:3;top:18px;left:26px;right:26px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.deer-story-label{display:flex;align-items:baseline;gap:18px;text-shadow:0 2px 10px #180c05;font:23px/1.4 var(--serif);white-space:nowrap}
+.deer-story-count{font:13px/1.4 "PingFang SC",sans-serif;color:#f2e4ce}
+.deer-story-toolbar nav{display:flex;gap:8px}
+.deer-story .deer-story-toolbar button{background:#34251cc9;border:1px solid #e8c78e60;min-height:38px;padding:6px 14px;color:#fff4e3;font-size:14px;backdrop-filter:blur(6px);white-space:nowrap;min-width:0}
+.deer-story .deer-story-toolbar button:hover{background:#514130;border-color:#d3b889}
+.deer-story .deer-story-toolbar button:disabled{opacity:.45;cursor:default}
+.world-story.deer-story .world-subtitle{bottom:22px;max-width:calc(100% - 52px);padding:13px 24px;z-index:4}
+.world-story.deer-story .world-subtitle p{font-size:21px;line-height:1.65}
+.world-story.deer-story .world-subtitle-skip{color:inherit;font:inherit}
+.deer-story-status{position:absolute;z-index:4;top:50%;left:50%;transform:translate(-50%,-50%);padding:16px 24px;background:#38281de8;color:#fff3de;text-align:center}
+.deer-story-status button,.deer-story-audio-error button{margin-left:12px;min-height:34px;padding:4px 12px}
+.deer-story-audio-error{position:absolute;z-index:5;right:24px;top:72px;padding:6px 12px;background:#38281de8;font-size:13px}
+.world-culture-choice.world-story-choice{width:min(700px,100%);gap:14px}.world-story-choice button{white-space:nowrap}
+@media(max-height:600px){
+ .deer-story-toolbar{top:9px;left:16px;right:16px}.deer-story-label{font-size:20px;gap:10px}.deer-story .deer-story-toolbar button{min-height:34px;padding:4px 12px;font-size:13px}
+ .deer-story-stage{inset:54px 18px max(78px,calc(var(--story-caption-height,52px) + 26px))}.world-story.deer-story .world-subtitle{bottom:10px;padding:8px 14px;max-width:calc(100% - 36px)}.world-story.deer-story .world-subtitle p{font-size:16px;line-height:1.5}.deer-story-audio-error{top:51px}
+}
+
+.world-story.deer-story .deer-story-caption-measure{visibility:hidden;pointer-events:none}
+@media(max-width:760px) and (orientation:landscape){
+ .deer-story-toolbar{gap:8px;left:12px;right:12px}.deer-story-label{font-size:16px;gap:6px}.deer-story-toolbar nav{gap:4px}.deer-story .deer-story-toolbar button{padding:4px 7px;font-size:12px}
+}

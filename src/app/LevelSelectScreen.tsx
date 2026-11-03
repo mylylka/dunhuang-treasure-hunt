@@ -15,7 +15,7 @@ export interface LevelSelectScreenProps {
 
 const names: Record<GameType, string> = {
   'spot-difference': '找不同', puzzle: '拼图', coloring: '填色',
-  'hidden-object': '线索找物', 'shadow-match': '影子配对',
+  'hidden-object': '计时找物', 'shadow-match': '影子配对',
 };
 
 function usePageLayout(slotRef: RefObject<HTMLDivElement | null>) {
@@ -85,10 +85,10 @@ export function LevelSelectScreen({ catalog, theme, gameType, progress, onBack, 
               : <div className="selected-level-picture is-unmade">{picture}</div>}
             <div className="selected-level-copy">
               <h2>{choice.status === 'available' ? <a className="selected-level-title-link" href={hrefForLevel(choice.level.id)}>{choice.title}</a> : choice.title}</h2>
-              <p className="level-card-detail">{choice.status === 'available' ? choice.level.gameType === 'spot-difference' ? `${choice.level.differences.length}处差异` : choice.level.gameType === 'puzzle' ? `${choice.level.rows * choice.level.columns}块 · ${choice.level.mode === 'rotation' ? '旋转拼图' : '不规则碎片'}` : '自由配色' : choice.roadmap.gameType === 'puzzle' ? choice.roadmap.learningFocus : `拟设${choice.roadmap.plannedDifferenceCount}处`}
+              <p className="level-card-detail">{choice.status === 'available' ? choice.level.gameType === 'spot-difference' ? `${choice.level.differences.length}处差异` : choice.level.gameType === 'puzzle' ? `${choice.level.rows * choice.level.columns}块 · ${choice.level.mode === 'rotation' ? '旋转拼图' : '不规则碎片'}` : choice.level.gameType === 'hidden-object' ? `${choice.level.timeLimitSeconds}秒 · 每局随机生成` : choice.level.gameType === 'shadow-match' ? '4选1 · 轮廓配对' : '自由配色' : choice.roadmap.gameType === 'puzzle' ? choice.roadmap.learningFocus : `拟设${choice.roadmap.plannedDifferenceCount}处`}
                 {choice.roadmap?.gameType === 'spot-difference' && <><span aria-hidden="true"> · </span>{choice.roadmap.learningFocus}</>}</p>
               <div className="level-card-action">{choice.status === 'available'
-                ? <a className="button button-primary selected-level-start" href={hrefForLevel(choice.level.id)}><span className="button-label">{choice.level.gameType === 'coloring' ? completed ? '继续创作' : '开始填色' : choice.level.gameType === 'puzzle' ? '开始拼图' : completed ? '再次观察' : '开始观察'}</span></a>
+                ? <a className="button button-primary selected-level-start" href={hrefForLevel(choice.level.id)}><span className="button-label">{choice.level.gameType === 'coloring' ? completed ? '继续创作' : '开始填色' : choice.level.gameType === 'puzzle' ? '开始拼图' : choice.level.gameType === 'hidden-object' ? '开始找物' : choice.level.gameType === 'shadow-match' ? '开始配对' : completed ? '再次观察' : '开始观察'}</span></a>
                 : <span className="level-planned-status">筹备中</span>}</div>
             </div>
           </article>;

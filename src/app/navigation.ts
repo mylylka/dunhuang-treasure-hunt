@@ -8,7 +8,7 @@ export type Route = { page: 'home' | 'themes' | 'help' | 'settings' | 'missing' 
 const gameTypes: GameType[] = ['spot-difference', 'puzzle', 'coloring', 'hidden-object', 'shadow-match'];
 export const gameNames: Record<GameType, string> = {
   'spot-difference': '找不同', puzzle: '拼图', coloring: '填色',
-  'hidden-object': '线索找物', 'shadow-match': '影子配对',
+  'hidden-object': '计时找物', 'shadow-match': '影子配对',
 };
 
 export function readRoute(hash = window.location.hash): Route {

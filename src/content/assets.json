@@ -486,5 +486,55 @@
     "placeholder": false,
     "version": "user-puzzle-v002",
     "sourceNote": "开发者交付拼图图像，用户授权局部去除右下平台水印。仅采用登记范围，其他像素保持不变。原稿及处理记录见art-source/levels/puzzle-twin-dragons/v002/source-notes.json。"
+  },
+  {
+    "id": "shadow-apsara-reference",
+    "path": "/assets/levels/music-apsara-shadow/v001/reference.png",
+    "width": 1254,
+    "height": 1254,
+    "kind": "level",
+    "placeholder": false,
+    "version": "user-shadow-v001",
+    "sourceNote": "开发者交付的AI教学示意，原始透明PNG逐字节接入，不重绘、不裁切、不改色。原稿与SHA登记见art-source/levels/music-apsara-shadow/v001/manifest.json；红圈标注图仅作设计参考，不进入游戏候选。"
+  },
+  {
+    "id": "shadow-apsara-intact",
+    "path": "/assets/levels/music-apsara-shadow/v001/shadow-intact.png",
+    "width": 1254,
+    "height": 1254,
+    "kind": "level",
+    "placeholder": false,
+    "version": "user-shadow-v001",
+    "sourceNote": "开发者交付的AI教学示意，原始透明PNG逐字节接入，不重绘、不裁切、不改色。原稿与SHA登记见art-source/levels/music-apsara-shadow/v001/manifest.json；红圈标注图仅作设计参考，不进入游戏候选。"
+  },
+  {
+    "id": "shadow-apsara-head-cloud",
+    "path": "/assets/levels/music-apsara-shadow/v001/shadow-head-cloud.png",
+    "width": 1254,
+    "height": 1254,
+    "kind": "level",
+    "placeholder": false,
+    "version": "user-shadow-v001",
+    "sourceNote": "开发者交付的AI教学示意，原始透明PNG逐字节接入，不重绘、不裁切、不改色。原稿与SHA登记见art-source/levels/music-apsara-shadow/v001/manifest.json；红圈标注图仅作设计参考，不进入游戏候选。"
+  },
+  {
+    "id": "shadow-apsara-ribbon-foot",
+    "path": "/assets/levels/music-apsara-shadow/v001/shadow-ribbon-foot.png",
+    "width": 1254,
+    "height": 1254,
+    "kind": "level",
+    "placeholder": false,
+    "version": "user-shadow-v001",
+    "sourceNote": "开发者交付的AI教学示意，原始透明PNG逐字节接入，不重绘、不裁切、不改色。原稿与SHA登记见art-source/levels/music-apsara-shadow/v001/manifest.json；红圈标注图仅作设计参考，不进入游戏候选。"
+  },
+  {
+    "id": "shadow-apsara-ribbon-cloud",
+    "path": "/assets/levels/music-apsara-shadow/v001/shadow-ribbon-cloud.png",
+    "width": 1254,
+    "height": 1254,
+    "kind": "level",
+    "placeholder": false,
+    "version": "user-shadow-v001",
+    "sourceNote": "开发者交付的AI教学示意，原始透明PNG逐字节接入，不重绘、不裁切、不改色。原稿与SHA登记见art-source/levels/music-apsara-shadow/v001/manifest.json；红圈标注图仅作设计参考，不进入游戏候选。"
   }
 ]

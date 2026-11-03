@@ -411,8 +411,8 @@ async function inspectStaticScreens(page: Page) {
   await expectButtonCentered(page.getByRole('link', { name: /^开始观察/ }).first());
   await expectDocumentFits(page);
 
-  await page.goto('/#/theme/music');
-  await expectInsideViewport(page, page.getByRole('heading', { level: 1, name: '飞天、乐舞与服饰' }));
+  await page.goto('/#/theme/stories');
+  await expectInsideViewport(page, page.getByRole('heading', { level: 1, name: '壁画故事与宗教文化' }));
   await expectInsideViewport(page, page.getByRole('link', { name: '返回首页', exact: true }));
   await expectDocumentFits(page);
 
@@ -686,10 +686,10 @@ test('首页主题、三个玩法与关卡分别导航，未开放内容没有�
   await expect(page.locator('.theme-row')).toHaveCount(3);
   await expectInsideViewport(page, page.locator('.theme-patterns'));
   await expectDocumentFits(page);
-  const selectMusic = page.getByRole('button', { name: '查看主题：飞天、乐舞与服饰' });
-  if (await selectMusic.isVisible()) await selectMusic.click();
-  await page.locator('.theme-music').click();
-  await expect(page.getByRole('heading', { level: 1, name: '飞天、乐舞与服饰' })).toBeVisible();
+  const selectStories = page.getByRole('button', { name: '查看主题：壁画故事与宗教文化' });
+  if (await selectStories.isVisible()) await selectStories.click();
+  await page.locator('.theme-stories').click();
+  await expect(page.getByRole('heading', { level: 1, name: '壁画故事与宗教文化' })).toBeVisible();
   await expect(page.getByText('主题尚未开放', { exact: true })).toBeVisible();
   await expect(page.getByRole('link', { name: /^开始观察/ }).first()).toHaveCount(0);
   const back = page.getByRole('link', { name: '返回首页', exact: true });
