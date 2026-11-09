@@ -61,10 +61,9 @@ export function restartShadowMatchState(level: Definition, state: ShadowMatchSna
 }
 
 function card(x: number, y: number, width: number, height: number): ShadowCardLayout {
-  const inset = Math.min(10, width * .05, height * .055);
-  const compact = width < 240 || height < 160;
-  const labelSpace = Math.min(compact ? 18 : 22, height * .3);
-  // The corner zoom control uses the PNG's transparent corner, not a full-width empty band.
+  const inset = Math.min(2, width * .02, height * .025);
+  const labelSpace = Math.min(14, height * .2);
+  // One compact label is separate from the full image; comparison controls live in the rail.
   return { x, y, width, height, image: {
     x: x + inset, y: y + inset,
     width: width - inset * 2, height: height - inset * 2 - labelSpace,
@@ -73,16 +72,21 @@ function card(x: number, y: number, width: number, height: number): ShadowCardLa
 
 export function calculateShadowLayout(width: number, height: number): ShadowMatchLayout {
   requireCondition(positive(width) && positive(height), '画布宽高必须为有限正数。');
-  const inset = Math.min(14, width * .035, height * .035);
-  const gap = Math.min(16, width * .03, height * .03);
+  const inset = Math.min(6, width * .02, height * .02);
+  const gap = Math.min(8, width * .016, height * .024);
   const usableWidth = width - inset * 2, usableHeight = height - inset * 2;
   let reference: ShadowCardLayout, options: ShadowCardLayout[];
   if (width >= height * 1.1) {
-    const referenceWidth = (usableWidth - gap) * .42;
-    const optionWidth = (usableWidth - referenceWidth - gap * 2) / 2;
     const optionHeight = (usableHeight - gap) / 2;
-    const start = inset + referenceWidth + gap;
-    reference = card(inset, inset, referenceWidth, usableHeight);
+    const labelSpace = Math.min(14, optionHeight * .2);
+    const idealReferenceWidth = usableHeight - labelSpace;
+    const idealOptionWidth = optionHeight - labelSpace;
+    const fit = Math.min(1, (usableWidth - gap * 2) / (idealReferenceWidth + idealOptionWidth * 2));
+    const referenceWidth = idealReferenceWidth * fit, optionWidth = idealOptionWidth * fit;
+    const groupWidth = referenceWidth + optionWidth * 2 + gap * 2;
+    const referenceStart = (width - groupWidth) / 2;
+    const start = referenceStart + referenceWidth + gap;
+    reference = card(referenceStart, inset, referenceWidth, usableHeight);
     options = Array.from({ length: 4 }, (_, index) => card(start + index % 2 * (optionWidth + gap),
       inset + Math.floor(index / 2) * (optionHeight + gap), optionWidth, optionHeight));
   } else {

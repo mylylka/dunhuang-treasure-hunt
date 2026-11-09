@@ -16,7 +16,7 @@ export interface HiddenObjectRecipe {
   poolId: string;
   board: HiddenObjectBoard;
   categoryQuotas: { categoryId: string; count: number }[];
-  tasks: { groupIds: string[]; groupCount: number; minCount: number; maxCount: number };
+  tasks: { groupIds: string[]; groupCount: number; minCount: number; maxCount: number; totalCount?: number };
   timeLimitSeconds: number;
 }
 

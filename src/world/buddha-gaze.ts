@@ -1,5 +1,13 @@
 import * as THREE from 'three';
 
+export const BUDDHA_HEAD = { x: 122, y: 36.3, z: -91.8 } as const;
+
+export function centeredBuddhaHead(camera: THREE.PerspectiveCamera, head: THREE.Vector3, projected: THREE.Vector3) {
+  camera.updateMatrixWorld(true);
+  projected.copy(head).project(camera);
+  return projected.z > -1 && projected.z < 1 && Math.abs(projected.x) <= .5 && Math.abs(projected.y) <= .5;
+}
+
 /** Conservative front viewing zone plus projected anatomy, not an R-key trigger.
  * Landmarks are measured in the accepted 35m model's world coordinates. */
 export function buddhaDominatesView(camera: THREE.PerspectiveCamera) {
@@ -9,7 +17,7 @@ export function buddhaDominatesView(camera: THREE.PerspectiveCamera) {
   const forward=camera.getWorldDirection(new THREE.Vector3());
   if(forward.y<.42 || forward.z>-.25)return false;
   const project=(x:number,y:number,z:number)=>new THREE.Vector3(x,y,z).project(camera);
-  const head=project(122,36.3,-91.8),chest=project(122,27.3,-87.8);
+  const head=project(BUDDHA_HEAD.x,BUDDHA_HEAD.y,BUDDHA_HEAD.z),chest=project(122,27.3,-87.8);
   const left=project(114,24,-87),right=project(130,24,-87),foot=project(122,7.3,-84);
   const inside=(p:THREE.Vector3,x:number,y:number)=>p.z>-1&&p.z<1&&Math.abs(p.x)<x&&Math.abs(p.y)<y;
   return inside(head,.70,.92)&&inside(chest,.60,.85)&&Math.abs(right.x-left.x)>.85&&head.y-foot.y>1.35;

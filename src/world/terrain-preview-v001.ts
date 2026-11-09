@@ -7,7 +7,7 @@ import './music-pavilion-preview.css';
 import './music-pavilion-preview-v002.css';
 import './terrain-preview-v001.css';
 import { defaultWorldCheckpoint } from './session';
-import { TERRAIN_SESSION_OPTIONS, TERRAIN_SPAWN, TERRAIN_REGIONS, TERRAIN_ROUTES, toTerrainPoint, terrainSurfaceHeight } from './terrain-rules-v001';
+import { TERRAIN_SESSION_OPTIONS, TERRAIN_SPAWN, TERRAIN_REGIONS, TERRAIN_ROUTES, toTerrainPoint, terrainSurfaceHeight, relocateOasisPoint, OASIS_RELOCATION_YAW } from './terrain-rules-v001';
 import {TERRAIN_CAISSON_CONFIG,terrainCaissonLookOffset} from './terrain-caisson-v001';
 import {terrainCameraSpace,terrainFollowPose} from './terrain-camera-v001';
 
@@ -19,6 +19,7 @@ const at = (region:'courtyard'|'music'|'cliff',x:number,z:number,yaw:number):num
 const firstRoute=TERRAIN_ROUTES[0].points;
 const crest=firstRoute.reduce((highest,p)=>p.y>highest.y?p:highest);
 const valley=firstRoute[Math.floor(firstRoute.length*.8)];
+const lakeStation=relocateOasisPoint({x:237,z:69});
 const stations:Record<string,number[]> = {
   start:[TERRAIN_SPAWN.x,TERRAIN_SPAWN.z,TERRAIN_REGIONS.courtyard.yaw],
   courtyard:at('courtyard',-12,9,0),
@@ -31,7 +32,7 @@ const stations:Record<string,number[]> = {
   caisson:at('courtyard',caisson?TERRAIN_CAISSON_CONFIG.sourcePlacement.x:-12,caisson?TERRAIN_CAISSON_CONFIG.sourcePlacement.z:-17,0),
   crest:[crest.x,crest.z,-Math.PI/2],
   valley:[valley.x,valley.z,-1.5],
-  lake:[237,69,.4],
+  lake:[lakeStation.x,lakeStation.z,.4+OASIS_RELOCATION_YAW],
   music:at('music',40.2,6,0),
   flying:at('music',52.35,-11.9,0),
   forecourt:at('cliff',122,35,0),
@@ -54,4 +55,4 @@ if(station) {
   query.delete('view');
   history.replaceState(null,'',`${location.pathname}${query.size?`?${query}`:''}${location.hash}`);
 }
-void import('../main');
+export const mainReady = import('../main');

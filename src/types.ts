@@ -77,6 +77,7 @@ export interface PuzzleLevel extends LevelMetadata {
 }
 export interface HiddenObjectLevel extends LevelMetadata, HiddenObjectRecipe {
   gameType: 'hidden-object';
+  chapter?: { id: string; title: string; order: number; level: number; backgroundAssetId: string };
 }
 export interface ShadowMatchLevel extends LevelMetadata {
   gameType: 'shadow-match';
@@ -98,7 +99,9 @@ export interface HiddenObjectSnapshot {
 }
 export type Level = SpotDifferenceLevel | ColoringLevel | PuzzleLevel | HiddenObjectLevel | ShadowMatchLevel;
 export type RegionColors = Record<string, string>;
-export type SoundCue = 'button' | 'rotate' | 'success' | 'error' | 'fill' | 'hint' | 'complete';
+export type ColoringMaterialId = 'sparkle-gold-v001' | 'sparkle-silver-v001';
+export type RegionMaterials = Record<string, ColoringMaterialId>;
+export type SoundCue = 'button' | 'rotate' | 'success' | 'error' | 'fill' | 'hint' | 'complete' | 'gallery-unlock' | 'guide-stardust';
 export interface ContentCatalog {
   schemaVersion: 1;
   themes: ThemeDefinition[];
@@ -116,7 +119,7 @@ export type GameCommand =
   | { type: 'hidden-select-task'; taskId: string; sequence: number }
   | { type: 'shadow-select'; optionId: string; sequence: number }
   | { type: 'hidden-scroll'; offset: number; sequence: number }
-  | { type: 'select-color'; color: string | null; sequence: number }
+  | { type: 'select-color'; color: string | null; material?: ColoringMaterialId; sequence: number }
   | { type: 'set-zoom'; zoom: 1 | 2 | 3; sequence: number }
   | { type: 'puzzle-scroll'; offset: number; sequence: number }
   | { type: 'set-motion'; reducedMotion: boolean; sequence: number };
@@ -125,7 +128,8 @@ export type GameEvent =
   | { type: 'ready'; total: number }
   | { type: 'progress'; foundIds: string[]; total: number }
   | { type: 'hint'; message: string }
-  | { type: 'coloring-change'; colors: RegionColors; paintedCount: number; canUndo: boolean; zoom: 1 | 2 | 3 }
+  | { type: 'coloring-change'; colors: RegionColors; materials?: RegionMaterials; paintedCount: number; canUndo: boolean; zoom: number }
+  | { type: 'spot-view-change'; zoom: number; center: { x: number; y: number } }
   | { type: 'puzzle-change'; placedCount: number; total: number }
   | { type: 'hidden-object-change'; snapshot: HiddenObjectSnapshot }
   | { type: 'shadow-match-change'; snapshot: ShadowMatchSnapshot }

@@ -1,0 +1,98 @@
+[
+  {
+    "version": "screen-layout",
+    "path": "work/build-history/screen-layout/dunhuang-treasure-v0.1.zip",
+    "sha256": "2f9b87870720ccd28cc6859b7a0d3ff78364dd96d07f236aa27c51d21898a5ff",
+    "bytes": 955014,
+    "records": 57,
+    "manifest": "docs/history/early-2d/manifests/screen-layout.json"
+  },
+  {
+    "version": "user-art-v001",
+    "path": "work/build-history/user-art-v001/dunhuang-treasure-v0.1.zip",
+    "sha256": "9939729a41f25b75d4301039a9fb9f8da7142a02843eaf66d73fa4b2be2d7827",
+    "bytes": 867434,
+    "records": 59,
+    "manifest": "docs/history/early-2d/manifests/user-art-v001.json"
+  },
+  {
+    "version": "ui-cleanup",
+    "path": "work/build-history/ui-cleanup/dunhuang-treasure-v0.1.zip",
+    "sha256": "d5875c86c4fadb15d7809dc367730f37a546c52c5faf5ad1b48579796629f668",
+    "bytes": 69022840,
+    "records": 93,
+    "manifest": "docs/history/early-2d/manifests/ui-cleanup.json"
+  },
+  {
+    "version": "learning-flow",
+    "path": "work/build-history/learning-flow/dunhuang-treasure-v0.1.zip",
+    "sha256": "7198292c9ae1ae07825074994bb11b28318e2f85ea9dff9152bbca87c3e62b02",
+    "bytes": 68854595,
+    "records": 93,
+    "manifest": "docs/history/early-2d/manifests/learning-flow.json"
+  },
+  {
+    "version": "teaching-panel-and-roadmap",
+    "path": "work/build-history/teaching-panel-and-roadmap/dunhuang-treasure-v0.1.zip",
+    "sha256": "131e480cbf531f3a3f0526d9759be92bd6bc41b801e67b912f51b37c0473dba3",
+    "bytes": 109913654,
+    "records": 139,
+    "manifest": "docs/history/early-2d/manifests/teaching-panel-and-roadmap.json"
+  },
+  {
+    "version": "teaching-safe-area-v3",
+    "path": "work/build-history/teaching-safe-area-v3/dunhuang-treasure-v0.1.zip",
+    "sha256": "652710c231906424b772a5e31c510a46bc047db4fd1d85c90b3cf16197fbb453",
+    "bytes": 123544040,
+    "records": 153,
+    "manifest": "docs/history/early-2d/manifests/teaching-safe-area-v3.json"
+  },
+  {
+    "version": "new-levels-and-coloring-v1",
+    "path": "work/build-history/new-levels-and-coloring-v1/dunhuang-treasure-v0.1.zip",
+    "sha256": "1770a0d922e804387a214dc1dba022cd4ac5dc7e3dd0666eaa657b8c4aba5ae6",
+    "bytes": 139942558,
+    "records": 167,
+    "manifest": "docs/history/early-2d/manifests/new-levels-and-coloring-v1.json"
+  },
+  {
+    "version": "puzzle-and-inline-reference-v1",
+    "path": "work/build-history/puzzle-and-inline-reference-v1/dunhuang-treasure-v0.1.zip",
+    "sha256": "dd8310e23ee38026cc10fb92c85c375b5baccce0440bfb418aee8aaf5b8727e0",
+    "bytes": 288428270,
+    "records": 253,
+    "manifest": "docs/history/early-2d/manifests/puzzle-and-inline-reference-v1.json"
+  },
+  {
+    "version": "reference-refresh-retouch-v2",
+    "path": "work/build-history/reference-refresh-retouch-v2/dunhuang-treasure-v0.1.zip",
+    "sha256": "67ab91e2ec91641fd44c2a804aa77b1b95d6e3960c95d71aca5cc30fc3ca2925",
+    "bytes": 327797268,
+    "records": 285,
+    "manifest": "docs/history/early-2d/manifests/reference-refresh-retouch-v2.json"
+  },
+  {
+    "version": "outline-and-guide-label-v1",
+    "path": "work/build-history/outline-and-guide-label-v1/dunhuang-treasure-v0.1.zip",
+    "sha256": "ceecfc0013fc72e3ad9a9bfdd61e4bc61f0ea1813ce89404d4fdac7008116531",
+    "bytes": 409420069,
+    "records": 319,
+    "manifest": "docs/history/early-2d/manifests/outline-and-guide-label-v1.json"
+  },
+  {
+    "version": "scroll-tray-and-card-entry-v1",
+    "path": "work/build-history/scroll-tray-and-card-entry-v1/dunhuang-treasure-v0.1.zip",
+    "sha256": "6a0863e300c7dd8a0a2d8ba7afa0a95f14f0f581d79d624e072d5a25461c9d55",
+    "bytes": 409391089,
+    "records": 319,
+    "manifest": "docs/history/early-2d/manifests/scroll-tray-and-card-entry-v1.json"
+  },
+  {
+    "version": "portable-2026-10-29",
+    "path": "outputs/dunhuang-treasure-v0.1.zip",
+    "sha256": "19b5a6331926732eb7ce60f579287ae9bde9e1a2046190f6e1e4a41c6f46f369",
+    "bytes": 411216706,
+    "records": 321,
+    "manifest": "docs/history/early-2d/manifests/portable-2026-10-29.json"
+  }
+]

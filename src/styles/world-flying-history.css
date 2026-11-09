@@ -1,0 +1,110 @@
+.world-screen.is-flying-history > .world-hud { visibility: hidden; }
+
+.flying-history {
+  --history-inset: clamp(12px, 2.6vw, 34px);
+  position: absolute;
+  z-index: 5;
+  inset: 0;
+  color: #f9ecd3;
+  outline: none;
+  touch-action: manipulation;
+}
+
+.flying-history__toolbar {
+  position: absolute;
+  top: max(var(--history-inset), env(safe-area-inset-top));
+  right: max(var(--history-inset), env(safe-area-inset-right));
+  display: flex;
+  gap: 7px;
+}
+
+.world-screen .flying-history__toolbar button,
+.world-screen .flying-history__chapters button,
+.world-screen .flying-history__actions button {
+  min-height: 44px;
+  padding: 7px 13px;
+  white-space: nowrap;
+  color: #513c29;
+}
+
+.world-screen .flying-history__actions .world-primary { color: #fff9ee; }
+
+.flying-history__chapters {
+  position: absolute;
+  z-index: 1;
+  top: calc(max(var(--history-inset), env(safe-area-inset-top)) + 50px);
+  right: max(var(--history-inset), env(safe-area-inset-right));
+  width: min(270px, calc(100% - 2 * var(--history-inset)));
+  max-height: calc(100% - var(--history-inset) - 60px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 9px;
+  border: 1px solid #ddbc78;
+  border-radius: 10px;
+  color: #513c29;
+  background: #f7edda;
+  box-shadow: 0 12px 35px #35231456;
+}
+
+.flying-history__chapters header { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 0 4px 7px; }
+.flying-history__chapters h2 { margin: 0; font: 600 17px/1.4 var(--serif); }
+.flying-history__chapters ol { display: grid; gap: 4px; margin: 0; padding: 0; list-style: none; overflow: auto; overscroll-behavior: contain; touch-action: pan-y; }
+.world-screen .flying-history__chapters li button { width: 100%; justify-content: flex-start; gap: 9px; text-align: left; }
+.world-screen .flying-history__chapters li button[aria-current='step'] { border-color: #a16d49; background: #eed8b0; font-weight: 600; }
+.flying-history__ordinal { font-variant-numeric: tabular-nums; color: #8b6347; font-size: 12px; }
+
+.flying-history__footer {
+  position: absolute;
+  inset: auto max(var(--history-inset), env(safe-area-inset-right)) env(safe-area-inset-bottom) max(var(--history-inset), env(safe-area-inset-left));
+  height: max(52px, 16%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  pointer-events: none;
+}
+
+.flying-history__subtitle,
+.flying-history__actions,
+.flying-history__notice {
+  max-width: min(960px, 100%);
+  margin: 0;
+  padding: 8px 14px;
+  border: 1px solid #ddbc78ad;
+  border-radius: 8px;
+  background: #302218ed;
+  box-shadow: 0 5px 24px #26170745;
+}
+
+.flying-history__subtitle {
+  box-sizing: border-box;
+  max-width: min(1100px, 100%);
+  max-height: calc(100% - 6px);
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  pointer-events: auto;
+  touch-action: pan-y;
+}
+.flying-history__subtitle p { margin: 0; font: clamp(15px, 1.5vw, 21px)/1.42 var(--serif); }
+.flying-history__speaker { margin-inline-end: .65em; color: #ebc68a; font-weight: 600; }
+.flying-history__actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 7px; pointer-events: auto; }
+.flying-history__actions p { margin: 0 3px; }
+.flying-history__notice { font-size: 14px; }
+
+@media (max-height: 470px) {
+  .flying-history { --history-inset: 10px; }
+  .flying-history__toolbar { gap: 5px; }
+  .flying-history__footer { height: max(70px, 21%); }
+  .world-screen .flying-history__toolbar button,
+  .world-screen .flying-history__actions button { padding: 5px 10px; font-size: 13px; }
+  .flying-history__subtitle,
+  .flying-history__actions { padding: 4px 9px; }
+  .flying-history__subtitle p { font: 15px/1.25 var(--serif); }
+}
+
+@media (max-height: 470px) and (max-width: 680px) {
+  .flying-history__footer { height: max(88px, 27%); }
+  .flying-history__subtitle p { font-size: 14px; }
+}

@@ -11,27 +11,30 @@ export interface FlyingVoiceState {
 }
 
 /** A single region-owned narration track, independent of the short UI sound pool. */
-export function createFlyingVoice(media: HTMLAudioElement | null, initial: SoundPreferences) {
+export function createFlyingVoice(source: HTMLAudioElement | (() => HTMLAudioElement) | null, initial: SoundPreferences,
+  { keyboardSkip = true }: { keyboardSkip?: boolean } = {}) {
+  let media = typeof source === 'function' ? null : source;
   let active = false, due = false, blocked = false, disposed = false, ended = false;
-  let status: FlyingVoiceState['status'] = media ? 'loading' : 'missing';
+  let status: FlyingVoiceState['status'] = source ? 'loading' : 'missing';
   let preferences = initial, pending = false, generation = 0;
   function skip() {
     if (!active || !due || blocked || disposed || ended) return false;
     generation++; ended = true; media?.pause(); return true;
   }
-  const unregisterSkip = registerSpeechSkip(skip);
+  const unregisterSkip = keyboardSkip ? registerSpeechSkip(skip) : undefined;
   const allowed = () => active && due && !blocked && !disposed && !ended;
   function apply() {
-    if (!media || disposed) return;
-    media.volume = Math.max(0, Math.min(1, preferences.volume));
-    media.muted = !preferences.enabled;
-    if (!allowed()) { media.pause(); return; }
-    if (status === 'error' || status === 'blocked' || pending || !media.paused) return;
+    const audio = media;
+    if (!audio || disposed) return;
+    audio.volume = Math.max(0, Math.min(1, preferences.volume));
+    audio.muted = !preferences.enabled;
+    if (!allowed()) { audio.pause(); return; }
+    if (status === 'error' || status === 'blocked' || pending || !audio.paused) return;
     const attempt = generation;
     pending = true;
-    void media.play().then(() => {
+    void audio.play().then(() => {
       // A browser may settle play() after exit, pause or a background switch.
-      if (!allowed()) media.pause();
+      if (!allowed()) audio.pause();
     }).catch(error => {
       if (disposed || attempt !== generation || !allowed()) return;
       status = error instanceof DOMException && error.name === 'NotAllowedError' ? 'blocked' : 'error';
@@ -44,16 +47,23 @@ export function createFlyingVoice(media: HTMLAudioElement | null, initial: Sound
   function ready() { if (!disposed && status !== 'blocked') status = 'ready'; }
   function failed() { if (!disposed) { status = 'error'; media?.pause(); } }
   function finish() { ended = true; }
-  if (media) {
-    media.preload = 'auto';
-    media.addEventListener('canplay', ready);
-    media.addEventListener('error', failed);
-    media.addEventListener('ended', finish);
+  function attach(audio: HTMLAudioElement) {
+    audio.preload = 'auto';
+    audio.addEventListener('canplay', ready);
+    audio.addEventListener('error', failed);
+    audio.addEventListener('ended', finish);
   }
+  function ensureMedia() {
+    if (media || typeof source !== 'function') return;
+    try { media = source(); attach(media); }
+    catch { status = 'error'; }
+  }
+  if (media) attach(media);
   return {
     skip,
     enter() {
       if (disposed) return;
+      ensureMedia();
       generation++; active = true; due = false; ended = false;
       if (media) { media.pause(); media.currentTime = 0; }
     },
@@ -65,7 +75,9 @@ export function createFlyingVoice(media: HTMLAudioElement | null, initial: Sound
     },
     setPreferences(value: SoundPreferences) { preferences = value; apply(); },
     retry() {
-      if (!media || disposed) return;
+      if (disposed) return;
+      ensureMedia();
+      if (!media) return;
       generation++; ended = false;
       if (status === 'error') { status = 'loading'; media.load(); }
       else if (status === 'blocked') status = 'ready';
@@ -84,7 +96,7 @@ export function createFlyingVoice(media: HTMLAudioElement | null, initial: Sound
     },
     dispose() {
       if (disposed) return;
-      disposed = true; active = false; generation++; unregisterSkip();
+      disposed = true; active = false; generation++; unregisterSkip?.();
       if (media) {
         media.pause(); media.removeEventListener('canplay', ready);
         media.removeEventListener('error', failed); media.removeEventListener('ended', finish);

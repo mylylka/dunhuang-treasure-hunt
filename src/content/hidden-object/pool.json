@@ -12,6 +12,130 @@
     {
       "id": "bell",
       "label": "铃铛"
+    },
+    {
+      "id": "flute",
+      "label": "笛子"
+    },
+    {
+      "id": "panpipes",
+      "label": "排箫"
+    },
+    {
+      "id": "cymbals",
+      "label": "钹"
+    },
+    {
+      "id": "ribbon",
+      "label": "飘带"
+    },
+    {
+      "id": "crown",
+      "label": "头冠"
+    },
+    {
+      "id": "necklace",
+      "label": "项链"
+    },
+    {
+      "id": "earring",
+      "label": "耳坠"
+    },
+    {
+      "id": "bracelet",
+      "label": "手镯"
+    },
+    {
+      "id": "belt",
+      "label": "腰带"
+    },
+    {
+      "id": "boots",
+      "label": "靴子"
+    },
+    {
+      "id": "deer",
+      "label": "鹿"
+    },
+    {
+      "id": "peacock",
+      "label": "孔雀"
+    },
+    {
+      "id": "rabbit",
+      "label": "兔子"
+    },
+    {
+      "id": "horse",
+      "label": "马"
+    },
+    {
+      "id": "camel",
+      "label": "骆驼"
+    },
+    {
+      "id": "ox",
+      "label": "牛"
+    },
+    {
+      "id": "lion",
+      "label": "狮子"
+    },
+    {
+      "id": "fish",
+      "label": "鱼"
+    },
+    {
+      "id": "lotus",
+      "label": "莲花"
+    },
+    {
+      "id": "seedpod",
+      "label": "莲蓬"
+    },
+    {
+      "id": "lotus-leaf",
+      "label": "荷叶"
+    },
+    {
+      "id": "flower",
+      "label": "花形"
+    },
+    {
+      "id": "leaf",
+      "label": "叶片"
+    },
+    {
+      "id": "round-pattern",
+      "label": "圆纹"
+    },
+    {
+      "id": "diamond-pattern",
+      "label": "菱纹"
+    },
+    {
+      "id": "flame-pattern",
+      "label": "火焰纹"
+    },
+    {
+      "id": "incense-burner",
+      "label": "香炉"
+    },
+    {
+      "id": "candleholder",
+      "label": "烛台"
+    },
+    {
+      "id": "bowl",
+      "label": "碗"
+    },
+    {
+      "id": "scroll",
+      "label": "卷轴"
+    },
+    {
+      "id": "bead-string",
+      "label": "珠串"
     }
   ],
   "sprites": [
@@ -209,7 +333,9 @@
       "path": "/assets/shared/hidden-object/v002/instruments-016.png",
       "width": 285,
       "height": 383,
-      "groupIds": [],
+      "groupIds": [
+        "panpipes"
+      ],
       "hitPoint": {
         "x": 0.5,
         "y": 0.5
@@ -221,7 +347,9 @@
       "path": "/assets/shared/hidden-object/v002/instruments-017.png",
       "width": 276,
       "height": 383,
-      "groupIds": [],
+      "groupIds": [
+        "panpipes"
+      ],
       "hitPoint": {
         "x": 0.498188,
         "y": 0.5
@@ -281,7 +409,9 @@
       "path": "/assets/shared/hidden-object/v002/instruments-022.png",
       "width": 419,
       "height": 309,
-      "groupIds": [],
+      "groupIds": [
+        "flute"
+      ],
       "hitPoint": {
         "x": 0.4642,
         "y": 0.399676
@@ -293,7 +423,9 @@
       "path": "/assets/shared/hidden-object/v002/instruments-023.png",
       "width": 512,
       "height": 318,
-      "groupIds": [],
+      "groupIds": [
+        "flute"
+      ],
       "hitPoint": {
         "x": 0.483398,
         "y": 0.441824
@@ -401,7 +533,9 @@
       "path": "/assets/shared/hidden-object/v002/instruments-031.png",
       "width": 348,
       "height": 363,
-      "groupIds": [],
+      "groupIds": [
+        "cymbals"
+      ],
       "hitPoint": {
         "x": 0.498563,
         "y": 0.5
@@ -413,7 +547,9 @@
       "path": "/assets/shared/hidden-object/v002/instruments-032.png",
       "width": 356,
       "height": 326,
-      "groupIds": [],
+      "groupIds": [
+        "cymbals"
+      ],
       "hitPoint": {
         "x": 0.498596,
         "y": 0.498466
@@ -659,7 +795,9 @@
       "path": "/assets/shared/hidden-object/v002/clothing-001.png",
       "width": 353,
       "height": 385,
-      "groupIds": [],
+      "groupIds": [
+        "ribbon"
+      ],
       "hitPoint": {
         "x": 0.5,
         "y": 0.5
@@ -671,7 +809,9 @@
       "path": "/assets/shared/hidden-object/v002/clothing-002.png",
       "width": 288,
       "height": 313,
-      "groupIds": [],
+      "groupIds": [
+        "ribbon"
+      ],
       "hitPoint": {
         "x": 0.467014,
         "y": 0.50639
@@ -803,7 +943,9 @@
       "path": "/assets/shared/hidden-object/v002/clothing-013.png",
       "width": 281,
       "height": 338,
-      "groupIds": [],
+      "groupIds": [
+        "crown"
+      ],
       "hitPoint": {
         "x": 0.5,
         "y": 0.498521
@@ -827,7 +969,9 @@
       "path": "/assets/shared/hidden-object/v002/clothing-015.png",
       "width": 309,
       "height": 336,
-      "groupIds": [],
+      "groupIds": [
+        "crown"
+      ],
       "hitPoint": {
         "x": 0.5,
         "y": 0.498512
@@ -875,7 +1019,9 @@
       "path": "/assets/shared/hidden-object/v002/clothing-019.png",
       "width": 339,
       "height": 340,
-      "groupIds": [],
+      "groupIds": [
+        "necklace"
+      ],
       "hitPoint": {
         "x": 0.5,
         "y": 0.498529
@@ -887,7 +1033,9 @@
       "path": "/assets/shared/hidden-object/v002/clothing-020.png",
       "width": 290,
       "height": 316,
-      "groupIds": [],
+      "groupIds": [
+        "necklace"
+      ],
       "hitPoint": {
         "x": 0.498276,
         "y": 0.498418
@@ -923,7 +1071,9 @@
       "path": "/assets/shared/hidden-object/v002/clothing-023.png",
       "width": 193,
       "height": 341,
-      "groupIds": [],
+      "groupIds": [
+        "earring"
+      ],
       "hitPoint": {
         "x": 0.5,
         "y": 0.5
@@ -935,7 +1085,9 @@
       "path": "/assets/shared/hidden-object/v002/clothing-024.png",
       "width": 116,
       "height": 338,
-      "groupIds": [],
+      "groupIds": [
+        "earring"
+      ],
       "hitPoint": {
         "x": 0.49569,
         "y": 0.498521
@@ -1007,7 +1159,9 @@
       "path": "/assets/shared/hidden-object/v002/clothing-030.png",
       "width": 324,
       "height": 192,
-      "groupIds": [],
+      "groupIds": [
+        "bracelet"
+      ],
       "hitPoint": {
         "x": 0.498457,
         "y": 0.518229
@@ -1019,7 +1173,9 @@
       "path": "/assets/shared/hidden-object/v002/clothing-031.png",
       "width": 327,
       "height": 201,
-      "groupIds": [],
+      "groupIds": [
+        "bracelet"
+      ],
       "hitPoint": {
         "x": 0.5,
         "y": 0.5
@@ -1043,7 +1199,9 @@
       "path": "/assets/shared/hidden-object/v002/clothing-033.png",
       "width": 304,
       "height": 313,
-      "groupIds": [],
+      "groupIds": [
+        "belt"
+      ],
       "hitPoint": {
         "x": 0.498355,
         "y": 0.5
@@ -1067,7 +1225,9 @@
       "path": "/assets/shared/hidden-object/v002/clothing-035.png",
       "width": 381,
       "height": 310,
-      "groupIds": [],
+      "groupIds": [
+        "belt"
+      ],
       "hitPoint": {
         "x": 0.481627,
         "y": 0.48871
@@ -1331,7 +1491,9 @@
       "path": "/assets/shared/hidden-object/v002/clothing-057.png",
       "width": 204,
       "height": 236,
-      "groupIds": [],
+      "groupIds": [
+        "boots"
+      ],
       "hitPoint": {
         "x": 0.497549,
         "y": 0.497881
@@ -1343,7 +1505,9 @@
       "path": "/assets/shared/hidden-object/v002/clothing-058.png",
       "width": 315,
       "height": 241,
-      "groupIds": [],
+      "groupIds": [
+        "boots"
+      ],
       "hitPoint": {
         "x": 0.5,
         "y": 0.5
@@ -2315,7 +2479,9 @@
       "path": "/assets/shared/hidden-object/v002/animals-001.png",
       "width": 336,
       "height": 393,
-      "groupIds": [],
+      "groupIds": [
+        "deer"
+      ],
       "hitPoint": {
         "x": 0.498512,
         "y": 0.502545
@@ -2327,7 +2493,9 @@
       "path": "/assets/shared/hidden-object/v002/animals-002.png",
       "width": 337,
       "height": 390,
-      "groupIds": [],
+      "groupIds": [
+        "deer"
+      ],
       "hitPoint": {
         "x": 0.5,
         "y": 0.498718
@@ -2387,7 +2555,9 @@
       "path": "/assets/shared/hidden-object/v002/animals-007.png",
       "width": 266,
       "height": 362,
-      "groupIds": [],
+      "groupIds": [
+        "peacock"
+      ],
       "hitPoint": {
         "x": 0.49812,
         "y": 0.498619
@@ -2399,7 +2569,9 @@
       "path": "/assets/shared/hidden-object/v002/animals-008.png",
       "width": 406,
       "height": 354,
-      "groupIds": [],
+      "groupIds": [
+        "peacock"
+      ],
       "hitPoint": {
         "x": 0.498768,
         "y": 0.498588
@@ -2531,7 +2703,9 @@
       "path": "/assets/shared/hidden-object/v002/animals-019.png",
       "width": 411,
       "height": 324,
-      "groupIds": [],
+      "groupIds": [
+        "rabbit"
+      ],
       "hitPoint": {
         "x": 0.5,
         "y": 0.507716
@@ -2543,7 +2717,9 @@
       "path": "/assets/shared/hidden-object/v002/animals-020.png",
       "width": 380,
       "height": 310,
-      "groupIds": [],
+      "groupIds": [
+        "rabbit"
+      ],
       "hitPoint": {
         "x": 0.498684,
         "y": 0.559677
@@ -2567,7 +2743,9 @@
       "path": "/assets/shared/hidden-object/v002/animals-022.png",
       "width": 352,
       "height": 379,
-      "groupIds": [],
+      "groupIds": [
+        "horse"
+      ],
       "hitPoint": {
         "x": 0.49858,
         "y": 0.5
@@ -2579,7 +2757,9 @@
       "path": "/assets/shared/hidden-object/v002/animals-023.png",
       "width": 319,
       "height": 406,
-      "groupIds": [],
+      "groupIds": [
+        "horse"
+      ],
       "hitPoint": {
         "x": 0.5,
         "y": 0.498768
@@ -2603,7 +2783,9 @@
       "path": "/assets/shared/hidden-object/v002/animals-025.png",
       "width": 327,
       "height": 368,
-      "groupIds": [],
+      "groupIds": [
+        "camel"
+      ],
       "hitPoint": {
         "x": 0.5,
         "y": 0.498641
@@ -2615,7 +2797,9 @@
       "path": "/assets/shared/hidden-object/v002/animals-026.png",
       "width": 385,
       "height": 272,
-      "groupIds": [],
+      "groupIds": [
+        "camel"
+      ],
       "hitPoint": {
         "x": 0.5,
         "y": 0.498162
@@ -2639,7 +2823,9 @@
       "path": "/assets/shared/hidden-object/v002/animals-028.png",
       "width": 332,
       "height": 306,
-      "groupIds": [],
+      "groupIds": [
+        "ox"
+      ],
       "hitPoint": {
         "x": 0.498494,
         "y": 0.498366
@@ -2651,7 +2837,9 @@
       "path": "/assets/shared/hidden-object/v002/animals-029.png",
       "width": 383,
       "height": 287,
-      "groupIds": [],
+      "groupIds": [
+        "ox"
+      ],
       "hitPoint": {
         "x": 0.5,
         "y": 0.5
@@ -2711,7 +2899,9 @@
       "path": "/assets/shared/hidden-object/v002/animals-034.png",
       "width": 355,
       "height": 324,
-      "groupIds": [],
+      "groupIds": [
+        "lion"
+      ],
       "hitPoint": {
         "x": 0.5,
         "y": 0.498457
@@ -2723,7 +2913,9 @@
       "path": "/assets/shared/hidden-object/v002/animals-035.png",
       "width": 387,
       "height": 347,
-      "groupIds": [],
+      "groupIds": [
+        "lion"
+      ],
       "hitPoint": {
         "x": 0.5,
         "y": 0.5
@@ -2855,7 +3047,9 @@
       "path": "/assets/shared/hidden-object/v002/animals-046.png",
       "width": 378,
       "height": 253,
-      "groupIds": [],
+      "groupIds": [
+        "fish"
+      ],
       "hitPoint": {
         "x": 0.498677,
         "y": 0.5
@@ -2867,7 +3061,9 @@
       "path": "/assets/shared/hidden-object/v002/animals-047.png",
       "width": 318,
       "height": 244,
-      "groupIds": [],
+      "groupIds": [
+        "fish"
+      ],
       "hitPoint": {
         "x": 0.498428,
         "y": 0.497951
@@ -3611,7 +3807,9 @@
       "path": "/assets/shared/hidden-object/v002/patterns-001.png",
       "width": 356,
       "height": 370,
-      "groupIds": [],
+      "groupIds": [
+        "round-pattern"
+      ],
       "hitPoint": {
         "x": 0.498596,
         "y": 0.498649
@@ -3623,7 +3821,9 @@
       "path": "/assets/shared/hidden-object/v002/patterns-002.png",
       "width": 357,
       "height": 369,
-      "groupIds": [],
+      "groupIds": [
+        "round-pattern"
+      ],
       "hitPoint": {
         "x": 0.5,
         "y": 0.5
@@ -3647,7 +3847,9 @@
       "path": "/assets/shared/hidden-object/v002/patterns-004.png",
       "width": 351,
       "height": 378,
-      "groupIds": [],
+      "groupIds": [
+        "diamond-pattern"
+      ],
       "hitPoint": {
         "x": 0.5,
         "y": 0.498677
@@ -3659,7 +3861,9 @@
       "path": "/assets/shared/hidden-object/v002/patterns-005.png",
       "width": 361,
       "height": 395,
-      "groupIds": [],
+      "groupIds": [
+        "diamond-pattern"
+      ],
       "hitPoint": {
         "x": 0.5,
         "y": 0.5
@@ -3755,7 +3959,9 @@
       "path": "/assets/shared/hidden-object/v002/patterns-013.png",
       "width": 349,
       "height": 434,
-      "groupIds": [],
+      "groupIds": [
+        "flame-pattern"
+      ],
       "hitPoint": {
         "x": 0.5,
         "y": 0.498848
@@ -3779,7 +3985,9 @@
       "path": "/assets/shared/hidden-object/v002/patterns-015.png",
       "width": 351,
       "height": 442,
-      "groupIds": [],
+      "groupIds": [
+        "flame-pattern"
+      ],
       "hitPoint": {
         "x": 0.5,
         "y": 0.498869
@@ -4079,7 +4287,9 @@
       "path": "/assets/shared/hidden-object/v002/plants-001.png",
       "width": 512,
       "height": 348,
-      "groupIds": [],
+      "groupIds": [
+        "lotus"
+      ],
       "hitPoint": {
         "x": 0.499023,
         "y": 0.498563
@@ -4091,7 +4301,9 @@
       "path": "/assets/shared/hidden-object/v002/plants-002.png",
       "width": 512,
       "height": 404,
-      "groupIds": [],
+      "groupIds": [
+        "lotus"
+      ],
       "hitPoint": {
         "x": 0.499023,
         "y": 0.498762
@@ -4115,7 +4327,9 @@
       "path": "/assets/shared/hidden-object/v002/plants-004.png",
       "width": 383,
       "height": 387,
-      "groupIds": [],
+      "groupIds": [
+        "seedpod"
+      ],
       "hitPoint": {
         "x": 0.5,
         "y": 0.5
@@ -4127,7 +4341,9 @@
       "path": "/assets/shared/hidden-object/v002/plants-005.png",
       "width": 371,
       "height": 393,
-      "groupIds": [],
+      "groupIds": [
+        "seedpod"
+      ],
       "hitPoint": {
         "x": 0.5,
         "y": 0.5
@@ -4151,7 +4367,9 @@
       "path": "/assets/shared/hidden-object/v002/plants-007.png",
       "width": 497,
       "height": 365,
-      "groupIds": [],
+      "groupIds": [
+        "lotus-leaf"
+      ],
       "hitPoint": {
         "x": 0.5,
         "y": 0.5
@@ -4163,7 +4381,9 @@
       "path": "/assets/shared/hidden-object/v002/plants-008.png",
       "width": 512,
       "height": 316,
-      "groupIds": [],
+      "groupIds": [
+        "lotus-leaf"
+      ],
       "hitPoint": {
         "x": 0.499023,
         "y": 0.498418
@@ -4259,7 +4479,9 @@
       "path": "/assets/shared/hidden-object/v002/plants-016.png",
       "width": 447,
       "height": 412,
-      "groupIds": [],
+      "groupIds": [
+        "flower"
+      ],
       "hitPoint": {
         "x": 0.5,
         "y": 0.498786
@@ -4271,7 +4493,9 @@
       "path": "/assets/shared/hidden-object/v002/plants-017.png",
       "width": 454,
       "height": 407,
-      "groupIds": [],
+      "groupIds": [
+        "flower"
+      ],
       "hitPoint": {
         "x": 0.498899,
         "y": 0.5
@@ -4331,7 +4555,9 @@
       "path": "/assets/shared/hidden-object/v002/plants-022.png",
       "width": 418,
       "height": 293,
-      "groupIds": [],
+      "groupIds": [
+        "leaf"
+      ],
       "hitPoint": {
         "x": 0.498804,
         "y": 0.5
@@ -4355,7 +4581,9 @@
       "path": "/assets/shared/hidden-object/v002/plants-024.png",
       "width": 462,
       "height": 320,
-      "groupIds": [],
+      "groupIds": [
+        "leaf"
+      ],
       "hitPoint": {
         "x": 0.498918,
         "y": 0.498437
@@ -4475,7 +4703,9 @@
       "path": "/assets/shared/hidden-object/v002/ritual-001.png",
       "width": 255,
       "height": 357,
-      "groupIds": [],
+      "groupIds": [
+        "incense-burner"
+      ],
       "hitPoint": {
         "x": 0.5,
         "y": 0.5
@@ -4499,7 +4729,9 @@
       "path": "/assets/shared/hidden-object/v002/ritual-003.png",
       "width": 326,
       "height": 380,
-      "groupIds": [],
+      "groupIds": [
+        "incense-burner"
+      ],
       "hitPoint": {
         "x": 0.498466,
         "y": 0.498684
@@ -4715,7 +4947,9 @@
       "path": "/assets/shared/hidden-object/v002/ritual-021.png",
       "width": 166,
       "height": 302,
-      "groupIds": [],
+      "groupIds": [
+        "candleholder"
+      ],
       "hitPoint": {
         "x": 0.496988,
         "y": 0.498344
@@ -4727,7 +4961,9 @@
       "path": "/assets/shared/hidden-object/v002/ritual-022.png",
       "width": 248,
       "height": 286,
-      "groupIds": [],
+      "groupIds": [
+        "candleholder"
+      ],
       "hitPoint": {
         "x": 0.497984,
         "y": 0.498252
@@ -4871,7 +5107,9 @@
       "path": "/assets/shared/hidden-object/v002/ritual-034.png",
       "width": 255,
       "height": 210,
-      "groupIds": [],
+      "groupIds": [
+        "bowl"
+      ],
       "hitPoint": {
         "x": 0.5,
         "y": 0.497619
@@ -4883,7 +5121,9 @@
       "path": "/assets/shared/hidden-object/v002/ritual-035.png",
       "width": 259,
       "height": 217,
-      "groupIds": [],
+      "groupIds": [
+        "bowl"
+      ],
       "hitPoint": {
         "x": 0.5,
         "y": 0.5
@@ -5027,7 +5267,9 @@
       "path": "/assets/shared/hidden-object/v002/ritual-047.png",
       "width": 401,
       "height": 282,
-      "groupIds": [],
+      "groupIds": [
+        "scroll"
+      ],
       "hitPoint": {
         "x": 0.5,
         "y": 0.498227
@@ -5063,7 +5305,9 @@
       "path": "/assets/shared/hidden-object/v002/ritual-050.png",
       "width": 320,
       "height": 298,
-      "groupIds": [],
+      "groupIds": [
+        "scroll"
+      ],
       "hitPoint": {
         "x": 0.498437,
         "y": 0.498322
@@ -5075,7 +5319,9 @@
       "path": "/assets/shared/hidden-object/v002/ritual-051.png",
       "width": 339,
       "height": 281,
-      "groupIds": [],
+      "groupIds": [
+        "bead-string"
+      ],
       "hitPoint": {
         "x": 0.5059,
         "y": 0.503559
@@ -5087,7 +5333,9 @@
       "path": "/assets/shared/hidden-object/v002/ritual-052.png",
       "width": 318,
       "height": 296,
-      "groupIds": [],
+      "groupIds": [
+        "bead-string"
+      ],
       "hitPoint": {
         "x": 0.485849,
         "y": 0.478041

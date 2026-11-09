@@ -1,0 +1,241 @@
+{
+  "stories": [
+    {
+      "id": "bandits",
+      "title": "五百强盗成佛图",
+      "source": "莫高窟第285窟 · 西魏",
+      "overview": "此图出自敦煌莫高窟285窟南壁，名为“五百强盗成佛故事”。",
+      "ending": "故事以自然景致为画面的区划，激烈的战争和残酷的刑罚，与双眼复明后出家隐居山林参禅入定的场面形成了鲜明的对照，是西魏期故事画的经典之作。",
+      "full": {
+        "width": 4203,
+        "height": 602,
+        "mobile": "mogao-hall-a/v001/bandits-full-mobile.webp",
+        "desktop": "mogao-hall-a/v001/bandits-full-desktop.webp"
+      },
+      "segments": [
+        {
+          "id": "defeat",
+          "title": "官兵镇压，强盗战败",
+          "text": "在古代南印度一个叫憍 [jiāo] 萨里的王国，有五百个强盗占山为王，与官府分庭抗礼。国王波斯匿王选派了精兵强将前去镇压，强盗寡不敌众，战败被俘。",
+          "region": [
+            0.0,
+            0.0,
+            0.23681641,
+            1.0
+          ],
+          "focus": [
+            0.00666191,
+            0.20598007,
+            0.18700928,
+            0.99667774
+          ],
+          "image": {
+            "width": 2350,
+            "height": 1476,
+            "mobile": "mogao-hall-a/v001/bandits-detail-1-mobile.webp",
+            "desktop": "mogao-hall-a/v001/bandits-detail-1-desktop.webp"
+          }
+        },
+        {
+          "id": "captured",
+          "title": "战败被俘",
+          "text": "强盗战败被俘，被剥去衣服（几件衣服扔在地上）",
+          "region": [
+            0.12548828,
+            0.0,
+            0.26074219,
+            1.0
+          ],
+          "focus": [
+            0.18082322,
+            0.40863787,
+            0.25957649,
+            1.0
+          ],
+          "image": {
+            "width": 1024,
+            "height": 1108,
+            "mobile": "mogao-hall-a/v001/bandits-detail-2-mobile.webp",
+            "desktop": "mogao-hall-a/v001/bandits-detail-2-desktop.webp"
+          }
+        },
+        {
+          "id": "trial",
+          "title": "殿前审判",
+          "text": "国王坐在殿堂里，大臣站在殿堂下面，审问面前跪着的强盗；强盗被判受剜眼之刑。",
+          "region": [
+            0.21972656,
+            0.0,
+            0.37207031,
+            1.0
+          ],
+          "focus": [
+            0.21389484,
+            0.14119601,
+            0.34237449,
+            1.0
+          ],
+          "image": {
+            "width": 1668,
+            "height": 1602,
+            "mobile": "mogao-hall-a/v001/bandits-detail-3-mobile.webp",
+            "desktop": "mogao-hall-a/v001/bandits-detail-3-desktop.webp"
+          }
+        },
+        {
+          "id": "punishment",
+          "title": "受刑与流放",
+          "text": "强盗遭受挖眼的刑罚，并且被放逐到常有野兽出没的荒郊野外。强盗悲愤绝望，发出凄惨悲切的呼号。",
+          "region": [
+            0.43896484,
+            0.0,
+            0.5703125,
+            1.0
+          ],
+          "focus": [
+            0.44135142,
+            0.11627907,
+            0.54603854,
+            0.91196013
+          ],
+          "image": {
+            "width": 1362,
+            "height": 1486,
+            "mobile": "mogao-hall-a/v001/bandits-detail-4-mobile.webp",
+            "desktop": "mogao-hall-a/v001/bandits-detail-4-desktop.webp"
+          }
+        },
+        {
+          "id": "restored-sight",
+          "title": "得眼林中复明听法",
+          "text": "凄惨的呼叫声传遍四野，也传进了释迦牟尼佛的耳朵。知道这是五百强盗在生死线上挣扎呼救，便用神力送来了香山妙药，吹进了五百强盗的眼眶。更重要的是——不仅使他们的双目重见光明，更使他们的心灵真正见到光明——用佛法启发他们心底的佛性。\n图中是释迦亲临山谷，给五百强盗讲经说法。众强盗去恶从善，皈依为佛门弟子。从此，山谷中的森林被称作“得眼林”。",
+          "region": [
+            0.53710938,
+            0.0,
+            0.703125,
+            1.0
+          ],
+          "focus": [
+            0.54770402,
+            0.05980066,
+            0.68689032,
+            0.90697674
+          ],
+          "image": {
+            "width": 1814,
+            "height": 1580,
+            "mobile": "mogao-hall-a/v001/bandits-detail-5-mobile.webp",
+            "desktop": "mogao-hall-a/v001/bandits-detail-5-desktop.webp"
+          }
+        },
+        {
+          "id": "ordained",
+          "title": "剃度为僧",
+          "text": "五百强盗剃度为僧，聆听释迦说法。缤纷花雨，从天而降，飘落在皈依者上方",
+          "region": [
+            0.70800781,
+            0.0,
+            0.85449219,
+            1.0
+          ],
+          "focus": [
+            0.735665,
+            0.15282392,
+            0.8579586,
+            1.0
+          ],
+          "image": {
+            "width": 1592,
+            "height": 1584,
+            "mobile": "mogao-hall-a/v001/bandits-detail-6-mobile.webp",
+            "desktop": "mogao-hall-a/v001/bandits-detail-6-desktop.webp"
+          }
+        },
+        {
+          "id": "forest",
+          "title": "山林修行",
+          "text": "已出家为僧的五百强盗，于深山中修行。修行之地上有飞天散花，中有茂林修竹、下有青绿山林。",
+          "region": [
+            0.88183594,
+            0.0,
+            1.0,
+            1.0
+          ],
+          "focus": [
+            0.89269569,
+            0.00498339,
+            0.98905544,
+            0.85215947
+          ],
+          "image": {
+            "width": 1252,
+            "height": 1574,
+            "mobile": "mogao-hall-a/v001/bandits-detail-7-mobile.webp",
+            "desktop": "mogao-hall-a/v001/bandits-detail-7-desktop.webp"
+          }
+        }
+      ]
+    },
+    {
+      "id": "burning-house",
+      "title": "火宅喻",
+      "source": "莫高窟第61窟 · 五代",
+      "overview": "此图出自敦煌莫高窟61窟，名为《火宅喻》，故事出自大乘佛教的主要经典之一《法华经》",
+      "ending": "“火宅喻”把三界比喻为火宅，里面充满各种痛苦，十分可怕。故事中的老者是佛的化身，象征他作为永恒真理的化身引导众生走向觉悟的道路。",
+      "full": {
+        "width": 2560,
+        "height": 1311,
+        "mobile": "mogao-hall-a/v001/burning-house-full-mobile.webp",
+        "desktop": "mogao-hall-a/v001/burning-house-full-desktop.webp"
+      },
+      "segments": [
+        {
+          "id": "fire",
+          "title": "宅院四面起火",
+          "text": "有一大富长者，身居大宅院中，宅院四面起火，又有各种猛兽、恶鸟、毒蛇、魔鬼纷纷出现，而宅院中诸子尚在嬉戏，危在眉睫而不自知。",
+          "region": [
+            0.38085938,
+            0.0,
+            0.97412109,
+            0.82061069
+          ],
+          "focus": [
+            0.37578125,
+            0.09687262,
+            0.96992188,
+            0.69641495
+          ],
+          "image": {
+            "width": 1704,
+            "height": 880,
+            "mobile": "mogao-hall-a/v001/burning-house-detail-1-mobile.webp",
+            "desktop": "mogao-hall-a/v001/burning-house-detail-1-desktop.webp"
+          }
+        },
+        {
+          "id": "three-carts",
+          "title": "三车引诸子出火宅",
+          "text": "长者于门外置牛车、羊车、鹿车三乘大车，诱诸子脱离火宅。最后长者赐诸子以大白牛车。",
+          "region": [
+            0.01953125,
+            0.54389313,
+            0.62011719,
+            0.96183206
+          ],
+          "focus": [
+            0.02304688,
+            0.5453852,
+            0.62421875,
+            0.96186117
+          ],
+          "image": {
+            "width": 1724,
+            "height": 612,
+            "mobile": "mogao-hall-a/v001/burning-house-detail-2-mobile.webp",
+            "desktop": "mogao-hall-a/v001/burning-house-detail-2-desktop.webp"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,89 @@
+.caisson-gold-marks { pointer-events: none; }
+
+.caisson-gold-mark [data-palette='gold'] {
+  --caisson-tint: #b87931;
+  --caisson-shadow: #51321d;
+  --caisson-highlight: #fff0c5;
+}
+
+.caisson-gold-mark [data-palette='red'] {
+  --caisson-tint: #cb4936;
+  --caisson-shadow: #621e26;
+  --caisson-highlight: #ffc8b2;
+}
+
+.caisson-gold-mark [data-palette='blue'] {
+  --caisson-tint: #436ba9;
+  --caisson-shadow: #1e345d;
+  --caisson-highlight: #cce8ff;
+}
+
+.caisson-gold-mark .caisson-gold-fill {
+  fill: var(--caisson-tint);
+  fill-opacity: .12;
+  stroke: none;
+  animation: caisson-gold-warm 460ms ease-out both;
+}
+
+.caisson-gold-mark :is(.caisson-gold-ink, .caisson-gold-metal, .caisson-gold-gilding) {
+  fill: none;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.caisson-gold-mark .caisson-gold-ink {
+  stroke: var(--caisson-shadow);
+  stroke-width: 1.95px;
+  opacity: .94;
+}
+
+.caisson-gold-mark .caisson-gold-metal { stroke-width: 1.05px; }
+
+.caisson-gold-ink, .caisson-gold-metal {
+  stroke-dasharray: 100 100;
+  animation: caisson-gold-trace 460ms ease-out both;
+}
+
+.caisson-gold-mark .caisson-gold-gilding {
+  stroke: var(--caisson-highlight);
+  stroke-width: .39px;
+  stroke-dasharray: 12 16 7 20 9 36;
+  opacity: .76;
+  animation: caisson-gold-warm 350ms 160ms ease-out both;
+}
+
+.caisson-gold-spark {
+  fill: var(--caisson-highlight);
+  opacity: .86;
+  animation: caisson-gold-fleck 1.45s 180ms ease-in-out 2 both;
+}
+
+.caisson-gold-mark[data-tone='current'] .caisson-gold-fill { fill-opacity: .18; }
+.caisson-gold-mark[data-tone='shared'] .caisson-gold-fill { fill-opacity: .2; }
+.caisson-gold-mark[data-tone='shared'] .caisson-gold-spark { opacity: 1; }
+
+/* The original round keeps both edges of the path. The new color fills its center. */
+.caisson-gold-mark [data-layer='outer'] .caisson-gold-ink { stroke-width: 2.9px; }
+.caisson-gold-mark [data-layer='outer'] .caisson-gold-metal { stroke-width: 2.2px; }
+.caisson-gold-mark [data-layer='inner'] .caisson-gold-ink { stroke-width: 1.17px; }
+.caisson-gold-mark [data-layer='inner'] .caisson-gold-metal { stroke-width: .88px; }
+.caisson-gold-mark [data-layer='inner'] .caisson-gold-gilding { stroke-width: .25px; }
+
+.caisson-gold-orbit-rest { opacity: 0; vector-effect: non-scaling-stroke; }
+.caisson-gold-orbit-sweep { animation: caisson-gold-ring-lifetime 2.75s linear both; }
+.caisson-gold-orbit-run { animation: caisson-gold-run 2.75s linear both; }
+
+@keyframes caisson-gold-trace { from { stroke-dashoffset: 100; } to { stroke-dashoffset: 0; } }
+@keyframes caisson-gold-warm { from { opacity: 0; } }
+@keyframes caisson-gold-fleck { 0%, 100% { opacity: .55; } 45% { opacity: 1; } }
+@keyframes caisson-gold-run { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -120; } }
+@keyframes caisson-gold-ring-lifetime { 0%, 100% { opacity: 0; } 12%, 83% { opacity: 1; } }
+
+.caisson-gold-marks[data-reduced-motion='true'] * { animation: none; }
+.caisson-gold-marks[data-reduced-motion='true'] .caisson-gold-orbit-rest { opacity: .45; }
+
+@media (prefers-reduced-motion: reduce) {
+  .caisson-gold-marks * { animation: none; }
+  .caisson-gold-orbit-sweep { display: none; }
+  .caisson-gold-orbit-rest { opacity: .45; }
+}

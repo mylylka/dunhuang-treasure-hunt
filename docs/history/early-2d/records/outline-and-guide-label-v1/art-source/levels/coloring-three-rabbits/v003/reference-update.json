@@ -1,0 +1,25 @@
+{
+  "date": "2026-10-29",
+  "purpose": "用户替换配色参考和关卡封面；不更改线稿、区域图、作品版本或存档。",
+  "originalFile": "三兔莲花藻井颜色参考.png",
+  "deliveryPath": "/Users/liujing/Downloads/填色游戏素材/三兔莲花藻井颜色参考.png",
+  "originalSha256": "3a70bcf099c094509dcc6437a18fba4783b7b43b9d73e345db8c076613ed8f36",
+  "width": 1254,
+  "height": 1254,
+  "archiveVersion": "v003",
+  "runtimeReferenceVersion": "user-reference-v002",
+  "runtimePath": "public/assets/levels/coloring-three-rabbits/coloring-three-rabbits-reference-v002.png",
+  "runtimeSha256": "781e221ab8f313d9b6cd1db9bf5cf19d129ed608ee80cf6dcd4faf559198a710",
+  "processing": "完整保留构图；按EXIF方向规范化并转换RGB PNG；不缩放、不裁切、不调色、不改图。",
+  "source": "开发者使用AI生成并重新交付的教学配色示意；非原壁画照片。",
+  "pixelVerification": "运行PNG与方向规范化后的交付原稿RGB像素完全一致。",
+  "unchanged": [
+    "lineAssetId",
+    "regionsAssetId",
+    "artworkVersion",
+    "level configuration",
+    "stored works",
+    "completion progress"
+  ],
+  "previousReference": "art-source/levels/coloring-three-rabbits/v001/三兔莲花藻井颜色参考.png"
+}

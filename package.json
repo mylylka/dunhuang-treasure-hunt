@@ -5,6 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite --host 0.0.0.0 --port 5173 --strictPort",
+    "play": "node scripts/serve-preview.mjs --port=5173 --no-open",
+    "playtest:build": "node scripts/build-world-playtests-v001.mjs",
+    "playtest:serve": "node scripts/serve-world-playtests-v001.mjs",
+    "playtest:prune": "node scripts/prune-playtest-artifacts.mjs",
     "validate:content": "node --import tsx scripts/validate-content.ts",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",

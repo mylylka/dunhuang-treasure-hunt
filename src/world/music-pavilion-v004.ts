@@ -1,17 +1,17 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { worldAssetUrl } from '../content/world/assets';
-import { MUSIC_LAYOUT_V4 as MUSIC_LAYOUT, MUSIC_SOLIDS_V4 as MUSIC_SOLIDS } from './music-pavilion-rules-v004';
+import { MUSIC_LAYOUT_V4 as MUSIC_LAYOUT, MUSIC_SOLIDS_V4 as MUSIC_SOLIDS, musicPavilionCameraColliderTop } from './music-pavilion-rules-v004';
 import { FLYING_DURATION, flyingColor } from './music-pavilion-rules';
 import { CAMERA_CLEARANCE, COURTYARD_CAMERA_BOXES, type CameraSpace } from './camera';
 
-export function musicCameraSpaceV4(): CameraSpace {
+export function musicCameraSpaceV4(openBalcony = false): CameraSpace {
   return {
     subjectHeight:.65,
     shelters: MUSIC_LAYOUT.shelters as [number,number,number,number][],
     landmarkFraming: { bounds: MUSIC_LAYOUT.framing as [number,number,number,number], targetLift: 1.7 },
     boxes: [
-      ...MUSIC_SOLIDS.filter(item=>!item.circle&&!item.polygon).map(item=>new THREE.Box3(new THREE.Vector3(item.minX,-.2,item.minZ),new THREE.Vector3(item.maxX,item.height,item.maxZ))),
+      ...MUSIC_SOLIDS.filter(item=>!item.circle&&!item.polygon).map(item=>new THREE.Box3(new THREE.Vector3(item.minX,-.2,item.minZ),new THREE.Vector3(item.maxX,musicPavilionCameraColliderTop(item,openBalcony),item.maxZ))),
       ...[...COURTYARD_CAMERA_BOXES,...MUSIC_LAYOUT.cameraBoxes,...MUSIC_LAYOUT.dune.cameraBoxes].map(item=>new THREE.Box3(new THREE.Vector3(...item.min as [number,number,number]),new THREE.Vector3(...item.max as [number,number,number]))),
     ].map(box=>box.expandByScalar(CAMERA_CLEARANCE)),
     cylinders:MUSIC_SOLIDS.flatMap(item=>item.circle?[{...item.circle,id:item.id??'music-prop',minY:-.2,maxY:item.height}]:[]),

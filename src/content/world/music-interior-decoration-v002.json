@@ -1,0 +1,69 @@
+{
+  "version": "music-interior-decoration-v002",
+  "coordinates": "music source coordinates in metres; attach lights, targets and fixtures before the music terrain transform",
+  "materialPrefix": "music-decor-",
+  "floral": {
+    "material": "music-decor-floral",
+    "asset": "courtyard/v002/wall-floral-border.jpg",
+    "sourceSize": [1013, 97],
+    "loadTimeoutMs": 12000,
+    "repeat": [1, 1]
+  },
+  "technicalTextures": {
+    "size": 256,
+    "seed": 7631,
+    "plaster": { "repeat": [1, 1], "materials": ["plaster", "wainscot", "ceiling", "soffit", "riser", "tread"] },
+    "stone": { "repeat": [0.5555555556, 0.7692307692], "slabSizeMetres": [1.8, 1.3], "materials": ["stone", "stone-landing"] },
+    "wood": { "repeat": [0.9090909091, 0.4166666667], "plankWidthMetres": 0.55, "materials": ["wood"] }
+  },
+  "fixture": {
+    "woodColor": "#703e2b",
+    "copperColor": "#87603b",
+    "clothColor": "#e9c89c",
+    "emissiveColor": "#ffd6a2",
+    "emissiveIntensity": 0.18,
+    "bodyRadius": 0.17,
+    "frameRadius": 0.19,
+    "capRadius": 0.21,
+    "bodyHeight": 0.46,
+    "postThickness": 0.022
+  },
+  "lights": [
+    {
+      "id": "entry", "label": "L1", "mountKind": "screen",
+      "position": [43.7, 4.55, -21.99], "target": [43.7, 1.8, -24.7],
+      "mount": [43.7, 5.11, -21.85], "depthScale": 0.6,
+      "color": "#ffe6bf", "intensity": 135, "distance": 4.2, "decay": 2, "angleDegrees": 42, "penumbra": 0.65
+    },
+    {
+      "id": "under-upper-floor", "label": "L2", "mountKind": "ceiling",
+      "position": [39.4, 5.45, -27.8], "target": [39.4, 1.8, -27.8],
+      "mount": [39.4, 7.426, -27.8], "depthScale": 1,
+      "color": "#ffe6bf", "intensity": 75, "distance": 5.5, "decay": 2, "angleDegrees": 65, "penumbra": 0.65
+    },
+    {
+      "id": "right-room", "label": "L3", "mountKind": "side-wall",
+      "position": [59.17, 4.65, -25.6], "target": [55.5, 1.8, -25.6],
+      "mount": [59.4242977528, 5.21, -25.6], "depthScale": 1,
+      "color": "#ffe6bf", "intensity": 130, "distance": 5.4, "decay": 2, "angleDegrees": 45, "penumbra": 0.65
+    },
+    {
+      "id": "stair-foot", "label": "L4", "mountKind": "rear-wall",
+      "position": [54.9, 4.81, -31.9], "target": [54.9, 2.31, -29.1],
+      "mount": [54.9, 5.37, -32.175], "depthScale": 1,
+      "color": "#ffe6bf", "intensity": 95, "distance": 5, "decay": 2, "angleDegrees": 45, "penumbra": 0.65
+    },
+    {
+      "id": "stair-high-space", "label": "L5", "mountKind": "rear-wall",
+      "position": [47.4, 9.68, -31.9], "target": [47.4, 7.18, -29.1],
+      "mount": [47.4, 10.24, -32.175], "depthScale": 1,
+      "color": "#ffe6bf", "intensity": 105, "distance": 5, "decay": 2, "angleDegrees": 45, "penumbra": 0.65
+    },
+    {
+      "id": "upper-rear", "label": "L6", "mountKind": "ceiling",
+      "position": [39.4, 11.15, -25.7], "target": [39.4, 7.915375, -25.7],
+      "mount": [39.4, 13.5305, -25.7], "depthScale": 1,
+      "color": "#ffe6bf", "intensity": 85, "distance": 5.4, "decay": 2, "angleDegrees": 65, "penumbra": 0.65
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "puzzle-lotus-ceiling",
+  "themeId": "patterns",
+  "gameType": "puzzle",
+  "title": "莲花平棋",
+  "subtitle": "纹样与色彩 · 旋转拼图",
+  "objective": "点击图块使其顺时针旋转90°，将九块图像恢复为参考图的朝向。",
+  "difficulty": "入门",
+  "estimatedMinutes": 4,
+  "thumbnailAssetId": "puzzle-lotus-ceiling-image",
+  "imageAssetId": "puzzle-lotus-ceiling-image",
+  "mode": "rotation",
+  "rows": 3,
+  "columns": 3,
+  "seed": 254329,
+  "teachingNote": "图像由开发者提供，保留原有来源水印。程序仅进行图块旋转或拼片处理，不代表文物修复或历史原貌复原。",
+  "source": {
+    "title": "常书鸿代序：敦煌图案的装饰部位与用途",
+    "url": "https://www.tup.tsinghua.edu.cn/booksCenter/bookpreface?id=00894801",
+    "note": "可从中心、边带和重复排列观察装饰图案。本关图像由开发者提供，具体洞窟、年代与原作者尚未据交付资料确认。"
+  }
+}

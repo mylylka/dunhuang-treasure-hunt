@@ -6,7 +6,7 @@ const url=(f:string)=>worldAssetUrl(`novice-story/v001/${f}`);
 const tracks=audio.tracks as Record<string,{file:string;duration:number}>;
 const narration=(id:string)=>({url:url(tracks[id].file),duration:tracks[id].duration});
 export const noviceStory:WorldStoryDefinition={
- id:config.id,title:config.title,coordinateSize:config.coordinateSize,
+ id:config.id,title:config.title,source:'莫高窟第257窟南壁 · 北魏',coordinateSize:config.coordinateSize,
  fullImage:{...config.fullImage,url:url(config.fullImage.file)},
  background:{url:'',width:1920,height:1080,scrollRect:config.backgroundScrollRect,composite:true},
  introduction:{...config.introduction,narration:narration(config.introduction.id)},

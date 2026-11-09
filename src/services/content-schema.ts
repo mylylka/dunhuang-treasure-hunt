@@ -2,7 +2,7 @@ import { z } from 'zod';
 import type { ContentCatalog } from '../types';
 import { getDifferenceRegions } from '../games/spot-difference/rules';
 import type { HiddenObjectPool } from '../games/hidden-object/types';
-import { createHiddenObjectRound } from '../games/hidden-object/rules';
+import { createHiddenObjectRound, validateHiddenObjectRecipe } from '../games/hidden-object/rules';
 
 const gameType = z.enum(['spot-difference', 'hidden-object', 'shadow-match', 'puzzle', 'coloring']);
 const id = z.string().regex(/^[a-z][a-z0-9-]*$/, '编号须为英文小写及连字符');
@@ -43,9 +43,10 @@ export const puzzleSchema = z.object({
 });
 export const hiddenObjectSchema = z.object({
   ...metadata, gameType: z.literal('hidden-object'), poolId: id,
+  chapter: z.object({ id, title: z.string().min(1), order: z.number().int().positive(), level: z.number().int().positive(), backgroundAssetId: id }).optional(),
   board: z.object({ width: z.number().positive(), height: z.number().positive(), columns: z.number().int().positive(), rows: z.number().int().positive(), inset: z.number().nonnegative(), jitter: z.number().nonnegative(), minScale: z.number().positive().optional(), maxScale: z.number().positive().optional(), maxRotationDegrees: z.number().min(0).max(45).optional() }),
   categoryQuotas: z.array(z.object({ categoryId: id, count: z.number().int().positive() })).min(1),
-  tasks: z.object({ groupIds: z.array(id).min(1), groupCount: z.number().int().positive(), minCount: z.number().int().positive(), maxCount: z.number().int().positive() }),
+  tasks: z.object({ groupIds: z.array(id).min(1), groupCount: z.number().int().positive(), minCount: z.number().int().positive(), maxCount: z.number().int().positive(), totalCount: z.number().int().positive().optional() }),
   timeLimitSeconds: z.number().positive().max(3600),
 });
 export const shadowMatchSchema = z.object({
@@ -68,7 +69,12 @@ export function assertShellAssets(catalog: ContentCatalog): void {
   }
 }
 
-export function parseCatalog(input: unknown, hiddenObjectPool?: HiddenObjectPool): ContentCatalog {
+export interface CatalogValidationOptions {
+  /** Runtime validates allocations only; content tools also generate complete seeded boards. */
+  hiddenObjectValidation?: 'runtime' | 'deep';
+}
+
+export function parseCatalog(input: unknown, hiddenObjectPool?: HiddenObjectPool, options: CatalogValidationOptions = {}): ContentCatalog {
   const parsed = catalogSchema.safeParse(input);
   if (!parsed.success) {
     throw new Error(parsed.error.issues.map(issue => `${issue.path.join('.') || '内容目录'}：${issue.message}`).join('\n'));
@@ -94,7 +100,8 @@ export function parseCatalog(input: unknown, hiddenObjectPool?: HiddenObjectPool
     const imageIds = level.gameType === 'spot-difference' ? [level.baseAssetId, level.editedAssetId]
       : level.gameType === 'coloring' ? [level.referenceAssetId, level.lineAssetId, level.regionMapAssetId]
       : level.gameType === 'puzzle' ? [level.imageAssetId]
-      : level.gameType === 'shadow-match' ? [level.referenceAssetId, ...level.options.map(option => option.assetId)] : [];
+      : level.gameType === 'shadow-match' ? [level.referenceAssetId, ...level.options.map(option => option.assetId)]
+      : level.gameType === 'hidden-object' && level.chapter ? [level.chapter.backgroundAssetId] : [];
     for (const assetId of [...imageIds, level.thumbnailAssetId]) {
       if (!assets.has(assetId)) issues.push(`关卡 ${level.id}：素材 ${assetId} 不存在`);
     }
@@ -114,10 +121,26 @@ export function parseCatalog(input: unknown, hiddenObjectPool?: HiddenObjectPool
       continue;
     }
     if (level.gameType === 'hidden-object') {
+      if (level.chapter) {
+        const background = assets.get(level.chapter.backgroundAssetId);
+        if (background && background.kind !== 'background') issues.push(`关卡 ${level.id}：章节底图须登记为背景素材`);
+        for (const sibling of catalog.levels) {
+          if (sibling.id === level.id || sibling.themeId !== level.themeId || sibling.gameType !== 'hidden-object' || !sibling.chapter) continue;
+          if (sibling.chapter.id === level.chapter.id) {
+            if (sibling.chapter.level === level.chapter.level) issues.push(`关卡 ${level.id}：章节内关卡序号重复`);
+            if (sibling.chapter.order !== level.chapter.order || sibling.chapter.title !== level.chapter.title
+              || sibling.chapter.backgroundAssetId !== level.chapter.backgroundAssetId) issues.push(`关卡 ${level.id}：同章标题、顺序和底图须一致`);
+          } else if (sibling.chapter.order === level.chapter.order) issues.push(`关卡 ${level.id}：不同章节不能共用章节顺序`);
+        }
+      }
       try {
         if (!hiddenObjectPool) throw new Error('缺少找物素材池');
-        createHiddenObjectRound(level, hiddenObjectPool, 0);
-        createHiddenObjectRound({ ...level, tasks: { ...level.tasks, minCount: level.tasks.maxCount } }, hiddenObjectPool, 1);
+        validateHiddenObjectRecipe(level, hiddenObjectPool);
+        if (options.hiddenObjectValidation !== 'runtime') {
+          createHiddenObjectRound(level, hiddenObjectPool, 0);
+          createHiddenObjectRound(level.tasks.totalCount === undefined
+            ? { ...level, tasks: { ...level.tasks, minCount: level.tasks.maxCount } } : level, hiddenObjectPool, 1);
+        }
       } catch (error) {
         issues.push(`关卡 ${level.id}：${error instanceof Error ? error.message : '找物配方无效'}`);
       }

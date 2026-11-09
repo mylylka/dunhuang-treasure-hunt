@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "puzzle-twin-dragons",
+  "themeId": "patterns",
+  "gameType": "puzzle",
+  "title": "双龙藻井",
+  "subtitle": "纹样与色彩 · 20片不规则拼图",
+  "objective": "比较双龙、中心花形与层层边饰，把二十片不规则图块放回原图。",
+  "difficulty": "挑战",
+  "estimatedMinutes": 9,
+  "thumbnailAssetId": "puzzle-twin-dragons-image",
+  "imageAssetId": "puzzle-twin-dragons-image",
+  "mode": "jigsaw",
+  "rows": 4,
+  "columns": 5,
+  "seed": 202920,
+  "teachingNote": "图像由开发者提供，用于拼图练习。",
+  "source": {
+    "title": "常书鸿代序：敦煌图案的装饰部位与用途",
+    "url": "https://www.tup.tsinghua.edu.cn/booksCenter/bookpreface?id=00894801",
+    "note": "可从中心、边带和重复排列观察装饰图案。本关图像由开发者提供，具体洞窟、年代与原作者尚未据交付资料确认。"
+  }
+}

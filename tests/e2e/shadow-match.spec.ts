@@ -2,6 +2,7 @@ import { expect, test, type Locator, type Page } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 import type { ProgressData, ShadowMatchLevel } from '../../src/types';
 import type { ShadowMatchLayout } from '../../src/games/shadow-match/types';
+import { compactPlayableViewport, isMobileProject, mobileLandscapeViewport, mobilePortraitViewport } from './supported-viewports';
 
 const level = JSON.parse(readFileSync('src/content/levels/music-apsara-shadow.json', 'utf8')) as ShadowMatchLevel;
 const assets = JSON.parse(readFileSync('src/content/assets.json', 'utf8')) as { id: string; path: string; width: number; height: number }[];
@@ -14,7 +15,7 @@ test.setTimeout(60_000);
 const screen = (page: Page) => page.getByTestId('shadow-match-screen');
 const host = (page: Page) => page.getByTestId('phaser-player');
 const option = (page: Page, label: string) => page.locator(`[data-testid="shadow-match-option"][data-option-label="${label}"]`);
-const expand = (page: Page, label: string) => page.getByRole('button', { name: `放大影子 ${label} 对照`, exact: true });
+const compareButton = (page: Page) => page.getByRole('button', { name: '放大对照', exact: true });
 const inspector = (page: Page) => page.getByTestId('shadow-match-inspector');
 const status = (page: Page) => page.getByTestId('shadow-match-status');
 const assetPath = (assetId: string) => assets.find(asset => asset.id === assetId)!.path;
@@ -67,8 +68,12 @@ async function playingFits(page: Page) {
   await expect(page.getByRole('timer')).toHaveCount(0);
   await inside(page, host(page).locator('canvas'));
   await inside(page, page.getByRole('button', { name: '返回影子配对关卡', exact: true }), true);
-  for (const button of await screen(page).locator('.shadow-match-actions button, .shadow-match-option, .shadow-match-expand').all()) {
+  for (const button of await screen(page).locator('.shadow-match-actions button:visible, .shadow-match-option, .shadow-match-reference').all()) {
     await inside(page, button, true);
+  }
+  await expect(screen(page).locator('.shadow-match-expand')).toHaveCount(0);
+  for (const id of ['level-previous', 'level-advance']) {
+    await inside(page, page.getByTestId(id), true); await expect(page.getByTestId(id)).toBeDisabled();
   }
   // The live pictures belong to Phaser; HTML supplies labels and accessible controls only.
   await expect(screen(page).locator('.shadow-match-controls img')).toHaveCount(0);
@@ -87,6 +92,13 @@ async function playingFits(page: Page) {
     expect(card.image.x + card.image.width).toBeLessThanOrEqual(card.x + card.width + .1);
     expect(card.image.y + card.image.height).toBeLessThanOrEqual(card.y + card.height + .1);
   }
+  const mobileStudio = await page.evaluate(() => matchMedia('(pointer: coarse) and (hover: none) and (orientation: landscape) and (max-height: 600px)').matches);
+  if (mobileStudio) {
+    const canvas = (await host(page).boundingBox())!;
+    expect(canvas.height, '手机主画布应占据完整可用高度').toBeGreaterThanOrEqual((page.viewportSize()!.height) - 18);
+    expect(current.reference.image.height, '彩色参照不能继续缩成小卡片').toBeGreaterThanOrEqual(240);
+    for (const card of current.options) expect(card.image.height).toBeGreaterThanOrEqual(110);
+  }
 }
 async function inspectorFits(page: Page) {
   const dialog = inspector(page);
@@ -99,7 +111,9 @@ async function inspectorFits(page: Page) {
   expect(viewport.height - bounds.y - bounds.height).toBeGreaterThanOrEqual(7);
   const buttons = await dialog.getByRole('button').all();
   for (const button of buttons) await inside(page, button, true);
-  for (const element of [...buttons, ...await dialog.locator('.shadow-match-inspector-window').all()]) {
+  const choice = dialog.getByRole('combobox', { name: '选择对照影子', exact: true });
+  await inside(page, choice, true); await expect(choice.locator('option')).toHaveCount(4);
+  for (const element of [...buttons, choice, ...await dialog.locator('.shadow-match-inspector-window').all()]) {
     const rect = (await element.boundingBox())!;
     expect(rect.x, '观察窗控件应在左侧装饰以内').toBeGreaterThanOrEqual(bounds.x + 24);
     expect(rect.y, '观察窗控件应在顶部装饰以内').toBeGreaterThanOrEqual(bounds.y + 24);
@@ -124,11 +138,17 @@ async function inspectorFits(page: Page) {
   await noPageScroll(page);
 }
 
+async function openComparison(page: Page, label: string) {
+  await compareButton(page).click();
+  await inspector(page).getByRole('combobox', { name: '选择对照影子', exact: true }).selectOption({ label: `影子 ${label}` });
+  await expect(inspector(page)).toHaveAccessibleName(`放大对照 · 影子 ${label}`);
+}
+
 /** Build A–D -> image through the player's real read-only comparison UI, without exposing answer IDs in DOM. */
 async function pictureOrder(page: Page) {
   const result: Record<string, string> = {};
   for (const label of letters) {
-    await expand(page, label).click();
+    await openComparison(page, label);
     await expect(inspector(page)).toHaveAccessibleName(`放大对照 · 影子 ${label}`);
     const image = inspector(page).locator('.shadow-match-inspector-picture img').nth(1);
     await expect(image).toHaveJSProperty('complete', true);
@@ -193,7 +213,7 @@ test('放大对照保持同尺度和同步拖动，关窗后选项顺序与本�
   await choose(page, label, Boolean(testInfo.project.use.hasTouch));
   await expect(status(page)).toContainText('再比较');
   const message = await status(page).textContent();
-  await expand(page, label).click();
+  await openComparison(page, label);
   await inspectorFits(page);
   await inspector(page).getByRole('button', { name: '2×', exact: true }).click();
   await inspectorFits(page);
@@ -206,34 +226,50 @@ test('放大对照保持同尺度和同步拖动，关窗后选项顺序与本�
   await page.mouse.up();
   await expect.poll(() => pictures.first().evaluate(element => getComputedStyle(element).transform)).not.toBe(before);
   await inspectorFits(page);
+  const transformed = await pictures.first().evaluate(element => getComputedStyle(element).transform);
+  const originalWindows = await inspector(page).locator('.shadow-match-inspector-window').elementHandles();
+  await inspector(page).getByRole('combobox', { name: '选择对照影子', exact: true }).selectOption({ label: `影子 ${correctLabel(order)}` });
+  await expect(inspector(page)).toHaveAccessibleName(`放大对照 · 影子 ${correctLabel(order)}`);
+  await expect(page).toHaveURL(new RegExp(`/#/play/${level.id}$`));
+  await expect(pictures.first()).toHaveCSS('transform', transformed);
+  for (const window of originalWindows) expect(await window.evaluate(element => element.isConnected), '切换候选不得更换ResizeObserver观察窗口').toBe(true);
+  await noCompletion(page);
+  // Inspecting even the correct outline is not a selection or submission.
+  await inspector(page).getByRole('combobox', { name: '选择对照影子', exact: true }).selectOption({ label: `影子 ${label}` });
   await inspector(page).getByRole('button', { name: '3×', exact: true }).click();
   await inspectorFits(page);
   await inspector(page).getByRole('button', { name: '复位', exact: true }).click();
   await expect(inspector(page).getByRole('button', { name: '1×', exact: true })).toHaveAttribute('aria-pressed', 'true');
   await inspectorFits(page);
   await page.getByRole('button', { name: '关闭放大对照', exact: true }).click();
-  await expect(expand(page, label)).toBeFocused();
+  await expect(compareButton(page)).toBeFocused();
   await expect(status(page)).toHaveText(message!);
   await expect(option(page, label)).toHaveClass(/is-wrong/);
   expect(await pictureOrder(page)).toEqual(order);
   await noCompletion(page);
 });
 
-test('手机360竖屏与844横屏保留错误和随机顺序，画布选项与放大窗完整同屏', async ({ page }, testInfo) => {
-  await page.setViewportSize({ width: 360, height: 640 });
+test('桌面窄窗或手机竖屏中断后保留错误和顺序，支持视口的选项与放大窗完整同屏', async ({ page }, testInfo) => {
+  await page.setViewportSize(compactPlayableViewport(testInfo));
   await openRound(page);
   const order = await pictureOrder(page);
   const label = wrongLabel(order);
   await choose(page, label, Boolean(testInfo.project.use.hasTouch));
   await expect(option(page, label)).toHaveClass(/is-wrong/);
-  for (const viewport of [{ width: 360, height: 640 }, { width: 844, height: 390 }, { width: 360, height: 640 }]) {
+  if (isMobileProject(testInfo)) {
+    await page.setViewportSize(mobilePortraitViewport);
+    await expect(page.getByTestId('mobile-landscape-gate')).toBeVisible();
+    await page.setViewportSize(mobileLandscapeViewport);
+    await expect(page.getByTestId('mobile-landscape-gate')).not.toBeVisible();
+  }
+  for (const viewport of [compactPlayableViewport(testInfo), mobileLandscapeViewport, compactPlayableViewport(testInfo)]) {
     await page.setViewportSize(viewport);
     await ready(page);
     await playingFits(page);
     await expect(option(page, label)).toHaveClass(/is-wrong/);
     await expect(option(page, label)).toHaveAttribute('aria-pressed', 'true');
     expect(await pictureOrder(page)).toEqual(order);
-    await expand(page, label).click();
+    await openComparison(page, label);
     await inspectorFits(page);
     // In full view, both actual images are complete within their individual observation windows.
     for (const image of await inspector(page).locator('.shadow-match-inspector-picture img').all()) await inside(page, image);

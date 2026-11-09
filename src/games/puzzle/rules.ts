@@ -88,9 +88,12 @@ export function calculatePuzzleLayout(width: number, height: number, ratio: numb
   let tray: Rectangle | null = null;
   if (level.mode === 'jigsaw') {
     if (wide) {
-      const boardWidth = Math.max(1, (width - padding * 2 - gap) * .62);
-      area = { x: padding, y: padding, width: boardWidth, height: height - padding * 2 };
-      tray = { x: padding + boardWidth + gap, y: padding, width: width - padding * 2 - gap - boardWidth, height: height - padding * 2 };
+      const short = height <= 500;
+      const trayWidth = short ? Math.min(180, Math.max(120, width * .25)) : (width - padding * 2 - gap) * .38;
+      const boardWidth = Math.max(1, Math.min(width - padding * 2 - gap - trayWidth, (height - padding * 2) * ratio));
+      const start = (width - boardWidth - gap - trayWidth) / 2;
+      area = { x: start, y: padding, width: boardWidth, height: height - padding * 2 };
+      tray = { x: start + boardWidth + gap, y: padding, width: trayWidth, height: height - padding * 2 };
     } else {
       const boardHeight = (height - padding * 2 - gap) * .69;
       area = { x: padding, y: padding, width: width - padding * 2, height: boardHeight };
@@ -126,8 +129,9 @@ export function calculatePuzzleLayout(width: number, height: number, ratio: numb
       const inset = Math.min(7, slot.width / 12, slot.height / 10);
       const inner = { x: slot.x + inset, y: slot.y + inset,
         width: Math.max(1, slot.width - inset * 2), height: Math.max(1, slot.height - inset * 2) };
-      // Match native cell proportions; additional knob margins are fitted by the scene.
-      displayRect = fit(inner, cellWidth / cellHeight);
+      // Let the scene fit the padded textures directly for long scrolls so
+      // their already shallow pieces can use all the available tray width.
+      displayRect = ratio >= 4 ? inner : fit(inner, cellWidth / cellHeight);
       visible = rectangleIntersection(displayRect, tray) !== null;
       fullyVisible = fullyWithin(displayRect, tray);
       if (!visible) displayRect = null;

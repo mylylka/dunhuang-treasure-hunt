@@ -1,0 +1,115 @@
+.world-screen:has(.first-gallery-overlay[data-caisson-view]) > .world-hud {
+  visibility: hidden;
+}
+
+.gallery-link-actions button:disabled {
+  opacity: .65;
+  cursor: default;
+}
+
+.caisson-float {
+  position: absolute;
+  inset: 0;
+  isolation: isolate;
+  overflow: hidden;
+  pointer-events: auto;
+  touch-action: none;
+  outline: none;
+  color: #fff4d9;
+}
+
+.caisson-float[hidden] {
+  display: none;
+}
+
+.caisson-float-background {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  background: #25140c4d;
+  -webkit-backdrop-filter: blur(9px);
+  backdrop-filter: blur(9px);
+  pointer-events: none;
+}
+
+.caisson-float-panel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: min(680px, calc(100% - 32px), calc(100dvh - 80px));
+  aspect-ratio: 1;
+  transform-origin: 0 0;
+  opacity: 0;
+}
+
+.caisson-float:not([data-stage="approach"]) .caisson-float-panel {
+  box-shadow: 0 12px 42px #150b0866;
+}
+
+.caisson-float-art {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+  user-select: none;
+}
+
+.caisson-float[data-interactive] .caisson-float-art {
+  cursor: pointer;
+}
+
+.caisson-float-focus {
+  fill: transparent;
+  stroke: transparent;
+  pointer-events: none;
+  outline: none;
+}
+
+.caisson-float-focus:focus-visible {
+  stroke: #fff0b9;
+  stroke-width: 1.2;
+}
+
+.first-gallery-overlay .caisson-float-close {
+  position: absolute;
+  top: max(10px, env(safe-area-inset-top));
+  right: max(12px, env(safe-area-inset-right));
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid #f6dca466;
+  border-radius: 50%;
+  background: #2c1c16b8;
+  color: inherit;
+  font-size: 24px;
+  line-height: 1;
+}
+
+.caisson-float-caption {
+  position: absolute;
+  left: 50%;
+  bottom: max(7px, env(safe-area-inset-bottom));
+  width: max-content;
+  max-width: calc(100% - 24px);
+  transform: translateX(-50%);
+  padding: 2px 10px;
+  border-radius: 4px;
+  background: #26170fc2;
+  text-align: center;
+  font-size: clamp(12px, 2.2dvh, 15px);
+  line-height: 1.22;
+  pointer-events: none;
+}
+
+.caisson-float-caption p {
+  margin: 0;
+}
+
+.caisson-float-summary {
+  width: min(58rem, calc(100% - 24px));
+  padding: clamp(6px, 1.5dvh, 12px) clamp(12px, 2.5vw, 24px);
+  line-height: 1.5;
+  pointer-events: auto;
+}

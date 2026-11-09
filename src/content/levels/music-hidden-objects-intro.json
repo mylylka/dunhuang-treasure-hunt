@@ -4,22 +4,58 @@
   "themeId": "music",
   "gameType": "hidden-object",
   "title": "乐舞寻宝",
-  "subtitle": "飞天、乐舞与服饰 · 计时找物",
+  "subtitle": "衣冠乐舞 · 计时找物",
   "objective": "找到与任务卡图案、颜色完全相同的物件。",
-  "difficulty": "计时挑战",
+  "difficulty": "3种目标",
   "estimatedMinutes": 2,
-  "thumbnailAssetId": "cover-music",
-  "teachingNote": "物件由开发者提供，属于AI教学示意。名称用于外形观察，不代表特定洞窟器物或古乐复原。",
-  "source": { "title": "敦煌研究院 · 文化资料入口", "url": "https://www.dha.ac.cn/", "note": "游戏器形为教学示意，了解壁画中的乐舞文化时请结合实物影像与专业资料。" },
+  "thumbnailAssetId": "hidden-object-background-ch1",
+  "teachingNote": "物件属于开发者提供的AI教学示意。目标名称仅用于可见外形观察，不代表特定洞窟器物、历史身份、植物品种或古乐复原。",
+  "source": {
+    "title": "敦煌研究院 · 文化资料入口",
+    "url": "https://www.dha.ac.cn/",
+    "note": "游戏器形为教学示意，了解壁画中的乐舞文化时请结合实物影像与专业资料。"
+  },
   "poolId": "dunhuang-stickers-v001",
-  "board": { "width": 960, "height": 1800, "columns": 12, "rows": 20, "inset": 10, "jitter": 5, "minScale": 1.2, "maxScale": 1.6, "maxRotationDegrees": 24 },
+  "board": {
+    "width": 960,
+    "height": 1800,
+    "columns": 12,
+    "rows": 20,
+    "inset": 10,
+    "jitter": 5,
+    "minScale": 1.2,
+    "maxScale": 1.6,
+    "maxRotationDegrees": 24
+  },
   "categoryQuotas": [
-    { "categoryId": "instruments", "count": 40 },
-    { "categoryId": "clothing", "count": 38 },
-    { "categoryId": "animals", "count": 20 },
-    { "categoryId": "patterns", "count": 12 },
-    { "categoryId": "plants", "count": 10 }
+    {
+      "categoryId": "instruments",
+      "count": 40
+    },
+    {
+      "categoryId": "clothing",
+      "count": 80
+    }
   ],
-  "tasks": { "groupIds": ["pipa", "drum", "bell"], "groupCount": 3, "minCount": 1, "maxCount": 2 },
-  "timeLimitSeconds": 50
+  "tasks": {
+    "groupIds": [
+      "pipa",
+      "drum",
+      "bell",
+      "crown",
+      "bracelet",
+      "boots"
+    ],
+    "groupCount": 3,
+    "minCount": 1,
+    "maxCount": 2
+  },
+  "timeLimitSeconds": 50,
+  "chapter": {
+    "id": "music-hidden-chapter-1",
+    "title": "衣冠乐舞",
+    "order": 1,
+    "level": 1,
+    "backgroundAssetId": "hidden-object-background-ch1"
+  }
 }

@@ -16,6 +16,15 @@ describe('v008 compact giant Buddha hall',()=>{
 });
 describe('shared five-segment story with optional opening',()=>{
  it('retains five paragraphs and one opening track, with reliable supplied coordinates',()=>{expect(noviceStory.segments).toHaveLength(5);expect(noviceStory.introduction?.text).toContain('257窟南壁');expect(noviceStory.segments[1].text).toContain('少女发现后，伤心不已');for(const s of noviceStory.segments){expect(s.narration.duration).toBeGreaterThan(5);expect(s.images).toHaveLength(1);expect(s.images[0].region[2]).toBeGreaterThan(s.images[0].region[0]);}expect(noviceStory.segments[2].images[0].width).toBeLessThan(noviceStory.segments[2].images[0].height);});
- it('finishing or skipping the opening still starts episode one',()=>{const f=initialStoryFrame(true);expect(f.phase).toBe('introduction');expect(tickStory(f,20,5)).toEqual(f);for(const n of [skipStory(f,5),finishNarration(f)]){expect(n.index).toBe(0);expect(n.phase).toBe('overview');}});
+ it('protects the visual opening before the introduction can skip to the first frame',()=>{
+  const opening=initialStoryFrame(true);
+  expect(opening.phase).toBe('opening');
+  expect(skipStory(opening,5)).toBe(opening);
+  const intro=tickStory(opening,1,5);
+  expect(intro.phase).toBe('introduction');
+  expect(tickStory(intro,20,5)).toBe(intro);
+  expect(finishNarration(intro)).toMatchObject({index:0,phase:'overview'});
+  expect(skipStory(intro,5)).toMatchObject({index:0,phase:'highlight'});
+ });
  it('leaves the deer opening and five existing paragraphs unchanged',()=>{expect(initialStoryFrame().phase).toBe('overview');expect(deerStory.segments).toHaveLength(5);expect(deerStory.segments[0].text).toContain('有一人掉入恒河');});
 });

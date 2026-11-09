@@ -1,11 +1,20 @@
 import {describe,it,expect} from 'vitest';
 import * as THREE from 'three';
-import {buddhaDominatesView,createBuddhaGaze} from '../../src/world/buddha-gaze';
+import {BUDDHA_HEAD,buddhaDominatesView,centeredBuddhaHead,createBuddhaGaze} from '../../src/world/buddha-gaze';
 
 const camera=(target:THREE.Vector3,eye=new THREE.Vector3(122,9.355,-77))=>{
   const c=new THREE.PerspectiveCamera(49,1279/925,.1,450);c.position.copy(eye);c.lookAt(target);return c;
 };
 describe('Buddha presentation gaze',()=>{
+ it('accepts the head inside the central half of both viewport dimensions',()=>{
+  const head=new THREE.Vector3(BUDDHA_HEAD.x,BUDDHA_HEAD.y,BUDDHA_HEAD.z),projected=new THREE.Vector3();
+  const c=camera(head);
+  expect(centeredBuddhaHead(c,head,projected)).toBe(true);
+  for(const [x,y,expected] of [[.49,.49,true],[.51,.49,false],[.49,-.51,false]] as const){
+   const point=new THREE.Vector3(x,y,projected.z).unproject(c);
+   expect(centeredBuddhaHead(c,point,new THREE.Vector3())).toBe(expected);
+  }
+ });
  it('accepts a front low-angle view with the face and chest visible',()=>{
   expect(buddhaDominatesView(camera(new THREE.Vector3(122,28,-90)))).toBe(true);
  });

@@ -35,18 +35,20 @@ export function musicSpatialGain(p:WorldPoint,spatial:MusicSpatialAudio){
 }
 
 /** Region-owned long audio. It never uses or crowds the shared UI effects pool. */
-export function createMusicArrivalAudio(initial: SoundPreferences, spatial:MusicSpatialAudio = MUSIC_LAYOUT_V2.audio) {
+export function createMusicArrivalAudio(initial: SoundPreferences, spatial:MusicSpatialAudio = MUSIC_LAYOUT_V2.audio, deferUntilNear = false) {
   let disposed=false,unlocked=false,blocked=false,status:'loading'|'ready'|'error'='loading';
-  let preferences=initial,point:WorldPoint={x:0,z:18},yaw=0,gainValue=0,ducked=false,enabled=true;
+  let preferences=initial,point:WorldPoint|null=null,yaw=0,gainValue=0,ducked=false,enabled=true;
   let context:AudioContext|null=null,buffer:AudioBuffer|null=null,source:AudioBufferSourceNode|null=null;
   let gain:GainNode|null=null,pan:StereoPannerNode|null=null,recording:MediaStreamAudioDestinationNode|null=null;
   let bytes:ArrayBuffer|null=null,pending:Promise<void>|null=null;
   const abort=new AbortController();
+  let requested = false;
   const audibleClock=createAudibleMusicClock();
   const playing=()=>!disposed&&!!source&&status==='ready'&&context?.state==='running'&&enabled&&!blocked&&!document.hidden&&preferences.enabled&&preferences.volume>0&&gainValue>0;
   const audible=()=>!!playing()&&Math.min(gainValue,gain?.gain.value??0)>=MIN_AUDIBLE_MUSIC_GAIN;
   function sampleAudibleClock(){if(context)audibleClock.sample(context.currentTime,audible());}
   async function load(){
+    requested = true;
     status='loading';
     try{
       const response=await fetch(worldAssetUrl('music-pavilion/v002/arrival-plucks.wav'),{signal:abort.signal});
@@ -75,11 +77,11 @@ export function createMusicArrivalAudio(initial: SoundPreferences, spatial:Music
   }
   function apply(){
     sampleAudibleClock();
-    const silent=!enabled||blocked||document.hidden||!preferences.enabled;
-    gainValue=silent?0:musicSpatialGain(point,spatial)*preferences.volume*(ducked ? .22 : 1);
+    const silent=!point||!enabled||blocked||document.hidden||!preferences.enabled;
+    gainValue=point&&!silent?musicSpatialGain(point,spatial)*preferences.volume*(ducked ? .22 : 1):0;
     if(!context)return;
     if(gain){gain.gain.cancelScheduledValues(context.currentTime);gain.gain.setTargetAtTime(gainValue,context.currentTime,silent ? .008 : .12);}
-    if(pan){const dx=spatial.source[0]-point.x,dz=spatial.source[2]-point.z;
+    if(pan&&point){const dx=spatial.source[0]-point.x,dz=spatial.source[2]-point.z;
       pan.pan.setTargetAtTime(Math.max(-.65,Math.min(.65,(dx*Math.cos(yaw)-dz*Math.sin(yaw))/Math.max(1,Math.hypot(dx,dz)))),context.currentTime,.2);}
     if(silent&&context.state==='running')void context.suspend().catch(()=>{});
     else if(!silent&&unlocked&&context.state==='suspended')void context.resume().catch(()=>{});
@@ -92,10 +94,14 @@ export function createMusicArrivalAudio(initial: SoundPreferences, spatial:Music
     catch{status='error';}
   }
   window.addEventListener('pointerdown',unlock);window.addEventListener('keydown',unlock);
-  void load();
+  if (!deferUntilNear) void load();
   return {
-    update(next:WorldPoint,cameraYaw:number){point=next;yaw=cameraYaw;apply();},
-    setEnabled(value:boolean){enabled=value;apply();},
+    update(next:WorldPoint,cameraYaw:number,allowLoad=true){
+      point=next;yaw=cameraYaw;
+      if (!requested && allowLoad && musicSpatialGain(next, spatial) > 0) void load();
+      apply();
+    },
+    setEnabled(value:boolean){if(value!==enabled){enabled=value;apply();}},
     setBlocked(value:boolean){blocked=value;apply();},
     setDucked(value:boolean){if(value!==ducked){ducked=value;apply();}},
     setPreferences(value:SoundPreferences){preferences=value;apply();},

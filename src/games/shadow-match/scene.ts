@@ -6,6 +6,7 @@ import { calculateShadowLayout, createShadowMatchState, fitShadowImage, nextShad
 
 export interface ShadowMatchController {
   execute(command: GameCommand): void;
+  setBlocked(blocked: boolean): void;
   resize(viewport: Viewport): void;
   setReducedMotion(reducedMotion: boolean): void;
   dispose(): void;
@@ -24,6 +25,7 @@ export function createShadowMatchScene(Phaser: typeof import('phaser'), options:
   scene: PhaserTypes.Scene; controller: ShadowMatchController;
 } {
   class ShadowMatchScene extends Phaser.Scene implements ShadowMatchController {
+    private blocked = false;
     private state = createShadowMatchState(options.level);
     private viewport = { ...options.viewport };
     private layout = calculateShadowLayout(this.viewport.width, this.viewport.height);
@@ -60,6 +62,7 @@ export function createShadowMatchScene(Phaser: typeof import('phaser'), options:
           if (!frame || frame.realWidth <= 0 || frame.realHeight <= 0) throw new Error('影子图片尺寸无效');
         }
         this.initialized = true;
+        if (this.input) this.input.enabled = !this.blocked;
         this.hintFrame = this.add.graphics();
         this.render();
         options.emit({ type: 'ready', total: 1 });
@@ -126,6 +129,7 @@ export function createShadowMatchScene(Phaser: typeof import('phaser'), options:
     execute(command: GameCommand) {
       if (this.disposed || this.failed || command.sequence <= this.sequence) return;
       this.sequence = command.sequence;
+      if (this.blocked) return;
       if (!this.initialized) { this.pending.push(command); return; }
       this.apply(command);
     }
@@ -133,6 +137,7 @@ export function createShadowMatchScene(Phaser: typeof import('phaser'), options:
     private apply(command: GameCommand) {
       if (this.disposed || this.failed) return;
       if (command.type === 'set-motion') { this.setReducedMotion(command.reducedMotion); return; }
+      if (this.blocked) return;
       if (command.type === 'restart') {
         this.state = restartShadowMatchState(options.level, this.state); this.completedEmitted = false;
         this.render(); this.publish(); options.emit({ type: 'hint', message: '' }); return;
@@ -156,9 +161,15 @@ export function createShadowMatchScene(Phaser: typeof import('phaser'), options:
     }
 
     resize(viewport: Viewport) {
-      if (this.disposed) return;
+      if (this.disposed || this.blocked) return;
       this.viewport = { ...viewport };
       this.render();
+    }
+    setBlocked(blocked: boolean) {
+      if (this.disposed) return;
+      this.blocked = blocked;
+      if (this.input) this.input.enabled = !blocked;
+      if (blocked) this.pending = [];
     }
     setReducedMotion(_reducedMotion: boolean) { /* Hints are static; this game has no decorative animation. */ }
     dispose() {

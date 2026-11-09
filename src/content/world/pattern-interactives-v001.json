@@ -1,0 +1,18 @@
+[
+  {
+    "id": "coloring-station",
+    "asset": "pattern-interactives/v002/coloring-station.glb",
+    "position": { "x": -3.7, "y": 0.003, "z": -1.6 },
+    "yawDegrees": -135,
+    "scale": 4.95,
+    "bounds": { "halfWidth": 0.499756, "height": 0.781738, "halfDepth": 0.294678 }
+  },
+  {
+    "id": "mural-station",
+    "asset": "pattern-interactives/v003/mural-station.glb",
+    "position": { "x": -5.6, "y": 0.285, "z": -20.35 },
+    "yawDegrees": -60,
+    "scale": 4.05,
+    "bounds": { "halfWidth": 0.499756, "height": 0.748535, "halfDepth": 0.249756 }
+  }
+]

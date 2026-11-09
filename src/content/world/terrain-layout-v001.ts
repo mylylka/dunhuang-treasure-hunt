@@ -5,7 +5,7 @@ export interface TerrainPlanPoint { x: number; y?: number; z: number }
 export interface TerrainRoute { id: string; width: number; points: readonly TerrainPoint[] }
 export const TERRAIN_REGIONS: Record<TerrainRegion, { source: TerrainPoint; target: TerrainPoint; yaw: number }> = {
   courtyard: { source: { x: -12, y: 0, z: 2 }, target: { x: 110, y: 12, z: 12 }, yaw: 24 * Math.PI / 180 },
-  music: { source: { x: 46, y: 0, z: -9 }, target: { x: 185, y: 2.5, z: 15 }, yaw: -12 * Math.PI / 180 },
+  music: { source: { x: 46, y: 0, z: -9 }, target: { x: 210, y: 2.5, z: -43 }, yaw: 28 * Math.PI / 180 },
   cliff: { source: { x: 122, y: 0, z: -68 }, target: { x: 330, y: 10, z: 90 }, yaw: -160 * Math.PI / 180 },
 };
 export const TERRAIN_BOUNDS = { minX: -75, maxX: 430, minZ: -125, maxZ: 185 };
@@ -14,10 +14,19 @@ export const TERRAIN_SPAWN = { x: spawnPoint.x, z: spawnPoint.z };
 export const TERRAIN_SPAWN_YAW = TERRAIN_REGIONS.courtyard.yaw;
 export const TERRAIN_SESSION_KEY = 'dunhuang:terrain-preview:v3';
 export const TERRAIN_RUN_SPEED = 7;
-export const TERRAIN_WALK_SPEED = 1.8;
+export const TERRAIN_WALK_SPEED = 2.1;
 export const LAKE_WATER_LEVEL = 0;
 export const LAKE_SCALE = 1.75;
-export const LAKE_ORIGIN = { x: 210, z: 15 };
+export const OASIS_RELOCATION_YAW = TERRAIN_REGIONS.music.yaw + 12 * Math.PI / 180;
+/** v012 moves the accepted pavilion/lake assembly rigidly, without reshaping it.
+ * Input points are in the accepted v011 world frame, not pavilion model space. */
+export function relocateOasisPoint(p: TerrainPlanPoint): TerrainPoint {
+  const yaw = OASIS_RELOCATION_YAW;
+  const c = Math.cos(yaw), s = Math.sin(yaw), x = p.x - 185, z = p.z - 15;
+  return { x: TERRAIN_REGIONS.music.target.x + c * x + s * z,
+    y: p.y ?? LAKE_WATER_LEVEL, z: TERRAIN_REGIONS.music.target.z - s * x + c * z };
+}
+export const LAKE_ORIGIN = relocateOasisPoint({ x: 210, z: 15 });
 /** v003 extends the perimeter only. Coordinates remain in the original GLB space. */
 export const TERRAIN_COURTYARD_EXPANSION = {
   perSide: 2,
@@ -51,7 +60,7 @@ export function terrainCourtyardPartTransform(id: string, centerX: number): { sc
 /** Existing roadside assets move off the shortened road; meshes stay unchanged. */
 export const TERRAIN_SCENERY_SOURCE_OVERRIDES: Partial<Record<TerrainRegion, Record<string, { x: number; z: number }>>> = {
   courtyard: { 'rock-road-east-low': { x: 8.5, z: 13.2 }, 'shrub-rock-east-low': { x: 8.6, z: 13.1 }, ...TERRAIN_COURTYARD_EXPANSION.attachedProps },
-  music: { 'music-tree-1': { x: 19.2, z: 28.4 }, 'music-tree-2': { x: 35, z: 29 } },
+  music: { 'music-tree-1': { x: 18, z: 32 }, 'music-tree-2': { x: 35, z: 29 } },
 };
 export const TERRAIN_PROP_OVERRIDES = TERRAIN_SCENERY_SOURCE_OVERRIDES;
 export function getTerrainPropPosition(region: TerrainRegion, id: string, original: { x: number; z: number }) {
@@ -83,9 +92,15 @@ const lakeCurves = [
 export const LAKE_SHORELINE: readonly { x: number; z: number }[] = lakeCurves.flatMap(([a, b, c, d]) =>
   Array.from({ length: 40 }, (_, i) => {
     const t = i / 40, s = 1 - t;
-    return { x: LAKE_ORIGIN.x + LAKE_SCALE * (s ** 3 * a[0] + 3 * s * s * t * b[0] + 3 * s * t * t * c[0] + t ** 3 * d[0]),
-      z: LAKE_ORIGIN.z - LAKE_SCALE * (s ** 3 * a[1] + 3 * s * s * t * b[1] + 3 * s * t * t * c[1] + t ** 3 * d[1]) };
+    return relocateOasisPoint({ x: 210 + LAKE_SCALE * (s ** 3 * a[0] + 3 * s * s * t * b[0] + 3 * s * t * t * c[0] + t ** 3 * d[0]),
+      z: 15 - LAKE_SCALE * (s ** 3 * a[1] + 3 * s * s * t * b[1] + 3 * s * t * t * c[1] + t ** 3 * d[1]) });
   }));
+export const LAKE_BOUNDS = { minX: Math.min(...LAKE_SHORELINE.map(p => p.x)), maxX: Math.max(...LAKE_SHORELINE.map(p => p.x)),
+  minZ: Math.min(...LAKE_SHORELINE.map(p => p.z)), maxZ: Math.max(...LAKE_SHORELINE.map(p => p.z)) };
+export function lakeMayBeWithin(x: number, z: number, margin: number): boolean {
+  return x >= LAKE_BOUNDS.minX - margin && x <= LAKE_BOUNDS.maxX + margin
+    && z >= LAKE_BOUNDS.minZ - margin && z <= LAKE_BOUNDS.maxZ + margin;
+}
 export function lakeSignedDistance(x: number, z: number): number {
   let distance2 = Infinity, inside = false;
   for (let i = 0, j = LAKE_SHORELINE.length - 1; i < LAKE_SHORELINE.length; j = i++) {
@@ -114,13 +129,13 @@ const routeControls: { id: string; width: number; controls: TerrainPoint[] }[] =
   { id: 'courtyard-to-valley', width: 3.3, controls: [
     TERRAIN_ANCHORS.courtyardGate, courtyardApproach(0, 3, 12), courtyardApproach(0, 6, 12),
     courtyardApproach(5, 9, 13.2), courtyardApproach(12, 13, 16.3), { x: 136.5, y: 20.6, z: 22 },
-    { x: 150, y: 13.1, z: 35 }, { x: 163, y: 7, z: 43 }, musicApproach(12),
+    { x: 153, y: 12, z: 21 }, { x: 177, y: 4.2, z: 15 }, { x: 198, y: 2.5, z: 4 }, musicApproach(14),
     musicApproach(8), musicApproach(2), TERRAIN_ANCHORS.musicGate,
   ] },
   { id: 'lake-to-cliff', width: 3.3, controls: [
-    TERRAIN_ANCHORS.musicGate, musicApproach(2), musicApproach(7), { x: 193, y: 2.5, z: 43 },
-    { x: 197, y: 2.2, z: 70 }, { x: 205, y: 2, z: 83 }, { x: 239, y: 2.8, z: 85 },
-    { x: 277, y: 6, z: 74 }, { x: 309, y: 9.5, z: 62 }, cliffApproach(4), TERRAIN_ANCHORS.cliffStairFoot,
+    TERRAIN_ANCHORS.musicGate, musicApproach(2), musicApproach(7), musicApproach(14),
+    { x: 239, y: 3.1, z: 12 }, { x: 270, y: 5.6, z: 26 }, { x: 299, y: 8.3, z: 36 },
+    cliffApproach(12, 9), cliffApproach(4), TERRAIN_ANCHORS.cliffStairFoot,
   ] },
 ];
 interface PathPoint extends TerrainPoint { distance: number }
@@ -184,7 +199,7 @@ function padDistance(x: number, z: number, minX: number, maxX: number, minZ: num
 }
 /** One continuous sand surface. Architecture and the stair ramps are separate. */
 export function terrainHeight(x: number, z: number): number {
-  const lakeDistance = lakeSignedDistance(x, z);
+  const lakeDistance = lakeMayBeWithin(x, z, 8) ? lakeSignedDistance(x, z) : 8;
   if (lakeDistance <= 0) return LAKE_WATER_LEVEL - Math.min(4.2, -lakeDistance * .45);
   const broad = (Math.sin(z * .018 + x * .006) * 1.1 + Math.cos(z * .011 - x * .014) * .55) * (1 - smooth(125, 190, x) * .65);
   let height = sandProfile(x - Math.sin(z * .013) * 3) + broad;
@@ -230,6 +245,7 @@ export function terrainHeight(x: number, z: number): number {
   height = lerp(height, 2.475, 1 - smooth(0, 1.5, padDistance(music.x, music.z, 23.51, 70.49, -29.29, 3.49)));
   // The same curve creates the dry shore, waterline and basin. A shallow bank
   // replaces the local sand only near water, leaving the music pad untouched.
+  if (lakeDistance >= 8) return height;
   const bank = LAKE_WATER_LEVEL + lakeDistance * .19;
   return lerp(bank, height, smooth(0, 8, lakeDistance));
 }

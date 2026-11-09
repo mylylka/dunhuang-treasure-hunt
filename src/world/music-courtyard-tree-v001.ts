@@ -2,6 +2,18 @@ import * as THREE from 'three';
 import { MUSIC_COURTYARD_RELOCATIONS, MUSIC_COURTYARD_TREE, relocatedMusicPoint } from '../content/world/music-courtyard-tree-v001';
 import { TERRAIN_REGIONS, toTerrainPoint } from '../content/world/terrain-layout-v001';
 
+function musicTreeRootCore() {
+  // This insert closes the ground gap and ends inside the original trunk.
+  const geometry = new THREE.CylinderGeometry(.052, .05, .066, 16, 2);
+  const uv = geometry.getAttribute('uv');
+  // The GLB shares a 2048px atlas between trunk and foliage. Sample a bark
+  // patch with surrounding bark padding, including for mipmap filtering.
+  for (let i = 0; i < uv.count; i++) {
+    uv.setXY(i, (144 + uv.getX(i) * 144) / 2048, (1744 + uv.getY(i) * 144) / 2048);
+  }
+  return geometry;
+}
+
 /** Existing art-sample loader owns the GLB's geometry, materials and textures. */
 export function placeMusicCourtyardTree(model: THREE.Object3D) {
   const definition = MUSIC_COURTYARD_TREE;
@@ -17,13 +29,26 @@ export function placeMusicCourtyardTree(model: THREE.Object3D) {
   model.traverse(object => {
     if (object instanceof THREE.Mesh) { object.castShadow = object.receiveShadow = true; meshes.push(object); }
   });
+  const bark = meshes.flatMap(mesh => Array.isArray(mesh.material) ? mesh.material : [mesh.material])
+    .find(material => material instanceof THREE.MeshStandardMaterial);
+  const rootFill = bark && new THREE.Mesh(musicTreeRootCore(), bark);
+  if (rootFill) {
+    rootFill.name = `${definition.id}-root-core`;
+    rootFill.position.set(definition.rootAnchor.x, .033, definition.rootAnchor.z);
+    rootFill.castShadow = rootFill.receiveShadow = true;
+    normalization.add(rootFill);
+    meshes.push(rootFill);
+  }
   root.updateWorldMatrix(true, true);
   const bounds = new THREE.Box3().setFromObject(root, true);
   return {
     root, meshes, worldBounds: bounds,
     inspect: () => ({ id: definition.id, height: bounds.max.y - bounds.min.y,
       position: root.position.toArray(), worldBounds: { min: bounds.min.toArray(), max: bounds.max.toArray() } }),
-    dispose() { model.removeFromParent(); root.removeFromParent(); root.clear(); },
+    dispose() {
+      rootFill?.geometry.dispose();
+      model.removeFromParent(); root.removeFromParent(); root.clear();
+    },
   };
 }
 

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import type * as PhaserTypes from 'phaser';
-import type { ColoringLevel, GameCommand, GameEvent, RegionColors, SpotDifferenceLevel, PuzzleLevel, HiddenObjectLevel, ShadowMatchLevel } from '../types';
+import type { ColoringLevel, GameCommand, GameEvent, RegionColors, RegionMaterials, SpotDifferenceLevel, PuzzleLevel, HiddenObjectLevel, ShadowMatchLevel } from '../types';
 import type { HiddenObjectPool } from '../games/hidden-object/types';
 import type { Viewport } from './geometry';
 import { calculateLayout, type GameLayout } from './layout';
@@ -8,6 +8,7 @@ import { calculateColoringLayout } from '../games/coloring/rules';
 import type { PuzzleLayout } from '../games/puzzle/rules';
 import type { ShadowMatchLayout } from '../games/shadow-match/types';
 import { soundPlayer } from '../services/sound';
+import { getMobileLandscapeBlocked, subscribeMobileLandscape } from '../services/mobile-landscape';
 import '../styles/player.css';
 
 interface PlayerCommonProps {
@@ -26,6 +27,7 @@ export interface ColoringPlayerProps extends PlayerCommonProps {
   lineImageUrl: string;
   regionMapImageUrl: string;
   initialColors: RegionColors;
+  initialMaterials?: RegionMaterials;
 }
 export interface PuzzlePlayerProps extends PlayerCommonProps {
   level: PuzzleLevel;
@@ -35,6 +37,7 @@ export interface PuzzlePlayerProps extends PlayerCommonProps {
 export interface HiddenObjectPlayerProps extends PlayerCommonProps {
   level: HiddenObjectLevel;
   hiddenObjectPool: HiddenObjectPool;
+  backgroundImageUrl?: string;
 }
 export interface ShadowMatchPlayerProps extends PlayerCommonProps {
   level: ShadowMatchLevel;
@@ -42,8 +45,9 @@ export interface ShadowMatchPlayerProps extends PlayerCommonProps {
   onShadowLayout?: (layout: ShadowMatchLayout) => void;
 }
 export type PhaserPlayerProps = SpotDifferencePlayerProps | ColoringPlayerProps | PuzzlePlayerProps | HiddenObjectPlayerProps | ShadowMatchPlayerProps;
-interface RuntimeController {
+export interface RuntimeController {
   execute(command: GameCommand): void;
+  setBlocked(blocked: boolean): void;
   resize(viewport: Viewport): void;
   setReducedMotion(reducedMotion: boolean): void;
   dispose(): void;
@@ -57,6 +61,7 @@ export function PhaserPlayer(props: PhaserPlayerProps) {
   const regionMapImageUrl = 'regionMapImageUrl' in props ? props.regionMapImageUrl : '';
   const imageUrl = 'imageUrl' in props ? props.imageUrl : '';
   const hiddenObjectPool = 'hiddenObjectPool' in props ? props.hiddenObjectPool : undefined;
+  const backgroundImageUrl = 'backgroundImageUrl' in props ? props.backgroundImageUrl : undefined;
   const shadowImages = 'shadowImages' in props ? props.shadowImages : undefined;
   const aspectRatio = props.imageAspectRatio ?? (level.gameType === 'spot-difference' ? 1.5 : 1);
   const hostRef = useRef<HTMLDivElement>(null);
@@ -65,12 +70,16 @@ export function PhaserPlayer(props: PhaserPlayerProps) {
   const eventRef = useRef(onEvent);
   const commandRef = useRef(command);
   const controllerRef = useRef<RuntimeController | null>(null);
+  const blockedRef = useRef(getMobileLandscapeBlocked());
+  const synchronizeBlockedRef = useRef<(() => void) | null>(null);
   const puzzleLayoutRef = useRef<PuzzlePlayerProps['onPuzzleLayout']>(undefined);
   puzzleLayoutRef.current = 'onPuzzleLayout' in props ? props.onPuzzleLayout : undefined;
   const shadowLayoutRef = useRef<ShadowMatchPlayerProps['onShadowLayout']>(undefined);
   shadowLayoutRef.current = 'onShadowLayout' in props ? props.onShadowLayout : undefined;
   const initialColorsRef = useRef<RegionColors>({});
   if ('initialColors' in props) initialColorsRef.current = props.initialColors;
+  const initialMaterialsRef = useRef<RegionMaterials>({});
+  initialMaterialsRef.current = 'initialMaterials' in props ? props.initialMaterials ?? {} : {};
   const pendingCommandsRef = useRef<GameCommand[]>([]);
   const processedSequenceRef = useRef<number | null>(null);
   const failedRef = useRef(false);
@@ -88,7 +97,13 @@ export function PhaserPlayer(props: PhaserPlayerProps) {
     let cancelled = false;
     let game: PhaserTypes.Game | null = null;
     let controller: RuntimeController | null = null;
-    const highDensity = level.gameType === 'hidden-object' || level.gameType === 'shadow-match';
+    let runtimeScene: PhaserTypes.Scene | null = null;
+    let sceneReady = false;
+    let pausedByBlock = false;
+    let releaseFrame: number | null = null;
+    let blocked = getMobileLandscapeBlocked();
+    blockedRef.current = blocked;
+    const highDensity = true;
     const density = () => highDensity ? Math.min(2, Math.max(1, window.devicePixelRatio || 1)) : 1;
     let pixelRatio = density();
     failedRef.current = false;
@@ -107,7 +122,7 @@ export function PhaserPlayer(props: PhaserPlayerProps) {
     let appliedHeight = 0;
     let appliedPixelRatio = 0;
     const resizeGame = (activeGame: PhaserTypes.Game) => {
-      if (cancelled) return;
+      if (cancelled || getMobileLandscapeBlocked()) return;
       if (!highDensity) {
         activeGame.scale.resize(viewport.width, viewport.height);
         return;
@@ -121,12 +136,38 @@ export function PhaserPlayer(props: PhaserPlayerProps) {
       activeGame.scale.refresh();
       host.dataset.renderPixelRatio = String(pixelRatio);
     };
-    const updateLayout = () => {
+    function queueReleasedLayout() {
+      if (releaseFrame !== null) window.cancelAnimationFrame(releaseFrame);
+      // React may reveal an inert/hidden container after the synchronous store event.
+      releaseFrame = window.requestAnimationFrame(() => { releaseFrame = null; updateLayout(true); });
+    }
+    const synchronizeBlocked = (force = false) => {
+      if (cancelled) return false;
+      const next = getMobileLandscapeBlocked(), changed = next !== blocked;
+      blocked = next; blockedRef.current = next;
+      host.dataset.mobileLandscapeBlocked = String(next);
+      if (changed || force) {
+        if (next) pendingCommandsRef.current = [];
+        controller?.setBlocked(next);
+        // Loading may finish behind the guard; pause only after Scene.create has run.
+        if (sceneReady && runtimeScene?.scene) {
+          if (next && !pausedByBlock) { runtimeScene.scene.pause(); pausedByBlock = true; }
+          else if (!next && pausedByBlock) { runtimeScene.scene.resume(); pausedByBlock = false; }
+        }
+        if (changed && !next) queueReleasedLayout();
+      }
+      return changed;
+    };
+    const updateLayout = (force = false) => {
       if (cancelled) return;
+      // Resize can arrive before the media-query change event: block at this boundary too.
+      synchronizeBlocked();
+      if (blocked) return;
       const bounds = host.getBoundingClientRect();
+      if (bounds.width < 2 || bounds.height < 2) return;
       const next = { width: Math.max(1, Math.floor(bounds.width)), height: Math.max(1, Math.floor(bounds.height)) };
       const nextPixelRatio = density();
-      if (next.width === appliedWidth && next.height === appliedHeight && nextPixelRatio === appliedPixelRatio) return;
+      if (!force && next.width === appliedWidth && next.height === appliedHeight && nextPixelRatio === appliedPixelRatio) return;
       appliedWidth = next.width;
       appliedHeight = next.height;
       appliedPixelRatio = nextPixelRatio;
@@ -141,13 +182,20 @@ export function PhaserPlayer(props: PhaserPlayerProps) {
       if (game) resizeGame(game);
       controller?.resize(viewport);
     };
+    const synchronizeFromCommand = () => { synchronizeBlocked(); };
+    synchronizeBlockedRef.current = synchronizeFromCommand;
     updateLayout();
-    const observer = new ResizeObserver(updateLayout);
+    const observer = new ResizeObserver(() => updateLayout());
     observer.observe(host);
+    const unsubscribeLandscape = subscribeMobileLandscape(() => {
+      if (synchronizeBlocked() && !blocked) updateLayout(true);
+    });
+    const handleResize = () => updateLayout();
     // Moving a window between displays can change DPR without changing the host's CSS bounds.
-    if (highDensity) window.addEventListener('resize', updateLayout);
+    if (highDensity) window.addEventListener('resize', handleResize);
     const emit = (event: GameEvent) => {
       if (cancelled) return;
+      if (event.type === 'ready') { sceneReady = true; synchronizeBlocked(true); }
       if (event.type === 'feedback') soundPlayer.play(event.cue);
       if (event.type === 'completed' && !completedSoundRef.current) {
         completedSoundRef.current = true;
@@ -181,12 +229,12 @@ export function PhaserPlayer(props: PhaserPlayerProps) {
           const { createColoringScene } = await import('../games/coloring/scene');
           if (cancelled) return;
           runtime = createColoringScene(Phaser, { level, lineImageUrl, regionMapImageUrl,
-            initialColors: initialColorsRef.current, viewport, imageAspectRatio: aspectRatio,
+            initialColors: initialColorsRef.current, initialMaterials: initialMaterialsRef.current, viewport, imageAspectRatio: aspectRatio,
             reducedMotion: motionRef.current, publishLayout, emit });
         } else if (level.gameType === 'hidden-object' && hiddenObjectPool) {
           const { createHiddenObjectScene } = await import('../games/hidden-object/scene');
           if (cancelled) return;
-          runtime = createHiddenObjectScene(Phaser, { level, pool: hiddenObjectPool, viewport,
+          runtime = createHiddenObjectScene(Phaser, { level, pool: hiddenObjectPool, viewport, backgroundImageUrl,
             reducedMotion: motionRef.current, publishLayout, emit });
         } else if (level.gameType === 'shadow-match' && shadowImages) {
           const { createShadowMatchScene } = await import('../games/shadow-match/scene');
@@ -202,6 +250,8 @@ export function PhaserPlayer(props: PhaserPlayerProps) {
         }
         controller = runtime.controller;
         controllerRef.current = controller;
+        runtimeScene = runtime.scene;
+        synchronizeBlocked(true);
         game = new Phaser.Game({
           type: Phaser.AUTO,
           parent: target,
@@ -218,7 +268,9 @@ export function PhaserPlayer(props: PhaserPlayerProps) {
         });
         game.canvas.setAttribute('aria-label', level.gameType === 'spot-difference'
           ? '找不同游戏画布，点击参照图或变化图中的差异' : level.gameType === 'coloring' ? '填色画布，点击区域上色，放大后可拖动' : level.gameType === 'hidden-object' ? '计时找物画布，寻找任务物件，放大后可拖动查看' : level.gameType === 'shadow-match' ? '影子配对画布，对照彩色飞天选择完全一致的影子' : '拼图画布，旋转图块或将碎片放回图中');
-        for (const pending of pendingCommandsRef.current.splice(0)) controller.execute(pending);
+        synchronizeBlocked(true);
+        const pending = pendingCommandsRef.current.splice(0);
+        if (!blocked) for (const command of pending) controller.execute(command);
       } catch {
         emit({ type: 'error', message: '游戏运行组件未能加载，请点击“重来”重试。' });
       }
@@ -226,13 +278,16 @@ export function PhaserPlayer(props: PhaserPlayerProps) {
     return () => {
       cancelled = true;
       observer.disconnect();
-      if (highDensity) window.removeEventListener('resize', updateLayout);
+      unsubscribeLandscape();
+      if (releaseFrame !== null) window.cancelAnimationFrame(releaseFrame);
+      if (highDensity) window.removeEventListener('resize', handleResize);
       controller?.dispose();
+      if (synchronizeBlockedRef.current === synchronizeFromCommand) synchronizeBlockedRef.current = null;
       if (controllerRef.current === controller) controllerRef.current = null;
       game?.destroy(true);
       target.remove();
     };
-  }, [level, baseImageUrl, editedImageUrl, lineImageUrl, regionMapImageUrl, imageUrl, hiddenObjectPool, shadowImages, aspectRatio, attempt]);
+  }, [level, baseImageUrl, editedImageUrl, lineImageUrl, regionMapImageUrl, imageUrl, hiddenObjectPool, backgroundImageUrl, shadowImages, aspectRatio, attempt]);
 
   useEffect(() => {
     const query = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -248,6 +303,12 @@ export function PhaserPlayer(props: PhaserPlayerProps) {
   useEffect(() => {
     if (!command || command.sequence === processedSequenceRef.current) return;
     processedSequenceRef.current = command.sequence;
+    synchronizeBlockedRef.current?.();
+    blockedRef.current = getMobileLandscapeBlocked();
+    if (blockedRef.current) {
+      pendingCommandsRef.current = [];
+      return;
+    }
     if (command.type === 'restart') completedSoundRef.current = false;
     if (command.type === 'restart' && failedRef.current) {
       setAttempt((value) => value + 1);
@@ -260,7 +321,7 @@ export function PhaserPlayer(props: PhaserPlayerProps) {
   return <div ref={hostRef} data-testid="phaser-player" data-game-type={level.gameType} role="group"
     aria-label={level.gameType === 'coloring' ? '填色游戏区' : level.gameType === 'puzzle' ? '拼图游戏区' : level.gameType === 'hidden-object' ? '计时找物游戏区' : level.gameType === 'shadow-match' ? '影子配对游戏区' : '找不同游戏区'}
     style={{ position: 'relative', width: '100%', height: '100%', flex: '1 1 0', minWidth: 0,
-      minHeight: 0, touchAction: level.gameType === 'spot-difference' ? 'manipulation' : 'none' }}>
+      minHeight: 0, touchAction: 'none' }}>
     <div ref={mountRef} style={{ width: '100%', height: '100%', minHeight: 0 }} />
     {level.gameType === 'spot-difference' && labelLayout && <>
       <span className="game-image-label" data-testid="reference-label" style={{ left: labelLayout.referenceLabel.x, top: labelLayout.referenceLabel.y + 2 }}>参照图 A</span>

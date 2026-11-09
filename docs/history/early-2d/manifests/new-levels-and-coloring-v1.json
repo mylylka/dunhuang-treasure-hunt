@@ -1,0 +1,1171 @@
+[
+  {
+    "original": ".gitignore",
+    "kept": "docs/history/early-2d/records/screen-layout/.gitignore",
+    "sha256": "4d3e1fe6bae9a3adc2de534ab78d2500230e7829ec2787cfb8083a9f326711c0",
+    "bytes": 51,
+    "kind": "history-record"
+  },
+  {
+    "original": "AGENTS.md",
+    "kept": "docs/history/early-2d/records/new-levels-and-coloring-v1/AGENTS.snapshot.md",
+    "sha256": "db49b1866593b232515aad2c43a651e0ce98cebdd5fcd0ab5a8b6e47141c98a9",
+    "bytes": 10186,
+    "kind": "history-record"
+  },
+  {
+    "original": "README.md",
+    "kept": "docs/history/early-2d/records/new-levels-and-coloring-v1/README.md",
+    "sha256": "a2f8d8c08c009ec8d98bdffca276fe93f5931917e2f85241318613f8659e7ee1",
+    "bytes": 3654,
+    "kind": "history-record"
+  },
+  {
+    "original": "art-source/README.md",
+    "kept": "docs/history/early-2d/records/new-levels-and-coloring-v1/art-source/README.md",
+    "sha256": "8a8908873297fe295099dae3c845086cc1e917bcf4e0a4bb0fefd458623ad3bf",
+    "bytes": 7008,
+    "kind": "history-record"
+  },
+  {
+    "original": "art-source/delivery-v001.json",
+    "kept": "docs/history/early-2d/records/ui-cleanup/art-source/delivery-v001.json",
+    "sha256": "50be9a505805f19565de761f69c499dfc2822452f860dc9bb0d36e176f224c5a",
+    "bytes": 5280,
+    "kind": "history-record"
+  },
+  {
+    "original": "art-source/levels/patterns-intro/v001/patterns-intro-a-source.png",
+    "kept": "art-source/levels/patterns-intro/v001/patterns-intro-a-source.png",
+    "sha256": "baaf4ff2c9855093d8adc1e61c8c15c1a74ef148ed9ac9dda0b1b8afe5ffc021",
+    "bytes": 3375292,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/levels/patterns-intro/v001/patterns-intro-b-source.png",
+    "kept": "art-source/levels/patterns-intro/v001/patterns-intro-b-source.png",
+    "sha256": "c2c53a4edd6dc60f985357eef0e30016e1d2a40a91b721f401f90ad0fb85f032",
+    "bytes": 2938995,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/references/patterns/v001/0254-0001-0013-0031-preview.jpg",
+    "kept": "art-source/references/patterns/v001/0254-0001-0013-0031-preview.jpg",
+    "sha256": "ddacc4a6ad4d7ffa70910e69438d9388babe1906e20b88483b03ea135d981de6",
+    "bytes": 72993,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/references/patterns/v001/0257-0001-0013-0017-preview.jpg",
+    "kept": "art-source/references/patterns/v001/0257-0001-0013-0017-preview.jpg",
+    "sha256": "16cad63bc6e230d6969499bf26bdf4cb6f6174063bf8d9a153947ab0cc666126",
+    "bytes": 60682,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/references/patterns/v001/0329-0001-0009-preview.jpg",
+    "kept": "art-source/references/patterns/v001/0329-0001-0009-preview.jpg",
+    "sha256": "8342b1392352138f96bde3da38a762e1dcf8efbaa74c8b48510a90528f74977c",
+    "bytes": 87811,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/references/patterns/v001/1129308686_16744413016341n.png",
+    "kept": "art-source/references/patterns/v001/1129308686_16744413016341n.png",
+    "sha256": "c269eba34badf2b72298441d50f568153416100b15380d16c57904462b3baa83",
+    "bytes": 2790272,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/references/patterns/v001/4EB1B7CEE2F2D679E4D60DD8FD9_9ADEBA06_1B8B64.png",
+    "kept": "art-source/references/patterns/v001/4EB1B7CEE2F2D679E4D60DD8FD9_9ADEBA06_1B8B64.png",
+    "sha256": "921f0e6cb0dddbd1193f5e3480f0903efdacdd93045e725a0b8e5a1d28dcdb82",
+    "bytes": 1805156,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/references/patterns/v001/71DE933BB20B8C928521953E115_8B7361C4_930A7.png",
+    "kept": "art-source/references/patterns/v001/71DE933BB20B8C928521953E115_8B7361C4_930A7.png",
+    "sha256": "acb3c01a219b845d3b0ad9584b4bd145d2db3158b0c87c5f5898cc3e908ee998",
+    "bytes": 602279,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/references/patterns/v001/BC9551B953CCEDCA3CD64D3FA9F_9170A011_D3075.png",
+    "kept": "art-source/references/patterns/v001/BC9551B953CCEDCA3CD64D3FA9F_9170A011_D3075.png",
+    "sha256": "5f06ad5cb735ffc493c9f52bbfaef8709815edb13076d12894dd13210279cb34",
+    "bytes": 864373,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/references/patterns/v001/BE397C918FCC27E02ED294CD7A8_66ECC9EC_1C8BF5.png",
+    "kept": "art-source/references/patterns/v001/BE397C918FCC27E02ED294CD7A8_66ECC9EC_1C8BF5.png",
+    "sha256": "57027d51985515936ed2575a9174c3076cbedaa0882c5c90a5fdd908110340ec",
+    "bytes": 1870837,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/references/patterns/v001/E4ECDF33EEA0286B62901B47C0C_ED5C5B1A_51D37.png",
+    "kept": "art-source/references/patterns/v001/E4ECDF33EEA0286B62901B47C0C_ED5C5B1A_51D37.png",
+    "sha256": "75dc5485d379f7c02d816dea9b8ae97ded71764ae4902adba1dba5763b31526a",
+    "bytes": 335159,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/references/patterns/v001/source-notes.json",
+    "kept": "docs/history/early-2d/records/teaching-panel-and-roadmap/art-source/references/patterns/v001/source-notes.json",
+    "sha256": "4ba02dfd94c4bf1eb850c4aa5c6fecc4ee36b71208002980ae06a993835b2465",
+    "bytes": 14043,
+    "kind": "history-record"
+  },
+  {
+    "original": "art-source/references/patterns/v001/三兔共耳.jpg",
+    "kept": "art-source/references/patterns/v001/三兔共耳.jpg",
+    "sha256": "9d8219860e34e833c57625214434ba3fa0c884839ea5166866cb808dfeb1f8e8",
+    "bytes": 137202,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/references/patterns/v001/忍冬纹.jpg",
+    "kept": "art-source/references/patterns/v001/忍冬纹.jpg",
+    "sha256": "340f39cc014b4c2d59601740ae74e107e1edd25c9e38af73822fe3ff5b6879fd",
+    "bytes": 163272,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/references/patterns/v001/莫高窟第254号窟平顶.png",
+    "kept": "art-source/references/patterns/v001/莫高窟第254号窟平顶.png",
+    "sha256": "0b8fe020988a111b1e9a5956c33e1f9c56713cfb6f5b98c2f560054600337623",
+    "bytes": 2168653,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/references/patterns/v002/1664329985689334.png",
+    "kept": "art-source/references/patterns/v002/1664329985689334.png",
+    "sha256": "bc98b4f4d163015e6c62015907103492fbdcd60ffef48f347bb11ae803b03f84",
+    "bytes": 2575186,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/references/patterns/v002/2832894e51f9427bb5ab288fe0028db4.png",
+    "kept": "art-source/references/patterns/v002/2832894e51f9427bb5ab288fe0028db4.png",
+    "sha256": "cad181f029ac74ebed3dd6f1092bbf8533e0b16b24f65fb21a828bb3d7df3fb7",
+    "bytes": 596598,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/references/patterns/v002/source-notes.json",
+    "kept": "docs/history/early-2d/records/teaching-safe-area-v3/art-source/references/patterns/v002/source-notes.json",
+    "sha256": "ae91361f7a74c55a43dc8e4c0b5664157ae5b28955951ca8fab76b0fbcf15380",
+    "bytes": 6276,
+    "kind": "history-record"
+  },
+  {
+    "original": "art-source/shared/bg-landscape/v001/bg-landscape-source.png",
+    "kept": "art-source/shared/bg-landscape/v001/bg-landscape-source.png",
+    "sha256": "f32278daa7028ac824979ef69a5f2ee2220b7450157699b6f452850861695da1",
+    "bytes": 2989359,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/shared/bg-portrait/v001/bg-portrait-source.png",
+    "kept": "art-source/shared/bg-portrait/v001/bg-portrait-source.png",
+    "sha256": "af05050c803378f770ef2596b96b18e3d28beb532f6693eefcd7b5fdd7c90514",
+    "bytes": 2949963,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/shared/button-primary/v001/button-primary-source.png",
+    "kept": "art-source/shared/button-primary/v001/button-primary-source.png",
+    "sha256": "a33545f64bbef720cdff73eb30694b4d2062fd70fa35cfe102e840f37a2d01cf",
+    "bytes": 1715696,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/shared/button-secondary/v001/button-secondary-source.png",
+    "kept": "art-source/shared/button-secondary/v001/button-secondary-source.png",
+    "sha256": "2ccd28134bcd95cb7ea179517a488231b69ab1382eac4911dc1f1ead094aa3f4",
+    "bytes": 1512821,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/shared/fonts/v001/lxgw-wenkai-source.ttf",
+    "kept": "art-source/shared/fonts/v001/lxgw-wenkai-source.ttf",
+    "sha256": "2d73eea94ad808999d90c0000c239a84a33b09d4bc6ab6c5b8bbf1eda8a7fc8b",
+    "bytes": 25928940,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/shared/fonts/v001/ofl.txt",
+    "kept": "docs/history/early-2d/records/new-levels-and-coloring-v1/art-source/shared/fonts/v001/ofl.txt",
+    "sha256": "1a25e35da1031c6c3436fde545bb9cb5aca954e9873afe510c834b8b79bd21a0",
+    "bytes": 5171,
+    "kind": "history-record"
+  },
+  {
+    "original": "art-source/shared/fonts/v001/source-notes.json",
+    "kept": "docs/history/early-2d/records/new-levels-and-coloring-v1/art-source/shared/fonts/v001/source-notes.json",
+    "sha256": "c54600a37e8436b99ad26426e30ba2fbecdb71606c56ee08d03dc4d41fe076bf",
+    "bytes": 830,
+    "kind": "history-record"
+  },
+  {
+    "original": "art-source/shared/icon-back/v001/icon-back-source.png",
+    "kept": "art-source/shared/icon-back/v001/icon-back-source.png",
+    "sha256": "4551b53537e5cec2147d6dfe157f8ac6203de8dea81d09c76951f123b0e1e17d",
+    "bytes": 2652,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/shared/icon-completed/v001/icon-completed-source.png",
+    "kept": "art-source/shared/icon-completed/v001/icon-completed-source.png",
+    "sha256": "06148fde9ac5fd656f5e15915b5becad5573156dc6b5b0718d4e107b56aca385",
+    "bytes": 7659,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/shared/icon-hint/v001/icon-hint-source.png",
+    "kept": "art-source/shared/icon-hint/v001/icon-hint-source.png",
+    "sha256": "e34c273f6230081a037823da654cf25ce6eb718fd2b8c5045bf8f8c28316b5be",
+    "bytes": 10985,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/shared/icon-locked/v001/icon-locked-source.png",
+    "kept": "art-source/shared/icon-locked/v001/icon-locked-source.png",
+    "sha256": "a40aa367212c2ace776a022f23f4e23f4fff39df70a43dc20c34d9b6559440f3",
+    "bytes": 8764,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/shared/icon-restart/v001/icon-restart-source.png",
+    "kept": "art-source/shared/icon-restart/v001/icon-restart-source.png",
+    "sha256": "403935af53b65a78a9625c9378131da73fe38dcb5151bbb7ee9755687e99ee02",
+    "bytes": 13262,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/shared/panel/v001/panel-source.png",
+    "kept": "art-source/shared/panel/v001/panel-source.png",
+    "sha256": "a8b025277894ad0c95b7e864f20a599480a69990d12be4a4d175ffae4975218c",
+    "bytes": 2366563,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/themes/music/v001/cover-music-source.png",
+    "kept": "art-source/themes/music/v001/cover-music-source.png",
+    "sha256": "6519fc6dc7bd7595c12714d734f7c0dc65d306bdb138b20bbf93e85313c0797e",
+    "bytes": 3762141,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/themes/patterns/v001/cover-patterns-source.png",
+    "kept": "art-source/themes/patterns/v001/cover-patterns-source.png",
+    "sha256": "8ea3826bb3580d68651a316617db15155e43d1c534af1fe5237d1382e5628d97",
+    "bytes": 3860827,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/themes/stories/v001/cover-stories-source.png",
+    "kept": "art-source/themes/stories/v001/cover-stories-source.png",
+    "sha256": "a43953007b62988cc684c82f9c85cadb19d9b9d2287defb7eb50f1ccf9245b97",
+    "bytes": 3634930,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "docs/architecture.md",
+    "kept": "docs/history/early-2d/records/new-levels-and-coloring-v1/docs/architecture.md",
+    "sha256": "021301aa51ed78dfb912c000e85995bc4226a186b7d7038b7cefb1f98ffe51b3",
+    "bytes": 8455,
+    "kind": "history-record"
+  },
+  {
+    "original": "docs/art-assets.md",
+    "kept": "docs/history/early-2d/records/new-levels-and-coloring-v1/docs/art-assets.md",
+    "sha256": "dbfb64e0a250112c4d82296ad0785f33cae7b41ba2b849d4fc16b7971822eb54",
+    "bytes": 14527,
+    "kind": "history-record"
+  },
+  {
+    "original": "index.html",
+    "kept": "docs/history/early-2d/records/new-levels-and-coloring-v1/index.html",
+    "sha256": "4d2fd5efcb8481286b0204f32f768d2ade7fd28cecf2cbe69b980cf34a575f84",
+    "bytes": 860,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/三兔教学预览.png",
+    "kept": "work/build-history/records/early-2d/new-levels-and-coloring-v1/outputs/三兔教学预览.png",
+    "sha256": "3db1383a51221323603491627acae4321d9701f5c7f96bc375f0097f7f5958c1",
+    "bytes": 1301804,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/使用说明.md",
+    "kept": "docs/history/early-2d/records/new-levels-and-coloring-v1/outputs/使用说明.md",
+    "sha256": "14ef1128cbf559000553ecf93d9ed27c123d2b789b92915fbcafcdf171a7757e",
+    "bytes": 7006,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/关卡选择预览.png",
+    "kept": "work/build-history/records/early-2d/teaching-safe-area-v3/outputs/关卡选择预览.png",
+    "sha256": "36728785d7f81ce5048661ba7045f5b9d53f33d40220ad055d30d24e1cd16d62",
+    "bytes": 1718611,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/卷草放大预览.png",
+    "kept": "work/build-history/records/early-2d/new-levels-and-coloring-v1/outputs/卷草放大预览.png",
+    "sha256": "c5fdbd1ee1a935ae47e4134f1eb7207a7de490c91a7b077c18213970e14a2ba1",
+    "bytes": 1588467,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/启动敦煌寻宝记.command",
+    "kept": "docs/history/early-2d/records/screen-layout/outputs/启动敦煌寻宝记.command",
+    "sha256": "c7886c50b1636f8c185364c2927d54f4625a1f1b9ef778a512e6eaafc923eba3",
+    "bytes": 393,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/平棋教学预览.png",
+    "kept": "work/build-history/records/early-2d/new-levels-and-coloring-v1/outputs/平棋教学预览.png",
+    "sha256": "952dae812819ddee50f10a1609669ee0112abbc448350cad8d4b6453de60da54",
+    "bytes": 1310578,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/开发验收记录.md",
+    "kept": "docs/history/early-2d/records/new-levels-and-coloring-v1/outputs/开发验收记录.md",
+    "sha256": "121a862ba1d40685a6810e5313d764d7996c942dfcda9d0ed52b4d175b76a20d",
+    "bytes": 7795,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/手机文化教学预览.png",
+    "kept": "work/build-history/records/early-2d/new-levels-and-coloring-v1/outputs/手机文化教学预览.png",
+    "sha256": "f52457019e0ca87b32eb5092b185d02fa89aa75984ccde01b8677c6597273c00",
+    "bytes": 199116,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/手机横屏文化教学预览.png",
+    "kept": "work/build-history/records/early-2d/new-levels-and-coloring-v1/outputs/手机横屏文化教学预览.png",
+    "sha256": "78c6d8cf9bb9a0c26eb0165dffb2b6d0132a6130bf8b3b747d20368b0d93e2e4",
+    "bytes": 247046,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/手机横屏知识小考预览.png",
+    "kept": "work/build-history/records/early-2d/new-levels-and-coloring-v1/outputs/手机横屏知识小考预览.png",
+    "sha256": "35d0724f5cb718f88045306f3f03f0924fb7c1c937111fb29bcc508dc692d942",
+    "bytes": 263015,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/手机横屏美术预览.png",
+    "kept": "work/build-history/records/early-2d/teaching-panel-and-roadmap/outputs/手机横屏美术预览.png",
+    "sha256": "0b63a20073f47a28e23f28d74271189e2d16fb43ff1503eb02b0a7f706831e66",
+    "bytes": 449269,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/手机知识小考预览.png",
+    "kept": "work/build-history/records/early-2d/new-levels-and-coloring-v1/outputs/手机知识小考预览.png",
+    "sha256": "9d1d1ec1d8bd1fef661a59ba53dbd01dadd84b9430a2ed3d6380663da39bcb37",
+    "bytes": 205135,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/手机美术预览.png",
+    "kept": "work/build-history/records/early-2d/new-levels-and-coloring-v1/outputs/手机美术预览.png",
+    "sha256": "7acdf4c2f4e83dcd0ebf32902800c3e8ec14bddad94a6e5390b5cf53df715db3",
+    "bytes": 371971,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/教学图源更新记录.md",
+    "kept": "docs/history/early-2d/records/teaching-safe-area-v3/outputs/教学图源更新记录.md",
+    "sha256": "f3ab56f3509c769ae065b99148068dca41632a3908092c5daaabf8197d938efc",
+    "bytes": 6182,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/文化教学预览.png",
+    "kept": "work/build-history/records/early-2d/new-levels-and-coloring-v1/outputs/文化教学预览.png",
+    "sha256": "237c5140352fe59aa1d3e999e86dd5f176c6e8db7bb471cae348a9a0e9e600a1",
+    "bytes": 1175963,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/游戏选择预览.png",
+    "kept": "work/build-history/records/early-2d/new-levels-and-coloring-v1/outputs/游戏选择预览.png",
+    "sha256": "891e3fc08054dd16c63b0e65039e04de0acd39626e10c1ecc64fef4a1e11eeb0",
+    "bytes": 1789053,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/知识小考预览.png",
+    "kept": "work/build-history/records/early-2d/new-levels-and-coloring-v1/outputs/知识小考预览.png",
+    "sha256": "17a9c6bf132a4764767b46cb83e8de6b171039b63a814eeb5ec247cb35d4ea1c",
+    "bytes": 1400766,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/素材交付清单.md",
+    "kept": "docs/history/early-2d/records/new-levels-and-coloring-v1/outputs/素材交付清单.md",
+    "sha256": "0b91fc5dd7d61696b63fd951f04f3900bacea111226c687800bf2e348de5e7cd",
+    "bytes": 8134,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/纹样找不同六关计划.md",
+    "kept": "docs/history/early-2d/records/teaching-safe-area-v3/outputs/纹样找不同六关计划.md",
+    "sha256": "d03f562debb99b9ab909228159e0fd120b2ab9572b042905acedb0c45688d042",
+    "bytes": 3184,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/花叶教学预览.png",
+    "kept": "work/build-history/records/early-2d/new-levels-and-coloring-v1/outputs/花叶教学预览.png",
+    "sha256": "2926f512f6b691bc620d532a9e0c2679506352de155056f4f91961f6efb765d1",
+    "bytes": 1277208,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/试玩首页.png",
+    "kept": "work/build-history/records/early-2d/new-levels-and-coloring-v1/outputs/试玩首页.png",
+    "sha256": "377002055208bf25fef439f29cec148bb62edc0b17e5d09d880b8a72855ee434",
+    "bytes": 1839744,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/通关结果手机预览.png",
+    "kept": "work/build-history/records/early-2d/new-levels-and-coloring-v1/outputs/通关结果手机预览.png",
+    "sha256": "714fc6b5e424d559b1d78418f909e50eeea1685bec99aa9bc821ed0b5867ece4",
+    "bytes": 492202,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/通关结果预览.png",
+    "kept": "work/build-history/records/early-2d/teaching-safe-area-v3/outputs/通关结果预览.png",
+    "sha256": "b8da77a6799103d3354ab10ad5eec9f6ab6dade0678805e68d663421ac95d1fb",
+    "bytes": 1479700,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/首关美术预览.png",
+    "kept": "work/build-history/records/early-2d/teaching-panel-and-roadmap/outputs/首关美术预览.png",
+    "sha256": "b61b545cb4dd108e17769155287ba9f467f6b739914726a62a18cc7949ada4b0",
+    "bytes": 1569493,
+    "kind": "history-record"
+  },
+  {
+    "original": "package-lock.json",
+    "kept": "docs/history/early-2d/records/screen-layout/package-lock.json",
+    "sha256": "1353dead395876ba56a0ef7dcb1ab89fc558447783dec46d1a079db31b80875b",
+    "bytes": 68462,
+    "kind": "history-record"
+  },
+  {
+    "original": "package.json",
+    "kept": "docs/history/early-2d/records/screen-layout/package.json",
+    "sha256": "b63db714cfedea8b5c28a653edd965ef740fa59cbb1fdc5c3f9c443125179e43",
+    "bytes": 1073,
+    "kind": "history-record"
+  },
+  {
+    "original": "playwright.config.ts",
+    "kept": "docs/history/early-2d/records/screen-layout/playwright.config.ts",
+    "sha256": "40ee615f168cdfbeef0e4d9ef11cd7adeb752becfcc60d0804f37b0e34a719fe",
+    "bytes": 1055,
+    "kind": "history-record"
+  },
+  {
+    "original": "public/assets/lessons/patterns/lesson-201-ceiling-v001.png",
+    "kept": "public/assets/lessons/patterns/lesson-201-ceiling-v001.png",
+    "sha256": "2ee68fa62af3993f8e8db2ba2953b20c43a58f8431d4586fe98d559a0830bf0e",
+    "bytes": 334085,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/lessons/patterns/lesson-254-ceiling-v001.png",
+    "kept": "public/assets/lessons/patterns/lesson-254-ceiling-v001.png",
+    "sha256": "12a8e0e97638b1d383499fd5513f90ded9246c4889629a5ff10ff04a6a452e49",
+    "bytes": 534626,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/lessons/patterns/lesson-254-niche-v001.png",
+    "kept": "public/assets/lessons/patterns/lesson-254-niche-v001.png",
+    "sha256": "fb7f7c0983d4592acab764b6f3e19e402d80237ac13b1d0d9bf4a7c4682deec3",
+    "bytes": 600412,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/lessons/patterns/lesson-257-ceiling-v001.png",
+    "kept": "public/assets/lessons/patterns/lesson-257-ceiling-v001.png",
+    "sha256": "430e394c3d60f534d531ce801a0726d69ab5a17b63d026784f710540a145642c",
+    "bytes": 504739,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/lessons/patterns/lesson-329-ceiling-v001.png",
+    "kept": "public/assets/lessons/patterns/lesson-329-ceiling-v001.png",
+    "sha256": "e080cf5089961df29b8109d813714a5efe839f897da04a1ab472a077bc2e9791",
+    "bytes": 553946,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/lessons/patterns/lesson-329-ceiling-v002.png",
+    "kept": "public/assets/lessons/patterns/lesson-329-ceiling-v002.png",
+    "sha256": "62807a8bb4b816c5e839d628e85fd42a4c607c47f973648d98cfbe838db4c162",
+    "bytes": 2226086,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/lessons/patterns/lesson-329-center-v001.png",
+    "kept": "public/assets/lessons/patterns/lesson-329-center-v001.png",
+    "sha256": "401b35f304ea906fe398f4a64d1255d8728319e648f4ef587f352eabbcc5b482",
+    "bytes": 771848,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/lessons/patterns/lesson-329-center-v002.png",
+    "kept": "public/assets/lessons/patterns/lesson-329-center-v002.png",
+    "sha256": "dc230411c27d1956e1f3294f440b051afcf48e7347515ee63c20d83d16112047",
+    "bytes": 378440,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/lessons/patterns/lesson-329-interior-v001.png",
+    "kept": "public/assets/lessons/patterns/lesson-329-interior-v001.png",
+    "sha256": "d2d450dcb5fb100af92073263f135d28f9b7f08c3561e28a0b403807e5a9dd55",
+    "bytes": 1203201,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/lessons/patterns/lesson-401-ceiling-v001.png",
+    "kept": "public/assets/lessons/patterns/lesson-401-ceiling-v001.png",
+    "sha256": "d6e5cd9600dc1acd59a7120f0bb94c1b46bb48a2a9ea7f1d3da94bb5bde21ef2",
+    "bytes": 1167408,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/lessons/patterns/lesson-407-borders-v002.png",
+    "kept": "public/assets/lessons/patterns/lesson-407-borders-v002.png",
+    "sha256": "89b7f135b0f3fdad84cb696ac30d3d277224022b00f8b99d9cd43f09502031fa",
+    "bytes": 1526837,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/lessons/patterns/lesson-407-rabbits-v001.png",
+    "kept": "public/assets/lessons/patterns/lesson-407-rabbits-v001.png",
+    "sha256": "064d703b335115597e2a6dddb2f674897c1ab7aa62c0edb888035ce993db0f86",
+    "bytes": 2075209,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/lessons/patterns/lesson-user-254-ceiling-v001.png",
+    "kept": "public/assets/lessons/patterns/lesson-user-254-ceiling-v001.png",
+    "sha256": "fb42099c63c14ec6bf2da1561b6bb0a5d6ede18ef2e4dc6421ee7ac1c98afe3a",
+    "bytes": 2160676,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/lessons/patterns/lesson-user-honeysuckle-v001.png",
+    "kept": "public/assets/lessons/patterns/lesson-user-honeysuckle-v001.png",
+    "sha256": "21f5d88b6f316fae8a595231439b6c5e426d88fcc956d49480c5c3cb2b38c61c",
+    "bytes": 1143908,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/lessons/patterns/lesson-user-rabbits-v001.png",
+    "kept": "public/assets/lessons/patterns/lesson-user-rabbits-v001.png",
+    "sha256": "785384577e34354c2fd77adc2b450c3999b4bb6997454e36c0eefe66a96ec321",
+    "bytes": 389384,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/levels/patterns-intro/patterns-intro-a-v001.png",
+    "kept": "public/assets/levels/patterns-intro/patterns-intro-a-v001.png",
+    "sha256": "c11e703807f13e233ab1d4fd299d81b7f741f1160c36638c8fdb8ed8ce4d6d71",
+    "bytes": 2026875,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/levels/patterns-intro/patterns-intro-a.svg",
+    "kept": "public/assets/levels/patterns-intro/patterns-intro-a.svg",
+    "sha256": "521b04584648ea8d07d8af31123c631eb38e5742a71e75064210f49310f65739",
+    "bytes": 3232,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/levels/patterns-intro/patterns-intro-b-v001.png",
+    "kept": "public/assets/levels/patterns-intro/patterns-intro-b-v001.png",
+    "sha256": "401291b78982fe9eba5b76b42a580e11bf02fd9763561f6e443f835d8eb206ed",
+    "bytes": 2020156,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/levels/patterns-intro/patterns-intro-b.svg",
+    "kept": "public/assets/levels/patterns-intro/patterns-intro-b.svg",
+    "sha256": "d68b34b69c1898c758be9f4a804a79b84ed519c65f4af9eacf39e78af336b4f7",
+    "bytes": 3095,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/shared/bg-landscape-v001.png",
+    "kept": "public/assets/shared/bg-landscape-v001.png",
+    "sha256": "4a21044ca3c22ce6601820a67b9a5effc751cff5ad1f2ca8b11e04f457d483db",
+    "bytes": 2551340,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/shared/bg-landscape.svg",
+    "kept": "public/assets/shared/bg-landscape.svg",
+    "sha256": "01c1fecdd12f1f601460cf0c5078e7b3fc196ca6c280177107581294b94265b9",
+    "bytes": 832,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/shared/bg-portrait-v001.png",
+    "kept": "public/assets/shared/bg-portrait-v001.png",
+    "sha256": "ef525b410d2df8bf8d17522f0234a0fceaeb199fb386401b7c2561097960f47d",
+    "bytes": 2503834,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/shared/bg-portrait.svg",
+    "kept": "public/assets/shared/bg-portrait.svg",
+    "sha256": "8c2e356f0f022de9e04998dea71ba9bd76577faddd91d0eb1d3ae8ecb05e3ba1",
+    "bytes": 833,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/shared/button-primary-v001.png",
+    "kept": "public/assets/shared/button-primary-v001.png",
+    "sha256": "8e1e28c98218105efc984e6b4c4e20a041f2b464c2a556058bd14096a0167176",
+    "bytes": 371061,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/shared/button-primary.svg",
+    "kept": "public/assets/shared/button-primary.svg",
+    "sha256": "2de1aa882bac5d6e08c9966bc81b89600928777ecbc91806fcc3471a550137d0",
+    "bytes": 387,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/shared/button-secondary-v001.png",
+    "kept": "public/assets/shared/button-secondary-v001.png",
+    "sha256": "d5f06ddd2ba3a5c60bb61397f3929fd2b8d2ff363f10379551225f7f03db72cb",
+    "bytes": 322206,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/shared/button-secondary.svg",
+    "kept": "public/assets/shared/button-secondary.svg",
+    "sha256": "2d1b70bb5e9c2b2112207057d24de3c822d89924fd7fb1ba5547b9d57f83e84d",
+    "bytes": 389,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/shared/fonts/dunhuang-title-v001.woff",
+    "kept": "public/assets/shared/fonts/dunhuang-title-v001.woff",
+    "sha256": "ae7a6f78a2c7666fccd85158369b0131cd95435294a57b969bc2ab2c13406921",
+    "bytes": 3048,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/shared/fonts/ofl.txt",
+    "kept": "docs/history/early-2d/records/new-levels-and-coloring-v1/art-source/shared/fonts/v001/ofl.txt",
+    "sha256": "1a25e35da1031c6c3436fde545bb9cb5aca954e9873afe510c834b8b79bd21a0",
+    "bytes": 5171,
+    "kind": "history-record"
+  },
+  {
+    "original": "public/assets/shared/icon-back-v001.png",
+    "kept": "public/assets/shared/icon-back-v001.png",
+    "sha256": "e0b67ed991d018ed077eee53dddaf25705ead0d52b255f0b0bc5c90ae362fae3",
+    "bytes": 2604,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/shared/icon-back.svg",
+    "kept": "public/assets/shared/icon-back.svg",
+    "sha256": "4abdd662bbd6c00e7cf14d38f9efee24479368d209955112f76f6d0b3706b19f",
+    "bytes": 421,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/shared/icon-completed-v001.png",
+    "kept": "public/assets/shared/icon-completed-v001.png",
+    "sha256": "1fc293c1f77ff86e687e0b8597c84d820004f80f48868d3a6f2c519bd46255b5",
+    "bytes": 7582,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/shared/icon-completed.svg",
+    "kept": "public/assets/shared/icon-completed.svg",
+    "sha256": "4cb3ea6e7ef47890bcb876cd927bb28ada8d4ab51a33d8e5ef5f5b8ccc6318eb",
+    "bytes": 448,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/shared/icon-hint-v001.png",
+    "kept": "public/assets/shared/icon-hint-v001.png",
+    "sha256": "86bab7f238ba546ca1f88c6f29e82b293cee0c0975cc7a43daa8cb30e82fa876",
+    "bytes": 10861,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/shared/icon-hint.svg",
+    "kept": "public/assets/shared/icon-hint.svg",
+    "sha256": "f0d0251dda3ba17dbcb8bedff295d27a7ce5bdc5e077fe9acd7b423be48544ff",
+    "bytes": 501,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/shared/icon-locked-v001.png",
+    "kept": "public/assets/shared/icon-locked-v001.png",
+    "sha256": "115fc0b85a1293be8a1daf7f2fb46cc9595140b8a916c6f55c512709e7206e46",
+    "bytes": 8681,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/shared/icon-locked.svg",
+    "kept": "public/assets/shared/icon-locked.svg",
+    "sha256": "26902a81ec240a3fbe578a8ff8a6ac8f904c7f88bbc0f1dfbe210da046b28ccd",
+    "bytes": 485,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/shared/icon-restart-v001.png",
+    "kept": "public/assets/shared/icon-restart-v001.png",
+    "sha256": "ba655ce96a7c7e380e05faa18570e8b6519a3bb3505b54bdfb598dff065ded0f",
+    "bytes": 13057,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/shared/icon-restart.svg",
+    "kept": "public/assets/shared/icon-restart.svg",
+    "sha256": "1e129cbbf3753122c7a0f4535e7f094debb45c747ad35acf89265441941eacb7",
+    "bytes": 428,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/shared/panel-v001.png",
+    "kept": "public/assets/shared/panel-v001.png",
+    "sha256": "b86ce0be9bcc45e8dc1814385304de6bd6709bf45edfb239594fa21eb0df2b94",
+    "bytes": 1452937,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/shared/panel.svg",
+    "kept": "public/assets/shared/panel.svg",
+    "sha256": "7ab7afe177b575f234eede00807fda77d47916fe248b1580cac2408d7dfa3bd8",
+    "bytes": 500,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/themes/cover-music-v001.png",
+    "kept": "public/assets/themes/cover-music-v001.png",
+    "sha256": "915d1c14925410bcf3f0466824343bad993b8c275ac6027baf28f79f4f4c0e7d",
+    "bytes": 2125420,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/themes/cover-music.svg",
+    "kept": "public/assets/themes/cover-music.svg",
+    "sha256": "80decb75fe65da1f1d22d9b7fd6490fd6d7d2bff56ab987f074a9639c7f21965",
+    "bytes": 1040,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/themes/cover-patterns-v001.png",
+    "kept": "public/assets/themes/cover-patterns-v001.png",
+    "sha256": "9fc328cb3336d6e316be7a4122fbb79b97f3ada438c0e1590769ea9bfa2e8bdd",
+    "bytes": 2201172,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/themes/cover-patterns.svg",
+    "kept": "public/assets/themes/cover-patterns.svg",
+    "sha256": "7fa6b96023e69a89085789a96f33aa7f860ab156c5da57d1a3c7848da40809ea",
+    "bytes": 1004,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/themes/cover-stories-v001.png",
+    "kept": "public/assets/themes/cover-stories-v001.png",
+    "sha256": "acb57dded2a4b6cd6fb9046a6d6d6833c9bc7c4fb9fb05334b2e2fc9797948c0",
+    "bytes": 2052839,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/themes/cover-stories.svg",
+    "kept": "public/assets/themes/cover-stories.svg",
+    "sha256": "1991638cd9a0ddb7d385945d596db70aae62ea457a06d989375bee6133d6ab07",
+    "bytes": 1058,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "scripts/import-art-v001.py",
+    "kept": "docs/history/early-2d/records/teaching-safe-area-v3/scripts/import-art-v001.py",
+    "sha256": "a2fff674fbd83eff782785effb3e9d0e80ff72dc450f445e5e3741dca16eabf6",
+    "bytes": 8471,
+    "kind": "history-record"
+  },
+  {
+    "original": "scripts/import-pattern-lesson-references-v002.py",
+    "kept": "docs/history/early-2d/records/teaching-safe-area-v3/scripts/import-pattern-lesson-references-v002.py",
+    "sha256": "20ed20eb1ff387cd97cfd1706ca5cdef7339105d9c576270314ec32565d64f9a",
+    "bytes": 5953,
+    "kind": "history-record"
+  },
+  {
+    "original": "scripts/import-pattern-lesson-references.py",
+    "kept": "docs/history/early-2d/records/teaching-safe-area-v3/scripts/import-pattern-lesson-references.py",
+    "sha256": "655aaa6ed2aebf135555a41f2822e6fdabe054f730658a4146307f3ad3269509",
+    "bytes": 9538,
+    "kind": "history-record"
+  },
+  {
+    "original": "scripts/import-title-font.py",
+    "kept": "docs/history/early-2d/records/new-levels-and-coloring-v1/scripts/import-title-font.py",
+    "sha256": "955718ad1d91c1940104500feb0d14f3a82705e4285ff28bedf9ea4d8841c26e",
+    "bytes": 2666,
+    "kind": "history-record"
+  },
+  {
+    "original": "scripts/serve-preview.mjs",
+    "kept": "docs/history/early-2d/records/new-levels-and-coloring-v1/scripts/serve-preview.mjs",
+    "sha256": "bc0c876a6cffb8d29288781cfb7db313fe9a2babbbba45e0f5df08f1bdd84060",
+    "bytes": 3232,
+    "kind": "history-record"
+  },
+  {
+    "original": "scripts/validate-content.ts",
+    "kept": "docs/history/early-2d/records/teaching-panel-and-roadmap/scripts/validate-content.ts",
+    "sha256": "9b10b859827dad895f4ebd48cf83ef6b1ec8ff49f7d5b39bf7b96edb2a78d9b3",
+    "bytes": 2876,
+    "kind": "history-record"
+  },
+  {
+    "original": "scripts/verify-production.mjs",
+    "kept": "docs/history/early-2d/records/new-levels-and-coloring-v1/scripts/verify-production.mjs",
+    "sha256": "2950657de68de0951ad57bf886646d2d974d893ef3276473310265f940ff55c8",
+    "bytes": 33557,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/app/App.tsx",
+    "kept": "docs/history/early-2d/records/new-levels-and-coloring-v1/src/app/App.tsx",
+    "sha256": "f8687e2d627381811146f70a7783131591c07699a972476812a98b756a7bf7b1",
+    "bytes": 18892,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/app/ArtInspector.tsx",
+    "kept": "docs/history/early-2d/records/ui-cleanup/src/app/ArtInspector.tsx",
+    "sha256": "95908b5344e1a71f3d5835228911ceeb4a88001c3701df5fd1626af305d5c357",
+    "bytes": 4130,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/app/GameSelectScreen.tsx",
+    "kept": "docs/history/early-2d/records/teaching-panel-and-roadmap/src/app/GameSelectScreen.tsx",
+    "sha256": "363b16295ed55de4778404c366d6ca4de96282b80078c81513e433d19c5f57e7",
+    "bytes": 2508,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/app/LessonImageViewer.tsx",
+    "kept": "docs/history/early-2d/records/new-levels-and-coloring-v1/src/app/LessonImageViewer.tsx",
+    "sha256": "999a9bd00031b7f6fea427b8c7c9d7660488369beae21bab75b99804797300e0",
+    "bytes": 7337,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/app/LevelSelectScreen.tsx",
+    "kept": "docs/history/early-2d/records/teaching-safe-area-v3/src/app/LevelSelectScreen.tsx",
+    "sha256": "8ace8f989403c56c582f92350e7299d410ddb2fa31a6e2c373705bd49f55aa60",
+    "bytes": 6321,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/app/TeachingScreen.tsx",
+    "kept": "docs/history/early-2d/records/new-levels-and-coloring-v1/src/app/TeachingScreen.tsx",
+    "sha256": "a27dc109fbf6b66bd4078499015d9b63bca4299b7ad31d3e37ac399eb086f9a2",
+    "bytes": 14950,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/app/ThemeCards.tsx",
+    "kept": "docs/history/early-2d/records/new-levels-and-coloring-v1/src/app/ThemeCards.tsx",
+    "sha256": "aa48524ea3572cf72511f1a216f7207d77eeb96cfb9409f2d2e681fa344ebe40",
+    "bytes": 1968,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/app/navigation.ts",
+    "kept": "docs/history/early-2d/records/teaching-panel-and-roadmap/src/app/navigation.ts",
+    "sha256": "eb31bb2dccad5386f9764988632021ffe0f9c00ae347d10c40f92b7789efb587",
+    "bytes": 2070,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/content/assets.json",
+    "kept": "docs/history/early-2d/records/teaching-safe-area-v3/src/content/assets.json",
+    "sha256": "ee342ba9020af3c672fb52ab84eb064be5994eb48b1805bbab9352be7c109d26",
+    "bytes": 13663,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/content/index.ts",
+    "kept": "docs/history/early-2d/records/teaching-panel-and-roadmap/src/content/index.ts",
+    "sha256": "dd106bc8622b24b8c91aa583334ee416f435e745e3cb23939d5483b65bcb58b9",
+    "bytes": 1192,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/content/lessons/index.ts",
+    "kept": "docs/history/early-2d/records/teaching-panel-and-roadmap/src/content/lessons/index.ts",
+    "sha256": "435ad9ad889295aacd3bddb035ba335784989dbca44718923d83054f647757b0",
+    "bytes": 190,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/content/lessons/patterns.ts",
+    "kept": "docs/history/early-2d/records/new-levels-and-coloring-v1/src/content/lessons/patterns.ts",
+    "sha256": "6ce351eaa6057cf7804f34a843b86b3270a638a03d7e2f7001f9885ad3862295",
+    "bytes": 17882,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/content/lessons/types.ts",
+    "kept": "docs/history/early-2d/records/new-levels-and-coloring-v1/src/content/lessons/types.ts",
+    "sha256": "1d24f0063bebf2a14344624a24ce118a2da41626bb3b5094ee388d9332608c4b",
+    "bytes": 978,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/content/level-roadmap.ts",
+    "kept": "docs/history/early-2d/records/teaching-safe-area-v3/src/content/level-roadmap.ts",
+    "sha256": "827c3e2203581b4da3c46f2e849a2240dcb39e096764e2a6e0e4faf5b123e224",
+    "bytes": 2800,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/content/levels/patterns-intro.json",
+    "kept": "docs/history/early-2d/records/teaching-safe-area-v3/src/content/levels/patterns-intro.json",
+    "sha256": "c3b0194f1744c498dd5972243b95fcc24b08ec0763b248e6b0e2cc3b12fc382e",
+    "bytes": 2758,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/content/themes.json",
+    "kept": "docs/history/early-2d/records/learning-flow/src/content/themes.json",
+    "sha256": "0c79898928e47019148ec2537a281e8e80d91bc900eb43f4f02f10b39f572b1b",
+    "bytes": 1193,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/games/spot-difference/rules.ts",
+    "kept": "docs/history/early-2d/records/screen-layout/src/games/spot-difference/rules.ts",
+    "sha256": "cd478354aed003f71243b354bc29239096d52068233ce5bf869cce7a095eba78",
+    "bytes": 3625,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/games/spot-difference/scene.ts",
+    "kept": "docs/history/early-2d/records/screen-layout/src/games/spot-difference/scene.ts",
+    "sha256": "e52c3a6b5856136d8fe663490823d3076f4ad6da79d6e1a92846f29fb4347195",
+    "bytes": 9064,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/main.tsx",
+    "kept": "docs/history/early-2d/records/screen-layout/src/main.tsx",
+    "sha256": "27ae5b8e05242c94c598ce6d48c3684c32ad6a54eb14bbcf16905d33642adb4b",
+    "bytes": 818,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/runtime/PhaserPlayer.tsx",
+    "kept": "docs/history/early-2d/records/user-art-v001/src/runtime/PhaserPlayer.tsx",
+    "sha256": "3ec4baf4bb74d7060dc11d08348258dec521f2a242295119af683dd3ff61ad27",
+    "bytes": 4716,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/runtime/layout.ts",
+    "kept": "docs/history/early-2d/records/user-art-v001/src/runtime/layout.ts",
+    "sha256": "f1905da90ea868d926ecb975ec58e324c2550e3d0ab5cf73e4da1c98a3efde10",
+    "bytes": 3084,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/services/content-schema.ts",
+    "kept": "docs/history/early-2d/records/teaching-safe-area-v3/src/services/content-schema.ts",
+    "sha256": "302d642ce4fa615f1e179f4b8c0f2ed87566a54e34766c976099a999c56efa89",
+    "bytes": 6075,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/services/learning.ts",
+    "kept": "docs/history/early-2d/records/teaching-panel-and-roadmap/src/services/learning.ts",
+    "sha256": "bfc462a7619f70ad66527a2b20dc7f5f5ed850623174c69bc449a84401f7853b",
+    "bytes": 3077,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/services/lesson-schema.ts",
+    "kept": "docs/history/early-2d/records/new-levels-and-coloring-v1/src/services/lesson-schema.ts",
+    "sha256": "338fef459a77464e0e5ddaadff6997b9ae31600a12260fc42c398058662644fb",
+    "bytes": 3287,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/services/progress.ts",
+    "kept": "docs/history/early-2d/records/teaching-panel-and-roadmap/src/services/progress.ts",
+    "sha256": "6a0ff12b93a7fb94bf802d0de0d8fefdee628ad54a26eba2a97b951959fa836b",
+    "bytes": 2827,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/styles/art-inspector.css",
+    "kept": "docs/history/early-2d/records/ui-cleanup/src/styles/art-inspector.css",
+    "sha256": "b360043cf1c2c99b92b34a51f8a370e1c601e280befd2a6787a1671a59d0f56a",
+    "bytes": 3890,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/styles/lesson-image-viewer.css",
+    "kept": "docs/history/early-2d/records/new-levels-and-coloring-v1/src/styles/lesson-image-viewer.css",
+    "sha256": "a980614445ee43c056883146f2e65f448ac707fb0aac43421f2d3073966ddb76",
+    "bytes": 4252,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/styles/selection.css",
+    "kept": "docs/history/early-2d/records/new-levels-and-coloring-v1/src/styles/selection.css",
+    "sha256": "65d461ab34504711766e835cd16c7ebed43702ced8788f03df2f37a1094ced1d",
+    "bytes": 15539,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/styles/teaching.css",
+    "kept": "docs/history/early-2d/records/new-levels-and-coloring-v1/src/styles/teaching.css",
+    "sha256": "e92905ceeeb85006693e77d974c52c5d9eae74b66564432cc8a6bcf58808dd76",
+    "bytes": 15007,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/styles/theme.css",
+    "kept": "docs/history/early-2d/records/teaching-safe-area-v3/src/styles/theme.css",
+    "sha256": "290d38e8ff2e0e94c11b5c619b1f6f5ecd24d3a7e1432413fc28a22a8d7bf249",
+    "bytes": 35198,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/types.ts",
+    "kept": "docs/history/early-2d/records/teaching-safe-area-v3/src/types.ts",
+    "sha256": "337a0c4c0eb5f6c902ec28625c3bb3f5d25fe6feaf8f92aeb4fd4b5060367507",
+    "bytes": 1893,
+    "kind": "history-record"
+  },
+  {
+    "original": "tests/e2e/game.spec.ts",
+    "kept": "docs/history/early-2d/records/new-levels-and-coloring-v1/tests/e2e/game.spec.ts",
+    "sha256": "407a0319e33fef6d4ab303a58fc54bc49d0a3db5ed2bde9db8a2cf9f6edc86f1",
+    "bytes": 60310,
+    "kind": "history-record"
+  },
+  {
+    "original": "tests/fixtures/catalog.ts",
+    "kept": "docs/history/early-2d/records/screen-layout/tests/fixtures/catalog.ts",
+    "sha256": "d93d5c45afe340a7e136669e91e1df284bad1d7aea519a8b10e6131184c0b8ed",
+    "bytes": 1485,
+    "kind": "history-record"
+  },
+  {
+    "original": "tests/unit/content-schema.test.ts",
+    "kept": "docs/history/early-2d/records/screen-layout/tests/unit/content-schema.test.ts",
+    "sha256": "e3358d51b224784d9072913293db6d5cb255e51514377e4edca708c96261677f",
+    "bytes": 2924,
+    "kind": "history-record"
+  },
+  {
+    "original": "tests/unit/learning.test.ts",
+    "kept": "docs/history/early-2d/records/new-levels-and-coloring-v1/tests/unit/learning.test.ts",
+    "sha256": "75e1a3311d187c9bd0e8442f8ca33fb566b232bf3c6c9a05116c2a342ff921c4",
+    "bytes": 4356,
+    "kind": "history-record"
+  },
+  {
+    "original": "tests/unit/lesson-schema.test.ts",
+    "kept": "docs/history/early-2d/records/new-levels-and-coloring-v1/tests/unit/lesson-schema.test.ts",
+    "sha256": "c12ad14707ae2709d474b8bfee9808ea1d7f8534987f6fb61a16fa4e54e2377d",
+    "bytes": 4874,
+    "kind": "history-record"
+  },
+  {
+    "original": "tests/unit/level-roadmap.test.ts",
+    "kept": "docs/history/early-2d/records/teaching-safe-area-v3/tests/unit/level-roadmap.test.ts",
+    "sha256": "4a4b2edf028a11a4c7dcae1ca0b2bac98c9c9277a851902ab5b4e95058fe41b9",
+    "bytes": 3681,
+    "kind": "history-record"
+  },
+  {
+    "original": "tests/unit/navigation.test.ts",
+    "kept": "docs/history/early-2d/records/teaching-panel-and-roadmap/tests/unit/navigation.test.ts",
+    "sha256": "44baffcd58fd39aa44fb928eb7ed688cb91d7c6f96a0717f262cd1d79e0b7131",
+    "bytes": 1407,
+    "kind": "history-record"
+  },
+  {
+    "original": "tests/unit/progress.test.ts",
+    "kept": "docs/history/early-2d/records/teaching-panel-and-roadmap/tests/unit/progress.test.ts",
+    "sha256": "a843e1a33acd07a3e116d953f710c2b153ac55b1101f9781294b80ea9bb293e6",
+    "bytes": 4497,
+    "kind": "history-record"
+  },
+  {
+    "original": "tests/unit/runtime-layout.test.ts",
+    "kept": "docs/history/early-2d/records/user-art-v001/tests/unit/runtime-layout.test.ts",
+    "sha256": "393439799ba19a8b7ecf7bf843a5d96caa2e1907b3cde93c90f5a83d9c1d1046",
+    "bytes": 3041,
+    "kind": "history-record"
+  },
+  {
+    "original": "tests/unit/spot-difference.test.ts",
+    "kept": "docs/history/early-2d/records/screen-layout/tests/unit/spot-difference.test.ts",
+    "sha256": "705b51ad59f2041754a529d2dc3378b1949dbba5caeee76ee2bde03e0395a3e7",
+    "bytes": 11817,
+    "kind": "history-record"
+  },
+  {
+    "original": "tsconfig.json",
+    "kept": "docs/history/early-2d/records/screen-layout/tsconfig.json",
+    "sha256": "227c2278e38d08e21bade880935773a07dea5d3b66024e1c58c667cc9844f490",
+    "bytes": 491,
+    "kind": "history-record"
+  },
+  {
+    "original": "vite.config.ts",
+    "kept": "docs/history/early-2d/records/screen-layout/vite.config.ts",
+    "sha256": "176000d574ac8dba0686ecc4dbdc31108b5bc4ddc0589ccaef183abb1c1f0959",
+    "bytes": 235,
+    "kind": "history-record"
+  },
+  {
+    "original": "vitest.config.ts",
+    "kept": "docs/history/early-2d/records/screen-layout/vitest.config.ts",
+    "sha256": "03b9f46dd268230bf2af89a45e94ad84e30e2bcf77a580bc953aaebcfc6419e7",
+    "bytes": 148,
+    "kind": "history-record"
+  }
+]

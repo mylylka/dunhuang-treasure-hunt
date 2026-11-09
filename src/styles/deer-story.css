@@ -1,5 +1,8 @@
 /* The artwork is the stage; controls and spoken subtitles never share a panel. */
 .world-story.deer-story{display:block;padding:0;overflow:hidden;background:#302116;isolation:isolate}
+.world-story.deer-story{-webkit-tap-highlight-color:transparent}
+.world-story.deer-story button{-webkit-tap-highlight-color:initial}
+.world-story.deer-story[data-can-skip="true"]{cursor:pointer}
 .deer-story-atmosphere{position:absolute;inset:-25px;background-size:cover;background-position:center;filter:blur(18px) brightness(.68);z-index:-1}
 .deer-story-background{position:absolute;object-fit:contain;pointer-events:none;user-select:none;mask-image:linear-gradient(transparent,#000 3%,#000 97%,transparent)}
 .deer-story-stage{position:absolute;inset:76px 26px max(110px,calc(var(--story-caption-height,70px) + 40px));pointer-events:none}
@@ -8,13 +11,11 @@
 .deer-story-toolbar{position:absolute;z-index:3;top:18px;left:26px;right:26px;display:flex;align-items:center;justify-content:space-between;gap:16px}
 .deer-story-label{display:flex;align-items:baseline;gap:18px;text-shadow:0 2px 10px #180c05;font:23px/1.4 var(--serif);white-space:nowrap}
 .deer-story-count{font:13px/1.4 "PingFang SC",sans-serif;color:#f2e4ce}
-.deer-story-toolbar nav{display:flex;gap:8px}
 .deer-story .deer-story-toolbar button{background:#34251cc9;border:1px solid #e8c78e60;min-height:38px;padding:6px 14px;color:#fff4e3;font-size:14px;backdrop-filter:blur(6px);white-space:nowrap;min-width:0}
 .deer-story .deer-story-toolbar button:hover{background:#514130;border-color:#d3b889}
 .deer-story .deer-story-toolbar button:disabled{opacity:.45;cursor:default}
 .world-story.deer-story .world-subtitle{bottom:22px;max-width:calc(100% - 52px);padding:13px 24px;z-index:4}
 .world-story.deer-story .world-subtitle p{font-size:21px;line-height:1.65}
-.world-story.deer-story .world-subtitle-skip{color:inherit;font:inherit}
 .deer-story-status{position:absolute;z-index:4;top:50%;left:50%;transform:translate(-50%,-50%);padding:16px 24px;background:#38281de8;color:#fff3de;text-align:center}
 .deer-story-status button,.deer-story-audio-error button{margin-left:12px;min-height:34px;padding:4px 12px}
 .deer-story-audio-error{position:absolute;z-index:5;right:24px;top:72px;padding:6px 12px;background:#38281de8;font-size:13px}
@@ -26,5 +27,41 @@
 
 .world-story.deer-story .deer-story-caption-measure{visibility:hidden;pointer-events:none}
 @media(max-width:760px) and (orientation:landscape){
- .deer-story-toolbar{gap:8px;left:12px;right:12px}.deer-story-label{font-size:16px;gap:6px}.deer-story-toolbar nav{gap:4px}.deer-story .deer-story-toolbar button{padding:4px 7px;font-size:12px}
+ .deer-story-toolbar{gap:8px;left:12px;right:12px}.deer-story-label{font-size:16px;gap:6px}.deer-story .deer-story-toolbar button{padding:4px 7px;font-size:12px}
+}
+
+.world-story.deer-story--text .deer-story-background{mask-image:none}
+.deer-story-text-layout{
+ position:absolute;inset:14px max(14px,env(safe-area-inset-right)) 14px max(14px,env(safe-area-inset-left));
+ z-index:3;display:grid;grid-template-columns:minmax(0,1fr);
+ grid-template-rows:auto minmax(0,1fr) minmax(68px,auto);gap:8px;pointer-events:none;
+}
+.deer-story-text-heading{display:flex;justify-content:space-between;align-items:center;gap:8px;color:#fff3db}
+.deer-story-text-heading h2,.deer-story-text-heading p,.deer-story-text-caption p{margin:0}
+.deer-story-text-heading h2{font:650 clamp(20px,2.4vw,29px)/1.25 "Heiti SC","PingFang SC","Microsoft YaHei",sans-serif}
+.deer-story-text-heading p{font-size:13px;line-height:1.4;color:#e1c79c}
+.deer-story-text-heading button,.deer-story-text-actions{pointer-events:auto}
+.deer-story-text-actions{display:flex;gap:7px}
+.deer-story-text-footer{display:grid;grid-template-columns:minmax(0,1fr);place-items:center;min-width:0}
+.deer-story-text-caption{width:max-content;max-width:min(100%,820px);min-width:0}
+.deer-story-text-caption p{
+ padding:8px 18px;border:1px solid #ae8b59;border-radius:9px;
+ background:#2f211ae8;box-shadow:0 8px 24px #190d0866;color:#fff3db;
+ font:18px/1.5 var(--serif);text-align:center;overflow-wrap:anywhere;white-space:pre-line;
+}
+.deer-story--text button{min-height:42px;padding:5px 12px;white-space:nowrap;font-size:14px}
+.deer-story--text button:disabled{opacity:.45;cursor:default}
+.deer-story--text button:focus-visible{outline:2px solid #f4d297;outline-offset:2px}
+.deer-story--text .deer-story-status{z-index:4;max-width:calc(100% - 32px);font-size:14px}
+
+@media(max-height:540px) and (orientation:landscape){
+ .deer-story-text-layout{
+  inset:6px max(7px,env(safe-area-inset-right)) 6px max(7px,env(safe-area-inset-left));
+  grid-template-rows:auto minmax(0,1fr) minmax(52px,auto);gap:5px;
+ }
+ .deer-story-text-heading h2{font-size:16px}
+ .deer-story-text-heading p{font-size:11px}
+ .deer-story-text-caption p{padding:4px 11px;font-size:15px;line-height:1.4}
+ .deer-story--text button{min-width:0;min-height:38px;padding:4px 8px;font-size:13px}
+ .deer-story--text .deer-story-status{padding:9px}
 }

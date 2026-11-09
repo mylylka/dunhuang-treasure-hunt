@@ -194,7 +194,7 @@ L01 与 L02 原稿存在全图重绘漂移，**不能说两张原稿只差五处
 
 `python3 scripts/import-art-v001.py` 可使用已有 Pillow 重复导出本批 PNG。脚本优先核对交付原稿；交付文件不在原位置时使用项目归档。已有 v001 原稿若内容不同，脚本会拒绝覆盖，需创建新版本。正常 `npm` 开发、运行和构建不需要 Python。
 
-`python3 scripts/import-pattern-lesson-references.py` 重建v001参考归档与运行文件，并保护已采用v002的素材索引不被降级；`python3 scripts/import-pattern-lesson-references-v002.py` 重建本轮2份新原件及3项导出，包含井心原像素裁切。两者均拒绝覆盖内容不同的已归档原件。新的原图或资料版本须另建下一版本，不能复用版本名覆盖。
+`python3 scripts/import-pattern-lesson-references.py` 核对并按需重建 v001 教学参考，保护已采用 v002 的素材索引。`python3 scripts/import-pattern-lesson-references-v002.py` 核对 v002 的原件和三项导出，包含井心原像素裁切。两条命令复用核验通过的原件与运行文件。新来源通过仓外素材库登记，新内容使用下一版本。 [项目文件存放约定](project-file-layout.md)
 
 替换教学图时同步复核面板图注、知识来源、局部观察坐标、实际清晰度及资料展示状态。保持素材ID不变，更新路径、真实尺寸、版本与来源说明；更换A/B时一同核对差异区域、蒙版、提示和讲解。完成后按 `AGENTS.md` 执行相应内容、类型、规则、浏览器与生产验证，并检查手机细小目标可读性。公开发布仍须另行确认。
 

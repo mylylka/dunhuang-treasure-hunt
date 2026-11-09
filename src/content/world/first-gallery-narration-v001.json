@@ -1,0 +1,92 @@
+{
+  "mural-wall": {
+    "path": "first-gallery-narration/v001/mural-wall.mp3",
+    "duration": 3.305,
+    "text": "这面墙怎么都脱落了……原来画的是什么呢？"
+  },
+  "mural-table": {
+    "path": "first-gallery-narration/v001/mural-table.mp3",
+    "duration": 1.06,
+    "text": "这边有莲花……"
+  },
+  "mural-bird": {
+    "path": "first-gallery-narration/v001/mural-bird.mp3",
+    "duration": 2.375,
+    "text": "这些东西会不会跟画有关呢？"
+  },
+  "mural-return": {
+    "path": "first-gallery-narration/v001/mural-return.mp3",
+    "duration": 1.405,
+    "text": "我再去看一眼壁画吧。"
+  },
+  "mural-guess": {
+    "path": "first-gallery-narration/v001/mural-guess.mp3",
+    "duration": 4.51,
+    "text": "嗯，好像真的有关系。中间这个会不会是莲花？"
+  },
+  "mural-missing": {
+    "path": "first-gallery-narration/v001/mural-missing.mp3",
+    "duration": 1.03,
+    "text": "还缺点什么呢……"
+  },
+  "caisson-beauty": {
+    "path": "first-gallery-narration/v001/caisson-beauty.mp3",
+    "duration": 1.45,
+    "text": "哇，好美的藻井！"
+  },
+  "caisson-rabbits": {
+    "path": "first-gallery-narration/v001/caisson-rabbits.mp3",
+    "duration": 3.9,
+    "text": "等等，最上面的小方格里，好像有一些小兔子……"
+  },
+  "caisson-ears": {
+    "path": "first-gallery-narration/v001/caisson-ears.mp3",
+    "duration": 3.09,
+    "text": "原来这两只兔子共用一只耳朵！"
+  },
+  "easel-discover": {
+    "path": "first-gallery-narration/v001/easel-discover.mp3",
+    "duration": 3.155,
+    "text": "咦，这儿还有一幅画？怎么一点颜色都没有啊？"
+  },
+  "easel-pigments": {
+    "path": "first-gallery-narration/v001/easel-pigments.mp3",
+    "duration": 3.255,
+    "text": "旁边还有颜料呢……要不我来试试？"
+  },
+  "easel-hung": {
+    "path": "first-gallery-narration/v001/easel-hung.mp3",
+    "duration": 2.77,
+    "text": "哎？真的挂上去了！效果不错！"
+  },
+  "mural-lotus-note": {
+    "path": "first-gallery-narration/v001/mural-lotus-note.mp3",
+    "duration": 5.53,
+    "text": "莲花常常被画成围绕花心展开的纹样，既像真花，又比真花更整齐。"
+  },
+  "mural-bird-note": {
+    "path": "first-gallery-narration/v001/mural-bird-note.mp3",
+    "duration": 4.39,
+    "text": "飞鸟纹常常会排进边饰里，和其他纹样一起重复出现。"
+  },
+  "mural-grapes-note": {
+    "path": "first-gallery-narration/v001/mural-grapes-note.mp3",
+    "duration": 5.18,
+    "text": "像葡萄藤、卷叶这样的纹样，常常顺着方向连续展开，组成一整条装饰。"
+  },
+  "mural-summary": {
+    "path": "first-gallery-narration/v001/mural-summary.mp3",
+    "duration": 16.94,
+    "text": "敦煌壁画中的许多纹样，都从真实的花草、动物等形象中提炼而来，也有联珠、菱格等几何纹样。古代画师将这些图案加以美化，再通过重复、对称、旋转等方式巧妙组合，形成装饰在壁画和藻井上的精美纹样。"
+  },
+  "caisson-summary": {
+    "path": "first-gallery-narration/v001/caisson-summary.mp3",
+    "duration": 17.255,
+    "text": "恭喜你，发现了莫高窟最具有代表性的三兔共耳！画工巧妙地利用三只兔子的耳朵组成的等边三角形，画出莲花中三兔盘旋追逐的装饰图案，使静止的图案呈现出了动的情趣，构思之巧妙，令人赞叹。"
+  },
+  "easel-color-note": {
+    "path": "first-gallery-narration/v001/easel-color-note.mp3",
+    "duration": 19.349,
+    "text": "敦煌纹样的色彩丰富而鲜明，古代画师常用石青、石绿、朱砂、赭石等颜料，让青绿、朱红与土黄相互映衬，形成独特的敦煌色彩。再通过冷暖对比、深浅变化和层层设色，让莲花、飞鸟、卷草等纹样更加生动，也让整幅画面充满节奏与层次。"
+  }
+}

@@ -1,0 +1,2249 @@
+[
+  {
+    "original": ".gitignore",
+    "kept": "docs/history/early-2d/records/screen-layout/.gitignore",
+    "sha256": "4d3e1fe6bae9a3adc2de534ab78d2500230e7829ec2787cfb8083a9f326711c0",
+    "bytes": 51,
+    "kind": "history-record"
+  },
+  {
+    "original": "AGENTS.md",
+    "kept": "docs/history/early-2d/records/portable-2026-10-29/AGENTS.snapshot.md",
+    "sha256": "d16960fe3123741938acaca440518c2aa5d1c866e3d05090e08e0517062548ff",
+    "bytes": 15921,
+    "kind": "history-record"
+  },
+  {
+    "original": "README.md",
+    "kept": "docs/history/early-2d/records/portable-2026-10-29/README.md",
+    "sha256": "f8dd2f6580480da052b04d494eb70cd75d5db45773f7fac4dc01a6d2cf16fca0",
+    "bytes": 7261,
+    "kind": "history-record"
+  },
+  {
+    "original": "art-source/README.md",
+    "kept": "docs/history/early-2d/records/new-levels-and-coloring-v1/art-source/README.md",
+    "sha256": "8a8908873297fe295099dae3c845086cc1e917bcf4e0a4bb0fefd458623ad3bf",
+    "bytes": 7008,
+    "kind": "history-record"
+  },
+  {
+    "original": "art-source/delivery-v001.json",
+    "kept": "docs/history/early-2d/records/ui-cleanup/art-source/delivery-v001.json",
+    "sha256": "50be9a505805f19565de761f69c499dfc2822452f860dc9bb0d36e176f224c5a",
+    "bytes": 5280,
+    "kind": "history-record"
+  },
+  {
+    "original": "art-source/levels/coloring-grape-lotus/v001/processing.json",
+    "kept": "docs/history/early-2d/records/puzzle-and-inline-reference-v1/art-source/levels/coloring-grape-lotus/v001/processing.json",
+    "sha256": "b983757ea8182c6223b1ab19016fbc044fc5092152d23d3d6a6520bf314fbd05",
+    "bytes": 129423,
+    "kind": "history-record"
+  },
+  {
+    "original": "art-source/levels/coloring-grape-lotus/v001/source-notes.json",
+    "kept": "docs/history/early-2d/records/puzzle-and-inline-reference-v1/art-source/levels/coloring-grape-lotus/v001/source-notes.json",
+    "sha256": "e87b2c2626d5e24432560c55b921ddea8dd23076a026ff236c1907de61181d86",
+    "bytes": 2017,
+    "kind": "history-record"
+  },
+  {
+    "original": "art-source/levels/coloring-grape-lotus/v001/葡萄莲花纹线条稿.PNG",
+    "kept": "art-source/levels/coloring-grape-lotus/v001/葡萄莲花纹线条稿.PNG",
+    "sha256": "3980bb9444e2312dc205d86a68af800aa1a89fb2a665014c4896b890fd413b20",
+    "bytes": 2629915,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/levels/coloring-grape-lotus/v001/葡萄莲花纹藻井颜色参考.png",
+    "kept": "art-source/levels/coloring-grape-lotus/v001/葡萄莲花纹藻井颜色参考.png",
+    "sha256": "32044f25ca972caa60b8e8415c92f652c94eecf308341c8f78affea4d3d50957",
+    "bytes": 3869304,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/levels/coloring-grape-lotus/v002/ai-repair-full-output.png",
+    "kept": "art-source/levels/coloring-grape-lotus/v002/ai-repair-full-output.png",
+    "sha256": "6d6da5c9e7a607ec7763e9bfab02b4f30de0f00269114d2f912a4a7ba4dea846",
+    "bytes": 3204313,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/levels/coloring-grape-lotus/v002/processing.json",
+    "kept": "docs/history/early-2d/records/puzzle-and-inline-reference-v1/art-source/levels/coloring-grape-lotus/v002/processing.json",
+    "sha256": "033a27e48d0d43652748a863b5d944ff5d542b67c02ae3c1534322c496eff710",
+    "bytes": 131417,
+    "kind": "history-record"
+  },
+  {
+    "original": "art-source/levels/coloring-grape-lotus/v002/repair-scope-mask.png",
+    "kept": "art-source/levels/coloring-grape-lotus/v002/repair-scope-mask.png",
+    "sha256": "66d559fd582f226cd05d8dfcb4b0d594a06d63607387271a43be89ae83ef60f2",
+    "bytes": 4073,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/levels/coloring-grape-lotus/v002/reviewed-local-composite.png",
+    "kept": "art-source/levels/coloring-grape-lotus/v002/reviewed-local-composite.png",
+    "sha256": "615c266c1a27091919c44c9b7e1d211b522f2c70910a3dd67cc65adf1a68d640",
+    "bytes": 2379895,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/levels/coloring-grape-lotus/v002/source-notes.json",
+    "kept": "docs/history/early-2d/records/puzzle-and-inline-reference-v1/art-source/levels/coloring-grape-lotus/v002/source-notes.json",
+    "sha256": "6d88642db5ebf1f0a0dfd77ac7e627faae870cf8c318b180fc33c388b2636156",
+    "bytes": 5638,
+    "kind": "history-record"
+  },
+  {
+    "original": "art-source/levels/coloring-grape-lotus/v002/technical-composite-recipe.py",
+    "kept": "art-source/levels/coloring-grape-lotus/v002/technical-composite-recipe.py",
+    "sha256": "52b88acef3c2d01eced503d05d178df8e26afdf11b18bd3d2ecbd0cfb5732546",
+    "bytes": 4219,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/levels/coloring-grape-lotus/v003/reference-update.json",
+    "kept": "docs/history/early-2d/records/outline-and-guide-label-v1/art-source/levels/coloring-grape-lotus/v003/reference-update.json",
+    "sha256": "b2b2d923ab4ba80cf22f6050621f81efa0ff284856c9bbd5a31ca729e1ff7d85",
+    "bytes": 1285,
+    "kind": "history-record"
+  },
+  {
+    "original": "art-source/levels/coloring-grape-lotus/v003/葡萄莲花纹藻井颜色参考.png",
+    "kept": "art-source/levels/coloring-grape-lotus/v003/葡萄莲花纹藻井颜色参考.png",
+    "sha256": "914953377fecef81f0851dfa630885331152d02f995d910f6eb90218d9230266",
+    "bytes": 3164483,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/levels/coloring-grape-pomegranate/v001/processing.json",
+    "kept": "docs/history/early-2d/records/puzzle-and-inline-reference-v1/art-source/levels/coloring-grape-pomegranate/v001/processing.json",
+    "sha256": "cea7b0ce8bcaf011d64a1fab0042885a432ff2f9fad6e26911acda7df8931fd4",
+    "bytes": 157990,
+    "kind": "history-record"
+  },
+  {
+    "original": "art-source/levels/coloring-grape-pomegranate/v001/source-notes.json",
+    "kept": "docs/history/early-2d/records/puzzle-and-inline-reference-v1/art-source/levels/coloring-grape-pomegranate/v001/source-notes.json",
+    "sha256": "ffa9a793f2b080b51a8ed389908ffac5f91c82839096586be7a08ece4e328c78",
+    "bytes": 2053,
+    "kind": "history-record"
+  },
+  {
+    "original": "art-source/levels/coloring-grape-pomegranate/v001/葡萄石榴纹线条稿.PNG",
+    "kept": "art-source/levels/coloring-grape-pomegranate/v001/葡萄石榴纹线条稿.PNG",
+    "sha256": "ea467a9244acc23e52c967a2c002bbb46eeb5081ff3a99aba11815302c1d5ae5",
+    "bytes": 2607862,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/levels/coloring-grape-pomegranate/v001/葡萄石榴纹藻井颜色参考.png",
+    "kept": "art-source/levels/coloring-grape-pomegranate/v001/葡萄石榴纹藻井颜色参考.png",
+    "sha256": "cf140f8049d6b359e850e556286013e84dda0865a7d37aa3ddd1c1479175cfed",
+    "bytes": 4024961,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/levels/coloring-grape-pomegranate/v003/reference-update.json",
+    "kept": "docs/history/early-2d/records/outline-and-guide-label-v1/art-source/levels/coloring-grape-pomegranate/v003/reference-update.json",
+    "sha256": "91c57aed5e2d3642d7b98120d4eb2d5f9026c35e39b7f0cbd2ee7b8bb117979c",
+    "bytes": 1303,
+    "kind": "history-record"
+  },
+  {
+    "original": "art-source/levels/coloring-grape-pomegranate/v003/葡萄石榴纹藻井颜色参考.png",
+    "kept": "art-source/levels/coloring-grape-pomegranate/v003/葡萄石榴纹藻井颜色参考.png",
+    "sha256": "436cfd3d83158500653ceeacd9752069195b2b1048184b42f04a19ef10cb30a6",
+    "bytes": 3223430,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/levels/coloring-lotus-camellia/v001/processing.json",
+    "kept": "docs/history/early-2d/records/puzzle-and-inline-reference-v1/art-source/levels/coloring-lotus-camellia/v001/processing.json",
+    "sha256": "c90baa847f4a64eedb482341aea25dbfef157697ab9ac0d73db4d93ce8aa525f",
+    "bytes": 132041,
+    "kind": "history-record"
+  },
+  {
+    "original": "art-source/levels/coloring-lotus-camellia/v001/source-notes.json",
+    "kept": "docs/history/early-2d/records/puzzle-and-inline-reference-v1/art-source/levels/coloring-lotus-camellia/v001/source-notes.json",
+    "sha256": "d0194d5fd18aadef063247a9de8c81c5299a558239f38bf1c1317bd276081395",
+    "bytes": 2011,
+    "kind": "history-record"
+  },
+  {
+    "original": "art-source/levels/coloring-lotus-camellia/v001/莲花茶花纹线条稿.PNG",
+    "kept": "art-source/levels/coloring-lotus-camellia/v001/莲花茶花纹线条稿.PNG",
+    "sha256": "c09834f2b304e589e2782c9d6670a777298f2e7af274f997f55f4c990a41a54d",
+    "bytes": 2247355,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/levels/coloring-lotus-camellia/v001/莲花茶花纹藻井.png",
+    "kept": "art-source/levels/coloring-lotus-camellia/v001/莲花茶花纹藻井.png",
+    "sha256": "b9bea913628fe7ea474dc142b0de808b96f94f98905d5511ba105e4417437197",
+    "bytes": 3744455,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/levels/coloring-three-rabbits/v001/processing.json",
+    "kept": "docs/history/early-2d/records/puzzle-and-inline-reference-v1/art-source/levels/coloring-three-rabbits/v001/processing.json",
+    "sha256": "d9c2a215f16f6902c626bd32018f6d52e80ba9b6fdfe6363a09d27ca4e5214f8",
+    "bytes": 89151,
+    "kind": "history-record"
+  },
+  {
+    "original": "art-source/levels/coloring-three-rabbits/v001/source-notes.json",
+    "kept": "docs/history/early-2d/records/puzzle-and-inline-reference-v1/art-source/levels/coloring-three-rabbits/v001/source-notes.json",
+    "sha256": "1e656e7b906fc578a9127fdd3888d4d42c7a4fdcaff0226c721a668eaa04fe91",
+    "bytes": 2023,
+    "kind": "history-record"
+  },
+  {
+    "original": "art-source/levels/coloring-three-rabbits/v001/三兔莲花纹线条稿.PNG",
+    "kept": "art-source/levels/coloring-three-rabbits/v001/三兔莲花纹线条稿.PNG",
+    "sha256": "b315e1975f5167c43d40ba82aa9b5a49747b78de8b3cfd6341730b5da24439e9",
+    "bytes": 2461603,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/levels/coloring-three-rabbits/v001/三兔莲花藻井颜色参考.png",
+    "kept": "art-source/levels/coloring-three-rabbits/v001/三兔莲花藻井颜色参考.png",
+    "sha256": "168a612cc21ac85032c8760d6b94d8d14d6fd060e8d1ac5887876c48fd25d109",
+    "bytes": 3803302,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/levels/coloring-three-rabbits/v002/ai-repair-full-output.png",
+    "kept": "art-source/levels/coloring-three-rabbits/v002/ai-repair-full-output.png",
+    "sha256": "fc8627fe79dcf7b090d17c90c04891922e32b00d0fafbc1e4f3b84f95950ab67",
+    "bytes": 2998501,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/levels/coloring-three-rabbits/v002/processing.json",
+    "kept": "docs/history/early-2d/records/puzzle-and-inline-reference-v1/art-source/levels/coloring-three-rabbits/v002/processing.json",
+    "sha256": "3a86a8f535d7a226fc6fb5270f1a599e4e14e467ce683f2323cd515ca6ad0b57",
+    "bytes": 89339,
+    "kind": "history-record"
+  },
+  {
+    "original": "art-source/levels/coloring-three-rabbits/v002/repair-scope-mask.png",
+    "kept": "art-source/levels/coloring-three-rabbits/v002/repair-scope-mask.png",
+    "sha256": "de0a9f9443330cf13c93d87b36280f75f7d43604c253ca99f3cb30a45f46c17b",
+    "bytes": 6520,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/levels/coloring-three-rabbits/v002/reviewed-local-composite.png",
+    "kept": "art-source/levels/coloring-three-rabbits/v002/reviewed-local-composite.png",
+    "sha256": "ba017d700f49cfd17df9ecc3867cf3130295ac948c8031516b9ded28eac55f55",
+    "bytes": 2181813,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/levels/coloring-three-rabbits/v002/source-notes.json",
+    "kept": "docs/history/early-2d/records/puzzle-and-inline-reference-v1/art-source/levels/coloring-three-rabbits/v002/source-notes.json",
+    "sha256": "38f647933105f0e546f596ed98f88ccd08bc4169460a4bd8b0dcb397dbaaba30",
+    "bytes": 3690,
+    "kind": "history-record"
+  },
+  {
+    "original": "art-source/levels/coloring-three-rabbits/v003/reference-update.json",
+    "kept": "docs/history/early-2d/records/outline-and-guide-label-v1/art-source/levels/coloring-three-rabbits/v003/reference-update.json",
+    "sha256": "4453ccda5d10a52b82afafe3d8ff48f7fea5e0982c82ed8fb4e0c3696096bdfb",
+    "bytes": 1282,
+    "kind": "history-record"
+  },
+  {
+    "original": "art-source/levels/coloring-three-rabbits/v003/三兔莲花藻井颜色参考.png",
+    "kept": "art-source/levels/coloring-three-rabbits/v003/三兔莲花藻井颜色参考.png",
+    "sha256": "3a70bcf099c094509dcc6437a18fba4783b7b43b9d73e345db8c076613ed8f36",
+    "bytes": 3396001,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/levels/patterns-intro/v001/patterns-intro-a-source.png",
+    "kept": "art-source/levels/patterns-intro/v001/patterns-intro-a-source.png",
+    "sha256": "baaf4ff2c9855093d8adc1e61c8c15c1a74ef148ed9ac9dda0b1b8afe5ffc021",
+    "bytes": 3375292,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/levels/patterns-intro/v001/patterns-intro-b-source.png",
+    "kept": "art-source/levels/patterns-intro/v001/patterns-intro-b-source.png",
+    "sha256": "c2c53a4edd6dc60f985357eef0e30016e1d2a40a91b721f401f90ad0fb85f032",
+    "bytes": 2938995,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/levels/patterns-lotus/v001/source-notes.json",
+    "kept": "docs/history/early-2d/records/puzzle-and-inline-reference-v1/art-source/levels/patterns-lotus/v001/source-notes.json",
+    "sha256": "657629de051b9e13c3e544b8f1edd623ecc3ae7c92c2e18b5ffe0c4581b9185f",
+    "bytes": 2672,
+    "kind": "history-record"
+  },
+  {
+    "original": "art-source/levels/patterns-lotus/v001/莲瓣团花A.png",
+    "kept": "art-source/levels/patterns-lotus/v001/莲瓣团花A.png",
+    "sha256": "8d6e7f81f31d5d03cb851d50a3da2ab884159def5fb6b3910cb358d460e54062",
+    "bytes": 3763705,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/levels/patterns-lotus/v001/莲瓣团花B.png",
+    "kept": "art-source/levels/patterns-lotus/v001/莲瓣团花B.png",
+    "sha256": "50dbf6f9305e9e71999d518b7e19632f35959f95d0d88ab8094f2c1c84cb3361",
+    "bytes": 3518407,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/levels/patterns-scrolls/v001/source-notes.json",
+    "kept": "docs/history/early-2d/records/puzzle-and-inline-reference-v1/art-source/levels/patterns-scrolls/v001/source-notes.json",
+    "sha256": "d35792a301ef2ad6ca6707c715655c204cf52bfa0f0b740a11dcb542a69ef634",
+    "bytes": 2776,
+    "kind": "history-record"
+  },
+  {
+    "original": "art-source/levels/patterns-scrolls/v001/忍冬卷草A.png",
+    "kept": "art-source/levels/patterns-scrolls/v001/忍冬卷草A.png",
+    "sha256": "67a0764561c8a0acc4c99b20ee47b11221b0ee3dfc3c95d313b76d266b6752f5",
+    "bytes": 3649675,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/levels/patterns-scrolls/v001/忍冬卷草B.png",
+    "kept": "art-source/levels/patterns-scrolls/v001/忍冬卷草B.png",
+    "sha256": "3517189419174819b93ef84257d35ae2935ad0ec981365d1e4edce3bbb039923",
+    "bytes": 3481927,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/levels/puzzle-lotus-ceiling/v001/source-notes.json",
+    "kept": "docs/history/early-2d/records/reference-refresh-retouch-v2/art-source/levels/puzzle-lotus-ceiling/v001/source-notes.json",
+    "sha256": "ddd651b6e96968c20b6d350b5b7415fa792f0b942f2053a2da1f63dd4ed23219",
+    "bytes": 1990,
+    "kind": "history-record"
+  },
+  {
+    "original": "art-source/levels/puzzle-lotus-ceiling/v001/保持莲花平棋.JPG",
+    "kept": "art-source/levels/puzzle-lotus-ceiling/v001/保持莲花平棋.JPG",
+    "sha256": "5e75c9ff13f58f4732f3a739560d03086ff64e4ef39f05b989975303b299f703",
+    "bytes": 1246830,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/levels/puzzle-lotus-ceiling/v002/retouch-candidate-detail.png",
+    "kept": "art-source/levels/puzzle-lotus-ceiling/v002/retouch-candidate-detail.png",
+    "sha256": "f7dfd04779ed8335cb5352c926e52e009b9acd308ffa0062803b0fe19c80c2cf",
+    "bytes": 2854825,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/levels/puzzle-lotus-ceiling/v002/retouch-candidate.png",
+    "kept": "art-source/levels/puzzle-lotus-ceiling/v002/retouch-candidate.png",
+    "sha256": "b5e33cbb2f18a5b9825d18bd21c65034ed7fab5b1b83968be4ba2572f6afce1a",
+    "bytes": 3677837,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/levels/puzzle-lotus-ceiling/v002/retouch-input-crop.png",
+    "kept": "art-source/levels/puzzle-lotus-ceiling/v002/retouch-input-crop.png",
+    "sha256": "65100ac51fde15cde486814e743cad722e656d1980f25aae64fdc83ed69a4383",
+    "bytes": 225694,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/levels/puzzle-lotus-ceiling/v002/retouch-request.json",
+    "kept": "docs/history/early-2d/records/outline-and-guide-label-v1/art-source/levels/puzzle-lotus-ceiling/v002/retouch-request.json",
+    "sha256": "35b620677d8e83bb11d69782e8cfed73865def1df6a8a13164a40aca8dcf9282",
+    "bytes": 2577,
+    "kind": "history-record"
+  },
+  {
+    "original": "art-source/levels/puzzle-lotus-ceiling/v002/source-notes.json",
+    "kept": "docs/history/early-2d/records/outline-and-guide-label-v1/art-source/levels/puzzle-lotus-ceiling/v002/source-notes.json",
+    "sha256": "f0e3f743302757008635832e7629d5a237090e90eb94b5bc06beae1051d4c93d",
+    "bytes": 3516,
+    "kind": "history-record"
+  },
+  {
+    "original": "art-source/levels/puzzle-three-rabbits/v001/source-notes.json",
+    "kept": "docs/history/early-2d/records/reference-refresh-retouch-v2/art-source/levels/puzzle-three-rabbits/v001/source-notes.json",
+    "sha256": "13d7d15c1855d63de1264aa82d06bb8e30439ae3717167c15d0350dd30379d25",
+    "bytes": 1992,
+    "kind": "history-record"
+  },
+  {
+    "original": "art-source/levels/puzzle-three-rabbits/v001/三兔飞天藻井.JPG",
+    "kept": "art-source/levels/puzzle-three-rabbits/v001/三兔飞天藻井.JPG",
+    "sha256": "44938b4b827e3d007318d424075e1c78dd54d348ee83be7a6869e76e5cae07ee",
+    "bytes": 1335296,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/levels/puzzle-three-rabbits/v002/retouch-candidate-detail.png",
+    "kept": "art-source/levels/puzzle-three-rabbits/v002/retouch-candidate-detail.png",
+    "sha256": "559463897736375f5c837c14cf7b9b3a16a2a18b6dbde6b9e61147d0efe6e5d0",
+    "bytes": 2349718,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/levels/puzzle-three-rabbits/v002/retouch-candidate.png",
+    "kept": "art-source/levels/puzzle-three-rabbits/v002/retouch-candidate.png",
+    "sha256": "f9dda53bdc935ec65d9734cccf9dd07d491abff5b023a23110c38055ea52df76",
+    "bytes": 3802299,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/levels/puzzle-three-rabbits/v002/retouch-input-crop.png",
+    "kept": "art-source/levels/puzzle-three-rabbits/v002/retouch-input-crop.png",
+    "sha256": "d43c9f3227f2e313b1afa9370f58afb7b2add6c37e3e7ae870325a0eb2239ea0",
+    "bytes": 205092,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/levels/puzzle-three-rabbits/v002/retouch-request.json",
+    "kept": "docs/history/early-2d/records/outline-and-guide-label-v1/art-source/levels/puzzle-three-rabbits/v002/retouch-request.json",
+    "sha256": "ed7ffa9cb169f63edcfc7b657d7e0de395abc857a26b09de42bee421618c998f",
+    "bytes": 2101,
+    "kind": "history-record"
+  },
+  {
+    "original": "art-source/levels/puzzle-three-rabbits/v002/source-notes.json",
+    "kept": "docs/history/early-2d/records/outline-and-guide-label-v1/art-source/levels/puzzle-three-rabbits/v002/source-notes.json",
+    "sha256": "6ec8267223b1f0c5c3a045693c4530d80dc19dbb5d9904b879cd8da06886d51b",
+    "bytes": 3040,
+    "kind": "history-record"
+  },
+  {
+    "original": "art-source/levels/puzzle-twin-dragons/v001/source-notes.json",
+    "kept": "docs/history/early-2d/records/reference-refresh-retouch-v2/art-source/levels/puzzle-twin-dragons/v001/source-notes.json",
+    "sha256": "4dd6e4c9ac97ff4a8c34cead089d8ed851772e1a9eb34b893096b3cc9cdaa706",
+    "bytes": 1973,
+    "kind": "history-record"
+  },
+  {
+    "original": "art-source/levels/puzzle-twin-dragons/v001/双龙藻井.JPG",
+    "kept": "art-source/levels/puzzle-twin-dragons/v001/双龙藻井.JPG",
+    "sha256": "0923df289490c1a90a9ff2494db4b4e1801bccffd5b58f3df0d0d4ce45ced3b8",
+    "bytes": 694715,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/levels/puzzle-twin-dragons/v002/retouch-candidate-detail.png",
+    "kept": "art-source/levels/puzzle-twin-dragons/v002/retouch-candidate-detail.png",
+    "sha256": "ed2586c3677218f35eee4e33012e6fe37bc7f6b16308203a5e9b8e3edd088642",
+    "bytes": 1854708,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/levels/puzzle-twin-dragons/v002/retouch-candidate.png",
+    "kept": "art-source/levels/puzzle-twin-dragons/v002/retouch-candidate.png",
+    "sha256": "ee0bc906e0b6c1d2bb9d7a263e2c766b90b9c1c5e5e33e8d63ba72bb5f6461f4",
+    "bytes": 2653141,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/levels/puzzle-twin-dragons/v002/retouch-input-crop.png",
+    "kept": "art-source/levels/puzzle-twin-dragons/v002/retouch-input-crop.png",
+    "sha256": "f0b120f9230e226a65f3d374e6e23c2258c36c9e299b9e4e2f25185c5e85fe8b",
+    "bytes": 134285,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/levels/puzzle-twin-dragons/v002/retouch-request.json",
+    "kept": "docs/history/early-2d/records/outline-and-guide-label-v1/art-source/levels/puzzle-twin-dragons/v002/retouch-request.json",
+    "sha256": "be439bddcf3b4506c44a49cfb4504f774bbf826ce35ee12442f1dca729f81408",
+    "bytes": 2099,
+    "kind": "history-record"
+  },
+  {
+    "original": "art-source/levels/puzzle-twin-dragons/v002/source-notes.json",
+    "kept": "docs/history/early-2d/records/outline-and-guide-label-v1/art-source/levels/puzzle-twin-dragons/v002/source-notes.json",
+    "sha256": "bfe4d8b1232e98d82f731197ad7514c304030adcc701f8678d585997a488d4ed",
+    "bytes": 3035,
+    "kind": "history-record"
+  },
+  {
+    "original": "art-source/references/patterns/v001/0254-0001-0013-0031-preview.jpg",
+    "kept": "art-source/references/patterns/v001/0254-0001-0013-0031-preview.jpg",
+    "sha256": "ddacc4a6ad4d7ffa70910e69438d9388babe1906e20b88483b03ea135d981de6",
+    "bytes": 72993,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/references/patterns/v001/0257-0001-0013-0017-preview.jpg",
+    "kept": "art-source/references/patterns/v001/0257-0001-0013-0017-preview.jpg",
+    "sha256": "16cad63bc6e230d6969499bf26bdf4cb6f6174063bf8d9a153947ab0cc666126",
+    "bytes": 60682,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/references/patterns/v001/0329-0001-0009-preview.jpg",
+    "kept": "art-source/references/patterns/v001/0329-0001-0009-preview.jpg",
+    "sha256": "8342b1392352138f96bde3da38a762e1dcf8efbaa74c8b48510a90528f74977c",
+    "bytes": 87811,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/references/patterns/v001/1129308686_16744413016341n.png",
+    "kept": "art-source/references/patterns/v001/1129308686_16744413016341n.png",
+    "sha256": "c269eba34badf2b72298441d50f568153416100b15380d16c57904462b3baa83",
+    "bytes": 2790272,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/references/patterns/v001/4EB1B7CEE2F2D679E4D60DD8FD9_9ADEBA06_1B8B64.png",
+    "kept": "art-source/references/patterns/v001/4EB1B7CEE2F2D679E4D60DD8FD9_9ADEBA06_1B8B64.png",
+    "sha256": "921f0e6cb0dddbd1193f5e3480f0903efdacdd93045e725a0b8e5a1d28dcdb82",
+    "bytes": 1805156,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/references/patterns/v001/71DE933BB20B8C928521953E115_8B7361C4_930A7.png",
+    "kept": "art-source/references/patterns/v001/71DE933BB20B8C928521953E115_8B7361C4_930A7.png",
+    "sha256": "acb3c01a219b845d3b0ad9584b4bd145d2db3158b0c87c5f5898cc3e908ee998",
+    "bytes": 602279,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/references/patterns/v001/BC9551B953CCEDCA3CD64D3FA9F_9170A011_D3075.png",
+    "kept": "art-source/references/patterns/v001/BC9551B953CCEDCA3CD64D3FA9F_9170A011_D3075.png",
+    "sha256": "5f06ad5cb735ffc493c9f52bbfaef8709815edb13076d12894dd13210279cb34",
+    "bytes": 864373,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/references/patterns/v001/BE397C918FCC27E02ED294CD7A8_66ECC9EC_1C8BF5.png",
+    "kept": "art-source/references/patterns/v001/BE397C918FCC27E02ED294CD7A8_66ECC9EC_1C8BF5.png",
+    "sha256": "57027d51985515936ed2575a9174c3076cbedaa0882c5c90a5fdd908110340ec",
+    "bytes": 1870837,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/references/patterns/v001/E4ECDF33EEA0286B62901B47C0C_ED5C5B1A_51D37.png",
+    "kept": "art-source/references/patterns/v001/E4ECDF33EEA0286B62901B47C0C_ED5C5B1A_51D37.png",
+    "sha256": "75dc5485d379f7c02d816dea9b8ae97ded71764ae4902adba1dba5763b31526a",
+    "bytes": 335159,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/references/patterns/v001/source-notes.json",
+    "kept": "docs/history/early-2d/records/teaching-panel-and-roadmap/art-source/references/patterns/v001/source-notes.json",
+    "sha256": "4ba02dfd94c4bf1eb850c4aa5c6fecc4ee36b71208002980ae06a993835b2465",
+    "bytes": 14043,
+    "kind": "history-record"
+  },
+  {
+    "original": "art-source/references/patterns/v001/三兔共耳.jpg",
+    "kept": "art-source/references/patterns/v001/三兔共耳.jpg",
+    "sha256": "9d8219860e34e833c57625214434ba3fa0c884839ea5166866cb808dfeb1f8e8",
+    "bytes": 137202,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/references/patterns/v001/忍冬纹.jpg",
+    "kept": "art-source/references/patterns/v001/忍冬纹.jpg",
+    "sha256": "340f39cc014b4c2d59601740ae74e107e1edd25c9e38af73822fe3ff5b6879fd",
+    "bytes": 163272,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/references/patterns/v001/莫高窟第254号窟平顶.png",
+    "kept": "art-source/references/patterns/v001/莫高窟第254号窟平顶.png",
+    "sha256": "0b8fe020988a111b1e9a5956c33e1f9c56713cfb6f5b98c2f560054600337623",
+    "bytes": 2168653,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/references/patterns/v002/1664329985689334.png",
+    "kept": "art-source/references/patterns/v002/1664329985689334.png",
+    "sha256": "bc98b4f4d163015e6c62015907103492fbdcd60ffef48f347bb11ae803b03f84",
+    "bytes": 2575186,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/references/patterns/v002/2832894e51f9427bb5ab288fe0028db4.png",
+    "kept": "art-source/references/patterns/v002/2832894e51f9427bb5ab288fe0028db4.png",
+    "sha256": "cad181f029ac74ebed3dd6f1092bbf8533e0b16b24f65fb21a828bb3d7df3fb7",
+    "bytes": 596598,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/references/patterns/v002/source-notes.json",
+    "kept": "docs/history/early-2d/records/teaching-safe-area-v3/art-source/references/patterns/v002/source-notes.json",
+    "sha256": "ae91361f7a74c55a43dc8e4c0b5664157ae5b28955951ca8fab76b0fbcf15380",
+    "bytes": 6276,
+    "kind": "history-record"
+  },
+  {
+    "original": "art-source/shared/bg-landscape/v001/bg-landscape-source.png",
+    "kept": "art-source/shared/bg-landscape/v001/bg-landscape-source.png",
+    "sha256": "f32278daa7028ac824979ef69a5f2ee2220b7450157699b6f452850861695da1",
+    "bytes": 2989359,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/shared/bg-portrait/v001/bg-portrait-source.png",
+    "kept": "art-source/shared/bg-portrait/v001/bg-portrait-source.png",
+    "sha256": "af05050c803378f770ef2596b96b18e3d28beb532f6693eefcd7b5fdd7c90514",
+    "bytes": 2949963,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/shared/button-primary/v001/button-primary-source.png",
+    "kept": "art-source/shared/button-primary/v001/button-primary-source.png",
+    "sha256": "a33545f64bbef720cdff73eb30694b4d2062fd70fa35cfe102e840f37a2d01cf",
+    "bytes": 1715696,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/shared/button-secondary/v001/button-secondary-source.png",
+    "kept": "art-source/shared/button-secondary/v001/button-secondary-source.png",
+    "sha256": "2ccd28134bcd95cb7ea179517a488231b69ab1382eac4911dc1f1ead094aa3f4",
+    "bytes": 1512821,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/shared/fonts/v001/lxgw-wenkai-source.ttf",
+    "kept": "art-source/shared/fonts/v001/lxgw-wenkai-source.ttf",
+    "sha256": "2d73eea94ad808999d90c0000c239a84a33b09d4bc6ab6c5b8bbf1eda8a7fc8b",
+    "bytes": 25928940,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/shared/fonts/v001/ofl.txt",
+    "kept": "docs/history/early-2d/records/new-levels-and-coloring-v1/art-source/shared/fonts/v001/ofl.txt",
+    "sha256": "1a25e35da1031c6c3436fde545bb9cb5aca954e9873afe510c834b8b79bd21a0",
+    "bytes": 5171,
+    "kind": "history-record"
+  },
+  {
+    "original": "art-source/shared/fonts/v001/source-notes.json",
+    "kept": "docs/history/early-2d/records/new-levels-and-coloring-v1/art-source/shared/fonts/v001/source-notes.json",
+    "sha256": "c54600a37e8436b99ad26426e30ba2fbecdb71606c56ee08d03dc4d41fe076bf",
+    "bytes": 830,
+    "kind": "history-record"
+  },
+  {
+    "original": "art-source/shared/icon-back/v001/icon-back-source.png",
+    "kept": "art-source/shared/icon-back/v001/icon-back-source.png",
+    "sha256": "4551b53537e5cec2147d6dfe157f8ac6203de8dea81d09c76951f123b0e1e17d",
+    "bytes": 2652,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/shared/icon-completed/v001/icon-completed-source.png",
+    "kept": "art-source/shared/icon-completed/v001/icon-completed-source.png",
+    "sha256": "06148fde9ac5fd656f5e15915b5becad5573156dc6b5b0718d4e107b56aca385",
+    "bytes": 7659,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/shared/icon-hint/v001/icon-hint-source.png",
+    "kept": "art-source/shared/icon-hint/v001/icon-hint-source.png",
+    "sha256": "e34c273f6230081a037823da654cf25ce6eb718fd2b8c5045bf8f8c28316b5be",
+    "bytes": 10985,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/shared/icon-locked/v001/icon-locked-source.png",
+    "kept": "art-source/shared/icon-locked/v001/icon-locked-source.png",
+    "sha256": "a40aa367212c2ace776a022f23f4e23f4fff39df70a43dc20c34d9b6559440f3",
+    "bytes": 8764,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/shared/icon-restart/v001/icon-restart-source.png",
+    "kept": "art-source/shared/icon-restart/v001/icon-restart-source.png",
+    "sha256": "403935af53b65a78a9625c9378131da73fe38dcb5151bbb7ee9755687e99ee02",
+    "bytes": 13262,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/shared/panel/v001/panel-source.png",
+    "kept": "art-source/shared/panel/v001/panel-source.png",
+    "sha256": "a8b025277894ad0c95b7e864f20a599480a69990d12be4a4d175ffae4975218c",
+    "bytes": 2366563,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/themes/music/v001/cover-music-source.png",
+    "kept": "art-source/themes/music/v001/cover-music-source.png",
+    "sha256": "6519fc6dc7bd7595c12714d734f7c0dc65d306bdb138b20bbf93e85313c0797e",
+    "bytes": 3762141,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/themes/patterns/v001/cover-patterns-source.png",
+    "kept": "art-source/themes/patterns/v001/cover-patterns-source.png",
+    "sha256": "8ea3826bb3580d68651a316617db15155e43d1c534af1fe5237d1382e5628d97",
+    "bytes": 3860827,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "art-source/themes/stories/v001/cover-stories-source.png",
+    "kept": "art-source/themes/stories/v001/cover-stories-source.png",
+    "sha256": "a43953007b62988cc684c82f9c85cadb19d9b9d2287defb7eb50f1ccf9245b97",
+    "bytes": 3634930,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "docs/architecture.md",
+    "kept": "docs/history/early-2d/records/portable-2026-10-29/docs/architecture.md",
+    "sha256": "be2c2537abd28227197cf7ffda97424ee43b8869d5eec0998eee14142b33ae8a",
+    "bytes": 16287,
+    "kind": "history-record"
+  },
+  {
+    "original": "docs/art-assets.md",
+    "kept": "docs/history/early-2d/records/portable-2026-10-29/docs/art-assets.md",
+    "sha256": "930b014ce261dc6f5790b14ff6b84367b16d7fa370449902d96322c2432dbbb3",
+    "bytes": 24330,
+    "kind": "history-record"
+  },
+  {
+    "original": "index.html",
+    "kept": "docs/history/early-2d/records/new-levels-and-coloring-v1/index.html",
+    "sha256": "4d2fd5efcb8481286b0204f32f768d2ade7fd28cecf2cbe69b980cf34a575f84",
+    "bytes": 860,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/patterns-lotus-找不同预览.png",
+    "kept": "work/build-history/records/early-2d/reference-refresh-retouch-v2/outputs/patterns-lotus-找不同预览.png",
+    "sha256": "8813496f25bbf438b69eefd2a4c63a6b5378e271cbba0a9db2db7f52b946cd8a",
+    "bytes": 1726895,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/patterns-scrolls-找不同预览.png",
+    "kept": "work/build-history/records/early-2d/reference-refresh-retouch-v2/outputs/patterns-scrolls-找不同预览.png",
+    "sha256": "f95e817a23917deb91bb50f1269c4b96f34cebe6d9dcb0df8a192bcc731e018e",
+    "bytes": 1666687,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/puzzle-lotus-ceiling-拼图预览.png",
+    "kept": "work/build-history/records/early-2d/portable-2026-10-29/outputs/puzzle-lotus-ceiling-拼图预览.png",
+    "sha256": "093961afb3d99a9128b0e24ff66b8dbd8c7e7adcdfe102ce065711877f7a97ca",
+    "bytes": 2189735,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/puzzle-three-rabbits-拼图预览.png",
+    "kept": "work/build-history/records/early-2d/portable-2026-10-29/outputs/puzzle-three-rabbits-拼图预览.png",
+    "sha256": "bd5fcb2fdd6006f27f14f4b2a4b72e8722f9ddd510131abb4ddea6eb657888cf",
+    "bytes": 1761629,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/puzzle-twin-dragons-拼图预览.png",
+    "kept": "work/build-history/records/early-2d/portable-2026-10-29/outputs/puzzle-twin-dragons-拼图预览.png",
+    "sha256": "d1013018ded388836b1dda1d4b668c8cee3d76343b0e36a012cde4f504dc3be0",
+    "bytes": 1524461,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/三兔教学预览.png",
+    "kept": "work/build-history/records/early-2d/scroll-tray-and-card-entry-v1/outputs/三兔教学预览.png",
+    "sha256": "59c745fcf368a4d2087f757605f1157788a0fcf3b0217adc476b4e761a10ab60",
+    "bytes": 1301768,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/使用说明.md",
+    "kept": "docs/history/early-2d/records/portable-2026-10-29/outputs/使用说明.md",
+    "sha256": "7c040146447909a3ce0f789c9bba6aff7995e278f595f8b325f7c03c3cde71b1",
+    "bytes": 12065,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/关卡选择预览.png",
+    "kept": "work/build-history/records/early-2d/puzzle-and-inline-reference-v1/outputs/关卡选择预览.png",
+    "sha256": "1279c188baf8c3fcf34ffb79a6df96a54d0162bac256f9994e556e32347ed4a9",
+    "bytes": 1814171,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/卷草放大预览.png",
+    "kept": "work/build-history/records/early-2d/new-levels-and-coloring-v1/outputs/卷草放大预览.png",
+    "sha256": "c5fdbd1ee1a935ae47e4134f1eb7207a7de490c91a7b077c18213970e14a2ba1",
+    "bytes": 1588467,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/双龙碎片滚动预览.png",
+    "kept": "work/build-history/records/early-2d/portable-2026-10-29/outputs/双龙碎片滚动预览.png",
+    "sha256": "48ffe075f45e31bf29e4ec98b7cdcbff58d0e2dc607b6e4e9e73451f9897185a",
+    "bytes": 1526361,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/启动敦煌寻宝记.command",
+    "kept": "docs/history/early-2d/records/screen-layout/outputs/启动敦煌寻宝记.command",
+    "sha256": "c7886c50b1636f8c185364c2927d54f4625a1f1b9ef778a512e6eaafc923eba3",
+    "bytes": 393,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/填色作品结果预览.png",
+    "kept": "work/build-history/records/early-2d/puzzle-and-inline-reference-v1/outputs/填色作品结果预览.png",
+    "sha256": "34255f4b0dad516e49403d7cd6d7def18d64c3d9a8e7798bddd24f92909d2961",
+    "bytes": 1824813,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/填色关卡选择预览.png",
+    "kept": "work/build-history/records/early-2d/outline-and-guide-label-v1/outputs/填色关卡选择预览.png",
+    "sha256": "ff321098e499334d13ccadf169eda61028ba63619f71cbd3e65bf89cf6f134f3",
+    "bytes": 1803953,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/填色第1关预览.png",
+    "kept": "work/build-history/records/early-2d/outline-and-guide-label-v1/outputs/填色第1关预览.png",
+    "sha256": "77441e56c1c8b2da5d7f9f04ed713fd77abe0ede2d7c84a5276fe37569297761",
+    "bytes": 1951734,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/填色第2关预览.png",
+    "kept": "work/build-history/records/early-2d/outline-and-guide-label-v1/outputs/填色第2关预览.png",
+    "sha256": "56312a6e26c893778de4149d449e0c26fc4b1ca8ee96b28729082b06a8f158da",
+    "bytes": 1933954,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/填色第3关预览.png",
+    "kept": "work/build-history/records/early-2d/portable-2026-10-29/outputs/填色第3关预览.png",
+    "sha256": "4a14944e8b1dfbcea451b3e7fb97d1add53a21f39b0d627e81ff441a17e11adc",
+    "bytes": 1947498,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/填色第4关预览.png",
+    "kept": "work/build-history/records/early-2d/outline-and-guide-label-v1/outputs/填色第4关预览.png",
+    "sha256": "14c892567e9a6a563b632a270cd949677bbebf0400fa97d9a2b4eb4761d8072f",
+    "bytes": 1904215,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/平棋教学预览.png",
+    "kept": "work/build-history/records/early-2d/scroll-tray-and-card-entry-v1/outputs/平棋教学预览.png",
+    "sha256": "7aa2781bbb694e918a70ceb627ff17577dd40afd7eb7563f513623d8e55656c8",
+    "bytes": 1310540,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/开发验收记录.md",
+    "kept": "docs/history/early-2d/records/portable-2026-10-29/outputs/开发验收记录.md",
+    "sha256": "14fa59cc2dde917d87c652e65e4796d04c0a4a781e14914c99448924b3faaf39",
+    "bytes": 8593,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/手机-puzzle-lotus-ceiling-拼图预览.png",
+    "kept": "work/build-history/records/early-2d/outline-and-guide-label-v1/outputs/手机-puzzle-lotus-ceiling-拼图预览.png",
+    "sha256": "8251397423446dccd39263832f5646f9440b27542816a27a170c04cf3ba87fef",
+    "bytes": 440719,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/手机-puzzle-three-rabbits-拼图预览.png",
+    "kept": "work/build-history/records/early-2d/portable-2026-10-29/outputs/手机-puzzle-three-rabbits-拼图预览.png",
+    "sha256": "5b32dcde1e84863e8adb9c3fb302a6c894e29bdb0917d6bbcc63ed2647e01085",
+    "bytes": 338943,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/手机-puzzle-twin-dragons-拼图预览.png",
+    "kept": "work/build-history/records/early-2d/portable-2026-10-29/outputs/手机-puzzle-twin-dragons-拼图预览.png",
+    "sha256": "8853ff380f19f68f0fd9717dc97e181aa84e278ee3d6f55b1a3480bee8099f5d",
+    "bytes": 315910,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/手机-双龙碎片滚动预览.png",
+    "kept": "work/build-history/records/early-2d/portable-2026-10-29/outputs/手机-双龙碎片滚动预览.png",
+    "sha256": "c71c6e2484eb90b80b007e64a9e571cece22ab9c78893cc49eb85aab3098c4f4",
+    "bytes": 316379,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/手机-莲花平棋结果预览.png",
+    "kept": "work/build-history/records/early-2d/outline-and-guide-label-v1/outputs/手机-莲花平棋结果预览.png",
+    "sha256": "703eee9955fe12e04bdc989ad46db1c6ff00908eca419efd8f149472bfdef443",
+    "bytes": 331424,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/手机填色作品结果预览.png",
+    "kept": "work/build-history/records/early-2d/puzzle-and-inline-reference-v1/outputs/手机填色作品结果预览.png",
+    "sha256": "e8251c3156c4ff0a291747d20de8875ea689c51bf74f875046632b14902d3992",
+    "bytes": 321843,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/手机填色预览.png",
+    "kept": "work/build-history/records/early-2d/outline-and-guide-label-v1/outputs/手机填色预览.png",
+    "sha256": "1a51e9e31d43012c3522c155baf8814a0705642d0bae7d31ee034fd4e30aea7f",
+    "bytes": 365798,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/手机文化教学预览.png",
+    "kept": "work/build-history/records/early-2d/new-levels-and-coloring-v1/outputs/手机文化教学预览.png",
+    "sha256": "f52457019e0ca87b32eb5092b185d02fa89aa75984ccde01b8677c6597273c00",
+    "bytes": 199116,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/手机横屏-puzzle-lotus-ceiling-拼图预览.png",
+    "kept": "work/build-history/records/early-2d/outline-and-guide-label-v1/outputs/手机横屏-puzzle-lotus-ceiling-拼图预览.png",
+    "sha256": "08dabda9536f9c0d5fad7a7807a7a492b6d2344046142c9469dc77ee89d2e971",
+    "bytes": 503764,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/手机横屏-puzzle-three-rabbits-拼图预览.png",
+    "kept": "work/build-history/records/early-2d/portable-2026-10-29/outputs/手机横屏-puzzle-three-rabbits-拼图预览.png",
+    "sha256": "3010aaa194a61f3178ad2fce8d091ded74260b800e6630913ad887a58c4f8471",
+    "bytes": 470517,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/手机横屏-puzzle-twin-dragons-拼图预览.png",
+    "kept": "work/build-history/records/early-2d/portable-2026-10-29/outputs/手机横屏-puzzle-twin-dragons-拼图预览.png",
+    "sha256": "087dcc798e1928536aa4fa7209b90421c643530ce2c0d7a93f9709fc09ab51c5",
+    "bytes": 432748,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/手机横屏-莲花平棋结果预览.png",
+    "kept": "work/build-history/records/early-2d/outline-and-guide-label-v1/outputs/手机横屏-莲花平棋结果预览.png",
+    "sha256": "acd6fa8b2d43b759dff32b9a904f98493e35caf6771a4c372972dfe6ef509f70",
+    "bytes": 469717,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/手机横屏填色作品结果预览.png",
+    "kept": "work/build-history/records/early-2d/puzzle-and-inline-reference-v1/outputs/手机横屏填色作品结果预览.png",
+    "sha256": "e77e37852dffa9e46acf5ceb5df4eefc79864dc9124830cb557a7be0114db3c1",
+    "bytes": 465953,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/手机横屏填色预览.png",
+    "kept": "work/build-history/records/early-2d/outline-and-guide-label-v1/outputs/手机横屏填色预览.png",
+    "sha256": "93433ed1b8ca20da037a7034db7cc84bb68bdd9b60515a4207b70d5fee483bfa",
+    "bytes": 493447,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/手机横屏文化教学预览.png",
+    "kept": "work/build-history/records/early-2d/scroll-tray-and-card-entry-v1/outputs/手机横屏文化教学预览.png",
+    "sha256": "f434b3109d1437bed88669228122a62e6308cf8b933f04e782e1e54ebadcf676",
+    "bytes": 247031,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/手机横屏知识小考预览.png",
+    "kept": "work/build-history/records/early-2d/scroll-tray-and-card-entry-v1/outputs/手机横屏知识小考预览.png",
+    "sha256": "56300835d8175cae8ae6d15364cf7adeed6989ed913773ced7294bc1d66d39cc",
+    "bytes": 262994,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/手机横屏美术预览.png",
+    "kept": "work/build-history/records/early-2d/reference-refresh-retouch-v2/outputs/手机横屏美术预览.png",
+    "sha256": "c5be958b28d6e55928d6918bd5450242fd9a27fe95ae83d8f66823d7ed163f0a",
+    "bytes": 449262,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/手机知识小考预览.png",
+    "kept": "work/build-history/records/early-2d/new-levels-and-coloring-v1/outputs/手机知识小考预览.png",
+    "sha256": "9d1d1ec1d8bd1fef661a59ba53dbd01dadd84b9430a2ed3d6380663da39bcb37",
+    "bytes": 205135,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/手机美术预览.png",
+    "kept": "work/build-history/records/early-2d/reference-refresh-retouch-v2/outputs/手机美术预览.png",
+    "sha256": "15dd48e59ba9e4614ef6c26532710d020047a315fe9b2d82859f02a7a22ed796",
+    "bytes": 372014,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/拼图六关计划.md",
+    "kept": "docs/history/early-2d/records/portable-2026-10-29/outputs/拼图六关计划.md",
+    "sha256": "ad1254583cc99ea1e9a3526f9de6ba3b00f4d5601825fa5aff5513fa43cede40",
+    "bytes": 5108,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/拼图关卡选择预览.png",
+    "kept": "work/build-history/records/early-2d/portable-2026-10-29/outputs/拼图关卡选择预览.png",
+    "sha256": "110d0cf2e5196ea43606296074b879b658a94c070b0183a38c3aceeb4e1754c6",
+    "bytes": 1741095,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/教学图源更新记录.md",
+    "kept": "docs/history/early-2d/records/teaching-safe-area-v3/outputs/教学图源更新记录.md",
+    "sha256": "f3ab56f3509c769ae065b99148068dca41632a3908092c5daaabf8197d938efc",
+    "bytes": 6182,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/文化教学预览.png",
+    "kept": "work/build-history/records/early-2d/scroll-tray-and-card-entry-v1/outputs/文化教学预览.png",
+    "sha256": "2e92fbcd95bc0fa6802dc4268f6fced667b5911ce71228d8661beeb431f37d28",
+    "bytes": 1175928,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/本轮素材更新记录.md",
+    "kept": "docs/history/early-2d/records/outline-and-guide-label-v1/outputs/本轮素材更新记录.md",
+    "sha256": "d705b9cbdbfa006578fd8dbb52d6eac7eaef4c73dd9622dad9e7dd4e792a132c",
+    "bytes": 3992,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/游戏选择预览.png",
+    "kept": "work/build-history/records/early-2d/outline-and-guide-label-v1/outputs/游戏选择预览.png",
+    "sha256": "252ead451e1ba65a778d249946ae6dcb65523a455612e006b1123670050d3312",
+    "bytes": 1848933,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/知识小考预览.png",
+    "kept": "work/build-history/records/early-2d/scroll-tray-and-card-entry-v1/outputs/知识小考预览.png",
+    "sha256": "7cb57f21420c855bfe1366efbabba3a7713c389d34a4a99174f13b1e9e4055f1",
+    "bytes": 1400731,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/素材交付清单.md",
+    "kept": "docs/history/early-2d/records/portable-2026-10-29/outputs/素材交付清单.md",
+    "sha256": "e839f985f9b98abe65533a6403500dc3e41a3e96944560e66c581f9ec08a1a36",
+    "bytes": 16485,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/纹样找不同六关计划.md",
+    "kept": "docs/history/early-2d/records/puzzle-and-inline-reference-v1/outputs/纹样找不同六关计划.md",
+    "sha256": "b8d4729f2e006a9afb0c38c0699d8c9dd1d68867411a1b145f0e4635240db117",
+    "bytes": 4164,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/花叶教学预览.png",
+    "kept": "work/build-history/records/early-2d/scroll-tray-and-card-entry-v1/outputs/花叶教学预览.png",
+    "sha256": "1d39d88719cd90c05ccddacd1a3b5db6f6d9358e254f01b03ac884cab9f20864",
+    "bytes": 1277170,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/莲花平棋结果预览.png",
+    "kept": "work/build-history/records/early-2d/outline-and-guide-label-v1/outputs/莲花平棋结果预览.png",
+    "sha256": "a3e20e493f3ede7d8971c25ef09ff9cda995301d2d4ab9bb273b8853e6983d07",
+    "bytes": 1913608,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/试玩首页.png",
+    "kept": "work/build-history/records/early-2d/new-levels-and-coloring-v1/outputs/试玩首页.png",
+    "sha256": "377002055208bf25fef439f29cec148bb62edc0b17e5d09d880b8a72855ee434",
+    "bytes": 1839744,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/通关结果手机预览.png",
+    "kept": "work/build-history/records/early-2d/new-levels-and-coloring-v1/outputs/通关结果手机预览.png",
+    "sha256": "714fc6b5e424d559b1d78418f909e50eeea1685bec99aa9bc821ed0b5867ece4",
+    "bytes": 492202,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/通关结果预览.png",
+    "kept": "work/build-history/records/early-2d/teaching-safe-area-v3/outputs/通关结果预览.png",
+    "sha256": "b8da77a6799103d3354ab10ad5eec9f6ab6dade0678805e68d663421ac95d1fb",
+    "bytes": 1479700,
+    "kind": "history-record"
+  },
+  {
+    "original": "outputs/首关美术预览.png",
+    "kept": "work/build-history/records/early-2d/outline-and-guide-label-v1/outputs/首关美术预览.png",
+    "sha256": "16352606613d6cd1316a97b22f805d38c3e9e1eac727d25f9567438b105e3a78",
+    "bytes": 1569574,
+    "kind": "history-record"
+  },
+  {
+    "original": "package-lock.json",
+    "kept": "docs/history/early-2d/records/screen-layout/package-lock.json",
+    "sha256": "1353dead395876ba56a0ef7dcb1ab89fc558447783dec46d1a079db31b80875b",
+    "bytes": 68462,
+    "kind": "history-record"
+  },
+  {
+    "original": "package.json",
+    "kept": "docs/history/early-2d/records/puzzle-and-inline-reference-v1/package.json",
+    "sha256": "0b5fdf28d5677bc359a7ffecf5ad4ba59d71c443010a8a1903a87e37d4e50d40",
+    "bytes": 1087,
+    "kind": "history-record"
+  },
+  {
+    "original": "playwright.config.ts",
+    "kept": "docs/history/early-2d/records/screen-layout/playwright.config.ts",
+    "sha256": "40ee615f168cdfbeef0e4d9ef11cd7adeb752becfcc60d0804f37b0e34a719fe",
+    "bytes": 1055,
+    "kind": "history-record"
+  },
+  {
+    "original": "public/assets/lessons/patterns/lesson-201-ceiling-v001.png",
+    "kept": "public/assets/lessons/patterns/lesson-201-ceiling-v001.png",
+    "sha256": "2ee68fa62af3993f8e8db2ba2953b20c43a58f8431d4586fe98d559a0830bf0e",
+    "bytes": 334085,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/lessons/patterns/lesson-254-ceiling-v001.png",
+    "kept": "public/assets/lessons/patterns/lesson-254-ceiling-v001.png",
+    "sha256": "12a8e0e97638b1d383499fd5513f90ded9246c4889629a5ff10ff04a6a452e49",
+    "bytes": 534626,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/lessons/patterns/lesson-254-niche-v001.png",
+    "kept": "public/assets/lessons/patterns/lesson-254-niche-v001.png",
+    "sha256": "fb7f7c0983d4592acab764b6f3e19e402d80237ac13b1d0d9bf4a7c4682deec3",
+    "bytes": 600412,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/lessons/patterns/lesson-257-ceiling-v001.png",
+    "kept": "public/assets/lessons/patterns/lesson-257-ceiling-v001.png",
+    "sha256": "430e394c3d60f534d531ce801a0726d69ab5a17b63d026784f710540a145642c",
+    "bytes": 504739,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/lessons/patterns/lesson-329-ceiling-v001.png",
+    "kept": "public/assets/lessons/patterns/lesson-329-ceiling-v001.png",
+    "sha256": "e080cf5089961df29b8109d813714a5efe839f897da04a1ab472a077bc2e9791",
+    "bytes": 553946,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/lessons/patterns/lesson-329-ceiling-v002.png",
+    "kept": "public/assets/lessons/patterns/lesson-329-ceiling-v002.png",
+    "sha256": "62807a8bb4b816c5e839d628e85fd42a4c607c47f973648d98cfbe838db4c162",
+    "bytes": 2226086,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/lessons/patterns/lesson-329-center-v001.png",
+    "kept": "public/assets/lessons/patterns/lesson-329-center-v001.png",
+    "sha256": "401b35f304ea906fe398f4a64d1255d8728319e648f4ef587f352eabbcc5b482",
+    "bytes": 771848,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/lessons/patterns/lesson-329-center-v002.png",
+    "kept": "public/assets/lessons/patterns/lesson-329-center-v002.png",
+    "sha256": "dc230411c27d1956e1f3294f440b051afcf48e7347515ee63c20d83d16112047",
+    "bytes": 378440,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/lessons/patterns/lesson-329-interior-v001.png",
+    "kept": "public/assets/lessons/patterns/lesson-329-interior-v001.png",
+    "sha256": "d2d450dcb5fb100af92073263f135d28f9b7f08c3561e28a0b403807e5a9dd55",
+    "bytes": 1203201,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/lessons/patterns/lesson-401-ceiling-v001.png",
+    "kept": "public/assets/lessons/patterns/lesson-401-ceiling-v001.png",
+    "sha256": "d6e5cd9600dc1acd59a7120f0bb94c1b46bb48a2a9ea7f1d3da94bb5bde21ef2",
+    "bytes": 1167408,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/lessons/patterns/lesson-407-borders-v002.png",
+    "kept": "public/assets/lessons/patterns/lesson-407-borders-v002.png",
+    "sha256": "89b7f135b0f3fdad84cb696ac30d3d277224022b00f8b99d9cd43f09502031fa",
+    "bytes": 1526837,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/lessons/patterns/lesson-407-rabbits-v001.png",
+    "kept": "public/assets/lessons/patterns/lesson-407-rabbits-v001.png",
+    "sha256": "064d703b335115597e2a6dddb2f674897c1ab7aa62c0edb888035ce993db0f86",
+    "bytes": 2075209,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/lessons/patterns/lesson-user-254-ceiling-v001.png",
+    "kept": "public/assets/lessons/patterns/lesson-user-254-ceiling-v001.png",
+    "sha256": "fb42099c63c14ec6bf2da1561b6bb0a5d6ede18ef2e4dc6421ee7ac1c98afe3a",
+    "bytes": 2160676,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/lessons/patterns/lesson-user-honeysuckle-v001.png",
+    "kept": "public/assets/lessons/patterns/lesson-user-honeysuckle-v001.png",
+    "sha256": "21f5d88b6f316fae8a595231439b6c5e426d88fcc956d49480c5c3cb2b38c61c",
+    "bytes": 1143908,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/lessons/patterns/lesson-user-rabbits-v001.png",
+    "kept": "public/assets/lessons/patterns/lesson-user-rabbits-v001.png",
+    "sha256": "785384577e34354c2fd77adc2b450c3999b4bb6997454e36c0eefe66a96ec321",
+    "bytes": 389384,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/levels/coloring-grape-lotus/coloring-grape-lotus-line-v001.png",
+    "kept": "public/assets/levels/coloring-grape-lotus/coloring-grape-lotus-line-v001.png",
+    "sha256": "5c768ac953c5304efd81e4056c1ffccf2fe025ebd5a4cd711fe02d05470e69f5",
+    "bytes": 2364176,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/levels/coloring-grape-lotus/coloring-grape-lotus-line-v002.png",
+    "kept": "public/assets/levels/coloring-grape-lotus/coloring-grape-lotus-line-v002.png",
+    "sha256": "242c767bd3847e93847b11fc5106166c9ef16a842b8024d67a04c3b28613462e",
+    "bytes": 2418916,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/levels/coloring-grape-lotus/coloring-grape-lotus-reference-v001.png",
+    "kept": "public/assets/levels/coloring-grape-lotus/coloring-grape-lotus-reference-v001.png",
+    "sha256": "e286fb049b57e7f6f2a29a2e81d48bcaac8ed19f6ecbd3b272a5c1b6920b1091",
+    "bytes": 3427669,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/levels/coloring-grape-lotus/coloring-grape-lotus-reference-v002.png",
+    "kept": "public/assets/levels/coloring-grape-lotus/coloring-grape-lotus-reference-v002.png",
+    "sha256": "8def928cce0a93b6922c1a329db58835d4c5661405204511d316c34f2b8690f6",
+    "bytes": 2998116,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/levels/coloring-grape-lotus/coloring-grape-lotus-regions-v001.png",
+    "kept": "public/assets/levels/coloring-grape-lotus/coloring-grape-lotus-regions-v001.png",
+    "sha256": "8256aae5e687f601a0f504543d98e7ebd836333a39a01ac6eb00f31e0c143cb9",
+    "bytes": 126551,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/levels/coloring-grape-lotus/coloring-grape-lotus-regions-v002.png",
+    "kept": "public/assets/levels/coloring-grape-lotus/coloring-grape-lotus-regions-v002.png",
+    "sha256": "f0e5aebd663636fb885ff12d1d68b837882691623c9650eda36f7bb6e6d5e2d2",
+    "bytes": 148468,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/levels/coloring-grape-pomegranate/coloring-grape-pomegranate-line-v001.png",
+    "kept": "public/assets/levels/coloring-grape-pomegranate/coloring-grape-pomegranate-line-v001.png",
+    "sha256": "aa9ae0c5cc13c2609908df42a9ef003a26b19a2e066087b6e409770a57fa83e6",
+    "bytes": 2348263,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/levels/coloring-grape-pomegranate/coloring-grape-pomegranate-reference-v001.png",
+    "kept": "public/assets/levels/coloring-grape-pomegranate/coloring-grape-pomegranate-reference-v001.png",
+    "sha256": "72df0e1fb497726d47745b5a0633303c03ff92e2dff0eeb4ea7dd7e178913e76",
+    "bytes": 3562632,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/levels/coloring-grape-pomegranate/coloring-grape-pomegranate-reference-v002.png",
+    "kept": "public/assets/levels/coloring-grape-pomegranate/coloring-grape-pomegranate-reference-v002.png",
+    "sha256": "cfa76362f247d1ba5f51a9b212f741d7876825d0f8d443236410fb19b5271781",
+    "bytes": 3054995,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/levels/coloring-grape-pomegranate/coloring-grape-pomegranate-regions-v001.png",
+    "kept": "public/assets/levels/coloring-grape-pomegranate/coloring-grape-pomegranate-regions-v001.png",
+    "sha256": "33e3a91992099ce1b28e033ea581e6e8a015d5648938c3b01d4dc9ea9b880fe6",
+    "bytes": 150694,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/levels/coloring-lotus-camellia/coloring-lotus-camellia-line-v001.png",
+    "kept": "public/assets/levels/coloring-lotus-camellia/coloring-lotus-camellia-line-v001.png",
+    "sha256": "9a59a93a2e590b323cb75fe4f9e495991059873da1e84dce3c7bc1655cc078c1",
+    "bytes": 2053619,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/levels/coloring-lotus-camellia/coloring-lotus-camellia-reference-v001.png",
+    "kept": "public/assets/levels/coloring-lotus-camellia/coloring-lotus-camellia-reference-v001.png",
+    "sha256": "e74f4cc6e43ac219714e62568729aea8876b82051962827ceafdeea3882dbb5f",
+    "bytes": 3732334,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/levels/coloring-lotus-camellia/coloring-lotus-camellia-regions-v001.png",
+    "kept": "public/assets/levels/coloring-lotus-camellia/coloring-lotus-camellia-regions-v001.png",
+    "sha256": "ca4d24df32eb39e017870426dea15c6b02ed3ff997c17bdc7692f6b4ab4fc985",
+    "bytes": 130599,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/levels/coloring-three-rabbits/coloring-three-rabbits-line-v001.png",
+    "kept": "public/assets/levels/coloring-three-rabbits/coloring-three-rabbits-line-v001.png",
+    "sha256": "2ac69489ec0a2275f4f7f0da2126245bcc6b5b487951fd626aca986b81af656d",
+    "bytes": 2212693,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/levels/coloring-three-rabbits/coloring-three-rabbits-line-v002.png",
+    "kept": "public/assets/levels/coloring-three-rabbits/coloring-three-rabbits-line-v002.png",
+    "sha256": "98b84162e341c8c9f4e0c965fbb654249ef05997a4d9bbca026b4b05823146fb",
+    "bytes": 2230836,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/levels/coloring-three-rabbits/coloring-three-rabbits-reference-v001.png",
+    "kept": "public/assets/levels/coloring-three-rabbits/coloring-three-rabbits-reference-v001.png",
+    "sha256": "39cc1add684db95a1ee2c2b18085f3ca14cdf5b0bdbcb08c348c0464ff93f7c6",
+    "bytes": 3411974,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/levels/coloring-three-rabbits/coloring-three-rabbits-reference-v002.png",
+    "kept": "public/assets/levels/coloring-three-rabbits/coloring-three-rabbits-reference-v002.png",
+    "sha256": "781e221ab8f313d9b6cd1db9bf5cf19d129ed608ee80cf6dcd4faf559198a710",
+    "bytes": 3196297,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/levels/coloring-three-rabbits/coloring-three-rabbits-regions-v001.png",
+    "kept": "public/assets/levels/coloring-three-rabbits/coloring-three-rabbits-regions-v001.png",
+    "sha256": "051b93ac7e65994eab3a0481b289db64efb39a9d11900f08e267f22b0ab79165",
+    "bytes": 104186,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/levels/coloring-three-rabbits/coloring-three-rabbits-regions-v002.png",
+    "kept": "public/assets/levels/coloring-three-rabbits/coloring-three-rabbits-regions-v002.png",
+    "sha256": "cdadb50a0166b37b6eab480bfd767e378d14faf318a28f8537a22e41cdb45076",
+    "bytes": 104600,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/levels/patterns-intro/patterns-intro-a-v001.png",
+    "kept": "public/assets/levels/patterns-intro/patterns-intro-a-v001.png",
+    "sha256": "c11e703807f13e233ab1d4fd299d81b7f741f1160c36638c8fdb8ed8ce4d6d71",
+    "bytes": 2026875,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/levels/patterns-intro/patterns-intro-a.svg",
+    "kept": "public/assets/levels/patterns-intro/patterns-intro-a.svg",
+    "sha256": "521b04584648ea8d07d8af31123c631eb38e5742a71e75064210f49310f65739",
+    "bytes": 3232,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/levels/patterns-intro/patterns-intro-b-v001.png",
+    "kept": "public/assets/levels/patterns-intro/patterns-intro-b-v001.png",
+    "sha256": "401291b78982fe9eba5b76b42a580e11bf02fd9763561f6e443f835d8eb206ed",
+    "bytes": 2020156,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/levels/patterns-intro/patterns-intro-b.svg",
+    "kept": "public/assets/levels/patterns-intro/patterns-intro-b.svg",
+    "sha256": "d68b34b69c1898c758be9f4a804a79b84ed519c65f4af9eacf39e78af336b4f7",
+    "bytes": 3095,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/levels/patterns-lotus/patterns-lotus-a-v001.png",
+    "kept": "public/assets/levels/patterns-lotus/patterns-lotus-a-v001.png",
+    "sha256": "71b9904852281983456cb8fb16353cad2a4c35e6170f029308db7806b3d44ee9",
+    "bytes": 3466014,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/levels/patterns-lotus/patterns-lotus-b-v001.png",
+    "kept": "public/assets/levels/patterns-lotus/patterns-lotus-b-v001.png",
+    "sha256": "1a8f30c707bbd1e0244e7179d8a13d1bdddd079dcb95abf3d1185183f30a6697",
+    "bytes": 3456920,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/levels/patterns-scrolls/patterns-scrolls-a-v001.png",
+    "kept": "public/assets/levels/patterns-scrolls/patterns-scrolls-a-v001.png",
+    "sha256": "3c9dad38cd97e8583f58eb1d02b35a5e335a3e96c7582616a0562050e9da612f",
+    "bytes": 3373694,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/levels/patterns-scrolls/patterns-scrolls-b-v001.png",
+    "kept": "public/assets/levels/patterns-scrolls/patterns-scrolls-b-v001.png",
+    "sha256": "5b70ae292f8a91cff469614c66dda58671488f597918065656f20b2d454c4471",
+    "bytes": 3371662,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/levels/puzzle-lotus-ceiling/puzzle-lotus-ceiling-image-v001.png",
+    "kept": "public/assets/levels/puzzle-lotus-ceiling/puzzle-lotus-ceiling-image-v001.png",
+    "sha256": "932b4c838808dd902dff43d2ccd6c45c07743cde1a6320fd940caacb5688e4c3",
+    "bytes": 4889669,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/levels/puzzle-lotus-ceiling/puzzle-lotus-ceiling-image-v002.png",
+    "kept": "public/assets/levels/puzzle-lotus-ceiling/puzzle-lotus-ceiling-image-v002.png",
+    "sha256": "f56b463ce09eaf4400402dabc9f93816da50b60ee77119a7ffefbab5e547be10",
+    "bytes": 5803431,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/levels/puzzle-three-rabbits/puzzle-three-rabbits-image-v001.png",
+    "kept": "public/assets/levels/puzzle-three-rabbits/puzzle-three-rabbits-image-v001.png",
+    "sha256": "a2853f55f3d552baa98fdd8725001504a31e8dff4ba0f068bf0319a2c00b0510",
+    "bytes": 5015561,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/levels/puzzle-three-rabbits/puzzle-three-rabbits-image-v002.png",
+    "kept": "public/assets/levels/puzzle-three-rabbits/puzzle-three-rabbits-image-v002.png",
+    "sha256": "54dee11ea2888243e2c1b57dac7013f3d3507f2720b4cd7bfa9ebc8b3583a206",
+    "bytes": 6088196,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/levels/puzzle-twin-dragons/puzzle-twin-dragons-image-v001.png",
+    "kept": "public/assets/levels/puzzle-twin-dragons/puzzle-twin-dragons-image-v001.png",
+    "sha256": "eb55e5ffc04a026f6005a7b695dc941bca0843453623363910c52f19205a494d",
+    "bytes": 2948535,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/levels/puzzle-twin-dragons/puzzle-twin-dragons-image-v002.png",
+    "kept": "public/assets/levels/puzzle-twin-dragons/puzzle-twin-dragons-image-v002.png",
+    "sha256": "f318ef543acb6f6e2a8e012f1dd09e1a6535cbf130e7e0d5319dea0f8fb666aa",
+    "bytes": 3951198,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/shared/bg-landscape-v001.png",
+    "kept": "public/assets/shared/bg-landscape-v001.png",
+    "sha256": "4a21044ca3c22ce6601820a67b9a5effc751cff5ad1f2ca8b11e04f457d483db",
+    "bytes": 2551340,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/shared/bg-landscape.svg",
+    "kept": "public/assets/shared/bg-landscape.svg",
+    "sha256": "01c1fecdd12f1f601460cf0c5078e7b3fc196ca6c280177107581294b94265b9",
+    "bytes": 832,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/shared/bg-portrait-v001.png",
+    "kept": "public/assets/shared/bg-portrait-v001.png",
+    "sha256": "ef525b410d2df8bf8d17522f0234a0fceaeb199fb386401b7c2561097960f47d",
+    "bytes": 2503834,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/shared/bg-portrait.svg",
+    "kept": "public/assets/shared/bg-portrait.svg",
+    "sha256": "8c2e356f0f022de9e04998dea71ba9bd76577faddd91d0eb1d3ae8ecb05e3ba1",
+    "bytes": 833,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/shared/button-primary-v001.png",
+    "kept": "public/assets/shared/button-primary-v001.png",
+    "sha256": "8e1e28c98218105efc984e6b4c4e20a041f2b464c2a556058bd14096a0167176",
+    "bytes": 371061,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/shared/button-primary.svg",
+    "kept": "public/assets/shared/button-primary.svg",
+    "sha256": "2de1aa882bac5d6e08c9966bc81b89600928777ecbc91806fcc3471a550137d0",
+    "bytes": 387,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/shared/button-secondary-v001.png",
+    "kept": "public/assets/shared/button-secondary-v001.png",
+    "sha256": "d5f06ddd2ba3a5c60bb61397f3929fd2b8d2ff363f10379551225f7f03db72cb",
+    "bytes": 322206,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/shared/button-secondary.svg",
+    "kept": "public/assets/shared/button-secondary.svg",
+    "sha256": "2d1b70bb5e9c2b2112207057d24de3c822d89924fd7fb1ba5547b9d57f83e84d",
+    "bytes": 389,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/shared/fonts/dunhuang-title-v001.woff",
+    "kept": "public/assets/shared/fonts/dunhuang-title-v001.woff",
+    "sha256": "ae7a6f78a2c7666fccd85158369b0131cd95435294a57b969bc2ab2c13406921",
+    "bytes": 3048,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/shared/fonts/ofl.txt",
+    "kept": "docs/history/early-2d/records/new-levels-and-coloring-v1/art-source/shared/fonts/v001/ofl.txt",
+    "sha256": "1a25e35da1031c6c3436fde545bb9cb5aca954e9873afe510c834b8b79bd21a0",
+    "bytes": 5171,
+    "kind": "history-record"
+  },
+  {
+    "original": "public/assets/shared/icon-back-v001.png",
+    "kept": "public/assets/shared/icon-back-v001.png",
+    "sha256": "e0b67ed991d018ed077eee53dddaf25705ead0d52b255f0b0bc5c90ae362fae3",
+    "bytes": 2604,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/shared/icon-back.svg",
+    "kept": "public/assets/shared/icon-back.svg",
+    "sha256": "4abdd662bbd6c00e7cf14d38f9efee24479368d209955112f76f6d0b3706b19f",
+    "bytes": 421,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/shared/icon-completed-v001.png",
+    "kept": "public/assets/shared/icon-completed-v001.png",
+    "sha256": "1fc293c1f77ff86e687e0b8597c84d820004f80f48868d3a6f2c519bd46255b5",
+    "bytes": 7582,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/shared/icon-completed.svg",
+    "kept": "public/assets/shared/icon-completed.svg",
+    "sha256": "4cb3ea6e7ef47890bcb876cd927bb28ada8d4ab51a33d8e5ef5f5b8ccc6318eb",
+    "bytes": 448,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/shared/icon-hint-v001.png",
+    "kept": "public/assets/shared/icon-hint-v001.png",
+    "sha256": "86bab7f238ba546ca1f88c6f29e82b293cee0c0975cc7a43daa8cb30e82fa876",
+    "bytes": 10861,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/shared/icon-hint.svg",
+    "kept": "public/assets/shared/icon-hint.svg",
+    "sha256": "f0d0251dda3ba17dbcb8bedff295d27a7ce5bdc5e077fe9acd7b423be48544ff",
+    "bytes": 501,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/shared/icon-locked-v001.png",
+    "kept": "public/assets/shared/icon-locked-v001.png",
+    "sha256": "115fc0b85a1293be8a1daf7f2fb46cc9595140b8a916c6f55c512709e7206e46",
+    "bytes": 8681,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/shared/icon-locked.svg",
+    "kept": "public/assets/shared/icon-locked.svg",
+    "sha256": "26902a81ec240a3fbe578a8ff8a6ac8f904c7f88bbc0f1dfbe210da046b28ccd",
+    "bytes": 485,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/shared/icon-restart-v001.png",
+    "kept": "public/assets/shared/icon-restart-v001.png",
+    "sha256": "ba655ce96a7c7e380e05faa18570e8b6519a3bb3505b54bdfb598dff065ded0f",
+    "bytes": 13057,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/shared/icon-restart.svg",
+    "kept": "public/assets/shared/icon-restart.svg",
+    "sha256": "1e129cbbf3753122c7a0f4535e7f094debb45c747ad35acf89265441941eacb7",
+    "bytes": 428,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/shared/panel-v001.png",
+    "kept": "public/assets/shared/panel-v001.png",
+    "sha256": "b86ce0be9bcc45e8dc1814385304de6bd6709bf45edfb239594fa21eb0df2b94",
+    "bytes": 1452937,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/shared/panel.svg",
+    "kept": "public/assets/shared/panel.svg",
+    "sha256": "7ab7afe177b575f234eede00807fda77d47916fe248b1580cac2408d7dfa3bd8",
+    "bytes": 500,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/themes/cover-music-v001.png",
+    "kept": "public/assets/themes/cover-music-v001.png",
+    "sha256": "915d1c14925410bcf3f0466824343bad993b8c275ac6027baf28f79f4f4c0e7d",
+    "bytes": 2125420,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/themes/cover-music.svg",
+    "kept": "public/assets/themes/cover-music.svg",
+    "sha256": "80decb75fe65da1f1d22d9b7fd6490fd6d7d2bff56ab987f074a9639c7f21965",
+    "bytes": 1040,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/themes/cover-patterns-v001.png",
+    "kept": "public/assets/themes/cover-patterns-v001.png",
+    "sha256": "9fc328cb3336d6e316be7a4122fbb79b97f3ada438c0e1590769ea9bfa2e8bdd",
+    "bytes": 2201172,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/themes/cover-patterns.svg",
+    "kept": "public/assets/themes/cover-patterns.svg",
+    "sha256": "7fa6b96023e69a89085789a96f33aa7f860ab156c5da57d1a3c7848da40809ea",
+    "bytes": 1004,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/themes/cover-stories-v001.png",
+    "kept": "public/assets/themes/cover-stories-v001.png",
+    "sha256": "acb57dded2a4b6cd6fb9046a6d6d6833c9bc7c4fb9fb05334b2e2fc9797948c0",
+    "bytes": 2052839,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "public/assets/themes/cover-stories.svg",
+    "kept": "public/assets/themes/cover-stories.svg",
+    "sha256": "1991638cd9a0ddb7d385945d596db70aae62ea457a06d989375bee6133d6ab07",
+    "bytes": 1058,
+    "kind": "same-asset-in-project"
+  },
+  {
+    "original": "scripts/import-art-v001.py",
+    "kept": "docs/history/early-2d/records/teaching-safe-area-v3/scripts/import-art-v001.py",
+    "sha256": "a2fff674fbd83eff782785effb3e9d0e80ff72dc450f445e5e3741dca16eabf6",
+    "bytes": 8471,
+    "kind": "history-record"
+  },
+  {
+    "original": "scripts/import-coloring-assets.py",
+    "kept": "docs/history/early-2d/records/puzzle-and-inline-reference-v1/scripts/import-coloring-assets.py",
+    "sha256": "76b1788e1579a046cf8caa3d19a3a0e8390850a95856afce0ec4d0f7a30d7a8b",
+    "bytes": 15707,
+    "kind": "history-record"
+  },
+  {
+    "original": "scripts/import-coloring-repairs.py",
+    "kept": "docs/history/early-2d/records/puzzle-and-inline-reference-v1/scripts/import-coloring-repairs.py",
+    "sha256": "4a7b838c434bfd9f777ffab70f5c7e815882fc4e6cc115654b6ddc287a430f8e",
+    "bytes": 9534,
+    "kind": "history-record"
+  },
+  {
+    "original": "scripts/import-pattern-lesson-references-v002.py",
+    "kept": "docs/history/early-2d/records/teaching-safe-area-v3/scripts/import-pattern-lesson-references-v002.py",
+    "sha256": "20ed20eb1ff387cd97cfd1706ca5cdef7339105d9c576270314ec32565d64f9a",
+    "bytes": 5953,
+    "kind": "history-record"
+  },
+  {
+    "original": "scripts/import-pattern-lesson-references.py",
+    "kept": "docs/history/early-2d/records/teaching-safe-area-v3/scripts/import-pattern-lesson-references.py",
+    "sha256": "655aaa6ed2aebf135555a41f2822e6fdabe054f730658a4146307f3ad3269509",
+    "bytes": 9538,
+    "kind": "history-record"
+  },
+  {
+    "original": "scripts/import-pattern-levels.py",
+    "kept": "docs/history/early-2d/records/puzzle-and-inline-reference-v1/scripts/import-pattern-levels.py",
+    "sha256": "5122f4d12a96c71822fc5781b150dea550ef13f99461cbe1f8015f2b5e2d6055",
+    "bytes": 12212,
+    "kind": "history-record"
+  },
+  {
+    "original": "scripts/import-puzzle-assets.py",
+    "kept": "docs/history/early-2d/records/outline-and-guide-label-v1/scripts/import-puzzle-assets.py",
+    "sha256": "bf72ef60714dcccd88b98d938f460d32fe7ceb67527bd0114da91be7905572f9",
+    "bytes": 8765,
+    "kind": "history-record"
+  },
+  {
+    "original": "scripts/import-title-font.py",
+    "kept": "docs/history/early-2d/records/new-levels-and-coloring-v1/scripts/import-title-font.py",
+    "sha256": "955718ad1d91c1940104500feb0d14f3a82705e4285ff28bedf9ea4d8841c26e",
+    "bytes": 2666,
+    "kind": "history-record"
+  },
+  {
+    "original": "scripts/prepare-puzzle-retouches.mjs",
+    "kept": "docs/history/early-2d/records/outline-and-guide-label-v1/scripts/prepare-puzzle-retouches.mjs",
+    "sha256": "f106d3671cc182b4df69f6ec102ae1e27cba56cac35c29b261ca9b879b0765de",
+    "bytes": 5937,
+    "kind": "history-record"
+  },
+  {
+    "original": "scripts/read-png.ts",
+    "kept": "docs/history/early-2d/records/puzzle-and-inline-reference-v1/scripts/read-png.ts",
+    "sha256": "22f292db13be6b82a685a8dcf6ea0ae05f0a292f0665d82a8543fee9b00ab036",
+    "bytes": 2052,
+    "kind": "history-record"
+  },
+  {
+    "original": "scripts/refresh-coloring-references.py",
+    "kept": "docs/history/early-2d/records/outline-and-guide-label-v1/scripts/refresh-coloring-references.py",
+    "sha256": "f4161924a3f66d560e887ed31c489a160b767da83fe25e06b80ff50a9173ab1d",
+    "bytes": 6040,
+    "kind": "history-record"
+  },
+  {
+    "original": "scripts/serve-preview.mjs",
+    "kept": "docs/history/early-2d/records/new-levels-and-coloring-v1/scripts/serve-preview.mjs",
+    "sha256": "bc0c876a6cffb8d29288781cfb7db313fe9a2babbbba45e0f5df08f1bdd84060",
+    "bytes": 3232,
+    "kind": "history-record"
+  },
+  {
+    "original": "scripts/validate-content.ts",
+    "kept": "docs/history/early-2d/records/puzzle-and-inline-reference-v1/scripts/validate-content.ts",
+    "sha256": "6200cf56de263eff087fb385c68e986c66d75fb51527d5a47650d90848c6e5b2",
+    "bytes": 4880,
+    "kind": "history-record"
+  },
+  {
+    "original": "scripts/verify-production.mjs",
+    "kept": "docs/history/early-2d/records/portable-2026-10-29/scripts/verify-production.mjs",
+    "sha256": "44835e60797c2e7e0ff67a0e6ee29393aa6479dfce48eb91c5c0d42cf76148a2",
+    "bytes": 48042,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/app/App.tsx",
+    "kept": "docs/history/early-2d/records/outline-and-guide-label-v1/src/app/App.tsx",
+    "sha256": "8fd61f8fd5ccd546d22ab8182263d33054de33e58f34f07e40f4e6fd9b0fde95",
+    "bytes": 23336,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/app/ArtInspector.tsx",
+    "kept": "docs/history/early-2d/records/puzzle-and-inline-reference-v1/src/app/ArtInspector.tsx",
+    "sha256": "dd5e253eaf6a11743d9efe16a6ccd88ff1515e758e6a570f227a12f30fe714ac",
+    "bytes": 4335,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/app/ColoringResult.tsx",
+    "kept": "docs/history/early-2d/records/puzzle-and-inline-reference-v1/src/app/ColoringResult.tsx",
+    "sha256": "55db9fc8c9e5481675a9edb16aa31f655577fcdbed9cc1135e21f6fcefbc928f",
+    "bytes": 2568,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/app/ColoringScreen.tsx",
+    "kept": "docs/history/early-2d/records/reference-refresh-retouch-v2/src/app/ColoringScreen.tsx",
+    "sha256": "c0ddd3691ebd6479bd0dd2bb3fb7735a92fd9373713d560cee7cad7a181caa83",
+    "bytes": 8053,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/app/GameSelectScreen.tsx",
+    "kept": "docs/history/early-2d/records/reference-refresh-retouch-v2/src/app/GameSelectScreen.tsx",
+    "sha256": "09cf12bc58b9cd52e9a7e0db024b1316395eb6dc0f62c638953bb7c09179fc22",
+    "bytes": 2683,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/app/LessonImageViewer.tsx",
+    "kept": "docs/history/early-2d/records/new-levels-and-coloring-v1/src/app/LessonImageViewer.tsx",
+    "sha256": "999a9bd00031b7f6fea427b8c7c9d7660488369beae21bab75b99804797300e0",
+    "bytes": 7337,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/app/LevelSelectScreen.tsx",
+    "kept": "docs/history/early-2d/records/portable-2026-10-29/src/app/LevelSelectScreen.tsx",
+    "sha256": "a423f2a9fede28faf79e5acd5ca8be735af6fab32a74be37259f46d85d739fc9",
+    "bytes": 7133,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/app/PuzzleScreen.tsx",
+    "kept": "docs/history/early-2d/records/portable-2026-10-29/src/app/PuzzleScreen.tsx",
+    "sha256": "2674b48b0a133c8d59a491ecb7a3de381da91975774bb4c1c639226d0776bd48",
+    "bytes": 7210,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/app/TeachingScreen.tsx",
+    "kept": "docs/history/early-2d/records/scroll-tray-and-card-entry-v1/src/app/TeachingScreen.tsx",
+    "sha256": "9afdb4a433ff795c5154bc1b0c3a952f41a63c8896e5a9755c584575a58d8b25",
+    "bytes": 14954,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/app/ThemeCards.tsx",
+    "kept": "docs/history/early-2d/records/new-levels-and-coloring-v1/src/app/ThemeCards.tsx",
+    "sha256": "aa48524ea3572cf72511f1a216f7207d77eeb96cfb9409f2d2e681fa344ebe40",
+    "bytes": 1968,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/app/navigation.ts",
+    "kept": "docs/history/early-2d/records/teaching-panel-and-roadmap/src/app/navigation.ts",
+    "sha256": "eb31bb2dccad5386f9764988632021ffe0f9c00ae347d10c40f92b7789efb587",
+    "bytes": 2070,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/content/assets.json",
+    "kept": "docs/history/early-2d/records/outline-and-guide-label-v1/src/content/assets.json",
+    "sha256": "21ea430b30924f4a79c4c0ba3f8e5aab4971d6fdadaa1d9fe6696f6159fbb0c1",
+    "bytes": 23290,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/content/index.ts",
+    "kept": "docs/history/early-2d/records/teaching-panel-and-roadmap/src/content/index.ts",
+    "sha256": "dd106bc8622b24b8c91aa583334ee416f435e745e3cb23939d5483b65bcb58b9",
+    "bytes": 1192,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/content/lessons/index.ts",
+    "kept": "docs/history/early-2d/records/teaching-panel-and-roadmap/src/content/lessons/index.ts",
+    "sha256": "435ad9ad889295aacd3bddb035ba335784989dbca44718923d83054f647757b0",
+    "bytes": 190,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/content/lessons/patterns.ts",
+    "kept": "docs/history/early-2d/records/new-levels-and-coloring-v1/src/content/lessons/patterns.ts",
+    "sha256": "6ce351eaa6057cf7804f34a843b86b3270a638a03d7e2f7001f9885ad3862295",
+    "bytes": 17882,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/content/lessons/types.ts",
+    "kept": "docs/history/early-2d/records/new-levels-and-coloring-v1/src/content/lessons/types.ts",
+    "sha256": "1d24f0063bebf2a14344624a24ce118a2da41626bb3b5094ee388d9332608c4b",
+    "bytes": 978,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/content/level-roadmap.ts",
+    "kept": "docs/history/early-2d/records/reference-refresh-retouch-v2/src/content/level-roadmap.ts",
+    "sha256": "8399bb1b1efd32b063d0531e45216c5dfc5ec2a7a902eaadbd6f3b7327574883",
+    "bytes": 4031,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/content/levels/coloring-grape-lotus.json",
+    "kept": "docs/history/early-2d/records/puzzle-and-inline-reference-v1/src/content/levels/coloring-grape-lotus.json",
+    "sha256": "0c3c84aa788c52d670a675fd25944c082bda0134c0e242af34b44bc0cd6525cd",
+    "bytes": 180633,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/content/levels/coloring-grape-pomegranate.json",
+    "kept": "docs/history/early-2d/records/puzzle-and-inline-reference-v1/src/content/levels/coloring-grape-pomegranate.json",
+    "sha256": "a0ed634034c704bcb5c1558abf5523dd934c36198adea90baa277554039c7c25",
+    "bytes": 216288,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/content/levels/coloring-lotus-camellia.json",
+    "kept": "docs/history/early-2d/records/puzzle-and-inline-reference-v1/src/content/levels/coloring-lotus-camellia.json",
+    "sha256": "82931799df37254426808c5e9becfc87831f3a2c056e8af19b57868c25be915c",
+    "bytes": 180382,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/content/levels/coloring-three-rabbits.json",
+    "kept": "docs/history/early-2d/records/puzzle-and-inline-reference-v1/src/content/levels/coloring-three-rabbits.json",
+    "sha256": "4854d3cffa5eff9678bca79aa39062f9f4d8cd0c04d4f095c9f39a9de465d810",
+    "bytes": 122741,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/content/levels/patterns-intro.json",
+    "kept": "docs/history/early-2d/records/teaching-safe-area-v3/src/content/levels/patterns-intro.json",
+    "sha256": "c3b0194f1744c498dd5972243b95fcc24b08ec0763b248e6b0e2cc3b12fc382e",
+    "bytes": 2758,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/content/levels/patterns-lotus.json",
+    "kept": "docs/history/early-2d/records/puzzle-and-inline-reference-v1/src/content/levels/patterns-lotus.json",
+    "sha256": "cbf5532dfd4e1ef3e3e24d79e6304a441f59086fa50d9de0c6e0e0a145256f7b",
+    "bytes": 2751,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/content/levels/patterns-scrolls.json",
+    "kept": "docs/history/early-2d/records/puzzle-and-inline-reference-v1/src/content/levels/patterns-scrolls.json",
+    "sha256": "a3645f171a106ea1138eccf04e7ec832351a15bd069c249e0c1108ae20e48ab6",
+    "bytes": 2723,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/content/levels/puzzle-lotus-ceiling.json",
+    "kept": "docs/history/early-2d/records/outline-and-guide-label-v1/src/content/levels/puzzle-lotus-ceiling.json",
+    "sha256": "79da8ebf348969f16a027920c01a4b6d1c148c605e5947e5f31ee68cefd2b675",
+    "bytes": 743,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/content/levels/puzzle-three-rabbits.json",
+    "kept": "docs/history/early-2d/records/outline-and-guide-label-v1/src/content/levels/puzzle-three-rabbits.json",
+    "sha256": "74d80e6eca0c9b73736c8f4beccded11d2b66d46e93c3ed212e630b5df890cbc",
+    "bytes": 927,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/content/levels/puzzle-twin-dragons.json",
+    "kept": "docs/history/early-2d/records/outline-and-guide-label-v1/src/content/levels/puzzle-twin-dragons.json",
+    "sha256": "595e5be2e649b3c04664d58067a6dab1b90e6195d8cf6ba34a86c2350ea35557",
+    "bytes": 921,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/content/themes.json",
+    "kept": "docs/history/early-2d/records/learning-flow/src/content/themes.json",
+    "sha256": "0c79898928e47019148ec2537a281e8e80d91bc900eb43f4f02f10b39f572b1b",
+    "bytes": 1193,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/games/coloring/render.ts",
+    "kept": "docs/history/early-2d/records/puzzle-and-inline-reference-v1/src/games/coloring/render.ts",
+    "sha256": "7db2a3225b037daf17c55a893f39e8386a512d5d7e28b2964848e83c0b64d246",
+    "bytes": 5668,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/games/coloring/rules.ts",
+    "kept": "docs/history/early-2d/records/puzzle-and-inline-reference-v1/src/games/coloring/rules.ts",
+    "sha256": "cb3e65b0b0b3b356538705824892f0b6c9bed56d7fcdf5764e3f06d0f4f0f08b",
+    "bytes": 4359,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/games/coloring/scene.ts",
+    "kept": "docs/history/early-2d/records/puzzle-and-inline-reference-v1/src/games/coloring/scene.ts",
+    "sha256": "47c8d6e6696628c829c17099a4b61dcd094d66793625efea239172c14e8e0e34",
+    "bytes": 11987,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/games/puzzle/rules.ts",
+    "kept": "docs/history/early-2d/records/portable-2026-10-29/src/games/puzzle/rules.ts",
+    "sha256": "485052dbd8a559313c5395f2b35083442cc06bcd57cb0b85e2c4d4bddbf2fd25",
+    "bytes": 10313,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/games/puzzle/scene.ts",
+    "kept": "docs/history/early-2d/records/portable-2026-10-29/src/games/puzzle/scene.ts",
+    "sha256": "907271b8c5f7f97fe6e27150a3163d6ba4023416ba8f4b06de6ee85c9e7344de",
+    "bytes": 19977,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/games/puzzle/shapes.ts",
+    "kept": "docs/history/early-2d/records/reference-refresh-retouch-v2/src/games/puzzle/shapes.ts",
+    "sha256": "b0175f9c864c33b8056e41c208fc16ebcb1b0e95351cd5725843f0dc41218d78",
+    "bytes": 2054,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/games/spot-difference/rules.ts",
+    "kept": "docs/history/early-2d/records/screen-layout/src/games/spot-difference/rules.ts",
+    "sha256": "cd478354aed003f71243b354bc29239096d52068233ce5bf869cce7a095eba78",
+    "bytes": 3625,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/games/spot-difference/scene.ts",
+    "kept": "docs/history/early-2d/records/reference-refresh-retouch-v2/src/games/spot-difference/scene.ts",
+    "sha256": "b381328ed819b45252ec6ba9830f0239c34f3c63869073c37504b99b84a46467",
+    "bytes": 9592,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/main.tsx",
+    "kept": "docs/history/early-2d/records/screen-layout/src/main.tsx",
+    "sha256": "27ae5b8e05242c94c598ce6d48c3684c32ad6a54eb14bbcf16905d33642adb4b",
+    "bytes": 818,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/runtime/PhaserPlayer.tsx",
+    "kept": "docs/history/early-2d/records/portable-2026-10-29/src/runtime/PhaserPlayer.tsx",
+    "sha256": "1edf6e7ffe47a5095633578a469f5d7a442a0200ea3026e04701fc52f8509d96",
+    "bytes": 10415,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/runtime/geometry.ts",
+    "kept": "docs/history/early-2d/records/puzzle-and-inline-reference-v1/src/runtime/geometry.ts",
+    "sha256": "f1cb6e75de08caa28ad20021fc599775565dd932daa96b8a7dee91ccd65327a1",
+    "bytes": 665,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/runtime/layout.ts",
+    "kept": "docs/history/early-2d/records/puzzle-and-inline-reference-v1/src/runtime/layout.ts",
+    "sha256": "4fff282a4cf1008210fd40467a2e9169ae7558499455cafde9a43bebdc0fb149",
+    "bytes": 3190,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/services/artworks.ts",
+    "kept": "docs/history/early-2d/records/puzzle-and-inline-reference-v1/src/services/artworks.ts",
+    "sha256": "c665716190f8bf3731f6b96a1e954890919ef73061d7dd59a2ba1cb920788354",
+    "bytes": 3586,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/services/content-schema.ts",
+    "kept": "docs/history/early-2d/records/outline-and-guide-label-v1/src/services/content-schema.ts",
+    "sha256": "7197ad81811037908ce1c81014198cb9ae1e313463e396842582b02906b213b9",
+    "bytes": 8546,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/services/learning.ts",
+    "kept": "docs/history/early-2d/records/teaching-panel-and-roadmap/src/services/learning.ts",
+    "sha256": "bfc462a7619f70ad66527a2b20dc7f5f5ed850623174c69bc449a84401f7853b",
+    "bytes": 3077,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/services/lesson-schema.ts",
+    "kept": "docs/history/early-2d/records/new-levels-and-coloring-v1/src/services/lesson-schema.ts",
+    "sha256": "338fef459a77464e0e5ddaadff6997b9ae31600a12260fc42c398058662644fb",
+    "bytes": 3287,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/services/progress.ts",
+    "kept": "docs/history/early-2d/records/puzzle-and-inline-reference-v1/src/services/progress.ts",
+    "sha256": "47828e7bcd7011fcb952ff63e5b95c9f222f87d4a588f6a99f37cc4e3c4accb1",
+    "bytes": 2799,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/styles/art-inspector.css",
+    "kept": "docs/history/early-2d/records/puzzle-and-inline-reference-v1/src/styles/art-inspector.css",
+    "sha256": "2ee6a8e02f027d2e38add76b8f75a51c22de37b1fac97d3770561fa60df38de3",
+    "bytes": 3890,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/styles/coloring-result.css",
+    "kept": "docs/history/early-2d/records/puzzle-and-inline-reference-v1/src/styles/coloring-result.css",
+    "sha256": "9041d142f8ac8b9dbbfccbd86250be0146540369a60b7a3a8cb0f14736e14927",
+    "bytes": 621,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/styles/coloring.css",
+    "kept": "docs/history/early-2d/records/reference-refresh-retouch-v2/src/styles/coloring.css",
+    "sha256": "3cc7a8eea0c8e687a7f9ed3eade9309d66e9363d4bd33be73d95efa51ef263ef",
+    "bytes": 8299,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/styles/lesson-image-viewer.css",
+    "kept": "docs/history/early-2d/records/new-levels-and-coloring-v1/src/styles/lesson-image-viewer.css",
+    "sha256": "a980614445ee43c056883146f2e65f448ac707fb0aac43421f2d3073966ddb76",
+    "bytes": 4252,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/styles/player.css",
+    "kept": "docs/history/early-2d/records/reference-refresh-retouch-v2/src/styles/player.css",
+    "sha256": "649f47c820da332181c95b48e772e530e2902c9103760475b119b5a50af5e09d",
+    "bytes": 162,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/styles/puzzle.css",
+    "kept": "docs/history/early-2d/records/portable-2026-10-29/src/styles/puzzle.css",
+    "sha256": "e084b43fdda8b6db30386a31b615531c8edf8fd429adc50248cb7a3d1dddbbac",
+    "bytes": 4397,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/styles/selection.css",
+    "kept": "docs/history/early-2d/records/portable-2026-10-29/src/styles/selection.css",
+    "sha256": "9b9f9d718026943a7ae32337da54c43912340a70be19495a16f1524eda42c9f4",
+    "bytes": 15943,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/styles/teaching.css",
+    "kept": "docs/history/early-2d/records/scroll-tray-and-card-entry-v1/src/styles/teaching.css",
+    "sha256": "ffad805f59fb34226feca6c448ef74129dde180b4f001b3569b330de9c53e114",
+    "bytes": 14958,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/styles/theme.css",
+    "kept": "docs/history/early-2d/records/outline-and-guide-label-v1/src/styles/theme.css",
+    "sha256": "e66374e669fd6fa2dbb454fa8cc87388ab53f63f91f6925e0d6c256ba00b0b0e",
+    "bytes": 35362,
+    "kind": "history-record"
+  },
+  {
+    "original": "src/types.ts",
+    "kept": "docs/history/early-2d/records/portable-2026-10-29/src/types.ts",
+    "sha256": "397de7eed07c759579c11e8a711453da3cc6e0c12beaa9d1a85b8eaa9b7e3dbb",
+    "bytes": 3130,
+    "kind": "history-record"
+  },
+  {
+    "original": "tests/e2e/coloring.spec.ts",
+    "kept": "docs/history/early-2d/records/outline-and-guide-label-v1/tests/e2e/coloring.spec.ts",
+    "sha256": "4147ced9f56925b736b71b2abb193476acf30d5e66699f8ff9d0d6f3b69db492",
+    "bytes": 23508,
+    "kind": "history-record"
+  },
+  {
+    "original": "tests/e2e/game.spec.ts",
+    "kept": "docs/history/early-2d/records/portable-2026-10-29/tests/e2e/game.spec.ts",
+    "sha256": "3fe3acac389fe6d5ad5b9400958fa9e4eb88fcd3741523d2ea509af664dca956",
+    "bytes": 61347,
+    "kind": "history-record"
+  },
+  {
+    "original": "tests/e2e/puzzle.spec.ts",
+    "kept": "docs/history/early-2d/records/portable-2026-10-29/tests/e2e/puzzle.spec.ts",
+    "sha256": "ccd3fbd55ca047544e43a8821f9aa52627cb1fd31e4e7c3f2a66931e1c540055",
+    "bytes": 29789,
+    "kind": "history-record"
+  },
+  {
+    "original": "tests/fixtures/catalog.ts",
+    "kept": "docs/history/early-2d/records/puzzle-and-inline-reference-v1/tests/fixtures/catalog.ts",
+    "sha256": "afa8a7322b84c87a517ec4774011006ecdd555735135dc7e15bf690fd6979634",
+    "bytes": 1521,
+    "kind": "history-record"
+  },
+  {
+    "original": "tests/unit/artworks.test.ts",
+    "kept": "docs/history/early-2d/records/puzzle-and-inline-reference-v1/tests/unit/artworks.test.ts",
+    "sha256": "4c1069cf1e987e46c2571b47e76abc3d382a147e624fcf0f92e0524f097eacda",
+    "bytes": 3207,
+    "kind": "history-record"
+  },
+  {
+    "original": "tests/unit/coloring.test.ts",
+    "kept": "docs/history/early-2d/records/puzzle-and-inline-reference-v1/tests/unit/coloring.test.ts",
+    "sha256": "477b1c1b85f4670075090fda158afb41d0f3b414fe989cfd62b1c883d530ca01",
+    "bytes": 3781,
+    "kind": "history-record"
+  },
+  {
+    "original": "tests/unit/content-schema.test.ts",
+    "kept": "docs/history/early-2d/records/outline-and-guide-label-v1/tests/unit/content-schema.test.ts",
+    "sha256": "5ebcabacb7466818d23ead37a6c7d8e735c5a5aa499d559b77ab41faca7c0756",
+    "bytes": 6271,
+    "kind": "history-record"
+  },
+  {
+    "original": "tests/unit/learning.test.ts",
+    "kept": "docs/history/early-2d/records/new-levels-and-coloring-v1/tests/unit/learning.test.ts",
+    "sha256": "75e1a3311d187c9bd0e8442f8ca33fb566b232bf3c6c9a05116c2a342ff921c4",
+    "bytes": 4356,
+    "kind": "history-record"
+  },
+  {
+    "original": "tests/unit/lesson-schema.test.ts",
+    "kept": "docs/history/early-2d/records/new-levels-and-coloring-v1/tests/unit/lesson-schema.test.ts",
+    "sha256": "c12ad14707ae2709d474b8bfee9808ea1d7f8534987f6fb61a16fa4e54e2377d",
+    "bytes": 4874,
+    "kind": "history-record"
+  },
+  {
+    "original": "tests/unit/level-roadmap.test.ts",
+    "kept": "docs/history/early-2d/records/reference-refresh-retouch-v2/tests/unit/level-roadmap.test.ts",
+    "sha256": "f8389630c7042b3cb38e23b62c2741e24ed993d2c13565a496c46d898ab17443",
+    "bytes": 3911,
+    "kind": "history-record"
+  },
+  {
+    "original": "tests/unit/navigation.test.ts",
+    "kept": "docs/history/early-2d/records/teaching-panel-and-roadmap/tests/unit/navigation.test.ts",
+    "sha256": "44baffcd58fd39aa44fb928eb7ed688cb91d7c6f96a0717f262cd1d79e0b7131",
+    "bytes": 1407,
+    "kind": "history-record"
+  },
+  {
+    "original": "tests/unit/progress.test.ts",
+    "kept": "docs/history/early-2d/records/teaching-panel-and-roadmap/tests/unit/progress.test.ts",
+    "sha256": "a843e1a33acd07a3e116d953f710c2b153ac55b1101f9781294b80ea9bb293e6",
+    "bytes": 4497,
+    "kind": "history-record"
+  },
+  {
+    "original": "tests/unit/puzzle.test.ts",
+    "kept": "docs/history/early-2d/records/portable-2026-10-29/tests/unit/puzzle.test.ts",
+    "sha256": "97a74fd439635ede865fb932b251149efe393b66b5d3a0b36a3bf3ddd3b975d9",
+    "bytes": 9492,
+    "kind": "history-record"
+  },
+  {
+    "original": "tests/unit/runtime-layout.test.ts",
+    "kept": "docs/history/early-2d/records/user-art-v001/tests/unit/runtime-layout.test.ts",
+    "sha256": "393439799ba19a8b7ecf7bf843a5d96caa2e1907b3cde93c90f5a83d9c1d1046",
+    "bytes": 3041,
+    "kind": "history-record"
+  },
+  {
+    "original": "tests/unit/spot-difference.test.ts",
+    "kept": "docs/history/early-2d/records/screen-layout/tests/unit/spot-difference.test.ts",
+    "sha256": "705b51ad59f2041754a529d2dc3378b1949dbba5caeee76ee2bde03e0395a3e7",
+    "bytes": 11817,
+    "kind": "history-record"
+  },
+  {
+    "original": "tsconfig.json",
+    "kept": "docs/history/early-2d/records/screen-layout/tsconfig.json",
+    "sha256": "227c2278e38d08e21bade880935773a07dea5d3b66024e1c58c667cc9844f490",
+    "bytes": 491,
+    "kind": "history-record"
+  },
+  {
+    "original": "vite.config.ts",
+    "kept": "docs/history/early-2d/records/screen-layout/vite.config.ts",
+    "sha256": "176000d574ac8dba0686ecc4dbdc31108b5bc4ddc0589ccaef183abb1c1f0959",
+    "bytes": 235,
+    "kind": "history-record"
+  },
+  {
+    "original": "vitest.config.ts",
+    "kept": "docs/history/early-2d/records/screen-layout/vitest.config.ts",
+    "sha256": "03b9f46dd268230bf2af89a45e94ad84e30e2bcf77a580bc953aaebcfc6419e7",
+    "bytes": 148,
+    "kind": "history-record"
+  }
+]

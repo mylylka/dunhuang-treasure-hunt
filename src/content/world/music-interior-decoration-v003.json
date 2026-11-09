@@ -1,0 +1,240 @@
+{
+  "version": "music-interior-decoration-v003",
+  "coordinates": "music source coordinates in metres; fixtures and lights share the existing mounts; indirect illumination is evaluated in this space",
+  "materialPrefix": "music-decor-",
+  "floral": {
+    "material": "music-decor-floral",
+    "asset": "courtyard/v002/wall-floral-border.jpg",
+    "sourceSize": [
+      1013,
+      97
+    ],
+    "loadTimeoutMs": 12000,
+    "repeat": [
+      1,
+      1
+    ]
+  },
+  "technicalTextures": {
+    "size": 256,
+    "seed": 7631,
+    "plaster": {
+      "repeat": [
+        1,
+        1
+      ],
+      "materials": [
+        "plaster",
+        "wainscot",
+        "ceiling",
+        "soffit",
+        "riser",
+        "tread"
+      ]
+    },
+    "stone": {
+      "repeat": [
+        0.5555555556,
+        0.7692307692
+      ],
+      "slabSizeMetres": [
+        1.8,
+        1.3
+      ],
+      "materials": [
+        "stone",
+        "stone-landing"
+      ]
+    },
+    "wood": {
+      "repeat": [
+        0.9090909091,
+        0.4166666667
+      ],
+      "plankWidthMetres": 0.55,
+      "materials": [
+        "wood"
+      ]
+    }
+  },
+  "fixture": {
+    "woodColor": "#703e2b",
+    "copperColor": "#87603b",
+    "clothColor": "#e9c89c",
+    "emissiveColor": "#ffd6a2",
+    "emissiveIntensity": 0.18,
+    "bodyRadius": 0.17,
+    "frameRadius": 0.19,
+    "capRadius": 0.21,
+    "bodyHeight": 0.46,
+    "postThickness": 0.022
+  },
+  "lights": [
+    {
+      "id": "entry",
+      "label": "L1",
+      "mountKind": "screen",
+      "position": [
+        43.7,
+        4.55,
+        -21.99
+      ],
+      "mount": [
+        43.7,
+        5.11,
+        -21.85
+      ],
+      "depthScale": 0.6,
+      "color": "#ffe6c9",
+      "intensity": 1.0,
+      "distance": 12,
+      "decay": 1,
+      "type": "PointLight",
+      "sourceRadius": 1.35
+    },
+    {
+      "id": "under-upper-floor",
+      "label": "L2",
+      "mountKind": "ceiling",
+      "position": [
+        39.4,
+        5.45,
+        -27.8
+      ],
+      "mount": [
+        39.4,
+        7.426,
+        -27.8
+      ],
+      "depthScale": 1,
+      "color": "#ffe6c9",
+      "intensity": 1.0,
+      "distance": 12,
+      "decay": 1,
+      "type": "PointLight",
+      "sourceRadius": 1.35
+    },
+    {
+      "id": "right-room",
+      "label": "L3",
+      "mountKind": "side-wall",
+      "position": [
+        59.17,
+        4.65,
+        -25.6
+      ],
+      "mount": [
+        59.4242977528,
+        5.21,
+        -25.6
+      ],
+      "depthScale": 1,
+      "color": "#ffe6c9",
+      "intensity": 1.0,
+      "distance": 12,
+      "decay": 1,
+      "type": "PointLight",
+      "sourceRadius": 1.35
+    },
+    {
+      "id": "stair-foot",
+      "label": "L4",
+      "mountKind": "rear-wall",
+      "position": [
+        54.9,
+        4.81,
+        -31.9
+      ],
+      "mount": [
+        54.9,
+        5.37,
+        -32.175
+      ],
+      "depthScale": 1,
+      "color": "#ffe6c9",
+      "intensity": 1.0,
+      "distance": 12,
+      "decay": 1,
+      "type": "PointLight",
+      "sourceRadius": 1.35
+    },
+    {
+      "id": "stair-high-space",
+      "label": "L5",
+      "mountKind": "rear-wall",
+      "position": [
+        47.4,
+        9.68,
+        -31.9
+      ],
+      "mount": [
+        47.4,
+        10.24,
+        -32.175
+      ],
+      "depthScale": 1,
+      "color": "#ffe6c9",
+      "intensity": 1.0,
+      "distance": 12,
+      "decay": 1,
+      "type": "PointLight",
+      "sourceRadius": 1.35
+    },
+    {
+      "id": "upper-rear",
+      "label": "L6",
+      "mountKind": "ceiling",
+      "position": [
+        39.4,
+        11.15,
+        -25.7
+      ],
+      "mount": [
+        39.4,
+        13.5305,
+        -25.7
+      ],
+      "depthScale": 1,
+      "color": "#ffe6c9",
+      "intensity": 1.0,
+      "distance": 12,
+      "decay": 1,
+      "type": "PointLight",
+      "sourceRadius": 1.35
+    }
+  ],
+  "ambient": {
+    "color": "#fff6eb",
+    "intensity": 1.8,
+    "normalVariation": 0.13,
+    "edgeFadeMetres": 0.24,
+    "volumes": [
+      {
+        "min": [
+          34.7625,
+          1.25,
+          -32.175
+        ],
+        "max": [
+          59.424298,
+          13.54,
+          -18.225
+        ]
+      },
+      {
+        "min": [
+          34.4725,
+          7.4,
+          -21.95
+        ],
+        "max": [
+          44.7801,
+          13.54,
+          -17.65
+        ]
+      }
+    ],
+    "outerToleranceMetres": 0.015,
+    "surfaceBiasMetres": 0.24
+  }
+}

@@ -9,8 +9,8 @@ import { TERRAIN_PLAYER_COLLIDERS, isTerrainWalkable, moveTerrainPlayer, terrain
 /** Load the real GLB's positions, node transforms and semantic groups without
  * a browser/image decoder. Materials are placeholders; geometry is not a mock.
  */
-function courtyardGeometry() {
-  const bytes = readFileSync(new URL('../../public/assets/world/courtyard/v002/courtyard.glb', import.meta.url));
+function courtyardGeometry(version = 'v002') {
+  const bytes = readFileSync(new URL(`../../public/assets/world/courtyard/${version}/courtyard.glb`, import.meta.url));
   const jsonLength = bytes.readUInt32LE(12), json = JSON.parse(bytes.toString('utf8', 20, 20 + jsonLength));
   const binary = bytes.subarray(28 + jsonLength);
   const root = new THREE.Group(), materials = json.materials.map(() => new THREE.MeshBasicMaterial());
@@ -44,6 +44,26 @@ function release(root: THREE.Object3D) {
 }
 
 describe('terrain-only courtyard expansion v003', () => {
+  it('joins the real v007 corner trims without overlapping their coplanar faces', () => {
+    const root = courtyardGeometry('v007');
+    const before = new Map<string, THREE.Box3>();
+    for (const kind of ['coping', 'plinth']) for (const side of ['east', 'west']) {
+      const name = `courtyard-v005-side-${kind}-${side}`;
+      before.set(name, box(root, name));
+    }
+    applyTerrainCourtyardExpansion(root);
+    for (const kind of ['coping', 'plinth']) for (const side of ['east', 'west']) {
+      const name = `courtyard-v005-side-${kind}-${side}`, after = box(root, name);
+      const wing = box(root, `courtyard-v005-wing-${kind}-${side}`), original = before.get(name)!;
+      expect(after.max.z, name).toBeCloseTo(wing.min.z, 5);
+      expect(after.min.z, name).toBeCloseTo(original.min.z, 5);
+      expect(after.min.x, name).toBeCloseTo(original.min.x, 5);
+      expect(after.max.x, name).toBeCloseTo(original.max.x, 5);
+      expect(after.min.y, name).toBeCloseTo(original.min.y, 5);
+      expect(after.max.y, name).toBeCloseTo(original.max.y, 5);
+    }
+    release(root);
+  });
   it('extends the actual outer walls exactly two metres, keeps the hall/gate and preserves square art', () => {
     const root = courtyardGeometry(), original = new Map<string, THREE.Box3>();
     root.traverse(object => { if (object.userData.semanticGroup) original.set(object.name, box(root, object.name)); });

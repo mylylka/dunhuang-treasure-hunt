@@ -1,8 +1,10 @@
-import { expect, test, type Page } from '@playwright/test';
+import { expect, test, type Locator, type Page } from '@playwright/test';
 import { readFileSync, readdirSync } from 'node:fs';
 import type { AssetDefinition, Level, PuzzleLevel, SpotDifferenceLevel } from '../../src/types';
 import type { PieceLayout, PuzzleLayout } from '../../src/games/puzzle/rules';
 import { puzzleRoadmap } from '../../src/content/level-roadmap';
+import { compactPlayableViewport, isMobileProject, mobileLandscapeViewport, mobilePortraitViewport, supportedResizeViewports } from './supported-viewports';
+import { expectSpotSynchronized, readSpotView, setSpotZoom } from './spot-view-controls';
 
 const levels = readdirSync('src/content/levels').filter(name => name.endsWith('.json'))
   .map(name => JSON.parse(readFileSync(`src/content/levels/${name}`, 'utf8')) as Level);
@@ -36,6 +38,14 @@ async function fits(page: Page) {
     x: scrollX, y: scrollY,
   }))).toEqual({ horizontal: 0, vertical: 0, x: 0, y: 0 });
 }
+async function puzzleAction(page: Page, name: '查看原图' | '重新拼图'): Promise<Locator> {
+  const action = page.getByRole('button', { name, exact: true });
+  await expect(action).toBeVisible();
+  await expect(action).toBeInViewport({ ratio: .999 });
+  const bounds = (await action.boundingBox())!;
+  expect(bounds.width).toBeGreaterThanOrEqual(44); expect(bounds.height).toBeGreaterThanOrEqual(44);
+  return action;
+}
 async function startPuzzle(page: Page, level: PuzzleLevel) {
   await page.goto(`/#/play/${level.id}`);
   await expect(page.getByRole('button', { name: '拼图提示', exact: true })).toBeEnabled({ timeout: imageLoadTimeout });
@@ -43,7 +53,10 @@ async function startPuzzle(page: Page, level: PuzzleLevel) {
   await expect(host).toHaveAttribute('data-game-type', 'puzzle');
   await expect(host.locator('canvas')).toHaveCount(1);
   await expect(host.locator('canvas')).toBeInViewport({ ratio: 0.999 });
-  for (const name of ['查看原图', '重新拼图', '拼图提示']) await expect(page.getByRole('button', { name, exact: true })).toBeInViewport({ ratio: 0.999 });
+  await expect(page.getByRole('button', { name: '拼图提示', exact: true })).toBeInViewport({ ratio: .999 });
+  await expect(page.getByRole('button', { name: '更多操作', exact: true })).toHaveCount(0);
+  await expect(page.getByRole('dialog', { name: '更多操作', exact: true })).toHaveCount(0);
+  for (const name of ['查看原图', '重新拼图'] as const) await puzzleAction(page, name);
   const current = await layout(page);
   expect(current.pieces).toHaveLength(level.rows * level.columns);
   expect(current.board.width / current.board.height).toBeCloseTo(assets.find(asset => asset.id === level.imageAssetId)!.width / assets.find(asset => asset.id === level.imageAssetId)!.height, 6);
@@ -124,30 +137,30 @@ async function verifyNextPuzzle(page: Page, level: PuzzleLevel) {
   await fits(page);
 }
 
-test('拼图目录有六个位置、三关实际内容，筹备位不可玩且手机分页可达', async ({ page }) => {
+test('拼图目录有六个位置、三关实际内容，筹备位不可玩且手机横屏滚动可达', async ({ page }, testInfo) => {
   expect(puzzles).toHaveLength(3);
   expect(rotations).toHaveLength(1);
   expect(jigsaws.map(level => level.rows * level.columns).sort((a, b) => a - b)).toEqual([12, 20]);
   expect(puzzleRoadmap).toHaveLength(6);
   const formalIds = new Set(puzzles.map(level => level.id));
-  for (const viewport of [{ width: 1289, height: 930 }, { width: 360, height: 640 }, { width: 844, height: 390 }]) {
+  for (const viewport of [{ width: 1289, height: 930 }, ...supportedResizeViewports(testInfo)]) {
     await page.setViewportSize(viewport);
     await page.goto(puzzleDirectory);
     await expect(page.getByRole('heading', { name: '拼图关卡', exact: true })).toBeVisible();
-    await expect(page.locator('.level-select-screen')).toHaveAttribute('data-page-size', viewport.width === 1289 ? '6' : '2');
+    await expect(page.locator('.level-select-screen')).toHaveAttribute('data-layout', 'scroll');
+    const list = page.getByTestId('level-choice-scroll');
+    await expect(list).toBeVisible();
+    await expect(page.locator('.level-choice-card')).toHaveCount(6);
+    if (viewport.width >= 800) await expect.poll(async () => Number(await page.locator('.level-select-screen').getAttribute('data-columns'))).toBeGreaterThanOrEqual(3);
     await expect(page.getByTestId('level-catalog-summary')).toHaveText('共 6 关3 关开放');
-    // Resizing preserves the selected page. Traverse back before auditing the complete directory.
-    const previous = page.getByRole('button', { name: '上一页', exact: true });
-    while (await previous.count() && await previous.isEnabled()) {
-      const before = await page.locator('.level-choice-card').first().getAttribute('data-level-id');
-      await previous.click();
-      await expect(page.locator('.level-choice-card').first()).not.toHaveAttribute('data-level-id', before!);
-    }
+    await expect(page.getByRole('button', { name: '上一页', exact: true })).toHaveCount(0);
+    await expect(page.getByRole('button', { name: '下一页', exact: true })).toHaveCount(0);
+    await list.evaluate(element => { element.scrollTop = 0; });
     await expect(page.locator('.level-choice-card').first()).toHaveAttribute('data-level-id', puzzleRoadmap[0].id);
     const seen = new Map<string, string>();
-    for (let pageIndex = 0; pageIndex < puzzleRoadmap.length; pageIndex++) {
       const cards = page.locator('.level-choice-card');
       for (const card of await cards.all()) {
+        await card.scrollIntoViewIfNeeded();
         const id = (await card.getAttribute('data-level-id'))!;
         const status = (await card.getAttribute('data-status'))!;
         seen.set(id, status);
@@ -163,13 +176,9 @@ test('拼图目录有六个位置、三关实际内容，筹备位不可玩且�
           await expect(card.locator('a')).toHaveCount(0);
         }
       }
-      await fits(page);
-      const next = page.getByRole('button', { name: '下一页', exact: true });
-      if (!await next.count() || !await next.isEnabled()) break;
-      const before = await cards.first().getAttribute('data-level-id');
-      await next.click();
-      await expect(cards.first()).not.toHaveAttribute('data-level-id', before!);
-    }
+    await list.evaluate(element => { element.scrollTop = element.scrollHeight; });
+    await expect(cards.last()).toBeInViewport({ ratio: .999 });
+    await fits(page);
     expect([...seen.keys()].sort()).toEqual(puzzleRoadmap.map(entry => entry.id).sort());
     expect([...seen.values()].filter(status => status === 'available')).toHaveLength(3);
   }
@@ -212,9 +221,13 @@ test('九块旋转以真实点击恢复，提示和查看原图不提前完成�
   for (let attempt = 0; attempt < 3; attempt++) await page.getByRole('button', { name: '拼图提示', exact: true }).click();
   expect((await layout(page)).pieces.map(piece => piece.turns)).toEqual(scrambled);
   await noCompletion(page, level);
-  await page.getByRole('button', { name: '查看原图', exact: true }).click();
+  await (await puzzleAction(page, '查看原图')).click();
   const reference = page.getByRole('dialog', { name: `${level.title} · 原图`, exact: true });
   await expect(reference.locator('img')).toBeInViewport({ ratio: 0.999 });
+  await expect(reference.locator('img')).toHaveCSS('object-fit', 'contain');
+  const referenceAsset = assets.find(asset => asset.id === level.imageAssetId)!;
+  expect(await reference.locator('img').evaluate(element => [(element as HTMLImageElement).naturalWidth, (element as HTMLImageElement).naturalHeight]))
+    .toEqual([referenceAsset.width, referenceAsset.height]);
   await reference.getByRole('button', { name: '返回拼图', exact: true }).click();
   expect((await layout(page)).pieces.map(piece => piece.turns)).toEqual(scrambled);
   await solveRotation(page, level);
@@ -281,7 +294,7 @@ for (const level of jigsaws) {
 
 test('碎片区连续滚动、裁切命中、提示定位与触滑不会代替拼片', async ({ page }, testInfo) => {
   const level = jigsaws.find(item => item.rows * item.columns === 20)!;
-  await page.setViewportSize({ width: 360, height: 640 });
+  await page.setViewportSize(compactPlayableViewport(testInfo));
   await startPuzzle(page, level);
   let current = await layout(page);
   expect(current.trayMaxScroll).toBeGreaterThan(0);
@@ -317,7 +330,7 @@ test('碎片区连续滚动、裁切命中、提示定位与触滑不会代替�
   await countIs(page, 0, level);
 
   if (testInfo.project.name === 'mobile-chromium') {
-    await page.getByRole('button', { name: '重新拼图', exact: true }).click();
+    await (await puzzleAction(page, '重新拼图')).click();
     await countIs(page, 0, level);
     current = await layout(page);
     const canvas = (await page.getByTestId('phaser-player').locator('canvas').boundingBox())!;
@@ -340,7 +353,7 @@ test('碎片区连续滚动、裁切命中、提示定位与触滑不会代替�
   await fits(page);
 });
 
-test('碎片可选片后点击归位，重开和退出重进重置，横竖屏切换保留本局', async ({ page }) => {
+test('碎片可选片后点击归位，重开和退出重进重置，窗口变化或手机竖屏中断保留本局', async ({ page }, testInfo) => {
   const level = jigsaws[jigsaws.length - 1]!;
   await startPuzzle(page, level);
   const chosen = (await layout(page)).pieces.find(piece => !piece.placed && piece.fullyVisible && piece.displayRect)!;
@@ -348,7 +361,13 @@ test('碎片可选片后点击归位，重开和退出重进重置，横竖屏�
   await expect.poll(async () => (await layout(page)).selectedPieceId).toBe(chosen.id);
   await clickAt(page, chosen.targetRect);
   await countIs(page, 1, level);
-  for (const viewport of [{ width: 360, height: 640 }, { width: 844, height: 390 }]) {
+  if (isMobileProject(testInfo)) {
+    await page.setViewportSize(mobilePortraitViewport);
+    await expect(page.getByTestId('mobile-landscape-gate')).toBeVisible();
+    await page.setViewportSize(mobileLandscapeViewport);
+    await expect(page.getByTestId('mobile-landscape-gate')).not.toBeVisible();
+  }
+  for (const viewport of supportedResizeViewports(testInfo)) {
     await page.setViewportSize(viewport);
     await layoutSettled(page);
     await countIs(page, 1, level);
@@ -365,7 +384,7 @@ test('碎片可选片后点击归位，重开和退出重进重置，横竖屏�
     await scrollTrayEdge(page, false);
     await fits(page);
   }
-  await page.getByRole('button', { name: '重新拼图', exact: true }).click();
+  await (await puzzleAction(page, '重新拼图')).click();
   await countIs(page, 0, level);
   expect((await layout(page)).pieces.every(piece => !piece.placed)).toBe(true);
   const again = (await layout(page)).pieces.find(piece => !piece.placed && piece.fullyVisible && piece.displayRect)!;
@@ -378,7 +397,7 @@ test('碎片可选片后点击归位，重开和退出重进重置，横竖屏�
   await noCompletion(page, level);
 });
 
-test('旋转拼图转动状态在横竖屏间保持，重开恢复本关初始乱序', async ({ page }) => {
+test('旋转拼图转动状态在窗口变化或手机竖屏中断后保持，重开恢复初始乱序', async ({ page }, testInfo) => {
   const level = rotations[0]!;
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await startPuzzle(page, level);
@@ -386,7 +405,13 @@ test('旋转拼图转动状态在横竖屏间保持，重开恢复本关初始�
   await clickAt(page, (await layout(page)).pieces[0].targetRect);
   const edited = (await layout(page)).pieces.map(piece => piece.turns);
   expect(edited[0]).toBe((initial[0] + 1) % 4);
-  for (const viewport of [{ width: 360, height: 640 }, { width: 844, height: 390 }]) {
+  if (isMobileProject(testInfo)) {
+    await page.setViewportSize(mobilePortraitViewport);
+    await expect(page.getByTestId('mobile-landscape-gate')).toBeVisible();
+    await page.setViewportSize(mobileLandscapeViewport);
+    await expect(page.getByTestId('mobile-landscape-gate')).not.toBeVisible();
+  }
+  for (const viewport of supportedResizeViewports(testInfo)) {
     await page.setViewportSize(viewport);
     await layoutSettled(page);
     await expect.poll(async () => (await layout(page)).pieces.map(piece => piece.turns)).toEqual(edited);
@@ -394,7 +419,7 @@ test('旋转拼图转动状态在横竖屏间保持，重开恢复本关初始�
     await expect(page.getByTestId('phaser-player').locator('canvas')).toBeInViewport({ ratio: 0.999 });
     await fits(page);
   }
-  await page.getByRole('button', { name: '重新拼图', exact: true }).click();
+  await (await puzzleAction(page, '重新拼图')).click();
   await expect.poll(async () => (await layout(page)).pieces.map(piece => piece.turns)).toEqual(initial);
   await noCompletion(page, level);
 });
@@ -417,16 +442,20 @@ test('图片加载失败保留真实重试入口，恢复后不用刷新页面',
   await expect.poll(async () => (await layout(page)).pieces[0].turns).toBe((before + 1) % 4);
 });
 
-test('三关找不同使用清晰HTML标签，坐标与画布布局一致且没有重复实例', async ({ page }) => {
+test('三关找不同使用清晰HTML标签，坐标与画布布局一致且没有重复实例', async ({ page }, testInfo) => {
   expect(observations).toHaveLength(3);
   for (const level of observations) {
     await page.goto(`/#/play/${level.id}`);
     await expect(page.getByRole('button', { name: '给我提示', exact: true })).toBeEnabled({ timeout: imageLoadTimeout });
     const host = page.getByTestId('phaser-player');
     await expect(host.locator('canvas')).toHaveCount(1);
-    for (const viewport of [{ width: 1289, height: 930 }, { width: 360, height: 640 }, { width: 844, height: 390 }]) {
+    await expect(page.getByRole('button', { name: '放大观察', exact: true })).toHaveCount(0);
+    for (const viewport of [{ width: 1289, height: 930 }, ...supportedResizeViewports(testInfo)]) {
       await page.setViewportSize(viewport);
       await layoutSettled(page);
+      await setSpotZoom(page, 2);
+      const source = assets.find(asset => asset.id === level.baseAssetId)!;
+      expectSpotSynchronized(await readSpotView(page), source.width / source.height);
       const bounds = (await host.boundingBox())!;
       const current = JSON.parse((await host.getAttribute('data-layout'))!);
       for (const [id, text, point] of [
@@ -446,13 +475,15 @@ test('三关找不同使用清晰HTML标签，坐标与画布布局一致且没�
           return Math.abs(measured.x - bounds.x - point.x) < 1 && Math.abs(measured.y - bounds.y - point.y - 2) < 1;
         }).toBe(true);
       }
+      await setSpotZoom(page, 1);
+      expectSpotSynchronized(await readSpotView(page), source.width / source.height);
       await fits(page);
     }
   }
 });
 
-test('玩法封面横版铺满，填色图像不再留下两侧空背景', async ({ page }) => {
-  for (const viewport of [{ width: 1289, height: 930 }, { width: 360, height: 640 }, { width: 844, height: 390 }]) {
+test('玩法封面横版铺满，填色图像不再留下两侧空背景', async ({ page }, testInfo) => {
+  for (const viewport of [{ width: 1289, height: 930 }, ...supportedResizeViewports(testInfo)]) {
     await page.setViewportSize(viewport);
     await page.goto('/#/theme/patterns/games');
     const coloring = page.getByRole('link', { name: '填色', exact: true });

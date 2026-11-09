@@ -3,9 +3,11 @@ import { getAssetUrl } from '../content';
 import { PhaserPlayer } from '../runtime/PhaserPlayer';
 import type { ContentCatalog, GameCommand, GameEvent, PuzzleLevel } from '../types';
 import type { PuzzleLayout } from '../games/puzzle/rules';
+import { GroupedLevelTitle, LevelAdvanceControl } from './LevelAdvanceControl';
+import { DialogCloseButton } from './DialogCloseButton';
 import '../styles/puzzle.css';
 
-export interface PuzzleScreenProps { level: PuzzleLevel; catalog: ContentCatalog; onEvent: (event: GameEvent) => void; reducedMotion: boolean; onBack: () => void }
+export interface PuzzleScreenProps { level: PuzzleLevel; catalog: ContentCatalog; onEvent: (event: GameEvent) => void; reducedMotion: boolean; onBack: () => void; backLabel?: string }
 function PuzzleReference({ url, title, onClose }: { url: string; title: string; onClose: () => void }) {
   const dialog = useRef<HTMLDialogElement>(null), heading = useId();
   useEffect(() => {
@@ -13,12 +15,12 @@ function PuzzleReference({ url, title, onClose }: { url: string; title: string; 
     return () => { dialog.current?.close(); if (opener instanceof HTMLElement && opener.isConnected) opener.focus({ preventScroll: true }); };
   }, []);
   return <dialog ref={dialog} className="puzzle-reference-dialog" aria-labelledby={heading} onCancel={event => { event.preventDefault(); onClose(); }}>
-    <header><h2 id={heading}>{title} · 原图</h2><button type="button" aria-label="关闭拼图参考" onClick={onClose}>×</button></header>
+    <header><h2 id={heading}>{title} · 原图</h2><DialogCloseButton label="关闭拼图参考" onClick={onClose} /></header>
     <div className="puzzle-reference-picture"><img src={url} alt={`${title}完整参考图`} draggable={false} /></div>
     <footer><button type="button" className="button button-secondary button-small" onClick={onClose}><span className="button-label">返回拼图</span></button></footer>
   </dialog>;
 }
-export function PuzzleScreen({ level, catalog, onEvent, reducedMotion, onBack }: PuzzleScreenProps) {
+export function PuzzleScreen({ level, catalog, onEvent, reducedMotion, onBack, backLabel = '返回拼图关卡' }: PuzzleScreenProps) {
   const [ready, setReady] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [command, setCommand] = useState<GameCommand | null>(null);
@@ -52,12 +54,19 @@ export function PuzzleScreen({ level, catalog, onEvent, reducedMotion, onBack }:
     setCommand({ type, sequence: ++sequence.current });
   };
   return <div className="page page-play puzzle-screen" data-puzzle-mode={level.mode}>
+    <aside className="puzzle-controls" aria-label="拼图操作">
     <header className="puzzle-heading">
-      <button type="button" className="puzzle-back" aria-label="返回拼图关卡" onClick={onBack}><img src={getAssetUrl(catalog, 'icon-back')} alt="" /><span>返回</span></button>
-      <h1>{level.title}</h1>
-      <button type="button" className="text-link" onClick={() => setReferenceOpen(true)}>查看原图</button>
+      <button type="button" className="puzzle-back" aria-label={backLabel} onClick={onBack}><img src={getAssetUrl(catalog, 'icon-back')} alt="" /><span>返回</span></button>
+      <h1 aria-label={level.title}><GroupedLevelTitle title={level.title} /></h1>
+      <button type="button" aria-label="查看原图" className="text-link puzzle-reference-trigger" onClick={() => setReferenceOpen(true)}>原图</button>
       <div className="puzzle-progress" data-testid="puzzle-progress" aria-label={`已归位 ${count} 块，共 ${level.rows * level.columns} 块`}><strong>{count}</strong><span>/ {level.rows * level.columns}</span></div>
     </header>
+    <div className="puzzle-actions">
+      <button type="button" data-sound="none" className="button button-secondary button-small puzzle-hint" aria-label="拼图提示" disabled={!ready} onClick={() => send('hint')}><img src={getAssetUrl(catalog, 'icon-hint')} alt="" /><span className="button-label">提示</span></button>
+      <button type="button" aria-label="重新拼图" className="button button-secondary button-small puzzle-restart" disabled={!ready} onClick={() => send('restart')}><img src={getAssetUrl(catalog, 'icon-restart')} alt="" /><span className="button-label">重来</span></button>
+      <LevelAdvanceControl className="button button-secondary button-small puzzle-advance" />
+    </div>
+    </aside>
     <section className="game-stage puzzle-stage" aria-label={level.mode === 'rotation' ? '旋转拼图游戏区' : '不规则碎片拼图游戏区'}>
       <div className="puzzle-instruction">{level.mode === 'rotation' ? '点击图块，顺时针旋转90°' : '拖动碎片或选片后点位置；滑动碎片区空白可上下找片'}</div>
       <div className="puzzle-canvas-shell">
@@ -85,10 +94,6 @@ export function PuzzleScreen({ level, catalog, onEvent, reducedMotion, onBack }:
     {error ? <div className="notice notice-error puzzle-error" role="alert"><p>{error}</p><button type="button" className="button button-secondary button-small" onClick={() => {
       setError(null); setReady(false); setMessage(''); setCount(0); setCommand(null); setLayout(null); setRun(value => value + 1);
     }}><span className="button-label">重新加载拼图</span></button></div> : <div className="puzzle-status" role="status" data-testid="puzzle-hint-status">{message}</div>}
-    <div className="puzzle-actions">
-      <button type="button" data-sound="none" className="button button-secondary button-small" disabled={!ready} onClick={() => send('hint')}><img src={getAssetUrl(catalog, 'icon-hint')} alt="" /><span className="button-label">拼图提示</span></button>
-      <button type="button" className="button button-secondary button-small" disabled={!ready} onClick={() => send('restart')}><img src={getAssetUrl(catalog, 'icon-restart')} alt="" /><span className="button-label">重新拼图</span></button>
-    </div>
     {referenceOpen && <PuzzleReference url={getAssetUrl(catalog, level.imageAssetId)} title={level.title} onClose={() => setReferenceOpen(false)} />}
   </div>;
 }

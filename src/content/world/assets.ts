@@ -21,3 +21,5 @@ export const WORLD_ART_SAMPLE = {
 
 /** Square hall revision for the terrain preview, retaining the approved v002 asset. */
 export const TERRAIN_COURTYARD_MODEL = 'courtyard/v006/courtyard.glb';
+export const TERRAIN_FIRST_GALLERY_COURTYARD_MODEL = 'courtyard/v007/courtyard.glb';
+export const TERRAIN_TRAVELER_MODEL = 'traveler-tripo/v002/traveler.glb';

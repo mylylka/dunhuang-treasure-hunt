@@ -101,7 +101,7 @@ function within(inner: { x: number; y: number; width: number; height: number }, 
 }
 
 describe('影子配对完整等比布局', () => {
-  it('电脑与手机横竖屏五张卡片、标签预留和绘图框完整处于视口内且不重叠', () => {
+  it('电脑窗口与手机横屏五张卡片、紧凑标签和绘图框完整处于视口内且不重叠', () => {
     for (const [width, height] of [[1440, 800], [1024, 600], [844, 240], [568, 220], [390, 600], [360, 460], [320, 300], [280, 180], [112, 48], [1, 1]]) {
       const layout = calculateShadowLayout(width, height);
       expect(layout.options).toHaveLength(4);
@@ -109,7 +109,7 @@ describe('影子配对完整等比布局', () => {
       for (const card of cards) {
         expect(within(card, { x: 0, y: 0, width, height })).toBe(true);
         expect(within(card.image, card)).toBe(true);
-        if (card.height >= 100) expect(card.y + card.height - card.image.y - card.image.height).toBeGreaterThanOrEqual(22);
+        if (card.height >= 100) expect(card.y + card.height - card.image.y - card.image.height).toBeGreaterThanOrEqual(14);
       }
       for (let a = 0; a < cards.length; a++) for (let b = a + 1; b < cards.length; b++) {
         const first = cards[a], second = cards[b];
@@ -121,6 +121,23 @@ describe('影子配对完整等比布局', () => {
       expect(layout.options[0].y).toBe(layout.options[1].y);
       expect(layout.options[2].y).toBe(layout.options[3].y);
       expect(layout.options[0].x).toBe(layout.options[2].x);
+    }
+  });
+
+  it('手机侧栏之外的画布以高度优先，参照接近整高，四候选保持清晰的2×2大图', () => {
+    for (const [width, height, referenceMinimum, optionMinimum] of [[524, 288, 245, 110], [736, 318, 280, 130]]) {
+      const layout = calculateShadowLayout(width, height);
+      const reference = fitShadowImage(layout.reference.image, 1254, 1254);
+      expect(reference.height).toBeGreaterThanOrEqual(referenceMinimum);
+      for (const card of layout.options) {
+        const option = fitShadowImage(card.image, 1254, 1254);
+        expect(option.height).toBeGreaterThanOrEqual(optionMinimum);
+        expect(card.width).toBeGreaterThanOrEqual(44); expect(card.height).toBeGreaterThanOrEqual(44);
+        expect(within(option, card)).toBe(true);
+      }
+      expect(layout.options[0].y).toBe(layout.options[1].y);
+      expect(layout.options[2].y).toBe(layout.options[3].y);
+      expect(layout.reference.x + layout.reference.width).toBeLessThan(layout.options[0].x);
     }
   });
 

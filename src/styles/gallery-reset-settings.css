@@ -1,0 +1,99 @@
+.setting-row.gallery-reset-settings {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px 20px;
+  border-top: 0;
+}
+
+.gallery-reset-controls,
+.gallery-reset-dialog-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.gallery-reset-controls select,
+.gallery-reset-settings button {
+  min-height: 44px;
+  padding: 6px 13px;
+  border: 1px solid #bba98a;
+  border-radius: 4px;
+  background: var(--paper-light);
+  color: var(--ink);
+  font: inherit;
+  font-size: 14px;
+}
+
+.gallery-reset-controls select {
+  max-width: 100%;
+}
+
+.gallery-reset-controls select:focus-visible {
+  outline: 3px solid var(--blue);
+  outline-offset: 3px;
+}
+
+.gallery-reset-settings .gallery-reset-action {
+  border-color: #bd8b75;
+  color: var(--red);
+}
+
+.gallery-reset-settings .gallery-reset-action:hover:not(:disabled) {
+  background: #f3e3d8;
+}
+
+.gallery-reset-settings .gallery-reset-status {
+  grid-column: 1 / -1;
+  color: var(--blue);
+}
+
+.gallery-reset-status:empty,
+.gallery-reset-error:empty {
+  position: absolute;
+}
+
+.gallery-reset-dialog {
+  width: min(440px, calc(100% - 24px));
+  max-height: calc(100dvh - 24px);
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding: clamp(16px, 4vw, 24px);
+  border: 1px solid #bba98a;
+  border-radius: 6px;
+  background: var(--paper-light);
+  color: var(--ink);
+  box-shadow: 0 20px 80px #302e2940;
+}
+
+.gallery-reset-dialog::backdrop {
+  background: #302e2960;
+}
+
+.gallery-reset-description {
+  display: grid;
+  gap: 5px;
+  line-height: 1.6;
+}
+
+.gallery-reset-dialog-actions {
+  justify-content: flex-end;
+  margin-top: 14px;
+}
+
+.gallery-reset-settings .gallery-reset-confirm {
+  background: var(--red);
+  border-color: var(--red);
+  color: var(--paper-light);
+}
+
+.gallery-reset-settings .gallery-reset-error:not(:empty) {
+  margin-top: 10px;
+  color: var(--red);
+}
+
+@media (max-width: 680px) {
+  .setting-row.gallery-reset-settings {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

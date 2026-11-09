@@ -1,0 +1,179 @@
+import { useEffect, useRef, useState } from 'react';
+import type * as PhaserTypes from 'phaser';
+import type { ColoringLevel, GameCommand, GameEvent, RegionColors, SpotDifferenceLevel } from '../types';
+import type { Viewport } from './geometry';
+import { calculateLayout } from './layout';
+import { calculateColoringLayout } from '../games/coloring/rules';
+
+interface PlayerCommonProps {
+  onEvent: (event: GameEvent) => void;
+  command: GameCommand | null;
+  imageAspectRatio?: number;
+  reducedMotion?: boolean;
+}
+export interface SpotDifferencePlayerProps extends PlayerCommonProps {
+  level: SpotDifferenceLevel;
+  baseImageUrl: string;
+  editedImageUrl: string;
+}
+export interface ColoringPlayerProps extends PlayerCommonProps {
+  level: ColoringLevel;
+  lineImageUrl: string;
+  regionMapImageUrl: string;
+  initialColors: RegionColors;
+}
+export type PhaserPlayerProps = SpotDifferencePlayerProps | ColoringPlayerProps;
+interface RuntimeController {
+  execute(command: GameCommand): void;
+  resize(viewport: Viewport): void;
+  setReducedMotion(reducedMotion: boolean): void;
+  dispose(): void;
+}
+
+export function PhaserPlayer(props: PhaserPlayerProps) {
+  const { level, onEvent, command } = props;
+  const baseImageUrl = 'baseImageUrl' in props ? props.baseImageUrl : '';
+  const editedImageUrl = 'editedImageUrl' in props ? props.editedImageUrl : '';
+  const lineImageUrl = 'lineImageUrl' in props ? props.lineImageUrl : '';
+  const regionMapImageUrl = 'regionMapImageUrl' in props ? props.regionMapImageUrl : '';
+  const aspectRatio = props.imageAspectRatio ?? (level.gameType === 'spot-difference' ? 1.5 : 1);
+  const hostRef = useRef<HTMLDivElement>(null);
+  const eventRef = useRef(onEvent);
+  const commandRef = useRef(command);
+  const controllerRef = useRef<RuntimeController | null>(null);
+  const initialColorsRef = useRef<RegionColors>({});
+  if ('initialColors' in props) initialColorsRef.current = props.initialColors;
+  const pendingCommandsRef = useRef<GameCommand[]>([]);
+  const processedSequenceRef = useRef<number | null>(null);
+  const failedRef = useRef(false);
+  const [attempt, setAttempt] = useState(0);
+  const [systemReducedMotion, setSystemReducedMotion] = useState(() => window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  const motionRef = useRef(false);
+  motionRef.current = Boolean(props.reducedMotion || systemReducedMotion);
+  eventRef.current = onEvent;
+  commandRef.current = command;
+
+  useEffect(() => {
+    const host = hostRef.current;
+    if (!host) return;
+    let cancelled = false;
+    let game: PhaserTypes.Game | null = null;
+    let controller: RuntimeController | null = null;
+    failedRef.current = false;
+    pendingCommandsRef.current = [];
+    // A command from the previous level must not be replayed when opening this level.
+    processedSequenceRef.current = commandRef.current?.sequence ?? null;
+    const target = document.createElement('div');
+    target.style.width = '100%';
+    target.style.height = '100%';
+    target.style.minHeight = '0';
+    host.append(target);
+    const initialBounds = host.getBoundingClientRect();
+    let viewport: Viewport = { width: Math.max(1, Math.floor(initialBounds.width)), height: Math.max(1, Math.floor(initialBounds.height)) };
+    let appliedWidth = 0;
+    let appliedHeight = 0;
+    const updateLayout = () => {
+      if (cancelled) return;
+      const bounds = host.getBoundingClientRect();
+      const next = { width: Math.max(1, Math.floor(bounds.width)), height: Math.max(1, Math.floor(bounds.height)) };
+      if (next.width === appliedWidth && next.height === appliedHeight) return;
+      appliedWidth = next.width;
+      appliedHeight = next.height;
+      viewport = next;
+      if (!controller) host.dataset.layout = JSON.stringify(level.gameType === 'spot-difference'
+        ? calculateLayout(viewport.width, viewport.height, aspectRatio)
+        : calculateColoringLayout(viewport.width, viewport.height, aspectRatio));
+      if (game) game.scale.resize(viewport.width, viewport.height);
+      controller?.resize(viewport);
+    };
+    updateLayout();
+    const observer = new ResizeObserver(updateLayout);
+    observer.observe(host);
+    const emit = (event: GameEvent) => {
+      if (cancelled) return;
+      if (event.type === 'error') failedRef.current = true;
+      eventRef.current(event);
+    };
+    void (async () => {
+      try {
+        const Phaser = await import('phaser');
+        if (cancelled) return;
+        const publishLayout = (layout: unknown) => {
+          if (cancelled) return;
+          host.dataset.layout = JSON.stringify(layout);
+          const presentation = layout as { animating?: boolean; reducedMotion?: boolean };
+          if (presentation.animating !== undefined) host.dataset.animating = String(presentation.animating);
+          if (presentation.reducedMotion !== undefined) host.dataset.reducedMotion = String(presentation.reducedMotion);
+        };
+        let runtime: { scene: PhaserTypes.Scene; controller: RuntimeController };
+        if (level.gameType === 'spot-difference') {
+          const { createSpotDifferenceScene } = await import('../games/spot-difference/scene');
+          if (cancelled) return;
+          runtime = createSpotDifferenceScene(Phaser, { level, baseImageUrl, editedImageUrl,
+            layout: calculateLayout(viewport.width, viewport.height, aspectRatio), imageAspectRatio: aspectRatio,
+            reducedMotion: motionRef.current, publishLayout, emit });
+        } else {
+          const { createColoringScene } = await import('../games/coloring/scene');
+          if (cancelled) return;
+          runtime = createColoringScene(Phaser, { level, lineImageUrl, regionMapImageUrl,
+            initialColors: initialColorsRef.current, viewport, imageAspectRatio: aspectRatio,
+            reducedMotion: motionRef.current, publishLayout, emit });
+        }
+        controller = runtime.controller;
+        controllerRef.current = controller;
+        game = new Phaser.Game({
+          type: Phaser.AUTO,
+          parent: target,
+          width: viewport.width,
+          height: viewport.height,
+          transparent: true,
+          banner: false,
+          canvasStyle: 'display: block;',
+          scale: { mode: Phaser.Scale.NONE },
+          scene: [runtime.scene],
+          input: { activePointers: 2 },
+        });
+        game.canvas.setAttribute('aria-label', level.gameType === 'spot-difference'
+          ? '找不同游戏画布，点击参照图或变化图中的差异' : '填色画布，点击区域上色，放大后可拖动');
+        for (const pending of pendingCommandsRef.current.splice(0)) controller.execute(pending);
+      } catch {
+        emit({ type: 'error', message: '游戏运行组件未能加载，请点击“重来”重试。' });
+      }
+    })();
+    return () => {
+      cancelled = true;
+      observer.disconnect();
+      controller?.dispose();
+      if (controllerRef.current === controller) controllerRef.current = null;
+      game?.destroy(true);
+      target.remove();
+    };
+  }, [level, baseImageUrl, editedImageUrl, lineImageUrl, regionMapImageUrl, aspectRatio, attempt]);
+
+  useEffect(() => {
+    const query = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const update = () => setSystemReducedMotion(query.matches);
+    query.addEventListener('change', update);
+    return () => query.removeEventListener('change', update);
+  }, []);
+
+  useEffect(() => {
+    controllerRef.current?.setReducedMotion(Boolean(props.reducedMotion || systemReducedMotion));
+  }, [props.reducedMotion, systemReducedMotion]);
+
+  useEffect(() => {
+    if (!command || command.sequence === processedSequenceRef.current) return;
+    processedSequenceRef.current = command.sequence;
+    if (command.type === 'restart' && failedRef.current) {
+      setAttempt((value) => value + 1);
+      return;
+    }
+    if (controllerRef.current) controllerRef.current.execute(command);
+    else pendingCommandsRef.current.push(command);
+  }, [command]);
+
+  return <div ref={hostRef} data-testid="phaser-player" data-game-type={level.gameType} role="group"
+    aria-label={level.gameType === 'coloring' ? '填色游戏区' : '找不同游戏区'}
+    style={{ width: '100%', height: '100%', flex: '1 1 0', minWidth: 0,
+      minHeight: 0, touchAction: level.gameType === 'coloring' ? 'none' : 'manipulation' }} />;
+}

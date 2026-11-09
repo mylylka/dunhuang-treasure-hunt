@@ -1,0 +1,170 @@
+[
+  {
+    "id": "bg-landscape",
+    "path": "/assets/shared/bg-landscape-v001.png",
+    "width": 1600,
+    "height": 900,
+    "kind": "background",
+    "placeholder": false,
+    "version": "user-art-v001",
+    "sourceNote": "婧婧在 ChatGPT 网页端生成并交付的 AI 教学美术；原稿按 v001 保存，不是原壁画照片或历史原貌复原。"
+  },
+  {
+    "id": "bg-portrait",
+    "path": "/assets/shared/bg-portrait-v001.png",
+    "width": 900,
+    "height": 1600,
+    "kind": "background",
+    "placeholder": false,
+    "version": "user-art-v001",
+    "sourceNote": "婧婧在 ChatGPT 网页端生成并交付的 AI 教学美术；原稿按 v001 保存，不是原壁画照片或历史原貌复原。"
+  },
+  {
+    "id": "panel",
+    "path": "/assets/shared/panel-v001.png",
+    "width": 1024,
+    "height": 1024,
+    "kind": "panel",
+    "placeholder": false,
+    "version": "user-art-v001",
+    "sourceNote": "婧婧在 ChatGPT 网页端生成并交付的 AI 教学美术；原稿按 v001 保存，不是原壁画照片或历史原貌复原。",
+    "slice": {
+      "top": 310,
+      "right": 318,
+      "bottom": 310,
+      "left": 318
+    }
+  },
+  {
+    "id": "button-primary",
+    "path": "/assets/shared/button-primary-v001.png",
+    "width": 1024,
+    "height": 256,
+    "kind": "button",
+    "placeholder": false,
+    "version": "user-art-v001",
+    "sourceNote": "婧婧在 ChatGPT 网页端生成并交付的 AI 教学美术；原稿按 v001 保存，不是原壁画照片或历史原貌复原。",
+    "slice": {
+      "top": 64,
+      "right": 220,
+      "bottom": 64,
+      "left": 220
+    }
+  },
+  {
+    "id": "button-secondary",
+    "path": "/assets/shared/button-secondary-v001.png",
+    "width": 1024,
+    "height": 256,
+    "kind": "button",
+    "placeholder": false,
+    "version": "user-art-v001",
+    "sourceNote": "婧婧在 ChatGPT 网页端生成并交付的 AI 教学美术；原稿按 v001 保存，不是原壁画照片或历史原貌复原。",
+    "slice": {
+      "top": 64,
+      "right": 220,
+      "bottom": 64,
+      "left": 220
+    }
+  },
+  {
+    "id": "icon-back",
+    "path": "/assets/shared/icon-back-v001.png",
+    "width": 256,
+    "height": 256,
+    "kind": "icon",
+    "placeholder": false,
+    "version": "user-art-v001",
+    "sourceNote": "婧婧在 ChatGPT 网页端生成并交付的 AI 教学美术；原稿按 v001 保存，不是原壁画照片或历史原貌复原。"
+  },
+  {
+    "id": "icon-hint",
+    "path": "/assets/shared/icon-hint-v001.png",
+    "width": 256,
+    "height": 256,
+    "kind": "icon",
+    "placeholder": false,
+    "version": "user-art-v001",
+    "sourceNote": "婧婧在 ChatGPT 网页端生成并交付的 AI 教学美术；原稿按 v001 保存，不是原壁画照片或历史原貌复原。"
+  },
+  {
+    "id": "icon-restart",
+    "path": "/assets/shared/icon-restart-v001.png",
+    "width": 256,
+    "height": 256,
+    "kind": "icon",
+    "placeholder": false,
+    "version": "user-art-v001",
+    "sourceNote": "婧婧在 ChatGPT 网页端生成并交付的 AI 教学美术；原稿按 v001 保存，不是原壁画照片或历史原貌复原。"
+  },
+  {
+    "id": "icon-locked",
+    "path": "/assets/shared/icon-locked-v001.png",
+    "width": 256,
+    "height": 256,
+    "kind": "icon",
+    "placeholder": false,
+    "version": "user-art-v001",
+    "sourceNote": "婧婧在 ChatGPT 网页端生成并交付的 AI 教学美术；原稿按 v001 保存，不是原壁画照片或历史原貌复原。"
+  },
+  {
+    "id": "icon-completed",
+    "path": "/assets/shared/icon-completed-v001.png",
+    "width": 256,
+    "height": 256,
+    "kind": "icon",
+    "placeholder": false,
+    "version": "user-art-v001",
+    "sourceNote": "婧婧在 ChatGPT 网页端生成并交付的 AI 教学美术；原稿按 v001 保存，不是原壁画照片或历史原貌复原。"
+  },
+  {
+    "id": "cover-patterns",
+    "path": "/assets/themes/cover-patterns-v001.png",
+    "width": 1200,
+    "height": 800,
+    "kind": "cover",
+    "placeholder": false,
+    "version": "user-art-v001",
+    "sourceNote": "婧婧在 ChatGPT 网页端生成并交付的 AI 教学美术；原稿按 v001 保存，不是原壁画照片或历史原貌复原。"
+  },
+  {
+    "id": "cover-music",
+    "path": "/assets/themes/cover-music-v001.png",
+    "width": 1200,
+    "height": 800,
+    "kind": "cover",
+    "placeholder": false,
+    "version": "user-art-v001",
+    "sourceNote": "婧婧在 ChatGPT 网页端生成并交付的 AI 教学美术；原稿按 v001 保存，不是原壁画照片或历史原貌复原。"
+  },
+  {
+    "id": "cover-stories",
+    "path": "/assets/themes/cover-stories-v001.png",
+    "width": 1200,
+    "height": 800,
+    "kind": "cover",
+    "placeholder": false,
+    "version": "user-art-v001",
+    "sourceNote": "婧婧在 ChatGPT 网页端生成并交付的 AI 教学美术；原稿按 v001 保存，不是原壁画照片或历史原貌复原。"
+  },
+  {
+    "id": "patterns-intro-a",
+    "path": "/assets/levels/patterns-intro/patterns-intro-a-v001.png",
+    "width": 1200,
+    "height": 800,
+    "kind": "level",
+    "placeholder": false,
+    "version": "user-art-v001",
+    "sourceNote": "婧婧在 ChatGPT 网页端生成并交付的 AI 教学美术；原稿按 v001 保存，不是原壁画照片或历史原貌复原。"
+  },
+  {
+    "id": "patterns-intro-b",
+    "path": "/assets/levels/patterns-intro/patterns-intro-b-v001.png",
+    "width": 1200,
+    "height": 800,
+    "kind": "level",
+    "placeholder": false,
+    "version": "user-art-v001",
+    "sourceNote": "婧婧在 ChatGPT 网页端生成并交付的 AI 教学美术；原稿按 v001 保存，不是原壁画照片或历史原貌复原。 以 L01 为底，仅在五个配置区域用局部蒙版合入 L02，边缘轻微过渡；区域外像素与 A 相同。"
+  }
+]

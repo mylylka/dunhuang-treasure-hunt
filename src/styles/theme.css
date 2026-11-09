@@ -114,3 +114,11 @@
  .result-reference .result-reference-link{font-size:16px;margin-bottom:7px}
  .result-reference .result-art-note{font-size:11px;padding-top:7px}
 }
+
+/* Phone play surfaces use the actual browser viewport, including safe-area padding. */
+@media(pointer:coarse) and (hover:none) and (orientation:landscape) and (max-height:600px){
+ .app-shell[data-screen=play]:has(.spot-screen,.puzzle-screen,.coloring-screen)::before{opacity:0}
+ .app-shell[data-screen=play]:has(.spot-screen,.puzzle-screen,.coloring-screen)>.site-header,.app-shell[data-screen=play]:has(.spot-screen,.puzzle-screen,.coloring-screen)>.site-footer{display:none}
+ .page.page-play:is(.spot-screen,.puzzle-screen,.coloring-screen){width:100%;margin:0;padding:max(6px,env(safe-area-inset-top)) max(6px,env(safe-area-inset-right)) max(6px,env(safe-area-inset-bottom)) max(6px,env(safe-area-inset-left));background:#f7f1e4}
+ .page-play:is(.spot-screen,.puzzle-screen,.coloring-screen) .game-stage{padding:0;border:0;border-image:none;background:transparent}
+}

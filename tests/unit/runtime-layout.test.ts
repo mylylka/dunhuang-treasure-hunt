@@ -59,4 +59,23 @@ describe('受宽高共同约束的屏幕式画布', () => {
     expect(layout.reference.width).toBeGreaterThan(0);
     expect(layout.edited.height).toBeGreaterThan(0);
   });
+
+  it.each([
+    { width: 754, height: 318, minimum: 290 },
+    { width: 550, height: 288, minimum: 260 },
+  ])('手机横屏$width×$height 主图区优先利用完整高度', ({ width, height, minimum }) => {
+    const layout = calculateLayout(width, height, 1, true);
+    expect(layout.stacked).toBe(false);
+    expect(layout.reference.height).toBeGreaterThanOrEqual(minimum);
+    for (const pane of [layout.reference, layout.edited]) {
+      expect(pane.width).toBe(pane.height);
+      expect(pane.y).toBeGreaterThanOrEqual(20);
+      expect(pane.y + pane.height).toBeLessThanOrEqual(height);
+      expect(pane.x).toBeGreaterThanOrEqual(0);
+      expect(pane.x + pane.width).toBeLessThanOrEqual(width);
+    }
+    expect(layout.reference.x + layout.reference.width + 8).toBeCloseTo(layout.edited.x);
+    const originalRatio = calculateLayout(width, height, 1.5, true);
+    expect(originalRatio.reference.width / originalRatio.reference.height).toBeCloseTo(1.5);
+  });
 });

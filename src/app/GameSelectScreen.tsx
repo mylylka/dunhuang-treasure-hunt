@@ -6,7 +6,6 @@ export interface GameSelectScreenProps {
   catalog: ContentCatalog;
   theme: ThemeDefinition;
   onBack: () => void;
-  onReview: () => void;
   hrefForGame: (type: GameType) => string;
 }
 
@@ -27,14 +26,13 @@ function GamePreview({ catalog, theme, type }: { catalog: ContentCatalog; theme:
   </div>;
 }
 
-export function GameSelectScreen({ catalog, theme, onBack, onReview, hrefForGame }: GameSelectScreenProps) {
+export function GameSelectScreen({ catalog, theme, onBack, hrefForGame }: GameSelectScreenProps) {
   return <div className="page selection-screen game-select-screen">
     <header className="selection-topbar">
       <button className="selection-back" type="button" onClick={onBack} aria-label="返回上一级">
         <img src={getAssetUrl(catalog, 'icon-back')} alt="" /><span>返回</span>
       </button>
       <h1>选择游戏</h1>
-      <button className="selection-review" type="button" onClick={onReview}>重看教学</button>
     </header>
     <div className="game-choice-stage">
       <div className="game-choice-grid" data-game-count={theme.allowedGameTypes.length} aria-label={`${theme.title}小游戏`}>

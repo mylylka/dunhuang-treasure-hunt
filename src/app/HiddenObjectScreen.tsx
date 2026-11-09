@@ -1,7 +1,8 @@
-import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState, type CSSProperties } from 'react';
 import { getAssetUrl } from '../content';
 import { hiddenObjectPool, hiddenObjectSpriteUrl } from '../content/hidden-object';
 import { PhaserPlayer } from '../runtime/PhaserPlayer';
+import { GroupedLevelTitle, LevelAdvanceControl } from './LevelAdvanceControl';
 import type { ContentCatalog, GameCommand, GameEvent, HiddenObjectLevel, HiddenObjectSnapshot } from '../types';
 import '../styles/hidden-object.css';
 
@@ -76,8 +77,12 @@ export function HiddenObjectScreen({ level, catalog, reducedMotion, onEvent, onB
   const status = snapshot?.status ?? 'ready';
   const remainingMs = snapshot?.remainingMs ?? level.timeLimitSeconds * 1000;
   const taskCount = snapshot?.totalTargets ?? 0;
+  const taskGroups = snapshot?.tasks.length ?? level.tasks.groupCount;
+  const chapterPaper = level.chapter?.order === 2 ? '#f5f8ee' : level.chapter?.order === 3 ? '#faf5ec' : '#fffaf1';
+  const screenStyle = { '--hidden-ready-columns': taskGroups, '--hidden-ready-paper': chapterPaper } as CSSProperties;
   const running = ready && !error && status === 'running';
-  const selectable = ready && !error && (status === 'ready' || status === 'running');
+  const selectable = running;
+  const preparing = !error && status === 'ready';
   const blocked = !running;
   const scrollTop = snapshot?.scrollTop ?? 0;
   const scrollMax = snapshot?.scrollMax ?? 0;
@@ -90,7 +95,7 @@ export function HiddenObjectScreen({ level, catalog, reducedMotion, onEvent, onB
     observer.observe(element);
     measure();
     return () => observer.disconnect();
-  }, []);
+  }, [run]);
 
   useLayoutEffect(() => {
     const element = scrollbar.current;
@@ -127,19 +132,21 @@ export function HiddenObjectScreen({ level, catalog, reducedMotion, onEvent, onB
     setRun(value => value + 1);
   };
 
-  return <div className="page page-play hidden-object-screen" data-hidden-status={error ? 'error' : ready ? status : 'loading'}>
+  return <div className="page page-play hidden-object-screen" data-level-id={level.id} data-hidden-status={error ? 'error' : ready ? status : 'loading'}
+    data-preparing={preparing ? 'true' : 'false'} data-task-groups={taskGroups}
+    data-chapter-id={level.chapter?.id} data-chapter-order={level.chapter?.order} data-chapter-level={level.chapter?.level}
+    data-background-asset-id={level.chapter?.backgroundAssetId} style={screenStyle}>
+    <div className="hidden-object-controls" aria-label="寻找目标与操作" aria-hidden={preparing} inert={preparing}>
     <header className="hidden-object-heading">
       <button type="button" className="hidden-object-back" aria-label="返回找物关卡" onClick={onBack}>
         <img src={getAssetUrl(catalog, 'icon-back')} alt="" /><span>返回</span>
       </button>
-      <h1>{level.title}</h1>
+      <h1 aria-label={level.title}><GroupedLevelTitle title={level.title} /></h1>
       <div className={`hidden-object-clock${remainingMs <= 10_000 ? ' is-urgent' : ''}`}
         role="timer" aria-live="off" aria-label={`剩余 ${Math.ceil(remainingMs / 1000)} 秒`} data-testid="hidden-object-timer">
         <span>剩余时间</span><strong>{clockLabel(remainingMs)}</strong>
       </div>
     </header>
-
-    <div className="hidden-object-workspace">
       <aside className="hidden-object-task-panel" aria-label="本局寻找目标">
         <div className="hidden-object-task-heading">
           <span>寻找目标</span>
@@ -156,7 +163,7 @@ export function HiddenObjectScreen({ level, catalog, reducedMotion, onEvent, onB
               aria-label={`${task.label}，已找到 ${task.found} 件，共 ${task.required} 件${complete ? '，已找齐' : ''}`}
               disabled={!selectable || complete}
               onClick={() => { setMessage(''); send({ type: 'hidden-select-task', taskId: task.id }); }}>
-              <span className="hidden-object-task-art">{sprite && <img src={hiddenObjectSpriteUrl(sprite)} alt="" draggable={false} />}</span>
+              <span className="hidden-object-task-art">{sprite && <img src={hiddenObjectSpriteUrl(sprite)} alt="" draggable={false} loading="lazy" decoding="async" />}</span>
               <span className="hidden-object-task-copy"><strong>{task.label}</strong><span>{complete ? '已找齐' : '已找到'} <b>{task.found} / {task.required}</b></span></span>
               {complete && <span className="hidden-object-task-check" aria-hidden="true">✓</span>}
             </button>;
@@ -164,10 +171,17 @@ export function HiddenObjectScreen({ level, catalog, reducedMotion, onEvent, onB
           {!snapshot && <p className="hidden-object-target-loading">正在抽取本局目标…</p>}
         </div>
       </aside>
-
+    <footer className="hidden-object-actions">
+      {status === 'timeout' ? <button type="button" className="button button-secondary button-small" disabled={!ready || Boolean(error)} onClick={retry}><span className="button-label">重试本局</span></button>
+        : <button type="button" className="button button-secondary button-small" disabled={!running} onClick={() => send({ type: 'hidden-pause' })}><span className="button-label">暂停</span></button>}
+      <button type="button" data-sound="none" className="button button-secondary button-small" disabled={!running || !snapshot?.tasks.some(task => task.found < task.required)}
+        onClick={() => send({ type: 'hint' })}><img src={getAssetUrl(catalog, 'icon-hint')} alt="" /><span className="button-label">提示</span></button>
+      <button type="button" className="button button-secondary button-small" disabled={!ready || Boolean(error) || status === 'won'} onClick={newRound}><span className="button-label">新一局</span></button>
+      <LevelAdvanceControl />
+    </footer>
+    </div>
       <section className={`game-stage hidden-object-stage${blocked ? ' is-blocked' : ''}`} aria-label="找物游戏区">
         <div className="hidden-object-tools">
-          <span>滚轮或上下拖动浏览</span>
           <div role="group" aria-label="盘面缩放">{([1, 2, 3] as const).map(zoom =>
             <button type="button" key={zoom} disabled={!running}
               aria-pressed={(snapshot?.zoom ?? 1) === zoom}
@@ -176,6 +190,7 @@ export function HiddenObjectScreen({ level, catalog, reducedMotion, onEvent, onB
         <div className="hidden-object-canvas-shell">
           <div className="hidden-object-canvas-host" aria-hidden={blocked}>
             <PhaserPlayer key={`${level.id}-${run}`} level={level} hiddenObjectPool={hiddenObjectPool}
+              backgroundImageUrl={level.chapter ? getAssetUrl(catalog, level.chapter.backgroundAssetId) : undefined}
               reducedMotion={reducedMotion} onEvent={emit} command={command} />
           </div>
           <div ref={scrollbar} className="hidden-object-scrollbar" data-testid="hidden-object-scrollbar"
@@ -196,24 +211,24 @@ export function HiddenObjectScreen({ level, catalog, reducedMotion, onEvent, onB
           {error ? <div className="hidden-object-overlay hidden-object-error" role="alert">
             <h2>画面暂未准备好</h2><p>{error}</p>
             <button type="button" className="button button-secondary button-small" onClick={reload}><span className="button-label">重新加载</span></button>
-          </div> : !ready ? <div className="hidden-object-overlay hidden-object-loading" role="status"><p>正在布置寻宝物件…</p></div>
+          </div> : !ready && !snapshot ? <div className="hidden-object-overlay hidden-object-loading" role="status"><p>正在布置寻宝物件…</p></div>
             : status === 'ready' ? <div className="hidden-object-overlay hidden-object-ready" data-testid="hidden-object-ready" role="dialog" aria-labelledby={overlayHeading}>
               <h2 id={overlayHeading} className="visually-hidden">本局寻找</h2>
               <p className="hidden-object-ready-meta"><span>{level.timeLimitSeconds}秒</span><span aria-hidden="true">·</span><span>共{taskCount}件</span></p>
-              <div className="hidden-object-ready-targets" role="list" aria-label="本局目标图片与数量">
+              <div className="hidden-object-ready-targets" role="list" aria-label="本局目标图片与数量" data-task-count={taskGroups}>
                 {snapshot?.tasks.map(task => {
                   const sprite = spritesById.get(task.previewSpriteId);
                   return <figure key={task.id} className="hidden-object-ready-target" role="listitem"
                     data-testid="hidden-object-ready-target" data-task-id={task.id}>
                     <div className="hidden-object-ready-art">
-                      {sprite && <img src={hiddenObjectSpriteUrl(sprite)} alt={`${task.label}目标图`} draggable={false} />}
+                      {sprite && <img src={hiddenObjectSpriteUrl(sprite)} alt={`${task.label}目标图`} draggable={false} fetchPriority="high" loading="eager" decoding="async" />}
                     </div>
                     <figcaption><span>{task.label}</span><strong aria-label={`${task.required}件`}>×{task.required}</strong></figcaption>
                   </figure>;
                 })}
               </div>
               <div className="hidden-object-ready-footer">
-                <button ref={overlayAction} type="button" className="button button-primary" onClick={() => { setMessage(''); send({ type: 'hidden-start' }); }}><span className="button-label">开始寻找</span></button>
+                <button ref={overlayAction} type="button" className="button button-primary" disabled={!ready} aria-busy={!ready} onClick={() => { setMessage(''); send({ type: 'hidden-start' }); }}><span className="button-label">开始寻找</span></button>
               </div>
             </div> : status === 'paused' ? <div className="hidden-object-overlay" role="dialog" aria-labelledby={overlayHeading}>
               <h2 id={overlayHeading}>已暂停</h2><p>时间停在 {clockLabel(remainingMs)}</p>
@@ -227,15 +242,6 @@ export function HiddenObjectScreen({ level, catalog, reducedMotion, onEvent, onB
             </div> : status === 'won' ? <div className="hidden-object-overlay" role="status"><h2>目标已找齐</h2></div> : null}
         </div>
       </section>
-    </div>
-
     <div className="hidden-object-status" role="status" data-testid="hidden-object-hint-status">{message}</div>
-    <footer className="hidden-object-actions">
-      {status === 'timeout' ? <button type="button" className="button button-secondary button-small" disabled={!ready || Boolean(error)} onClick={retry}><span className="button-label">重试本局</span></button>
-        : <button type="button" className="button button-secondary button-small" disabled={!running} onClick={() => send({ type: 'hidden-pause' })}><span className="button-label">暂停</span></button>}
-      <button type="button" data-sound="none" className="button button-secondary button-small" disabled={!running || !snapshot?.tasks.some(task => task.found < task.required)}
-        onClick={() => send({ type: 'hint' })}><img src={getAssetUrl(catalog, 'icon-hint')} alt="" /><span className="button-label">提示</span></button>
-      <button type="button" className="button button-secondary button-small" disabled={!ready || Boolean(error) || status === 'won'} onClick={newRound}><span className="button-label">新一局</span></button>
-    </footer>
   </div>;
 }

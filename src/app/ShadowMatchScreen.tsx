@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useId, useMemo, useRef, useState, type CSSProperties, type PointerEvent } from 'react';
 import { getAssetUrl } from '../content';
 import { PhaserPlayer } from '../runtime/PhaserPlayer';
+import { GroupedLevelTitle, LevelAdvanceControl } from './LevelAdvanceControl';
+import { DialogCloseButton } from './DialogCloseButton';
 import type { ContentCatalog, GameCommand, GameEvent, ShadowMatchLevel } from '../types';
 import type { ShadowCardLayout, ShadowMatchLayout, ShadowMatchSnapshot } from '../games/shadow-match/types';
 import '../styles/shadow-match.css';
@@ -21,11 +23,14 @@ interface ShadowComparisonProps {
   optionUrl: string;
   label: string;
   imageAspectRatio: number;
+  candidates: { id: string; label: string }[];
+  selectedOptionId: string;
+  onChooseOption: (optionId: string) => void;
   onClose: () => void;
 }
 
 /** A separate, read-only comparison: both pictures share the same fitted size and transform. */
-function ShadowComparison({ referenceUrl, optionUrl, label, imageAspectRatio, onClose }: ShadowComparisonProps) {
+function ShadowComparison({ referenceUrl, optionUrl, label, imageAspectRatio, candidates, selectedOptionId, onChooseOption, onClose }: ShadowComparisonProps) {
   const dialog = useRef<HTMLDialogElement>(null);
   const windows = useRef<(HTMLDivElement | null)[]>([]);
   const headingId = useId();
@@ -49,6 +54,9 @@ function ShadowComparison({ referenceUrl, optionUrl, label, imageAspectRatio, on
   useEffect(() => {
     const slots = windows.current.filter((element): element is HTMLDivElement => Boolean(element));
     const measure = () => {
+      // A portrait guard hides the entered surface without unmounting this observer.
+      // Ignore its temporary zero size so the inspection's zoom and pan remain intact.
+      if (slots.length !== 2 || slots.some(element => element.clientWidth < 2 || element.clientHeight < 2)) return;
       // Leave one CSS pixel on every edge after integer layout rounding in WebKit.
       const availableWidth = Math.max(1, Math.min(...slots.map(element =>
         Math.min(element.clientWidth, Math.floor(element.getBoundingClientRect().width)))) - 2);
@@ -92,20 +100,8 @@ function ShadowComparison({ referenceUrl, optionUrl, label, imageAspectRatio, on
 
   return <dialog ref={dialog} className="shadow-match-inspector" data-testid="shadow-match-inspector"
     aria-labelledby={headingId} onCancel={event => { event.preventDefault(); onClose(); }}>
-    <header className="shadow-match-inspector-heading">
-      <h2 id={headingId}>放大对照 · 影子 {label}</h2>
-      <button type="button" className="shadow-match-inspector-close" aria-label="关闭放大对照" onClick={onClose}>×</button>
-    </header>
-    <div className="shadow-match-inspector-tools">
-      <span>两图同步放大，拖动查看</span>
-      <div role="group" aria-label="对照图片缩放">
-        {([1, 2, 3] as const).map(value => <button key={value} type="button" aria-pressed={zoom === value}
-          onClick={() => { setZoom(value); if (value === 1) setPan({ x: 0, y: 0 }); }}>{value}×</button>)}
-        <button type="button" onClick={() => { setZoom(1); setPan({ x: 0, y: 0 }); }}>复位</button>
-      </div>
-    </div>
     <div className="shadow-match-inspector-pair">
-      {[{ url: referenceUrl, title: '彩色参照' }, { url: optionUrl, title: `影子 ${label}` }].map((image, index) => <figure key={image.title}>
+      {[{ url: referenceUrl, title: '彩色参照' }, { url: optionUrl, title: `影子 ${label}` }].map((image, index) => <figure key={index}>
         <figcaption>{image.title}</figcaption>
         <div ref={element => { windows.current[index] = element; }} className={`shadow-match-inspector-window${zoom > 1 ? ' is-zoomed' : ''}`}
           onPointerDown={beginDrag} onPointerMove={moveDrag} onPointerUp={finishDrag} onPointerCancel={finishDrag}
@@ -117,9 +113,26 @@ function ShadowComparison({ referenceUrl, optionUrl, label, imageAspectRatio, on
         </div>
       </figure>)}
     </div>
-    <footer className="shadow-match-inspector-footer">
-      <button type="button" className="button button-secondary button-small" onClick={onClose}><span className="button-label">返回配对</span></button>
-    </footer>
+    <aside className="shadow-match-inspector-rail" aria-label="对照操作">
+      <header className="shadow-match-inspector-heading">
+        <h2 id={headingId} className="visually-hidden">放大对照 · 影子 {label}</h2>
+        <span aria-hidden="true">影子 {label}</span>
+        <DialogCloseButton label="关闭放大对照" className="shadow-match-inspector-close" onClick={onClose} />
+      </header>
+      <label className="shadow-match-comparison-choice"><span className="visually-hidden">选择对照影子</span>
+        <select aria-label="选择对照影子" value={selectedOptionId} onChange={event => onChooseOption(event.target.value)}>
+          {candidates.map(candidate => <option key={candidate.id} value={candidate.id}>影子 {candidate.label}</option>)}
+        </select>
+      </label>
+      <div className="shadow-match-inspector-tools" role="group" aria-label="对照图片缩放">
+        {([1, 2, 3] as const).map(value => <button key={value} type="button" aria-pressed={zoom === value}
+          onClick={() => { setZoom(value); if (value === 1) setPan({ x: 0, y: 0 }); }}>{value}×</button>)}
+        <button type="button" onClick={() => { setZoom(1); setPan({ x: 0, y: 0 }); }}>复位</button>
+      </div>
+      <footer className="shadow-match-inspector-footer">
+        <button type="button" className="button button-secondary button-small" onClick={onClose}><span className="button-label">返回配对</span></button>
+      </footer>
+    </aside>
   </dialog>;
 }
 
@@ -183,19 +196,19 @@ export function ShadowMatchScreen({ level, catalog, reducedMotion, onEvent, onBa
       <button type="button" className="shadow-match-back" aria-label="返回影子配对关卡" onClick={onBack}>
         <img src={getAssetUrl(catalog, 'icon-back')} alt="" /><span>返回</span>
       </button>
-      <h1>{level.title}</h1>
+      <h1 aria-label={level.title}><GroupedLevelTitle title={level.title} /></h1>
     </header>
+    <div className="shadow-match-studio">
     <section className="game-stage shadow-match-stage" aria-label="飞天影子配对游戏区">
-      <p className="shadow-match-instruction">选择与参照轮廓完全相同的影子</p>
       <div className="shadow-match-canvas-shell">
         <PhaserPlayer key={`${level.id}-${run}`} level={level} shadowImages={shadowImages} onShadowLayout={setLayout}
           reducedMotion={reducedMotion} onEvent={emit} command={command} />
         {ready && !error && layout && snapshot && <div className="shadow-match-controls" role="group" aria-label="参照与四个影子选项">
-          <div className="shadow-match-reference" style={cardStyle(layout.reference)}>
+          <button type="button" className="shadow-match-reference" style={cardStyle(layout.reference)}
+            disabled={!firstComparisonId} aria-label="放大参照对照"
+            onClick={event => { if (firstComparisonId) openComparison(firstComparisonId, event.currentTarget); }}>
             <span className="shadow-match-card-label">参照</span>
-            <button type="button" className="shadow-match-expand" disabled={!firstComparisonId}
-              aria-label="放大参照对照" onClick={event => { if (firstComparisonId) openComparison(firstComparisonId, event.currentTarget); }}><span aria-hidden="true">↗</span></button>
-          </div>
+          </button>
           {layout.options.map((card, index) => {
             const optionId = snapshot.optionIds[index];
             const label = optionLabel(index);
@@ -207,8 +220,6 @@ export function ShadowMatchScreen({ level, catalog, reducedMotion, onEvent, onBa
                 aria-pressed={selected} disabled={!playable} onClick={() => send({ type: 'shadow-select', optionId })}>
                 <span className="shadow-match-card-label" aria-hidden="true">{label}</span>
               </button>
-              <button type="button" className="shadow-match-expand" aria-label={`放大影子 ${label} 对照`}
-                onClick={event => openComparison(optionId, event.currentTarget)}><span aria-hidden="true">↗</span></button>
             </div>;
           })}
         </div>}
@@ -220,15 +231,28 @@ export function ShadowMatchScreen({ level, catalog, reducedMotion, onEvent, onBa
     </section>
     <div className="shadow-match-status" data-testid="shadow-match-status" role="status">{snapshot?.message ?? ''}</div>
     <footer className="shadow-match-actions">
+      <div className="shadow-match-rail-heading">
+        <button type="button" className="shadow-match-back" aria-label="返回影子配对关卡" onClick={onBack}>
+          <img src={getAssetUrl(catalog, 'icon-back')} alt="" /><span>返回</span>
+        </button>
+        <h1 aria-label={level.title}><GroupedLevelTitle title={level.title} /></h1>
+      </div>
+      <button type="button" className="button button-secondary button-small" disabled={!firstComparisonId || !playable}
+        data-testid="shadow-match-compare" onClick={event => { if (firstComparisonId) openComparison(firstComparisonId, event.currentTarget); }}>
+        <span className="button-label">放大对照</span>
+      </button>
       <button type="button" data-sound="none" className="button button-secondary button-small" disabled={!playable} onClick={() => send({ type: 'hint' })}>
         <img src={getAssetUrl(catalog, 'icon-hint')} alt="" /><span className="button-label">配对提示</span>
       </button>
       <button type="button" className="button button-secondary button-small" disabled={!ready || Boolean(error)} onClick={() => send({ type: 'restart' })}>
         <img src={getAssetUrl(catalog, 'icon-restart')} alt="" /><span className="button-label">重新配对</span>
       </button>
+      <LevelAdvanceControl />
     </footer>
+    </div>
     {comparison && comparisonIndex >= 0 && <ShadowComparison referenceUrl={shadowImages[level.referenceAssetId]}
       optionUrl={shadowImages[comparison.assetId]} label={optionLabel(comparisonIndex)} imageAspectRatio={reference.width / reference.height}
-      onClose={closeComparison} />}
+      candidates={snapshot!.optionIds.map((id, index) => ({ id, label: optionLabel(index) }))}
+      selectedOptionId={comparisonOptionId!} onChooseOption={setComparisonOptionId} onClose={closeComparison} />}
   </div>;
 }

@@ -1,0 +1,18 @@
+{
+  "banditsDefeat": {
+    "path": "mogao-narration/v001/bandits-defeat.mp3",
+    "duration": 16.26
+  },
+  "hall-a": {
+    "path": "mogao-narration/v001/hall-a-introduction.mp3",
+    "duration": 25.17
+  },
+  "hall-b": {
+    "path": "mogao-narration/v001/hall-b-introduction.mp3",
+    "duration": 28.28
+  },
+  "buddha": {
+    "path": "mogao-narration/v001/buddha-introduction.mp3",
+    "duration": 24.54
+  }
+}

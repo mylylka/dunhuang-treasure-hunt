@@ -1,0 +1,170 @@
+[
+  {
+    "id": "bg-landscape",
+    "path": "/assets/shared/bg-landscape.svg",
+    "width": 1600,
+    "height": 900,
+    "kind": "background",
+    "placeholder": true,
+    "version": "placeholder-v1",
+    "sourceNote": "Agent 创建的几何技术占位，非正式美术；正式原稿由婧婧提供，未复原任何文物。"
+  },
+  {
+    "id": "bg-portrait",
+    "path": "/assets/shared/bg-portrait.svg",
+    "width": 900,
+    "height": 1600,
+    "kind": "background",
+    "placeholder": true,
+    "version": "placeholder-v1",
+    "sourceNote": "Agent 创建的几何技术占位，非正式美术；正式原稿由婧婧提供，未复原任何文物。"
+  },
+  {
+    "id": "panel",
+    "path": "/assets/shared/panel.svg",
+    "width": 1024,
+    "height": 1024,
+    "kind": "panel",
+    "placeholder": true,
+    "version": "placeholder-v1",
+    "sourceNote": "Agent 创建的几何技术占位，非正式美术；正式原稿由婧婧提供，未复原任何文物。",
+    "slice": {
+      "top": 72,
+      "right": 72,
+      "bottom": 72,
+      "left": 72
+    }
+  },
+  {
+    "id": "button-primary",
+    "path": "/assets/shared/button-primary.svg",
+    "width": 1024,
+    "height": 256,
+    "kind": "button",
+    "placeholder": true,
+    "version": "placeholder-v1",
+    "sourceNote": "Agent 创建的几何技术占位，非正式美术；正式原稿由婧婧提供，未复原任何文物。",
+    "slice": {
+      "top": 64,
+      "right": 80,
+      "bottom": 64,
+      "left": 80
+    }
+  },
+  {
+    "id": "button-secondary",
+    "path": "/assets/shared/button-secondary.svg",
+    "width": 1024,
+    "height": 256,
+    "kind": "button",
+    "placeholder": true,
+    "version": "placeholder-v1",
+    "sourceNote": "Agent 创建的几何技术占位，非正式美术；正式原稿由婧婧提供，未复原任何文物。",
+    "slice": {
+      "top": 64,
+      "right": 80,
+      "bottom": 64,
+      "left": 80
+    }
+  },
+  {
+    "id": "icon-back",
+    "path": "/assets/shared/icon-back.svg",
+    "width": 256,
+    "height": 256,
+    "kind": "icon",
+    "placeholder": true,
+    "version": "placeholder-v1",
+    "sourceNote": "Agent 创建的几何技术占位，非正式美术；正式原稿由婧婧提供，未复原任何文物。"
+  },
+  {
+    "id": "icon-hint",
+    "path": "/assets/shared/icon-hint.svg",
+    "width": 256,
+    "height": 256,
+    "kind": "icon",
+    "placeholder": true,
+    "version": "placeholder-v1",
+    "sourceNote": "Agent 创建的几何技术占位，非正式美术；正式原稿由婧婧提供，未复原任何文物。"
+  },
+  {
+    "id": "icon-restart",
+    "path": "/assets/shared/icon-restart.svg",
+    "width": 256,
+    "height": 256,
+    "kind": "icon",
+    "placeholder": true,
+    "version": "placeholder-v1",
+    "sourceNote": "Agent 创建的几何技术占位，非正式美术；正式原稿由婧婧提供，未复原任何文物。"
+  },
+  {
+    "id": "icon-locked",
+    "path": "/assets/shared/icon-locked.svg",
+    "width": 256,
+    "height": 256,
+    "kind": "icon",
+    "placeholder": true,
+    "version": "placeholder-v1",
+    "sourceNote": "Agent 创建的几何技术占位，非正式美术；正式原稿由婧婧提供，未复原任何文物。"
+  },
+  {
+    "id": "icon-completed",
+    "path": "/assets/shared/icon-completed.svg",
+    "width": 256,
+    "height": 256,
+    "kind": "icon",
+    "placeholder": true,
+    "version": "placeholder-v1",
+    "sourceNote": "Agent 创建的几何技术占位，非正式美术；正式原稿由婧婧提供，未复原任何文物。"
+  },
+  {
+    "id": "cover-patterns",
+    "path": "/assets/themes/cover-patterns.svg",
+    "width": 1200,
+    "height": 800,
+    "kind": "cover",
+    "placeholder": true,
+    "version": "placeholder-v1",
+    "sourceNote": "Agent 创建的几何技术占位，非正式美术；正式原稿由婧婧提供，未复原任何文物。"
+  },
+  {
+    "id": "cover-music",
+    "path": "/assets/themes/cover-music.svg",
+    "width": 1200,
+    "height": 800,
+    "kind": "cover",
+    "placeholder": true,
+    "version": "placeholder-v1",
+    "sourceNote": "Agent 创建的几何技术占位，非正式美术；正式原稿由婧婧提供，未复原任何文物。"
+  },
+  {
+    "id": "cover-stories",
+    "path": "/assets/themes/cover-stories.svg",
+    "width": 1200,
+    "height": 800,
+    "kind": "cover",
+    "placeholder": true,
+    "version": "placeholder-v1",
+    "sourceNote": "Agent 创建的几何技术占位，非正式美术；正式原稿由婧婧提供，未复原任何文物。"
+  },
+  {
+    "id": "patterns-intro-a",
+    "path": "/assets/levels/patterns-intro/patterns-intro-a.svg",
+    "width": 1200,
+    "height": 800,
+    "kind": "level",
+    "placeholder": true,
+    "version": "placeholder-v1",
+    "sourceNote": "同源几何技术占位，非正式美术。A/B 仅三处已标区域不同；不声称复原莫高窟第329窟。"
+  },
+  {
+    "id": "patterns-intro-b",
+    "path": "/assets/levels/patterns-intro/patterns-intro-b.svg",
+    "width": 1200,
+    "height": 800,
+    "kind": "level",
+    "placeholder": true,
+    "version": "placeholder-v1",
+    "sourceNote": "同源几何技术占位，非正式美术。A/B 仅三处已标区域不同；不声称复原莫高窟第329窟。"
+  }
+]

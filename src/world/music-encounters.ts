@@ -9,6 +9,7 @@ export interface MusicEncounterOptions {
   useAudiblePlayback?:boolean;
   hearingDuration?:number;
   musicAlreadyHeard?:boolean;
+  musicAvailable?: () => boolean;
 }
 /** Visit-scoped anticipation. Mural discovery stays unavailable until its line finishes. */
 export function nearMuralSteps(p:WorldPoint){
@@ -28,7 +29,7 @@ export function createMusicEncounters(initial: WorldPoint, revised=false, hearin
     get musicHeard() { return musicHeard; },
     get listenedSeconds() { return Math.max(0,lastAudibleTime-heardAtBaseline); },
     get muralReady() { return admired && !active; },
-    update(p: WorldPoint, dt: number, speechEnded: boolean, playback?:MusicPlaybackEvidence) {
+    update(p: WorldPoint, dt: number, speechEnded: boolean, playback?:MusicPlaybackEvidence, muralAvailable = true) {
       if(actualPlayback&&playback&&Number.isFinite(playback.audibleTime)){
         if(playback.audibleTime<lastAudibleTime)heardAtBaseline=playback.audibleTime;
         lastAudibleTime=playback.audibleTime;
@@ -43,9 +44,10 @@ export function createMusicEncounters(initial: WorldPoint, revised=false, hearin
         return;
       }
       if(actualPlayback){
-        if(!musicHeard&&playback?.audible&&lastAudibleTime-heardAtBaseline>=requiredSeconds){musicHeard=true;begin('music');return;}
+        if (hearingZone && !hearingZone(p)) heardAtBaseline = lastAudibleTime;
+        else if(!musicHeard&&playback?.audible&&lastAudibleTime-heardAtBaseline>=requiredSeconds&&options.musicAvailable?.()!==false){musicHeard=true;begin('music');return;}
         const [x,z]=MUSIC_LAYOUT_V4.mural.trigger;
-        if(!admired&&inMusicCourtV4(p)&&(revised?nearMuralSteps(p):Math.hypot(p.x-x,p.z-z)<4.1))begin('mural');
+        if(muralAvailable&&!admired&&inMusicCourtV4(p)&&(revised?nearMuralSteps(p):Math.hypot(p.x-x,p.z-z)<4.1))begin('mural');
         return;
       }
       if(hearingDelay!==null){hearingDelay+=dt;if(hearingDelay>=2){hearingDelay=null;begin('music');}return;}
@@ -57,7 +59,7 @@ export function createMusicEncounters(initial: WorldPoint, revised=false, hearin
       // A reload/preview start farther along must not remain permanently silent.
       if (hearingZone?inMusicCourtV4(p):p.x > g.maxX) musicHeard = true;
       const [x,z] = MUSIC_LAYOUT_V4.mural.trigger;
-      if (!admired && inMusicCourtV4(p) && (revised?nearMuralSteps(p):Math.hypot(p.x-x,p.z-z) < 4.1)) begin('mural');
+      if (muralAvailable && !admired && inMusicCourtV4(p) && (revised?nearMuralSteps(p):Math.hypot(p.x-x,p.z-z) < 4.1)) begin('mural');
     },
     skip: finish,
     reset() { musicHeard = false; hearingDelay=null; heardAtBaseline=lastAudibleTime; admired = false; active = null; },

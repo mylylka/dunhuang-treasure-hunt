@@ -57,6 +57,11 @@ function validate(recipe: HiddenObjectRecipe, pool: HiddenObjectPool): void {
   requireCondition(integer(requested.groupCount, 1) && requested.groupCount <= requested.groupIds.length, '任务组数量超出候选范围。');
   requireCondition(integer(requested.minCount, 1) && integer(requested.maxCount, requested.minCount), '每组目标数量范围无效。');
   requireCondition(requested.groupCount * requested.minCount <= total, '类别配额不足以容纳目标。');
+  if (requested.totalCount !== undefined) {
+    requireCondition(integer(requested.totalCount, requested.groupCount * requested.minCount)
+      && requested.totalCount <= requested.groupCount * requested.maxCount && requested.totalCount <= total,
+    '目标总数须位于各组数量范围内且不超过盘面物件数。');
+  }
 
   const spriteIds = pool.sprites.map(sprite => sprite.id);
   requireCondition(spriteIds.every(nonempty) && new Set(spriteIds).size === spriteIds.length, '素材编号不能为空或重复。');
@@ -108,11 +113,151 @@ function allocateTargets(required: number[], candidates: HiddenObjectSprite[][],
   return chosen;
 }
 
+/** Validate every selectable target allocation without generating coordinates or consuming randomness. */
+export function validateHiddenObjectRecipe(recipe: HiddenObjectRecipe, pool: HiddenObjectPool): void {
+  validate(recipe, pool);
+  const { tasks } = recipe;
+  const totalItems = recipe.categoryQuotas.reduce((sum, quota) => sum + quota.count, 0);
+  requireCondition(tasks.totalCount !== undefined || tasks.groupCount * tasks.maxCount <= totalItems,
+    '类别配额不足以容纳所有可能的目标数量。');
+  const candidates = tasks.groupIds.map(group => pool.sprites.filter(sprite => sprite.groupIds.includes(group)));
+  const selected: HiddenObjectSprite[][] = [], required: number[] = [];
+  function counts(group: number, used: number): void {
+    if (group === tasks.groupCount) {
+      allocateTargets(required, selected, recipe.categoryQuotas, pool);
+      return;
+    }
+    const pending = tasks.groupCount - group - 1;
+    const minimum = tasks.totalCount === undefined ? tasks.minCount
+      : Math.max(tasks.minCount, tasks.totalCount - used - pending * tasks.maxCount);
+    const maximum = tasks.totalCount === undefined ? tasks.maxCount
+      : Math.min(tasks.maxCount, tasks.totalCount - used - pending * tasks.minCount);
+    for (let count = minimum; count <= maximum; count++) {
+      required[group] = count;
+      counts(group + 1, used + count);
+    }
+  }
+  function groups(start: number): void {
+    if (selected.length === tasks.groupCount) { counts(0, 0); return; }
+    const pending = tasks.groupCount - selected.length;
+    for (let group = start; group <= candidates.length - pending; group++) {
+      selected.push(candidates[group]); groups(group + 1); selected.pop();
+    }
+  }
+  groups(0);
+}
+
 export function rotatedItemBounds(item: Pick<HiddenObjectItem, 'x' | 'y' | 'width' | 'height' | 'rotation'>): { x: number; y: number; width: number; height: number } {
   const cosine = Math.abs(Math.cos(item.rotation)), sine = Math.abs(Math.sin(item.rotation));
   const width = item.width * cosine + item.height * sine;
   const height = item.width * sine + item.height * cosine;
   return { x: item.x + (item.width - width) / 2, y: item.y + (item.height - height) / 2, width, height };
+}
+
+type ScatterBounds = ReturnType<typeof rotatedItemBounds>;
+
+/** Repair only positions: a sparse patch must not be hidden by a dense neighbouring column. */
+function repairLocalBalance(items: HiddenObjectItem[], board: HiddenObjectBoard, random: () => number): HiddenObjectItem[] | undefined {
+  const boxes = items.map(rotatedItemBounds);
+  const totalArea = boxes.reduce((sum, box) => sum + box.width * box.height, 0);
+  const globalDensity = totalArea / (board.width * board.height);
+  // Sparse test/custom recipes cannot populate every small window. The dense
+  // production scrolls have enough objects for a meaningful local coverage floor.
+  if (globalDensity <= .45) return items;
+  const floor = globalDensity * .65;
+  const windows: (ScatterBounds & { kind: 'local' | 300 | 600 })[] = [];
+  const starts = (last: number, step: number): number[] => {
+    const values = Array.from({ length: Math.floor(last / step) + 1 }, (_, index) => index * step);
+    if (values.at(-1) !== last) values.push(last);
+    return values;
+  };
+  const width = Math.min(320, board.width), height = Math.min(300, board.height);
+  for (const y of starts(board.height - height, 75)) for (const x of starts(board.width - width, 80)) {
+    windows.push({ x, y, width, height, kind: 'local' });
+  }
+  const localCount = windows.length;
+  for (const h of [300, 600] as const) for (const y of starts(board.height - Math.min(h, board.height), 100)) {
+    windows.push({ x: 0, y, width: board.width, height: Math.min(h, board.height), kind: h });
+  }
+  const overlap = (box: ScatterBounds, window: ScatterBounds) => Math.max(0, Math.min(box.x + box.width, window.x + window.width) - Math.max(box.x, window.x))
+    * Math.max(0, Math.min(box.y + box.height, window.y + window.height) - Math.max(box.y, window.y));
+  let densities = windows.map(window => boxes.reduce((sum, box) => sum + overlap(box, window), 0) / (window.width * window.height));
+  const energy = (values: number[]) => values.slice(0, localCount).reduce((sum, value) => sum + Math.max(0, floor - value) ** 2, 0);
+  const verticalPass = (values: number[]) => ([300, 600] as const).every(h => {
+    const valuesForHeight = values.filter((_value, index) => windows[index].kind === h);
+    return Math.max(...valuesForHeight) - Math.min(...valuesForHeight) < (h === 300 ? .25 : .15);
+  });
+  const holeLimit = 65, holeWeight = .05;
+  const distanceSquared = (box: ScatterBounds, point: { x: number; y: number }) => Math.max(box.x - point.x, 0, point.x - box.x - box.width) ** 2
+    + Math.max(box.y - point.y, 0, point.y - box.y - box.height) ** 2;
+  const penalty = (squared: number) => Math.max(0, Math.sqrt(squared) / holeLimit - 1) ** 2;
+  const measureHoles = () => {
+    const points: { x: number; y: number; nearest: number; second: number; owner: number; penalty: number }[] = [];
+    const bad: number[] = [], owners: number[][] = boxes.map(() => []);
+    let maximum = { distance: 0, x: 0, y: 0 }, total = 0;
+    // Sample the 2D free space, including the edges. These are measurement
+    // points only; object positions remain continuous, with no snapping.
+    for (const y of starts(board.height - board.inset * 2, 20)) for (const x of starts(board.width - board.inset * 2, 20)) {
+      const point = { x: x + board.inset, y: y + board.inset, nearest: Infinity, second: Infinity, owner: -1, penalty: 0 };
+      for (let index = 0; index < boxes.length; index++) {
+        const squared = distanceSquared(boxes[index], point);
+        if (squared < point.nearest) { point.second = point.nearest; point.nearest = squared; point.owner = index; }
+        else if (squared < point.second) point.second = squared;
+      }
+      point.penalty = penalty(point.nearest); total += point.penalty;
+      owners[point.owner].push(points.length);
+      if (point.penalty > 0) bad.push(points.length);
+      const distance = Math.sqrt(point.nearest);
+      if (distance > maximum.distance) maximum = { distance, x: point.x, y: point.y };
+      points.push(point);
+    }
+    return { points, bad, owners, maximum, total };
+  };
+  let holes = measureHoles();
+  let currentEnergy = energy(densities) + holes.total * holeWeight;
+  const output = [...items];
+  for (let step = 0; step < 24; step++) {
+    let worst = 0;
+    for (let index = 1; index < localCount; index++) if (densities[index] < densities[worst]) worst = index;
+    if (densities[worst] >= floor - 1e-10 && holes.maximum.distance <= holeLimit + 1e-10) return output;
+    const fillHole = holes.maximum.distance / holeLimit - 1 > Math.max(0, (floor - densities[worst]) / floor);
+    const target = fillHole ? { x: Math.max(0, Math.min(board.width - width, holes.maximum.x - width / 2)),
+      y: Math.max(0, Math.min(board.height - height, holes.maximum.y - height / 2)), width, height } : windows[worst];
+    const start = Math.floor(random() * boxes.length);
+    let best: { index: number; next: ScatterBounds; values: number[]; score: number } | undefined;
+    // At most two continuous random positions per existing object, per repair.
+    // No fresh sprites, size changes or unbounded searches are introduced.
+    for (let trial = 0; trial < boxes.length * 2; trial++) {
+      const index = (start + Math.floor(trial / 2)) % boxes.length, old = boxes[index];
+      if (overlap(old, target) > old.width * old.height * .2) continue;
+      const minX = Math.max(board.inset, fillHole ? holes.maximum.x - old.width - holeLimit / 2 : target.x);
+      const minY = Math.max(board.inset, fillHole ? holes.maximum.y - old.height - holeLimit / 2 : target.y);
+      const maxX = Math.min(board.width - board.inset - old.width, fillHole ? holes.maximum.x + holeLimit / 2 : target.x + target.width - old.width);
+      const maxY = Math.min(board.height - board.inset - old.height, fillHole ? holes.maximum.y + holeLimit / 2 : target.y + target.height - old.height);
+      if (maxX < minX || maxY < minY) continue;
+      const next = { x: minX + random() * (maxX - minX), y: minY + random() * (maxY - minY), width: old.width, height: old.height };
+      if (boxes.some((other, otherIndex) => otherIndex !== index && next.x < other.x + other.width + 2
+        && next.x + next.width + 2 > other.x && next.y < other.y + other.height + 2 && next.y + next.height + 2 > other.y)) continue;
+      const values = densities.map((value, i) => value + (overlap(next, windows[i]) - overlap(old, windows[i])) / (windows[i].width * windows[i].height));
+      // Other currently-safe samples cannot get worse when their nearest box
+      // stays put. Only the donor's samples and existing holes need reevaluation.
+      let holeEnergy = holes.total;
+      for (const pointIndex of new Set([...holes.bad, ...holes.owners[index]])) {
+        const point = holes.points[pointIndex];
+        const squared = Math.min(point.owner === index ? point.second : point.nearest, distanceSquared(next, point));
+        holeEnergy += penalty(squared) - point.penalty;
+      }
+      const score = energy(values) + holeEnergy * holeWeight;
+      if (score < (best?.score ?? currentEnergy) - 1e-12 && verticalPass(values)) best = { index, next, values, score };
+    }
+    if (!best) break;
+    densities = best.values; boxes[best.index] = best.next; holes = measureHoles();
+    currentEnergy = energy(densities) + holes.total * holeWeight;
+    const item = output[best.index];
+    output[best.index] = { ...item, x: best.next.x + (best.next.width - item.width) / 2,
+      y: best.next.y + (best.next.height - item.height) / 2 };
+  }
+  return densities.slice(0, localCount).every(value => value >= floor - 1e-10) && holes.maximum.distance <= holeLimit + 1e-10 ? output : undefined;
 }
 
 function scatterItems(selected: { sprite: HiddenObjectSprite; groupId?: string }[], board: HiddenObjectBoard, random: () => number): HiddenObjectItem[] {
@@ -146,7 +291,13 @@ function scatterItems(selected: { sprite: HiddenObjectSprite; groupId?: string }
     for (let row = top; row <= bottom; row++) for (let column = left; column <= right; column++) keys.push(row * board.columns + column);
     return keys;
   }
-  function remainingSpaces(spaces: ReturnType<typeof rotatedItemBounds>[], occupied: ReturnType<typeof rotatedItemBounds>): ReturnType<typeof rotatedItemBounds>[] {
+  const minimumWidth = Array<number>(ordered.length + 1).fill(Infinity), minimumHeight = Array<number>(ordered.length + 1).fill(Infinity);
+  for (let index = ordered.length - 1; index >= 0; index--) {
+    minimumWidth[index] = Math.min(minimumWidth[index + 1], ordered[index].bounds.width);
+    minimumHeight[index] = Math.min(minimumHeight[index + 1], ordered[index].bounds.height);
+  }
+  function remainingSpaces(spaces: ScatterBounds[], occupied: ScatterBounds, nextIndex: number): ScatterBounds[] {
+    if (nextIndex >= ordered.length) return [];
     const cut = { x: occupied.x - gap, y: occupied.y - gap, width: occupied.width + gap * 2, height: occupied.height + gap * 2 };
     const split = spaces.flatMap(space => {
       const right = space.x + space.width, bottom = space.y + space.height;
@@ -159,7 +310,10 @@ function scatterItems(selected: { sprite: HiddenObjectSprite; groupId?: string }
       if (cutBottom < bottom) pieces.push({ ...space, y: cutBottom, height: bottom - cutBottom });
       return pieces;
     });
-    return split.filter((space, index) => !split.some((other, otherIndex) => otherIndex !== index
+    // This necessary fit condition cannot remove a space usable by any remaining
+    // object. Prune before the quadratic containment check, without capping spaces.
+    const useful = split.filter(space => space.width >= minimumWidth[nextIndex] && space.height >= minimumHeight[nextIndex]);
+    return useful.filter((space, index) => !useful.some((other, otherIndex) => otherIndex !== index
       && other.x <= space.x && other.y <= space.y && other.x + other.width >= space.x + space.width
       && other.y + other.height >= space.y + space.height
       && (otherIndex < index || other.width > space.width || other.height > space.height)));
@@ -171,7 +325,7 @@ function scatterItems(selected: { sprite: HiddenObjectSprite; groupId?: string }
     const buckets = new Map<number, Occupied[]>();
     const placed = new Map<string, HiddenObjectItem>();
     // These regions measure occupied area only; positions never snap to their edges or centres.
-    const densityColumns = 3, densityRows = 6;
+    const densityColumns = 6, densityRows = 12;
     const densityWidth = board.width / densityColumns, densityHeight = board.height / densityRows;
     const coverage = Array<number>(densityColumns * densityRows).fill(0);
     const coverageParts = (box: ReturnType<typeof rotatedItemBounds>) => coverage.map((_, index) => {
@@ -183,7 +337,7 @@ function scatterItems(selected: { sprite: HiddenObjectSprite; groupId?: string }
       .reduce((sum, area, index) => sum + area * coverage[index], 0)
       / (box.width * box.height * densityWidth * densityHeight);
     let freeSpaces = [{ x: board.inset, y: board.inset, width: usableWidth, height: usableHeight }];
-    for (const prototype of ordered) {
+    for (const [prototypeIndex, prototype] of ordered.entries()) {
       let accepted: Occupied | undefined;
       let bestScore = Infinity, validCandidates = 0;
       const available = attempt >= 2 ? freeSpaces.filter(candidate => candidate.width >= prototype.bounds.width
@@ -199,9 +353,17 @@ function scatterItems(selected: { sprite: HiddenObjectSprite; groupId?: string }
           if (!available.length) break;
           space = available[Math.floor(random() * (attempt >= 8 ? Math.min(8, available.length) : available.length))];
         }
+        // Keep large free rectangles connected on the fit-priority attempts.
+        // A continuous offset near a random corner avoids the tiny unusable
+        // slivers left by placing a large object in the middle of each space.
+        const offset = (span: number) => {
+          if (attempt < 8) return random() * span;
+          const inset = Math.min(12, span / 2) * random() ** 2;
+          return random() < .5 ? inset : span - inset;
+        };
         const bounds = {
-          x: space.x + random() * (space.width - prototype.bounds.width),
-          y: space.y + random() * (space.height - prototype.bounds.height),
+          x: space.x + offset(space.width - prototype.bounds.width),
+          y: space.y + offset(space.height - prototype.bounds.height),
           width: prototype.bounds.width, height: prototype.bounds.height,
         };
         const nearby = new Set(cellKeys({ x: bounds.x - gap, y: bounds.y - gap, width: bounds.width + gap * 2, height: bounds.height + gap * 2 })
@@ -224,12 +386,29 @@ function scatterItems(selected: { sprite: HiddenObjectSprite; groupId?: string }
       if (!accepted) break;
       placed.set(accepted.item.id, accepted.item);
       coverageParts(accepted.bounds).forEach((area, index) => { coverage[index] += area; });
-      if (attempt >= 2) freeSpaces = remainingSpaces(freeSpaces, accepted.bounds);
+      if (attempt >= 2) freeSpaces = remainingSpaces(freeSpaces, accepted.bounds, prototypeIndex + 1);
       for (const key of cellKeys(accepted.bounds)) {
         const bucket = buckets.get(key) ?? []; bucket.push(accepted); buckets.set(key, bucket);
       }
     }
-    if (placed.size === prototypes.length) return prototypes.map(item => placed.get(item.id)!);
+    if (placed.size === prototypes.length) {
+      const items = prototypes.map(item => placed.get(item.id)!);
+      const boxes = items.map(rotatedItemBounds);
+      // Check overlapping scroll windows as well as the coarse placement grid.
+      // A packed board can otherwise leave a conspicuous gap across two cells.
+      const balanced = ([{ height: 600, spread: .15 }, { height: 300, spread: .25 }]).every(window => {
+        const height = Math.min(window.height, board.height), last = board.height - height;
+        const starts = Array.from({ length: Math.floor(last / 100) + 1 }, (_, index) => index * 100);
+        if (starts.at(-1) !== last) starts.push(last);
+        const values = starts.map(y => boxes.reduce((sum, box) => sum
+          + Math.max(0, Math.min(y + height, box.y + box.height) - Math.max(y, box.y)) * box.width, 0) / (board.width * height));
+        return Math.max(...values) - Math.min(...values) < window.spread;
+      });
+      if (balanced) {
+        const repaired = repairLocalBalance(items, board, random);
+        if (repaired) return repaired;
+      }
+    }
   }
   throw new Error('找物配置：散放空间不足，有限次重新布局后仍无法完整摆放全部物件。');
 }
@@ -240,7 +419,17 @@ export function createHiddenObjectRound(recipe: HiddenObjectRecipe, pool: Hidden
   const normalizedSeed = seed >>> 0;
   const random = randomFromSeed(normalizedSeed);
   const selectedGroups = shuffled(recipe.tasks.groupIds, random).slice(0, recipe.tasks.groupCount);
-  const required = selectedGroups.map(() => recipe.tasks.minCount + Math.floor(random() * (recipe.tasks.maxCount - recipe.tasks.minCount + 1)));
+  const required = selectedGroups.map(() => recipe.tasks.totalCount === undefined
+    ? recipe.tasks.minCount + Math.floor(random() * (recipe.tasks.maxCount - recipe.tasks.minCount + 1))
+    : recipe.tasks.minCount);
+  if (recipe.tasks.totalCount !== undefined) {
+    let remaining = recipe.tasks.totalCount - required.reduce((sum, count) => sum + count, 0);
+    while (remaining > 0) {
+      const eligible = required.map((count, index) => ({ count, index })).filter(item => item.count < recipe.tasks.maxCount);
+      const chosen = eligible[Math.floor(random() * eligible.length)].index;
+      required[chosen]++; remaining--;
+    }
+  }
   const candidates = selectedGroups.map(group => shuffled(pool.sprites.filter(sprite => sprite.groupIds.includes(group)), random));
   const targetSprites = allocateTargets(required, candidates, recipe.categoryQuotas, pool);
   const targetIds = new Set(targetSprites.map(sprite => sprite.id));

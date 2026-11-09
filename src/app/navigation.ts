@@ -1,7 +1,7 @@
 import type { GameType } from '../types';
 
 export type Route = { page: 'home' | 'themes' | 'help' | 'settings' | 'missing' }
-  | { page: 'theme' | 'play' | 'result'; id: string }
+  | { page: 'play' | 'result'; id: string }
   | { page: 'games'; themeId: string }
   | { page: 'levels'; themeId: string; gameType: GameType };
 
@@ -17,8 +17,10 @@ export function readRoute(hash = window.location.hash): Route {
   catch { return { page: 'missing' }; }
   if (!parts.length) return { page: 'home' };
   if (parts.length === 1 && (parts[0] === 'help' || parts[0] === 'settings' || parts[0] === 'themes')) return { page: parts[0] };
-  if (parts.length === 2 && ['theme', 'play', 'result'].includes(parts[0])) {
-    return { page: parts[0] as 'theme' | 'play' | 'result', id: parts[1] };
+  if (parts.length === 2) {
+    const [page, id] = parts;
+    if (page === 'theme') return { page: 'games', themeId: id };
+    if (page === 'play' || page === 'result') return { page, id };
   }
   if (parts[0] === 'theme' && parts[2] === 'games') {
     if (parts.length === 3) return { page: 'games', themeId: parts[1] };

@@ -1,4 +1,5 @@
 import geometry from '../content/world/courtyard-hall-v006.json';
+import firstGalleryGeometry from '../content/world/courtyard-hall-v007.json';
 import type {WorldCollider} from './movement';
 import type {WorldPoint} from './types';
 
@@ -16,6 +17,9 @@ interface HallGeometry {
 export const TERRAIN_HALL_GEOMETRY=geometry as HallGeometry;
 export const TERRAIN_HALL_PLAYER_SOLIDS:readonly WorldCollider[]=TERRAIN_HALL_GEOMETRY.playerSolids;
 export const TERRAIN_HALL_CAMERA_BOXES=TERRAIN_HALL_GEOMETRY.cameraBoxes;
+export const TERRAIN_FIRST_GALLERY_HALL_GEOMETRY=firstGalleryGeometry as HallGeometry;
+export const TERRAIN_FIRST_GALLERY_HALL_PLAYER_SOLIDS:readonly WorldCollider[]=TERRAIN_FIRST_GALLERY_HALL_GEOMETRY.playerSolids;
+export const TERRAIN_FIRST_GALLERY_HALL_CAMERA_BOXES=TERRAIN_FIRST_GALLERY_HALL_GEOMETRY.cameraBoxes;
 const contains=(p:WorldPoint,box:HallRectangle)=>p.x>=box.minX&&p.x<=box.maxX&&p.z>=box.minZ&&p.z<=box.maxZ;
 
 /** A continuous proxy over the real low platform and its three exit ramps. */

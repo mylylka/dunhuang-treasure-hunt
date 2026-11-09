@@ -1,0 +1,118 @@
+{
+  "version": "user-patterns-v001",
+  "receivedOn": "2026-10-28",
+  "creator": "开发者",
+  "originals": [
+    {
+      "filename": "莲瓣团花A.png",
+      "path": "art-source/levels/patterns-lotus/v001/莲瓣团花A.png",
+      "sha256": "8d6e7f81f31d5d03cb851d50a3da2ab884159def5fb6b3910cb358d460e54062"
+    },
+    {
+      "filename": "莲瓣团花B.png",
+      "path": "art-source/levels/patterns-lotus/v001/莲瓣团花B.png",
+      "sha256": "50dbf6f9305e9e71999d518b7e19632f35959f95d0d88ab8094f2c1c84cb3361"
+    }
+  ],
+  "sourceSize": [
+    1254,
+    1254
+  ],
+  "runtimeSize": [
+    1254,
+    1254
+  ],
+  "cultureStatus": "AI 教学示意；用户未提供对应具体洞窟的原始图源，不添加洞窟归属或历史配色断言。",
+  "processing": "保留原稿字节与原尺寸。使用已审查的 B→A 相似变换配准，双三次重采样；以 A 为底，仅在五个确认矩形内合入 B。蒙版从矩形边缘零透明度向内以 smoothstep 增至不透明，羽化不越出区域；未裁切画幅、强拉比例、生成、修复或重画美术内容。",
+  "registrationBToA": [
+    [
+      0.9996581045509337,
+      -0.00028155875322905135,
+      0.7543974822269067
+    ],
+    [
+      0.00028155875322905135,
+      0.9996581045509337,
+      0.1867810681842754
+    ]
+  ],
+  "targets": [
+    {
+      "id": "outer-flower-center",
+      "pixelBox": [
+        125,
+        30,
+        207,
+        109
+      ],
+      "semanticCenterPixels": [
+        165,
+        74
+      ],
+      "inwardFeatherPixels": 8,
+      "changedPixels": 6063
+    },
+    {
+      "id": "upper-right-corner",
+      "pixelBox": [
+        822,
+        278,
+        979,
+        424
+      ],
+      "semanticCenterPixels": [
+        904,
+        352
+      ],
+      "inwardFeatherPixels": 12,
+      "changedPixels": 21673
+    },
+    {
+      "id": "lower-left-corner",
+      "pixelBox": [
+        283,
+        737,
+        532,
+        972
+      ],
+      "semanticCenterPixels": [
+        389,
+        855
+      ],
+      "inwardFeatherPixels": 12,
+      "changedPixels": 56655
+    },
+    {
+      "id": "right-border-flower",
+      "pixelBox": [
+        1080,
+        763,
+        1149,
+        837
+      ],
+      "semanticCenterPixels": [
+        1115,
+        800
+      ],
+      "inwardFeatherPixels": 8,
+      "changedPixels": 4806
+    },
+    {
+      "id": "right-lower-four-petals",
+      "pixelBox": [
+        1078,
+        935,
+        1151,
+        1017
+      ],
+      "semanticCenterPixels": [
+        1114,
+        976
+      ],
+      "inwardFeatherPixels": 8,
+      "changedPixels": 5601
+    }
+  ],
+  "outsideRegionChangedPixels": 0,
+  "fifthTargetNote": null
+}

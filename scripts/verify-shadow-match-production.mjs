@@ -37,7 +37,8 @@ export async function verifyShadowMatchProduction(page, baseUrl) {
   const candidatePaths = async () => {
     const paths = [];
     for (const label of ['A', 'B', 'C', 'D']) {
-      await page.getByRole('button', { name: `放大影子 ${label} 对照`, exact: true }).click();
+      await page.getByRole('button', { name: '放大对照', exact: true }).click();
+      await page.getByRole('combobox', { name: '选择对照影子', exact: true }).selectOption({ label: `影子 ${label}` });
       const dialog = page.getByTestId('shadow-match-inspector');
       const image = dialog.locator('img').nth(1);
       await expect(image).toHaveJSProperty('complete', true);
@@ -76,8 +77,8 @@ export async function verifyShadowMatchProduction(page, baseUrl) {
     for (const [viewport, label] of [
       [{ width: 1440, height: 1000 }, '电脑'],
       [{ width: 1279, height: 925 }, '批注视口'],
-      [{ width: 360, height: 640 }, '手机'],
-      [{ width: 844, height: 390 }, '手机横屏'],
+      [{ width: 360, height: 640 }, '桌面窄窗'],
+      [{ width: 844, height: 390 }, '桌面横屏窗口'],
     ]) {
       await page.setViewportSize(viewport);
       await expect.poll(async () => {
@@ -109,7 +110,8 @@ export async function verifyShadowMatchProduction(page, baseUrl) {
       const path = `outputs/飞天寻影-${label}预览.png`;
       await page.screenshot({ path, fullPage: true, animations: 'disabled' }); screenshots.push(path);
     }
-    await page.getByRole('button', { name: '放大影子 A 对照', exact: true }).click();
+    await page.getByRole('button', { name: '放大对照', exact: true }).click();
+    await page.getByRole('combobox', { name: '选择对照影子', exact: true }).selectOption({ label: '影子 A' });
     const dialog = page.getByTestId('shadow-match-inspector');
     await page.getByRole('button', { name: '3×', exact: true }).click();
     const window = dialog.locator('.shadow-match-inspector-window').first();

@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "puzzle-three-rabbits",
+  "themeId": "patterns",
+  "gameType": "puzzle",
+  "title": "三兔飞天",
+  "subtitle": "纹样与色彩 · 12片不规则拼图",
+  "objective": "观察三兔、环绕人物与边带，把十二片不规则图块放回正确位置。",
+  "difficulty": "进阶",
+  "estimatedMinutes": 6,
+  "thumbnailAssetId": "puzzle-three-rabbits-image",
+  "imageAssetId": "puzzle-three-rabbits-image",
+  "mode": "jigsaw",
+  "rows": 3,
+  "columns": 4,
+  "seed": 407012,
+  "teachingNote": "图像由开发者提供，用于拼图练习。",
+  "source": {
+    "title": "敦煌研究院：莫高窟第407窟三兔共耳构图参考",
+    "url": "https://www.dha.ac.cn/info/1425/3569.htm",
+    "note": "第407窟资料可用于延伸观察三兔共耳与围绕中心的组织方式；本关图像由开发者提供，不能据此链接认定交付图的洞窟、年代或作者。"
+  }
+}

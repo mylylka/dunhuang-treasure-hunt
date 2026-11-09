@@ -1,0 +1,59 @@
+{
+  "tool": "built-in imagegen",
+  "date": "2026-10-29",
+  "authorization": "用户本轮明确要求去除拼图素材的小红书标识及账号。",
+  "input": "public/assets/levels/puzzle-lotus-ceiling/puzzle-lotus-ceiling-image-v001.png",
+  "prompt": "Use case: precise-object-edit. 输入是原画右下角420×180像素的精确局部，保持它同样的横向长方形构图和边界。仅移除叠加的白色/半透明“小红书”胶囊标识和“小红书号：423649365”文字，延续紧邻的原有线条、颜色和纹理。不要裁剪、位移、旋转、改变任何纹样的尺寸、位置和轮廓；已存在的所有图案都逐一保留，尤其标识周围尖角、曲线与重复装饰要精准衔接。不要柔化、模糊或统一质感；保留原图像的锐度和颗粒。输出同输入的完整横向局部，无文字、无新标记，只对叠字覆盖部分作小范围修补。",
+  "sourceVerification": {
+    "title": "敦煌莫高窟北魏宝池莲花平棋临摹品",
+    "url": "https://www.sina.cn/news/detail/5337906056003855.html",
+    "publisher": "湖南省博物馆官方微博；新浪页面呈现",
+    "reported": "北魏莫高窟第257窟宝池莲花平棋，史苇湘、杨同乐临摹，敦煌研究院藏。",
+    "boundary": "文化参考记载已核验，不据此认定用户所供小红书图片的具体摄影或转载来源。"
+  },
+  "previousFullImagePrompt": "Use case: precise-object-edit. 这是一张敦煌主题游戏的原始拼图素材，用户明确要求删除右下角叠加的小红书水印。只删除右下角白色/半透明胶囊形“小红书”标识和其下方“小红书号：423649365”文字，以水印周围已有的纹样、线条、色块和纸张纹理自然衔接修补这两个小区域。保留原始全幅正方形构图、全部边饰、色调、人物/龙/兔、中心图案和既有裂痕、旧化细节。不要裁切、旋转、拉伸或重新设计，不添加其他文字和标识。输出与输入同样的完整正方形图；除水印覆盖区域外任何内容都不要变化。",
+  "candidateFilename": "retouch-candidate-detail.png",
+  "crop": {
+    "x": 1020,
+    "y": 1260,
+    "width": 420,
+    "height": 180
+  },
+  "previousPatch": {
+    "x": 1060,
+    "y": 1295,
+    "width": 360,
+    "height": 120,
+    "feather": 8
+  },
+  "patches": [
+    {
+      "x": 1287,
+      "y": 1301,
+      "width": 114,
+      "height": 60,
+      "feather": 4
+    },
+    {
+      "x": 1075,
+      "y": 1367,
+      "width": 334,
+      "height": 42,
+      "feather": 4
+    }
+  ],
+  "version": 2,
+  "levelId": "puzzle-lotus-ceiling",
+  "originalRuntimeSha256": "932b4c838808dd902dff43d2ccd6c45c07743cde1a6320fd940caacb5688e4c3",
+  "candidateSha256": "f7dfd04779ed8335cb5352c926e52e009b9acd308ffa0062803b0fe19c80c2cf",
+  "runtimePath": "/assets/levels/puzzle-lotus-ceiling/puzzle-lotus-ceiling-image-v002.png",
+  "runtimeSha256": "f56b463ce09eaf4400402dabc9f93816da50b60ee77119a7ffefbab5e547be10",
+  "width": 1440,
+  "height": 1440,
+  "candidateWidth": 1916,
+  "candidateHeight": 821,
+  "changedInside": 19769,
+  "changedOutside": 0,
+  "processing": "内置imagegen编辑右下角420×180局部，按原坐标采用标识及账号的两个独立小范围，以各范围登记的内缘羽化衔接；范围之外0像素变化。原稿、v001运行图、全图候选与局部候选均保留。",
+  "contentBoundary": "仅供游戏显示的局部去平台水印版本；补绘像素不作为历史纹样细节的考据。"
+}

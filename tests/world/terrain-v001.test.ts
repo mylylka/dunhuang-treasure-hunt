@@ -2,12 +2,15 @@ import { describe, expect, it } from 'vitest';
 import {
   LAKE_SHORELINE, LAKE_WATER_LEVEL, TERRAIN_ANCHORS, TERRAIN_BOUNDS, TERRAIN_PLAYER_COLLIDERS,
   TERRAIN_REGIONS, TERRAIN_ROUTES, TERRAIN_SESSION_OPTIONS, TERRAIN_SPAWN, TERRAIN_SPAWN_YAW,
-  fromTerrainPoint, isTerrainWalkable, lakeSignedDistance, moveTerrainPlayer,
+  fromTerrainPoint, isTerrainWalkable, lakeSignedDistance, moveTerrainPlayer, relocateOasisPoint,
   sanitizeTerrainPosition, terrainHeight, terrainRegionAt, terrainSurfaceHeight, toTerrainPoint,
   type TerrainRegion,
 } from '../../src/world/terrain-rules-v001';
 import { isWalkable, movementVector } from '../../src/world/movement';
 import { TERRAIN_TOWER_TREES } from '../../src/content/world/terrain-trees-v001';
+
+const formerDeepWater = { x: 233, z: 15 };
+const deepWater = relocateOasisPoint(formerDeepWater);
 
 describe('continuous terrain v001', () => {
   it('moves all region coordinates together and preserves the accepted cliff assembly', () => {
@@ -22,9 +25,10 @@ describe('continuous terrain v001', () => {
     expect(toTerrainPoint('cliff', { x: 122, y: 6.85546875, z: -68 })).toEqual({ x: 330, y: 16.85546875, z: 90 });
     expect(TERRAIN_ANCHORS.cliffStairFoot.x).toBeCloseTo(320.0814158436);
     expect(TERRAIN_ANCHORS.cliffStairFoot.z).toBeCloseTo(62.7489139972);
-    expect(TERRAIN_ANCHORS.musicGate.x).toBeCloseTo(176.8318036259);
-    expect(TERRAIN_ANCHORS.musicGate.z).toBeCloseTo(25.5318834021);
-    expect((TERRAIN_REGIONS.courtyard.yaw - TERRAIN_REGIONS.music.yaw) * 180 / Math.PI).toBeCloseTo(36);
+    // The v012 relocation rotated the pavilion 40 degrees around its old pad.
+    expect(TERRAIN_ANCHORS.musicGate.x).toBeCloseTo(210.5125627148);
+    expect(TERRAIN_ANCHORS.musicGate.z).toBeCloseTo(-29.6816938215);
+    expect((TERRAIN_REGIONS.courtyard.yaw - TERRAIN_REGIONS.music.yaw) * 180 / Math.PI).toBeCloseTo(-4);
   });
 
   it('has a continuous high shoulder, natural crest and low valley while retaining building floors', () => {
@@ -33,7 +37,8 @@ describe('continuous terrain v001', () => {
     expect(terrainHeight(136.5, 22)).toBeGreaterThan(19);
     expect(terrainHeight(136.5, 22)).toBeLessThan(20.5);
     expect(terrainHeight(66, 20)).toBeLessThan(18);
-    expect(terrainHeight(185, 15)).toBeCloseTo(2.475, 3);
+    const musicPad = TERRAIN_REGIONS.music.target;
+    expect(terrainHeight(musicPad.x, musicPad.z)).toBeCloseTo(2.475, 3);
     expect(terrainSurfaceHeight(toTerrainPoint('courtyard', { x: -12, z: -18 }))).toBeCloseTo(12.28);
     expect(terrainSurfaceHeight(toTerrainPoint('music', { x: 52, z: -20 }))).toBeCloseTo(4.3);
     expect(terrainSurfaceHeight(toTerrainPoint('cliff', { x: 122, z: -77 }))).toBeCloseTo(16.87946875);
@@ -50,28 +55,31 @@ describe('continuous terrain v001', () => {
       }
   });
 
-  it('shortens the first route to one third while joining the real doors without folded curves', () => {
+  it('keeps the v012 road lengths and grades while joining the real doors without folded curves', () => {
     const [first, second] = TERRAIN_ROUTES;
     for (const [point, expected] of [[first.points[0], TERRAIN_ANCHORS.courtyardGate], [first.points.at(-1)!, TERRAIN_ANCHORS.musicGate],
       [second.points[0], TERRAIN_ANCHORS.musicGate], [second.points.at(-1)!, TERRAIN_ANCHORS.cliffStairFoot]]) {
       expect(point.x).toBeCloseTo(expected.x, 8); expect(point.z).toBeCloseTo(expected.z, 8);
     }
-    const lengths: number[] = [];
-    for (const route of TERRAIN_ROUTES) { let length = 0; for (let i = 1; i < route.points.length; i++) {
-      const a = route.points[i - 1], b = route.points[i], distance = Math.hypot(b.x - a.x, b.z - a.z);
-      length += distance;
-      expect(distance).toBeLessThan(1.5);
-      expect(distance).toBeGreaterThan(.05);
-      expect(Math.abs(b.y - a.y) / distance).toBeLessThanOrEqual(Math.tan(22.5 * Math.PI / 180));
-      expect(b.y).toBeCloseTo(terrainHeight(b.x, b.z), 9);
-      const atCliffFoot = Math.hypot(b.x - TERRAIN_ANCHORS.cliffStairFoot.x, b.z - TERRAIN_ANCHORS.cliffStairFoot.z) < 1e-8;
-      if (atCliffFoot) {
-        expect(terrainSurfaceHeight(b)).toBeCloseTo(TERRAIN_REGIONS.cliff.target.y + .024, 8);
-        expect(Math.abs(b.y - TERRAIN_REGIONS.cliff.target.y)).toBeLessThan(.01);
-      } else expect(Math.abs(terrainSurfaceHeight(b) - b.y)).toBeLessThan(.03);
-    } lengths.push(length); }
-    expect(lengths[0]).toBeGreaterThanOrEqual(85); expect(lengths[0]).toBeLessThanOrEqual(95);
-    expect(lengths[1]).toBeGreaterThanOrEqual(180); expect(lengths[1]).toBeLessThanOrEqual(195);
+    // The relocation acceptance recorded 138.57 m at 27.40° and 150.63 m at 5.56°.
+    for (const [route, minimumLength, maximumLength, maximumGrade] of [[first, 137, 140, 28], [second, 149, 152, 6]] as const) {
+      let length = 0;
+      for (let i = 1; i < route.points.length; i++) {
+        const a = route.points[i - 1], b = route.points[i], distance = Math.hypot(b.x - a.x, b.z - a.z);
+        length += distance;
+        expect(distance).toBeLessThan(1.5);
+        expect(distance).toBeGreaterThan(.05);
+        expect(Math.abs(b.y - a.y) / distance).toBeLessThanOrEqual(Math.tan(maximumGrade * Math.PI / 180));
+        expect(b.y).toBeCloseTo(terrainHeight(b.x, b.z), 9);
+        const atCliffFoot = Math.hypot(b.x - TERRAIN_ANCHORS.cliffStairFoot.x, b.z - TERRAIN_ANCHORS.cliffStairFoot.z) < 1e-8;
+        if (atCliffFoot) {
+          expect(terrainSurfaceHeight(b)).toBeCloseTo(TERRAIN_REGIONS.cliff.target.y + .024, 8);
+          expect(b.y).toBeCloseTo(TERRAIN_REGIONS.cliff.target.y - .025, 2);
+        } else expect(Math.abs(terrainSurfaceHeight(b) - b.y)).toBeLessThan(.03);
+      }
+      expect(length).toBeGreaterThanOrEqual(minimumLength);
+      expect(length).toBeLessThanOrEqual(maximumLength);
+    }
   });
 
   it('keeps the entire road ribbon walkable beside existing walls and props', () => {
@@ -110,12 +118,14 @@ describe('continuous terrain v001', () => {
       expect(Math.abs(lakeSignedDistance(p.x, p.z))).toBeLessThan(1e-9);
       expect(terrainHeight(p.x, p.z)).toBeCloseTo(LAKE_WATER_LEVEL, 8);
     }
-    const lake = { x: 233, z: 15 };
-    expect(lakeSignedDistance(lake.x, lake.z)).toBeLessThan(-8);
-    expect(terrainHeight(lake.x, lake.z)).toBeLessThan(-3);
-    expect(isTerrainWalkable(lake)).toBe(false);
-    const approach = moveTerrainPlayer({ x: 260, z: 15 }, { x: -38, z: 0 });
-    expect(approach.x).toBeGreaterThan(254);
+    expect(lakeSignedDistance(deepWater.x, deepWater.z)).toBeLessThan(-8);
+    expect(terrainHeight(deepWater.x, deepWater.z)).toBeLessThan(-3);
+    expect(isTerrainWalkable(deepWater)).toBe(false);
+    const start = relocateOasisPoint({ x: 260, z: 15 }), target = relocateOasisPoint({ x: 222, z: 15 });
+    const approach = moveTerrainPlayer(start, { x: target.x - start.x, z: target.z - start.z });
+    const travelled = Math.hypot(approach.x - start.x, approach.z - start.z);
+    expect(travelled).toBeGreaterThan(4);
+    expect(travelled).toBeLessThan(6);
     expect(lakeSignedDistance(approach.x, approach.z)).toBeGreaterThanOrEqual(1.04 - 1e-5);
     expect(isTerrainWalkable(approach)).toBe(true);
     expect(TERRAIN_PLAYER_COLLIDERS.find(collider => collider.id === 'terrain-lake')?.polygon).toEqual(LAKE_SHORELINE.map(p => [p.x, p.z]));
@@ -132,11 +142,12 @@ describe('continuous terrain v001', () => {
 
   it('sanitizes water, walls and invalid sessions to a dry safe spawn in the new version', () => {
     expect(isTerrainWalkable(TERRAIN_SPAWN)).toBe(true);
-    for (const p of [{ x: 233, z: 15 }, { x: NaN, z: 0 }, { x: TERRAIN_BOUNDS.maxX + 1, z: 0 }, toTerrainPoint('courtyard', { x: -24, z: -11 })])
+    for (const p of [deepWater, { x: NaN, z: 0 }, { x: TERRAIN_BOUNDS.maxX + 1, z: 0 }, toTerrainPoint('courtyard', { x: -24, z: -11 })])
       expect(sanitizeTerrainPosition(p)).toEqual(TERRAIN_SPAWN);
+    expect(sanitizeTerrainPosition(formerDeepWater)).toEqual(formerDeepWater);
     expect(sanitizeTerrainPosition({ x: 136.5, z: 22 })).toEqual({ x: 136.5, z: 22 });
     expect(TERRAIN_SESSION_OPTIONS.spawn).toEqual(TERRAIN_SPAWN);
-    expect(TERRAIN_SESSION_OPTIONS.sanitizePosition({ x: 233, z: 15 })).toEqual(TERRAIN_SPAWN);
+    expect(TERRAIN_SESSION_OPTIONS.sanitizePosition(deepWater)).toEqual(TERRAIN_SPAWN);
     expect(TERRAIN_SESSION_OPTIONS.key).toBe('dunhuang:terrain-preview:v3');
     expect(terrainRegionAt(TERRAIN_SPAWN)).toBe('courtyard');
     expect(terrainRegionAt(TERRAIN_ANCHORS.musicGate)).toBe('music');
@@ -184,7 +195,7 @@ describe('continuous terrain v001', () => {
     }
     // Regression: the two road shoulders overlap outside the music gate. An
     // inverse-square singularity used to drop 10.6 cm over one 9 cm move here.
-    const seam = { x: 173.292447483457, z: 35.14358595036031 };
+    const seam = relocateOasisPoint({ x: 173.292447483457, z: 35.14358595036031 });
     for (let i = 0; i < 32; i++) {
       const angle = i * Math.PI / 16, delta = { x: Math.cos(angle) * .09, z: Math.sin(angle) * .09 };
       const moved = moveTerrainPlayer(seam, delta);

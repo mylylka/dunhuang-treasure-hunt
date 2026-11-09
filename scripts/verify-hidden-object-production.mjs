@@ -101,7 +101,10 @@ export async function verifyHiddenObjectProduction(page, baseUrl) {
       const sprite = sprites.get(copies[0].spriteId);
       expect(sprite?.groupIds, '目标图应属于正式任务分类').toContain(groupId);
       const expectedUrl = new URL(sprite.path.replace(/^\//, ''), base).href;
-      await expect(page.locator(`.hidden-object-task[data-task-id="${groupId}"] img`), '任务卡必须引用目标原图')
+      const prepared = await screen.getAttribute('data-hidden-status') === 'ready';
+      const preview = prepared ? page.locator(`[data-testid="hidden-object-ready-target"][data-task-id="${groupId}"] img`)
+        : page.locator(`.hidden-object-task[data-task-id="${groupId}"] img`);
+      await expect(preview, '准备清单或运行任务卡必须引用目标原图')
         .toHaveJSProperty('src', expectedUrl);
       for (const copy of copies) {
         expect(new URL(sprites.get(copy.spriteId).path.replace(/^\//, ''), base).href,
@@ -123,12 +126,19 @@ export async function verifyHiddenObjectProduction(page, baseUrl) {
     await visibleInViewport(canvas, `${label}画布`);
     await visibleInViewport(scrollbar, `${label}长卷滚动条`);
     await expect(taskCards).toHaveCount(level.tasks.groupCount);
+    await verifyExactTargetCopies(data);
     for (let index = 0; index < level.tasks.groupCount; index++) await visibleInViewport(taskCards.nth(index), `${label}任务卡${index + 1}`);
     for (const name of ['暂停', '提示', '新一局']) {
       await visibleInViewport(page.getByRole('button', { name, exact: true }), `${label}${name}`);
     }
-    for (const button of await page.getByRole('group', { name: '盘面缩放', exact: true }).getByRole('button').all()) {
-      await visibleInViewport(button, `${label}缩放按钮`);
+    const compact = await page.evaluate(() => matchMedia('(pointer: coarse) and (hover: none) and (orientation: landscape) and (max-height: 600px)').matches);
+    const zoomTools = page.getByRole('group', { name: '盘面缩放', exact: true });
+    if (compact) {
+      await expect(zoomTools, '手机主画布不再显示倍率工具行').toBeHidden();
+      const bounds = await canvas.boundingBox();
+      expect(bounds.height, '手机长卷应使用完整可用高度').toBeGreaterThanOrEqual(page.viewportSize().height - 14);
+    } else {
+      for (const button of await zoomTools.getByRole('button').all()) await visibleInViewport(button, `${label}缩放按钮`);
     }
     expect(data.scrollMax, `${label}长卷应可纵向浏览`).toBeGreaterThan(0);
     expect(data.scrollTop, `${label}长卷滚动位置`).toBeGreaterThanOrEqual(0);
@@ -146,6 +156,11 @@ export async function verifyHiddenObjectProduction(page, baseUrl) {
     await expect(ready).toHaveAccessibleName('本局寻找');
     await expect(ready).not.toContainText('造型');
     await expect(ready.locator('.hidden-object-ready-footer p')).toHaveCount(0);
+    for (const selector of ['.hidden-object-controls', '.hidden-object-task-panel', '.hidden-object-heading', '.hidden-object-actions', '.hidden-object-tools']) {
+      await expect(page.locator(selector), `${label}准备期间应隐藏外壳操作`).toBeHidden();
+    }
+    await expect(timer, `${label}上方倒计时准备期间应隐藏`).toBeHidden();
+    await expect(screen.locator('button:visible')).toHaveText(['开始寻找']);
     expect(await page.evaluate(async () => (await document.fonts.load('700 30px "Dunhuang Labels"', '琵琶鼓铃铛×12')).length),
       '标签须加载本地手写字体而非仅声明回退字体').toBeGreaterThan(0);
     expect(await page.evaluate(url => performance.getEntriesByType('resource').some(entry => entry.name === url),
@@ -174,8 +189,9 @@ export async function verifyHiddenObjectProduction(page, baseUrl) {
     const outer = await ready.boundingBox(), meta = await ready.locator('.hidden-object-ready-meta').boundingBox();
     const group = await ready.locator('.hidden-object-ready-targets').boundingBox();
     const button = await ready.getByRole('button', { name: '开始寻找', exact: true }).boundingBox();
-    expect(meta.x, '时限总数应在浅色面右上方').toBeGreaterThan(outer.x + outer.width * .6);
-    expect(meta.y + meta.height, '时限总数不应压住目标图').toBeLessThan(group.y);
+    expect(meta.x, '时限须完整处于独立一行').toBeGreaterThanOrEqual(outer.x);
+    expect(meta.x + meta.width, '时限须完整处于独立一行').toBeLessThanOrEqual(outer.x + outer.width);
+    expect(meta.y + meta.height, '时限独立行不得压住目标图').toBeLessThan(group.y);
     expect(button.y, '开始按钮应位于目标名称及数量下方并留出间距').toBeGreaterThan(group.y + group.height + 4);
     if (page.viewportSize().width === 1279) expect(button.y, '批注视口的开始按钮应下移').toBeGreaterThan(690);
     await expect(timer).toHaveAttribute('aria-label', `剩余 ${initialSeconds} 秒`);
@@ -294,8 +310,10 @@ export async function verifyHiddenObjectProduction(page, baseUrl) {
       expect((await page.locator('.game-choice-card[href]').evaluateAll(cards => cards.map(card => card.getAttribute('href')))).sort()).toEqual(availableGameLinks);
       await noPageScroll('乐舞玩法选择');
       await page.locator('a.game-choice-hidden-object').click();
-      await expect(page.locator('.level-choice-card[data-status="available"]')).toHaveCount(1);
-      await visibleInViewport(page.getByRole('link', { name: '开始找物', exact: true }), '找物首关入口');
+      await expect(page.locator('.level-choice-card[data-status="available"]')).toHaveCount(catalogLevels.filter(item => item.gameType === 'hidden-object' && item.themeId === level.themeId).length);
+      const firstCard = page.locator(`.level-choice-card[data-level-id="${levelId}"]`);
+      await firstCard.getByRole('link', { name: '开始找物', exact: true }).scrollIntoViewIfNeeded();
+      await visibleInViewport(firstCard.getByRole('link', { name: '开始找物', exact: true }), '找物首关入口');
       await noPageScroll('找物选关');
     }
     await page.setViewportSize({ width: 1440, height: 1000 });
@@ -304,7 +322,7 @@ export async function verifyHiddenObjectProduction(page, baseUrl) {
     await expect(screen).toHaveAttribute('data-hidden-status', 'ready', { timeout: imageLoadTimeout });
     await expect(page.getByRole('button', { name: '开始寻找', exact: true })).toBeEnabled();
     await expect(timer).toHaveAttribute('aria-label', `剩余 ${initialSeconds} 秒`);
-    await expect(taskCards).toHaveCount(level.tasks.groupCount);
+    await expect(page.getByTestId('hidden-object-ready-target')).toHaveCount(level.tasks.groupCount);
     const baselineProgress = await readProgress();
     const initial = await layout();
     await verifyExactTargetCopies(initial);
@@ -317,6 +335,9 @@ export async function verifyHiddenObjectProduction(page, baseUrl) {
     expect(initial.items.filter(item => item.displayRect.y < initial.height
       && item.displayRect.y + item.displayRect.height > 0).length, '首屏只显示长卷中的部分物件').toBeLessThan(totalItems);
 
+    // The ready screen deliberately exposes only start; round controls become available after it.
+    await page.getByRole('button', { name: '开始寻找', exact: true }).click();
+    await expect(screen).toHaveAttribute('data-hidden-status', 'running');
     await page.getByRole('button', { name: '新一局', exact: true }).click();
     await expect(screen).toHaveAttribute('data-hidden-status', 'ready', { timeout: imageLoadTimeout });
     await expect.poll(async () => (await readLayout())?.seed,
@@ -332,7 +353,7 @@ export async function verifyHiddenObjectProduction(page, baseUrl) {
     for (const [groupId, count] of taskCounts) {
       expect(count).toBeGreaterThanOrEqual(level.tasks.minCount);
       expect(count).toBeLessThanOrEqual(level.tasks.maxCount);
-      await expect(page.locator(`.hidden-object-task[data-task-id="${groupId}"]`)).toHaveAttribute('aria-label', new RegExp(`已找到 0 件，共 ${count} 件`));
+      await expect(page.locator(`[data-testid="hidden-object-ready-target"][data-task-id="${groupId}"] figcaption strong`)).toHaveText(`×${count}`);
     }
     expect(round.seed, '新一局应更换种子').not.toBe(initial.seed);
     const spriteSet = data => data.items.map(item => item.spriteId).sort();
@@ -344,8 +365,8 @@ export async function verifyHiddenObjectProduction(page, baseUrl) {
     for (const view of [
       { width: 1440, height: 1000, filename: '找物开局-电脑预览.png' },
       { width: 1279, height: 925, filename: '找物开局-批注视口预览.png' },
-      { width: 360, height: 640, filename: '找物开局-手机预览.png' },
-      { width: 844, height: 390, filename: '找物开局-手机横屏预览.png' },
+      { width: 360, height: 640, filename: '找物开局-桌面窄窗预览.png' },
+      { width: 844, height: 390, filename: '找物开局-桌面横屏窗口预览.png' },
     ]) {
       await page.setViewportSize({ width: view.width, height: view.height });
       await verifyReadyScreen(`${view.width}×${view.height}`);
@@ -363,15 +384,15 @@ export async function verifyHiddenObjectProduction(page, baseUrl) {
     const foundIds = [await findOne(1, targetTotal)];
     const seed = round.seed;
     for (const view of [
-      { width: 360, height: 640, label: '手机360×640', filename: '程序化找物-手机预览.png' },
-      { width: 844, height: 390, label: '手机横屏844×390', filename: '程序化找物-手机横屏预览.png' },
+      { width: 360, height: 640, label: '桌面窄窗360×640', filename: '程序化找物-桌面窄窗预览.png' },
+      { width: 844, height: 390, label: '桌面横屏窗口844×390', filename: '程序化找物-桌面横屏窗口预览.png' },
     ]) {
       await page.setViewportSize({ width: view.width, height: view.height });
       await verifyPlayingScreen(view.label);
       const data = await layout();
-      expect(data.seed, '旋转屏幕应保留种子').toBe(seed);
-      expect(data.items.filter(item => item.found).map(item => item.id), '旋转屏幕应保留发现').toEqual(foundIds);
-      expect(spriteSet(data), '旋转屏幕不得重新抽图').toEqual(spriteSet(round));
+      expect(data.seed, '调整桌面窗口应保留种子').toBe(seed);
+      expect(data.items.filter(item => item.found).map(item => item.id), '调整桌面窗口应保留发现').toEqual(foundIds);
+      expect(spriteSet(data), '调整桌面窗口不得重新抽图').toEqual(spriteSet(round));
       await expect(progress).toHaveText(`已找到 1 / ${targetTotal}`);
       screenshots.push(await screenshot(view.filename));
     }

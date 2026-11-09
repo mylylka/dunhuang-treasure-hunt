@@ -1,0 +1,38 @@
+.world-map-fog {
+  position: absolute;
+  inset: -1.5%;
+  pointer-events: none;
+  animation: world-map-fog-drift 15s ease-in-out infinite alternate;
+}
+
+.world-map-fog-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 1.8s ease-in-out;
+}
+
+.world-map-fog-layer[data-fog-covered] {
+  opacity: 1;
+  transition-duration: 0s;
+}
+
+@keyframes world-map-fog-drift {
+  from { transform: translate(-.6%, -.35%); }
+  to { transform: translate(.85%, .55%); }
+}
+
+.world-map-fog[data-reduced-motion] {
+  animation: none;
+}
+
+.world-map-fog[data-reduced-motion] .world-map-fog-layer {
+  transition: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .world-map-fog { animation: none; }
+  .world-map-fog .world-map-fog-layer { transition: none; }
+}

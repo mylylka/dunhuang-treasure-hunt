@@ -1,0 +1,5 @@
+node_modules/
+work/
+outputs/web/
+*.local
+.DS_Store

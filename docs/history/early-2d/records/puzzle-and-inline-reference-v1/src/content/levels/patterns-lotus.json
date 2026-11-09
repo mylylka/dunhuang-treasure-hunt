@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "id": "patterns-lotus",
+  "themeId": "patterns",
+  "gameType": "spot-difference",
+  "title": "莲瓣团花：寻找五处变化",
+  "subtitle": "纹样与色彩 · AI 教学示意",
+  "objective": "比较莲瓣团花、卷叶和蓝色格带，寻找五处轮廓与配色变化。",
+  "difficulty": "细察",
+  "estimatedMinutes": 5,
+  "thumbnailAssetId": "patterns-lotus-a",
+  "baseAssetId": "patterns-lotus-a",
+  "editedAssetId": "patterns-lotus-b",
+  "teachingNote": "本关由开发者使用 AI 生成，用于观察纹样的形状、组织与配色；不是原壁画照片或历史原貌复原。",
+  "source": {
+    "title": "敦煌研究院文化资料（延伸阅读）",
+    "url": "https://www.dha.ac.cn/",
+    "note": "本关为敦煌装饰纹样启发的 AI 教学示意，不声称准确对应某一洞窟、年代或历史配色。"
+  },
+  "differences": [
+    {
+      "id": "outer-flower-center",
+      "region": {
+        "x": 0.09968102073365231,
+        "y": 0.023923444976076555,
+        "width": 0.06539074960127592,
+        "height": 0.06299840510366826
+      },
+      "hint": "沿外侧边饰比较每朵花的轮廓。",
+      "detailHint": "看左上角：其中一幅多了清晰的米白花形边线。"
+    },
+    {
+      "id": "upper-right-corner",
+      "region": {
+        "x": 0.6555023923444976,
+        "y": 0.22169059011164274,
+        "width": 0.1251993620414673,
+        "height": 0.11642743221690591
+      },
+      "hint": "比较内框四角花叶的配色。",
+      "detailHint": "看内框右上角：两处深蓝、深褐色层变成橙红色。"
+    },
+    {
+      "id": "lower-left-corner",
+      "region": {
+        "x": 0.22567783094098884,
+        "y": 0.5877192982456141,
+        "width": 0.19856459330143542,
+        "height": 0.18740031897926634
+      },
+      "hint": "留意内框左下连成片的卷叶。",
+      "detailHint": "看左下整组卷叶：蓝绿、深蓝改成了橙红、橙黄。"
+    },
+    {
+      "id": "right-border-flower",
+      "region": {
+        "x": 0.861244019138756,
+        "y": 0.6084529505582137,
+        "width": 0.05502392344497608,
+        "height": 0.05901116427432217
+      },
+      "hint": "比较右侧蓝色格带的中心装饰。",
+      "detailHint": "看右侧约三分之二高度：复杂套环被简化，米白中心连成一块。"
+    },
+    {
+      "id": "right-lower-four-petals",
+      "region": {
+        "x": 0.8596491228070176,
+        "y": 0.7456140350877193,
+        "width": 0.058213716108452954,
+        "height": 0.06539074960127592
+      },
+      "hint": "沿右侧蓝色格带继续向下观察。",
+      "detailHint": "看右侧靠下的小格：复杂花形变成红褐四瓣与米白花心。"
+    }
+  ]
+}

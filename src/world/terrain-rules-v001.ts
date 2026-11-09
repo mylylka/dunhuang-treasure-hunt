@@ -1,16 +1,18 @@
 import {
   TERRAIN_ANCHORS, TERRAIN_BOUNDS, TERRAIN_REGIONS, TERRAIN_SESSION_KEY, TERRAIN_SPAWN, TERRAIN_SCENERY_SOURCE_OVERRIDES,
-  LAKE_SHORELINE, fromTerrainPoint, lakeSignedDistance, terrainHeight, toTerrainPoint,
+  LAKE_BOUNDS, LAKE_SHORELINE, fromTerrainPoint, lakeMayBeWithin, lakeSignedDistance, terrainHeight, toTerrainPoint,
   type TerrainRegion,
   TERRAIN_COURTYARD_EXPANSION, terrainCourtyardPartTransform,
 } from '../content/world/terrain-layout-v001';
 import { isWalkable, PLAYER_RADIUS, WORLD_COLLIDERS, type WorldCollider } from './movement';
-import {courtyardHallSurfaceHeight,retiredCourtyardHallCollider,TERRAIN_HALL_PLAYER_SOLIDS} from './terrain-hall-v003';
+import {courtyardHallSurfaceHeight,retiredCourtyardHallCollider,TERRAIN_FIRST_GALLERY_HALL_PLAYER_SOLIDS,TERRAIN_HALL_PLAYER_SOLIDS} from './terrain-hall-v003';
 import { MUSIC_PLAYER_COLLIDERS_V4, MUSIC_SOLIDS_V4, musicSurfaceHeightV4, inMusicCourtV4 } from './music-pavilion-rules-v004';
 import {MUSIC_COURTYARD_TREE,musicCourtyardRelocationForProp,relocatedMusicPoint} from '../content/world/music-courtyard-tree-v001';
 import { MOGAO_SESSION_OPTIONS, mogaoSurfaceHeight, inMogaoRoom } from './mogao-rules-v012';
 import type { WorldPoint } from './types';
 import { TERRAIN_TOWER_TREES } from '../content/world/terrain-trees-v001';
+import { PATTERN_STATION_SOLIDS } from './pattern-interactives';
+import { COURTYARD_ROCK_SCALE, ENLARGED_COURTYARD_ROCKS } from '../content/world/courtyard-rock-refinement-v001';
 
 export * from '../content/world/terrain-layout-v001';
 
@@ -69,13 +71,35 @@ export const TERRAIN_COURTYARD_LOCAL_COLLIDERS = [
     .filter(collider => !collider.id?.startsWith('tree-')&&!retiredCourtyardHallCollider(collider)).map(expandCourtyardPerimeter),
   ...TERRAIN_HALL_PLAYER_SOLIDS,
 ];
-const courtyardSolids = TERRAIN_COURTYARD_LOCAL_COLLIDERS.map(collider => ({
-  ...collider, minX: collider.minX - .21, maxX: collider.maxX + .21, minZ: collider.minZ - .21, maxZ: collider.maxZ + .21,
-  ...(collider.circle ? { circle: { ...collider.circle, radius: collider.circle.radius + .21 } } : {}),
-}));
+const revisedWorkshop = new Set(['hall-v003-workbench', 'hall-v003-pattern-display', 'hall-v003-pigment-rack']);
+const revisedWorkshopSources = new Map(TERRAIN_FIRST_GALLERY_HALL_PLAYER_SOLIDS
+  .filter(solid => revisedWorkshop.has(solid.id ?? '')).map(solid => [solid.id, solid]));
+export const TERRAIN_FIRST_GALLERY_COURTYARD_LOCAL_COLLIDERS = TERRAIN_COURTYARD_LOCAL_COLLIDERS
+  .map(solid => enlargeReviewedRockCollider(revisedWorkshopSources.get(solid.id) ?? solid));
+function enlargeReviewedRockCollider(collider: WorldCollider): WorldCollider {
+  if (!ENLARGED_COURTYARD_ROCKS.has(collider.id ?? '')) return collider;
+  const center = collider.circle ?? {x: (collider.minX + collider.maxX) / 2, z: (collider.minZ + collider.maxZ) / 2};
+  return { ...collider,
+    minX: center.x + (collider.minX - center.x) * COURTYARD_ROCK_SCALE,
+    maxX: center.x + (collider.maxX - center.x) * COURTYARD_ROCK_SCALE,
+    minZ: center.z + (collider.minZ - center.z) * COURTYARD_ROCK_SCALE,
+    maxZ: center.z + (collider.maxZ - center.z) * COURTYARD_ROCK_SCALE,
+    height: collider.height * COURTYARD_ROCK_SCALE,
+    ...(collider.circle ? {circle: {...collider.circle, radius: collider.circle.radius * COURTYARD_ROCK_SCALE}} : {}),
+    ...(collider.polygon ? {polygon: collider.polygon.map(([x, z]) => [center.x + (x - center.x) * COURTYARD_ROCK_SCALE, center.z + (z - center.z) * COURTYARD_ROCK_SCALE])} : {}),
+  };
+}
+function padCourtyardCollider(collider: WorldCollider): WorldCollider {
+  return {
+    ...collider, minX: collider.minX - .21, maxX: collider.maxX + .21, minZ: collider.minZ - .21, maxZ: collider.maxZ + .21,
+    ...(collider.circle ? { circle: { ...collider.circle, radius: collider.circle.radius + .21 } } : {}),
+  };
+}
+const courtyardSolids = TERRAIN_COURTYARD_LOCAL_COLLIDERS.map(padCourtyardCollider);
 const sampleTree: WorldCollider = { id: 'sample-tree-a', minX: 1.78, maxX: 4.22, minZ: 3.78, maxZ: 6.22, height: 2.1, circle: { x: 3, z: 5, radius: 1.22 } };
 export const TERRAIN_PLAYER_COLLIDERS: readonly WorldCollider[] = [
   ...[...courtyardSolids, sampleTree].map(collider => transformedCollider('courtyard', collider)),
+  ...PATTERN_STATION_SOLIDS.map(collider => transformedCollider('courtyard', collider)),
   ...[...MUSIC_PLAYER_COLLIDERS_V4.filter(collider => collider.id?.startsWith('music-')).map(relocatedMusicCollider),musicTreeCollider].map(collider => transformedCollider('music', collider)),
   ...MOGAO_SESSION_OPTIONS.colliders.filter(collider => collider.id?.startsWith('mogao-v8-')).map(collider => transformedCollider('cliff', collider)),
   ...TERRAIN_TOWER_TREES.map(tree => {
@@ -83,10 +107,16 @@ export const TERRAIN_PLAYER_COLLIDERS: readonly WorldCollider[] = [
     return { id: tree.id, minX: p.x - radius, maxX: p.x + radius, minZ: p.z - radius, maxZ: p.z + radius,
       height: terrainHeight(p.x, p.z) + tree.placement.height, circle: { x: p.x, z: p.z, radius } };
   }),
-  { id: 'terrain-lake', minX: Math.min(...LAKE_SHORELINE.map(p => p.x)), maxX: Math.max(...LAKE_SHORELINE.map(p => p.x)),
-    minZ: Math.min(...LAKE_SHORELINE.map(p => p.z)), maxZ: Math.max(...LAKE_SHORELINE.map(p => p.z)), height: 0,
-    padding: .35, polygon: LAKE_SHORELINE.map(p => [p.x, p.z]) },
+  { id: 'terrain-lake', ...LAKE_BOUNDS, height: 0, padding: .35, polygon: LAKE_SHORELINE.map(p => [p.x, p.z]) },
 ];
+const firstGalleryFurniture = [...revisedWorkshopSources.values()]
+  .map(solid => transformedCollider('courtyard', padCourtyardCollider(solid)));
+const firstGalleryRocks = TERRAIN_FIRST_GALLERY_COURTYARD_LOCAL_COLLIDERS
+  .filter(solid => ENLARGED_COURTYARD_ROCKS.has(solid.id ?? ''))
+  .map(solid => transformedCollider('courtyard', padCourtyardCollider(solid)));
+const firstGalleryById = new Map([...firstGalleryFurniture, ...firstGalleryRocks].map(solid => [solid.id, solid]));
+export const TERRAIN_FIRST_GALLERY_PLAYER_COLLIDERS: readonly WorldCollider[] = TERRAIN_PLAYER_COLLIDERS
+  .map(solid => firstGalleryById.get(solid.id ?? '') ?? solid);
 
 /** Sand is continuous; building floors and accepted stair ramps retain scale. */
 export function terrainSurfaceHeight(p: WorldPoint): number {
@@ -120,28 +150,33 @@ function surfaceSlope(p: WorldPoint) {
   const dz = (terrainSurfaceHeight({ x: p.x, z: p.z + e }) - terrainSurfaceHeight({ x: p.x, z: p.z - e })) / (2 * e);
   return Math.hypot(dx, dz);
 }
-export function isTerrainWalkable(p: WorldPoint): boolean {
-  return isWalkable(p, TERRAIN_PLAYER_COLLIDERS, TERRAIN_BOUNDS)
-    && lakeSignedDistance(p.x, p.z) >= PLAYER_RADIUS + .35 - .00001
+export function isTerrainWalkable(p: WorldPoint, firstGallery = false): boolean {
+  const bankClearance = PLAYER_RADIUS + .35;
+  return isWalkable(p, firstGallery ? TERRAIN_FIRST_GALLERY_PLAYER_COLLIDERS : TERRAIN_PLAYER_COLLIDERS, TERRAIN_BOUNDS)
+    && (!lakeMayBeWithin(p.x, p.z, bankClearance) || lakeSignedDistance(p.x, p.z) >= bankClearance - .00001)
     && surfaceSlope(p) <= TERRAIN_MAX_WALK_SLOPE;
 }
-export function sanitizeTerrainPosition(p: WorldPoint): WorldPoint {
-  return isTerrainWalkable(p) ? { ...p } : { ...TERRAIN_SPAWN };
+export function sanitizeTerrainPosition(p: WorldPoint, firstGallery = false): WorldPoint {
+  return isTerrainWalkable(p, firstGallery) ? { ...p } : { ...TERRAIN_SPAWN };
 }
 export const TERRAIN_SESSION_OPTIONS = {
   key: TERRAIN_SESSION_KEY, bounds: TERRAIN_BOUNDS, colliders: TERRAIN_PLAYER_COLLIDERS,
   spawn: TERRAIN_SPAWN, sanitizePosition: sanitizeTerrainPosition, freeYaw: true,
 };
+export const TERRAIN_FIRST_GALLERY_SESSION_OPTIONS = {
+  ...TERRAIN_SESSION_OPTIONS, colliders: TERRAIN_FIRST_GALLERY_PLAYER_COLLIDERS,
+  sanitizePosition: (point: WorldPoint) => sanitizeTerrainPosition(point, true),
+};
 
 /** Substeps stop tunnelling through walls, steep banks and either crescent tip. */
-export function moveTerrainPlayer(position: WorldPoint, delta: WorldPoint): WorldPoint {
+export function moveTerrainPlayer(position: WorldPoint, delta: WorldPoint, firstGallery = false): WorldPoint {
   const length = Math.hypot(delta.x, delta.z);
   if (!Number.isFinite(length) || !length) return { ...position };
   const count = Math.ceil(length / (PLAYER_RADIUS * .4)), steps = Math.min(128, count), fraction = Math.min(1, 128 / count) / steps;
   let result = { ...position };
   for (let i = 0; i < steps; i++) {
     const step = { x: delta.x * fraction, z: delta.z * fraction }, combined = { x: result.x + step.x, z: result.z + step.z };
-    if (isTerrainWalkable(combined) && Math.abs(terrainSurfaceHeight(combined) - terrainSurfaceHeight(result)) <= Math.hypot(step.x, step.z) * TERRAIN_MAX_WALK_SLOPE + .035) {
+    if (isTerrainWalkable(combined, firstGallery) && Math.abs(terrainSurfaceHeight(combined) - terrainSurfaceHeight(result)) <= Math.hypot(step.x, step.z) * TERRAIN_MAX_WALK_SLOPE + .035) {
       result = combined; continue;
     }
     // Slide along an actual obstacle only after trying the intended diagonal;
@@ -150,7 +185,7 @@ export function moveTerrainPlayer(position: WorldPoint, delta: WorldPoint): Worl
       const distance = delta[axis] * fraction;
       if (!distance) continue;
       const next = { ...result, [axis]: result[axis] + distance };
-      if (isTerrainWalkable(next) && Math.abs(terrainSurfaceHeight(next) - terrainSurfaceHeight(result)) <= Math.abs(distance) * TERRAIN_MAX_WALK_SLOPE + .035) result = next;
+      if (isTerrainWalkable(next, firstGallery) && Math.abs(terrainSurfaceHeight(next) - terrainSurfaceHeight(result)) <= Math.abs(distance) * TERRAIN_MAX_WALK_SLOPE + .035) result = next;
     }
   }
   return result;

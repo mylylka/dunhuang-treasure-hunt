@@ -1,0 +1,23 @@
+{
+  "schemaVersion": 1,
+  "id": "puzzle-lotus-ceiling",
+  "themeId": "patterns",
+  "gameType": "puzzle",
+  "title": "莲花平棋",
+  "subtitle": "纹样与色彩 · 旋转拼图",
+  "objective": "点击图块使其顺时针旋转90°，将九块图像恢复为参考图的朝向。",
+  "difficulty": "入门",
+  "estimatedMinutes": 4,
+  "thumbnailAssetId": "puzzle-lotus-ceiling-image",
+  "imageAssetId": "puzzle-lotus-ceiling-image",
+  "mode": "rotation",
+  "rows": 3,
+  "columns": 3,
+  "seed": 254329,
+  "teachingNote": "图像由开发者提供，用于拼图练习。",
+  "source": {
+    "title": "敦煌莫高窟北魏宝池莲花平棋临摹品",
+    "url": "https://www.sina.cn/news/detail/5337906056003855.html",
+    "note": ""
+  }
+}

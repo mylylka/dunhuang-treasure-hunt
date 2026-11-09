@@ -38,6 +38,21 @@ const spatial={source:[0,0,0],innerRadius:2,outerRadius:20};
 afterEach(()=>vi.unstubAllGlobals());
 
 describe('real music playback evidence',()=>{
+  it('waits for a real position and an enabled world even if a gesture unlocks audio during loading', async () => {
+    const { window } = environment(), player = createMusicArrivalAudio(defaultSoundPreferences(), spatial);
+    await settle();
+    window.dispatchEvent(new Pointer('pointerdown'));
+    await settle();
+    Context.current.currentTime += 5;
+    expect(player.inspect()).toMatchObject({ gain: 0, playing: false, audible: false, audibleTime: 0 });
+    player.setEnabled(false);
+    player.update({ x: 0, z: 0 }, 0);
+    expect(player.inspect()).toMatchObject({ gain: 0, audibleTime: 0 });
+    player.setEnabled(true);
+    await settle();
+    expect(player.inspect()).toMatchObject({ gain: .4, audible: true, audibleTime: 0 });
+    player.dispose();
+  });
   it('never replaces media time with wall/game time across blocked or silent gaps',()=>{
     const clock=createAudibleMusicClock();
     expect(clock.sample(10,false)).toBe(0);

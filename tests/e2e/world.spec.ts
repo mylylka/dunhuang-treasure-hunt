@@ -91,12 +91,13 @@ test.beforeEach(async ({ page }) => {
 test('世界行走、暂停和恢复不会留下卡住的按键或改写旧记录', async ({ page }) => {
   await page.goto('/#/');
   await ready(page);
+  await expect(page.getByRole('navigation', { name: '世界导航' }).getByRole('button', { name: '暂停', exact: true })).toHaveCount(0);
   const before = await position(page);
   await hold(page, 'w', 800);
   await expect.poll(async () => (await position(page)).z).toBeLessThan(before.z - 1);
   expect(Math.abs((await position(page)).x - before.x)).toBeLessThan(.15);
   await page.keyboard.down('w');
-  await page.getByTestId('world-pause').click();
+  await page.keyboard.press('Escape');
   await page.keyboard.up('w');
   const paused = await position(page);
   await page.waitForTimeout(350);
@@ -152,26 +153,29 @@ test('人物不能穿过庭院后墙，重置能回到可行走位置', async ({
   expect(stopped.z).toBeLessThan(-22);
   await hold(page, 'w', 500);
   expect((await position(page)).z).toBeCloseTo(stopped.z, 2);
-  await page.getByTestId('world-pause').click();
+  await page.keyboard.press('Escape');
   await page.getByTestId('world-reset').click();
   // Reset returns to the start; it is not permitted to erase old game records.
   await expect.poll(async () => (await position(page)).z).toBeCloseTo(18, 1);
   expect((await position(page)).x).toBeCloseTo(0, 1);
 });
 
-test('五段故事自动展开，可跳段、暂停重播与退出，世界保持冻结', async ({ page }) => {
-  await seedPosition(page, -5.3, -5.8);
-  await page.goto('/#/');
+test('五段故事自动展开，讲解可跳过，转场接管输入并保持站位', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'no-preference' });
+  await page.goto('/terrain-v013.html?view=deer');
   await ready(page);
   await page.getByTestId('world-interact').click();
   const story = page.getByTestId('world-story');
   await expect(story).toBeVisible();
+  await expect(story).toHaveAttribute('data-phase', 'introduction');
+  await story.click({ position: { x: 17, y: 64 } });
   await expect(story).toHaveAttribute('data-phase', 'narration');
   await page.waitForFunction(()=>Number(document.querySelector<HTMLAudioElement>('[data-testid="story-audio"]')?.currentTime)>.1);
   await expect(story.getByTestId('world-story-step')).toHaveAttribute('data-index', '0');
   // Losing window focus opens the global pause cover, which must own keyboard
   // focus instead of leaving Tab trapped inside the covered story dialog.
-  await story.getByRole('button', { name: '暂停', exact: true }).focus();
+  await expect(story.getByRole('button', { name: '暂停', exact: true })).toHaveCount(0);
+  await story.focus();
   await page.evaluate(() => window.dispatchEvent(new Event('blur')));
   await expect(story).toHaveAttribute('inert', '');
   const resume = page.getByTestId('world-resume');
@@ -187,19 +191,21 @@ test('五段故事自动展开，可跳段、暂停重播与退出，世界保�
   const frozen = await position(page);
   await hold(page, 'w', 350);
   expect(await position(page)).toEqual(frozen);
-  await story.getByRole('button', { name: '跳过本段', exact: true }).click();
+  await story.click({ position: { x: 17, y: 64 } });
   await expect(story.getByTestId('world-story-step')).toHaveAttribute('data-index', '1');
-
-  await story.getByRole('button', { name: '暂停', exact: true }).click();
-  await expect(story.getByRole('button', { name: '继续播放', exact: true })).toBeVisible();
-  await story.getByRole('button', { name: '继续播放', exact: true }).click();
-  await story.getByRole('button', { name: '重播', exact: true }).click();
+  await expect(story).toHaveAttribute('data-phase', 'highlight');
+  await expect(story.getByTestId('story-detail')).toHaveCount(0);
+  await story.click({ position: { x: 17, y: 64 } });
   await expect(story.getByTestId('world-story-step')).toHaveAttribute('data-index', '1');
+  await expect(story).toHaveAttribute('data-phase', 'narration');
   await story.getByRole('button', { name: '退出故事', exact: true }).click();
   await expect(story).toHaveCount(0);
   expect(await position(page)).toEqual(frozen);
   await hold(page, 's', 450);
-  await expect.poll(async () => (await position(page)).z).toBeGreaterThan(frozen.z + .5);
+  await expect.poll(async () => {
+    const current = await position(page);
+    return Math.hypot(current.x - frozen.x, current.z - frozen.z);
+  }).toBeGreaterThan(.5);
   await fits(page);
 });
 

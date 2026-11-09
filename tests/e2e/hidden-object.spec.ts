@@ -1,17 +1,23 @@
 import { expect, test, type Locator, type Page } from '@playwright/test';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import type { HiddenObjectLevel, ProgressData } from '../../src/types';
 import { createHiddenObjectRound } from '../../src/games/hidden-object/rules';
 import type { HiddenObjectPool } from '../../src/games/hidden-object/types';
+import { getHiddenObjectRuntimeImagePath } from '../../src/content/hidden-object/runtime-images';
+import { compactMobileLandscapeViewport, compactPlayableViewport, isMobileProject, mobileLandscapeViewport, mobilePortraitViewport } from './supported-viewports';
 
 const level = JSON.parse(readFileSync('src/content/levels/music-hidden-objects-intro.json', 'utf8')) as HiddenObjectLevel;
+const formalHiddenLevels = readdirSync('src/content/levels').filter(name => name.endsWith('.json'))
+  .map(name => JSON.parse(readFileSync(`src/content/levels/${name}`, 'utf8')))
+  .filter((entry): entry is HiddenObjectLevel => entry.gameType === 'hidden-object');
 const pool = JSON.parse(readFileSync('src/content/hidden-object/pool.json', 'utf8')) as HiddenObjectPool;
 const sprites = new Map(pool.sprites.map(sprite => [sprite.id, sprite]));
 const progressKey = 'dunhuang:progress:v1';
 const learningKey = 'dunhuang:learning:v1';
 const imageLoadTimeout = 45_000;
 const playUrl = `/#/play/${level.id}`;
-const poolRoute = '**/assets/shared/hidden-object/v*/*.png*';
+const runtimeSpritePaths = new Set(pool.sprites.map(sprite => getHiddenObjectRuntimeImagePath(sprite.path)));
+const poolRoute = (url: URL) => runtimeSpritePaths.has(url.pathname);
 const totalItems = level.categoryQuotas.reduce((sum, quota) => sum + quota.count, 0);
 test.setTimeout(60_000);
 
@@ -66,6 +72,11 @@ async function waitReady(page: Page) {
   await expect(ready).toHaveAccessibleName('本局寻找');
   await expect(ready).not.toContainText('造型');
   await expect(ready.locator('.hidden-object-ready-footer p')).toHaveCount(0);
+  for (const selector of ['.hidden-object-controls', '.hidden-object-task-panel', '.hidden-object-heading', '.hidden-object-actions', '.hidden-object-tools']) {
+    await expect(page.locator(selector)).toBeHidden();
+  }
+  await expect(timer(page)).toBeHidden();
+  await expect(screen(page).locator('button:visible')).toHaveText(['开始寻找']);
   expect(await page.evaluate(async () => (await document.fonts.load('700 30px "Dunhuang Labels"', '琵琶鼓铃铛×12')).length)).toBeGreaterThan(0);
   await expect(page.getByRole('heading', { name: '开始寻宝', exact: true })).toHaveCount(0);
   const current = await layout(page);
@@ -75,7 +86,7 @@ async function waitReady(page: Page) {
   for (const groupId of new Set(targets.map(item => item.groupId!))) {
     const copies = targets.filter(item => item.groupId === groupId);
     const preview = ready.locator(`[data-task-id="${groupId}"]`);
-    const expectedUrl = new URL(sprites.get(copies[0].spriteId)!.path.replace(/^\//, ''), page.url()).href;
+    const expectedUrl = new URL(getHiddenObjectRuntimeImagePath(sprites.get(copies[0].spriteId)!.path).replace(/^\//, ''), page.url()).href;
     await expect(preview.locator('img')).toHaveJSProperty('src', expectedUrl);
     await expect(preview.locator('img')).toHaveJSProperty('complete', true);
     await expect(preview.locator('figcaption strong')).toHaveText(`×${copies.length}`);
@@ -112,11 +123,16 @@ async function fits(page: Page) {
   await inside(page, host(page).locator('canvas'));
   await inside(page, scrollbar(page));
   for (const task of await page.getByTestId('hidden-object-task').all()) await inside(page, task);
-  for (const button of await page.locator('.hidden-object-actions button, .hidden-object-tools button').all()) {
+  for (const button of await page.locator('.hidden-object-actions :is(button,a):visible, .hidden-object-tools button:visible').all()) {
     await inside(page, button);
     const bounds = (await button.boundingBox())!;
     expect(bounds.height).toBeGreaterThanOrEqual(44);
     expect(bounds.width).toBeGreaterThanOrEqual(44);
+  }
+  if (await page.evaluate(() => matchMedia('(pointer: coarse) and (hover: none) and (orientation: landscape) and (max-height: 600px)').matches)) {
+    await expect(page.locator('.hidden-object-tools')).toBeHidden();
+    const canvas = (await host(page).locator('canvas').boundingBox())!;
+    expect(canvas.height).toBeGreaterThanOrEqual((await page.evaluate(() => innerHeight)) - 14);
   }
 }
 async function settled(page: Page) {
@@ -147,10 +163,13 @@ async function exactTargetCopies(page: Page, current: HiddenLayout) {
     expect(new Set(copies.map(item => item.spriteId)).size).toBe(1);
     const sprite = sprites.get(copies[0].spriteId)!;
     expect(sprite.groupIds).toContain(groupId);
-    const expectedUrl = new URL(sprite.path.replace(/^\//, ''), base).href;
-    const image = page.locator(`[data-testid="hidden-object-task"][data-task-id="${groupId}"] img`);
+    const expectedUrl = new URL(getHiddenObjectRuntimeImagePath(sprite.path).replace(/^\//, ''), base).href;
+    const prepared = await screen(page).getAttribute('data-hidden-status') === 'ready';
+    const image = prepared
+      ? page.locator(`[data-testid="hidden-object-ready-target"][data-task-id="${groupId}"] img`)
+      : page.locator(`[data-testid="hidden-object-task"][data-task-id="${groupId}"] img`);
     await expect(image).toHaveJSProperty('src', expectedUrl);
-    for (const copy of copies) expect(new URL(sprites.get(copy.spriteId)!.path.replace(/^\//, ''), base).href).toBe(expectedUrl);
+    for (const copy of copies) expect(new URL(getHiddenObjectRuntimeImagePath(sprites.get(copy.spriteId)!.path).replace(/^\//, ''), base).href).toBe(expectedUrl);
   }
 }
 
@@ -266,7 +285,7 @@ test('乐舞导览可跳过，首关配额与随机目标数量正确，真实�
   await expect(page.getByRole('button', { name: '直接玩游戏', exact: true })).toBeVisible();
   await page.getByRole('button', { name: '直接玩游戏', exact: true }).click();
   await page.locator('a[href="#/theme/music/games/hidden-object"]').click();
-  await expect(page.locator('.level-choice-card[data-status="available"]')).toHaveCount(1);
+  await expect(page.locator('.level-choice-card[data-status="available"]')).toHaveCount(formalHiddenLevels.length);
   await page.locator(`a[href="#/play/${level.id}"]`).first().click();
   await waitReady(page);
   const initial = await layout(page);
@@ -304,6 +323,7 @@ test('新一局重新抽素材和摆放，同局重试复用种子并清空发�
   await openRound(page);
   const first = await layout(page);
   await exactTargetCopies(page, first);
+  await start(page);
   await page.getByRole('button', { name: '新一局', exact: true }).click();
   await waitReady(page);
   const second = await layout(page);
@@ -311,6 +331,7 @@ test('新一局重新抽素材和摆放，同局重试复用种子并清空发�
   expect(second.seed).not.toBe(first.seed);
   expect(contents(second)).not.toEqual(contents(first));
   expect(placement(second)).not.toEqual(placement(first));
+  await start(page);
   await page.getByRole('button', { name: '新一局', exact: true }).click();
   await waitReady(page);
   const third = await layout(page);
@@ -353,8 +374,10 @@ test('任务只匹配卡片原图，同类异色异形干扰真实点击不计�
   await card.click();
   await expect(card).toHaveAttribute('aria-pressed', 'true');
   const current = await layout(page);
+  // Starting changes the observation window width; use the running geometry of the same instance.
+  const runtimeDistractor = current.items.find(item => item.id === candidate.distractor.id)!;
   const offset = Math.min(current.scrollMax, Math.max(0,
-    candidate.distractor.hitPoint.y + current.scrollTop - current.height / 2));
+    runtimeDistractor.hitPoint.y + current.scrollTop - current.height / 2));
   await scrollbar(page).evaluate((element, value) => {
     element.scrollTop = value.fraction * (element.scrollHeight - element.clientHeight);
   }, { fraction: current.scrollMax > 0 ? offset / current.scrollMax : 0 });
@@ -487,7 +510,7 @@ test('图片加载失败不启动计时，恢复网络后可以原页重试', as
 });
 
 test('长卷只显示局部，滚轮、触屏拖动及独立滚动条均能到底，提示会滚到目标', async ({ page }, testInfo) => {
-  await page.setViewportSize({ width: 360, height: 640 });
+  await page.setViewportSize(compactPlayableViewport(testInfo));
   await freezeReadyClock(page);
   const prepared = await layout(page);
   expect(prepared.scrollMax).toBeGreaterThan(0);
@@ -564,16 +587,32 @@ test('长卷只显示局部，滚轮、触屏拖动及独立滚动条均能到�
   await noCompletion(page);
 });
 
-test('手机横竖屏保留抽样、已找到状态和缩放，盘面与操作无页面滚动', async ({ page }, testInfo) => {
-  await page.setViewportSize({ width: 360, height: 640 });
+test('桌面缩放或手机长卷在竖屏中断后保留抽样与发现，支持视口无页面滚动', async ({ page }, testInfo) => {
+  await page.setViewportSize(compactPlayableViewport(testInfo));
   await openRound(page);
   await start(page);
-  await page.getByRole('button', { name: '2×', exact: true }).click();
-  await expect.poll(async () => (await layout(page)).zoom).toBe(2);
+  const expectedZoom = isMobileProject(testInfo) ? 1 : 2;
+  if (isMobileProject(testInfo)) {
+    await expect(page.getByRole('group', { name: '盘面缩放', exact: true })).toBeHidden();
+    await expect.poll(async () => (await layout(page)).scrollMax).toBeGreaterThan(0);
+    await nativeScrollEdge(page, true);
+  } else {
+    await page.getByRole('button', { name: '2×', exact: true }).click();
+    await expect.poll(async () => (await layout(page)).zoom).toBe(2);
+  }
   await findOne(page, Boolean(testInfo.project.use.hasTouch), 1);
   const initial = await layout(page);
+  if (isMobileProject(testInfo)) {
+    await page.setViewportSize(mobilePortraitViewport);
+    await expect(page.getByTestId('mobile-landscape-gate')).toBeVisible();
+    await expect(screen(page)).toHaveAttribute('data-hidden-status', 'paused');
+    await page.setViewportSize(compactMobileLandscapeViewport);
+    await expect(page.getByTestId('mobile-landscape-gate')).not.toBeVisible();
+    await expect(screen(page)).toHaveAttribute('data-hidden-status', 'paused');
+    await page.getByRole('button', { name: '继续寻找', exact: true }).click();
+  }
   let previous = initial;
-  for (const viewport of [{ width: 844, height: 390 }, { width: 360, height: 640 }]) {
+  for (const viewport of [mobileLandscapeViewport, compactPlayableViewport(testInfo)]) {
     await page.setViewportSize(viewport);
     await settled(page);
     await expect(screen(page)).toHaveAttribute('data-hidden-status', 'running');
@@ -581,7 +620,7 @@ test('手机横竖屏保留抽样、已找到状态和缩放，盘面与操作�
     expect(current.seed).toBe(initial.seed);
     expect(contents(current)).toEqual(contents(initial));
     expect(current.items.filter(item => item.found).map(item => item.id)).toEqual(initial.items.filter(item => item.found).map(item => item.id));
-    expect(current.zoom).toBe(2);
+    expect(current.zoom).toBe(expectedZoom);
     const expectedScroll = Math.min(current.scrollMax, previous.scrollTop / previous.scale * current.scale);
     expect(Math.abs(current.scrollTop - expectedScroll)).toBeLessThanOrEqual(1);
     await fits(page);
@@ -592,6 +631,8 @@ test('手机横竖屏保留抽样、已找到状态和缩放，盘面与操作�
 
 test('只有找物显示倒计时，已有找不同、拼图和填色保持不限时', async ({ page }) => {
   await openRound(page);
+  await expect(page.getByRole('timer')).toHaveCount(0);
+  await start(page);
   await expect(page.getByRole('timer')).toHaveCount(1);
   for (const [id, readySelector] of [
     ['patterns-intro', '[data-testid="phaser-player"] canvas'],
@@ -632,7 +673,7 @@ test('找物成功但存档受限时保留结果，恢复后可重试保存', as
 test.describe('高清画布', () => {
   test.use({ deviceScaleFactor: 2 });
 
-  test('双倍像素画布保持真实点击、长卷滚动与横竖屏坐标一致', async ({ page }, testInfo) => {
+  test('双倍像素画布保持真实点击、长卷滚动与支持视口变化后的坐标一致', async ({ page }, testInfo) => {
     await openRound(page);
     const assertDensity = async () => {
       const current = await layout(page);
@@ -642,12 +683,17 @@ test.describe('高清画布', () => {
     };
     await assertDensity();
     await start(page);
-    await page.getByRole('button', { name: '2×', exact: true }).click();
-    await expect.poll(async () => (await layout(page)).zoom).toBe(2);
+    if (isMobileProject(testInfo)) {
+      await expect(page.getByRole('group', { name: '盘面缩放', exact: true })).toBeHidden();
+      expect((await layout(page)).zoom).toBe(1);
+    } else {
+      await page.getByRole('button', { name: '2×', exact: true }).click();
+      await expect.poll(async () => (await layout(page)).zoom).toBe(2);
+    }
     await nativeScrollEdge(page, true);
     await findOne(page, Boolean(testInfo.project.use.hasTouch), 1);
     const initial = await layout(page);
-    await page.setViewportSize({ width: 844, height: 390 });
+    await page.setViewportSize(isMobileProject(testInfo) ? compactMobileLandscapeViewport : mobileLandscapeViewport);
     await settled(page);
     await assertDensity();
     const resized = await layout(page);
@@ -660,6 +706,7 @@ test.describe('高清画布', () => {
     await page.goto('/#/play/patterns-intro');
     await expect(host(page).locator('canvas')).toBeVisible({ timeout: imageLoadTimeout });
     const legacy = await host(page).locator('canvas').evaluate(element => ({ width: (element as HTMLCanvasElement).width, cssWidth: element.getBoundingClientRect().width }));
-    expect(Math.abs(legacy.width - legacy.cssWidth)).toBeLessThanOrEqual(1);
+    // The common host now gives every 2D game the same capped DPR backing density.
+    expect(Math.abs(legacy.width - legacy.cssWidth * 2)).toBeLessThanOrEqual(1);
   });
 });

@@ -1,18 +1,10 @@
 import {describe,it,expect} from 'vitest';
 import {readFileSync,existsSync} from 'node:fs';
 import {deerStory} from '../../src/content/world/deer-story';
-import {initialStoryFrame,tickStory,skipStory,finishNarration,previousStory,storyImageTargets,mappedRegion,contain,storyExpansion,type StoryFrame} from '../../src/world/story-playback';
+import {initialStoryFrame,tickStory,skipStory,finishNarration,storyImageTargets,mappedRegion,contain,storyExpansion,type StoryFrame} from '../../src/world/story-playback';
 import {discoveryReducer} from '../../src/world/events';
 const advance=(frame:StoryFrame)=>tickStory(frame,10,5);
 describe('five configured deer episodes',()=>{
- it('previous returns from a later episode or invitation without replaying the introduction or keeping stale timing',()=>{
-  expect(previousStory(initialStoryFrame(true))).toEqual(initialStoryFrame(true));
-  expect(previousStory(initialStoryFrame())).toEqual(initialStoryFrame());
-  for(const phase of ['highlight','advance','narration','return','invitation'] as const){
-   expect(previousStory({index:3,phase,time:10,audioTime:20,quick:true,returnFrom:.5})).toEqual({...initialStoryFrame(),index:2});
-  }
-  expect(previousStory({index:5,phase:'invitation',time:0,audioTime:2,quick:false}).index).toBe(4);
- });
  it('preserves six exact source regions and the specified two-image third episode',()=>{
   expect(deerStory.segments).toHaveLength(5);
   expect(deerStory.segments.map(s=>s.images.map(i=>i.region))).toEqual([[[1,0,476,340]],[[1513,0,2048,340]],[[1215,0,1578,340],[406,4,614,111]],[[539,0,936,340]],[[1021,0,1255,340]]]);
@@ -36,11 +28,30 @@ describe('five configured deer episodes',()=>{
   }
   expect(s.index).toBe(5);s=advance(s);expect(s.phase).toBe('invitation');expect(advance(s)).toBe(s);expect(finishNarration(s).phase).toBe('finished');
  });
- it('a skip does not flash a large image before it has advanced; only one index advances',()=>{
-  const early=skipStory(initialStoryFrame(),5);expect(storyExpansion(early)).toBe(0);expect(skipStory(early,5)).toBe(early);expect(advance(early).index).toBe(1);
-  const spoken={...initialStoryFrame(),phase:'narration' as const};expect(storyExpansion(skipStory(spoken,5))).toBe(1);
-  expect(skipStory({...spoken,index:5,phase:'invitation'},5).phase).toBe('finished');
-  expect(skipStory({...initialStoryFrame(),index:5},5).phase).toBe('finished');
+ it('drops taps during transitions and immediately clears one active detail on a valid skip',()=>{
+  for(const phase of ['opening','overview','highlight','advance','return','finished'] as const){
+   const frame={...initialStoryFrame(),phase,time:.4};
+   expect(skipStory(frame,5)).toBe(frame);
+  }
+  const spoken={...initialStoryFrame(),phase:'narration' as const,audioTime:3};
+  const next=skipStory(spoken,5);
+  expect(next).toEqual({phase:'highlight',index:1,time:0,audioTime:0});
+  expect(storyExpansion(next)).toBe(0);
+  expect(skipStory(next,5)).toBe(next);
+  const last=skipStory({...spoken,index:4},5);
+  expect(last).toMatchObject({phase:'overview',index:5});
+  const ending=advance(last);
+  expect(ending).toMatchObject({phase:'invitation',index:5});
+  const finished=skipStory(ending,5);
+  expect(finished).toEqual(finishNarration(ending));
+  expect(skipStory(finished,5)).toBe(finished);
+ });
+ it('finishes at the full scroll when the exhibit omits the invitation',()=>{
+  const last={...initialStoryFrame(),phase:'narration' as const,index:4};
+  const overview=tickStory(finishNarration(last),1,5,false,false);
+  expect(overview).toMatchObject({phase:'overview',index:5});
+  expect(tickStory(overview,1,5,false,false)).toMatchObject({phase:'finished',index:5});
+  expect(tickStory(skipStory(last,5),1,5,false,false)).toMatchObject({phase:'finished',index:5});
  });
  it('one full paragraph is configured for each of the five audio files, without per-sentence playback timing',()=>{
   expect(deerStory.segments.map(s=>s.text)).toEqual(deerStory.segments.map(s=>s.cues.join('')));

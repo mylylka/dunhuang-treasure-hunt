@@ -1,0 +1,155 @@
+.world-screen:has(> .music-instrument-overlay) > .world-host {
+  filter: blur(8px) brightness(.53);
+  transform: scale(1.02);
+}
+
+.world-screen:has(> .music-instrument-overlay) > .world-hud { visibility: hidden; }
+
+.music-instrument-overlay {
+  --instrument-gold: #dfb77a;
+  --instrument-faint: #c6ae91;
+  position: absolute;
+  z-index: 5;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right))
+    max(12px, env(safe-area-inset-bottom)) max(12px, env(safe-area-inset-left));
+  background: radial-gradient(ellipse at 33% 45%, #3d28184d, #1d120ee6);
+  color: #fff0d9;
+  outline: none;
+  overscroll-behavior: contain;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.music-instrument-stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr);
+  align-items: stretch;
+  gap: clamp(16px, 3vw, 46px);
+  width: min(1120px, 94%);
+  height: min(680px, 100%);
+  min-height: 0;
+  animation: music-instrument-enter 180ms ease-out both;
+}
+
+@keyframes music-instrument-enter {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: none; }
+}
+
+.music-instrument-art {
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  min-height: 0;
+  margin: 0;
+  color: var(--instrument-faint);
+}
+
+.music-instrument-art img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  object-fit: contain;
+  filter: drop-shadow(0 9px 24px #130b08b0);
+  user-select: none;
+}
+
+.music-instrument-caption {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  gap: clamp(12px, 2.5vh, 28px);
+  min-height: 0;
+  min-width: 0;
+  max-height: 100%;
+  padding: 21px clamp(17px, 3vw, 42px);
+  border-inline-start: 1px solid #d6ae746b;
+  background: linear-gradient(90deg, #332017e6, #2a1a13a8 66%, #23150e00);
+}
+
+.music-instrument-caption header { padding-inline-end: 45px; }
+.music-instrument-caption p { margin: 0; }
+.music-instrument-group { color: var(--instrument-gold); font: 600 12px/1.5 var(--serif, serif); letter-spacing: .24em; }
+.music-instrument-caption h2 {
+  margin: 4px 0 0;
+  color: #ffeccf;
+  font: 600 clamp(27px, 4.2vw, 57px)/1.15 var(--serif, serif);
+  letter-spacing: .035em;
+  overflow-wrap: anywhere;
+}
+
+.music-instrument-copy { min-height: 0; overflow: auto; overscroll-behavior: contain; }
+.music-instrument-tone { color: #fae6c9; font: 500 clamp(15px, 2.15vw, 22px)/1.6 var(--serif, serif); }
+.music-instrument-copy .music-instrument-note { margin-top: 8px; color: #e7c28e; font-size: 13px; line-height: 1.6; }
+.music-instrument-copy .music-instrument-source { margin-top: 7px; color: var(--instrument-faint); font-size: 11px; line-height: 1.5; }
+
+.music-instrument-listening {
+  flex: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: 10px;
+  row-gap: 4px;
+  padding-top: 10px;
+  border-top: 1px solid #d6ae7457;
+}
+
+.music-instrument-listening [role="status"] { display: inline-flex; align-items: center; gap: 7px; color: var(--instrument-gold); font-size: 13px; }
+.music-instrument-listening p { flex-basis: 100%; color: var(--instrument-faint); font-size: 11px; line-height: 1.4; }
+.music-instrument-wave { display: inline-flex; align-items: center; gap: 2px; height: 13px; }
+.music-instrument-wave i { width: 2px; height: 5px; border-radius: 1px; background: currentColor; }
+.music-instrument-wave i:nth-child(2) { height: 11px; }
+.music-instrument-wave i:nth-child(3) { height: 7px; }
+.music-instrument-overlay[data-audio-status="playing"] .music-instrument-wave i { animation: music-instrument-wave .78s ease-in-out infinite alternate; }
+.music-instrument-overlay[data-audio-status="playing"] .music-instrument-wave i:nth-child(2) { animation-delay: -.4s; }
+.music-instrument-overlay[data-audio-status="playing"] .music-instrument-wave i:nth-child(3) { animation-delay: -.15s; }
+@keyframes music-instrument-wave { 0% { transform: scaleY(.55); } 100% { transform: scaleY(1.1); } }
+
+.world-screen .music-instrument-caption button {
+  color: #ffedcf;
+  background: #442d20;
+  border-color: #d0a86c91;
+  box-shadow: none;
+}
+.world-screen .music-instrument-caption button:hover { background: #61422e; border-color: var(--instrument-gold); }
+.world-screen .music-instrument-caption button:focus-visible { outline: 2px solid var(--instrument-gold); outline-offset: 2px; }
+.world-screen .music-instrument-caption .music-instrument-close {
+  position: absolute;
+  top: 8px;
+  right: 5px;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: 50%;
+}
+.world-screen .music-instrument-listening button { padding: 3px 10px; font-size: 12px; }
+
+@media (max-height: 460px) and (min-aspect-ratio: 5/4) {
+  .music-instrument-overlay {
+    padding: max(5px, env(safe-area-inset-top)) max(7px, env(safe-area-inset-right))
+      max(5px, env(safe-area-inset-bottom)) max(7px, env(safe-area-inset-left));
+  }
+  .music-instrument-stage { width: 100%; gap: 8px; grid-template-columns: minmax(0, 1fr) clamp(152px, 34%, 260px); }
+  .music-instrument-caption { align-self: stretch; justify-content: center; gap: 8px; padding: 7px 8px 7px 10px; }
+  .music-instrument-caption h2 { font-size: clamp(21px, 4vw, 28px); }
+  .music-instrument-group { font-size: 10px; }
+  .music-instrument-tone { font-size: 14px; }
+  .music-instrument-copy .music-instrument-note { margin-top: 4px; font-size: 11px; }
+  .music-instrument-copy .music-instrument-source { margin-top: 4px; font-size: 10px; }
+  .music-instrument-listening { padding-top: 6px; }
+  .world-screen .music-instrument-caption .music-instrument-close { top: 2px; right: 2px; }
+}
+
+@media (max-aspect-ratio: 5/4) {
+  .music-instrument-stage { width: 100%; grid-template-columns: 1fr; grid-template-rows: minmax(0, 1fr) auto; gap: 9px; }
+  .music-instrument-caption { max-height: 45vh; padding: 10px 14px; gap: 8px; }
+}
+
+.music-instrument-overlay[data-reduced-motion] :is(.music-instrument-stage, .music-instrument-wave i) { animation: none; }
+@media (prefers-reduced-motion: reduce) {
+  .music-instrument-overlay :is(.music-instrument-stage, .music-instrument-wave i) { animation: none; }
+}

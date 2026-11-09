@@ -42,7 +42,12 @@ export function isWalkable(point: WorldPoint, colliders: readonly WorldCollider[
   const r = PLAYER_RADIUS;
   if (point.x < bounds.minX + r || point.x > bounds.maxX - r || point.z < bounds.minZ + r || point.z > bounds.maxZ - r) return false;
   return !colliders.some(box => {
-    if (box.polygon) return overlapsPolygon(point, box.polygon, r+(box.padding??0));
+    if (box.polygon) {
+      const radius = r + (box.padding ?? 0);
+      return point.x >= box.minX - radius && point.x <= box.maxX + radius
+        && point.z >= box.minZ - radius && point.z <= box.maxZ + radius
+        && overlapsPolygon(point, box.polygon, radius);
+    }
     if (box.circle) return Math.hypot(point.x - box.circle.x, point.z - box.circle.z) < r + box.circle.radius - .00001;
     const x = Math.max(box.minX, Math.min(point.x, box.maxX));
     const z = Math.max(box.minZ, Math.min(point.z, box.maxZ));

@@ -1,0 +1,25 @@
+{
+  "date": "2026-10-29",
+  "purpose": "用户替换配色参考和关卡封面；不更改线稿、区域图、作品版本或存档。",
+  "originalFile": "葡萄莲花纹藻井颜色参考.png",
+  "deliveryPath": "/Users/liujing/Downloads/填色游戏素材/葡萄莲花纹藻井颜色参考.png",
+  "originalSha256": "914953377fecef81f0851dfa630885331152d02f995d910f6eb90218d9230266",
+  "width": 1254,
+  "height": 1254,
+  "archiveVersion": "v003",
+  "runtimeReferenceVersion": "user-reference-v002",
+  "runtimePath": "public/assets/levels/coloring-grape-lotus/coloring-grape-lotus-reference-v002.png",
+  "runtimeSha256": "8def928cce0a93b6922c1a329db58835d4c5661405204511d316c34f2b8690f6",
+  "processing": "完整保留构图；按EXIF方向规范化并转换RGB PNG；不缩放、不裁切、不调色、不改图。",
+  "source": "开发者使用AI生成并重新交付的教学配色示意；非原壁画照片。",
+  "pixelVerification": "运行PNG与方向规范化后的交付原稿RGB像素完全一致。",
+  "unchanged": [
+    "lineAssetId",
+    "regionsAssetId",
+    "artworkVersion",
+    "level configuration",
+    "stored works",
+    "completion progress"
+  ],
+  "previousReference": "art-source/levels/coloring-grape-lotus/v001/葡萄莲花纹藻井颜色参考.png"
+}

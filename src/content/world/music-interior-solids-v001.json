@@ -1,0 +1,1080 @@
+{
+  "version": "music-interior-solids-v001",
+  "coordinateFrame": "music source, metres, Y up",
+  "replacedLegacyIds": [
+    "music-back",
+    "music-west",
+    "music-east",
+    "music-mural-wall",
+    "music-porch-back",
+    "music-porch-divider",
+    "music-column-0",
+    "music-column-1",
+    "music-column-2"
+  ],
+  "solids": [
+    {
+      "id": "music-open-door-0",
+      "min": [
+        36.3149986,
+        1.8362499,
+        -21.6599998
+      ],
+      "max": [
+        36.5750008,
+        6.4037499,
+        -18.7600021
+      ]
+    },
+    {
+      "id": "music-open-door-1",
+      "min": [
+        42.6650009,
+        1.8362499,
+        -21.6600018
+      ],
+      "max": [
+        42.9249992,
+        6.4037499,
+        -18.7600002
+      ]
+    },
+    {
+      "id": "music-new-floor-slab-0",
+      "min": [
+        34.7625,
+        7.426,
+        -27.75
+      ],
+      "max": [
+        46.27,
+        7.915375,
+        -21.95
+      ],
+      "walkSurface": "music-floor-2"
+    },
+    {
+      "id": "music-new-floor-slab-1",
+      "min": [
+        44.7801,
+        7.426,
+        -21.95
+      ],
+      "max": [
+        46.27,
+        7.915375,
+        -21.85
+      ],
+      "walkSurface": "music-floor-2"
+    },
+    {
+      "id": "music-stair-tread-01",
+      "min": [
+        55.4208571,
+        1.48,
+        -26.6
+      ],
+      "max": [
+        55.69,
+        1.9698715,
+        -23
+      ],
+      "walkSurface": "music-stair"
+    },
+    {
+      "id": "music-stair-tread-02",
+      "min": [
+        55.1517143,
+        1.654725,
+        -26.6
+      ],
+      "max": [
+        55.4208571,
+        2.1397431,
+        -23
+      ],
+      "walkSurface": "music-stair"
+    },
+    {
+      "id": "music-stair-tread-03",
+      "min": [
+        54.8825714,
+        1.82945,
+        -26.6
+      ],
+      "max": [
+        55.1517143,
+        2.3096146,
+        -23
+      ],
+      "walkSurface": "music-stair"
+    },
+    {
+      "id": "music-stair-tread-04",
+      "min": [
+        54.6134286,
+        2.004175,
+        -26.6
+      ],
+      "max": [
+        54.8825714,
+        2.4794861,
+        -23
+      ],
+      "walkSurface": "music-stair"
+    },
+    {
+      "id": "music-stair-tread-05",
+      "min": [
+        54.3442857,
+        2.1789,
+        -26.6
+      ],
+      "max": [
+        54.6134286,
+        2.6493576,
+        -23
+      ],
+      "walkSurface": "music-stair"
+    },
+    {
+      "id": "music-stair-tread-06",
+      "min": [
+        54.0751429,
+        2.353625,
+        -26.6
+      ],
+      "max": [
+        54.3442857,
+        2.8192292,
+        -23
+      ],
+      "walkSurface": "music-stair"
+    },
+    {
+      "id": "music-stair-tread-07",
+      "min": [
+        53.806,
+        2.52835,
+        -26.6
+      ],
+      "max": [
+        54.0751429,
+        2.9891007,
+        -23
+      ],
+      "walkSurface": "music-stair"
+    },
+    {
+      "id": "music-stair-tread-08",
+      "min": [
+        53.5368571,
+        2.703075,
+        -26.6
+      ],
+      "max": [
+        53.806,
+        3.1589722,
+        -23
+      ],
+      "walkSurface": "music-stair"
+    },
+    {
+      "id": "music-stair-tread-09",
+      "min": [
+        53.2677143,
+        2.8778,
+        -26.6
+      ],
+      "max": [
+        53.5368571,
+        3.3288437,
+        -23
+      ],
+      "walkSurface": "music-stair"
+    },
+    {
+      "id": "music-stair-tread-10",
+      "min": [
+        52.9985714,
+        3.052525,
+        -26.6
+      ],
+      "max": [
+        53.2677143,
+        3.4987153,
+        -23
+      ],
+      "walkSurface": "music-stair"
+    },
+    {
+      "id": "music-stair-tread-11",
+      "min": [
+        52.7294286,
+        3.22725,
+        -26.6
+      ],
+      "max": [
+        52.9985714,
+        3.6685868,
+        -23
+      ],
+      "walkSurface": "music-stair"
+    },
+    {
+      "id": "music-stair-tread-12",
+      "min": [
+        52.4602857,
+        3.401975,
+        -26.6
+      ],
+      "max": [
+        52.7294286,
+        3.8384583,
+        -23
+      ],
+      "walkSurface": "music-stair"
+    },
+    {
+      "id": "music-stair-tread-13",
+      "min": [
+        52.1911429,
+        3.5767,
+        -26.6
+      ],
+      "max": [
+        52.4602857,
+        4.0083299,
+        -23
+      ],
+      "walkSurface": "music-stair"
+    },
+    {
+      "id": "music-stair-tread-14",
+      "min": [
+        51.922,
+        3.751425,
+        -26.6
+      ],
+      "max": [
+        52.1911429,
+        4.1782014,
+        -23
+      ],
+      "walkSurface": "music-stair"
+    },
+    {
+      "id": "music-stair-tread-15",
+      "min": [
+        51.6528571,
+        3.92615,
+        -26.6
+      ],
+      "max": [
+        51.922,
+        4.3480729,
+        -23
+      ],
+      "walkSurface": "music-stair"
+    },
+    {
+      "id": "music-stair-tread-16",
+      "min": [
+        51.3837143,
+        4.100875,
+        -26.6
+      ],
+      "max": [
+        51.6528571,
+        4.5179444,
+        -23
+      ],
+      "walkSurface": "music-stair"
+    },
+    {
+      "id": "music-stair-tread-17",
+      "min": [
+        51.1145714,
+        4.2756,
+        -26.6
+      ],
+      "max": [
+        51.3837143,
+        4.687816,
+        -23
+      ],
+      "walkSurface": "music-stair"
+    },
+    {
+      "id": "music-stair-tread-18",
+      "min": [
+        50.8454286,
+        4.450325,
+        -26.6
+      ],
+      "max": [
+        51.1145714,
+        4.8576875,
+        -23
+      ],
+      "walkSurface": "music-stair"
+    },
+    {
+      "id": "music-stair-tread-19",
+      "min": [
+        50.5762857,
+        4.62505,
+        -26.6
+      ],
+      "max": [
+        50.8454286,
+        5.027559,
+        -23
+      ],
+      "walkSurface": "music-stair"
+    },
+    {
+      "id": "music-stair-tread-20",
+      "min": [
+        50.3071429,
+        4.799775,
+        -26.6
+      ],
+      "max": [
+        50.5762857,
+        5.1974306,
+        -23
+      ],
+      "walkSurface": "music-stair"
+    },
+    {
+      "id": "music-stair-tread-21",
+      "min": [
+        50.038,
+        4.9745,
+        -26.6
+      ],
+      "max": [
+        50.3071429,
+        5.3673021,
+        -23
+      ],
+      "walkSurface": "music-stair"
+    },
+    {
+      "id": "music-stair-tread-22",
+      "min": [
+        49.7688571,
+        5.149225,
+        -26.6
+      ],
+      "max": [
+        50.038,
+        5.5371736,
+        -23
+      ],
+      "walkSurface": "music-stair"
+    },
+    {
+      "id": "music-stair-tread-23",
+      "min": [
+        49.4997143,
+        5.32395,
+        -26.6
+      ],
+      "max": [
+        49.7688571,
+        5.7070451,
+        -23
+      ],
+      "walkSurface": "music-stair"
+    },
+    {
+      "id": "music-stair-tread-24",
+      "min": [
+        49.2305714,
+        5.498675,
+        -26.6
+      ],
+      "max": [
+        49.4997143,
+        5.8769167,
+        -23
+      ],
+      "walkSurface": "music-stair"
+    },
+    {
+      "id": "music-stair-tread-25",
+      "min": [
+        48.9614286,
+        5.6734,
+        -26.6
+      ],
+      "max": [
+        49.2305714,
+        6.0467882,
+        -23
+      ],
+      "walkSurface": "music-stair"
+    },
+    {
+      "id": "music-stair-tread-26",
+      "min": [
+        48.6922857,
+        5.848125,
+        -26.6
+      ],
+      "max": [
+        48.9614286,
+        6.2166597,
+        -23
+      ],
+      "walkSurface": "music-stair"
+    },
+    {
+      "id": "music-stair-tread-27",
+      "min": [
+        48.4231429,
+        6.02285,
+        -26.6
+      ],
+      "max": [
+        48.6922857,
+        6.3865312,
+        -23
+      ],
+      "walkSurface": "music-stair"
+    },
+    {
+      "id": "music-stair-tread-28",
+      "min": [
+        48.154,
+        6.197575,
+        -26.6
+      ],
+      "max": [
+        48.4231429,
+        6.5564028,
+        -23
+      ],
+      "walkSurface": "music-stair"
+    },
+    {
+      "id": "music-stair-tread-29",
+      "min": [
+        47.8848571,
+        6.3723,
+        -26.6
+      ],
+      "max": [
+        48.154,
+        6.7262743,
+        -23
+      ],
+      "walkSurface": "music-stair"
+    },
+    {
+      "id": "music-stair-tread-30",
+      "min": [
+        47.6157143,
+        6.547025,
+        -26.6
+      ],
+      "max": [
+        47.8848571,
+        6.8961458,
+        -23
+      ],
+      "walkSurface": "music-stair"
+    },
+    {
+      "id": "music-stair-tread-31",
+      "min": [
+        47.3465714,
+        6.72175,
+        -26.6
+      ],
+      "max": [
+        47.6157143,
+        7.0660174,
+        -23
+      ],
+      "walkSurface": "music-stair"
+    },
+    {
+      "id": "music-stair-tread-32",
+      "min": [
+        47.0774286,
+        6.896475,
+        -26.6
+      ],
+      "max": [
+        47.3465714,
+        7.2358889,
+        -23
+      ],
+      "walkSurface": "music-stair"
+    },
+    {
+      "id": "music-stair-tread-33",
+      "min": [
+        46.8082857,
+        7.0712,
+        -26.6
+      ],
+      "max": [
+        47.0774286,
+        7.4057604,
+        -23
+      ],
+      "walkSurface": "music-stair"
+    },
+    {
+      "id": "music-stair-tread-34",
+      "min": [
+        46.5391429,
+        7.245925,
+        -26.6
+      ],
+      "max": [
+        46.8082857,
+        7.5756319,
+        -23
+      ],
+      "walkSurface": "music-stair"
+    },
+    {
+      "id": "music-stair-tread-35",
+      "min": [
+        46.27,
+        7.42065,
+        -26.6
+      ],
+      "max": [
+        46.5391429,
+        7.7455035,
+        -23
+      ],
+      "walkSurface": "music-stair"
+    },
+    {
+      "id": "music-lower-landing",
+      "min": [
+        55.69,
+        1.63,
+        -26.6
+      ],
+      "max": [
+        58.1,
+        1.8,
+        -23
+      ],
+      "walkSurface": "music-floor-1"
+    },
+    {
+      "id": "music-back",
+      "min": [
+        34.4,
+        1.278,
+        -28.25
+      ],
+      "max": [
+        59.85,
+        13.748,
+        -27.75
+      ]
+    },
+    {
+      "id": "music-west",
+      "min": [
+        34.0375,
+        1.278,
+        -28
+      ],
+      "max": [
+        34.7625,
+        13.748,
+        -18
+      ]
+    },
+    {
+      "id": "music-east",
+      "min": [
+        59.4242978,
+        1.278,
+        -28
+      ],
+      "max": [
+        60.2757022,
+        13.748,
+        -18
+      ]
+    },
+    {
+      "id": "music-mural-wall",
+      "min": [
+        44.8652809,
+        1.278,
+        -18.225
+      ],
+      "max": [
+        59.85,
+        13.748,
+        -17.775
+      ]
+    },
+    {
+      "id": "music-porch-divider",
+      "min": [
+        44.44125,
+        1.7855,
+        -21.65
+      ],
+      "max": [
+        44.9929916,
+        7.4405,
+        -17.95
+      ]
+    },
+    {
+      "id": "music-porch-back-west",
+      "min": [
+        34.69,
+        1.7855,
+        -21.975
+      ],
+      "max": [
+        37.7,
+        7.4405,
+        -21.625
+      ]
+    },
+    {
+      "id": "music-porch-back-east",
+      "min": [
+        41.3,
+        1.7855,
+        -21.975
+      ],
+      "max": [
+        44.55,
+        7.4405,
+        -21.625
+      ]
+    },
+    {
+      "id": "music-porch-door-lintel",
+      "min": [
+        37.7,
+        5.4,
+        -21.975
+      ],
+      "max": [
+        41.3,
+        7.4405,
+        -21.625
+      ]
+    },
+    {
+      "id": "music-gallery-rear-west",
+      "min": [
+        34.4,
+        7.803,
+        -22.15
+      ],
+      "max": [
+        41.9,
+        13.313,
+        -21.85
+      ]
+    },
+    {
+      "id": "music-gallery-rear-east",
+      "min": [
+        44.6,
+        7.803,
+        -22.15
+      ],
+      "max": [
+        44.8652809,
+        13.313,
+        -21.85
+      ]
+    },
+    {
+      "id": "music-gallery-door-lintel",
+      "min": [
+        41.9,
+        11.4,
+        -22.15
+      ],
+      "max": [
+        44.6,
+        13.313,
+        -21.85
+      ]
+    },
+    {
+      "id": "music-attic-ceiling",
+      "min": [
+        34.69,
+        13.5305,
+        -27.8
+      ],
+      "max": [
+        59.5094382,
+        13.7045,
+        -18.2
+      ]
+    },
+    {
+      "id": "music-front-bearing-beam",
+      "min": [
+        33.965,
+        13.168,
+        -17.91
+      ],
+      "max": [
+        60.3608427,
+        13.603,
+        -17.45
+      ]
+    },
+    {
+      "id": "music-existing-gallery-slab",
+      "min": [
+        34.4725,
+        7.426,
+        -21.95
+      ],
+      "max": [
+        44.7801404,
+        7.915375,
+        -17.65
+      ],
+      "walkSurface": "music-gallery"
+    },
+    {
+      "id": "music-column-lower-0",
+      "min": [
+        34.661,
+        1.8,
+        -18.16
+      ],
+      "max": [
+        35.299,
+        7.107,
+        -17.44
+      ]
+    },
+    {
+      "id": "music-column-upper-0",
+      "min": [
+        34.661,
+        7.915375,
+        -18.16
+      ],
+      "max": [
+        35.299,
+        13.2115,
+        -17.44
+      ]
+    },
+    {
+      "id": "music-column-lower-foot-0",
+      "min": [
+        34.458,
+        1.8,
+        -18.16
+      ],
+      "max": [
+        35.502,
+        2.206,
+        -17.44
+      ]
+    },
+    {
+      "id": "music-column-upper-foot-0",
+      "min": [
+        34.458,
+        7.8755,
+        -18.16
+      ],
+      "max": [
+        35.502,
+        8.2815,
+        -17.44
+      ]
+    },
+    {
+      "id": "music-column-lower-1",
+      "min": [
+        39.3735,
+        1.8,
+        -18.16
+      ],
+      "max": [
+        40.0115,
+        7.107,
+        -17.44
+      ]
+    },
+    {
+      "id": "music-column-upper-1",
+      "min": [
+        39.3735,
+        7.915375,
+        -18.16
+      ],
+      "max": [
+        40.0115,
+        13.2115,
+        -17.44
+      ]
+    },
+    {
+      "id": "music-column-lower-foot-1",
+      "min": [
+        39.1705,
+        1.8,
+        -18.16
+      ],
+      "max": [
+        40.2145,
+        2.206,
+        -17.44
+      ]
+    },
+    {
+      "id": "music-column-upper-foot-1",
+      "min": [
+        39.1705,
+        7.8755,
+        -18.16
+      ],
+      "max": [
+        40.2145,
+        8.2815,
+        -17.44
+      ]
+    },
+    {
+      "id": "music-column-lower-2",
+      "min": [
+        44.0135,
+        1.8,
+        -18.16
+      ],
+      "max": [
+        44.6515,
+        7.107,
+        -17.44
+      ]
+    },
+    {
+      "id": "music-column-upper-2",
+      "min": [
+        44.0135,
+        7.915375,
+        -18.16
+      ],
+      "max": [
+        44.6515,
+        13.2115,
+        -17.44
+      ]
+    },
+    {
+      "id": "music-column-lower-foot-2",
+      "min": [
+        43.8105,
+        1.8,
+        -18.16
+      ],
+      "max": [
+        44.8545,
+        2.206,
+        -17.44
+      ]
+    },
+    {
+      "id": "music-column-upper-foot-2",
+      "min": [
+        43.8105,
+        7.8755,
+        -18.16
+      ],
+      "max": [
+        44.8545,
+        8.2815,
+        -17.44
+      ]
+    },
+    {
+      "id": "music-foundation-00",
+      "min": [
+        30.18,
+        0,
+        -28.32
+      ],
+      "max": [
+        64.07,
+        0.18,
+        -13.28
+      ],
+      "walkSurface": "music-floor-1"
+    },
+    {
+      "id": "music-foundation-01",
+      "min": [
+        30.56,
+        0,
+        -28.32
+      ],
+      "max": [
+        63.69,
+        0.36,
+        -13.66
+      ],
+      "walkSurface": "music-floor-1"
+    },
+    {
+      "id": "music-foundation-02",
+      "min": [
+        30.94,
+        0,
+        -28.32
+      ],
+      "max": [
+        63.31,
+        0.54,
+        -14.04
+      ],
+      "walkSurface": "music-floor-1"
+    },
+    {
+      "id": "music-foundation-03",
+      "min": [
+        31.32,
+        0,
+        -28.32
+      ],
+      "max": [
+        62.93,
+        0.72,
+        -14.42
+      ],
+      "walkSurface": "music-floor-1"
+    },
+    {
+      "id": "music-foundation-04",
+      "min": [
+        31.7,
+        0,
+        -28.32
+      ],
+      "max": [
+        62.55,
+        0.9,
+        -14.8
+      ],
+      "walkSurface": "music-floor-1"
+    },
+    {
+      "id": "music-foundation-05",
+      "min": [
+        32.08,
+        0,
+        -28.32
+      ],
+      "max": [
+        62.17,
+        1.08,
+        -15.18
+      ],
+      "walkSurface": "music-floor-1"
+    },
+    {
+      "id": "music-foundation-06",
+      "min": [
+        32.46,
+        0,
+        -28.32
+      ],
+      "max": [
+        61.79,
+        1.26,
+        -15.56
+      ],
+      "walkSurface": "music-floor-1"
+    },
+    {
+      "id": "music-foundation-07",
+      "min": [
+        32.84,
+        0,
+        -28.32
+      ],
+      "max": [
+        61.41,
+        1.44,
+        -15.94
+      ],
+      "walkSurface": "music-floor-1"
+    },
+    {
+      "id": "music-foundation-08",
+      "min": [
+        33.22,
+        0,
+        -28.32
+      ],
+      "max": [
+        61.03,
+        1.62,
+        -16.32
+      ],
+      "walkSurface": "music-floor-1"
+    },
+    {
+      "id": "music-foundation-09",
+      "min": [
+        33.6,
+        0,
+        -28.32
+      ],
+      "max": [
+        60.65,
+        1.8,
+        -16.7
+      ],
+      "walkSurface": "music-floor-1"
+    },
+    {
+      "id": "music-gallery-musician-0",
+      "min": [
+        36.8817978,
+        7.8899999,
+        -20.0400009
+      ],
+      "max": [
+        37.7337456,
+        9.6800003,
+        -19.1984863
+      ]
+    },
+    {
+      "id": "music-gallery-musician-1",
+      "min": [
+        41.5414581,
+        7.8899999,
+        -20.0400009
+      ],
+      "max": [
+        42.5223999,
+        9.6800003,
+        -19.2099991
+      ]
+    }
+  ]
+}

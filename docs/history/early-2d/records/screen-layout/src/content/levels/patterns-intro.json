@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "id": "patterns-intro",
+  "themeId": "patterns",
+  "gameType": "spot-difference",
+  "title": "纹样侦探：寻找三处变化",
+  "subtitle": "纹样与色彩 · 入门体验",
+  "objective": "比较两幅示意图，找出叶形、花瓣轮廓和枝叶方向的三处变化。",
+  "difficulty": "入门",
+  "estimatedMinutes": 3,
+  "thumbnailAssetId": "patterns-intro-a",
+  "baseAssetId": "patterns-intro-a",
+  "editedAssetId": "patterns-intro-b",
+  "teachingNote": "莫高窟第329窟开凿于初唐，窟顶为莲花飞天藻井，井心以外有卷草纹、联珠纹等装饰。当前画面仅为几何占位素材，不代表原壁画、正式教学重绘或历史配色。",
+  "source": {
+    "title": "莫高窟第329窟初唐莲花飞天藻井",
+    "url": "https://www.dha.ac.cn/info/1425/3577.htm",
+    "note": "敦煌研究院官方资料仅提供文化参考。当前仅几何技术占位，未临摹或复原329窟；正式教学重绘待婧婧提供，届时重新核对三个区域、提示与讲解。"
+  },
+  "differences": [
+    {
+      "id": "leaf-missing",
+      "region": {
+        "x": 0.12,
+        "y": 0.1,
+        "width": 0.2,
+        "height": 0.23
+      },
+      "hint": "观察上方重复出现的叶形，看看数量是否一致。",
+      "detailHint": "对比左上区域，留意最右边的叶形单元。",
+      "explanation": "少了一个重复单元，图案的连续节奏就发生了变化。"
+    },
+    {
+      "id": "petal-outline",
+      "region": {
+        "x": 0.42,
+        "y": 0.35,
+        "width": 0.2,
+        "height": 0.3
+      },
+      "hint": "观察中间花形的外圈，留意每片轮廓。",
+      "detailHint": "看中间花形朝上的花瓣，比较它的宽度与长度。",
+      "explanation": "同一位置的花瓣轮廓改变后，花形的整体关系也随之改变。"
+    },
+    {
+      "id": "vine-direction",
+      "region": {
+        "x": 0.69,
+        "y": 0.67,
+        "width": 0.2,
+        "height": 0.23
+      },
+      "hint": "比较下方枝叶，观察弯曲和伸展的方向。",
+      "detailHint": "看右下区域，比较卷曲枝叶的左右朝向。",
+      "explanation": "枝叶朝向改变，会带来不同的视觉运动方向。"
+    }
+  ]
+}

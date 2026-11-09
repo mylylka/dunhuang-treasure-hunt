@@ -1,4 +1,9 @@
-import { TERRAIN_SESSION_OPTIONS } from '../world/terrain-rules-v001';
+import { MUSIC_COMPANION_SESSION_OPTIONS_V2, MUSIC_GUIDE_SESSION_OPTIONS } from '../world/music-companion-session-v002';
+import { MUSIC_COMPANION_SESSION_OPTIONS } from '../world/music-companion-session';
+import { TERRAIN_FIRST_GALLERY_SESSION_OPTIONS, TERRAIN_SESSION_OPTIONS } from '../world/terrain-rules-v001';
+import { UPPER_SESSION_OPTIONS } from '../world/mogao-upper-session';
+import { MOGAO_EXHIBIT_SESSION_OPTIONS } from '../world/mogao-exhibit-session';
+import { CONNECTED_GALLERY_SESSION_OPTIONS } from '../world/connected-gallery-session';
 import {MOGAO_SESSION_OPTIONS as MOGAO_SESSION_OPTIONS_V13} from '../world/mogao-rules-v013';
 import {MOGAO_SESSION_OPTIONS as MOGAO_SESSION_OPTIONS_V12} from '../world/mogao-rules-v012';
 import {MOGAO_SESSION_OPTIONS as MOGAO_SESSION_OPTIONS_V11} from '../world/mogao-rules-v011';
@@ -20,29 +25,36 @@ import { MUSIC_PLAYER_COLLIDERS, MUSIC_SESSION_KEY } from '../world/music-pavili
 import type { WorldCheckpoint } from '../world/types';
 import { WorldBoundary } from './WorldBoundary';
 import { getAssetUrl } from '../content';
-import { getLessonBook } from '../content/lessons';
-import { getLevelChoices } from '../content/level-roadmap';
-import type { LessonBook } from '../content/lessons/types';
+import { getNextOpenLevel } from '../services/level-sequence';
+import { LevelAdvanceControl, LevelNavigationProvider } from './LevelAdvanceControl';
 import { ThemeCards } from './ThemeCards';
-import { TeachingScreen } from './TeachingScreen';
 import { GameSelectScreen } from './GameSelectScreen';
 import { LevelSelectScreen } from './LevelSelectScreen';
-import { gameNames, gamesPath, goTo, levelsPath, playPath, readRoute, routeKey as getRouteKey, themePath, type Route } from './navigation';
-import { isLessonCompleted, lessonRecord, loadLearning, saveLearning, withCompletedLesson, withVisitedUnit, type LearningData } from '../services/learning';
-import { ArtInspector } from './ArtInspector';
+import { gameNames, gamesPath, goTo, levelsPath, playPath, readRoute, routeKey as getRouteKey, type Route } from './navigation';
 import { ColoringScreen } from './ColoringScreen';
 import { PuzzleScreen } from './PuzzleScreen';
 import { HiddenObjectScreen } from './HiddenObjectScreen';
 import { ShadowMatchScreen } from './ShadowMatchScreen';
+import { MobileLandscapeGuard } from './MobileLandscapeGuard';
 import { ColoringResult } from './ColoringResult';
 import { SoundSettings } from './SoundSettings';
+import { GalleryResetSettings } from './GalleryResetSettings';
 import { useSound } from './useSound';
-import { artworkColors, hasOlderArtwork, loadArtworks, saveArtworks, withArtwork, type ArtworksData } from '../services/artworks';
-import { PhaserPlayer } from '../runtime/PhaserPlayer';
+import { artworkColors, artworkMaterials, hasOlderArtwork, loadArtworks, saveArtworks, withArtwork, type ArtworksData } from '../services/artworks';
+import { canOpenFirstGalleryRoute, getFirstGalleryAccess, importGalleryArtworks, isFirstGalleryUnlocked, loadFirstGallery, markGalleryCeremonySeen, submitGalleryArtwork, subscribeFirstGallery } from '../services/first-gallery';
+import { clearGalleryColoringEntry, FIRST_GALLERY_EASEL_LEVEL, FIRST_GALLERY_ENTRY_CLAIM, FIRST_GALLERY_WORLD_SESSION_KEY, newGallerySubmissionId, readGalleryColoringEntry, saveGalleryColoringDraft, startGalleryColoring, type FirstGalleryColoringEntry } from '../services/first-gallery-entry';
+import { SpotDifferenceScreen } from './SpotDifferenceScreen';
 import { loadProgress, saveProgress, withCompletedLevel } from '../services/progress';
-import type { ContentCatalog, GameCommand, GameEvent, Level, LevelMetadata, ProgressData, RegionColors, ThemeDefinition } from '../types';
+import { unlockedGameThemes } from '../services/game-world-access';
+import { clearGallerySessionProgress, galleryForProgressResetKey, resetGalleryProgress } from '../services/gallery-progress-reset';
+import type { GalleryTaskArea } from '../services/gallery-tasks';
+import { useMusicGalleryProgress } from './use-music-gallery-progress';
+import type { ContentCatalog, GameEvent, Level, LevelMetadata, ProgressData, RegionColors, RegionMaterials, ThemeDefinition } from '../types';
 
-const WorldScreen = lazy(() => import('./WorldScreen'));
+const WorldScreen = lazy(async () => {
+  const [screen] = await Promise.all([import('./WorldScreen'), import('../styles/world-preview.css')]);
+  return screen;
+});
 
 function hasPlaceholder(catalog: ContentCatalog, ids: string[]) {
   return catalog.assets.some((asset) => ids.includes(asset.id) && asset.placeholder);
@@ -61,7 +73,7 @@ function PlaceholderLabel({ catalog, assetIds, children = '待替换 · 几何�
 function SourceNote({ level }: { level: LevelMetadata }) {
   return <section className="result-reference" aria-labelledby="result-reference-title" tabIndex={0}>
     <h2 id="result-reference-title">文化参考</h2>
-    <p className="result-reference-link"><a href={level.source.url} target="_blank" rel="noreferrer">{level.source.title}<span aria-hidden="true"> ↗</span></a></p>
+    <p className="result-reference-link"><a href={level.source.url} target="_blank" rel="noreferrer">{level.source.title}</a></p>
     {level.source.note && <p>{level.source.note}</p>}
     {level.teachingNote && <p className="result-art-note">{level.teachingNote}</p>}
   </section>;
@@ -69,45 +81,97 @@ function SourceNote({ level }: { level: LevelMetadata }) {
 
 export default function App({ catalog }: { catalog: ContentCatalog }) {
   const sound = useSound();
+  const [firstGallery] = useState(() => document.getElementById('root')?.dataset.firstGallery === 'v001');
+  const [connectedGalleries] = useState(() => document.getElementById('root')?.dataset.connectedGalleries === 'v001');
+  const [musicGalleryEnabled] = useState(() => connectedGalleries || document.getElementById('root')?.dataset.musicGallery === 'v001');
+  const galleryResetAvailable = firstGallery || musicGalleryEnabled || document.getElementById('root')?.dataset.mogaoExhibit === 'v001';
+  const musicGallery = useMusicGalleryProgress(musicGalleryEnabled);
+  const musicGamesLocked = musicGalleryEnabled && !musicGallery.unlocked;
+  const [gallery, setGallery] = useState(() => firstGallery ? loadFirstGallery() : null);
+  const lastGallery = useRef(gallery);
+  const [galleryPortalPending, setGalleryPortalPending] = useState(false);
+  const [galleryReturningFromColoring, setGalleryReturningFromColoring] = useState(false);
+  const [keepGalleryWorld, setKeepGalleryWorld] = useState(false);
+  const [gallerySaveError, setGallerySaveError] = useState<string | null>(null);
+  const [galleryCompatibility, setGalleryCompatibility] = useState(false);
+  const galleryRetry = useRef<(() => void) | null>(null);
+  const ordinaryRequest = useRef<string | null>(null);
+  const easelEntry = useRef<FirstGalleryColoringEntry | null>(
+    firstGallery ? readGalleryColoringEntry(window.history.state?.[FIRST_GALLERY_ENTRY_CLAIM]) : null,
+  );
   const [initialLoad] = useState(() => loadProgress());
-  const [initialLearning] = useState(() => loadLearning());
   const [initialArtworks] = useState(() => loadArtworks());
   const [artworks, setArtworks] = useState<ArtworksData>(initialArtworks.data);
   const artworksRef = useRef(artworks);
   const [artworkSaveError, setArtworkSaveError] = useState<string | null>(null);
-  const [learning, setLearning] = useState<LearningData>(initialLearning.data);
-  const learningRef = useRef(learning);
-  const [learningSaveError, setLearningSaveError] = useState<string | null>(null);
   const [progress, setProgress] = useState<ProgressData>(initialLoad.data);
   const progressRef = useRef(progress);
   const catalogRef = useRef(catalog);
   catalogRef.current = catalog;
-  const [loadWarning, setLoadWarning] = useState([initialLoad.warning, initialLearning.warning, initialArtworks.warning].filter(Boolean).join(' ') || null);
+  const [loadWarning, setLoadWarning] = useState([initialLoad.warning, initialArtworks.warning].filter(Boolean).join(' ') || null);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [route, setRoute] = useState<Route>(readRoute);
-  const [command, setCommand] = useState<GameCommand | null>(null);
-  const [foundIds, setFoundIds] = useState<string[]>([]);
-  const [gameTotal, setGameTotal] = useState(0);
-  const [hintStatus, setHintStatus] = useState('');
-  const [gameError, setGameError] = useState<string | null>(null);
-  const [gameReady, setGameReady] = useState(false);
-  const [playerRun, setPlayerRun] = useState(0);
   const [activeTheme, setActiveTheme] = useState(0);
-  const [inspectorOpen, setInspectorOpen] = useState(false);
-  const commandSequence = useRef(0);
   const completedThisRun = useRef(false);
+  const shellRef = useRef<HTMLDivElement>(null);
   const mainRef = useRef<HTMLElement>(null);
-  const [worldSessionOptions] = useState(() => document.getElementById('root')?.dataset.terrain === 'v001' ? TERRAIN_SESSION_OPTIONS : document.getElementById('root')?.dataset.flowRevision === 'v013' ? MOGAO_SESSION_OPTIONS_V13 : document.getElementById('root')?.dataset.mogao === 'v012' ? MOGAO_SESSION_OPTIONS_V12 : document.getElementById('root')?.dataset.mogao === 'v011' ? MOGAO_SESSION_OPTIONS_V11 : document.getElementById('root')?.dataset.mogao === 'v010' ? MOGAO_SESSION_OPTIONS_V10 : document.getElementById('root')?.dataset.mogao === 'v009' ? MOGAO_SESSION_OPTIONS_V9 : document.getElementById('root')?.dataset.mogao === 'v008' ? MOGAO_SESSION_OPTIONS_V8 : document.getElementById('root')?.dataset.mogao === 'v007' ? MOGAO_SESSION_OPTIONS_V7 : document.getElementById('root')?.dataset.mogao === 'v006' ? MOGAO_SESSION_OPTIONS_V6 : document.getElementById('root')?.dataset.mogao === 'v003' ? MOGAO_SESSION_OPTIONS_V3 : document.getElementById('root')?.dataset.mogao === 'v002' ? MOGAO_SESSION_OPTIONS_V2 : document.getElementById('root')?.dataset.mogao === 'v001' ? MOGAO_SESSION_OPTIONS : document.getElementById('root')?.dataset.musicPavilion === 'v006' ? { ...MUSIC_SESSION_OPTIONS_V4, key: 'dunhuang:music-pavilion-preview:v6' } : document.getElementById('root')?.dataset.musicPavilion === 'v005' ? { ...MUSIC_SESSION_OPTIONS_V4, key: 'dunhuang:music-pavilion-preview:v5' } : document.getElementById('root')?.dataset.musicPavilion === 'v004' ? MUSIC_SESSION_OPTIONS_V4 : document.getElementById('root')?.dataset.flyingVoice === 'v001' ? { ...MUSIC_SESSION_OPTIONS_V3, key: FLYING_VOICE_SESSION_KEY } : document.getElementById('root')?.dataset.musicPavilion === 'v003' ? MUSIC_SESSION_OPTIONS_V3 : document.getElementById('root')?.dataset.musicPavilion === 'v002' ? MUSIC_SESSION_OPTIONS_V2 : document.getElementById('root')?.dataset.musicPavilion === 'v001'
+  const [worldSessionOptions] = useState(() => connectedGalleries ? CONNECTED_GALLERY_SESSION_OPTIONS : firstGallery ? { ...TERRAIN_FIRST_GALLERY_SESSION_OPTIONS, key: FIRST_GALLERY_WORLD_SESSION_KEY } : document.getElementById('root')?.dataset.musicCompanion === 'v002' ? (document.getElementById('root')?.dataset.musicGuide === 'v001' ? MUSIC_GUIDE_SESSION_OPTIONS : MUSIC_COMPANION_SESSION_OPTIONS_V2) : document.getElementById('root')?.dataset.musicCompanion === 'v001' ? MUSIC_COMPANION_SESSION_OPTIONS : document.getElementById('root')?.dataset.mogaoExhibit === 'v001' ? MOGAO_EXHIBIT_SESSION_OPTIONS : document.getElementById('root')?.dataset.mogaoUpper === 'v002' ? UPPER_SESSION_OPTIONS : document.getElementById('root')?.dataset.terrain === 'v001' ? TERRAIN_SESSION_OPTIONS : document.getElementById('root')?.dataset.flowRevision === 'v013' ? MOGAO_SESSION_OPTIONS_V13 : document.getElementById('root')?.dataset.mogao === 'v012' ? MOGAO_SESSION_OPTIONS_V12 : document.getElementById('root')?.dataset.mogao === 'v011' ? MOGAO_SESSION_OPTIONS_V11 : document.getElementById('root')?.dataset.mogao === 'v010' ? MOGAO_SESSION_OPTIONS_V10 : document.getElementById('root')?.dataset.mogao === 'v009' ? MOGAO_SESSION_OPTIONS_V9 : document.getElementById('root')?.dataset.mogao === 'v008' ? MOGAO_SESSION_OPTIONS_V8 : document.getElementById('root')?.dataset.mogao === 'v007' ? MOGAO_SESSION_OPTIONS_V7 : document.getElementById('root')?.dataset.mogao === 'v006' ? MOGAO_SESSION_OPTIONS_V6 : document.getElementById('root')?.dataset.mogao === 'v003' ? MOGAO_SESSION_OPTIONS_V3 : document.getElementById('root')?.dataset.mogao === 'v002' ? MOGAO_SESSION_OPTIONS_V2 : document.getElementById('root')?.dataset.mogao === 'v001' ? MOGAO_SESSION_OPTIONS : document.getElementById('root')?.dataset.musicPavilion === 'v006' ? { ...MUSIC_SESSION_OPTIONS_V4, key: 'dunhuang:music-pavilion-preview:v6' } : document.getElementById('root')?.dataset.musicPavilion === 'v005' ? { ...MUSIC_SESSION_OPTIONS_V4, key: 'dunhuang:music-pavilion-preview:v5' } : document.getElementById('root')?.dataset.musicPavilion === 'v004' ? MUSIC_SESSION_OPTIONS_V4 : document.getElementById('root')?.dataset.flyingVoice === 'v001' ? { ...MUSIC_SESSION_OPTIONS_V3, key: FLYING_VOICE_SESSION_KEY } : document.getElementById('root')?.dataset.musicPavilion === 'v003' ? MUSIC_SESSION_OPTIONS_V3 : document.getElementById('root')?.dataset.musicPavilion === 'v002' ? MUSIC_SESSION_OPTIONS_V2 : document.getElementById('root')?.dataset.musicPavilion === 'v001'
     ? { key: MUSIC_SESSION_KEY, colliders: MUSIC_PLAYER_COLLIDERS } : {});
   const [initialWorld] = useState(() => loadWorldSession(undefined, worldSessionOptions));
   const worldCheckpoint = useRef(initialWorld.data);
   const [worldWarning, setWorldWarning] = useState(initialWorld.warning);
+  const [worldRevision, setWorldRevision] = useState(0);
+  const currentWorldRevision = useRef(0);
   const enteredFromWorld = useRef(false);
+  const receivedMogaoFoliosThisVisit = useRef(false);
   const persistWorld = useCallback((next: WorldCheckpoint) => {
     worldCheckpoint.current = next;
     const saved = saveWorldSession(next, undefined, worldSessionOptions);
     setWorldWarning(saved.ok ? null : saved.message);
-  }, []);
+  }, [worldSessionOptions]);
+
+  const reloadMusicGallery = musicGallery.reload;
+  const applyGalleryReset = useCallback((area: GalleryTaskArea) => {
+    // Discard writes from the old runtime when its effect cleans up.
+    setWorldRevision(++currentWorldRevision.current);
+    setKeepGalleryWorld(false);
+    const resumed = loadWorldSession(undefined, worldSessionOptions);
+    worldCheckpoint.current = resumed.data;
+    setWorldWarning(resumed.warning);
+    if (easelEntry.current) {
+      const refreshed = readGalleryColoringEntry(easelEntry.current.token);
+      if (refreshed) easelEntry.current = refreshed;
+    }
+    if (area === 'first' && firstGallery) {
+      const next = loadFirstGallery();
+      lastGallery.current = next;
+      setGallery(next);
+      setGalleryPortalPending(false);
+      setGalleryReturningFromColoring(false);
+      setGalleryCompatibility(false);
+    }
+    if (area === 'music') reloadMusicGallery();
+    if (area === 'mogao') receivedMogaoFoliosThisVisit.current = false;
+  }, [firstGallery, reloadMusicGallery, worldSessionOptions]);
+
+  useEffect(() => {
+    if (!galleryResetAvailable) return;
+    function syncGalleryReset(event: StorageEvent) {
+      const area = galleryForProgressResetKey(event.key);
+      if (!area || !event.newValue) return;
+      const cleared = clearGallerySessionProgress(area, undefined, worldSessionOptions.key);
+      applyGalleryReset(area);
+      if (!cleared.ok) setWorldWarning(cleared.message);
+    }
+    window.addEventListener('storage', syncGalleryReset);
+    return () => window.removeEventListener('storage', syncGalleryReset);
+  }, [applyGalleryReset, galleryResetAvailable, worldSessionOptions]);
+
+  function handleGalleryReset(area: GalleryTaskArea) {
+    const result = resetGalleryProgress(area, undefined, worldSessionOptions.key);
+    if (result.ok) applyGalleryReset(area);
+    return result;
+  }
 
   const persist = useCallback((next: ProgressData) => {
     progressRef.current = next;
@@ -117,45 +181,108 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
     return result.ok;
   }, []);
 
+  const returnToGalleryEasel = useCallback((entry: FirstGalleryColoringEntry, submitted: boolean) => {
+    persistWorld(entry.checkpoint);
+    clearGalleryColoringEntry(entry.token);
+    easelEntry.current = null;
+    galleryRetry.current = null;
+    setGallerySaveError(null);
+    setGalleryCompatibility(false);
+    setKeepGalleryWorld(false);
+    setGalleryReturningFromColoring(submitted && !keepGalleryWorld);
+    try { window.history.replaceState(null, '', '#/'); }
+    catch { goTo('/'); }
+    setRoute({ page: 'home' });
+  }, [keepGalleryWorld, persistWorld]);
+
+  const leaveGalleryEasel = useCallback(() => {
+    if (easelEntry.current) returnToGalleryEasel(easelEntry.current, false);
+  }, [returnToGalleryEasel]);
+
   useEffect(() => {
-    const handleHash = () => setRoute(readRoute());
+    const handleHash = () => {
+      const next = readRoute();
+      const current = easelEntry.current;
+      if (current && (next.page !== 'play' || next.id !== FIRST_GALLERY_EASEL_LEVEL ||
+        window.history.state?.[FIRST_GALLERY_ENTRY_CLAIM] !== current.token)) {
+        leaveGalleryEasel();
+        return;
+      }
+      if (next.page === 'home') setGalleryCompatibility(false);
+      setRoute(next);
+    };
     window.addEventListener('hashchange', handleHash);
-    return () => window.removeEventListener('hashchange', handleHash);
+    window.addEventListener('popstate', handleHash);
+    return () => {
+      window.removeEventListener('hashchange', handleHash);
+      window.removeEventListener('popstate', handleHash);
+    };
+  }, [leaveGalleryEasel]);
+
+  useEffect(() => {
+    if (!firstGallery) return;
+    const refresh = (local: boolean) => {
+      const previous = lastGallery.current;
+      const next = loadFirstGallery();
+      if (local && previous && !previous.warning && !next.warning &&
+        !isFirstGalleryUnlocked(previous.data) && isFirstGalleryUnlocked(next.data) && !next.data.ceremonySeen) {
+        setGalleryPortalPending(true);
+      } else if (next.data.ceremonySeen || !isFirstGalleryUnlocked(next.data)) {
+        setGalleryPortalPending(false);
+      }
+      lastGallery.current = next;
+      setGallery(next);
+    };
+    const unsubscribe = subscribeFirstGallery(refresh);
+    importGalleryArtworks(catalog);
+    refresh(false);
+    return unsubscribe;
+  }, [firstGallery, catalog]);
+
+  useEffect(() => {
+    const root = shellRef.current;
+    if (!root) return;
+    root.dataset.inputModality = 'pointer';
+    const pointer = () => { root.dataset.inputModality = 'pointer'; };
+    const keyboard = (event: KeyboardEvent) => {
+      if (['Tab', 'Enter', ' ', 'Escape', 'Home', 'End', 'PageUp', 'PageDown'].includes(event.key) || event.key.startsWith('Arrow')) {
+        root.dataset.inputModality = 'keyboard';
+      }
+    };
+    document.addEventListener('pointerdown', pointer, true);
+    document.addEventListener('touchstart', pointer, { capture: true, passive: true });
+    document.addEventListener('keydown', keyboard, true);
+    return () => {
+      document.removeEventListener('pointerdown', pointer, true);
+      document.removeEventListener('touchstart', pointer, true);
+      document.removeEventListener('keydown', keyboard, true);
+      delete root.dataset.inputModality;
+    };
   }, []);
 
   const routeKey = getRouteKey(route);
   useEffect(() => {
     if (route.page === 'themes') enteredFromWorld.current = false;
+    if (route.page !== 'home') setGalleryReturningFromColoring(false);
     window.scrollTo({ top: 0, behavior: 'instant' });
     mainRef.current?.focus({ preventScroll: true });
-    setCommand(null);
-    setInspectorOpen(false);
-    setFoundIds([]);
-    setGameError(null);
-    setGameReady(false);
-    setHintStatus('');
     completedThisRun.current = false;
+    if (route.page === 'play') {
+      ordinaryRequest.current = null;
+      galleryRetry.current = null;
+      setGallerySaveError(null);
+    }
   }, [routeKey]);
-
-  const persistLearning = useCallback((next: LearningData) => {
-    learningRef.current = next;
-    setLearning(next);
-    const result = saveLearning(next);
-    setLearningSaveError(result.ok ? null : result.message);
-  }, []);
 
   const persistArtworks = useCallback((next: ArtworksData) => {
     artworksRef.current = next;
     setArtworks(next);
     const result = saveArtworks(next);
     setArtworkSaveError(result.ok ? null : result.message);
+    return result.ok;
   }, []);
 
   const onGameEvent = useCallback((event: GameEvent) => {
-    if (event.type === 'ready') { setGameReady(true); setGameTotal(event.total); setGameError(null); }
-    if (event.type === 'progress') { setFoundIds(event.foundIds); setGameTotal(event.total); }
-    if (event.type === 'hint') setHintStatus(event.message);
-    if (event.type === 'error') { setGameError(event.message); setGameReady(false); }
     if (event.type === 'completed' && !completedThisRun.current) {
       const level = catalogRef.current.levels.find((item) => item.id === event.levelId);
       if (!level) return;
@@ -165,18 +292,8 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
     }
   }, [persist]);
 
-  function issueCommand(type: 'hint' | 'restart') {
-    if (type === 'restart') {
-      completedThisRun.current = false;
-      setFoundIds([]);
-      setHintStatus('');
-    }
-    setCommand({ type, sequence: ++commandSequence.current });
-  }
-
   function replay(levelId: string) {
     completedThisRun.current = false;
-    setPlayerRun((value) => value + 1);
     goTo(playPath(levelId));
   }
 
@@ -184,9 +301,10 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
     const slice = catalog.assets.find(asset => asset.id === id)!.slice!;
     return `${slice.top} ${slice.right} ${slice.bottom} ${slice.left}`;
   }
+  const previewHome = route.page === 'home' && (firstGallery || !!document.documentElement.dataset.previewResourceEntry);
   const assetStyle = {
-    '--background-landscape': `url("${getAssetUrl(catalog, 'bg-landscape')}")`,
-    '--background-portrait': `url("${getAssetUrl(catalog, 'bg-portrait')}")`,
+    '--background-landscape': previewHome ? 'none' : `url("${getAssetUrl(catalog, 'bg-landscape')}")`,
+    '--background-portrait': previewHome ? 'none' : `url("${getAssetUrl(catalog, 'bg-portrait')}")`,
     '--panel-slice': skinSlice('panel'),
     '--primary-button-slice': skinSlice('button-primary'),
     '--secondary-button-slice': skinSlice('button-secondary'),
@@ -203,39 +321,60 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
     </div>;
   }
 
-  function renderHome() {
-    return <ThemeCards catalog={catalog} selectedIndex={activeTheme} onSelectIndex={setActiveTheme}
-      hrefForTheme={theme => `#${themePath(theme.id)}`} />;
+  const unlocked = unlockedGameThemes();
+  if (musicGallery.unlocked && !unlocked.includes('music')) unlocked.push('music');
+  if (galleryCompatibility && !unlocked.includes('patterns')) unlocked.push('patterns');
+  if (receivedMogaoFoliosThisVisit.current && !unlocked.includes('stories')) unlocked.push('stories');
+  const availableThemes = catalog.themes.filter(theme => unlocked.includes(theme.id));
+  const gameWorldAvailable = availableThemes.length > 0 && !easelEntry.current;
+
+  function enterGalleryCompatibility() {
+    setGalleryCompatibility(true);
+    goTo(gamesPath('patterns'));
   }
 
-  function renderTeaching(book: LessonBook) {
-    const record = lessonRecord(learning, book);
-    return <TeachingScreen key={book.id} book={book} catalog={catalog} completed={isLessonCompleted(learning, book)}
-      initialVisitedIds={record.visitedIds}
-      onBack={() => goTo(enteredFromWorld.current ? '/' : '/themes')}
-      onSkip={() => goTo(gamesPath(book.themeId))}
-      onUnitChange={unitId => {
-        const next = withVisitedUnit(learningRef.current, book, unitId);
-        if (next !== learningRef.current) persistLearning(next);
-      }}
-      onComplete={() => {
-        // Only actual chapter visits can qualify a completed participation record.
-        persistLearning(withCompletedLesson(learningRef.current, book));
-        goTo(gamesPath(book.themeId));
-      }} />;
-  }
-
-  function renderTheme(theme: ThemeDefinition) {
-    const book = getLessonBook(theme.id);
-    if (book) return renderTeaching(book);
-    return <div className="page unavailable-theme"><Breadcrumb catalog={catalog} items={[{ label: enteredFromWorld.current ? '探索世界' : '首页', href: enteredFromWorld.current ? '#/' : '#/themes' }]} />
-      <h1>{theme.title}</h1><div className="unavailable-theme-content">
-        <Asset catalog={catalog} id={theme.coverAssetId} alt={`${theme.title}主题封面`} eager />
-        <p>主题尚未开放</p></div></div>;
+  function enterGalleryEasel(checkpoint: WorldCheckpoint, artworkId?: string): boolean {
+    if (!firstGallery) return false;
+    const level = catalog.levels.find(item => item.id === FIRST_GALLERY_EASEL_LEVEL);
+    if (level?.gameType !== 'coloring') {
+      setWorldWarning('画架线稿暂未加载，请重试。');
+      return false;
+    }
+    if (artworkId) {
+      const source = loadFirstGallery().data.artworks[artworkId];
+      if (!source || source.levelId !== level.id || source.artworkVersion !== level.artworkVersion) {
+        setWorldWarning('这幅作品暂时无法在当前画架上重新配色。');
+        return false;
+      }
+    }
+    const result = startGalleryColoring(checkpoint, level.artworkVersion, undefined, artworkId);
+    if (!result.ok) {
+      setWorldWarning(result.message);
+      return false;
+    }
+    try {
+      window.history.pushState({ [FIRST_GALLERY_ENTRY_CLAIM]: result.entry.token }, '', `#${playPath(level.id)}`);
+    } catch {
+      clearGalleryColoringEntry(result.entry.token);
+      setWorldWarning('画架暂时无法打开，请重试。');
+      return false;
+    }
+    persistWorld(checkpoint);
+    easelEntry.current = result.entry;
+    setKeepGalleryWorld(true);
+    setRoute({ page: 'play', id: level.id });
+    return true;
   }
 
   function renderArtworkNotice() {
     return artworkSaveError && <div className="notice notice-error notice-compact" role="alert" data-testid="artwork-save-error"><p>{artworkSaveError}</p><button type="button" className="button button-secondary button-small" data-testid="retry-artwork-save" onClick={() => persistArtworks(artworksRef.current)}><span className="button-label">重试保存作品</span></button></div>;
+  }
+
+  function renderGallerySaveNotice() {
+    return gallerySaveError && <div className="notice notice-error notice-compact" role="alert" data-testid="gallery-save-error">
+      <p>{gallerySaveError}</p>
+      <button type="button" className="button button-secondary button-small" onClick={() => galleryRetry.current?.()}>重试收藏作品</button>
+    </div>;
   }
 
   function renderLevel(level: Level, theme: ThemeDefinition) {
@@ -245,36 +384,78 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
     if (level.gameType === 'hidden-object') return <HiddenObjectScreen key={level.id} level={level} catalog={catalog}
       reducedMotion={progress.settings.reducedMotion} onEvent={onGameEvent}
       onBack={() => goTo(levelsPath(theme.id, 'hidden-object'))} />;
-    if (level.gameType === 'puzzle') return <PuzzleScreen key={level.id} level={level} catalog={catalog}
-      reducedMotion={progress.settings.reducedMotion} onEvent={onGameEvent}
-      onBack={() => goTo(levelsPath(theme.id, 'puzzle'))} />;
-    if (level.gameType === 'coloring') {
-      const save = (colors: RegionColors, submitted = false) => persistArtworks(withArtwork(artworksRef.current, level, colors, submitted));
-      return <ColoringScreen key={level.id} level={level} catalog={catalog} initialColors={artworkColors(artworks, level)}
-        reducedMotion={progress.settings.reducedMotion} onChange={colors => save(colors)}
-        onBack={() => goTo(levelsPath(theme.id, 'coloring'))}
-        onComplete={() => { save(artworkColors(artworksRef.current, level), true); onGameEvent({ type: 'completed', levelId: level.id }); }}
-        saveNotice={<>{hasOlderArtwork(artworks, level) && <p className="notice" role="status">线稿版本已更新，旧作品已保留。本页使用新线稿。</p>}{renderArtworkNotice()}</>} />;
+    if (level.gameType === 'puzzle') {
+      const fromMogao = theme.id === 'stories' && enteredFromWorld.current;
+      return <PuzzleScreen key={level.id} level={level} catalog={catalog}
+        reducedMotion={progress.settings.reducedMotion} onEvent={onGameEvent}
+        backLabel={fromMogao ? '返回第三馆一楼' : undefined}
+        onBack={() => goTo(fromMogao ? '/' : levelsPath(theme.id, 'puzzle'))} />;
     }
-    const image = catalog.assets.find(asset => asset.id === level.baseAssetId)!;
-    const total = gameReady ? gameTotal : level.differences.length;
-    return <div className="page page-play">
-      <div className="play-topline"><Breadcrumb catalog={catalog} items={[{ label: `${gameNames[level.gameType]}关卡`, href: `#${levelsPath(theme.id, level.gameType)}` }]} /><div className="play-view-actions"><button type="button" className="text-link" disabled={!gameReady} onClick={() => setInspectorOpen(true)}>放大观察</button></div></div>
-      <header className="play-heading"><div><h1>{level.title}</h1></div><div className="observation-count" data-testid="game-progress" aria-label={`已找到 ${foundIds.length} 处，共 ${total} 处`}><span>{foundIds.length}</span><span className="count-divider">/</span><span>{total}</span><small>处变化</small></div></header>
-      <section className="game-stage" aria-label="找不同游戏区"><div className="stage-topline"><span>点击任一幅图中发生变化的位置</span><PlaceholderLabel catalog={catalog} assetIds={[level.baseAssetId, level.editedAssetId]}>待替换 · 功能占位图</PlaceholderLabel></div><PhaserPlayer key={`${level.id}-${playerRun}`} level={level} baseImageUrl={getAssetUrl(catalog, level.baseAssetId)} editedImageUrl={getAssetUrl(catalog, level.editedAssetId)} imageAspectRatio={image.width / image.height} reducedMotion={progress.settings.reducedMotion} onEvent={onGameEvent} command={command} />{!gameReady && !gameError && <p className="game-loading" role="status">正在准备观察画面…</p>}</section>
-      {gameError ? <div className="notice notice-error game-error" role="alert"><div><strong>画面暂时无法打开</strong><p>{gameError}</p></div><button type="button" className="button button-secondary button-small" onClick={() => { setGameError(null); setGameReady(false); setPlayerRun((value) => value + 1); }}>重新加载画面</button></div> : <div className="hint-note" role="status" aria-live="polite" data-testid="hint-status"><p>{hintStatus}</p></div>}
-      {inspectorOpen && <ArtInspector referenceUrl={getAssetUrl(catalog, level.baseAssetId)} editedUrl={getAssetUrl(catalog, level.editedAssetId)} imageAspectRatio={image.width / image.height} onClose={() => setInspectorOpen(false)} />}
-      <div className="play-toolbar"><div className="play-actions"><button type="button" data-sound="none" className="button button-secondary button-small" onClick={() => issueCommand('hint')} disabled={!gameReady || !!gameError}><Asset catalog={catalog} id="icon-hint" /><span className="button-label">给我提示</span></button><button type="button" className="button button-plain button-small" onClick={() => issueCommand('restart')} disabled={!gameReady || !!gameError}><Asset catalog={catalog} id="icon-restart" /><span className="button-label">重新开始</span></button></div></div>
-    </div>;
+    if (level.gameType === 'coloring') {
+      const entry = easelEntry.current;
+      const savedSource = entry?.sourceArtworkId ? gallery?.data.artworks[entry.sourceArtworkId] : undefined;
+      const source = entry?.draft ?? (savedSource?.levelId === level.id && savedSource.artworkVersion === level.artworkVersion ? savedSource : undefined);
+      const save = (colors: RegionColors, materials: RegionMaterials) => {
+        persistArtworks(withArtwork(artworksRef.current, level, colors, false, undefined, materials));
+        if (entry) easelEntry.current = saveGalleryColoringDraft(entry.token, colors, materials) ?? easelEntry.current;
+        // Undoing a failed submission opens a new edit. Do not let its retry
+        // button publish the previous version of what is now on the canvas.
+        if (galleryRetry.current) {
+          galleryRetry.current = null;
+          setGallerySaveError(null);
+        }
+      };
+      const complete = (colors: RegionColors, materials: RegionMaterials) => {
+        if (completedThisRun.current) return;
+        const requestId = entry?.token ?? (ordinaryRequest.current ??= newGallerySubmissionId());
+        const submittedAt = new Date().toISOString();
+        let legacySaved = !!entry;
+        const capture = () => {
+          if (!legacySaved) {
+            legacySaved = persistArtworks(withArtwork(artworksRef.current, level, colors, true, submittedAt, materials));
+            if (!legacySaved) {
+              setGallerySaveError('作品尚未保存，请重试。');
+              galleryRetry.current = capture;
+              return;
+            }
+          }
+          const result = submitGalleryArtwork({ requestId, level, colors, materials, submittedAt, easelClaim: entry?.token });
+          setGallerySaveError(result.ok ? null : result.message);
+          if (!result.ok) {
+            galleryRetry.current = capture;
+            return;
+          }
+          galleryRetry.current = null;
+          if (entry) {
+            completedThisRun.current = true;
+            returnToGalleryEasel(entry, true);
+          } else onGameEvent({ type: 'completed', levelId: level.id });
+        };
+        capture();
+      };
+      return <ColoringScreen key={entry?.token ?? level.id} level={level} catalog={catalog} initialColors={source?.colors ?? artworkColors(artworks, level)}
+        initialMaterials={source?.materials ?? artworkMaterials(artworks, level)} reducedMotion={progress.settings.reducedMotion} onChange={save}
+        galleryEntry={!!entry} backLabel={entry ? '返回院内画架' : undefined} onBack={entry ? leaveGalleryEasel : () => goTo(levelsPath(theme.id, 'coloring'))}
+        onComplete={complete}
+        saveNotice={<>{hasOlderArtwork(artworks, level) && <p className="notice" role="status">线稿版本已更新，旧作品已保留。本页使用新线稿。</p>}
+          {gallerySaveError ? renderGallerySaveNotice() : renderArtworkNotice()}</>} />;
+    }
+    return <SpotDifferenceScreen key={level.id} level={level} catalog={catalog}
+      reducedMotion={progress.settings.reducedMotion} onEvent={onGameEvent}
+      onBack={() => goTo(levelsPath(theme.id, 'spot-difference'))} />;
   }
 
   function renderResult(level: Level, theme: ThemeDefinition) {
     const isColoring = level.gameType === 'coloring';
     const isPuzzle = level.gameType === 'puzzle';
-    const playablePuzzles = isPuzzle ? getLevelChoices(catalog, theme.id, 'puzzle')
-      .filter(choice => choice.status === 'available') : [];
-    const puzzleIndex = playablePuzzles.findIndex(choice => choice.id === level.id);
-    const nextPuzzle = puzzleIndex >= 0 ? playablePuzzles[puzzleIndex + 1]?.level : undefined;
+    const nextLevel = getNextOpenLevel(catalog, level);
+    const resultActions = (replayLabel: string) => <div className="result-actions">
+      {theme.id === 'stories' && enteredFromWorld.current
+        ? <a className="button button-primary" href="#/"><span className="button-label">返回第三馆一楼</span></a>
+        : <LevelAdvanceControl completed className="button button-primary" />}
+      <button type="button" className="button button-secondary" onClick={() => replay(level.id)}><span className="button-label">{replayLabel}</span></button>
+      {nextLevel && <a className="button button-secondary" href={`#${levelsPath(theme.id, level.gameType)}`}><span className="button-label">返回关卡</span></a>}
+    </div>;
     if (isPuzzle && !progress.completed[level.id]) return <div className="page narrow-page empty-state"><h1>先完成拼图，再查看全图</h1><a className="button button-primary" href={`#${playPath(level.id)}`}>前往拼图</a></div>;
     if (!progress.completed[level.id]) return <div className="page narrow-page empty-state"><h1>{isColoring ? '先完成活动，再回看作品' : '先完成活动，再回看发现'}</h1><a className="button button-primary" href={`#${playPath(level.id)}`}>{isColoring ? '前往填色' : '前往观察'}</a></div>;
     if (level.gameType === 'hidden-object') return <div className="page page-result">
@@ -282,8 +463,7 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
       <header className="result-heading"><h1>寻宝完成</h1></header>{renderSaveNotice()}
       <section className="result-review"><div className="result-image"><Asset catalog={catalog} id={level.thumbnailAssetId} alt="乐舞主题教学示意" eager /></div>
         <div className="result-summary"><SourceNote level={level} /></div></section>
-      <div className="result-actions"><a className="button button-primary" href={`#${levelsPath(theme.id, 'hidden-object')}`}>返回关卡</a>
-        <button type="button" className="button button-secondary" onClick={() => replay(level.id)}><span className="button-label">再找一局</span></button></div>
+      {resultActions('再找一局')}
     </div>;
     if (level.gameType === 'shadow-match') return <div className="page page-result shadow-result-screen">
       <Breadcrumb catalog={catalog} items={[{ label: '影子配对关卡', href: `#${levelsPath(theme.id, 'shadow-match')}` }]} />
@@ -292,8 +472,7 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
         <figure><Asset catalog={catalog} id={level.referenceAssetId} alt="彩色飞天完整图" eager /><figcaption>彩色飞天</figcaption></figure>
         <figure><Asset catalog={catalog} id={level.options.find(option => option.id === level.correctOptionId)!.assetId} alt="与飞天轮廓完全对应的影子" eager /><figcaption>对应影子</figcaption></figure>
       </div><div className="result-summary"><SourceNote level={level} /></div></section>
-      <div className="result-actions"><a className="button button-primary" href={`#${levelsPath(theme.id, 'shadow-match')}`}><span className="button-label">返回关卡</span></a>
-        <button type="button" className="button button-secondary" onClick={() => replay(level.id)}><span className="button-label">再配一次</span></button></div>
+      {resultActions('再配一次')}
     </div>;
     if (level.gameType === 'coloring' && !Object.keys(artworkColors(artworks, level)).length) return <div className="page narrow-page empty-state"><h1>{hasOlderArtwork(artworks, level) ? '线稿已更新，旧作品已保留' : '当前作品还未着色'}</h1>{renderArtworkNotice()}<a className="button button-primary" href={`#${playPath(level.id)}`}>继续填色</a></div>;
     return <div className={`page page-result${isColoring || isPuzzle ? ' is-coloring-result' : ''}`}>
@@ -301,34 +480,98 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
       <header className="result-heading"><h1>{isColoring ? '作品完成' : isPuzzle ? '拼图完成' : '观察完成'}</h1></header>
       {renderSaveNotice()}
       {isColoring && renderArtworkNotice()}
-      <section className="result-review"><div className="result-image">{level.gameType === 'coloring' ? <ColoringResult level={level} catalog={catalog} colors={artworkColors(artworks, level)} /> : level.gameType === 'puzzle' ? <Asset catalog={catalog} id={level.imageAssetId} alt="拼合完成的完整图像" eager /> : <><Asset catalog={catalog} id={level.baseAssetId} alt="本次观察参考图" eager /><PlaceholderLabel catalog={catalog} assetIds={[level.baseAssetId]} /></>}</div><div className="result-summary">{level.gameType === 'spot-difference' && <strong className="result-count">{level.differences.length}<span>处发现</span></strong>}<SourceNote level={level} /></div></section>
-      <div className={`result-actions${isPuzzle ? ' puzzle-result-actions' : ''}`}><a className="button button-primary" href={`#${levelsPath(theme.id, level.gameType)}`}><span className="button-label">返回关卡</span></a><button type="button" className="button button-secondary" onClick={() => replay(level.id)}><span className="button-label">{isColoring ? '继续创作' : isPuzzle ? '再拼一次' : '再观察一次'}</span></button>{nextPuzzle && <a className="button button-primary" href={`#${playPath(nextPuzzle.id)}`}><span className="button-label">下一关</span></a>}</div>
+      {isColoring && <p className="notice notice-compact">可以到 3D 世界的画架，从作品库选择这幅画来展示。</p>}
+      <section className="result-review"><div className="result-image">{level.gameType === 'coloring' ? <ColoringResult level={level} catalog={catalog} colors={artworkColors(artworks, level)} materials={artworkMaterials(artworks, level)} /> : level.gameType === 'puzzle' ? <Asset catalog={catalog} id={level.imageAssetId} alt="拼合完成的完整图像" eager /> : <><Asset catalog={catalog} id={level.baseAssetId} alt="本次观察参考图" eager /><PlaceholderLabel catalog={catalog} assetIds={[level.baseAssetId]} /></>}</div><div className="result-summary">{level.gameType === 'spot-difference' && <strong className="result-count">{level.differences.length}<span>处发现</span></strong>}<SourceNote level={level} /></div></section>
+      {resultActions(isColoring ? '继续创作' : isPuzzle ? '再拼一次' : '再观察一次')}
     </div>;
   }
 
   function renderHelp() {
-    return <div className="page narrow-page page-help"><Breadcrumb catalog={catalog} items={[{ label: '探索首页', href: '#/' }, { label: '游玩指南' }]} /><div className="text-page-heading"><h1>游玩指南</h1></div><div className="text-scroll" tabIndex={0} aria-label="游玩指南正文"><div className="guide-list"><article><span>01</span><div><h2>每次只做一件事</h2><p>进入主题先看文化导览，也可选择直接玩游戏，再选择玩法和关卡。一关只有一种玩法。</p></div></article><article><span>02</span><div><h2>卡住了，就用提示</h2><p>提示和重试都不限次数，也不会扣分。找不同可以点击任一幅图；已经找到的位置会在两幅图上标出。</p></div></article><article><span>03</span><div><h2>完成之后，再看一眼</h2><p>活动结束会给出简短解释和文化参考。完成表示参与过这次观察，不等于已经学会所有相关知识。</p></div></article><article><span>04</span><div><h2>记住探索的边界</h2><p>完成记录保存在当前设备、当前浏览器里。换浏览器、清除网站数据或使用无痕模式，可能无法保留记录。填色作品会自动保存，找不同不保存中途进度。</p></div></article></div><section className="development-note"><h2>图像说明</h2><p>AI教学示意图用于学习与游戏，不是原壁画照片或历史原貌复原。文化参考见完成后的发现回顾。</p></section></div><div className="text-page-actions"><a className="button button-secondary" href="#/">回到探索首页 <span aria-hidden="true">↗</span></a></div></div>;
+    return <div className="page narrow-page page-help"><Breadcrumb catalog={catalog} items={[{ label: '探索首页', href: '#/' }, { label: '游玩指南' }]} /><div className="text-page-heading"><h1>游玩指南</h1></div><div className="text-scroll" tabIndex={0} aria-label="游玩指南正文"><div className="guide-list"><article><span>01</span><div><h2>每次只做一件事</h2><p>解锁后可进入游戏世界，选择主题、玩法和关卡。一关只有一种玩法。</p></div></article><article><span>02</span><div><h2>卡住了，就用提示</h2><p>提示和重试都不限次数，也不会扣分。找不同可以点击任一幅图；已经找到的位置会在两幅图上标出。</p></div></article><article><span>03</span><div><h2>完成之后，再看一眼</h2><p>活动结束会给出简短解释和文化参考。完成表示参与过这次观察，不等于已经学会所有相关知识。</p></div></article><article><span>04</span><div><h2>记住探索的边界</h2><p>完成记录保存在当前设备、当前浏览器里。换浏览器、清除网站数据或使用无痕模式，可能无法保留记录。填色作品会自动保存，找不同不保存中途进度。</p></div></article></div><section className="development-note"><h2>图像说明</h2><p>AI教学示意图用于学习与游戏，不是原壁画照片或历史原貌复原。文化参考见完成后的发现回顾。</p></section></div><div className="text-page-actions"><a className="button button-secondary" href="#/">回到探索首页</a></div></div>;
   }
 
   function renderSettings() {
-    return <div className="page narrow-page page-settings"><Breadcrumb catalog={catalog} items={[{ label: '探索首页', href: '#/' }, { label: '体验设置' }]} /><div className="text-page-heading"><h1>设置</h1></div><div className="text-scroll"><SoundSettings sound={sound} /><div className="setting-row"><div><h2>减少动效</h2><p>减少页面过渡与按钮动效，让画面更安静。</p></div><label className="toggle"><input type="checkbox" checked={progress.settings.reducedMotion} onChange={(event) => persist({ ...progressRef.current, settings: { ...progressRef.current.settings, reducedMotion: event.target.checked } })} /><span className="toggle-track" aria-hidden="true" /><span className="visually-hidden">减少动效</span></label></div>{renderSaveNotice()}</div></div>;
+    return <div className="page narrow-page page-settings">
+      <Breadcrumb catalog={catalog} items={[{ label: '探索首页', href: '#/' }, { label: '体验设置' }]} />
+      <div className="text-page-heading"><h1>设置</h1></div>
+      <div className="text-scroll">
+        <SoundSettings sound={sound} />
+        <div className="setting-row">
+          <div><h2>减少动效</h2><p>减少页面过渡与按钮动效，让画面更安静。</p></div>
+          <label className="toggle">
+            <input type="checkbox" checked={progress.settings.reducedMotion} onChange={event => persist({
+              ...progressRef.current, settings: { ...progressRef.current.settings, reducedMotion: event.target.checked },
+            })} />
+            <span className="toggle-track" aria-hidden="true" /><span className="visually-hidden">减少动效</span>
+          </label>
+        </div>
+        {galleryResetAvailable && <GalleryResetSettings onReset={handleGalleryReset} />}
+        {renderSaveNotice()}
+      </div>
+    </div>;
   }
 
+  const galleryWorldSuspended = keepGalleryWorld && route.page === 'play' &&
+    route.id === FIRST_GALLERY_EASEL_LEVEL && !!easelEntry.current;
+  const unlockedMapGalleries = !connectedGalleries ? undefined :
+    gallery && isFirstGalleryUnlocked(gallery.data) ? (musicGallery.unlocked ? 3 : 2) : 1;
+  const renderWorld = (suspended: boolean) => <WorldBoundary gameWorldAvailable={gameWorldAvailable} onFallback={firstGallery ? enterGalleryCompatibility : undefined}><Suspense fallback={<div className="page empty-state"><h1>正在准备探索世界…</h1>{gameWorldAvailable && <a className={previewHome ? 'button button-plain' : 'button button-secondary'} href="#/themes">直接进入游戏世界</a>}</div>}><WorldScreen
+    key={worldRevision} initial={worldCheckpoint.current} saveWarning={worldWarning} reducedMotion={progress.settings.reducedMotion} sound={sound.preferences}
+    gameWorldAvailable={gameWorldAvailable}
+    musicGallery={musicGalleryEnabled ? musicGallery : undefined}
+    unlockedMapGalleries={unlockedMapGalleries}
+    onEnterMusicGames={!musicGalleryEnabled ? undefined : at => {
+      if (musicGamesLocked) return;
+      persistWorld(at); enteredFromWorld.current = true; goTo(gamesPath('music'));
+    }}
+    onEnterMogaoGames={at => {
+      receivedMogaoFoliosThisVisit.current = true;
+      persistWorld(at); enteredFromWorld.current = true; goTo(gamesPath('stories'));
+    }}
+    firstGallery={firstGallery} connectedGalleries={connectedGalleries} suspended={suspended} catalog={catalog} onGalleryColoring={enterGalleryEasel} onGalleryFallback={firstGallery ? enterGalleryCompatibility : undefined}
+    galleryReturningFromColoring={galleryReturningFromColoring} galleryPortalPending={galleryPortalPending}
+    onGalleryPortalPresented={() => {
+      setGalleryPortalPending(false);
+      const result = markGalleryCeremonySeen();
+      if (!result.ok) setWorldWarning(result.message);
+    }}
+    onGalleryPortalEnter={at => {
+      if (!getFirstGalleryAccess(loadFirstGallery().data, 'patterns')) return;
+      persistWorld(at);
+      enteredFromWorld.current = true;
+      goTo(gamesPath('patterns'));
+    }}
+    onCheckpoint={next => { if (worldRevision === currentWorldRevision.current) persistWorld(next); }} /></Suspense></WorldBoundary>;
   let page: ReactNode;
-  if (route.page === 'home') page = <WorldBoundary><Suspense fallback={<div className="page empty-state"><h1>正在准备探索世界…</h1><a className="button button-secondary" href="#/themes">直接选择文化主题</a></div>}><WorldScreen
-    initial={worldCheckpoint.current} saveWarning={worldWarning} reducedMotion={progress.settings.reducedMotion} sound={sound.preferences}
-    onCheckpoint={persistWorld} onEnterTheme={(id, next) => { persistWorld(next); enteredFromWorld.current = true; goTo(themePath(id)); }} /></Suspense></WorldBoundary>;
-  else if (route.page === 'themes') page = renderHome();
+  const routeTheme = route.page === 'games' || route.page === 'levels' ? route.themeId :
+    route.page === 'play' || route.page === 'result' ? catalog.levels.find(level => level.id === route.id)?.themeId : undefined;
+  const easelAllowed = !!gallery && !!easelEntry.current && canOpenFirstGalleryRoute(gallery.data, route, catalog, easelEntry.current, galleryCompatibility);
+  const routeAllowed = easelEntry.current ? easelAllowed : routeTheme !== 'patterns' || unlocked.includes('patterns');
+  const galleryWorldVisible = firstGallery && route.page === 'home' && routeAllowed;
+  const galleryWorldMounted = galleryWorldVisible || galleryWorldSuspended;
+  if (!routeAllowed) page = <div className="page narrow-page empty-state"><h1>这个入口尚未开放</h1>
+    <p>{gallery && getFirstGalleryAccess(gallery.data, 'patterns') ? '其他场馆的小游戏暂未开放。' : '完成壁画、藻井和画架三个事件，即可解锁纹样小游戏。'}</p>
+    <a className="button button-primary" href="#/">返回第一馆</a></div>;
+  else if (routeTheme === 'music' && !unlocked.includes('music')) page = <div className="page narrow-page empty-state" data-testid="music-gallery-locked">
+    <h1>乐舞小游戏尚未解锁</h1>
+    <p>看完九个飞天年代、打开十二件乐器试听，并为小导游换上任意一套历史服饰，即可解锁。</p>
+    <a className="button button-primary" href="#/">返回乐舞馆</a>
+  </div>;
+  else if (routeTheme === 'stories' && !unlocked.includes('stories')) page = <div className="page narrow-page empty-state" data-testid="mogao-game-locked">
+    <h1>壁画小游戏尚未解锁</h1>
+    <p>领取绘世厅与佛法厅的两份图鉴，即可在第三馆一楼找到游戏入口。</p>
+    <a className="button button-primary" href="#/">返回探索</a>
+  </div>;
+  else if (route.page === 'home' && !firstGallery) page = renderWorld(false);
+  else if (route.page === 'themes') page = <ThemeCards catalog={{ ...catalog, themes: availableThemes }} selectedIndex={activeTheme} onSelectIndex={setActiveTheme}
+    hrefForTheme={theme => `#${gamesPath(theme.id)}`} />;
   else if (route.page === 'help') page = renderHelp();
   else if (route.page === 'settings') page = renderSettings();
-  else if (route.page === 'theme') {
-    const theme = catalog.themes.find(item => item.id === route.id);
-    if (theme) page = renderTheme(theme);
-  } else if (route.page === 'games' || route.page === 'levels') {
+  else if (route.page === 'games' || route.page === 'levels') {
     const theme = catalog.themes.find(item => item.id === route.themeId);
     if (theme) {
       if (route.page === 'games') page = <GameSelectScreen catalog={catalog} theme={theme}
-        onBack={() => goTo(themePath(theme.id))} onReview={() => goTo(themePath(theme.id))}
+        onBack={() => goTo(enteredFromWorld.current ? '/' : '/themes')}
         hrefForGame={type => `#${levelsPath(theme.id, type)}`} />;
       else if (theme.allowedGameTypes.includes(route.gameType)) page = <LevelSelectScreen catalog={catalog} theme={theme}
         gameType={route.gameType} progress={progress} onBack={() => goTo(gamesPath(theme.id))}
@@ -338,18 +581,23 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
     const level = catalog.levels.find(item => item.id === route.id);
     const theme = catalog.themes.find(item => item.id === level?.themeId);
     if (level && theme) {
-      page = route.page === 'result' ? renderResult(level, theme) : renderLevel(level, theme);
+      page = <LevelNavigationProvider catalog={catalog} level={level} restricted={!!easelEntry.current}>{route.page === 'result' ? renderResult(level, theme) : renderLevel(level, theme)}</LevelNavigationProvider>;
     }
   }
-  if (!page) page = <div className="page narrow-page empty-state"><h1>页面不存在</h1><a className="button button-primary" href="#/">返回首页</a></div>;
+  if (!page && !galleryWorldVisible) page = <div className="page narrow-page empty-state"><h1>页面不存在</h1><a className="button button-primary" href="#/">返回首页</a></div>;
 
-  return <div className="app-shell" data-screen={route.page} data-reduced-motion={progress.settings.reducedMotion ? 'true' : 'false'} style={assetStyle} onClickCapture={sound.onInterfaceClick}>
+  return <div ref={shellRef} className="app-shell" data-screen={route.page} data-reduced-motion={progress.settings.reducedMotion ? 'true' : 'false'} style={assetStyle} onClickCapture={sound.onInterfaceClick}>
     <a className="skip-link" href="#main-content" onClick={(event) => { event.preventDefault(); mainRef.current?.focus(); }}>跳到主要内容</a>
-    <header className="site-header"><a className="brand" href="#/" aria-label="敦煌寻宝记，返回首页"><span className="brand-mark" aria-hidden="true">敦</span><strong>敦煌寻宝记</strong></a><nav className="header-nav" aria-label="主导航"><a href="#/" data-testid="world-return" aria-label="返回探索世界" aria-current={route.page === 'home' ? 'page' : undefined}>探索</a><a href="#/themes" aria-current={route.page === 'themes' ? 'page' : undefined}>主题</a><a href="#/help" aria-current={route.page === 'help' ? 'page' : undefined}>指南</a><a href="#/settings" aria-current={route.page === 'settings' ? 'page' : undefined}>设置</a></nav></header>
+    <header className="site-header"><a className="brand" href="#/" aria-label="敦煌寻宝记，返回首页"><span className="brand-mark" aria-hidden="true">敦</span><strong>敦煌寻宝记</strong></a><nav className="header-nav" aria-label="主导航"><a href="#/" data-testid="world-return" aria-label="漫游世界" aria-current={route.page === 'home' ? 'page' : undefined}>漫游世界</a>{gameWorldAvailable && <a href="#/themes" aria-current={route.page === 'themes' ? 'page' : undefined}>游戏世界</a>}<a href="#/help" aria-current={route.page === 'help' ? 'page' : undefined}>指南</a><a href="#/settings" aria-current={route.page === 'settings' ? 'page' : undefined}>设置</a></nav></header>
     {loadWarning && <div className="global-notice notice" role="status"><p>{loadWarning}</p><button className="text-link" onClick={() => setLoadWarning(null)} type="button">知道了</button></div>}
     {saveError && route.page !== 'result' && route.page !== 'settings' && <div className="global-notice">{renderSaveNotice(true)}</div>}
-    {learningSaveError && <div className="global-notice notice notice-error" role="alert" data-testid="learning-save-error"><p>{learningSaveError}</p><button className="button button-secondary button-small" type="button" onClick={() => persistLearning(learningRef.current)}>重试保存学习记录</button></div>}
-    <main id="main-content" ref={mainRef} tabIndex={-1} key={routeKey}>{page}</main>
+    {gallery?.warning && route.page !== 'home' && <div className="global-notice notice" role="status"><p>{gallery.warning}</p></div>}
+    {gallerySaveError && route.page === 'result' && <div className="global-notice">{renderGallerySaveNotice()}</div>}
+    <main id="main-content" ref={mainRef} tabIndex={-1} key={galleryWorldMounted ? 'gallery-world' : routeKey}>
+      {galleryWorldMounted && <div className="gallery-world-slot" hidden={galleryWorldSuspended} inert={galleryWorldSuspended}>{renderWorld(galleryWorldSuspended)}</div>}
+      {['themes', 'games', 'levels', 'play', 'result'].includes(route.page)
+        ? <MobileLandscapeGuard active>{page}</MobileLandscapeGuard> : page}
+    </main>
 
   </div>;
 }

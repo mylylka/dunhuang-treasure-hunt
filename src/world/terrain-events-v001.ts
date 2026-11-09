@@ -6,13 +6,17 @@ import type { WorldPoint } from './types';
 /** The same source/range used by the audible music, in its original local
  * frame. Moving or rotating the courtyard therefore also moves this encounter. */
 export const terrainMusicSpatial:MusicSpatialAudio={
-  source:MUSIC_LAYOUT_V4.audio.source,outerRadius:110,innerRadius:14,falloffExponent:4,
+  source:MUSIC_LAYOUT_V4.audio.source,outerRadius:155,innerRadius:14,falloffExponent:4,
   gainMultiplier(point){
-    // The new ninety-metre road leaves the real gate before climbing. A soft
-    // mask keeps the old courtyard quiet while the first uphill notes emerge.
+    // The relocated oasis is farther from the accepted courtyard ridge. Keep
+    // its first uphill notes barely audible, with a quiet courtyard departure.
     const courtyard=fromTerrainPoint('courtyard',toTerrainPoint('music',point));
     const t=Math.max(0,Math.min(1,(courtyard.z-9)/4));
-    return t*t*(3-2*t);
+    // Release the departure mask after leaving the courtyard's east shoulder.
+    // Applying its entrance plane to the whole world would mute the northward
+    // relocated pavilion even while standing directly beside the musicians.
+    const away=Math.max(0,Math.min(1,(courtyard.x-12)/18));
+    return Math.max(t*t*(3-2*t),away*away*(3-2*away));
   },
 };
 /** Diagnostic range only. Encounter timing must use AudioContext evidence. */

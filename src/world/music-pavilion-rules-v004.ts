@@ -4,6 +4,16 @@ import type { WorldPoint } from './types';
 import type { RoadSection } from './road';
 
 export { layout as MUSIC_LAYOUT_V4 };
+export const MUSIC_PAVILION_BUILDINGS_V006 = {
+  exterior: 'music-pavilion/v006/music-pavilion.glb',
+  interior: 'music-interior/v008/music-pavilion.glb',
+};
+
+/** The legacy exterior proxy also covered the upper pillar foot. The retained
+ * ground pillar and its capitals reach 7.252 m, below the existing eave. */
+export function musicPavilionCameraColliderTop(collider: Pick<WorldCollider, 'id' | 'height'>, openBalcony: boolean) {
+  return openBalcony && collider.id === 'music-column-1' ? 7.252 : collider.height;
+}
 export const MUSIC_SESSION_KEY_V4 = 'dunhuang:music-pavilion-preview:v4';
 export const MUSIC_ROAD_V4: readonly RoadSection[] = layout.road.flatMap(([a,b,c,d], segment) => {
   const steps = 100;

@@ -9,28 +9,41 @@ const schema = z.object({
   position: z.object({ x: z.number().finite(), z: z.number().finite() }),
   heading: z.number().finite(), cameraYaw: z.number().finite(),
   visitedEvents: z.array(z.enum(['caisson', 'story-demo', 'novice-story', 'flying'])),
+  walkSurface: z.string().min(1).max(128).optional(),
 });
-interface WorldSessionOptions { key?: string; colliders?: readonly WorldCollider[]; bounds?: WorldBounds; freeYaw?: boolean; spawn?: WorldPoint; sanitizePosition?(p:WorldPoint):WorldPoint }
-export function defaultWorldCheckpoint(spawn:WorldPoint={x:0,z:18}): WorldCheckpoint {
-  return { version: 1, position: { ...spawn }, heading: 0, cameraYaw: 0, visitedEvents: [] };
+type WorldSessionSpawn = WorldPoint & { heading?: number };
+export interface WorldSessionOptions {
+  key?: string; colliders?: readonly WorldCollider[]; bounds?: WorldBounds; freeYaw?: boolean; spawn?: WorldSessionSpawn;
+  sanitizePosition?(p: WorldPoint): WorldPoint;
+  /** Takes precedence over horizontal sanitation so stacked floors retain their surface. */
+  sanitizeCheckpoint?(checkpoint: WorldCheckpoint): WorldCheckpoint;
 }
-export function sanitizeCheckpoint(value: unknown, colliders?: readonly WorldCollider[], bounds?: WorldBounds, freeYaw = false, positionResolver?:(p:WorldPoint)=>WorldPoint, spawn?:WorldPoint): WorldCheckpoint {
+export function defaultWorldCheckpoint({ x, z, heading = 0 }: WorldSessionSpawn = { x: 0, z: 18 }): WorldCheckpoint {
+  return { version: 1, position: { x, z }, heading, cameraYaw: heading, visitedEvents: [] };
+}
+export function sanitizeCheckpoint(value: unknown, colliders?: readonly WorldCollider[], bounds?: WorldBounds, freeYaw = false, positionResolver?:(p:WorldPoint)=>WorldPoint, spawn?: WorldSessionSpawn, checkpointResolver?: (checkpoint: WorldCheckpoint) => WorldCheckpoint): WorldCheckpoint {
   const parsed = schema.safeParse(value);
-  if (!parsed.success) return defaultWorldCheckpoint(spawn);
-  return { ...parsed.data, position: positionResolver?positionResolver(parsed.data.position):sanitizePosition(parsed.data.position, colliders, bounds),
+  if (!parsed.success) return initialCheckpoint({ spawn, sanitizeCheckpoint: checkpointResolver });
+  const checkpoint: WorldCheckpoint = { ...parsed.data, position: { ...parsed.data.position },
     cameraYaw: freeYaw ? Math.atan2(Math.sin(parsed.data.cameraYaw), Math.cos(parsed.data.cameraYaw)) : clampCameraYaw(parsed.data.cameraYaw),
     heading: Math.atan2(Math.sin(parsed.data.heading), Math.cos(parsed.data.heading)),
     visitedEvents: [...new Set(parsed.data.visitedEvents)] };
+  if (checkpointResolver) return checkpointResolver(checkpoint);
+  return { ...checkpoint, position: positionResolver ? positionResolver(checkpoint.position) : sanitizePosition(checkpoint.position, colliders, bounds) };
+}
+function initialCheckpoint(options: WorldSessionOptions): WorldCheckpoint {
+  const checkpoint = defaultWorldCheckpoint(options.spawn);
+  return options.sanitizeCheckpoint?.(checkpoint) ?? checkpoint;
 }
 export function loadWorldSession(storage?: StorageLike, options: WorldSessionOptions = {}): { data: WorldCheckpoint; warning: string | null } {
   try {
     const raw = (storage ?? window.sessionStorage).getItem(options.key ?? WORLD_SESSION_KEY);
-    if (!raw) return { data: defaultWorldCheckpoint(options.spawn), warning: null };
+    if (!raw) return { data: initialCheckpoint(options), warning: null };
     const value: unknown = JSON.parse(raw);
     if (!schema.safeParse(value).success) throw new Error('Unsupported checkpoint');
-    return { data: sanitizeCheckpoint(value, options.colliders, options.bounds, options.freeYaw, options.sanitizePosition, options.spawn), warning: null };
+    return { data: sanitizeCheckpoint(value, options.colliders, options.bounds, options.freeYaw, options.sanitizePosition, options.spawn, options.sanitizeCheckpoint), warning: null };
   } catch {
-    return { data: defaultWorldCheckpoint(options.spawn), warning: '探索位置暂时无法读取，已回到起点。原记录已保留。' };
+    return { data: initialCheckpoint(options), warning: '探索位置暂时无法读取，已回到起点。原记录已保留。' };
   }
 }
 export function saveWorldSession(checkpoint: WorldCheckpoint, storage?: StorageLike, options: WorldSessionOptions = {}): { ok: true } | { ok: false; message: string } {
@@ -47,7 +60,7 @@ export function saveWorldSession(checkpoint: WorldCheckpoint, storage?: StorageL
         target.setItem(`${key}:unreadable:${suffix}`, raw);
       }
     }
-    target.setItem(key, JSON.stringify(sanitizeCheckpoint(checkpoint, options.colliders, options.bounds, options.freeYaw, options.sanitizePosition, options.spawn)));
+    target.setItem(key, JSON.stringify(sanitizeCheckpoint(checkpoint, options.colliders, options.bounds, options.freeYaw, options.sanitizePosition, options.spawn, options.sanitizeCheckpoint)));
     return { ok: true };
   } catch {
     return { ok: false, message: '探索位置尚未保存，本次仍可继续；刷新后可能回到起点。' };

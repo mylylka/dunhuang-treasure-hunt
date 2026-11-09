@@ -29,7 +29,7 @@ export const TERRAIN_TOWER_TREES: readonly TerrainTowerTree[] = [
   {
     id: 'tower-tree-broad',
     assetPath: 'tower-trees/v001/broad-tree.glb',
-    placement: { x: 148, z: -15, yaw: 0, height: 25 },
+    placement: { x: 148, z: -25, yaw: 0, height: 25 },
     collisionRadii: { player: 5.46, camera: 10.950 },
     lowBounds: { min: [-3.866, 0, -3.219], max: [3.903, 2.4, 4.757] },
     crownBounds: { min: [-10.937, 0, -7.750], max: [10.937, 25, 7.750] },

@@ -95,3 +95,36 @@
 }
 /* Supplementary photos must fit the short landscape source scroller. */
 @media(max-height:560px) and (min-width:681px){.lesson-source-figures img{height:clamp(72px,calc(100dvh - 240px),160px)}}
+
+/* Short phone landscapes must not inherit the narrow portrait's stacked rows.
+   Image tools share the figure's content row, leaving navigation its own track. */
+@media(pointer:coarse) and (hover:none) and (orientation:landscape) and (max-height:360px){
+ .app-shell:has(.page-teaching)>.site-header,.app-shell:has(.page-teaching)>.site-footer{display:none}
+ .page.page-teaching{width:calc(100% - 12px);padding-block:6px}
+ .lesson-panel{--lesson-frame:14px;padding:18px}
+ .lesson-content-surface{padding:6px;gap:3px;grid-template-rows:44px 46px minmax(0,1fr) 45px}
+ .lesson-heading{grid-template-columns:52px minmax(0,1fr) auto;grid-template-rows:44px;gap:6px;min-height:44px}
+ .lesson-heading>.lesson-title{display:flex;flex-direction:column;align-items:center;justify-content:center;grid-column:2;grid-row:1;min-width:0;gap:0}
+ .lesson-heading h1{margin:0;font-size:16px;line-height:1.25;letter-spacing:0}
+ .lesson-guide-label{margin:0;font-size:9px;line-height:1.2;letter-spacing:0}
+ .lesson-heading>.lesson-back{grid-column:1;grid-row:1;min-width:44px;min-height:44px;height:44px;font-size:10px;gap:3px}
+ .lesson-heading-actions{grid-column:3;grid-row:1;gap:4px}
+ .lesson-heading-actions .lesson-tool,.lesson-heading .lesson-skip{min-width:44px;min-height:44px;height:44px;padding:4px 8px;font-size:11px}
+ .lesson-chapters{grid-template-columns:repeat(7,minmax(0,1fr));gap:3px;padding-top:0}
+ .lesson-chapters>button{min-height:44px;padding:3px 2px;font-size:10px;line-height:1.2;gap:0}
+ .lesson-chapter-index{display:none}
+ .lesson-body,.lesson-body.is-review{grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);grid-template-rows:minmax(0,1fr);gap:12px}
+ .lesson-figure{grid-template-columns:minmax(0,1fr) auto;grid-template-rows:minmax(0,1fr) auto;gap:3px 6px}
+ .lesson-image-tools{grid-column:2;grid-row:1/-1;flex-direction:row;align-items:center;justify-content:center;gap:3px}
+ .lesson-image-tools .lesson-tool{min-width:44px;min-height:44px;height:44px;padding:3px 5px;font-size:10px}
+ .lesson-image-slot{grid-column:1;grid-row:1;padding:2px}
+ .lesson-figure figcaption{grid-column:1;grid-row:2;font-size:9px;line-height:1.3}
+ .lesson-explanation,.lesson-body.is-review .lesson-explanation{border-top:0;border-left:1px solid #baa98c70;padding:0 0 0 8px;gap:4px}
+ .lesson-panel-choices{gap:3px}
+ .lesson-panel-choices>button{min-height:32px;padding:3px 6px;font-size:10px;line-height:1.3}
+ .lesson-copy h2{font-size:17px;line-height:1.35;margin-bottom:4px}
+ .lesson-copy>p{font-size:11px;line-height:1.6;margin-bottom:6px}
+ .lesson-navigation{min-height:45px;padding-top:0;gap:6px}
+ .lesson-navigation>.button{min-height:44px;height:44px;min-width:0;max-width:118px;padding:0 20px;font-size:11px}
+ .lesson-page-number{font-size:12px}
+}

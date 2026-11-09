@@ -1,0 +1,44 @@
+[
+  {
+    "id": "patterns",
+    "title": "纹样与色彩",
+    "subtitle": "从细节发现秩序",
+    "description": "观察图案的重复、对称与色彩组织，用比较、拼合和创作发现细节。",
+    "number": "01",
+    "coverAssetId": "cover-patterns",
+    "introLevelId": "patterns-intro",
+    "allowedGameTypes": [
+      "spot-difference",
+      "puzzle",
+      "coloring"
+    ]
+  },
+  {
+    "id": "music",
+    "title": "飞天、乐舞与服饰",
+    "subtitle": "看见姿态与节奏",
+    "description": "从人物姿态、乐器与服饰细节进入敦煌图像。主题内容筹备中。",
+    "number": "02",
+    "coverAssetId": "cover-music",
+    "introLevelId": null,
+    "allowedGameTypes": [
+      "hidden-object",
+      "spot-difference",
+      "shadow-match",
+      "puzzle"
+    ]
+  },
+  {
+    "id": "stories",
+    "title": "壁画故事与宗教文化",
+    "subtitle": "循着图像理解故事",
+    "description": "通过寻找线索和组织情节认识壁画故事。主题内容筹备中。",
+    "number": "03",
+    "coverAssetId": "cover-stories",
+    "introLevelId": null,
+    "allowedGameTypes": [
+      "hidden-object",
+      "puzzle"
+    ]
+  }
+]

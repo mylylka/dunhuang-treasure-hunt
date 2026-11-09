@@ -1,5 +1,5 @@
 interface Props { text: string; onSkip(): void; testId?: string }
-/** Spoken words only. The ordinary parenthetical text is also a touch target. */
+/** The spoken subtitle also provides a touch target for skipping. */
 export function WorldSubtitle({text,onSkip,testId='world-subtitle'}:Props) {
-  return <aside className="world-subtitle" data-testid={testId} aria-live="polite"><p>{text}<button type="button" className="world-subtitle-skip" onClick={onSkip}>（空格跳过）</button></p></aside>;
+  return <aside className={`world-subtitle${text.length > 96 ? ' world-subtitle-long' : ''}`} data-testid={testId} aria-live="polite"><p><button type="button" className="world-subtitle-skip" onClick={onSkip} aria-label={`${text}。点击跳过当前讲解`}>{text}</button></p></aside>;
 }

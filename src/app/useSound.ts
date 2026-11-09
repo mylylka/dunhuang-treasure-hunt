@@ -1,6 +1,37 @@
 import { useCallback, useEffect, useRef, useState, type MouseEvent } from 'react';
-import { soundPlayer } from '../services/sound';
+import { soundPlayer, type SoundPlayer } from '../services/sound';
 import { loadSoundSettings, saveSoundSettings, type SoundPreferences } from '../services/sound-settings';
+
+/** Touch activation happens on release; a touch pointerdown alone cannot unlock Safari audio. */
+export function listenForSoundGestures(player: Pick<SoundPlayer, 'unlock' | 'stop'> = soundPlayer): () => void {
+  const unlock = (event: Event) => { if (event.isTrusted) void player.unlock(); };
+  const mouseDown = (event: PointerEvent) => { if (event.pointerType === 'mouse') unlock(event); };
+  const pointerUp = (event: PointerEvent) => { if (event.pointerType !== 'mouse') unlock(event); };
+  const handleKey = (event: KeyboardEvent) => {
+    if (event.key === 'Enter' || event.key === ' ' || event.key.startsWith('Arrow') || /^Key[WASD]$/.test(event.code)) unlock(event);
+  };
+  const visibility = () => { if (document.hidden) player.stop(); };
+  const leavePage = () => player.stop();
+  document.addEventListener('pointerdown', mouseDown, true);
+  document.addEventListener('pointerup', pointerUp, true);
+  document.addEventListener('touchend', unlock, { capture: true, passive: true });
+  document.addEventListener('click', unlock, true);
+  document.addEventListener('keydown', handleKey, true);
+  document.addEventListener('visibilitychange', visibility);
+  window.addEventListener('blur', leavePage);
+  window.addEventListener('pagehide', leavePage);
+  return () => {
+    document.removeEventListener('pointerdown', mouseDown, true);
+    document.removeEventListener('pointerup', pointerUp, true);
+    document.removeEventListener('touchend', unlock, true);
+    document.removeEventListener('click', unlock, true);
+    document.removeEventListener('keydown', handleKey, true);
+    document.removeEventListener('visibilitychange', visibility);
+    window.removeEventListener('blur', leavePage);
+    window.removeEventListener('pagehide', leavePage);
+    player.stop();
+  };
+}
 
 /** Audio preferences are independent from game progress, artwork and teaching records. */
 export function useSound() {
@@ -12,23 +43,7 @@ export function useSound() {
 
   useEffect(() => {
     soundPlayer.setPreferences(preferencesRef.current);
-    const unlock = () => { void soundPlayer.unlock(); };
-    const handleKey = (event: KeyboardEvent) => {
-      if (event.key === 'Enter' || event.key === ' ' || event.key.startsWith('Arrow')) unlock();
-    };
-    const visibility = () => { if (document.hidden) soundPlayer.stop(); };
-    const leavePage = () => soundPlayer.stop();
-    document.addEventListener('pointerdown', unlock, true);
-    document.addEventListener('keydown', handleKey, true);
-    document.addEventListener('visibilitychange', visibility);
-    window.addEventListener('pagehide', leavePage);
-    return () => {
-      document.removeEventListener('pointerdown', unlock, true);
-      document.removeEventListener('keydown', handleKey, true);
-      document.removeEventListener('visibilitychange', visibility);
-      window.removeEventListener('pagehide', leavePage);
-      soundPlayer.stop();
-    };
+    return listenForSoundGestures();
   }, []);
 
   const persist = useCallback((next: SoundPreferences) => {

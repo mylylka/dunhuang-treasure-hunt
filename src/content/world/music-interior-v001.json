@@ -1,0 +1,40 @@
+{
+  "version": "music-interior-v001",
+  "coordinates": "music source coordinates, metres, Y up; world mapping uses toTerrainPoint('music')",
+  "origin": [0, 0, 0],
+  "assets": { "building": "music-interior/v001/music-pavilion.glb" },
+  "spawn": { "surfaceId": "music-floor-1", "position": [39.5, 1.8, -19.4], "heading": 0 },
+  "companionSpawn": { "surfaceId": "music-floor-1", "position": [37.9, 1.8, -19.8], "heading": 0 },
+  "bounds": { "minX": 24, "maxX": 70, "minZ": -28.65, "maxZ": 3 },
+  "surfaces": [
+    { "id": "music-courtyard", "kind": "floor", "label": "乐舞坊庭院", "minX": 24, "maxX": 70, "minZ": -28.65, "maxZ": 3, "y": 0, "neighbors": ["music-front-ramp", "music-west-ramp", "music-east-ramp", "music-floor-1"], "safePoint": [44, 0, -4] },
+    { "id": "music-front-approach", "kind": "floor", "label": "门前台阶底部", "minX": 33.6, "maxX": 60.65, "minZ": -12.9, "maxZ": 3, "y": 0, "neighbors": ["music-courtyard", "music-front-ramp"], "safePoint": [39.5, 0, -11.5] },
+    { "id": "music-west-approach", "kind": "floor", "label": "西侧台阶底部", "minX": 24, "maxX": 29.8, "minZ": -28.32, "maxZ": -16.7, "y": 0, "neighbors": ["music-courtyard", "music-west-ramp"], "safePoint": [28.7, 0, -23] },
+    { "id": "music-east-approach", "kind": "floor", "label": "东侧台阶底部", "minX": 64.45, "maxX": 70, "minZ": -28.32, "maxZ": -16.7, "y": 0, "neighbors": ["music-courtyard", "music-east-ramp"], "safePoint": [65.6, 0, -23] },
+    { "id": "music-front-ramp", "kind": "ramp", "label": "门前台阶", "minX": 33.6, "maxX": 60.65, "minZ": -16.7, "maxZ": -12.9, "y": 1.8, "endY": 0, "axis": "z", "neighbors": ["music-front-approach", "music-floor-1"], "safePoint": [39.5, 0.9, -14.8] },
+    { "id": "music-west-ramp", "kind": "ramp", "label": "西侧台阶", "minX": 29.8, "maxX": 33.6, "minZ": -28.32, "maxZ": -16.7, "y": 0, "endY": 1.8, "axis": "x", "neighbors": ["music-west-approach", "music-floor-1"], "safePoint": [31.7, 0.9, -23] },
+    { "id": "music-east-ramp", "kind": "ramp", "label": "东侧台阶", "minX": 60.65, "maxX": 64.45, "minZ": -28.32, "maxZ": -16.7, "y": 1.8, "endY": 0, "axis": "x", "neighbors": ["music-floor-1", "music-east-approach"], "safePoint": [62.55, 0.9, -23] },
+    { "id": "music-floor-1", "kind": "floor", "label": "乐舞坊一楼", "minX": 33.6, "maxX": 60.65, "minZ": -28.32, "maxZ": -16.7, "y": 1.8, "neighbors": ["music-front-ramp", "music-west-ramp", "music-east-ramp", "music-stair"], "safePoint": [39.5, 1.8, -19.4] },
+    { "id": "music-stair-approach", "kind": "floor", "label": "一楼直梯底部", "minX": 55.69, "maxX": 60.65, "minZ": -26.6, "maxZ": -23, "y": 1.8, "neighbors": ["music-floor-1", "music-stair"], "safePoint": [56.8, 1.8, -24.8] },
+    { "id": "music-stair", "kind": "ramp", "label": "一至二楼直梯", "minX": 46.27, "maxX": 55.69, "minZ": -26.6, "maxZ": -23, "y": 7.915375, "endY": 1.8, "axis": "x", "neighbors": ["music-stair-approach", "music-floor-2"], "safePoint": [50.98, 4.8576875, -24.8] },
+    { "id": "music-floor-2", "kind": "floor", "label": "乐舞坊二楼", "minX": 34.7625, "maxX": 46.27, "minZ": -27.75, "maxZ": -21.85, "y": 7.915375, "neighbors": ["music-stair", "music-gallery"], "safePoint": [43.1, 7.915375, -24.8] },
+    { "id": "music-gallery", "kind": "floor", "label": "二楼乐人前廊", "minX": 34.4725, "maxX": 44.7801, "minZ": -21.95, "maxZ": -17.65, "y": 7.915375, "neighbors": ["music-floor-2"], "safePoint": [43.4, 7.915375, -20.2] }
+  ],
+  "gateways": [{ "surfaceId": "music-courtyard", "minX": 37, "maxX": 43.4, "minZ": 2.3, "maxZ": 5.5 }],
+  "openings": [
+    { "id": "music-ground-door", "min": [37.7, 1.8, -21.975], "max": [41.3, 5.4, -21.625] },
+    { "id": "music-gallery-door", "min": [41.9, 7.915375, -22.15], "max": [44.6, 11.4, -21.85] }
+  ],
+  "route": [
+    { "surfaceId": "music-floor-1", "position": [56.8, 1.8, -24.8] },
+    { "surfaceId": "music-stair", "position": [55.69, 1.8, -24.8] },
+    { "surfaceId": "music-stair", "position": [46.27, 7.915375, -24.8] },
+    { "surfaceId": "music-floor-2", "position": [44.8, 7.915375, -24.8] }
+  ],
+  "stops": [
+    { "surfaceId": "music-floor-1", "position": [56.8, 1.8, -24.8], "label": "一楼楼梯入口" },
+    { "surfaceId": "music-floor-2", "position": [44.8, 7.915375, -24.8], "label": "二楼展厅" }
+  ],
+  "navigation": { "gridStep": 0.45, "maximumStep": 0.18 },
+  "assist": { "speed": 3.2, "startRadius": 3, "stallSeconds": 0.45 }
+}

@@ -1,6 +1,7 @@
 import type * as PhaserTypes from 'phaser';
 import type { GameCommand, GameEvent, HiddenObjectLevel, HiddenObjectSnapshot } from '../../types';
 import type { Viewport } from '../../runtime/geometry';
+import { getHiddenObjectRuntimeImagePath } from '../../content/hidden-object/runtime-images';
 import type { HiddenObjectItem, HiddenObjectPool, HiddenObjectSession, HiddenObjectSprite } from './types';
 import { advanceSession, createHiddenObjectRound, createSession, findItem, getHintItem, pauseSession, restartSession, resumeSession, rotatedItemBounds, startSession } from './rules';
 
@@ -10,14 +11,16 @@ interface Options {
   pool: HiddenObjectPool;
   viewport: Viewport;
   reducedMotion: boolean;
+  backgroundImageUrl?: string;
   publishLayout(layout: unknown): void;
   emit(event: GameEvent): void;
 }
 const seed = () => globalThis.crypto.getRandomValues(new Uint32Array(1))[0];
-const spriteUrl = (sprite: HiddenObjectSprite) => new URL(`${import.meta.env.BASE_URL}${sprite.path.replace(/^\//, '')}`, document.baseURI).href;
+const spriteUrl = (sprite: HiddenObjectSprite) => new URL(`${import.meta.env.BASE_URL}${getHiddenObjectRuntimeImagePath(sprite.path).replace(/^\//, '')}`, document.baseURI).href;
 
 export function createHiddenObjectScene(Phaser: PhaserModule, options: Options) {
   class HiddenObjectScene extends Phaser.Scene {
+    private blocked = false;
     private state: HiddenObjectSession = createSession(createHiddenObjectRound(options.level, options.pool, seed()), options.level.timeLimitSeconds * 1000);
     private sprites = new Map(options.pool.sprites.map(sprite => [sprite.id, sprite]));
     private images = new Map<string, PhaserTypes.GameObjects.Image>();
@@ -39,17 +42,25 @@ export function createHiddenObjectScene(Phaser: PhaserModule, options: Options) 
     private highlight: string | null = null;
     private highlightUntil = 0;
     private frame: PhaserTypes.GameObjects.Graphics | null = null;
+    private background: PhaserTypes.GameObjects.Image | null = null;
     private gesture: { id: number; x: number; y: number; panX: number; scrollTop: number; moved: boolean } | null = null;
 
     constructor() { super({ key: 'hidden-object' }); }
 
     preload() {
+      // The real targets can be read while the rest of the board downloads.
+      // This snapshot never starts the timer or enables input.
+      this.publish();
       this.load.on('loaderror', this.loadError, this);
       this.queueImages();
     }
     private queueImages() {
       let count = 0;
-      for (const spriteId of new Set(this.state.round.items.map(item => item.spriteId))) {
+      if (options.backgroundImageUrl && !this.textures.exists('hidden-object-background')) {
+        this.load.image('hidden-object-background', options.backgroundImageUrl); count++;
+      }
+      const spriteIds = new Set([...this.state.tasks.map(task => task.previewSpriteId), ...this.state.round.items.map(item => item.spriteId)]);
+      for (const spriteId of spriteIds) {
         if (!this.textures.exists(spriteId)) { this.load.image(spriteId, spriteUrl(this.sprites.get(spriteId)!)); count++; }
       }
       return count;
@@ -82,6 +93,10 @@ export function createHiddenObjectScene(Phaser: PhaserModule, options: Options) 
     private finishLoading() {
       if (this.disposed || this.failed) return;
       try {
+        if (options.backgroundImageUrl && !this.background) {
+          if (!this.textures.exists('hidden-object-background')) throw new Error('缺少章节底图');
+          this.background = this.add.image(0, 0, 'hidden-object-background').setOrigin(0).setDepth(-2);
+        }
         const previousKeys = new Set([...this.images.values()].map(image => image.texture.key));
         const currentKeys = new Set(this.state.round.items.map(item => item.spriteId));
         for (const image of this.images.values()) image.destroy();
@@ -91,20 +106,9 @@ export function createHiddenObjectScene(Phaser: PhaserModule, options: Options) 
           if (!this.textures.exists(item.spriteId)) throw new Error('缺少图片');
           const image = this.add.image(0, 0, item.spriteId).setOrigin(0.5, 0.5);
           this.images.set(item.id, image);
-          if (!this.alpha.has(item.spriteId)) {
-            const source = this.textures.get(item.spriteId).getSourceImage() as HTMLImageElement;
-            const canvas = document.createElement('canvas');
-            canvas.width = source.width; canvas.height = source.height;
-            const ctx = canvas.getContext('2d', { willReadFrequently: true });
-            if (!ctx) throw new Error('无法准备图片');
-            ctx.drawImage(source, 0, 0);
-            const rgba = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
-            const pixels = new Uint8Array(canvas.width * canvas.height);
-            for (let pixel = 0; pixel < pixels.length; pixel++) pixels[pixel] = rgba[pixel * 4 + 3];
-            this.alpha.set(item.spriteId, { pixels, width: canvas.width, height: canvas.height });
-          }
         }
         this.initialized = true;
+        if (this.input) this.input.enabled = !this.blocked;
         this.lastTime = performance.now();
         this.render();
         options.emit({ type: 'ready', total: this.state.tasks.reduce((n, task) => n + task.required, 0) });
@@ -112,10 +116,33 @@ export function createHiddenObjectScene(Phaser: PhaserModule, options: Options) 
         for (const command of this.pending.splice(0)) this.apply(command);
       } catch { this.loadError(); }
     }
+    private alphaMask(spriteId: string) {
+      const cached = this.alpha.get(spriteId);
+      if (cached) return cached;
+      // Only a clicked bounding box needs an opaque-pixel mask. Reading all
+      // 120 textures up front stalls phone startup and duplicates GPU image data.
+      const source = this.textures.get(spriteId).getSourceImage() as HTMLImageElement;
+      const canvas = document.createElement('canvas');
+      canvas.width = source.width; canvas.height = source.height;
+      const ctx = canvas.getContext('2d', { willReadFrequently: true });
+      if (!ctx) throw new Error('无法准备图片');
+      ctx.drawImage(source, 0, 0);
+      const rgba = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+      const pixels = new Uint8Array(canvas.width * canvas.height);
+      for (let pixel = 0; pixel < pixels.length; pixel++) pixels[pixel] = rgba[pixel * 4 + 3];
+      const mask = { pixels, width: canvas.width, height: canvas.height };
+      this.alpha.set(spriteId, mask);
+      return mask;
+    }
     private loadError() {
+      this.fail('找物图片未能加载，请重新加载后再开始。');
+    }
+    private fail(message: string) {
       if (this.disposed || this.failed) return;
       this.failed = true; this.initialized = false;
-      options.emit({ type: 'error', message: '找物图片未能加载，请重新加载后再开始。' });
+      this.state = pauseSession(this.state); this.gesture = null;
+      if (this.input) this.input.enabled = false;
+      options.emit({ type: 'error', message });
     }
     private pixelScale() {
       const canvas = this.game?.canvas;
@@ -152,7 +179,9 @@ export function createHiddenObjectScene(Phaser: PhaserModule, options: Options) 
       if (!this.initialized || this.disposed || !this.frame) return;
       const t = this.transform();
       this.frame.clear();
-      this.frame.fillStyle(0xfaf1df, 0.96).fillRect(0, 0, this.viewport.width, this.viewport.height);
+      if (this.background) this.background.setPosition(t.x, t.y)
+        .setDisplaySize(options.level.board.width * t.scale, options.level.board.height * t.scale);
+      else this.frame.fillStyle(0xfaf1df, 0.96).fillRect(0, 0, this.viewport.width, this.viewport.height);
       this.frame.lineStyle(1, 0xc3a774, 0.7).strokeRect(1, 1, this.viewport.width - 2, this.viewport.height - 2);
       const found = new Set(this.state.foundIds);
       const published = this.state.round.items.map(item => {
@@ -172,7 +201,9 @@ export function createHiddenObjectScene(Phaser: PhaserModule, options: Options) 
         this.add.graphics().setName('hint-outline').setDepth(3).lineStyle(3, 0xb13f2b, 1)
           .strokeRoundedRect(rect.x - 4, rect.y - 4, rect.width + 8, rect.height + 8, 6);
       }
-      options.publishLayout({ type: 'hidden-object', seed: this.state.round.seed, status: this.state.status, width: this.viewport.width, height: this.viewport.height, renderScale: this.pixelScale(), board: options.level.board, zoom: this.zoom, scale: t.scale, origin: { x: t.x, y: t.y }, scrollTop: this.scrollTop, scrollMax: t.scrollMax, items: published });
+      options.publishLayout({ type: 'hidden-object', seed: this.state.round.seed, status: this.state.status, width: this.viewport.width, height: this.viewport.height, renderScale: this.pixelScale(), board: options.level.board, zoom: this.zoom, scale: t.scale, origin: { x: t.x, y: t.y }, scrollTop: this.scrollTop, scrollMax: t.scrollMax,
+        ...(this.background ? { background: { assetId: options.level.chapter?.backgroundAssetId,
+          bounds: { x: t.x, y: t.y, width: options.level.board.width * t.scale, height: options.level.board.height * t.scale } } } : {}), items: published });
     }
     private publish() {
       const snapshot: HiddenObjectSnapshot = {
@@ -184,6 +215,7 @@ export function createHiddenObjectScene(Phaser: PhaserModule, options: Options) 
       options.emit({ type: 'hidden-object-change', snapshot });
     }
     private advance(now = performance.now()) {
+      if (this.blocked) { this.lastTime = now; return; }
       const previous = this.state.status;
       this.state = advanceSession(this.state, Math.max(0, now - this.lastTime));
       this.lastTime = now;
@@ -192,7 +224,7 @@ export function createHiddenObjectScene(Phaser: PhaserModule, options: Options) 
       }
     }
     update() {
-      if (!this.initialized || this.disposed) return;
+      if (!this.initialized || this.disposed || this.blocked) return;
       const now = performance.now();
       this.advance(now);
       if (this.highlight && now >= this.highlightUntil) { this.highlight = null; this.render(); }
@@ -201,10 +233,12 @@ export function createHiddenObjectScene(Phaser: PhaserModule, options: Options) 
     execute(command: GameCommand) {
       if (this.disposed || command.sequence === this.sequence) return;
       this.sequence = command.sequence;
+      if (this.blocked) return;
       if (!this.initialized) { this.pending.push(command); return; }
       this.apply(command);
     }
     private apply(command: GameCommand) {
+      if (this.blocked) return;
       this.advance();
       if (command.type === 'hidden-start' && !this.suspended && !document.hidden) this.state = startSession(this.state);
       else if (command.type === 'hidden-pause') { this.state = pauseSession(this.state); this.gesture = null; }
@@ -239,23 +273,26 @@ export function createHiddenObjectScene(Phaser: PhaserModule, options: Options) 
       this.lastTime = performance.now(); this.render(); this.publish();
     }
     private newRound() {
-      this.initialized = false; this.completed = false; this.highlight = null; this.gesture = null;
-      this.state = createSession(createHiddenObjectRound(options.level, options.pool, seed()), options.level.timeLimitSeconds * 1000);
-      this.selectedTaskId = this.state.tasks[0]?.id ?? ''; this.zoom = 1; this.pan = { x: 0 }; this.scrollTop = 0;
-      for (const image of this.images.values()) image.setVisible(false);
-      options.emit({ type: 'hint', message: '' }); this.publish();
-      const count = this.queueImages();
-      if (count === 0) this.finishLoading();
-      else { this.load.once(Phaser.Loader.Events.COMPLETE, this.finishLoading, this); this.load.start(); }
+      if (this.blocked) return;
+      try {
+        this.initialized = false; this.completed = false; this.highlight = null; this.gesture = null;
+        this.state = createSession(createHiddenObjectRound(options.level, options.pool, seed()), options.level.timeLimitSeconds * 1000);
+        this.selectedTaskId = this.state.tasks[0]?.id ?? ''; this.zoom = 1; this.pan = { x: 0 }; this.scrollTop = 0;
+        for (const image of this.images.values()) image.setVisible(false);
+        options.emit({ type: 'hint', message: '' }); this.publish();
+        const count = this.queueImages();
+        if (count === 0) this.finishLoading();
+        else { this.load.once(Phaser.Loader.Events.COMPLETE, this.finishLoading, this); this.load.start(); }
+      } catch { this.fail('本局暂时无法布置，请重新加载后再试。'); }
     }
     private pointerDown(pointer: PhaserTypes.Input.Pointer) {
-      if (!this.initialized || this.state.status !== 'running' || this.gesture) return;
+      if (!this.initialized || this.blocked || this.state.status !== 'running' || this.gesture) return;
       const position = this.pointerPosition(pointer);
       this.gesture = { id: pointer.id, x: position.x, y: position.y, panX: this.pan.x, scrollTop: this.scrollTop, moved: false };
     }
     private pointerMove(pointer: PhaserTypes.Input.Pointer) {
       const gesture = this.gesture;
-      if (!gesture || gesture.id !== pointer.id || !pointer.isDown || this.state.status !== 'running') return;
+      if (this.blocked || !gesture || gesture.id !== pointer.id || !pointer.isDown || this.state.status !== 'running') return;
       const position = this.pointerPosition(pointer);
       if (Math.hypot(position.x - gesture.x, position.y - gesture.y) > 7) gesture.moved = true;
       if (gesture.moved) {
@@ -265,7 +302,7 @@ export function createHiddenObjectScene(Phaser: PhaserModule, options: Options) 
       }
     }
     private pointerWheel(_pointer: PhaserTypes.Input.Pointer, _objects: unknown, deltaX: number, deltaY: number) {
-      if (!this.initialized || this.disposed) return;
+      if (!this.initialized || this.disposed || this.blocked) return;
       this.advance();
       if (this.state.status !== 'running') return;
       if (this.gesture) this.gesture.moved = true;
@@ -275,6 +312,7 @@ export function createHiddenObjectScene(Phaser: PhaserModule, options: Options) 
     }
     private cancelGesture() { this.gesture = null; }
     private pointerUp(pointer: PhaserTypes.Input.Pointer) {
+      if (this.blocked) { this.gesture = null; return; }
       const gesture = this.gesture;
       if (!gesture || gesture.id !== pointer.id) return;
       this.gesture = null;
@@ -285,12 +323,13 @@ export function createHiddenObjectScene(Phaser: PhaserModule, options: Options) 
       const t = this.transform();
       const x = (position.x - t.x) / t.scale, y = (position.y - t.y) / t.scale;
       const available = this.state.round.items.filter(item => !this.state.foundIds.includes(item.id));
-      const item = available.find(item => {
+      let item: HiddenObjectItem | undefined;
+      try { item = available.find(item => {
         const dx = x - item.x - item.width / 2, dy = y - item.y - item.height / 2;
         const cos = Math.cos(item.rotation), sin = Math.sin(item.rotation);
         const localX = dx * cos + dy * sin + item.width / 2, localY = -dx * sin + dy * cos + item.height / 2;
         if (localX < 0 || localY < 0 || localX >= item.width || localY >= item.height) return false;
-        const mask = this.alpha.get(item.spriteId)!;
+        const mask = this.alphaMask(item.spriteId);
         const px = Math.min(mask.width - 1, Math.floor(localX / item.width * mask.width));
         const py = Math.min(mask.height - 1, Math.floor(localY / item.height * mask.height));
         return mask.pixels[py * mask.width + px] >= 128;
@@ -300,6 +339,7 @@ export function createHiddenObjectScene(Phaser: PhaserModule, options: Options) 
         return { item, visible: screenX >= 0 && screenX <= this.viewport.width && screenY >= 0 && screenY <= this.viewport.height,
           distance: Math.hypot(screenX - position.x, screenY - position.y) };
       }).filter(candidate => candidate.visible && candidate.distance <= Math.min(22, 12 * t.scale)).sort((a,b) => a.distance - b.distance)[0]?.item;
+      } catch { this.loadError(); return; }
       if (!item) return;
       const next = findItem(this.state, item.id);
       if (next === this.state) { options.emit({ type: 'feedback', cue: 'error' }); return; }
@@ -312,11 +352,25 @@ export function createHiddenObjectScene(Phaser: PhaserModule, options: Options) 
       if (next.status === 'won' && !this.completed) { this.completed = true; options.emit({ type: 'completed', levelId: options.level.id }); }
     }
     resize(viewport: Viewport) {
+      if (this.disposed || this.blocked) return;
       const logicalTop = this.scrollTop / this.transform().scale;
       this.viewport = viewport;
       this.scrollTop = logicalTop * this.transform().scale;
       this.configureCamera();
       this.render(); if (this.initialized) this.publish();
+    }
+    setBlocked(blocked: boolean) {
+      if (this.disposed) return;
+      if (this.input) this.input.enabled = !blocked;
+      if (blocked) { this.pending = []; this.gesture = null; }
+      if (this.blocked === blocked) return;
+      const now = performance.now();
+      if (blocked && this.initialized) this.advance(now);
+      this.blocked = blocked;
+      this.lastTime = now;
+      if (blocked) this.state = pauseSession(this.state);
+      // Unblocking leaves paused games paused; only an explicit resume starts the timer.
+      if (this.initialized) { this.render(); this.publish(); }
     }
     setReducedMotion(_reducedMotion: boolean) { /* This mode uses no decorative animation. */ }
     dispose() {

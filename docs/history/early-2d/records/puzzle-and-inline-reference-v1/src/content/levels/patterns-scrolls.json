@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "id": "patterns-scrolls",
+  "themeId": "patterns",
+  "gameType": "spot-difference",
+  "title": "忍冬卷草：寻找五处变化",
+  "subtitle": "纹样与色彩 · AI 教学示意",
+  "objective": "沿卷草构图比较人物、花心与放射花叶，寻找五处变化。",
+  "difficulty": "细察",
+  "estimatedMinutes": 5,
+  "thumbnailAssetId": "patterns-scrolls-a",
+  "baseAssetId": "patterns-scrolls-a",
+  "editedAssetId": "patterns-scrolls-b",
+  "teachingNote": "本关由开发者使用 AI 生成，用于观察纹样的形状、组织与配色；不是原壁画照片或历史原貌复原。",
+  "source": {
+    "title": "敦煌研究院文化资料（延伸阅读）",
+    "url": "https://www.dha.ac.cn/",
+    "note": "本关为敦煌装饰纹样启发的 AI 教学示意，不声称准确对应某一洞窟、年代或历史配色。"
+  },
+  "differences": [
+    {
+      "id": "upper-left-figure",
+      "region": {
+        "x": 0.21610845295055822,
+        "y": 0.21770334928229665,
+        "width": 0.12280701754385964,
+        "height": 0.12121212121212122
+      },
+      "hint": "比较四角人物的头部与手臂。",
+      "detailHint": "看左上人物：头部的红褐色块和手臂姿态不同。"
+    },
+    {
+      "id": "central-flower",
+      "region": {
+        "x": 0.45454545454545453,
+        "y": 0.4529505582137161,
+        "width": 0.08851674641148326,
+        "height": 0.08931419457735247
+      },
+      "hint": "先观察正中央的黑色花形。",
+      "detailHint": "其中一幅的黑花形里，多了一朵米白小花和红花心。"
+    },
+    {
+      "id": "lower-left-flower",
+      "region": {
+        "x": 0.12679425837320574,
+        "y": 0.7208931419457735,
+        "width": 0.12759170653907495,
+        "height": 0.1283891547049442
+      },
+      "hint": "比较左下角放射状花叶。",
+      "detailHint": "看左下：黑叶团变成了带红心的红色太阳状花。"
+    },
+    {
+      "id": "lower-right-leaves",
+      "region": {
+        "x": 0.7392344497607656,
+        "y": 0.726475279106858,
+        "width": 0.1331738437001595,
+        "height": 0.1379585326953748
+      },
+      "hint": "比较右下角放射状花叶的颜色。",
+      "detailHint": "看右下：黑色叶团变成了金黄色花叶。"
+    },
+    {
+      "id": "upper-red-petal-tip",
+      "region": {
+        "x": 0.4688995215311005,
+        "y": 0.32057416267942584,
+        "width": 0.06299840510366826,
+        "height": 0.0685805422647528
+      },
+      "hint": "比较中央上侧红色花瓣的尖端。",
+      "detailHint": "看中央上方、约三分之一高度：红瓣顶端的突出轮廓略有不同，可放大观察。"
+    }
+  ]
+}

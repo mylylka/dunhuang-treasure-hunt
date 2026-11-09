@@ -5,6 +5,8 @@ import { lessonBooks } from '../src/content/lessons';
 import { parseLessonBook } from '../src/services/lesson-schema';
 import { readPng } from './read-png';
 import hiddenObjectPool from '../src/content/hidden-object/pool.json';
+import { getHiddenObjectRuntimeImagePath } from '../src/content/hidden-object/runtime-images';
+import { readWebPSize } from './read-webp-size';
 
 const projectRoot = process.cwd();
 const contentRoot = resolve(projectRoot, 'src/content');
@@ -17,12 +19,22 @@ async function main() {
     readJson(resolve(contentRoot, 'assets.json')),
     Promise.all(levelNames.map(name => readJson(resolve(contentRoot, 'levels', name)))),
   ]);
-  const catalog = parseCatalog({ schemaVersion: 1, themes, assets, levels }, hiddenObjectPool);
+  const catalog = parseCatalog({ schemaVersion: 1, themes, assets, levels }, hiddenObjectPool,
+    { hiddenObjectValidation: 'deep' });
   assertShellAssets(catalog);
   for (const book of lessonBooks) parseLessonBook(book, catalog);
   const errors: string[] = [];
+  async function checkDerivedImage(path: string, width: number, height: number, label: string) {
+    const runtime = getHiddenObjectRuntimeImagePath(path);
+    if (runtime === path) return;
+    try {
+      const size = readWebPSize(await readFile(resolve(projectRoot, 'public', runtime.slice(1))));
+      if (size[0] !== width || size[1] !== height) errors.push(`${label}：技术派生尺寸不一致`);
+    } catch { errors.push(`${label}：无法读取技术派生 ${runtime}`); }
+  }
   const poolIds = new Set<string>();
   for (const sprite of hiddenObjectPool.sprites) {
+    await checkDerivedImage(sprite.path, sprite.width, sprite.height, `找物素材 ${sprite.id}`);
     if (poolIds.has(sprite.id)) errors.push(`找物素材 ${sprite.id}：编号重复`);
     poolIds.add(sprite.id);
     if (!/^\/assets\/shared\/hidden-object\/v\d{3}\/[a-z0-9-]+\.png$/.test(sprite.path)) errors.push(`找物素材 ${sprite.id}：运行路径无效`);
@@ -33,6 +45,7 @@ async function main() {
     } catch { errors.push(`找物素材 ${sprite.id}：无法读取 ${sprite.path}`); }
   }
   for (const asset of catalog.assets) {
+    await checkDerivedImage(asset.path, asset.width, asset.height, asset.id);
     const path = resolve(projectRoot, 'public', asset.path.slice(1));
     try {
       await access(path);
@@ -44,8 +57,10 @@ async function main() {
         if (viewBox) dimensions = [Number(viewBox[1]), Number(viewBox[2])];
       } else if (asset.path.endsWith('.png') && data.length >= 24 && data.subarray(1, 4).toString() === 'PNG') {
         dimensions = [data.readUInt32BE(16), data.readUInt32BE(20)];
+      } else if (asset.path.endsWith('.webp')) {
+        dimensions = readWebPSize(data);
       }
-      if (!dimensions) errors.push(`${asset.id}：目前校验支持带 viewBox 的 SVG 或 PNG，请补充对应格式的尺寸校验`);
+      if (!dimensions) errors.push(`${asset.id}：无法读取 SVG、PNG 或 WebP 图像尺寸`);
       else if (dimensions[0] !== asset.width || dimensions[1] !== asset.height) errors.push(`${asset.id}：登记 ${asset.width}×${asset.height}，实际 ${dimensions[0]}×${dimensions[1]}`);
     } catch {
       errors.push(`${asset.id}：找不到 ${relative(projectRoot, path)}`);

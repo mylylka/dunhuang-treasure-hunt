@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "levelId": "puzzle-twin-dragons",
+  "originalFilename": "双龙藻井.JPG",
+  "originalArchive": "art-source/levels/puzzle-twin-dragons/v001/双龙藻井.JPG",
+  "originalSha256": "0923df289490c1a90a9ff2494db4b4e1801bccffd5b58f3df0d0d4ce45ced3b8",
+  "originalDimensions": [
+    1440,
+    1440
+  ],
+  "originalMode": "RGB",
+  "exifOrientation": 1,
+  "runtimePath": "/assets/levels/puzzle-twin-dragons/puzzle-twin-dragons-image-v001.png",
+  "runtimeDimensions": [
+    1440,
+    1440
+  ],
+  "runtimeSha256": "eb55e5ffc04a026f6005a7b695dc941bca0843453623363910c52f19205a494d",
+  "decodedRgbSha256": "ab1bacfb3414c2d2bb0a6c1acc213c4d34ecf76c5e66948f0283eb4553c53b4c",
+  "runtimePixelsEqualExifOrientedOriginal": true,
+  "watermark": {
+    "present": true,
+    "platform": "小红书",
+    "description": "三张原图右下角均有平台标识和账号字样，原样保留；不是开发者署名。",
+    "reviewRegionNormalized": {
+      "x": 0.72,
+      "y": 0.89,
+      "width": 0.28,
+      "height": 0.11
+    },
+    "removedOrCropped": false
+  },
+  "provenance": "开发者本机交付的JPG；原贴链接、摄影或临摹作者、具体洞窟和年代未随本批材料提供。文件名用于资源映射，不作为学术认定。",
+  "processing": "原JPG字节完整归档；按EXIF方向读取并转RGB PNG，不裁切、不缩放、不调色、不去水印，不使用AI或绘图工具重画。拼片由运行时代码裁切蒙版生成，不另存内容性改图。",
+  "puzzle": {
+    "mode": "jigsaw",
+    "rows": 4,
+    "columns": 5,
+    "pieceCount": 20,
+    "seed": 202920
+  },
+  "relatedCultureReference": {
+    "title": "常书鸿代序：敦煌图案的装饰部位与用途",
+    "url": "https://www.tup.tsinghua.edu.cn/booksCenter/bookpreface?id=00894801",
+    "note": "可从中心、边带和重复排列观察装饰图案。本关图像由开发者提供，具体洞窟、年代与原作者尚未据交付资料确认。"
+  }
+}
