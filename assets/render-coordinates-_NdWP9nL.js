@@ -1,0 +1,1 @@
+function e(e,t){let n=e.game.scale.gameSize.width/Math.max(1,t.width);e.cameras.main.setOrigin(0,0).setScroll(0,0).setZoom(n)}function t(e,t,n){return{x:t.x*n.width/e.game.scale.gameSize.width,y:t.y*n.height/e.game.scale.gameSize.height}}export{t as n,e as t};

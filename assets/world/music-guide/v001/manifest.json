@@ -1,0 +1,347 @@
+{
+  "version": "v001",
+  "front": "-Z",
+  "units": "metres",
+  "outfits": [
+    {
+      "id": "plain",
+      "model": {
+        "file": "plain.glb",
+        "bytes": 3288100,
+        "sha256": "ab00824dbf8990833987e592dba28ffbd67c8cbc248979c3f3a2b05df08aa482",
+        "source": "小导游常服.glb",
+        "gzipBytes": 1711626,
+        "triangles": 53844,
+        "vertices": 44779,
+        "joints": 65,
+        "texture": {
+          "width": 1024,
+          "height": 1024,
+          "bytes": 181913
+        },
+        "heightMetres": 1.8,
+        "headHeightMetres": 1.2983541693050178,
+        "showcaseRadiusMetres": 0.31685994400713147,
+        "geometrySha256": "24196734ae8f268db0f99cd507dc74e37551180c614c21e7f2f0a11d50d68552",
+        "clips": {
+          "Idle": {
+            "seconds": 17.58333333209157,
+            "removedHorizontalTravelMetres": 0.0011126891371252047,
+            "maxFloorLiftMetres": 0.005575551475448759
+          },
+          "Walk": {
+            "seconds": 2.33333333209157,
+            "removedHorizontalTravelMetres": 2.2312290416898306,
+            "maxFloorLiftMetres": 0.0037364247047150796
+          },
+          "Run": {
+            "seconds": 1.2499999590218067,
+            "removedHorizontalTravelMetres": 4.356248031094574,
+            "maxFloorLiftMetres": 0.006455617057899251
+          },
+          "ShowcasePose": {
+            "seconds": 0.05,
+            "pose": "natural idle"
+          },
+          "Talk": {
+            "seconds": 3.2
+          },
+          "Welcome": {
+            "seconds": 1.6
+          }
+        }
+      },
+      "mural": null
+    },
+    {
+      "id": "northern-wei",
+      "model": {
+        "file": "northern-wei.glb",
+        "bytes": 3470284,
+        "sha256": "4fd420a18bd4b0ee49dc33cf58b77017c493c7f02910a40876f71415065ce89f",
+        "source": "北魏第257窟_沙弥守戒自杀壁画中的少女.glb",
+        "gzipBytes": 1748913,
+        "triangles": 51241,
+        "vertices": 48592,
+        "joints": 65,
+        "texture": {
+          "width": 1024,
+          "height": 1024,
+          "bytes": 199126
+        },
+        "heightMetres": 1.772686000823923,
+        "headHeightMetres": 1.2983541693050178,
+        "showcaseRadiusMetres": 0.45518457926729483,
+        "geometrySha256": "52296ad28d0dcbdb9e2149a8071efb2d66516e6c3a9e18ced2093e518774170d",
+        "clips": {
+          "Idle": {
+            "seconds": 17.58333333209157,
+            "removedHorizontalTravelMetres": 0.001097688939603236,
+            "maxFloorLiftMetres": 0.010350855417961767
+          },
+          "Walk": {
+            "seconds": 2.33333333209157,
+            "removedHorizontalTravelMetres": 2.2011530875922154,
+            "maxFloorLiftMetres": 0.01073365506617653
+          },
+          "Run": {
+            "seconds": 1.2499999590218067,
+            "removedHorizontalTravelMetres": 4.297528027038233,
+            "maxFloorLiftMetres": 0.02517546037545145
+          },
+          "ShowcasePose": {
+            "seconds": 0.05,
+            "pose": "supplied bind"
+          },
+          "Talk": {
+            "seconds": 3.2
+          }
+        }
+      },
+      "mural": {
+        "file": "northern-wei.webp",
+        "bytes": 100498,
+        "sha256": "df23db33e238ad36557270d5bf38fa69410d137e4a2c4c994ebaf61320f3f206",
+        "source": "北魏第257窟_沙弥守戒自杀壁画中的少女原型.PNG",
+        "originalSize": [
+          1206,
+          2622
+        ],
+        "width": 471,
+        "height": 1024
+      }
+    },
+    {
+      "id": "western-wei",
+      "model": {
+        "file": "western-wei.glb",
+        "bytes": 3357712,
+        "sha256": "966a92150d0e3b907a986ac0e39ab9a66fc26944b1c08fe6a68a72edc7688505",
+        "source": "285西魏供养人原型.glb",
+        "gzipBytes": 1690553,
+        "triangles": 52909,
+        "vertices": 45840,
+        "joints": 66,
+        "texture": {
+          "width": 1024,
+          "height": 1024,
+          "bytes": 217518
+        },
+        "heightMetres": 1.8312872879455349,
+        "headHeightMetres": 1.2983541693050178,
+        "showcaseRadiusMetres": 0.44983717457350675,
+        "geometrySha256": "4d94246ae65c075acb6658e856791ccea3f04894048c3f20a5bc09248c661b00",
+        "clips": {
+          "Idle": {
+            "seconds": 17.58333333209157,
+            "removedHorizontalTravelMetres": 0.0011266319387652362,
+            "maxFloorLiftMetres": 0.0319054640722334
+          },
+          "Walk": {
+            "seconds": 2.33333333209157,
+            "removedHorizontalTravelMetres": 2.2591997738603573,
+            "maxFloorLiftMetres": 0.07229918960513451
+          },
+          "Run": {
+            "seconds": 1.2499999590218067,
+            "removedHorizontalTravelMetres": 4.4108581209080056,
+            "maxFloorLiftMetres": 0.07820815841879186
+          },
+          "ShowcasePose": {
+            "seconds": 0.05,
+            "pose": "supplied bind"
+          },
+          "Talk": {
+            "seconds": 3.2
+          }
+        }
+      },
+      "mural": {
+        "file": "western-wei.webp",
+        "bytes": 219484,
+        "sha256": "6ec062240338900228d1ae2584c5dab42bad8b3ed1a24543a9dd0cd6b8410cf2",
+        "source": "285西魏供养人原型.PNG",
+        "originalSize": [
+          1086,
+          1448
+        ],
+        "width": 768,
+        "height": 1024
+      }
+    },
+    {
+      "id": "late-tang",
+      "model": {
+        "file": "late-tang.glb",
+        "bytes": 3494556,
+        "sha256": "75d8bbbc3cd1ebc692b6e1a12740011ec2ac1aa7c465afd6b5e1200876639d28",
+        "source": "晚唐第9窟供养人.glb",
+        "gzipBytes": 1685951,
+        "triangles": 49438,
+        "vertices": 48707,
+        "joints": 65,
+        "texture": {
+          "width": 1024,
+          "height": 1024,
+          "bytes": 228567
+        },
+        "heightMetres": 1.8113281180955185,
+        "headHeightMetres": 1.2983541693050178,
+        "showcaseRadiusMetres": 0.4615378932454409,
+        "geometrySha256": "148c78c0a1c64c73f5407b2b146a0b5aef4fe345961dd82a92ff362fd06bb03a",
+        "clips": {
+          "Idle": {
+            "seconds": 17.58333333209157,
+            "removedHorizontalTravelMetres": 0.001166953639925211,
+            "maxFloorLiftMetres": 0.007221836589813866
+          },
+          "Walk": {
+            "seconds": 2.33333333209157,
+            "removedHorizontalTravelMetres": 2.34004478117043,
+            "maxFloorLiftMetres": 0.042167454858837064
+          },
+          "Run": {
+            "seconds": 1.2499999590218067,
+            "removedHorizontalTravelMetres": 4.568700002719327,
+            "maxFloorLiftMetres": 0.04494385934901103
+          },
+          "ShowcasePose": {
+            "seconds": 0.05,
+            "pose": "supplied bind"
+          },
+          "Talk": {
+            "seconds": 3.2
+          }
+        }
+      },
+      "mural": {
+        "file": "late-tang.webp",
+        "bytes": 44530,
+        "sha256": "87878738ea861bfeed01fc1d5781feef5b4f74106cb0fd0cb839c85f54d75740",
+        "source": "晚唐第9窟供养人原型.jpg",
+        "originalSize": [
+          705,
+          1517
+        ],
+        "width": 476,
+        "height": 1024
+      }
+    },
+    {
+      "id": "five-dynasties",
+      "model": {
+        "file": "five-dynasties.glb",
+        "bytes": 3267192,
+        "sha256": "96e029a1097224e3e6de9991772907c3d084ad35ab39a84d529fbad51ff5d038",
+        "source": "五代于阗皇后曹氏.glb",
+        "gzipBytes": 1584045,
+        "triangles": 48644,
+        "vertices": 43888,
+        "joints": 65,
+        "texture": {
+          "width": 1024,
+          "height": 1024,
+          "bytes": 254264
+        },
+        "heightMetres": 2.020539022066633,
+        "headHeightMetres": 1.2983541693050176,
+        "showcaseRadiusMetres": 0.5119632774595392,
+        "geometrySha256": "a17a1c2f10806e7f74d104d844f9774f1755f9c235b3dc76bc5653798f7c9957",
+        "clips": {
+          "Idle": {
+            "seconds": 17.58333333209157,
+            "removedHorizontalTravelMetres": 0.0012081926259426465,
+            "maxFloorLiftMetres": 0.015358171908810076
+          },
+          "Walk": {
+            "seconds": 2.33333333209157,
+            "removedHorizontalTravelMetres": 2.4227227582469513,
+            "maxFloorLiftMetres": 0.032891813475966196
+          },
+          "Run": {
+            "seconds": 1.2499999590218067,
+            "removedHorizontalTravelMetres": 4.730120025235545,
+            "maxFloorLiftMetres": 0.0847063631844684
+          },
+          "ShowcasePose": {
+            "seconds": 0.05,
+            "pose": "supplied bind"
+          },
+          "Talk": {
+            "seconds": 3.2
+          }
+        }
+      },
+      "mural": {
+        "file": "five-dynasties.webp",
+        "bytes": 32184,
+        "sha256": "d6e0126c20e1751394313e40d9f7d30b886b744bcad3d46e6a0e053a6c221093",
+        "source": "五代于阗皇后曹氏原型.jpg",
+        "originalSize": [
+          190,
+          397
+        ],
+        "width": 190,
+        "height": 397
+      }
+    },
+    {
+      "id": "yuan",
+      "model": {
+        "file": "yuan.glb",
+        "bytes": 3291708,
+        "sha256": "e156aa36c0e3b63fe11a12fccaccb58dfc81b998cdebd20c4795fc9e22cebca0",
+        "source": "元代蒙古女供养人_第332窟.glb",
+        "gzipBytes": 1699019,
+        "triangles": 53928,
+        "vertices": 45484,
+        "joints": 65,
+        "texture": {
+          "width": 1024,
+          "height": 1024,
+          "bytes": 165830
+        },
+        "heightMetres": 1.9725740277794876,
+        "headHeightMetres": 1.2983541693050176,
+        "showcaseRadiusMetres": 0.48461538185526054,
+        "geometrySha256": "58514e6e45bdceb27a3958f9f8830059a5a18df359b71b4263624e3d3c108e8b",
+        "clips": {
+          "Idle": {
+            "seconds": 17.58333333209157,
+            "removedHorizontalTravelMetres": 0.0009369287823433491,
+            "maxFloorLiftMetres": 0.008317665872613868
+          },
+          "Walk": {
+            "seconds": 2.33333333209157,
+            "removedHorizontalTravelMetres": 1.8787865601942006,
+            "maxFloorLiftMetres": 0.016483622472882417
+          },
+          "Run": {
+            "seconds": 1.2499999590218067,
+            "removedHorizontalTravelMetres": 3.668139959203501,
+            "maxFloorLiftMetres": 0.019820869454774962
+          },
+          "ShowcasePose": {
+            "seconds": 0.05,
+            "pose": "supplied bind"
+          },
+          "Talk": {
+            "seconds": 3.2
+          }
+        }
+      },
+      "mural": {
+        "file": "yuan.webp",
+        "bytes": 56556,
+        "sha256": "9f3aa0976e107eae02b187c7aedc438113c916b71351fb0fad40c285a1079ab3",
+        "source": "元代蒙古女供养人_第332窟原型.JPG",
+        "originalSize": [
+          1352,
+          2000
+        ],
+        "width": 692,
+        "height": 1024
+      }
+    }
+  ]
+}

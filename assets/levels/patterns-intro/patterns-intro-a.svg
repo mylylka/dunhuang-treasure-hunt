@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+<title>首关几何观察示意 · 占位素材 / 非正式美术</title>
+<desc>Agent 创建的几何技术占位，仅供布局和交互验证；不是正式敦煌美术或文物复原。</desc>
+<rect width="1200" height="800" fill="#f3ecde"/>
+<rect x="28" y="28" width="1144" height="744" rx="24" fill="none" stroke="#bba57b" stroke-width="3"/>
+<path d="M85 55h1030M85 745h1030" stroke="#bba57b" stroke-opacity=".4"/>
+<text x="60" y="62" fill="#514a42" font-family="sans-serif" font-size="22">几何观察示意 · 占位素材 / 非正式美术</text>
+<text x="600" y="753" text-anchor="middle" fill="#514a42" opacity=".65" font-family="sans-serif" font-size="19">不是敦煌原壁画或文物复原 · 正式教学重绘待替换</text>
+<g fill="none" stroke="#bba57b" stroke-width="3" opacity=".35"><path d="M72 300h355M775 300h355M72 520h355M775 520h355"/><circle cx="110" cy="400" r="35"/><circle cx="1090" cy="400" r="35"/></g>
+<path d="M172 190h184" stroke="#bba57b" stroke-width="8" stroke-linecap="round"/>
+<!-- difference-1-start -->
+<path transform="translate(196 170)" d="M-25 14C-28-25 17-37 28-13C36 12 7 31-25 14Z" fill="#417479" stroke="#514a42" stroke-width="3"/>
+<path transform="translate(264 170)" d="M-25 14C-28-25 17-37 28-13C36 12 7 31-25 14Z" fill="#417479" stroke="#514a42" stroke-width="3"/>
+<path transform="translate(332 170)" d="M-25 14C-28-25 17-37 28-13C36 12 7 31-25 14Z" fill="#417479" stroke="#514a42" stroke-width="3"/>
+<!-- difference-1-end -->
+<!-- difference-2-start -->
+<g transform="translate(624 400)"><ellipse cx="0" cy="-55" rx="18" ry="36" transform="rotate(0)" fill="#9b4739" fill-opacity=".8" stroke="#514a42" stroke-width="3"/><ellipse cx="0" cy="-55" rx="18" ry="36" transform="rotate(45)" fill="#9b4739" fill-opacity=".8" stroke="#514a42" stroke-width="3"/><ellipse cx="0" cy="-55" rx="18" ry="36" transform="rotate(90)" fill="#9b4739" fill-opacity=".8" stroke="#514a42" stroke-width="3"/><ellipse cx="0" cy="-55" rx="18" ry="36" transform="rotate(135)" fill="#9b4739" fill-opacity=".8" stroke="#514a42" stroke-width="3"/><ellipse cx="0" cy="-55" rx="18" ry="36" transform="rotate(180)" fill="#9b4739" fill-opacity=".8" stroke="#514a42" stroke-width="3"/><ellipse cx="0" cy="-55" rx="18" ry="36" transform="rotate(225)" fill="#9b4739" fill-opacity=".8" stroke="#514a42" stroke-width="3"/><ellipse cx="0" cy="-55" rx="18" ry="36" transform="rotate(270)" fill="#9b4739" fill-opacity=".8" stroke="#514a42" stroke-width="3"/><ellipse cx="0" cy="-55" rx="18" ry="36" transform="rotate(315)" fill="#9b4739" fill-opacity=".8" stroke="#514a42" stroke-width="3"/><circle r="26" fill="#bba57b" stroke="#514a42" stroke-width="3"/></g>
+<!-- difference-2-end -->
+<!-- difference-3-start -->
+<g transform="translate(948 628) scale(1 1)"><path d="M-94 26C-78-28-33-36-2 0S55 42 94-12" fill="none" stroke="#9b4739" stroke-width="12" stroke-linecap="round"/><path d="M-49-14C-64-54-25-56-25-26C-25-16-35-8-49-14Z" fill="#417479" stroke="#514a42" stroke-width="3"/><path d="M54 22C62 50 90 56 96 30C85 23 72 17 54 22Z" fill="#417479" stroke="#514a42" stroke-width="3"/></g>
+<!-- difference-3-end -->
+
+</svg>
