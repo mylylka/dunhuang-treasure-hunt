@@ -75,7 +75,7 @@ import { musicCameraSpaceV3, flyingCameraPoseV3 } from './music-pavilion-v003';
 import { musicCameraSpaceV2, flyingCameraPoseV2 } from './music-pavilion-v002';
 import { createTravelCamera, normalizedYaw } from './travel-camera';
 import { flyingDialogue } from '../content/world/flying-dialogue';
-import { TERRAIN_TRAVELER_MODEL, worldAssetUrl } from '../content/world/assets';
+import { TERRAIN_TRAVELER_MOBILE_MODEL, TERRAIN_TRAVELER_MODEL, worldAssetUrl } from '../content/world/assets';
 import { createFlyingVoice } from './flying-voice';
 import { createFlyingHistory } from './flying-history';
 import { createMusicArrivalAudio } from './music-arrival-audio';
@@ -324,7 +324,8 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
       mogaoExhibitInteriorPath: coarsePointer ? 'mogao-upper/v003/interior-mobile.glb' : undefined,
       onMogaoExhibitChange: () => schedule(),
     } : {}) };
-  const world = createArtSampleScene(cinematicPreview ? { travelerPath: TERRAIN_TRAVELER_MODEL, ...previewLoading,
+  const world = createArtSampleScene(cinematicPreview ? { travelerPath: connected && options.firstGallery && isMobilePhone()
+    ? TERRAIN_TRAVELER_MOBILE_MODEL : TERRAIN_TRAVELER_MODEL, ...previewLoading,
     musicMuralTextureLimit: musicInterior ? Math.min(renderer.capabilities.maxTextureSize, coarsePointer ? 2048 : 4096) : undefined,
     musicBalconyV2: options.musicBalconyV2,
     musicGuide: !!guideVisit,

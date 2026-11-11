@@ -53,7 +53,7 @@ import {placeTerrainTowerTrees} from './terrain-trees-v001';
 import {TERRAIN_TOWER_TREES} from '../content/world/terrain-trees-v001';
 import {fromTerrainPoint, terrainHeight, toTerrainPoint, TERRAIN_SCENERY_SOURCE_OVERRIDES, type TerrainRegion} from '../content/world/terrain-layout-v001';
 import { GLTFLoader, type GLTF } from 'three/addons/loaders/GLTFLoader.js';
-import { TERRAIN_COURTYARD_MODEL, TERRAIN_FIRST_GALLERY_COURTYARD_MODEL, WORLD_ART_SAMPLE, worldAssetUrl } from '../content/world/assets';
+import { TERRAIN_COURTYARD_MODEL, TERRAIN_FIRST_GALLERY_COURTYARD_MODEL, TERRAIN_TRAVELER_MOBILE_MODEL, TERRAIN_TRAVELER_MODEL, WORLD_ART_SAMPLE, worldAssetUrl } from '../content/world/assets';
 import { connectedGalleryApproachGroups, connectedGalleryEntryGroups, firstGalleryApproachVenue, firstGalleryEntryVenue, firstGalleryStreamRegion, type FirstGalleryVenue } from './first-gallery-streaming';
 import { previewApproachRegions, previewRegionAt, type PreviewResourceGroup, type WorldPreviewResourceProfile } from './preview-resource-profile';
 import type { WorldPoint } from './types';
@@ -469,6 +469,15 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
     environment.dispose();
   }
   async function loadModel(path: string, signal = controller.signal,
+    progress?: (fraction: number | null) => void): Promise<GLTF> {
+    try {
+      return await loadSelectedModel(path, signal, progress);
+    } catch (error) {
+      if (path !== TERRAIN_TRAVELER_MOBILE_MODEL || disposed || signal.aborted) throw error;
+      return loadSelectedModel(TERRAIN_TRAVELER_MODEL, signal, progress);
+    }
+  }
+  async function loadSelectedModel(path: string, signal: AbortSignal,
     progress?: (fraction: number | null) => void): Promise<GLTF> {
     const url = new URL(worldAssetUrl(path), document.baseURI);
     const response = await fetch(url, { signal });

@@ -1,7 +1,7 @@
-// A 2D deep link must not download the terrain preview (and Three.js) first.
+// A 2D deep link must not download the 3D world (and Three.js) first.
 // The normal world entry still owns its initial station/session setup.
 const path = location.hash.replace(/^#\/?/, '').split('/').filter(Boolean);
-const opening = path.length === 0 ? import('./world/terrain-preview-v001').then(module => module.mainReady) : import('./main');
+const opening = path.length === 0 ? import('./world/first-gallery-preview-v001').then(module => module.mainReady) : import('./main');
 void opening.catch(() => {
   const startup = document.getElementById('startup');
   if (!startup) return;

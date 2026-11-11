@@ -1,16 +1,10 @@
-import './mogao-preview-v001.css';
-import './mogao-preview-v012.css';
-import './music-pavilion-preview-v005.css';
-import './flying-voice-preview.css';
-import './character-cinematics-preview.css';
-import './music-pavilion-preview.css';
-import './music-pavilion-preview-v002.css';
-import './terrain-preview-v001.css';
+import './first-gallery-world-styles';
 import { FIRST_GALLERY_WORLD_SESSION_KEY } from '../services/first-gallery-entry';
 import { TERRAIN_REGIONS, TERRAIN_SPAWN, terrainRegionAt, toTerrainPoint } from './terrain-rules-v001';
 import { defaultWorldCheckpoint } from './session';
 import { FIRST_GALLERY_MURAL_OBSERVER } from './first-gallery-mural-camera';
-import { TERRAIN_FIRST_GALLERY_COURTYARD_MODEL, TERRAIN_TRAVELER_MODEL, worldAssetUrl } from '../content/world/assets';
+import { TERRAIN_FIRST_GALLERY_COURTYARD_MODEL, TERRAIN_TRAVELER_MOBILE_MODEL, TERRAIN_TRAVELER_MODEL, worldAssetUrl } from '../content/world/assets';
+import { isMobilePhone } from '../services/mobile-landscape';
 
 // Only curated first-hall inspection stations; the story entry cannot use the
 // terrain preview's second/third-gallery stations to bypass progression.
@@ -34,7 +28,9 @@ if (!location.hash || location.hash === '#' || location.hash === '#/') {
       preloadCourtyard = terrainRegionAt(checkpoint.position) === 'courtyard';
     }
   } catch { /* Invalid sessions fall back to the first courtyard. */ }
-  const paths = preloadCourtyard ? [TERRAIN_FIRST_GALLERY_COURTYARD_MODEL, TERRAIN_TRAVELER_MODEL] : [TERRAIN_TRAVELER_MODEL];
+  const traveler = document.getElementById('root')?.dataset.connectedGalleries === 'v001' && isMobilePhone()
+    ? TERRAIN_TRAVELER_MOBILE_MODEL : TERRAIN_TRAVELER_MODEL;
+  const paths = preloadCourtyard ? [TERRAIN_FIRST_GALLERY_COURTYARD_MODEL, traveler] : [traveler];
   for (const path of paths) {
     const preload = document.createElement('link');
     preload.rel = 'preload';

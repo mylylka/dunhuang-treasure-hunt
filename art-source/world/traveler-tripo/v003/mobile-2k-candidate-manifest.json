@@ -1,0 +1,47 @@
+{
+  "status": "connected-gallery phone runtime; simulated visual review passed; physical-device review pending",
+  "source": {
+    "path": "public/assets/world/traveler-tripo/v002/traveler.glb",
+    "bytes": 7918856,
+    "sha256": "81b6b7c5a02fb6e84fd807be2f003e5e99f8f92daaeb7788dd62eec1ca084609",
+    "gzipLevel6Bytes": 5646807
+  },
+  "output": {
+    "path": "public/assets/world/traveler-tripo/v003/traveler-mobile-2k-candidate.glb",
+    "bytes": 5649924,
+    "sha256": "e93317801e6327d6884943454b5d0d9be4fe45dcbead2dbbf396f2f79491da94",
+    "gzipLevel6Bytes": 3377887
+  },
+  "texture": {
+    "sourceSize": [
+      4096,
+      4096
+    ],
+    "outputSize": [
+      2048,
+      2048
+    ],
+    "sourceMode": "RGB JPEG without alpha",
+    "outputMode": "RGB JPEG without alpha",
+    "sampling": "Lanczos",
+    "quality": 92,
+    "chromaSubsampling": "4:4:4",
+    "pillow": "12.2.0"
+  },
+  "verification": {
+    "nonTextureBufferViews": 1122,
+    "allNonTextureBytesIdentical": true,
+    "metadataIdenticalExcept": [
+      "buffer lengths and offsets"
+    ],
+    "skins": 1,
+    "animations": [
+      "LookAround",
+      "Run",
+      "Idle",
+      "Walk",
+      "Greeting",
+      "HallLookUp"
+    ]
+  }
+}

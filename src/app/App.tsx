@@ -54,7 +54,9 @@ import { useMusicGalleryProgress } from './use-music-gallery-progress';
 import type { ContentCatalog, GameEvent, Level, LevelMetadata, ProgressData, RegionColors, RegionMaterials, ThemeDefinition } from '../types';
 
 const WorldScreen = lazy(async () => {
-  const [screen] = await Promise.all([import('./WorldScreen'), import('../styles/world-preview.css')]);
+  const galleryStyles = document.getElementById('root')?.dataset.firstGallery === 'v001'
+    ? import('../world/first-gallery-world-styles') : Promise.resolve();
+  const [screen] = await Promise.all([import('./WorldScreen'), import('../styles/world-preview.css'), galleryStyles]);
   return screen;
 });
 
