@@ -219,7 +219,11 @@ export function createTerrainScene(scene: THREE.Scene, enhancedEnvironment = fal
     batch.forEach(item => item.dispose());
     if (!geometry) {stoneMaterials[index].dispose(); continue;}
     const road = new THREE.Mesh(geometry, stoneMaterials[index]); road.name = `terrain-following-stone-road-${index}`;
-    road.castShadow = enhancedEnvironment; road.receiveShadow = true; root.add(road); owned.push(road);
+    // The compact view cannot resolve the slabs' small cast shadows cleanly.
+    // Keep the shaded cut faces and let buildings and the traveler shade the road.
+    road.castShadow = enhancedEnvironment && !compactGround;
+    road.receiveShadow = true;
+    root.add(road); owned.push(road);
   }
 
   // Center the blue sky on the active camera, including the high overview.

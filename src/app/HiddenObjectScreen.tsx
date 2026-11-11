@@ -81,9 +81,10 @@ export function HiddenObjectScreen({ level, catalog, reducedMotion, onEvent, onB
   const chapterPaper = level.chapter?.order === 2 ? '#f5f8ee' : level.chapter?.order === 3 ? '#faf5ec' : '#fffaf1';
   const screenStyle = { '--hidden-ready-columns': taskGroups, '--hidden-ready-paper': chapterPaper } as CSSProperties;
   const running = ready && !error && status === 'running';
+  const browsing = ready && !error && (status === 'running' || status === 'timeout');
   const selectable = running;
   const preparing = !error && status === 'ready';
-  const blocked = !running;
+  const blocked = !browsing;
   const scrollTop = snapshot?.scrollTop ?? 0;
   const scrollMax = snapshot?.scrollMax ?? 0;
 
@@ -105,7 +106,7 @@ export function HiddenObjectScreen({ level, catalog, reducedMotion, onEvent, onB
     const nativeOffset = scrollMax > 0 ? scrollTop / scrollMax * nativeMaximum : 0;
     const atBoundary = scrollTop === 0 || scrollTop === scrollMax;
     if (Math.abs(element.scrollTop - nativeOffset) > (atBoundary ? .01 : .5)) element.scrollTop = nativeOffset;
-  }, [scrollTop, scrollMax, scrollbarHeight, running]);
+  }, [scrollTop, scrollMax, scrollbarHeight, browsing]);
 
   useEffect(() => {
     if (ready && !error && (status === 'ready' || status === 'paused')) {
@@ -194,10 +195,10 @@ export function HiddenObjectScreen({ level, catalog, reducedMotion, onEvent, onB
               reducedMotion={reducedMotion} onEvent={emit} command={command} />
           </div>
           <div ref={scrollbar} className="hidden-object-scrollbar" data-testid="hidden-object-scrollbar"
-            role="region" aria-label="上下滚动寻找物件" aria-disabled={!running || !scrollMax}
-            tabIndex={running ? 0 : -1}
+            role="region" aria-label="上下滚动寻找物件" aria-disabled={!browsing || !scrollMax}
+            tabIndex={browsing ? 0 : -1}
             onScroll={event => {
-              if (!running || !snapshot || snapshot.scrollMax <= 0) return;
+              if (!browsing || !snapshot || snapshot.scrollMax <= 0) return;
               const element = event.currentTarget;
               const nativeMaximum = Math.max(0, element.scrollHeight - element.clientHeight);
               const fraction = nativeMaximum > 0 ? Math.max(0, Math.min(1, element.scrollTop / nativeMaximum)) : 0;
@@ -236,12 +237,9 @@ export function HiddenObjectScreen({ level, catalog, reducedMotion, onEvent, onB
                 <button ref={overlayAction} type="button" className="button button-primary" onClick={() => send({ type: 'hidden-resume' })}><span className="button-label">继续寻找</span></button>
                 <button type="button" className="button button-secondary" onClick={retry}><span className="button-label">重试本局</span></button>
               </div>
-            </div> : status === 'timeout' ? <div className="hidden-object-overlay hidden-object-timeout" role="status">
-              <h2>时间到了</h2><p>本次找到 {snapshot?.foundCount ?? 0} / {taskCount} 件</p>
-              <span>可以重试本局，或换一局重新寻找</span>
             </div> : status === 'won' ? <div className="hidden-object-overlay" role="status"><h2>目标已找齐</h2></div> : null}
         </div>
       </section>
-    <div className="hidden-object-status" role="status" data-testid="hidden-object-hint-status">{message}</div>
+    <div className="hidden-object-status" role="status" data-testid="hidden-object-hint-status">{status === 'timeout' ? <><span role="heading" aria-level={2}>时间到了</span>，未找到的物品已圈出，可上下浏览。</> : message}</div>
   </div>;
 }

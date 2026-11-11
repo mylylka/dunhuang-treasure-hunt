@@ -43,7 +43,7 @@ import {applyTerrainSandstoneMaterial} from './terrain-rock-material-v001';
 import {hideConnectedCliffSandFoot} from './terrain-cliff-sand-v001';
 import {createBactrianCaravans} from './terrain-bactrian-caravans-v001';
 import {createTerrainScene} from './terrain-scene-v001';
-import {applyFirstGalleryHallPaving,applyTerrainCourtyardExpansion} from './terrain-courtyard-v003';
+import {applyFirstGalleryCourtyardPaving,applyFirstGalleryHallPaving,applyTerrainCourtyardExpansion} from './terrain-courtyard-v003';
 import {refineCourtyardRocks} from './courtyard-rock-refinement-v001';
 import {prepareTerrainCourtyardShadows,updateTerrainSunShadow} from './terrain-shadow-v005';
 import {TERRAIN_CAISSON_CONFIG,loadCaissonCenterTexture,prepareTerrainCaisson,releaseCaissonTexture} from './terrain-caisson-v001';
@@ -521,8 +521,7 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
     musicInteriorLighting?.include(model);
     environmentLighting?.includeReceivers(model);
   }
-  async function warmGuideOutfit(model: THREE.Object3D, renderer: THREE.WebGLRenderer, camera: THREE.Camera) {
-    includeGuideReceivers(model);
+  function modelTextures(model: THREE.Object3D) {
     const textures = new Set<THREE.Texture>();
     model.traverse(object => {
       if (!(object instanceof THREE.Mesh)) return;
@@ -530,8 +529,30 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
         for (const value of Object.values(material)) if (value instanceof THREE.Texture) textures.add(value);
       }
     });
-    for (const texture of textures) renderer.initTexture(texture);
+    return textures;
+  }
+  async function warmGuideOutfit(model: THREE.Object3D, renderer: THREE.WebGLRenderer, camera: THREE.Camera) {
+    includeGuideReceivers(model);
+    for (const texture of modelTextures(model)) renderer.initTexture(texture);
     await renderer.compileAsync(model, camera, environment.scene);
+  }
+  async function warmCliffTextures(model: THREE.Object3D, renderer: THREE.WebGLRenderer, signal: AbortSignal) {
+    for (const texture of modelTextures(model)) {
+      if (disposed || signal.aborted || document.hidden || renderer.getContext().isContextLost()) return;
+      // One upload per frame on the approach. Uploading every mural and the
+      // Buddha together makes a single long render stall on a phone.
+      await new Promise<void>(resolve => {
+        const finish = () => {
+          cancelAnimationFrame(frame);
+          signal.removeEventListener('abort', finish);
+          resolve();
+        };
+        const frame = requestAnimationFrame(finish);
+        signal.addEventListener('abort', finish, { once: true });
+      });
+      if (disposed || signal.aborted || document.hidden || renderer.getContext().isContextLost()) return;
+      renderer.initTexture(texture);
+    }
   }
   function updateGuideLighting() {
     if (!musicGuide) return;
@@ -808,6 +829,7 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
     });
     courtyard.scene.position.set(-12, 0, 2);
     if(terrain)courtyardExpansion=applyTerrainCourtyardExpansion(courtyard.scene);
+    if (compactConnectedTerrain) applyFirstGalleryCourtyardPaving(courtyard.scene);
     if (connectedGalleries) applyFirstGalleryHallPaving(courtyard.scene);
     if(terrain)courtyardShadows=prepareTerrainCourtyardShadows(courtyard.scene);
     if (terrain) {
@@ -1110,13 +1132,30 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
           if (connectedGalleries && (index === 2 || index === 3)) return [];
           return (index === 1 || index === 4) === (group === 'cliff-interior') ? [{ path, kind: kinds[index] }] : [];
         });
+        const loadParts = async () => {
+          const renderer = lightingRenderer;
+          if (group !== 'cliff-interior' || !compactConnectedTerrain || !renderer) {
+            return Promise.all(selected.map(async ({ path, kind }) => ({ model: await load(path), kind })));
+          }
+          const parts: { model: GLTF; kind: (typeof kinds)[number] }[] = [];
+          for (const { path, kind } of selected) {
+            const model = await load(path);
+            await warmCliffTextures(model.scene, renderer, abort.signal);
+            assertLive();
+            parts.push({ model, kind });
+          }
+          return parts;
+        };
         const [parts, trees] = await Promise.all([
-          Promise.all(selected.map(async ({ path, kind }) => ({ model: await load(path), kind }))),
+          loadParts(),
           group === 'cliff' && terrain && !connectedGalleries && !towerTrees ? Promise.all(TERRAIN_TOWER_TREES.map(tree => load(tree.assetPath))) : [],
         ]);
         assertLive();
         const distantFinish = rockFinish;
-        for (const { model, kind } of parts) attachCliffModel(model, kind);
+        for (const { model, kind } of parts) {
+          attachCliffModel(model, kind);
+          if (group === 'cliff-interior' && compactConnectedTerrain) environmentLighting?.includeReceivers(model.scene);
+        }
         if (connectedGalleries && group === 'cliff') {
           releaseDistantCliff(distantFinish);
           cliffMountainAsset = cliffPaths[0];

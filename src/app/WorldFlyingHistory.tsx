@@ -1,6 +1,9 @@
-import { useEffect, useLayoutEffect, useRef, type KeyboardEvent, type MouseEvent, type PointerEvent } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState, type KeyboardEvent, type MouseEvent, type PointerEvent } from 'react';
+import { worldAssetUrl } from '../content/world/assets';
+import detailChapters from '../content/world/flying-history-detail-v001.json';
 import { registerSpeechSkip } from '../services/speech-skip';
 import type { FlyingHistoryAction, FlyingHistorySnapshot } from '../world/flying-history';
+import { LessonImageViewer } from './LessonImageViewer';
 import '../styles/world-flying-history.css';
 
 interface Props {
@@ -29,10 +32,14 @@ export function WorldFlyingHistory({ state, blocked, onCaptionPresented, onContr
   const returnToMenuButton = useRef(true);
   const wasMenuOpen = useRef(false);
   const press = useRef<Press | null>(null);
-  const { phase, chapter, speaker, subtitle, paused, menuOpen, titles } = state;
+  const [detailIndex, setDetailIndex] = useState(0);
+  const { phase, chapter, speaker, subtitle, paused, menuOpen, detailOpen, titles } = state;
+  const images = chapter === null ? undefined : detailChapters[chapter];
+  const detail = detailOpen ? images?.[detailIndex] : undefined;
   const canSkip = state.canSkip && !blocked && !paused && !menuOpen;
   const canChoose = chapter !== null || phase === 'complete';
   const canPause = phase !== 'invite' && phase !== 'complete' && phase !== 'image-error';
+  const canViewDetail = !menuOpen && !!images?.length && (phase === 'chapter' || phase === 'hold' || phase === 'complete');
   const passage = `${phase}:${chapter}:${speaker}`;
 
   useLayoutEffect(() => {
@@ -40,7 +47,7 @@ export function WorldFlyingHistory({ state, blocked, onCaptionPresented, onContr
   }, [subtitle]);
 
   useLayoutEffect(() => {
-    if (blocked || (phase !== 'opening' && phase !== 'chapter')) return;
+    if (blocked || detailOpen || (phase !== 'opening' && phase !== 'chapter')) return;
     let nextFrame = 0;
     const frame = requestAnimationFrame(() => {
       nextFrame = requestAnimationFrame(() => onCaptionPresented(phase, chapter, true));
@@ -50,11 +57,11 @@ export function WorldFlyingHistory({ state, blocked, onCaptionPresented, onContr
       cancelAnimationFrame(nextFrame);
       onCaptionPresented(phase, chapter, false);
     };
-  }, [phase, chapter, blocked, onCaptionPresented]);
+  }, [phase, chapter, blocked, detailOpen, onCaptionPresented]);
 
   useLayoutEffect(() => {
     press.current = null;
-    if (blocked) return;
+    if (blocked || detailOpen) return;
     if (menuOpen) {
       const current = menu.current?.querySelector<HTMLElement>('[aria-current="step"]')
         ?? menu.current?.querySelector<HTMLElement>('ol button');
@@ -67,18 +74,18 @@ export function WorldFlyingHistory({ state, blocked, onCaptionPresented, onContr
     }
     wasMenuOpen.current = menuOpen;
     returnToMenuButton.current = true;
-  }, [blocked, menuOpen]);
+  }, [blocked, detailOpen, menuOpen]);
 
   const keyboardSkip = useRef<() => boolean>(() => false);
   const keyboardEscape = useRef<(event: globalThis.KeyboardEvent) => void>(() => {});
   keyboardSkip.current = () => {
-    if (blocked || !panel.current) return false;
+    if (blocked || detailOpen || !panel.current) return false;
     if (canSkip) onControl({ type: 'skip' });
     return true;
   };
   useEffect(() => registerSpeechSkip(() => keyboardSkip.current()), []);
   keyboardEscape.current = event => {
-    if (blocked || event.key !== 'Escape') return;
+    if (blocked || detailOpen || event.key !== 'Escape') return;
     event.preventDefault();
     event.stopImmediatePropagation();
     if (event.repeat) return;
@@ -137,11 +144,15 @@ export function WorldFlyingHistory({ state, blocked, onCaptionPresented, onContr
 
   function focusStage() { panel.current?.focus({ preventScroll: true }); }
 
-  return <section className="flying-history" role="dialog" aria-modal="true" aria-label="敦煌飞天历史讲解" tabIndex={-1}
-    ref={panel} inert={blocked} data-testid="flying-history" data-phase={phase} data-chapter={chapter ?? undefined}
+  return <><section className="flying-history" role="dialog" aria-modal="true" aria-label="敦煌飞天历史讲解" tabIndex={-1}
+    ref={panel} inert={blocked || detailOpen} data-testid="flying-history" data-phase={phase} data-chapter={chapter ?? undefined}
     data-paused={paused} data-can-skip={canSkip} onKeyDown={handleKey} onPointerDownCapture={rememberPress}
     onPointerMoveCapture={cancelDrag} onPointerCancelCapture={() => { press.current = null; }} onClickCapture={handleClick}>
     <nav className="flying-history__toolbar" aria-label="飞天讲解控制">
+      {canViewDetail && <button type="button" data-testid="flying-history-detail" onClick={() => {
+        setDetailIndex(0);
+        onControl({ type: 'set-detail', open: true });
+      }}>看大图</button>}
       {canChoose && <button type="button" ref={menuButton} aria-expanded={menuOpen} aria-controls="flying-history-chapters"
         data-testid="flying-history-menu-button" onClick={() => onControl({ type: 'toggle-menu' })}>
         年代 {(chapter ?? titles.length - 1) + 1}/{titles.length}
@@ -187,5 +198,13 @@ export function WorldFlyingHistory({ state, blocked, onCaptionPresented, onContr
         <button type="button" onClick={() => { onControl({ type: 'skip-broken' }); focusStage(); }}>跳过本段</button>
       </div>}
     </footer>
-  </section>;
+  </section>
+    {!blocked && detail && chapter !== null && <LessonImageViewer key={detail.path} src={worldAssetUrl(detail.path)}
+      imageWidth={detail.width} imageHeight={detail.height} title={titles[chapter]} caption={detail.caption}
+      navigation={images && images.length > 1 ? <>
+        <button type="button" disabled={detailIndex === 0} onClick={() => setDetailIndex(detailIndex - 1)}>上一张</button>
+        <button type="button" disabled={detailIndex + 1 === images.length} onClick={() => setDetailIndex(detailIndex + 1)}>下一张</button>
+      </> : undefined}
+      onClose={() => onControl({ type: 'set-detail', open: false })} />}
+  </>;
 }

@@ -70,7 +70,9 @@ export interface ColoringLevel extends LevelMetadata {
 export interface PuzzleLevel extends LevelMetadata {
   gameType: 'puzzle';
   imageAssetId: string;
-  mode: 'rotation' | 'jigsaw';
+  mode: 'rotation' | 'jigsaw' | 'gallery-order';
+  /** Number of left-to-right mural slices for gallery-order mode. */
+  sliceCount?: number;
   rows: number;
   columns: number;
   seed: number;

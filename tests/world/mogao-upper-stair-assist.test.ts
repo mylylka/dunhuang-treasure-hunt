@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { startUpperStairAssist, advanceUpperStairAssist, advanceUpperStairAssistFrame, getUpperStairOptions, isUpperStairAssistArea, type UpperStairDirection } from '../../src/world/mogao-upper-stair-assist';
-import { MOGAO_UPPER_LAYOUT, UPPER_MAX_SLOPE, upperToWorld, upperFromWorld, upperFloorHeight, upperNavigation, type UpperWalkState } from '../../src/world/mogao-upper-navigation';
+import { MOGAO_UPPER_LAYOUT, UPPER_MAX_SLOPE, upperToWorld, upperFromWorld, upperFloorHeight, upperNavigation, exhibitUpperNavigation, type UpperWalkState } from '../../src/world/mogao-upper-navigation';
 import { PLAYER_RADIUS } from '../../src/world/movement';
 
 function worldState(x: number, z: number, surfaceId: string): UpperWalkState {
@@ -9,15 +9,16 @@ function worldState(x: number, z: number, surfaceId: string): UpperWalkState {
 function completeTrip(current: UpperWalkState, direction: UpperStairDirection, stopAtHallDoors = false) {
   let assist = startUpperStairAssist(current, direction, stopAtHallDoors);
   expect(assist).not.toBeNull();
+  const navigation = stopAtHallDoors ? exhibitUpperNavigation : upperNavigation;
   const visitedFlights = new Set<string>(), flightDirections: number[] = [], visitedSurfaces = new Set([current.surfaceId]);
   let ticks = 0;
   for (; assist && ticks < 4000; ticks++) {
-    const before = current.position, step = advanceUpperStairAssist(assist, current, 1 / 30);
+    const before = current.position, step = advanceUpperStairAssist(assist, current, 1 / 30, undefined, stopAtHallDoors);
     expect(step.blocked).toBe(false);
     expect(Math.hypot(step.walk.position.x - before.x, step.walk.position.z - before.z)).toBeLessThanOrEqual(4.2 / 30 + 1e-6);
-    expect(Math.abs(upperFloorHeight(step.walk.position, step.walk.surfaceId)! - upperFloorHeight(before, current.surfaceId)!))
+    expect(Math.abs(upperFloorHeight(step.walk.position, step.walk.surfaceId, stopAtHallDoors)! - upperFloorHeight(before, current.surfaceId, stopAtHallDoors)!))
       .toBeLessThanOrEqual(4.2 / 30 * UPPER_MAX_SLOPE + .045);
-    expect(upperNavigation.validOnSurface(upperFromWorld(step.walk.position), step.walk.surfaceId!)).toBe(true);
+    expect(navigation.validOnSurface(upperFromWorld(step.walk.position), step.walk.surfaceId!)).toBe(true);
     visitedSurfaces.add(step.walk.surfaceId);
     for (const id of [current.surfaceId, step.walk.surfaceId]) if (id?.startsWith('flight-')) visitedFlights.add(id);
     if (current.surfaceId?.startsWith('flight-') && step.walk.surfaceId?.startsWith('flight-')) {
@@ -126,7 +127,23 @@ describe('continuous stair assistance', () => {
     }
     expect(getUpperStairOptions(current, true).up.available).toBe(false);
     expect(startUpperStairAssist(current, 'up', true)).toBeNull();
-    expect(startUpperStairAssist(current, 'down', true)).toEqual(startUpperStairAssist(current, 'down'));
+  });
+
+  it('returns from the third floor to the second-floor stair landing without entering the mural hall', () => {
+    const thirdFloor = worldState(20.3, -23, 'landing-4');
+    expect(getUpperStairOptions(thirdFloor, true).down).toEqual({
+      available: true, label: '二层楼梯平台', surfaceId: 'landing-2',
+    });
+    const toSecond = completeTrip(thirdFloor, 'down', true);
+    expect(toSecond.visitedFlights).toEqual(['flight-4', 'flight-3']);
+    expect(toSecond.visitedSurfaces.has('hall-a')).toBe(false);
+    expect(toSecond.current.surfaceId).toBe('landing-2');
+    expect(isUpperStairAssistArea(toSecond.current, true)).toBe(true);
+
+    const toGround = completeTrip(toSecond.current, 'down', true);
+    expect(toGround.visitedFlights).toEqual(['flight-2', 'flight-1']);
+    expect(toGround.visitedSurfaces.has('hall-a')).toBe(false);
+    expect(toGround.current.surfaceId).toBe('ground');
   });
 
   it('keeps the same route and real-time travel duration at 12 fps and 30 fps', () => {

@@ -1,7 +1,7 @@
 import {useCallback,useEffect,useLayoutEffect,useRef,useState,type MouseEvent,type SyntheticEvent} from 'react';
 import {registerSpeechSkip} from '../services/speech-skip';
 import {deerStory,type TextStoryDefinition,type WorldStoryDefinition} from '../content/world/deer-story';
-import {getMogaoMuralNarration} from '../content/world/mogao-mural-audio-v001';
+import {getMogaoMuralNarration,mogaoMuralSubtitleAt} from '../content/world/mogao-mural-audio-v001';
 import {contain,finishNarration,initialStoryFrame,interpolateRect,isStoryPassage,mappedRegion,skipStory,storyExpansion,storyImageTargets,tickStory,tickStoryText,type Rect} from '../world/story-playback';
 import type {SoundPreferences} from '../services/sound-settings';
 import '../styles/deer-story.css';
@@ -33,7 +33,7 @@ export function WorldStoryPlayer({story=deerStory,backdrop,paused,blocked=false,
  // highlight coordinates back to it, including older 1920px backdrops.
  const background=exhibitLayout?{x:exhibitFull.x-scroll[0]*scale,y:exhibitFull.y-scroll[1]*scale,width:1920*scale,height:story.background.height*scale}:contain(story.background.width,story.background.height,{x:0,y:0,width:size.width,height:size.height});
  const targets=storyImageTargets(activeSegment?.images??[],size.stage);
- const paragraph=recording?.text??current?.text??'';
+ const paragraph=recording?mogaoMuralSubtitleAt(recording,frame.audioTime):current?.text??'';
  const cue=speaking?(exhibitNarration||!textCues?paragraph:textCues.find(line=>frame.time<line.end)?.text??''):'';
  const finished=frame.phase==='finished';
  const passage=`${replay}:${frame.index}:${frame.phase}`;

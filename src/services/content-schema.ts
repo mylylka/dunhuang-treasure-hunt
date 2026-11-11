@@ -38,7 +38,8 @@ export const coloringSchema = z.object({
     point: z.object({ x: z.number().min(0).max(1), y: z.number().min(0).max(1) }), pixelCount: z.number().int().positive() })).min(1),
 });
 export const puzzleSchema = z.object({
-  ...metadata, gameType: z.literal('puzzle'), imageAssetId: id, mode: z.enum(['rotation', 'jigsaw']),
+  ...metadata, gameType: z.literal('puzzle'), imageAssetId: id, mode: z.enum(['rotation', 'jigsaw', 'gallery-order']),
+  sliceCount: z.number().int().min(2).max(48).optional(),
   rows: z.number().int().min(2).max(8), columns: z.number().int().min(2).max(8), seed: z.number().int().nonnegative(),
 });
 export const hiddenObjectSchema = z.object({
@@ -148,6 +149,9 @@ export function parseCatalog(input: unknown, hiddenObjectPool?: HiddenObjectPool
     }
     if (level.gameType === 'puzzle') {
       const image = assets.get(level.imageAssetId);
+      if (level.mode === 'gallery-order' && level.sliceCount === undefined) issues.push(`关卡 ${level.id}：画廊排序须配置切片数量`);
+      if (level.mode !== 'gallery-order' && level.sliceCount !== undefined) issues.push(`关卡 ${level.id}：仅画廊排序可配置切片数量`);
+      if (level.mode === 'gallery-order' && image && level.sliceCount && image.width < level.sliceCount) issues.push(`关卡 ${level.id}：切片数量不能超过图片像素宽度`);
       if (level.rows * level.columns > 48) issues.push(`关卡 ${level.id}：当前拼图最多支持48片`);
       if (level.mode === 'rotation' && image && Math.abs((image.width / level.columns) / (image.height / level.rows) - 1) > .001) issues.push(`关卡 ${level.id}：原位旋转图块须为正方形`);
       continue;

@@ -133,6 +133,10 @@ describe('内容目录校验', () => {
     const square = { ...input, assets: catalog.assets.map(asset => ({ ...asset, width: 1440, height: 1440 })) };
     expect(parseCatalog(square).levels[0]).toMatchObject({ gameType: 'puzzle', mode: 'rotation', rows: 3, columns: 3 });
     expect(parseCatalog({ ...square, levels: [{ ...puzzle, mode: 'jigsaw', rows: 3, columns: 4 }] }).levels[0]).toMatchObject({ rows: 3, columns: 4 });
+    expect(parseCatalog({ ...square, levels: [{ ...puzzle, mode: 'gallery-order', sliceCount: 12 }] }).levels[0]).toMatchObject({ mode: 'gallery-order', sliceCount: 12 });
+    expect(() => parseCatalog({ ...square, levels: [{ ...puzzle, mode: 'gallery-order' }] })).toThrow(/须配置切片数量/);
+    expect(() => parseCatalog({ ...square, levels: [{ ...puzzle, mode: 'gallery-order', sliceCount: 1 }] })).toThrow();
+    expect(() => parseCatalog({ ...square, levels: [{ ...puzzle, mode: 'jigsaw', sliceCount: 12 }] })).toThrow(/仅画廊排序/);
     expect(() => parseCatalog({ ...square, levels: [{ ...puzzle, rows: 0 }] })).toThrow();
     expect(() => parseCatalog({ ...square, levels: [{ ...puzzle, rows: 8, columns: 8 }] })).toThrow(/最多支持48片/);
     expect(() => parseCatalog({ ...square, levels: [{ ...puzzle, imageAssetId: 'missing-puzzle' }] })).toThrow(/missing-puzzle/);

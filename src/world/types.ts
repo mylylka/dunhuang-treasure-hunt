@@ -96,7 +96,6 @@ export interface WorldRuntime {
   cancelMusicGuideLine?(): void;
   retryVoice?(): void;
   skipBuddhaVoice?(): void;
-  retryBuddhaVoice?(): void;
   skipVoice?(): void;
   controlFlyingHistory?(action: import('./flying-history').FlyingHistoryAction): void;
   setFlyingHistoryCaptionPresented?(phase: import('./flying-history').FlyingHistorySnapshot['phase'], chapter: number | null, presented: boolean): void;

@@ -295,7 +295,7 @@ export function createMusicPavilionV5(scene:THREE.Scene, initiallyAwakened:boole
     if (!balconyVariant) return;
     const [replacedLegacyMeshes, ensemble] = await Promise.all([
       pavilionReady,
-      loadModel(new URL(worldAssetUrl(balcony.asset), document.baseURI), false, signal),
+      loadModel(new URL(worldAssetUrl(compactBalcony ? compactPlacement.asset : balcony.asset), document.baseURI), false, signal),
     ]);
     try {
       const players = balcony.players.map(({ id }) => {

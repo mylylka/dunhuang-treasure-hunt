@@ -10,3 +10,25 @@
   #root[data-mogao="v012"] [data-testid="buddha-subtitle"] p{font-size:16px;line-height:1.55}
   #root[data-mogao="v012"] .world-camera-controls button{padding:8px;font-size:13px}
 }
+
+#root[data-mogao="v012"] .has-mogao-exhibit [data-testid="buddha-subtitle"] {
+  bottom:max(22px, env(safe-area-inset-bottom));
+  max-width:min(740px, 66%);
+}
+#root[data-mogao="v012"] .has-mogao-exhibit .world-hud:has(.world-stair-assist) [data-testid="buddha-subtitle"] {
+  bottom:max(72px, calc(env(safe-area-inset-bottom) + 54px));
+}
+@media (pointer:coarse) and (orientation:landscape) {
+  #root[data-mogao="v012"] .has-mogao-exhibit [data-testid="buddha-subtitle"] {
+    bottom:max(14px, env(safe-area-inset-bottom));
+    max-width:min(620px, 60%);
+    padding:6px 12px;
+  }
+  #root[data-mogao="v012"] .has-mogao-exhibit [data-testid="buddha-subtitle"] p {
+    font-size:14px;
+    line-height:1.45;
+  }
+  #root[data-mogao="v012"] .has-mogao-exhibit .world-hud:has(.world-stair-assist) [data-testid="buddha-subtitle"] {
+    bottom:max(56px, calc(env(safe-area-inset-bottom) + 46px));
+  }
+}

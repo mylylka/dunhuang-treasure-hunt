@@ -93,6 +93,17 @@
 .flying-history__actions p { margin: 0 3px; }
 .flying-history__notice { font-size: 14px; }
 
+/* The source-size image should use the short landscape viewport for viewing,
+   especially where an in-app browser's navigation chrome takes extra height. */
+.world-screen.is-flying-history .lesson-image-viewer {
+  width: min(1100px, calc(100vw - 14px));
+  height: min(820px, calc(100dvh - 14px));
+  padding: 5px;
+  border: 1px solid #cfbb96;
+  background: #f5e8d0;
+}
+.world-screen.is-flying-history .lesson-viewer-close { width: 44px; height: 44px; padding: 0; color: #8b412c; }
+
 @media (max-height: 470px) {
   .flying-history { --history-inset: 10px; }
   .flying-history__toolbar { gap: 5px; }
@@ -102,6 +113,10 @@
   .flying-history__subtitle,
   .flying-history__actions { padding: 4px 9px; }
   .flying-history__subtitle p { font: 15px/1.25 var(--serif); }
+  .world-screen.is-flying-history .lesson-viewer-surface { gap: 5px; padding: 5px 9px; }
+  .world-screen.is-flying-history .lesson-viewer-heading { padding-bottom: 2px; }
+  .world-screen.is-flying-history .lesson-viewer-heading h2 { font-size: 17px; }
+  .world-screen.is-flying-history .lesson-viewer-controls > button { min-height: 36px; padding: 3px 9px; }
 }
 
 @media (max-height: 470px) and (max-width: 680px) {

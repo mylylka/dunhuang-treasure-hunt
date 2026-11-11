@@ -29,6 +29,7 @@ export interface FlyingHistorySnapshot {
   subtitle: string;
   paused: boolean;
   menuOpen: boolean;
+  detailOpen: boolean;
   canSkip: boolean;
   titles: readonly string[];
   audioTime: number;
@@ -38,7 +39,8 @@ export interface FlyingHistorySnapshot {
 }
 
 export type FlyingHistoryAction = { type: 'start' | 'skip' | 'toggle-pause' | 'toggle-menu' | 'retry' | 'skip-broken' | 'unlock' }
-  | { type: 'select'; chapter: number };
+  | { type: 'select'; chapter: number }
+  | { type: 'set-detail'; open: boolean };
 
 interface Display {
   show(texture: THREE.Texture | null, labels?: readonly FlyingHistoryLabel[]): void;
@@ -88,7 +90,7 @@ export function createFlyingHistory(display: Display, sound: SoundPreferences, o
   let active = false;
   let phase: Phase = 'awakening', chapter: number | null = null;
   let speaker: Speaker = 'flying';
-  let paused = false, menuOpen = false, blocked = false;
+  let paused = false, menuOpen = false, detailOpen = false, blocked = false;
   let phaseTime = 0;
   let preferences = sound;
   let shown: THREE.Texture | null = null;
@@ -137,7 +139,7 @@ export function createFlyingHistory(display: Display, sound: SoundPreferences, o
     if (prepared?.board.value) releaseTexture(prepared.board.value);
   }
 
-  const halted = () => paused || menuOpen || blocked;
+  const halted = () => paused || menuOpen || detailOpen || blocked;
   function offset() {
     return voice && voice.node && context
       ? Math.max(voice.offset, context.currentTime - voice.startedAt) : voice?.offset ?? 0;
@@ -243,6 +245,7 @@ export function createFlyingHistory(display: Display, sound: SoundPreferences, o
 
   function leave() {
     active = false;
+    detailOpen = false;
     opening?.controller.abort();
     opening = null;
     clearVoice();
@@ -283,7 +286,14 @@ export function createFlyingHistory(display: Display, sound: SoundPreferences, o
     },
     control(action: FlyingHistoryAction) {
       if (action.type === 'unlock') { unlock(); return; }
-      if (!active || blocked) return;
+      if (!active) return;
+      if (action.type === 'set-detail') {
+        if (action.open && (blocked || menuOpen || !shown || (phase !== 'chapter' && phase !== 'hold' && phase !== 'complete'))) return;
+        detailOpen = action.open;
+        if (detailOpen) pauseVoice(); else unlock();
+        return;
+      }
+      if (blocked || detailOpen) return;
       if (action.type === 'toggle-pause') {
         paused = !paused;
         if (paused) pauseVoice(); else unlock();
@@ -343,7 +353,7 @@ export function createFlyingHistory(display: Display, sound: SoundPreferences, o
     snapshot(): FlyingHistorySnapshot | undefined {
       if (!active) return undefined;
       const text = chapter !== null && (phase === 'chapter' || phase === 'hold') ? chapterText[chapter] : subtitle;
-      return { phase, chapter, speaker: chapter === null ? 'flying' : speaker, subtitle: text, paused, menuOpen,
+      return { phase, chapter, speaker: chapter === null ? 'flying' : speaker, subtitle: text, paused, menuOpen, detailOpen,
         canSkip: !halted() && (phase === 'opening' || phase === 'chapter'), titles,
         audioTime: offset(), audioPlaying: !!voice?.node && context?.state === 'running',
         audioPath: voice?.clip.path ?? null, highlightedCaves: highlights };

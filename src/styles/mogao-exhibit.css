@@ -6,7 +6,7 @@
   color: #fbf0d8;
 }
 
-.world-screen:has(> .mogao-exhibit-overlay[data-modal]) > .world-host {
+.world-screen:has(> .mogao-exhibit-overlay:is([data-modal], [data-intro])) > .world-host {
   filter: blur(9px) brightness(.68);
   transform: scale(1.018);
 }
@@ -25,7 +25,7 @@
 
 .mogao-exhibit-intro {
   --intro-side: max(12px, env(safe-area-inset-left), env(safe-area-inset-right));
-  width: min(920px, calc(100% - var(--intro-side) * 2), calc(var(--intro-fit-height) * 2.85));
+  width: calc(.75 * min(920px, 100% - var(--intro-side) * 2, var(--intro-fit-height) * 2.85));
   container-type: inline-size;
   background: #302219;
   -webkit-text-size-adjust: none;

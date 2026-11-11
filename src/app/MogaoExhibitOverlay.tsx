@@ -383,11 +383,12 @@ export function MogaoExhibitOverlay(props: MogaoExhibitOverlayProps) {
   const wall = wallId ? MOGAO_EXHIBIT.walls.find(item => item.id === wallId) : undefined;
   const modal = !!exhibit || !!wall || !!arrivalIntro;
   const activeModal = modal && !blocked;
+  const revisitIntro = !modal && !blocked ? props.intro : null;
 
-  return <div className="mogao-exhibit-overlay" data-modal={activeModal || undefined} data-reduced-motion={reducedMotion || undefined}>
-    {props.intro && !modal && !blocked && <aside className="mogao-exhibit-intro mogao-exhibit-intro-repeat" role="status"
-      data-testid={props.intro === 'hall-a' ? 'mogao-hall-a-intro' : 'mogao-exhibit-intro'}>
-      <HallIntroCopy hall={props.intro} />
+  return <div className="mogao-exhibit-overlay" data-modal={activeModal || undefined} data-intro={revisitIntro ?? undefined} data-reduced-motion={reducedMotion || undefined}>
+    {revisitIntro && <aside className="mogao-exhibit-intro mogao-exhibit-intro-repeat" role="status"
+      data-testid={revisitIntro === 'hall-a' ? 'mogao-hall-a-intro' : 'mogao-exhibit-intro'}>
+      <HallIntroCopy hall={revisitIntro} />
     </aside>}
     {arrivalIntro && <MogaoExhibitDialog kind="arrival-intro" blocked={blocked} titleId={arrivalTitleId} onClose={props.onCloseArrivalIntro}>
       <article className="mogao-exhibit-intro mogao-arrival-intro" data-hall={arrivalIntro}>

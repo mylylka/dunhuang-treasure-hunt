@@ -6,7 +6,7 @@ import type { MusicGuideLineId } from '../content/world/music-guide-v001';
 import { WorldMiniMap, type MapUnlockedGalleries } from './WorldMiniMap';
 import { worldMinimapPosition } from '../world/world-minimap';
 import { fromTerrainPoint } from '../world/terrain-rules-v001';
-import { buddhaNarrationFor } from '../content/world/buddha-narration';
+import { buddhaSubtitleAt } from '../content/world/buddha-narration';
 import {deerStoryV009} from '../content/world/deer-introduction-v009';
 import {inMogaoRoom as inMogaoRoomV8} from '../world/mogao-rules-v008';
 import {noviceStory} from '../content/world/novice-story';
@@ -17,7 +17,7 @@ import { WorldSubtitle } from './WorldSubtitle';
 import { WorldCultureChoice } from './WorldCultureChoice';
 import { inMusicCourtV4 } from '../world/music-pavilion-rules-v004';
 import { inMusicCourtV2 } from '../world/music-pavilion-rules-v002';
-import { lazy, Suspense, useCallback, useEffect, useLayoutEffect, useReducer, useRef, useState, type KeyboardEvent as ReactKeyboardEvent, type PointerEvent } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useLayoutEffect, useReducer, useRef, useState, type KeyboardEvent as ReactKeyboardEvent, type MouseEvent, type PointerEvent } from 'react';
 import type { SoundPreferences } from '../services/sound-settings';
 import { discoveryReducer, discoveryView, initialDiscoveryState } from '../world/events';
 import { withVisitedDiscovery } from '../world/session';
@@ -68,6 +68,7 @@ interface Props {
   reducedMotion: boolean;
   sound: SoundPreferences;
   gameWorldAvailable: boolean;
+  onDirectGameWorld(event: MouseEvent<HTMLAnchorElement>): boolean;
   onCheckpoint(checkpoint: WorldCheckpoint): void;
   musicGallery?: MusicGalleryExploration;
   unlockedMapGalleries?: MapUnlockedGalleries;
@@ -232,7 +233,12 @@ export default function WorldScreen(props: Props) {
   const persist = useCallback(() => {
     checkpoint.current = currentCheckpoint(); callbacks.current.onCheckpoint(checkpoint.current);
   }, [currentCheckpoint]);
-  const directGameWorld = gameWorldAvailable && <a href="#/themes" onClick={persist}>直接进入游戏世界</a>;
+  const directGameWorld = gameWorldAvailable && <a href="#/themes" onClick={event => {
+    if (!props.onDirectGameWorld(event)) return;
+    persist();
+    leavingToTheme.current = true;
+    runtime.current?.setPaused(true);
+  }}>直接进入游戏世界</a>;
   const openMogaoGames = useCallback(() => {
     const status = flags.current;
     const activeRuntime = runtime.current;
@@ -621,8 +627,7 @@ export default function WorldScreen(props: Props) {
         </nav>}
 
         {snapshot.encounter && snapshot.encounterVoice?.active && !snapshot.encounterVoice.ended && snapshot.encounter.time>=(snapshot.encounter.id==='music'?.35:.1) && <WorldSubtitle text={snapshot.encounter.text} onSkip={()=>runtime.current?.skipEncounter?.()} testId="world-encounter"/>}
-        {snapshot.buddhaVoice?.active&&!snapshot.buddhaVoice.ended&&<WorldSubtitle text={buddhaNarrationFor(exhibitPreview).text} onSkip={()=>runtime.current?.skipBuddhaVoice?.()} testId="buddha-subtitle"/>}
-        {snapshot.buddhaVoice?.active&&!snapshot.buddhaVoice.ended&&['blocked','error'].includes(snapshot.buddhaVoice.status)&&<aside className="world-audio-warning" role="status">讲解暂未播放。<button onClick={()=>runtime.current?.retryBuddhaVoice?.()}>播放讲解</button></aside>}
+        {snapshot.buddhaVoice?.active&&!snapshot.buddhaVoice.ended&&<WorldSubtitle text={buddhaSubtitleAt(exhibitPreview, snapshot.buddhaVoice.currentTime)} onSkip={()=>runtime.current?.skipBuddhaVoice?.()} testId="buddha-subtitle"/>}
         {snapshot.cinematic && <button type="button" className="world-cinematic-skip" data-testid="world-cinematic-skip" onClick={() => runtime.current?.skipCinematic()}>跳过 <kbd>Esc</kbd></button>}
         {!(globalLook||mogaoV10&&inCurrentMogaoRoom(snapshot.checkpoint.position))&&<div className="world-direction">{mogao?(inCurrentMogaoRoom(snapshot.checkpoint.position)?(modernCave?(snapshot.nearby==='novice-story'?'沙弥守戒壁画':snapshot.nearby==='story-demo'?'九色鹿壁画':'大佛殿'):'九色鹿壁画'):'莫高窟'):musicV2?(inCurrentMusicCourt(snapshot.checkpoint.position)?'飞天壁画':snapshot.musicAudio?.playing&&snapshot.musicAudio.gain>.015?'乐声来处':'乐舞馆'):musicPreview?(snapshot.checkpoint.position.x>8?'飞天壁画':'乐舞馆'):'纹彩院'} <span aria-hidden="true">{musicV2?(snapshot.musicAudio?.playing&&snapshot.musicAudio.gain>.015?'♪':''):musicPreview?'↗':'↖'}</span><small>{mogao?(inCurrentMogaoRoom(snapshot.checkpoint.position)?((mogaoVersion==='v003'||mogaoVersion==='v006'||mogaoVersion==='v007'||modernCave)?(modernCave?(mogaoVersion==='v009'?'按 R 抬头仰望，沿两侧观赏壁画':'抬头仰望大佛，沿两侧观赏壁画'):'四面通高壁画，可抬头观赏'):'三面通高壁画，可抬头观赏'):'沿石板曲径，前往崖下窟口'):musicV2?(inCurrentMusicCourt(snapshot.checkpoint.position)?'前庭右侧，走近后点击壁画':'沿石板曲径前行'):musicPreview?(snapshot.checkpoint.position.x>8?'前庭右侧，走近后点击壁画':snapshot.checkpoint.position.x< -2&&snapshot.checkpoint.position.z<3?'从院门返回岔路，沿石板支路前行':'沿石板支路，前往右侧馆舍'):'沿路前行，左转入院'}</small></div>}
         {ready && !locked && !exhibitOccupied && mogaoGameNotice && <aside className="world-preview-resource-notice world-mogao-game-notice" role="status" data-testid="mogao-game-unlocked">

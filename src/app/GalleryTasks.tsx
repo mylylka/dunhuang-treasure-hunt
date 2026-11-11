@@ -65,7 +65,7 @@ function CurrentGalleryTasks({ gallery, musicProgress, muralProgress, exhibitPro
   if (gallery === 'music') return <TaskGroups groups={musicGalleryTasks(musicProgress ?? loadMusicGalleryProgress())} discloseItems />;
   if (gallery === 'mogao') return <TaskGroups groups={mogaoGalleryTasks(
     muralProgress ?? loadMogaoHallAProgress().data, exhibitProgress ?? loadMogaoExhibitProgress().data,
-  )} />;
+  )} discloseItems />;
   return <p className="world-task-outside">走进展馆后，这里会显示该馆的任务进度。</p>;
 }
 

@@ -47,6 +47,7 @@ import {explorationLookTarget,MIN_EXPLORATION_LOOK,MAX_EXPLORATION_LOOK} from '.
 import { cameraZoomOffset, zoomFollowPose } from './follow-camera-zoom';
 import { pickDiscoveryAt } from './discovery-picking';
 import { buddhaNarrationFor } from '../content/world/buddha-narration';
+import { createRecordedNarration } from './recorded-narration';
 import { BUDDHA_HEAD, buddhaDominatesView, centeredBuddhaHead, createBuddhaGaze } from './buddha-gaze';
 import {createHallArrival} from './hall-arrival';
 import {mogaoCameraSpace as mogaoCameraSpaceV8,mogaoFollowPose as mogaoFollowPoseV8} from './mogao-camera-v008';
@@ -294,9 +295,9 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   // The open terrain sees centimetre-separated facade trim from 100–250 m.
   // A conventional .1–1400 m depth buffer cannot resolve those surfaces.
   const coarsePointer = window.matchMedia('(pointer: coarse)').matches;
-  const mobileTerrain = terrain && coarsePointer;
-  const renderer = new THREE.WebGLRenderer({ antialias: !mobileTerrain, alpha: false, powerPreference: 'high-performance', logarithmicDepthBuffer: terrain });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, mobileTerrain ? 1.15 : coarsePointer ? 1.5 : 2));
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: 'high-performance', logarithmicDepthBuffer: terrain });
+  // Keep a mobile pixel cap without dropping coverage on subpixel silhouettes.
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, coarsePointer ? 1.5 : 2));
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFShadowMap;
   renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -496,8 +497,12 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
 
   const buddhaGaze=mogaoV10&&(!upper||options.mogaoExhibit)?createBuddhaGaze():null;
   let buddhaSightTime=0,buddhaSightClear=false;
-  const buddhaVoice=buddhaGaze&&previewResources?.mode!=='music'&&previewResources?.mode!=='courtyard'
-    ?createFlyingVoice(()=>new Audio(worldAssetUrl(buddhaNarrationFor(!!options.mogaoExhibit).audioPath)),options.sound??defaultSoundPreferences()):null;
+  const { audioPath: buddhaAudioPath, duration: buddhaDuration, text: buddhaText } = buddhaNarrationFor(!!options.mogaoExhibit);
+  const buddhaVoice = buddhaGaze && previewResources?.mode !== 'music' && previewResources?.mode !== 'courtyard'
+    ? createRecordedNarration<'buddha', 'intro'>(options.sound ?? defaultSoundPreferences(), {
+      intro: { path: buddhaAudioPath, duration: buddhaDuration, text: buddhaText },
+    }) : null;
+  const unregisterBuddhaSkip = buddhaVoice ? registerSpeechSkip(() => buddhaVoice.skip('buddha')) : undefined;
 
   const unregisterEncounterSkip=registerSpeechSkip(()=>{
     if(!encounters?.state||paused||view!=='follow')return false;
@@ -646,7 +651,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     return { currentGallery: connected ? connectedGalleryAt(checkpoint) : undefined,
       galleryGate: connected ? discovery?.gate ?? undefined : undefined,
       gallery: gallerySnapshot, previewEntry: previewEntry ?? (inMusicGallery() && world.musicDetailsFailed?.() ? 'failed' : undefined), companion:companion?{...companion.state,speech:companionSpeech!.inspect()}:undefined, musicGuide, stairAssist:stairOptions?{up:stairOptions.up.available,down:stairOptions.down.available,active:musicStairAssist?.destination.label??stairAssist?.destination.label??null}:undefined, upper:upperSurface?{surface:upperSurface.id,label:upperSurface.label,height:heightAt(p)-16.85546875}:undefined, checkpoint: { ...checkpoint, position: { ...p }, visitedEvents: [...checkpoint.visitedEvents] }, nearby: overview?null:nearestDiscovery(), location, moving, overview, observationTime, caveLook:lookIntent, mogaoGamePortalNearby: !!mogaoGamePortal && nearMogaoGamePortal(checkpoint),
-      musicGamePortalNearby: !!musicGamePortal && nearMusicGamePortal(checkpoint), buddhaVoice:buddhaVoice?.inspect(), hallArrival:hallArrivalPhase, mogaoHallArrival:exhibitArrival ? { hall: exhibitArrival.hall, phase: exhibitArrival.phase } : undefined, encounter:encounters?.state, encounterVoice:currentEncounterVoice()?.inspect(), cinematic: director?.state ?? null, flying: world.music?.inspect(), musicAudio: audio?.inspect(), flyingVoice: voice?.inspect(), flyingHistory: history?.snapshot() };
+      musicGamePortalNearby: !!musicGamePortal && nearMusicGamePortal(checkpoint), buddhaVoice:buddhaVoice?.inspect() ?? undefined, hallArrival:hallArrivalPhase, mogaoHallArrival:exhibitArrival ? { hall: exhibitArrival.hall, phase: exhibitArrival.phase } : undefined, encounter:encounters?.state, encounterVoice:currentEncounterVoice()?.inspect(), cinematic: director?.state ?? null, flying: world.music?.inspect(), musicAudio: audio?.inspect(), flyingVoice: voice?.inspect(), flyingHistory: history?.snapshot() };
   }
   function emit() { options.onSnapshot(snapshot()); }
   function releaseExhibitArrival() {
@@ -1093,7 +1098,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     const flying = world.music?.inspect();
     history?.update(dt, reduced, !!flying?.complete, poseSettled);
     voice?.update(view==='flying'&&(musicV5?!!flying?.complete:(flying?.time??0)>=flyingDialogue.startAt));
-    audio?.setDucked(!!guideVisit?.speechLine||!!companion?.state.dialogue||!!history?.speaking||!!voice?.inspect().playing||!!currentEncounterVoice()?.inspect().playing||!!buddhaVoice?.inspect().playing||!!galleryNarration?.inspect()?.playing);
+    audio?.setDucked(!!guideVisit?.speechLine||!!companion?.state.dialogue||!!history?.speaking||!!voice?.inspect().playing||!!currentEncounterVoice()?.inspect().playing||!!buddhaVoice?.inspect()?.playing||!!galleryNarration?.inspect()?.playing);
     if(flying?.awakened && !checkpoint.visitedEvents.includes('flying')) checkpoint.visitedEvents.push('flying');
     if (portalPrelude) {
       const previousTime = portalPrelude.time;
@@ -1291,9 +1296,13 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
         buddhaSightClear=!!world.buddhaVisibleAtCenter?.(camera, options.mogaoExhibit ? buddhaHeadProjection : undefined);
         buddhaSightTime=.2;
       }
-      if(buddhaGaze.update(inside,eligible&&buddhaSightClear,dt)){buddhaVoice.enter();buddhaVoice.update(true);}
-      if((!inside||!observationFloor)&&buddhaVoice.inspect().active)buddhaVoice.exit();
-      audio?.setDucked(!!guideVisit?.speechLine||!!companion?.state.dialogue||!!voice?.inspect().playing||!!currentEncounterVoice()?.inspect().playing||buddhaVoice.inspect().playing||!!galleryNarration?.inspect()?.playing);
+      if (buddhaGaze.update(inside, eligible && buddhaSightClear, dt)) {
+        buddhaVoice.play('buddha', 'intro', () => {});
+        emit();
+      }
+      if (!inside || !observationFloor) buddhaVoice.cancel();
+      else buddhaVoice.update(frameSeconds);
+      audio?.setDucked(!!guideVisit?.speechLine||!!companion?.state.dialogue||!!voice?.inspect().playing||!!currentEncounterVoice()?.inspect().playing||buddhaVoice.inspect()?.playing||!!galleryNarration?.inspect()?.playing);
     }
     poseSettled = camera.position.distanceToSquared(desiredPose.position) < .00002 && cameraTarget.distanceToSquared(desiredPose.target) < .00002;
     render(true);
@@ -1343,7 +1352,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     syncFlyingPlayback();
     buddhaVoice?.setBlocked(document.hidden||paused||view!=='follow');
     blockEncounterVoices(document.hidden||paused||view!=='follow');
-    input.clear(); travelCamera?.reset(); voice?.setBlocked(document.hidden||paused||view!=='flying'); audio?.setDucked(!!guideVisit?.speechLine||!!companion?.state.dialogue||!!voice?.inspect().playing||!!currentEncounterVoice()?.inspect().playing||!!buddhaVoice?.inspect().playing); audio?.setBlocked(document.hidden||paused||view==='story'); moving = false; previousTime = 0;
+    input.clear(); travelCamera?.reset(); voice?.setBlocked(document.hidden||paused||view!=='flying'); audio?.setDucked(!!guideVisit?.speechLine||!!companion?.state.dialogue||!!voice?.inspect().playing||!!currentEncounterVoice()?.inspect().playing||!!buddhaVoice?.inspect()?.playing); audio?.setBlocked(document.hidden||paused||view==='story'); moving = false; previousTime = 0;
     if (document.hidden) { skipCinematic(); stop(); emit(); } else schedule();
   }
   function contextLost(event: Event) { event.preventDefault(); fail('浏览器暂停了3D画面。请重新加载。'); }
@@ -1614,9 +1623,8 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
       else restoreFollow();
       world.updateCameraVisibility(cameraTarget,camera.position,0,true);render();emit();schedule();
     },
-    setSound:preferences=>{galleryNarration?.setPreferences(preferences);history?.setSound(preferences);companionSpeech?.setPreferences(preferences);buddhaVoice?.setPreferences(preferences);encounterVoices?.music.setPreferences(preferences);encounterVoices?.mural.setPreferences(preferences);voice?.setPreferences(preferences);audio?.setPreferences(preferences);audio?.setDucked(!!guideVisit?.speechLine||!!companion?.state.dialogue||!!history?.speaking||!!voice?.inspect().playing||!!currentEncounterVoice()?.inspect().playing||!!buddhaVoice?.inspect().playing||!!galleryNarration?.inspect()?.playing);},
+    setSound:preferences=>{galleryNarration?.setPreferences(preferences);history?.setSound(preferences);companionSpeech?.setPreferences(preferences);buddhaVoice?.setPreferences(preferences);encounterVoices?.music.setPreferences(preferences);encounterVoices?.mural.setPreferences(preferences);voice?.setPreferences(preferences);audio?.setPreferences(preferences);audio?.setDucked(!!guideVisit?.speechLine||!!companion?.state.dialogue||!!history?.speaking||!!voice?.inspect().playing||!!currentEncounterVoice()?.inspect().playing||!!buddhaVoice?.inspect()?.playing||!!galleryNarration?.inspect()?.playing);},
     skipBuddhaVoice:()=>{buddhaVoice?.skip();emit();},
-    retryBuddhaVoice:()=>{buddhaVoice?.retry();emit();},
     skipVoice:()=>{voice?.skip();emit();},
     setFlyingHistoryCaptionPresented(phase, chapter, presented) { history?.setCaptionPresented(phase, chapter, presented); },
     controlFlyingHistory(action) {
@@ -1656,7 +1664,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
       } else if (portalPrelude && portalPrelude.time >= GALLERY_PORTAL_PRELUDE.turn) {
         galleryGaze?.start(portalLookTarget);
       }
-      paused = value; buddhaVoice?.setBlocked(paused||document.hidden||view!=='follow'); blockEncounterVoices(paused||document.hidden||view!=='follow'); travelCamera?.reset(); voice?.setBlocked(paused||document.hidden||view!=='flying'); audio?.setDucked(!!guideVisit?.speechLine||!!companion?.state.dialogue||!!voice?.inspect().playing||!!currentEncounterVoice()?.inspect().playing||!!buddhaVoice?.inspect().playing); audio?.setBlocked(paused||document.hidden||view==='story'); input.setEnabled(loaded && !paused && !galleryBlocked && !overview && !exhibitArrival && view === 'follow' && !encounters?.state && hallArrival?.phase!=='waiting'); moving = false; previousTime = 0;
+      paused = value; buddhaVoice?.setBlocked(paused||document.hidden||view!=='follow'); blockEncounterVoices(paused||document.hidden||view!=='follow'); travelCamera?.reset(); voice?.setBlocked(paused||document.hidden||view!=='flying'); audio?.setDucked(!!guideVisit?.speechLine||!!companion?.state.dialogue||!!voice?.inspect().playing||!!currentEncounterVoice()?.inspect().playing||!!buddhaVoice?.inspect()?.playing); audio?.setBlocked(paused||document.hidden||view==='story'); input.setEnabled(loaded && !paused && !galleryBlocked && !overview && !exhibitArrival && view === 'follow' && !encounters?.state && hallArrival?.phase!=='waiting'); moving = false; previousTime = 0;
       galleryNarration?.setBlocked(paused || document.hidden || galleryWindowBlurred || view !== 'follow' || overview);
       syncFlyingPlayback();
       if (paused) stop(); else schedule(); emit();
@@ -1677,7 +1685,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
       cancelGalleryCue();
       cancelStairAssists();
       stopCompanion();
-      buddhaVoice?.exit();
+      buddhaVoice?.cancel();
       if(encounters?.state)skipEncounter();
       skipCinematic(); if (next === 'caisson') director?.skipHall();
       const exitingFlying = view === 'flying';
@@ -1747,7 +1755,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
       else companion?.reset();
       lookIntent=0;lookPitch=0;zoomOffset=0;
       previewEntry = undefined; previewAttempt = undefined;
-      buddhaVoice?.exit();buddhaGaze?.update(false,false,0);
+      buddhaVoice?.cancel();buddhaGaze?.update(false,false,0);
       currentEncounterVoice()?.exit();encounters?.reset();terrainMusicArmed=false;audio?.setEnabled(!terrain&&!encounters);
       skipCinematic();
       history?.leave(); world.music?.exit(); voice?.exit(); audio?.setDucked(false); travelCamera?.reset();
@@ -1768,7 +1776,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
       if (portalPrelude) soundPlayer.stop();
       stopGuideShowcase();
       galleryNarration?.cancel();
-      disposed = true; unsubscribeGallery(); galleryGaze?.dispose(); galleryDisplay?.dispose(); companionSpeech?.dispose(); disposeCompanionMarker(); buddhaVoice?.dispose(); unregisterEncounterSkip();encounterVoices?.music.dispose();encounterVoices?.mural.dispose();voice?.dispose(); audio?.dispose(); stop(); input.dispose(); resizeObserver.disconnect();
+      disposed = true; unsubscribeGallery(); galleryGaze?.dispose(); galleryDisplay?.dispose(); companionSpeech?.dispose(); disposeCompanionMarker(); buddhaVoice?.cancel(); unregisterBuddhaSkip?.(); unregisterEncounterSkip();encounterVoices?.music.dispose();encounterVoices?.mural.dispose();voice?.dispose(); audio?.dispose(); stop(); input.dispose(); resizeObserver.disconnect();
       window.removeEventListener('blur', blur);
       if (gallery) window.removeEventListener('focus', focusGallery);
       if (guideVisit) window.removeEventListener('focus', syncFlyingPlayback);

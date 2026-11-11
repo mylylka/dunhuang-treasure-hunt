@@ -5,6 +5,7 @@ import { createHiddenObjectRound } from '../../src/games/hidden-object/rules';
 import type { HiddenObjectPool } from '../../src/games/hidden-object/types';
 import { getHiddenObjectRuntimeImagePath } from '../../src/content/hidden-object/runtime-images';
 import { compactMobileLandscapeViewport, compactPlayableViewport, isMobileProject, mobileLandscapeViewport, mobilePortraitViewport } from './supported-viewports';
+import { MUSIC_INSTRUMENTS } from '../../src/content/world/music-instruments-v001';
 
 const level = JSON.parse(readFileSync('src/content/levels/music-hidden-objects-intro.json', 'utf8')) as HiddenObjectLevel;
 const formalHiddenLevels = readdirSync('src/content/levels').filter(name => name.endsWith('.json'))
@@ -51,6 +52,7 @@ interface HiddenLayout {
   renderScale: { x: number; y: number };
   scrollTop: number;
   scrollMax: number;
+  revealedIds: string[];
   items: LayoutItem[];
 }
 
@@ -475,15 +477,27 @@ test('开始按钮事件后立即失焦，延迟执行的开始命令不得在�
   await noCompletion(page);
 });
 
-test('配置时限耗尽停止寻找且不保存完成，重试恢复完整时限', async ({ page }) => {
+test('配置时限耗尽停止寻找且不保存完成，重试恢复完整时限', async ({ page }, testInfo) => {
+  const chapters = JSON.parse(readFileSync('src/content/world/flying-history-art-v001.json', 'utf8')) as unknown[];
+  const keys = [...chapters.map((_, index) => `chapter:${index + 1}`), ...MUSIC_INSTRUMENTS.map(({ id }) => `instrument:${id}`), 'outfit'];
+  await page.addInitScript(keys => { for (const key of keys) localStorage.setItem(`dunhuang:music-gallery:progress:v1:${key}`, 'yes'); }, keys);
   await freezeReadyClock(page);
   await start(page);
+  await findOne(page, isMobileProject(testInfo), 1);
   await page.clock.fastForward(level.timeLimitSeconds * 1000 + 100);
   await expect(screen(page)).toHaveAttribute('data-hidden-status', 'timeout');
   await expect(timer(page)).toContainText('0:00');
   await expect(page.getByRole('heading', { name: '时间到了', exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: '提示', exact: true })).toBeDisabled();
-  await expect(host(page).locator('canvas')).not.toBeVisible();
+  await expect(host(page).locator('canvas')).toBeVisible();
+  const timedOut = await layout(page);
+  expect(timedOut.revealedIds.sort()).toEqual(timedOut.items.filter(item => item.groupId && !item.found).map(item => item.id).sort());
+  expect(timedOut.revealedIds.length).toBeGreaterThan(0);
+  expect(timedOut.items.filter(item => item.found)).toHaveLength(1);
+  await page.screenshot({ path: `work/qa/screenshots/hidden-timeout-${testInfo.project.name}.png` });
+  await scrollbar(page).evaluate(element => { element.scrollTop = element.scrollHeight; element.dispatchEvent(new Event('scroll')); });
+  await page.clock.runFor(50);
+  await expect.poll(async () => (await layout(page)).scrollTop).toBeGreaterThan(0);
   await noCompletion(page);
   const seed = (await layout(page)).seed;
   await page.getByRole('button', { name: '重试本局', exact: true }).click();

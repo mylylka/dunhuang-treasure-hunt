@@ -13,6 +13,7 @@ interface RecordedPassage {
 export interface MogaoMuralNarration extends StoryNarration {
   text: string;
   cues: StoryCue[];
+  paragraphs?: readonly StoryCue[];
 }
 
 const stories = new Map(Object.entries(recording).map(([id, passages]) => [
@@ -29,6 +30,21 @@ stories.get('bandits')?.set('defeat', {
   cues: [{ start: 0, end: defeatDuration, text: defeatText }],
 });
 
+const restoredSight = stories.get('bandits')?.get('restored-sight');
+if (restoredSight) {
+  const [first, second] = restoredSight.text.split('\n');
+  // The 27.48 s SRT boundary falls in the pause. The next phrase starts at 27.75 s.
+  const secondStart = 27.75;
+  restoredSight.paragraphs = [
+    { start: 0, end: secondStart, text: first },
+    { start: secondStart, end: restoredSight.duration, text: second },
+  ];
+}
+
 export function getMogaoMuralNarration(story: string, part: string): MogaoMuralNarration | undefined {
   return stories.get(story)?.get(part);
+}
+
+export function mogaoMuralSubtitleAt(recording: MogaoMuralNarration, time: number) {
+  return recording.paragraphs?.find(cue => time < cue.end)?.text ?? recording.paragraphs?.at(-1)?.text ?? recording.text;
 }

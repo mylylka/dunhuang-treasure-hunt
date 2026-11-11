@@ -196,6 +196,18 @@ export function createHiddenObjectScene(Phaser: PhaserModule, options: Options) 
       this.frame.setDepth(-1);
       const old = this.children.getByName('hint-outline');
       old?.destroy();
+      this.children.getByName('timeout-outlines')?.destroy();
+      const revealedIds: string[] = [];
+      if (this.state.status === 'timeout') {
+        const circles = this.add.graphics().setName('timeout-outlines').setDepth(3).lineStyle(3, 0xb13f2b, 1);
+        for (const item of published) {
+          if (!item.found && item.groupId && this.state.tasks.some(task => task.id === item.groupId && task.previewSpriteId === item.spriteId)) {
+            revealedIds.push(item.id);
+            const rect = item.displayRect;
+            circles.strokeEllipse(rect.x + rect.width / 2, rect.y + rect.height / 2, rect.width + 14, rect.height + 14);
+          }
+        }
+      }
       if (highlighted) {
         const rect = highlighted.displayRect;
         this.add.graphics().setName('hint-outline').setDepth(3).lineStyle(3, 0xb13f2b, 1)
@@ -203,7 +215,7 @@ export function createHiddenObjectScene(Phaser: PhaserModule, options: Options) 
       }
       options.publishLayout({ type: 'hidden-object', seed: this.state.round.seed, status: this.state.status, width: this.viewport.width, height: this.viewport.height, renderScale: this.pixelScale(), board: options.level.board, zoom: this.zoom, scale: t.scale, origin: { x: t.x, y: t.y }, scrollTop: this.scrollTop, scrollMax: t.scrollMax,
         ...(this.background ? { background: { assetId: options.level.chapter?.backgroundAssetId,
-          bounds: { x: t.x, y: t.y, width: options.level.board.width * t.scale, height: options.level.board.height * t.scale } } } : {}), items: published });
+          bounds: { x: t.x, y: t.y, width: options.level.board.width * t.scale, height: options.level.board.height * t.scale } } } : {}), items: published, revealedIds });
     }
     private publish() {
       const snapshot: HiddenObjectSnapshot = {
@@ -257,7 +269,7 @@ export function createHiddenObjectScene(Phaser: PhaserModule, options: Options) 
         const centerY = (this.scrollTop + this.viewport.height / 2) / before.scale;
         this.zoom = command.zoom; if (this.zoom === 1) this.pan = { x: 0 };
         this.scrollTop = centerY * this.transform().scale - this.viewport.height / 2;
-      } else if (command.type === 'hidden-scroll' && this.state.status === 'running') {
+      } else if (command.type === 'hidden-scroll' && (this.state.status === 'running' || this.state.status === 'timeout')) {
         this.scrollTop = Number.isFinite(command.offset) ? command.offset : this.scrollTop;
       } else if (command.type === 'hint' && this.state.status === 'running') {
         const item = getHintItem(this.state, this.selectedTaskId) ?? getHintItem(this.state);
@@ -286,13 +298,13 @@ export function createHiddenObjectScene(Phaser: PhaserModule, options: Options) 
       } catch { this.fail('本局暂时无法布置，请重新加载后再试。'); }
     }
     private pointerDown(pointer: PhaserTypes.Input.Pointer) {
-      if (!this.initialized || this.blocked || this.state.status !== 'running' || this.gesture) return;
+      if (!this.initialized || this.blocked || !['running', 'timeout'].includes(this.state.status) || this.gesture) return;
       const position = this.pointerPosition(pointer);
       this.gesture = { id: pointer.id, x: position.x, y: position.y, panX: this.pan.x, scrollTop: this.scrollTop, moved: false };
     }
     private pointerMove(pointer: PhaserTypes.Input.Pointer) {
       const gesture = this.gesture;
-      if (this.blocked || !gesture || gesture.id !== pointer.id || !pointer.isDown || this.state.status !== 'running') return;
+      if (this.blocked || !gesture || gesture.id !== pointer.id || !pointer.isDown || !['running', 'timeout'].includes(this.state.status)) return;
       const position = this.pointerPosition(pointer);
       if (Math.hypot(position.x - gesture.x, position.y - gesture.y) > 7) gesture.moved = true;
       if (gesture.moved) {
@@ -304,7 +316,7 @@ export function createHiddenObjectScene(Phaser: PhaserModule, options: Options) 
     private pointerWheel(_pointer: PhaserTypes.Input.Pointer, _objects: unknown, deltaX: number, deltaY: number) {
       if (!this.initialized || this.disposed || this.blocked) return;
       this.advance();
-      if (this.state.status !== 'running') return;
+      if (this.state.status !== 'running' && this.state.status !== 'timeout') return;
       if (this.gesture) this.gesture.moved = true;
       this.scrollTop += deltaY;
       if (this.zoom > 1) this.pan.x -= deltaX;

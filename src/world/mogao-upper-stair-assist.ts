@@ -52,6 +52,7 @@ const stopAt = (index: number, label: string): StairStop => {
 };
 const stops = [stopAt(0, '一层楼梯入口'), stopAt(firstA, '壁画洞窟 A'), stopAt(firstB, '壁画洞窟 B')];
 const hallDoorStops = [stopAt(firstA - 1, '二层绘世厅门口'), stopAt(firstB - 1, '三层佛法厅门口')];
+const exhibitDescentStops = [stopAt(lastA + 1, '二层楼梯平台'), stops[0]];
 const links = nodes.map(node => node.links);
 // Continue across the landing between flights without detouring into Hall A.
 const landingAFromBelow = hallDoorStops[0].node;
@@ -89,7 +90,7 @@ function destination(current: UpperWalkState, direction: UpperStairDirection, st
   if (!p) return null;
   const height = (stopAtHallDoors ? exhibitUpperNavigation : upperNavigation).floorHeight(p, current.surfaceId)!;
   return direction === 'up' ? (stopAtHallDoors ? hallDoorStops : stops).find(s => s.height > height + .001) ?? null
-    : [...stops].reverse().find(s => s.height < height - .001) ?? null;
+    : (stopAtHallDoors ? exhibitDescentStops : [...stops].reverse()).find(s => s.height < height - .001) ?? null;
 }
 export function getUpperStairOptions(current: UpperWalkState, stopAtHallDoors = false): Record<UpperStairDirection, UpperStairOption> {
   const option = (direction: UpperStairDirection): UpperStairOption => {
@@ -118,7 +119,7 @@ function distancesTo(end: number, routeLinks: readonly (readonly number[])[]) {
 export function startUpperStairAssist(current: UpperWalkState, direction: UpperStairDirection, stopAtHallDoors = false): UpperStairAssistState | null {
   const p = localStart(current, stopAtHallDoors), stop = destination(current, direction, stopAtHallDoors);
   if (!p || !stop) return null;
-  const routeLinks = stopAtHallDoors && direction === 'up' ? hallDoorLinks : links;
+  const routeLinks = stopAtHallDoors ? hallDoorLinks : links;
   const navigation = stopAtHallDoors ? exhibitUpperNavigation : upperNavigation;
   const floor = navigation.floorHeight(p, current.surfaceId)!, routes = distancesTo(stop.node, routeLinks);
   const candidates: { point: WorldPoint; start: number; distance: number }[] = [];

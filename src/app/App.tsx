@@ -19,7 +19,7 @@ import { MUSIC_SESSION_OPTIONS_V4 } from '../world/music-pavilion-rules-v004';
 import { FLYING_VOICE_SESSION_KEY } from '../content/world/flying-dialogue';
 import { MUSIC_SESSION_OPTIONS_V2 } from '../world/music-pavilion-rules-v002';
 import { MUSIC_SESSION_OPTIONS_V3 } from '../world/music-pavilion-rules-v003';
-import { lazy, Suspense, useCallback, useEffect, useRef, useState, type CSSProperties, type ReactNode } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useRef, useState, type CSSProperties, type MouseEvent, type ReactNode } from 'react';
 import { loadWorldSession, saveWorldSession } from '../world/session';
 import { MUSIC_PLAYER_COLLIDERS, MUSIC_SESSION_KEY } from '../world/music-pavilion-rules';
 import type { WorldCheckpoint } from '../world/types';
@@ -33,6 +33,8 @@ import { LevelSelectScreen } from './LevelSelectScreen';
 import { gameNames, gamesPath, goTo, levelsPath, playPath, readRoute, routeKey as getRouteKey, type Route } from './navigation';
 import { ColoringScreen } from './ColoringScreen';
 import { PuzzleScreen } from './PuzzleScreen';
+import { GalleryPuzzleScreen } from './GalleryPuzzleScreen';
+import { GalleryPuzzleResult } from './GalleryPuzzleResult';
 import { HiddenObjectScreen } from './HiddenObjectScreen';
 import { ShadowMatchScreen } from './ShadowMatchScreen';
 import { MobileLandscapeGuard } from './MobileLandscapeGuard';
@@ -327,6 +329,16 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
   if (receivedMogaoFoliosThisVisit.current && !unlocked.includes('stories')) unlocked.push('stories');
   const availableThemes = catalog.themes.filter(theme => unlocked.includes(theme.id));
   const gameWorldAvailable = availableThemes.length > 0 && !easelEntry.current;
+  const openGameWorld = useCallback((event: MouseEvent<HTMLAnchorElement>) => {
+    if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return false;
+    event.preventDefault();
+    try { window.history.pushState(null, '', '#/themes'); }
+    catch { goTo('/themes'); }
+    // The game menu is already loaded. Commit it from the click rather than
+    // waiting for the hash event while the 3D world is still preparing.
+    setRoute({ page: 'themes' });
+    return true;
+  }, []);
 
   function enterGalleryCompatibility() {
     setGalleryCompatibility(true);
@@ -386,6 +398,9 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
       onBack={() => goTo(levelsPath(theme.id, 'hidden-object'))} />;
     if (level.gameType === 'puzzle') {
       const fromMogao = theme.id === 'stories' && enteredFromWorld.current;
+      if (level.mode === 'gallery-order') return <GalleryPuzzleScreen key={level.id} level={level} catalog={catalog}
+        onEvent={onGameEvent} backLabel={fromMogao ? '返回第三馆一楼' : undefined}
+        onBack={() => goTo(fromMogao ? '/' : levelsPath(theme.id, 'puzzle'))} />;
       return <PuzzleScreen key={level.id} level={level} catalog={catalog}
         reducedMotion={progress.settings.reducedMotion} onEvent={onGameEvent}
         backLabel={fromMogao ? '返回第三馆一楼' : undefined}
@@ -458,7 +473,13 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
     </div>;
     if (isPuzzle && !progress.completed[level.id]) return <div className="page narrow-page empty-state"><h1>先完成拼图，再查看全图</h1><a className="button button-primary" href={`#${playPath(level.id)}`}>前往拼图</a></div>;
     if (!progress.completed[level.id]) return <div className="page narrow-page empty-state"><h1>{isColoring ? '先完成活动，再回看作品' : '先完成活动，再回看发现'}</h1><a className="button button-primary" href={`#${playPath(level.id)}`}>{isColoring ? '前往填色' : '前往观察'}</a></div>;
-    if (level.gameType === 'hidden-object') return <div className="page page-result">
+    if (level.gameType === 'puzzle' && level.mode === 'gallery-order') {
+      const fromMogao = theme.id === 'stories' && enteredFromWorld.current;
+      return <GalleryPuzzleResult level={level} catalog={catalog} nextLevel={nextLevel}
+        backHref={fromMogao ? '#/' : `#${levelsPath(theme.id, 'puzzle')}`}
+        backLabel={fromMogao ? '返回第三馆一楼' : '返回关卡'} onReplay={() => replay(level.id)} saveNotice={renderSaveNotice()} />;
+    }
+    if (level.gameType === 'hidden-object') return <div className="page page-result hidden-object-result-screen">
       <Breadcrumb catalog={catalog} items={[{ label: '找物关卡', href: `#${levelsPath(theme.id, 'hidden-object')}` }]} />
       <header className="result-heading"><h1>寻宝完成</h1></header>{renderSaveNotice()}
       <section className="result-review"><div className="result-image"><Asset catalog={catalog} id={level.thumbnailAssetId} alt="乐舞主题教学示意" eager /></div>
@@ -515,9 +536,10 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
     route.id === FIRST_GALLERY_EASEL_LEVEL && !!easelEntry.current;
   const unlockedMapGalleries = !connectedGalleries ? undefined :
     gallery && isFirstGalleryUnlocked(gallery.data) ? (musicGallery.unlocked ? 3 : 2) : 1;
-  const renderWorld = (suspended: boolean) => <WorldBoundary gameWorldAvailable={gameWorldAvailable} onFallback={firstGallery ? enterGalleryCompatibility : undefined}><Suspense fallback={<div className="page empty-state"><h1>正在准备探索世界…</h1>{gameWorldAvailable && <a className={previewHome ? 'button button-plain' : 'button button-secondary'} href="#/themes">直接进入游戏世界</a>}</div>}><WorldScreen
+  const renderWorld = (suspended: boolean) => <WorldBoundary gameWorldAvailable={gameWorldAvailable} onDirectGameWorld={openGameWorld} onFallback={firstGallery ? enterGalleryCompatibility : undefined}><Suspense fallback={<div className="page empty-state"><h1>正在准备探索世界…</h1>{gameWorldAvailable && <a className={previewHome ? 'button button-plain' : 'button button-secondary'} href="#/themes" onClick={openGameWorld}>直接进入游戏世界</a>}</div>}><WorldScreen
     key={worldRevision} initial={worldCheckpoint.current} saveWarning={worldWarning} reducedMotion={progress.settings.reducedMotion} sound={sound.preferences}
     gameWorldAvailable={gameWorldAvailable}
+    onDirectGameWorld={openGameWorld}
     musicGallery={musicGalleryEnabled ? musicGallery : undefined}
     unlockedMapGalleries={unlockedMapGalleries}
     onEnterMusicGames={!musicGalleryEnabled ? undefined : at => {

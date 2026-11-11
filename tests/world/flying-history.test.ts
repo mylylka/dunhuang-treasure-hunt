@@ -128,6 +128,21 @@ describe('flying mural history', () => {
     history.dispose();
   });
 
+  it('holds the current narration when looking at a mural detail', async () => {
+    const { history, start, tick, waitFor } = fixture();
+    start();
+    await waitFor('chapter');
+    tick(1);
+    history.control({ type: 'set-detail', open: true });
+    history.control({ type: 'skip' });
+    tick(5);
+    expect(history.snapshot()).toMatchObject({ chapter: 0, detailOpen: true, canSkip: false, audioTime: 1 });
+    history.control({ type: 'set-detail', open: false });
+    tick(1);
+    expect(history.snapshot()).toMatchObject({ chapter: 0, detailOpen: false, audioTime: 2 });
+    history.dispose();
+  });
+
   it('advances on the caption clock when audio is unavailable, with a full second to view the wall', async () => {
     const { history, tick, waitFor, start } = fixture();
     start();

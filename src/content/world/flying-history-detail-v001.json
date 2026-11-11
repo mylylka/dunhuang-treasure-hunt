@@ -1,0 +1,104 @@
+[
+  [
+    {
+      "path": "flying-history/v001/detail/01-01-275.webp",
+      "caption": "莫高窟第275窟 · 北凉",
+      "width": 628,
+      "height": 459
+    }
+  ],
+  [
+    {
+      "path": "flying-history/v001/detail/02-01-249.webp",
+      "caption": "莫高窟第249窟 · 西魏",
+      "width": 900,
+      "height": 1238
+    }
+  ],
+  [
+    {
+      "path": "flying-history/v001/detail/03-01-428.webp",
+      "caption": "莫高窟第428窟 · 北周",
+      "width": 380,
+      "height": 269
+    }
+  ],
+  [
+    {
+      "path": "flying-history/v001/detail/04-01-206.webp",
+      "caption": "莫高窟第206窟 · 隋代",
+      "width": 600,
+      "height": 868
+    }
+  ],
+  [
+    {
+      "path": "flying-history/v001/detail/05-01-321.webp",
+      "caption": "莫高窟第321窟 · 初唐",
+      "width": 1080,
+      "height": 1595
+    },
+    {
+      "path": "flying-history/v001/detail/05-02-320.webp",
+      "caption": "莫高窟第320窟 · 盛唐",
+      "width": 1600,
+      "height": 784
+    },
+    {
+      "path": "flying-history/v001/detail/05-03-172.webp",
+      "caption": "莫高窟第172窟 · 盛唐",
+      "width": 1206,
+      "height": 1502
+    }
+  ],
+  [
+    {
+      "path": "flying-history/v001/detail/06-01-158.webp",
+      "caption": "莫高窟第158窟 · 中唐",
+      "width": 2170,
+      "height": 1418
+    }
+  ],
+  [
+    {
+      "path": "flying-history/v001/detail/07-01-61.webp",
+      "caption": "莫高窟第61窟 · 五代",
+      "width": 1206,
+      "height": 1502
+    },
+    {
+      "path": "flying-history/v001/detail/07-02-76.webp",
+      "caption": "莫高窟第76窟 · 宋代",
+      "width": 2000,
+      "height": 1351
+    }
+  ],
+  [
+    {
+      "path": "flying-history/v001/detail/08-01-327.webp",
+      "caption": "莫高窟第327窟 · 西夏",
+      "width": 2000,
+      "height": 1358
+    },
+    {
+      "path": "flying-history/v001/detail/08-02-97.webp",
+      "caption": "莫高窟第97窟 · 回鹘重绘",
+      "width": 1500,
+      "height": 2206
+    }
+  ],
+  [
+    {
+      "path": "flying-history/v001/detail/09-01-3.webp",
+      "caption": "莫高窟第3窟 · 元代",
+      "width": 1080,
+      "height": 640
+    },
+    {
+      "path": "flying-history/v001/detail/09-02-3.webp",
+      "caption": "莫高窟第3窟 · 元代",
+      "width": 1080,
+      "height": 562
+    }
+  ]
+]

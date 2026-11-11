@@ -16,6 +16,8 @@ SOURCE = ROOT / 'art-source/world/flying-history/v001/art'
 RUNTIME = ROOT / 'public/assets/world/flying-history/v001/art'
 EVIDENCE = ROOT / 'work/world/flying-history-v001/art'
 METADATA = ROOT / 'src/content/world/flying-history-art-v001.json'
+DETAIL = ROOT / 'public/assets/world/flying-history/v001/detail'
+DETAIL_METADATA = ROOT / 'src/content/world/flying-history-detail-v001.json'
 FONT = ROOT / 'art-source/shared/fonts/v001/lxgw-wenkai-source.ttf'
 SIZE = (1440, 1080)
 FULL = (54, 129, 1332, 862)
@@ -149,7 +151,7 @@ def ink(text: str, font: ImageFont.FreeTypeFont, random: np.random.Generator, we
     return Image.fromarray(np.round(alpha).astype(np.uint8))
 
 
-def photograph(item: Exhibit) -> tuple[Image.Image, tuple[int, int], str | None]:
+def photograph(item: Exhibit, *, crop: bool = True) -> tuple[Image.Image, tuple[int, int], str | None]:
     with Image.open(SOURCE / item.filename) as original:
         photo = ImageOps.exif_transpose(original)
         size = photo.size
@@ -160,7 +162,7 @@ def photograph(item: Exhibit) -> tuple[Image.Image, tuple[int, int], str | None]
         source_profile = ImageCms.ImageCmsProfile(BytesIO(profile))
         profile_name = ImageCms.getProfileName(source_profile).strip()
         photo = ImageCms.profileToProfile(photo, source_profile, ImageCms.createProfile('sRGB'), outputMode='RGB')
-    if item.crop:
+    if crop and item.crop:
         photo = photo.crop(item.crop)
     return photo, size, profile_name
 
@@ -225,11 +227,45 @@ def build() -> None:
     sheet.save(EVIDENCE / 'chapter-contact.jpg', quality=92)
 
 
+def build_details() -> None:
+    DETAIL.mkdir(parents=True, exist_ok=True)
+    chapters = []
+    records = []
+    for chapter, (_, exhibits) in enumerate(CHAPTERS, 1):
+        images = []
+        for index, item in enumerate(exhibits, 1):
+            photo, dimensions, _ = photograph(item, crop=False)
+            name = f'{chapter:02d}-{index:02d}-{item.cave}.webp'
+            path = DETAIL / name
+            lossless = photo.width * photo.height <= 1_000_000
+            photo.save(path, 'WEBP', lossless=lossless, quality=95, method=6)
+            image = {'path': f'flying-history/v001/detail/{name}',
+                     'caption': f'莫高窟第{item.cave}窟 · {item.period}',
+                     'width': photo.width, 'height': photo.height}
+            images.append(image)
+            records.append({
+                'source': {'filename': item.filename, 'size': dimensions,
+                           'sha256': sha256((SOURCE / item.filename).read_bytes()).hexdigest()},
+                'output': {**image, 'bytes': path.stat().st_size, 'sha256': sha256(path.read_bytes()).hexdigest(),
+                           'encoding': 'WebP lossless' if lossless else 'WebP quality 95'},
+            })
+        chapters.append(images)
+    DETAIL_METADATA.write_text(json.dumps(chapters, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+    (SOURCE / 'detail-manifest-v001.json').write_text(json.dumps({
+        'version': 'flying-history-detail-v001', 'records': records,
+    }, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+
+
 if __name__ == '__main__':
     parser = ArgumentParser()
     parser.add_argument('--source', type=Path, help='Folder containing the 14 supplied originals and design notes.')
+    parser.add_argument('--detail', action='store_true', help='Build source-size close-ups from the archived photographs.')
     options = parser.parse_args()
-    for directory in (SOURCE, RUNTIME, EVIDENCE):
-        directory.mkdir(parents=True, exist_ok=True)
-    archive(options.source)
-    build()
+    if options.detail:
+        archive(None)
+        build_details()
+    else:
+        for directory in (SOURCE, RUNTIME, EVIDENCE):
+            directory.mkdir(parents=True, exist_ok=True)
+        archive(options.source)
+        build()

@@ -7,13 +7,24 @@ export interface MobileOrientation {
   coarsePointer: boolean;
   noHover: boolean;
   portrait: boolean;
+  /** Explicit phone identifiers supplement unreliable pointer media queries in embedded browsers. */
+  phoneUserAgent?: boolean;
+  viewportWidth?: number;
+  viewportHeight?: number;
 }
 
 export function isPhonePortrait(device: MobileOrientation): boolean {
   const shortSide = Math.min(device.screenWidth, device.screenHeight);
-  return Number.isFinite(shortSide) && shortSide > 0 && shortSide <= 600
-    && (device.maxTouchPoints > 0 || device.touchEvents === true)
-    && device.coarsePointer && device.noHover && device.portrait;
+  const smallScreen = Number.isFinite(shortSide) && shortSide > 0 && shortSide <= 600;
+  const viewportShort = Math.min(device.viewportWidth ?? 0, device.viewportHeight ?? 0);
+  const smallViewport = Number.isFinite(viewportShort) && viewportShort > 0 && viewportShort <= 600;
+  const knownPhone = device.phoneUserAgent === true && (smallScreen || smallViewport);
+  const touch = device.maxTouchPoints > 0 || device.touchEvents === true;
+  // iOS webviews can report a mouse/hover alongside touch. A real small screen
+  // plus touch points and either touch-oriented media signal still identifies a phone.
+  const touchPhone = smallScreen && touch && ((device.coarsePointer && device.noHover)
+    || (device.maxTouchPoints > 0 && (device.coarsePointer || device.noHover)));
+  return device.portrait && (knownPhone || touchPhone);
 }
 
 export function getMobileLandscapeBlocked(): boolean {
@@ -22,7 +33,10 @@ export function getMobileLandscapeBlocked(): boolean {
     screenWidth: window.screen.width || window.innerWidth,
     screenHeight: window.screen.height || window.innerHeight,
     maxTouchPoints: window.navigator.maxTouchPoints,
-    // WebKit can expose touch input with maxTouchPoints=0. Retain the other phone checks.
+    phoneUserAgent: /iPhone|iPod|Android.*Mobile/i.test(window.navigator.userAgent ?? ''),
+    viewportWidth: window.innerWidth,
+    viewportHeight: window.innerHeight,
+    // WebKit can expose touch input with maxTouchPoints=0.
     touchEvents: 'ontouchstart' in window,
     coarsePointer: window.matchMedia('(pointer: coarse)').matches,
     noHover: window.matchMedia('(hover: none)').matches,

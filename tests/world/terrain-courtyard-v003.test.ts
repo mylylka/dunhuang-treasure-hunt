@@ -1,33 +1,44 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import * as THREE from 'three';
-import { applyTerrainCourtyardExpansion } from '../../src/world/terrain-courtyard-v003';
+import { applyFirstGalleryCourtyardPaving, applyTerrainCourtyardExpansion } from '../../src/world/terrain-courtyard-v003';
 import { TERRAIN_COURTYARD_CAMERA_BOXES } from '../../src/world/terrain-camera-v001';
 import { COURTYARD_CAMERA_BOXES } from '../../src/world/camera';
 import { TERRAIN_PLAYER_COLLIDERS, isTerrainWalkable, moveTerrainPlayer, terrainHeight, terrainSurfaceHeight, toTerrainPoint } from '../../src/world/terrain-rules-v001';
 
 /** Load the real GLB's positions, node transforms and semantic groups without
- * a browser/image decoder. Materials are placeholders; geometry is not a mock.
+ * a browser/image decoder. Only material colour and name are needed here.
  */
 function courtyardGeometry(version = 'v002') {
   const bytes = readFileSync(new URL(`../../public/assets/world/courtyard/${version}/courtyard.glb`, import.meta.url));
   const jsonLength = bytes.readUInt32LE(12), json = JSON.parse(bytes.toString('utf8', 20, 20 + jsonLength));
   const binary = bytes.subarray(28 + jsonLength);
-  const root = new THREE.Group(), materials = json.materials.map(() => new THREE.MeshBasicMaterial());
+  const root = new THREE.Group(), materials = json.materials.map((material: any) => new THREE.MeshStandardMaterial({
+    name: material.name, color: new THREE.Color().fromArray(material.pbrMetallicRoughness?.baseColorFactor ?? [1, 1, 1]),
+  }));
   const nodes: THREE.Object3D[] = json.nodes.map((node: any) => {
-    const object = new THREE.Group(); object.name = node.name; object.userData = { ...node.extras };
+    const meshes: THREE.Mesh[] = node.mesh === undefined ? [] : json.meshes[node.mesh].primitives.map((primitive: any) => {
+      const accessor = json.accessors[primitive.attributes.POSITION], view = json.bufferViews[accessor.bufferView];
+      const data = new Float32Array(accessor.count * 3), start = (view.byteOffset ?? 0) + (accessor.byteOffset ?? 0);
+      for (let i = 0; i < accessor.count; i++) for (let axis = 0; axis < 3; axis++) data[i * 3 + axis] = binary.readFloatLE(start + i * (view.byteStride ?? 12) + axis * 4);
+      const geometry = new THREE.BufferGeometry().setAttribute('position', new THREE.BufferAttribute(data, 3));
+      const indices = json.accessors[primitive.indices], indexView = json.bufferViews[indices.bufferView];
+      const offset = (indexView.byteOffset ?? 0) + (indices.byteOffset ?? 0);
+      geometry.setIndex(Array.from({ length: indices.count }, (_, i) => {
+        if (indices.componentType === 5125) return binary.readUInt32LE(offset + 4 * i);
+        if (indices.componentType === 5123) return binary.readUInt16LE(offset + 2 * i);
+        return binary.readUInt8(offset + i);
+      }));
+      return new THREE.Mesh(geometry, materials[primitive.material]);
+    });
+    const object = meshes.length === 1 ? meshes[0] : new THREE.Group();
+    if (meshes.length > 1) object.add(...meshes);
+    object.name = node.name; object.userData = { ...node.extras };
     if (node.matrix) object.applyMatrix4(new THREE.Matrix4().fromArray(node.matrix));
     else {
       if (node.translation) object.position.fromArray(node.translation);
       if (node.rotation) object.quaternion.fromArray(node.rotation);
       if (node.scale) object.scale.fromArray(node.scale);
-    }
-    if (node.mesh !== undefined) for (const primitive of json.meshes[node.mesh].primitives) {
-      const accessor = json.accessors[primitive.attributes.POSITION], view = json.bufferViews[accessor.bufferView];
-      const data = new Float32Array(accessor.count * 3), start = (view.byteOffset ?? 0) + (accessor.byteOffset ?? 0);
-      for (let i = 0; i < accessor.count; i++) for (let axis = 0; axis < 3; axis++) data[i * 3 + axis] = binary.readFloatLE(start + i * (view.byteStride ?? 12) + axis * 4);
-      const geometry = new THREE.BufferGeometry().setAttribute('position', new THREE.BufferAttribute(data, 3));
-      object.add(new THREE.Mesh(geometry, materials[primitive.material]));
     }
     return object;
   });
@@ -44,6 +55,50 @@ function release(root: THREE.Object3D) {
 }
 
 describe('terrain-only courtyard expansion v003', () => {
+  it('filters the real courtyard brick colours without thin brick sides or shadows', () => {
+    const root = courtyardGeometry('v007');
+    applyTerrainCourtyardExpansion(root);
+    const ground = root.getObjectByName('courtyard-ground') as THREE.Mesh;
+    const footprint = box(root, ground.name);
+    const tiles = root.getObjectByName('courtyard-paving')!.children as THREE.Mesh<THREE.BufferGeometry, THREE.MeshStandardMaterial>[];
+    tiles.forEach(tile => { tile.castShadow = true; });
+    applyFirstGalleryCourtyardPaving(root);
+    const [, surface] = ground.material as THREE.MeshStandardMaterial[];
+    const map = surface.map as THREE.DataTexture;
+    expect(map.generateMipmaps).toBe(true);
+    expect(map.minFilter).toBe(THREE.LinearMipmapLinearFilter);
+    expect(ground.receiveShadow).toBe(true);
+    expect(box(root, ground.name)).toEqual(footprint);
+    expect(ground.geometry.groups).toEqual([
+      { start: 0, count: 30, materialIndex: 0 }, { start: 30, count: 6, materialIndex: 1 },
+    ]);
+    for (const tile of tiles) {
+      expect(tile.visible).toBe(false);
+      expect(tile.castShadow).toBe(false);
+      const positions = tile.geometry.getAttribute('position'), indices = tile.geometry.index!;
+      const point = new THREE.Vector3();
+      let sampled = false;
+      for (let i = 0; i < indices.count; i += 3) {
+        const corners = [0, 1, 2].map(j => new THREE.Vector3().fromBufferAttribute(positions, indices.getX(i + j)).applyMatrix4(tile.matrixWorld));
+        if (corners.some(corner => Math.abs(corner.y - .003) > 1e-5)) continue;
+        point.copy(corners[0]).add(corners[1]).add(corners[2]).multiplyScalar(1 / 3);
+        const x = Math.floor((point.x - footprint.min.x) / (footprint.max.x - footprint.min.x) * map.image.width);
+        const y = Math.floor((footprint.max.z - point.z) / (footprint.max.z - footprint.min.z) * map.image.height);
+        const offset = (y * map.image.width + x) * 4;
+        expect(Array.from(map.image.data!.slice(offset, offset + 3))).toEqual(
+          tile.material.color.clone().convertLinearToSRGB().toArray().map(channel => Math.round(channel * 255)),
+        );
+        sampled = true;
+        break;
+      }
+      expect(sampled).toBe(true);
+    }
+    root.traverse(object => {
+      if (object.name.startsWith('terrain-courtyard-side-paving-')) expect(object.visible).toBe(false);
+    });
+    map.dispose();
+    release(root);
+  });
   it('joins the real v007 corner trims without overlapping their coplanar faces', () => {
     const root = courtyardGeometry('v007');
     const before = new Map<string, THREE.Box3>();

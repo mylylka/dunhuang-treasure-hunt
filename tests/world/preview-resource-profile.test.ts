@@ -87,14 +87,20 @@ describe('preview resource scopes', () => {
     expect(connectedGalleryEntryGroups(valley)).toEqual([]);
   });
 
-  it('prefetches eligible combined venues on approach, then prepares the local cave assets', () => {
+  it('queues the unlocked cave and galleries at separate points before the Nine-Storey Tower stairs', () => {
     const access = { courtyardReady: true, musicUnlocked: false, cliffUnlocked: false };
     const musicApproach = toTerrainPoint('music', { x: 17, z: 0 });
     expect(connectedGalleryApproachGroups(musicApproach, null, access)).toEqual([]);
     expect(connectedGalleryApproachGroups(musicApproach, null, { ...access, musicUnlocked: true })).toEqual(['music']);
     expect(connectedGalleryApproachGroups(TERRAIN_ANCHORS.cliffStairFoot, null, access)).toEqual([]);
     const cliffAccess = { ...access, musicUnlocked: true, cliffUnlocked: true };
-    expect(connectedGalleryApproachGroups(TERRAIN_ANCHORS.cliffStairFoot, null, cliffAccess)).toEqual(['cliff']);
+    const cliffRoute = TERRAIN_ROUTES[1].points;
+    expect(connectedGalleryApproachGroups(cliffRoute[168], null, cliffAccess)).toEqual(['cliff']);
+    expect(connectedGalleryApproachGroups(cliffRoute[180], null, { ...cliffAccess, cliffUnlocked: false })).toEqual([]);
+    expect(connectedGalleryApproachGroups(cliffRoute[180], null, cliffAccess)).toEqual(['cliff', 'cliff-interior']);
+    expect(connectedGalleryApproachGroups(cliffRoute[204], null, cliffAccess)).toEqual(['cliff', 'cliff-interior', 'cliff-galleries']);
+    expect(connectedGalleryApproachGroups(TERRAIN_ANCHORS.cliffStairFoot, null, cliffAccess)).toEqual(['cliff', 'cliff-interior', 'cliff-galleries']);
+    expect(connectedGalleryEntryGroups(TERRAIN_ANCHORS.cliffStairFoot)).toEqual(['cliff']);
     expect(connectedGalleryApproachGroups(TERRAIN_ANCHORS.cliffDoor, null, cliffAccess)).toEqual(['cliff', 'cliff-interior', 'cliff-galleries']);
     const hall = upperToWorld({ x: 22, y: 19.58, z: -16 });
     expect(connectedGalleryApproachGroups(hall, 'hall-b', cliffAccess)).toEqual(['cliff-galleries']);

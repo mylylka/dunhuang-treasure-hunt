@@ -1,6 +1,7 @@
 import { afterEach, expect, it, vi } from 'vitest';
 import { soundPlayer } from '../../src/services/sound';
 import { createFirstGalleryNarration } from '../../src/world/first-gallery-narration';
+import { createRecordedNarration } from '../../src/world/recorded-narration';
 
 afterEach(() => {
   vi.restoreAllMocks();
@@ -46,4 +47,23 @@ it('plays subsequent mural clips on the same gesture-authorized context', async 
   expect(narration.skip('mural')).toBe(true);
   expect(sources[2].stop).toHaveBeenCalledOnce();
   expect(finished).toHaveBeenLastCalledWith('skipped');
+});
+
+it('advances the shared caption clock without sound and stops it while blocked', () => {
+  vi.spyOn(soundPlayer, 'playbackContext').mockReturnValue(null);
+  vi.stubGlobal('fetch', vi.fn(async () => new Response(new Uint8Array([0]))));
+  const narration = createRecordedNarration<'buddha', 'intro'>({ version: 1, enabled: false, volume: .4 },
+    { intro: { path: 'buddha-narration/v002/buddha-narration.mp3', duration: 25 } });
+  const finished = vi.fn();
+  narration.play('buddha', 'intro', finished);
+  narration.update(1);
+  narration.update(9);
+  expect(narration.inspect()?.currentTime).toBe(9);
+  narration.setBlocked(true);
+  narration.update(20);
+  expect(narration.inspect()?.currentTime).toBe(9);
+  narration.setBlocked(false);
+  narration.update(16);
+  expect(finished).toHaveBeenCalledWith('finished');
+  expect(narration.inspect()).toBeNull();
 });

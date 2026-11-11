@@ -18,6 +18,10 @@ const regions = {
 // Begin the larger music exhibits on the uphill bend, about 43 m of road
 // before the location label switches to 月牙谷地 on the descent.
 const CONNECTED_MUSIC_PREFETCH = 85;
+// Start the main cave on the path, then queue the upper galleries closer to
+// the stair foot. The entry rules still govern when either area can be entered.
+const CONNECTED_CLIFF_INTERIOR_PREFETCH_Z = -6;
+const CONNECTED_CLIFF_GALLERIES_PREFETCH_Z = -20;
 
 function distanceToRegion(region: FirstGalleryVenue, position: WorldPoint) {
   const local = fromTerrainPoint(region, position);
@@ -73,5 +77,7 @@ export function connectedGalleryApproachGroups(position: WorldPoint, surfaceId: 
   if (!venue && access.musicUnlocked && distanceToRegion('music', position) <= CONNECTED_MUSIC_PREFETCH) return ['music'];
   if (venue !== 'cliff') return venue ? [venue] : [];
   const { x, z } = fromTerrainPoint('cliff', position);
-  return x >= 105 && x <= 139 && z < -49 ? ['cliff', 'cliff-interior', 'cliff-galleries'] : ['cliff'];
+  if (x < 105 || x > 139 || z >= CONNECTED_CLIFF_INTERIOR_PREFETCH_Z) return ['cliff'];
+  return z < CONNECTED_CLIFF_GALLERIES_PREFETCH_Z
+    ? ['cliff', 'cliff-interior', 'cliff-galleries'] : ['cliff', 'cliff-interior'];
 }

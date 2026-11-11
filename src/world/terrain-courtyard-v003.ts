@@ -5,6 +5,8 @@ import { TERRAIN_COURTYARD_EXPANSION, terrainCourtyardPartTransform } from '../c
 
 export interface TerrainCourtyardExpansionReport { movedParts: string[]; pavingMeshes: number; addedWidth: number }
 
+type PavingMesh = THREE.Mesh<THREE.BufferGeometry, THREE.MeshStandardMaterial>;
+
 /** Exact bounds in the GLB root's coordinates, independent of the root placement. */
 function localBounds(root: THREE.Object3D, object: THREE.Object3D) {
   const bounds = new THREE.Box3(), inverse = root.matrixWorld.clone().invert();
@@ -16,6 +18,108 @@ function localBounds(root: THREE.Object3D, object: THREE.Object3D) {
       bounds.expandByPoint(new THREE.Vector3(x, y, z).applyMatrix4(matrix));
   });
   return bounds;
+}
+
+/** Project the thin courtyard boxes into the slab's top material. The original
+ * 3 mm rise and vertical sides are below a pixel along much of the approach.
+ * Filter their joints with the floor colour, rather than casting tiny shadows.
+ */
+export function applyFirstGalleryCourtyardPaving(root: THREE.Object3D): void {
+  const ground = root.getObjectByName('courtyard-ground');
+  const source = root.getObjectByName('courtyard-paving');
+  if (!(ground instanceof THREE.Mesh) || !(ground.material instanceof THREE.MeshStandardMaterial) || !source) return;
+  const tiles: PavingMesh[] = [];
+  const collect = (object: THREE.Object3D) => {
+    if (object instanceof THREE.Mesh && object.material instanceof THREE.MeshStandardMaterial) tiles.push(object as PavingMesh);
+  };
+  source.traverse(collect);
+  root.traverse(object => {
+    if (object.name.startsWith('terrain-courtyard-side-paving-')) collect(object);
+  });
+  if (!tiles.length) return;
+
+  const size = 512;
+  const bounds = localBounds(root, ground), width = bounds.max.x - bounds.min.x, depth = bounds.max.z - bounds.min.z;
+  const u = (x: number) => (x - bounds.min.x) / width;
+  const v = (z: number) => (bounds.max.z - z) / depth;
+  const localFromWorld = root.matrixWorld.clone().invert();
+  const floorColor = ground.material.color.clone().multiplyScalar(.94).convertLinearToSRGB().toArray();
+  const data = new Uint8Array(size * size * 4);
+  for (let i = 0; i < data.length; i += 4) {
+    data[i] = Math.round(floorColor[0] * 255);
+    data[i + 1] = Math.round(floorColor[1] * 255);
+    data[i + 2] = Math.round(floorColor[2] * 255);
+    data[i + 3] = 255;
+  }
+  const vertices = [new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3()];
+  for (const tile of tiles) {
+    const matrix = localFromWorld.clone().multiply(tile.matrixWorld);
+    const positions = tile.geometry.getAttribute('position'), indices = tile.geometry.index;
+    const top = localBounds(root, tile).max.y;
+    const color = tile.material.color.clone().convertLinearToSRGB().toArray();
+    const rectangles = new Set<string>();
+    for (let i = 0; i < (indices?.count ?? positions.count); i += 3) {
+      vertices.forEach((point, corner) => point.fromBufferAttribute(positions, indices?.getX(i + corner) ?? i + corner).applyMatrix4(matrix));
+      if (vertices.some(point => Math.abs(point.y - top) > 1e-5)) continue;
+      // Each rectangular box top has two triangles with the same X/Z bounds.
+      const minX = size * u(Math.min(...vertices.map(point => point.x)));
+      const maxX = size * u(Math.max(...vertices.map(point => point.x)));
+      const minY = size * v(Math.max(...vertices.map(point => point.z)));
+      const maxY = size * v(Math.min(...vertices.map(point => point.z)));
+      const key = `${minX},${maxX},${minY},${maxY}`;
+      if (rectangles.has(key)) continue;
+      rectangles.add(key);
+      for (let y = Math.max(0, Math.floor(minY)); y < Math.min(size, Math.ceil(maxY)); y++) {
+        const dy = Math.min(y + 1, maxY) - Math.max(y, minY);
+        for (let x = Math.max(0, Math.floor(minX)); x < Math.min(size, Math.ceil(maxX)); x++) {
+          const coverage = dy * (Math.min(x + 1, maxX) - Math.max(x, minX));
+          const index = (y * size + x) * 4;
+          for (let c = 0; c < 3; c++) data[index + c] += Math.round(255 * (color[c] - floorColor[c]) * coverage);
+        }
+      }
+    }
+    tile.visible = false;
+    tile.castShadow = false;
+  }
+
+  const map = new THREE.DataTexture(data, size, size);
+  map.name = 'first-gallery-courtyard-stone-joints';
+  map.colorSpace = THREE.SRGBColorSpace;
+  map.generateMipmaps = true;
+  map.minFilter = THREE.LinearMipmapLinearFilter;
+  map.magFilter = THREE.LinearFilter;
+  map.anisotropy = 8;
+  map.needsUpdate = true;
+
+  // Reuse the slab, including its visible sides. Only the two upward faces use
+  // the baked paving, so there is no second ground plane to compete for depth.
+  const geometry = ground.geometry.clone(), positions = geometry.getAttribute('position'), indices = geometry.index;
+  const uv = new Float32Array(positions.count * 2), point = vertices[0];
+  const matrix = localFromWorld.clone().multiply(ground.matrixWorld);
+  const topVertices = new Set<number>();
+  for (let i = 0; i < positions.count; i++) {
+    point.fromBufferAttribute(positions, i).applyMatrix4(matrix);
+    uv[i * 2] = u(point.x);
+    uv[i * 2 + 1] = v(point.z);
+    if (Math.abs(point.y - bounds.max.y) <= 1e-5) topVertices.add(i);
+  }
+  const sides: number[] = [], top: number[] = [];
+  for (let i = 0; i < (indices?.count ?? positions.count); i += 3) {
+    const triangle = [0, 1, 2].map(corner => indices?.getX(i + corner) ?? i + corner);
+    (triangle.every(index => topVertices.has(index)) ? top : sides).push(...triangle);
+  }
+  geometry.setIndex([...sides, ...top]);
+  geometry.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
+  geometry.clearGroups();
+  geometry.addGroup(0, sides.length, 0);
+  geometry.addGroup(sides.length, top.length, 1);
+  const material = ground.material.clone();
+  material.color.set(0xffffff);
+  material.map = map;
+  ground.geometry = geometry;
+  ground.material = [ground.material, material];
+  ground.castShadow = false;
+  ground.receiveShadow = true;
 }
 
 /** The hall's millimetre bevels put nearly vertical faces into subpixel joints.

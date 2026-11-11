@@ -174,9 +174,13 @@
 }
 .world-preview-resource-notice button { margin-left: 8px; min-height: 36px; }
 .world-mogao-game-notice {
-  bottom: max(176px, calc(env(safe-area-inset-bottom) + 150px));
+  bottom: max(18px, calc(env(safe-area-inset-bottom) + 8px));
+  display: flex;
+  align-items: center;
+  gap: 8px;
   width: max-content;
 }
-@media (max-height: 600px) {
-  .world-mogao-game-notice { bottom: max(123px, calc(env(safe-area-inset-bottom) + 117px)); }
+.world-mogao-game-notice button { flex: none; margin-left: 0; }
+@media (pointer: coarse) and (orientation: landscape) {
+  .world-mogao-game-notice { max-width: 58%; }
 }

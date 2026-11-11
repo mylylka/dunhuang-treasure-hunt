@@ -1,5 +1,6 @@
 import { expect, test, type Page } from '@playwright/test';
 import { readFileSync } from 'node:fs';
+import { MUSIC_INSTRUMENTS } from '../../src/content/world/music-instruments-v001';
 import type { ColoringLevel } from '../../src/types';
 
 const rawLevel = JSON.parse(readFileSync('src/content/levels/coloring-feitian-lotus.json', 'utf8')) as ColoringLevel;
@@ -36,6 +37,44 @@ test('剧情入口拒绝 2D 直链和伪造画架查询参数', async ({ page })
     await expect(page.getByTestId('phaser-player')).toHaveCount(0);
   }
   expect(await page.evaluate(key => localStorage.getItem(key), galleryKey)).toBeNull();
+});
+
+test('3D仍在加载时可直接进入游戏世界，飞天只显示可玩的两种玩法', async ({ page, isMobile }) => {
+  const chapters = JSON.parse(readFileSync('src/content/world/flying-history-art-v001.json', 'utf8')) as unknown[];
+  const unlockedMusic = [
+    ...chapters.map((_, index) => `chapter:${index + 1}`),
+    ...MUSIC_INSTRUMENTS.map(({ id }) => `instrument:${id}`),
+    'outfit',
+  ];
+  await page.addInitScript(keys => {
+    for (const key of keys) localStorage.setItem(`dunhuang:music-gallery:progress:v1:${key}`, 'yes');
+  }, unlockedMusic);
+  let unblockModel!: () => void;
+  const blockedModel = new Promise<void>(resolve => { unblockModel = resolve; });
+  await page.route('**/traveler-tripo/v002/traveler.glb', async route => {
+    await blockedModel;
+    await route.abort();
+  });
+  try {
+    await page.goto(galleryPath, { waitUntil: 'domcontentloaded' });
+    await expect(page.getByTestId('world-host')).toHaveAttribute('data-ready', 'false');
+    // The button should commit the menu without waiting for the browser's hash event.
+    await page.evaluate(() => window.addEventListener('hashchange', event => {
+      if (event.newURL.endsWith('#/themes')) event.stopImmediatePropagation();
+    }, true));
+    const enter = page.getByRole('link', { name: '直接进入游戏世界' });
+    if (isMobile) await enter.tap();
+    else await enter.click();
+    await expect(page).toHaveURL(/#\/themes$/);
+    const music = page.getByRole('link', { name: '飞天、乐舞与服饰' });
+    await expect(music).toBeVisible({ timeout: 2000 });
+    await expect(page.getByTestId('world-host')).toHaveCount(0);
+    if (isMobile) await music.tap();
+    else await music.click();
+    await expect(page.locator('.game-choice-card h2')).toHaveText(['计时找物', '影子配对']);
+  } finally {
+    unblockModel();
+  }
 });
 
 test('普通填色两次保存都成功才进结果，新收藏不会改动画架展品', async ({ page }) => {
