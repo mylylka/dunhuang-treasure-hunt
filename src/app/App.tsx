@@ -55,6 +55,7 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
   const [loadWarning, setLoadWarning] = useState([initialLoad.warning, initialArtworks.warning].filter(Boolean).join(' ') || null);
   const [saveError, setSaveError] = useState<string | null>(null);
   const [artworkSaveError, setArtworkSaveError] = useState<string | null>(null);
+  const artworkRetry = useRef<(() => void) | null>(null);
   const [route, setRoute] = useState<Route>(readRoute);
   const [activeTheme, setActiveTheme] = useState(0);
   const completedThisRun = useRef(false);
@@ -78,6 +79,7 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
   }, []);
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' }); mainRef.current?.focus({ preventScroll: true }); completedThisRun.current = false;
+    artworkRetry.current = null;
   }, [routeKey]);
   useEffect(() => {
     const root = shellRef.current;
@@ -110,7 +112,7 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
     return <div className={`notice notice-error ${compact ? 'notice-compact' : ''}`} role="alert" data-testid="save-error"><div><strong>记录暂未保存</strong><p>{saveError} 当前页面仍保留本次记录，关闭后可能丢失。</p></div><button type="button" className="button button-secondary button-small" data-testid="retry-save" onClick={() => persist(progressRef.current)}>重试保存</button></div>;
   }
   function renderArtworkNotice() {
-    return artworkSaveError && <div className="notice notice-error notice-compact" role="alert" data-testid="artwork-save-error"><p>{artworkSaveError}</p><button type="button" className="button button-secondary button-small" data-testid="retry-artwork-save" onClick={() => persistArtworks(artworksRef.current)}><span className="button-label">重试保存作品</span></button></div>;
+    return artworkSaveError && <div className="notice notice-error notice-compact" role="alert" data-testid="artwork-save-error"><p>{artworkSaveError}</p><button type="button" className="button button-secondary button-small" data-testid="retry-artwork-save" onClick={() => artworkRetry.current ? artworkRetry.current() : persistArtworks(artworksRef.current)}><span className="button-label">重试保存作品</span></button></div>;
   }
   function renderLevel(level: Level, theme: ThemeDefinition) {
     if (level.gameType === 'shadow-match') return <ShadowMatchScreen key={level.id} level={level} catalog={catalog} reducedMotion={progress.settings.reducedMotion} onEvent={onGameEvent} onBack={() => goTo(levelsPath(theme.id, 'shadow-match'))} />;
@@ -121,8 +123,14 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
     if (level.gameType === 'coloring') {
       const save = (colors: RegionColors, materials: RegionMaterials, submitted = false) => persistArtworks(withArtwork(artworksRef.current, level, colors, submitted, submitted ? new Date().toISOString() : undefined, materials));
       return <ColoringScreen key={level.id} level={level} catalog={catalog} initialColors={artworkColors(artworks, level)} initialMaterials={artworkMaterials(artworks, level)} reducedMotion={progress.settings.reducedMotion}
-        onChange={(colors, materials) => { save(colors, materials); }} onBack={() => goTo(levelsPath(theme.id, 'coloring'))}
-        onComplete={(colors, materials) => { if (save(colors, materials, true)) onGameEvent({ type: 'completed', levelId: level.id }); }}
+        onChange={(colors, materials) => { artworkRetry.current = null; save(colors, materials); }} onBack={() => goTo(levelsPath(theme.id, 'coloring'))}
+        onComplete={(colors, materials) => {
+          const complete = () => {
+            if (!save(colors, materials, true)) { artworkRetry.current = complete; return; }
+            artworkRetry.current = null; onGameEvent({ type: 'completed', levelId: level.id });
+          };
+          complete();
+        }}
         saveNotice={<>{hasOlderArtwork(artworks, level) && <p className="notice" role="status">线稿版本已更新，旧作品已保留。本页使用新线稿。</p>}{renderArtworkNotice()}</>} />;
     }
     return <SpotDifferenceScreen key={level.id} level={level} catalog={catalog} reducedMotion={progress.settings.reducedMotion} onEvent={onGameEvent} onBack={() => goTo(levelsPath(theme.id, 'spot-difference'))} />;

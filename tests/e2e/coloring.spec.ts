@@ -329,6 +329,28 @@ test('作品保存失败如实显示并可重试，不冒充写入旧通关结�
   await expectFits(page);
 });
 
+test('完成作品时保存失败，重试成功后才进入结果并记录完成', async ({ page }) => {
+  const level = coloringLevels[0]!;
+  await startColoring(page, level);
+  await clickRegion(page, level);
+  await expect.poll(() => currentColors(page, level)).toEqual({ [usableRegion(level).id]: level.palette[0].color.toLowerCase() });
+  await page.evaluate(key => {
+    const original = Storage.prototype.setItem;
+    (window as unknown as { __artworkStorageSetter: typeof original }).__artworkStorageSetter = original;
+    Storage.prototype.setItem = function (name, value) {
+      if (name === key) throw new DOMException('Test storage quota', 'QuotaExceededError');
+      return original.call(this, name, value);
+    };
+  }, artworkKey);
+  await page.getByRole('button', { name: '完成作品', exact: true }).click();
+  await expect(page.getByTestId('artwork-save-error')).toBeVisible();
+  expect(await page.evaluate(key => localStorage.getItem(key), progressKey)).toBeNull();
+  await page.evaluate(() => { Storage.prototype.setItem = (window as unknown as { __artworkStorageSetter: typeof Storage.prototype.setItem }).__artworkStorageSetter; });
+  await page.getByRole('button', { name: '重试保存作品', exact: true }).click();
+  await expect(page).toHaveURL(new RegExp(`#/result/${level.id}$`));
+  await expect.poll(() => page.evaluate(({ key, id }) => Boolean(JSON.parse(localStorage.getItem(key) ?? '{}').completed?.[id]), { key: progressKey, id: level.id })).toBe(true);
+});
+
 test('区域图加载失败保留错误与重新加载入口', async ({ page }) => {
   const level = coloringLevels[0]!;
   const map = assets.find(asset => asset.id === level.regionMapAssetId)!;
