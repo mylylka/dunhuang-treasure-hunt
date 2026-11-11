@@ -1,12 +1,12 @@
 """Import independently published clean photos; never erase a source watermark."""
 from __future__ import annotations
 
-import hashlib
-import json
-import urllib.request
+from datetime import date
 from pathlib import Path
 
 from PIL import Image
+
+from asset_intake import AssetIntake, image_size, read_json, write_json
 
 ROOT = Path(__file__).resolve().parents[1]
 ARCHIVE = ROOT / "art-source/references/patterns/v002"
@@ -39,53 +39,64 @@ REFERENCES = [
 
 
 def main() -> None:
-    ARCHIVE.mkdir(parents=True, exist_ok=True)
-    RUNTIME.mkdir(parents=True, exist_ok=True)
+    intake = AssetIntake(ROOT)
+    with intake.transaction():
+        import_references(intake)
+
+
+def encode_png(source: Path, destination: Path, crop: list[int] | None) -> None:
+    with Image.open(source) as image:
+        if crop:
+            image = image.crop(tuple(crop))
+        image.convert('RGB').save(destination, 'PNG', optimize=True)
+
+
+def import_references(intake: AssetIntake) -> None:
     assets_path = ROOT / "src/content/assets.json"
-    assets = json.loads(assets_path.read_text())
-    for asset in assets:
-        if "sourceNote" in asset:
-            asset["sourceNote"] = asset["sourceNote"].replace("婧婧", "开发者")
-    notes = []
+    notes_path = ARCHIVE / 'source-notes.json'
+    previous_assets = read_json(assets_path)
+    assets = list(previous_assets)
+    previous_notes = read_json(notes_path, {})
+    notes = {row['originalFilename']: row for row in previous_notes.get('references', [])}
     for ref in REFERENCES:
+        old = notes.get(ref['original'], {})
         archived = ARCHIVE / ref["original"]
         work_file = ROOT / "work" / ref["workFile"]
-        if archived.exists():
-            data = archived.read_bytes()
-            if work_file.exists() and work_file.read_bytes() != data:
-                raise RuntimeError(f"Changed archived original; use a new version: {archived}")
-        elif work_file.exists():
-            data = work_file.read_bytes()
-            archived.write_bytes(data)
-        else:
-            data = urllib.request.urlopen(ref["imageUrl"], timeout=40).read()
-            archived.write_bytes(data)
-        with Image.open(archived) as source:
-            source.load()
-            original_width, original_height = source.size
-            exports = []
-            for export in ref["exports"]:
-                crop = export.get("crop")
-                image = source.crop(tuple(crop)) if crop else source.copy()
-                runtime = RUNTIME / f"{export['id']}-v002.png"
-                image.convert("RGB").save(runtime, optimize=True)
-                width, height = image.size
-                processing = f"仅技术裁切井心，原像素矩形{crop}，未放大或重采样。" if crop else "完整保留下载图像；仅转PNG，不放大或重采样。"
-                processing += "原下载图本身无叠加水印，未擦除、遮挡或裁掉水印，未调色、补画或AI修复。"
-                source_note = f"真实教学参考图。{ref['publisher']}。{ref['verification']} {processing} 原件与来源登记见art-source/references/patterns/v002/source-notes.json。"
-                item = {"id": export["id"], "path": f"/assets/lessons/patterns/{runtime.name}", "width": width, "height": height, "kind": "teaching", "placeholder": False, "version": "reference-v002", "sourceNote": source_note}
-                index = next((i for i, a in enumerate(assets) if a["id"] == export["id"]), None)
-                if index is None:
-                    assets.append(item)
-                elif assets[index].get("version", "") <= item["version"]:
-                    assets[index] = item
-                exports.append({**item, "cropBox": crop, "processing": processing})
-                print(f"{export['id']}: {width}×{height}")
-        entry = {k: v for k, v in ref.items() if k not in ("workFile", "exports")}
-        entry.update({"originalPath": str(archived.relative_to(ROOT)), "originalFilename": ref["original"], "width": original_width, "height": original_height, "sha256": hashlib.sha256(data).hexdigest(), "retrievedOn": "2026-10-28", "exports": exports, "rights": "保留原摄影、供图与发布署名；未声称开放授权。"})
-        notes.append(entry)
-    (ARCHIVE / "source-notes.json").write_text(json.dumps({"version": 2, "purpose": "使用独立公开发布的无叠加水印实物照片替换；v001原件和运行图保留", "references": notes, "remainingGaps": ["第257窟残存平棋同一细节的高质量无水印实物原图尚未找到；目前教学改用已核验的第254窟忍冬与第407窟菱格实例，不混写窟号。", "用户忍冬整理图的原出版出处、具体窟号、年代及干净原图待补，保留原文件与知乎署名水印。", "用户第254窟平棋图原图片出版出处、三兔补充拼版原出处仍待补。"]}, ensure_ascii=False, indent=2) + "\n")
-    assets_path.write_text(json.dumps(assets, ensure_ascii=False, indent=2) + "\n")
+        original = intake.original(old.get('originalPath', str(archived.relative_to(ROOT))),
+                                   expected=old.get('sha256'), local=work_file, url=ref['imageUrl'])
+        original_width, original_height = (old['width'], old['height']) if old else image_size(original.path)
+        exports = {row['id']: row for row in old.get('exports', [])}
+        for export in ref["exports"]:
+            prior = exports.get(export['id'], {})
+            crop = export.get("crop")
+            runtime = RUNTIME / f"{export['id']}-v002.png"
+            runtime_path = f'/assets/lessons/patterns/{runtime.name}'
+            if prior and (prior['path'] != runtime_path or prior['cropBox'] != crop):
+                raise ValueError(f'Existing export definition differs; use a new version: {runtime}')
+            result = intake.derive(original, runtime, 'PNG', {'mode': 'RGB', 'optimize': True, 'crop': crop},
+                                   lambda source, destination: encode_png(source, destination, crop),
+                                   prior=prior.get('derivation'),
+                                   legacy_size=(prior['width'], prior['height']) if prior else None)
+            width, height = result.size
+            processing = f"仅技术裁切井心，原像素矩形{crop}，未放大或重采样。" if crop else "完整保留下载图像；仅转PNG，不放大或重采样。"
+            processing += "原下载图本身无叠加水印，未擦除、遮挡或裁掉水印，未调色、补画或AI修复。"
+            source_note = f"真实教学参考图。{ref['publisher']}。{ref['verification']} {processing} 原件与来源登记见art-source/references/patterns/v002/source-notes.json。"
+            item = {"id": export["id"], "path": runtime_path, "width": width, "height": height, "kind": "teaching", "placeholder": False, "version": "reference-v002", "sourceNote": source_note}
+            index = next((i for i, a in enumerate(assets) if a["id"] == export["id"]), None)
+            if index is None:
+                assets.append(item)
+            elif assets[index].get("version", "") < item["version"]:
+                assets[index] = item
+            elif assets[index].get('version') == item['version'] and any(
+                    assets[index].get(key) != item[key] for key in ('path', 'width', 'height')):
+                raise RuntimeError(f"Asset already registered differently: {export['id']}")
+            if not prior:
+                exports[export['id']] = {**item, "cropBox": crop, "processing": processing, "derivation": result.provenance()}
+            print(f"{export['id']}: {width}×{height}")
+        entry = old or {k: v for k, v in ref.items() if k not in ("workFile", "exports")}
+        notes[ref['original']] = {"retrievedOn": date.today().isoformat(), "rights": "保留原摄影、供图与发布署名；未声称开放授权。", **entry, "originalPath": original.reference, "originalFilename": ref["original"], "width": original_width, "height": original_height, "sha256": original.sha256, "exports": list(exports.values())}
+    write_json(notes_path, {"version": 2, "purpose": "使用独立公开发布的无叠加水印实物照片替换；v001原件和运行图保留", "remainingGaps": ["第257窟残存平棋同一细节的高质量无水印实物原图尚未找到；目前教学改用已核验的第254窟忍冬与第407窟菱格实例，不混写窟号。", "用户忍冬整理图的原出版出处、具体窟号、年代及干净原图待补，保留原文件与知乎署名水印。", "用户第254窟平棋图原图片出版出处、三兔补充拼版原出处待补。"], **previous_notes, "references": list(notes.values())}, existing=previous_notes)
+    write_json(assets_path, assets, existing=previous_assets)
 
 
 if __name__ == "__main__":

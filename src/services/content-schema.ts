@@ -1,6 +1,8 @@
 import { z } from 'zod';
 import type { ContentCatalog } from '../types';
 import { getDifferenceRegions } from '../games/spot-difference/rules';
+import type { HiddenObjectPool } from '../games/hidden-object/types';
+import { createHiddenObjectRound, validateHiddenObjectRecipe } from '../games/hidden-object/rules';
 
 const gameType = z.enum(['spot-difference', 'hidden-object', 'shadow-match', 'puzzle', 'coloring']);
 const id = z.string().regex(/^[a-z][a-z0-9-]*$/, '编号须为英文小写及连字符');
@@ -36,10 +38,24 @@ export const coloringSchema = z.object({
     point: z.object({ x: z.number().min(0).max(1), y: z.number().min(0).max(1) }), pixelCount: z.number().int().positive() })).min(1),
 });
 export const puzzleSchema = z.object({
-  ...metadata, gameType: z.literal('puzzle'), imageAssetId: id, mode: z.enum(['rotation', 'jigsaw']),
+  ...metadata, gameType: z.literal('puzzle'), imageAssetId: id, mode: z.enum(['rotation', 'jigsaw', 'gallery-order']),
+  sliceCount: z.number().int().min(2).max(48).optional(),
   rows: z.number().int().min(2).max(8), columns: z.number().int().min(2).max(8), seed: z.number().int().nonnegative(),
 });
-export const levelSchema = z.discriminatedUnion('gameType', [spotDifferenceSchema, coloringSchema, puzzleSchema]);
+export const hiddenObjectSchema = z.object({
+  ...metadata, gameType: z.literal('hidden-object'), poolId: id,
+  chapter: z.object({ id, title: z.string().min(1), order: z.number().int().positive(), level: z.number().int().positive(), backgroundAssetId: id }).optional(),
+  board: z.object({ width: z.number().positive(), height: z.number().positive(), columns: z.number().int().positive(), rows: z.number().int().positive(), inset: z.number().nonnegative(), jitter: z.number().nonnegative(), minScale: z.number().positive().optional(), maxScale: z.number().positive().optional(), maxRotationDegrees: z.number().min(0).max(45).optional() }),
+  categoryQuotas: z.array(z.object({ categoryId: id, count: z.number().int().positive() })).min(1),
+  tasks: z.object({ groupIds: z.array(id).min(1), groupCount: z.number().int().positive(), minCount: z.number().int().positive(), maxCount: z.number().int().positive(), totalCount: z.number().int().positive().optional() }),
+  timeLimitSeconds: z.number().positive().max(3600),
+});
+export const shadowMatchSchema = z.object({
+  ...metadata, gameType: z.literal('shadow-match'), referenceAssetId: id,
+  options: z.array(z.object({ id, assetId: id })).length(4), correctOptionId: id,
+  hints: z.array(z.object({ text: z.string().min(1), region: regionSchema })).min(1),
+});
+export const levelSchema = z.discriminatedUnion('gameType', [spotDifferenceSchema, coloringSchema, puzzleSchema, hiddenObjectSchema, shadowMatchSchema]);
 export const catalogSchema = z.object({ schemaVersion: z.literal(1), themes: z.array(themeSchema).min(1), assets: z.array(assetSchema).min(1), levels: z.array(levelSchema) });
 
 export const SHELL_ASSET_IDS = ['bg-landscape', 'bg-portrait', 'panel', 'button-primary', 'button-secondary', 'icon-back', 'icon-hint', 'icon-restart', 'icon-locked', 'icon-completed'] as const;
@@ -54,7 +70,12 @@ export function assertShellAssets(catalog: ContentCatalog): void {
   }
 }
 
-export function parseCatalog(input: unknown): ContentCatalog {
+export interface CatalogValidationOptions {
+  /** Runtime validates allocations only; content tools also generate complete seeded boards. */
+  hiddenObjectValidation?: 'runtime' | 'deep';
+}
+
+export function parseCatalog(input: unknown, hiddenObjectPool?: HiddenObjectPool, options: CatalogValidationOptions = {}): ContentCatalog {
   const parsed = catalogSchema.safeParse(input);
   if (!parsed.success) {
     throw new Error(parsed.error.issues.map(issue => `${issue.path.join('.') || '内容目录'}：${issue.message}`).join('\n'));
@@ -78,12 +99,59 @@ export function parseCatalog(input: unknown): ContentCatalog {
     if (!theme) issues.push(`关卡 ${level.id}：主题 ${level.themeId} 不存在`);
     else if (!theme.allowedGameTypes.includes(level.gameType)) issues.push(`关卡 ${level.id}：本主题不允许 ${level.gameType}`);
     const imageIds = level.gameType === 'spot-difference' ? [level.baseAssetId, level.editedAssetId]
-      : level.gameType === 'coloring' ? [level.referenceAssetId, level.lineAssetId, level.regionMapAssetId] : [level.imageAssetId];
+      : level.gameType === 'coloring' ? [level.referenceAssetId, level.lineAssetId, level.regionMapAssetId]
+      : level.gameType === 'puzzle' ? [level.imageAssetId]
+      : level.gameType === 'shadow-match' ? [level.referenceAssetId, ...level.options.map(option => option.assetId)]
+      : level.gameType === 'hidden-object' && level.chapter ? [level.chapter.backgroundAssetId] : [];
     for (const assetId of [...imageIds, level.thumbnailAssetId]) {
       if (!assets.has(assetId)) issues.push(`关卡 ${level.id}：素材 ${assetId} 不存在`);
     }
+    if (level.gameType === 'shadow-match') {
+      checkUnique(level.options, `关卡 ${level.id} 的影子选项`);
+      if (!level.options.some(option => option.id === level.correctOptionId)) issues.push(`关卡 ${level.id}：正确影子不在选项中`);
+      if (new Set(imageIds).size !== imageIds.length) issues.push(`关卡 ${level.id}：参照图和影子素材不得重复`);
+      const reference = assets.get(level.referenceAssetId);
+      for (const option of level.options) {
+        const image = assets.get(option.assetId);
+        if (reference && image && (reference.width !== image.width || reference.height !== image.height)) issues.push(`关卡 ${level.id}：参照与影子须使用相同画布尺寸`);
+      }
+      for (const hint of level.hints) {
+        const { x, y, width, height } = hint.region;
+        if (x + width > 1.000001 || y + height > 1.000001) issues.push(`关卡 ${level.id}：影子提示区域越界`);
+      }
+      continue;
+    }
+    if (level.gameType === 'hidden-object') {
+      if (level.chapter) {
+        const background = assets.get(level.chapter.backgroundAssetId);
+        if (background && background.kind !== 'background') issues.push(`关卡 ${level.id}：章节底图须登记为背景素材`);
+        for (const sibling of catalog.levels) {
+          if (sibling.id === level.id || sibling.themeId !== level.themeId || sibling.gameType !== 'hidden-object' || !sibling.chapter) continue;
+          if (sibling.chapter.id === level.chapter.id) {
+            if (sibling.chapter.level === level.chapter.level) issues.push(`关卡 ${level.id}：章节内关卡序号重复`);
+            if (sibling.chapter.order !== level.chapter.order || sibling.chapter.title !== level.chapter.title
+              || sibling.chapter.backgroundAssetId !== level.chapter.backgroundAssetId) issues.push(`关卡 ${level.id}：同章标题、顺序和底图须一致`);
+          } else if (sibling.chapter.order === level.chapter.order) issues.push(`关卡 ${level.id}：不同章节不能共用章节顺序`);
+        }
+      }
+      try {
+        if (!hiddenObjectPool) throw new Error('缺少找物素材池');
+        validateHiddenObjectRecipe(level, hiddenObjectPool);
+        if (options.hiddenObjectValidation !== 'runtime') {
+          createHiddenObjectRound(level, hiddenObjectPool, 0);
+          createHiddenObjectRound(level.tasks.totalCount === undefined
+            ? { ...level, tasks: { ...level.tasks, minCount: level.tasks.maxCount } } : level, hiddenObjectPool, 1);
+        }
+      } catch (error) {
+        issues.push(`关卡 ${level.id}：${error instanceof Error ? error.message : '找物配方无效'}`);
+      }
+      continue;
+    }
     if (level.gameType === 'puzzle') {
       const image = assets.get(level.imageAssetId);
+      if (level.mode === 'gallery-order' && level.sliceCount === undefined) issues.push(`关卡 ${level.id}：画廊排序须配置切片数量`);
+      if (level.mode !== 'gallery-order' && level.sliceCount !== undefined) issues.push(`关卡 ${level.id}：仅画廊排序可配置切片数量`);
+      if (level.mode === 'gallery-order' && image && level.sliceCount && image.width < level.sliceCount) issues.push(`关卡 ${level.id}：切片数量不能超过图片像素宽度`);
       if (level.rows * level.columns > 48) issues.push(`关卡 ${level.id}：当前拼图最多支持48片`);
       if (level.mode === 'rotation' && image && Math.abs((image.width / level.columns) / (image.height / level.rows) - 1) > .001) issues.push(`关卡 ${level.id}：原位旋转图块须为正方形`);
       continue;

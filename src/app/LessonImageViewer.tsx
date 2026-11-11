@@ -1,4 +1,5 @@
-import { useEffect, useId, useLayoutEffect, useRef, useState, type PointerEvent } from 'react';
+import { useEffect, useId, useLayoutEffect, useRef, useState, type PointerEvent, type ReactNode } from 'react';
+import { DialogCloseButton } from './DialogCloseButton';
 import '../styles/lesson-image-viewer.css';
 
 export interface LessonImageViewerProps {
@@ -7,6 +8,7 @@ export interface LessonImageViewerProps {
   imageHeight: number;
   title: string;
   caption: string;
+  navigation?: ReactNode;
   onClose: () => void;
 }
 
@@ -21,7 +23,7 @@ function constrainPan(pan: Position, image: Size, viewport: Size, zoom: number):
 }
 
 /** Observation only: zooming and moving never alter the source image or lesson state. */
-export function LessonImageViewer({ src, imageWidth, imageHeight, title, caption, onClose }: LessonImageViewerProps) {
+export function LessonImageViewer({ src, imageWidth, imageHeight, title, caption, navigation, onClose }: LessonImageViewerProps) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const stageRef = useRef<HTMLDivElement>(null);
@@ -62,6 +64,7 @@ export function LessonImageViewer({ src, imageWidth, imageHeight, title, caption
     if (!stage) return;
     const measure = () => {
       const bounds = stage.getBoundingClientRect();
+      if (bounds.width < 2 || bounds.height < 2) return;
       const next = { width: Math.max(1, bounds.width), height: Math.max(1, bounds.height) };
       setViewport(previous => previous.width === next.width && previous.height === next.height ? previous : next);
     };
@@ -112,7 +115,7 @@ export function LessonImageViewer({ src, imageWidth, imageHeight, title, caption
     <section className="lesson-viewer-surface" data-testid="lesson-viewer-surface">
       <header className="lesson-viewer-heading">
         <h2 id={titleId}>{title}</h2>
-        <button ref={closeRef} type="button" className="lesson-viewer-close" onClick={onClose} aria-label="关闭图像查看器">×</button>
+        <DialogCloseButton ref={closeRef} className="lesson-viewer-close" onClick={onClose} label="关闭图像查看器" />
       </header>
       <div className="lesson-viewer-stage" ref={stageRef} data-testid="lesson-viewer-stage"
         data-zoom={zoom} data-pan-x={pan.x} data-pan-y={pan.y} data-dragging={dragging}
@@ -139,7 +142,9 @@ export function LessonImageViewer({ src, imageWidth, imageHeight, title, caption
           onClick={() => selectZoom(value)}>{value === 1 ? '全图' : `${value}×`}</button>)}
         <button type="button" onClick={() => selectZoom(1)}>复位</button>
       </div>
-      <p className="lesson-viewer-caption" id={captionId} tabIndex={0}>{caption}</p>
+      {navigation ? <div className="lesson-viewer-controls">
+        <p className="lesson-viewer-caption" id={captionId}>{caption}</p>{navigation}
+      </div> : <p className="lesson-viewer-caption" id={captionId} tabIndex={0}>{caption}</p>}
     </section>
   </dialog>;
 }

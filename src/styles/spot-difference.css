@@ -1,0 +1,50 @@
+.page.page-play.spot-screen{position:relative;display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto;gap:10px}
+.spot-desktop-heading{display:flex;align-items:center;gap:22px;min-width:0}
+.spot-desktop-heading h1{flex:1;font:26px/1.3 Georgia,"Songti SC",serif;color:var(--ink);margin:0}
+.spot-back{display:flex;align-items:center;gap:7px;min-height:44px}
+.spot-back img{width:18px;height:18px;object-fit:contain}
+.spot-count{white-space:nowrap;color:var(--blue);font-size:20px}
+.spot-count strong{font-size:28px;font-weight:500}.spot-count small{font-size:11px;margin-left:8px;color:var(--muted)}
+.spot-stage{min-height:0;min-width:0}
+.spot-stage canvas{touch-action:none}
+.spot-controls{display:flex;align-items:center;justify-content:flex-end;gap:10px;min-width:0}
+.spot-control,.spot-zoom-controls button{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;min-width:44px;padding:7px 13px;border:1px solid #c8b99d;border-radius:7px;background:#f5eddd;color:#66513a;font-family:inherit;font-size:13px;line-height:1.2;cursor:pointer}
+.spot-control img{width:19px;height:19px;object-fit:contain}.spot-control:disabled,.spot-zoom-controls button:disabled{opacity:.4;cursor:default}
+.spot-zoom-controls{display:flex;align-items:center;gap:7px}.spot-zoom-controls output{font-size:12px;min-width:40px;text-align:center;font-variant-numeric:tabular-nums}
+.spot-controls .spot-mobile-back,.spot-controls .spot-mobile-zoom,.spot-mobile-heading h1{display:none}.spot-mobile-heading{margin-right:auto}
+.spot-instructions{font-size:10px;color:var(--muted);margin:0 auto 0 0;order:-1}
+.spot-message{position:absolute;z-index:4;left:50%;bottom:12px;transform:translateX(-50%);display:flex;align-items:center;gap:10px;width:max-content;max-width:calc(100% - 24px);padding:7px 8px 7px 14px;border:1px solid #c5ad7b;border-radius:8px;background:#fff8e9f5;box-shadow:0 3px 14px #4c392c24;color:#64502f}
+.spot-message p{margin:0;font-size:12px;line-height:1.5}.spot-message button{flex:none;width:44px;height:44px;border:0;background:transparent;font-size:23px;color:inherit;cursor:pointer}
+.spot-error{position:absolute;z-index:5;inset:20% 8% auto;background:#fcf5e8}.spot-error button{min-height:44px;padding:7px 12px;color:var(--red);background:#fff6e5;border:1px solid #c8b99d;border-radius:5px}
+@media(pointer:coarse) and (hover:none) and (orientation:landscape) and (max-height:600px){
+ .page.page-play.spot-screen{grid-template-columns:minmax(0,1fr) 72px;grid-template-rows:minmax(0,1fr);gap:6px}
+ .spot-desktop-heading{display:none}.spot-stage{grid-column:1;grid-row:1}
+ .spot-controls{grid-column:2;grid-row:1;display:flex;flex-direction:column;align-items:stretch;justify-content:center;gap:4px;min-height:0}
+ .spot-controls .spot-mobile-back,.spot-controls .spot-mobile-zoom{display:flex}.spot-mobile-heading{display:flex;flex-direction:column;align-items:center;gap:2px;margin:0}
+ .spot-mobile-heading h1{display:block;margin:0;max-width:72px;font-size:14px;font-weight:600;line-height:1.3;text-align:center}
+ .spot-mobile-heading .spot-count{font-size:13px;line-height:1.2}.spot-mobile-heading .spot-count strong{font-size:18px}.spot-mobile-heading .spot-count small{display:none}
+ .spot-control{width:72px;min-height:44px;padding:4px 2px;gap:4px;font-size:12px}.spot-control img{width:16px;height:16px}
+ .spot-control:not(.spot-mobile-back) img{display:none}
+ .spot-control span{white-space:nowrap}
+ .spot-controls .level-advance .button-label{white-space:normal;font-size:11px;line-height:1.3}
+ .spot-zoom-controls{display:none}
+ .spot-reset{display:none}
+ .spot-instructions{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+ .spot-message{bottom:7px;max-width:calc(100% - 12px);padding:3px 4px 3px 9px}.spot-message p{font-size:11px}.spot-message button{width:44px;height:44px}
+ .spot-screen .game-image-label{font-size:13px;line-height:18px}
+}
+
+@media(pointer:coarse) and (hover:none) and (orientation:landscape) and (max-height:600px){
+ .page.page-play.spot-screen{grid-template-columns:minmax(0,1fr) 96px}
+ .spot-controls{display:grid;grid-template-columns:44px 44px;grid-template-rows:44px 24px 44px 44px 44px;align-content:start;justify-content:start;border-left:1px solid var(--rule);padding-left:4px;gap:3px}
+ .spot-controls .spot-mobile-back{grid-area:1/1;width:44px;padding:0}.spot-mobile-back span{display:none}
+ .spot-mobile-heading{display:contents}.spot-mobile-heading h1{grid-area:1/2;font-size:14px;max-width:44px}
+ .spot-mobile-heading .spot-count{grid-area:2/1/3/3;text-align:center}
+ .spot-controls .spot-mobile-zoom{grid-area:3/1/4/3;width:91px}
+ .spot-controls>.spot-control[data-sound=none]{grid-area:4/1}
+ .spot-controls>.spot-control[data-sound=none]+.spot-control{grid-area:4/2}
+ .spot-controls .level-navigation [data-testid=level-previous]{grid-area:5/1}
+ .spot-controls .level-navigation [data-testid=level-advance]{grid-area:5/2}
+ .spot-controls .spot-control{width:44px;min-width:44px;font-family:inherit;font-size:11px;line-height:1.3;padding:0;color:var(--blue);border:0;background:transparent}
+ .spot-controls .spot-control span{white-space:normal}
+}

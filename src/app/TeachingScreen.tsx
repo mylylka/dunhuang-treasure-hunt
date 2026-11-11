@@ -3,6 +3,7 @@ import { getAssetUrl } from '../content';
 import type { LessonBook, LessonPanel, LessonQuestion, LessonRegion } from '../content/lessons/types';
 import type { ContentCatalog } from '../types';
 import { LessonImageViewer } from './LessonImageViewer';
+import { DialogCloseButton } from './DialogCloseButton';
 import '../styles/teaching.css';
 
 export interface TeachingScreenProps {
@@ -11,6 +12,7 @@ export interface TeachingScreenProps {
   initialUnitId?: string;
   initialVisitedIds?: string[];
   completed?: boolean;
+  gamesLocked?: boolean;
   onUnitChange?: (unitId: string) => void;
   onComplete: () => void;
   onSkip: () => void;
@@ -119,10 +121,10 @@ function LessonSources({ book, panel, onClose }: { book: LessonBook; panel?: Les
   return <dialog ref={dialogRef} className="lesson-source-dialog" aria-labelledby={titleId}
     onCancel={event => { event.preventDefault(); onClose(); }}>
     <div className="lesson-source-surface" data-testid="lesson-source-surface">
-    <header><h2 id={titleId}>教学资料</h2><button type="button" className="lesson-dialog-close" onClick={onClose} aria-label="关闭教学资料">×</button></header>
+    <header><h2 id={titleId}>教学资料</h2><DialogCloseButton className="lesson-dialog-close" onClick={onClose} label="关闭教学资料" /></header>
     <div className="lesson-source-scroll" tabIndex={0}>
-      {panel && <section><h3>当前图像</h3><p>{panel.imageCaption}</p>{current.map(source => <p key={source.id}><a href={sourceUrl(source.url)} target="_blank" rel="noreferrer">{source.title} ↗</a></p>)}</section>}
-      <section><h3>参考资料</h3>{other.map(source => <p key={source.id}><a href={sourceUrl(source.url)} target="_blank" rel="noreferrer">{source.title} ↗</a></p>)}</section>
+      {panel && <section><h3>当前图像</h3><p>{panel.imageCaption}</p>{current.map(source => <p key={source.id}><a href={sourceUrl(source.url)} target="_blank" rel="noreferrer">{source.title}</a></p>)}</section>}
+      <section><h3>参考资料</h3>{other.map(source => <p key={source.id}><a href={sourceUrl(source.url)} target="_blank" rel="noreferrer">{source.title}</a></p>)}</section>
       {supplementary.length > 0 && <section><h3>补充图像</h3><div className="lesson-source-figures">{supplementary.map(source => <figure key={source.id}>
         <a href={sourceUrl(source.url)} target="_blank" rel="noreferrer"><img src={sourceUrl(source.url)} alt={source.title} loading="lazy" /></a>
         <figcaption>{source.title}</figcaption></figure>)}</div></section>}
@@ -133,7 +135,7 @@ function LessonSources({ book, panel, onClose }: { book: LessonBook; panel?: Les
 }
 
 /** A seven-screen image-led guide. Lesson interaction never touches game state. */
-export function TeachingScreen({ book, catalog, initialUnitId, initialVisitedIds = [], onUnitChange, onComplete, onSkip, onBack }: TeachingScreenProps) {
+export function TeachingScreen({ book, catalog, initialUnitId, initialVisitedIds = [], gamesLocked, onUnitChange, onComplete, onSkip, onBack }: TeachingScreenProps) {
   const [unitIndex, setUnitIndex] = useState(() => Math.max(0, book.units.findIndex(unit => unit.id === initialUnitId)));
   const [visited, setVisited] = useState(() => new Set(initialVisitedIds));
   const [panelIds, setPanelIds] = useState<Record<string, string>>({});
@@ -174,7 +176,7 @@ export function TeachingScreen({ book, catalog, initialUnitId, initialVisitedIds
       <img src={getAssetUrl(catalog, 'icon-back')} alt="" /><span>返回</span></button>
       <div className="lesson-title"><p className="lesson-guide-label">文化导览<span> · {book.title}</span></p><h1>{unit.title}</h1></div><div className="lesson-heading-actions">
         <button type="button" className="lesson-tool" onClick={event => { event.currentTarget.focus({ preventScroll: true }); setSourcesOpen(true); }}>资料</button>
-        <button type="button" className="lesson-skip" onClick={onSkip}>直接玩游戏</button>
+        {!gamesLocked && <button type="button" className="lesson-skip" onClick={onSkip}>直接玩游戏</button>}
       </div></header>
     <nav className="lesson-chapters" aria-label="教学章节">{book.units.map((item, index) => <button type="button" key={item.id}
       aria-label={`第${index + 1}页：${item.title}`} aria-current={index === unitIndex ? 'step' : undefined}
@@ -207,7 +209,7 @@ export function TeachingScreen({ book, catalog, initialUnitId, initialVisitedIds
       <button type="button" className="button button-secondary" disabled={unitIndex === 0} onClick={() => selectUnit(unitIndex - 1)}>上一页</button>
       <span className="lesson-page-number" aria-label={`教学第 ${unitIndex + 1} 页，共 ${book.units.length} 页`}>{unitIndex + 1} / {book.units.length}</span>
       {isLast ? <button type="button" className="button button-primary" onClick={onComplete} disabled={!mayComplete}
-        title={!mayComplete ? '作答六道题即可完成小考，也可随时直接玩游戏。' : undefined}>完成小考</button> : <button type="button" className="button button-primary" onClick={() => selectUnit(unitIndex + 1)}>下一页</button>}
+        title={!mayComplete ? (gamesLocked ? '作答六道题即可完成小考。' : '作答六道题即可完成小考，也可随时直接玩游戏。') : undefined}>完成小考</button> : <button type="button" className="button button-primary" onClick={() => selectUnit(unitIndex + 1)}>下一页</button>}
     </footer>
     </div>
     </section>

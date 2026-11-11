@@ -1,0 +1,49 @@
+/* The panel PNG already supplies its centre and coloured decorative edge. A
+   background on the dialog paints beneath the PNG's transparent outer pixels.
+   Keep the independent inner lesson surfaces and every dialog's safe padding. */
+.app-shell:not([data-screen="home"]) :is(
+  dialog.lesson-source-dialog,
+  dialog.lesson-image-viewer,
+  dialog.puzzle-reference-dialog,
+  dialog.coloring-reference-dialog,
+  dialog.shadow-match-inspector,
+  section.floating-color-palette[role="dialog"]
+) {
+  background: transparent;
+  border-color: transparent;
+  border-image-slice: var(--panel-slice) fill;
+}
+
+.app-shell:not([data-screen="home"]) .dialog-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  border-image: none;
+  border-radius: 50%;
+  background: transparent;
+  color: #705a40;
+  box-shadow: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.app-shell:not([data-screen="home"]) .dialog-close:focus-visible,
+.app-shell[data-input-modality="keyboard"]:not([data-screen="home"]) .dialog-close:focus {
+  outline: 2px solid #a88459;
+  outline-offset: -5px;
+}
+
+.app-shell[data-input-modality="pointer"]:not([data-screen="home"]) .dialog-close:focus {
+  outline: none;
+}
+
+/* Pointer-driven focus does not need the keyboard's focus rectangle. */
+.app-shell[data-input-modality="pointer"]:not([data-screen="home"]) :is(button,a,input,select,[tabindex]):focus{outline:none}
+.app-shell:not([data-screen="home"]) :focus-visible{outline-color:#a88459}
+.app-shell[data-input-modality="pointer"]:not([data-screen="home"]) .coloring-free-color-rainbow:focus-within{outline:none}

@@ -1,0 +1,52 @@
+{
+  "family": "Dunhuang Labels",
+  "internalFamilyNames": {
+    "1": "Dunhuang Labels",
+    "4": "Dunhuang Labels",
+    "16": "Dunhuang Labels",
+    "18": "Dunhuang Labels",
+    "21": "Dunhuang Labels"
+  },
+  "postScriptName": "DunhuangLabels-Regular",
+  "originalFamily": "LXGW WenKai / 霞鹜文楷",
+  "originalVersion": "Version 1.530; October 18, 2026",
+  "projectUrl": "https://github.com/lxgw/LxgwWenKai",
+  "sourceReference": "art-source/shared/fonts/v001/lxgw-wenkai-source.ttf",
+  "sourceNotesReference": "art-source/shared/fonts/v001/source-notes.json",
+  "originalSha256": "2d73eea94ad808999d90c0000c239a84a33b09d4bc6ab6c5b8bbf1eda8a7fc8b",
+  "license": "SIL Open Font License 1.1",
+  "licenseReference": "art-source/shared/fonts/v001/ofl.txt",
+  "licenseSha256": "1a25e35da1031c6c3436fde545bb9cb5aca954e9873afe510c834b8b79bd21a0",
+  "subsetCharacters": "琵琶鼓铃铛×0123456789",
+  "subsetCodepoints": [
+    "U+7435",
+    "U+7436",
+    "U+9F13",
+    "U+94C3",
+    "U+94DB",
+    "U+00D7",
+    "U+0030",
+    "U+0031",
+    "U+0032",
+    "U+0033",
+    "U+0034",
+    "U+0035",
+    "U+0036",
+    "U+0037",
+    "U+0038",
+    "U+0039"
+  ],
+  "output": "public/assets/shared/fonts/dunhuang-labels-v001.woff",
+  "outputBytes": 4552,
+  "outputSha256": "5722e117dff030f408d4a931a524f21250b9a6e051b83dca71ff0bb05a0b3fe3",
+  "fontToolsVersion": "4.63.0",
+  "weight": 400,
+  "style": "Regular",
+  "boldPolicy": "源字体仅Regular；本文件不含真实Bold字形。界面700加粗须明确通过CSS font-synthesis: weight完成。",
+  "processing": "仅从v001本地母字体提取所列字符并重命名内部字族，WOFF/zlib编码；保留原版权与OFL记录，固定原head时间戳，不修改轮廓、不下载或安装系统字体。",
+  "checks": {
+    "characters": 16,
+    "glyphs": 17,
+    "weight": 400
+  }
+}

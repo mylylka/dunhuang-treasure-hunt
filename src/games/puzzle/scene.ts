@@ -1,11 +1,12 @@
 import type * as PhaserTypes from 'phaser';
 import type { GameCommand, GameEvent, PuzzleLevel } from '../../types';
 import type { Point, Rectangle, Viewport } from '../../runtime/geometry';
+import { applyLogicalCamera, logicalPointer } from '../../runtime/render-coordinates';
 import { acceptsDrop, calculatePuzzleLayout, cellAt, contains, createPieceEdges, createPuzzleState, fullyWithin, isPuzzleComplete,
   placePiece, placedCount, rectangleIntersection, rotatePiece, scrollToPuzzlePiece, selectPiece, type PuzzleLayout } from './rules';
 import { tracePiece } from './shapes';
 
-export interface PuzzleController { execute(command: GameCommand): void; resize(viewport: Viewport): void; setReducedMotion(reduced: boolean): void; dispose(): void }
+export interface PuzzleController { execute(command: GameCommand): void; setBlocked(blocked: boolean): void; resize(viewport: Viewport): void; setReducedMotion(reduced: boolean): void; dispose(): void }
 export interface PuzzleSceneOptions {
   level: PuzzleLevel; imageUrl: string; viewport: Viewport; imageAspectRatio: number; reducedMotion: boolean;
   emit(event: GameEvent): void; publishLayout(layout: PuzzleLayout): void;
@@ -17,6 +18,7 @@ interface TrayScrollGesture { id: number; start: Point; startScroll: number }
 /** Shared engine lifecycle belongs to PhaserPlayer; this scene owns only the current puzzle. */
 export function createPuzzleScene(Phaser: typeof import('phaser'), options: PuzzleSceneOptions): { scene: PhaserTypes.Scene; controller: PuzzleController } {
   class PuzzleScene extends Phaser.Scene implements PuzzleController {
+    private blocked = false;
     private state = createPuzzleState(options.level);
     private viewport = options.viewport;
     private ratio = options.imageAspectRatio;
@@ -51,6 +53,7 @@ export function createPuzzleScene(Phaser: typeof import('phaser'), options: Puzz
         this.renderBoard(); this.emitChange();
         this.input.on('pointerdown', this.pointerDown, this); this.input.on('pointermove', this.pointerMove, this);
         this.input.on('pointerup', this.pointerUp, this); this.input.on('gameout', this.cancelGesture, this);
+        this.input.enabled = !this.blocked;
         this.game.canvas.addEventListener('wheel', this.wheel, { passive: false });
         options.emit({ type: 'ready', total: options.level.rows * options.level.columns });
         for (const command of this.pending.splice(0)) this.applyCommand(command);
@@ -96,6 +99,7 @@ export function createPuzzleScene(Phaser: typeof import('phaser'), options: Puzz
     }
     private renderBoard() {
       if (!this.ready || this.disposed) return;
+      applyLogicalCamera(this, this.viewport);
       this.tweens.killAll(); this.children.removeAll(true); this.images.clear();
       this.layout = calculatePuzzleLayout(this.viewport.width, this.viewport.height, this.ratio, options.level, this.state, this.trayScroll, this.highlight);
       this.trayScroll = this.layout.trayScroll;
@@ -165,11 +169,13 @@ export function createPuzzleScene(Phaser: typeof import('phaser'), options: Puzz
     execute(command: GameCommand) {
       if (this.disposed || command.sequence === this.sequence) return;
       this.sequence = command.sequence;
+      if (this.blocked) return;
       if (!this.ready) { this.pending.push(command); return; }
       this.applyCommand(command);
     }
     private applyCommand(command: GameCommand) {
       if (command.type === 'set-motion') { this.setReducedMotion(command.reducedMotion); return; }
+      if (this.blocked) return;
       if (command.type === 'restart') {
         this.state = createPuzzleState(options.level); this.trayScroll = 0; this.highlight = null; this.completed = false; this.gesture = null; this.scrollGesture = null;
         this.renderBoard(); this.emitChange(); options.emit({ type: 'hint', message: '' }); return;
@@ -202,8 +208,8 @@ export function createPuzzleScene(Phaser: typeof import('phaser'), options: Puzz
       return null;
     }
     private pointerDown(pointer: PhaserTypes.Input.Pointer) {
-      if (!this.ready || this.disposed || this.completed || this.gesture || this.scrollGesture) return;
-      const point = { x: pointer.x, y: pointer.y };
+      if (!this.ready || this.disposed || this.blocked || this.completed || this.gesture || this.scrollGesture) return;
+      const point = logicalPointer(this, pointer, this.viewport);
       if (options.level.mode === 'rotation') {
         const id = cellAt(point, this.layout.board, options.level.rows, options.level.columns);
         if (id !== null) this.gesture = { id: pointer.id, pieceId: id, start: point, dragged: false, fromTray: false };
@@ -221,28 +227,31 @@ export function createPuzzleScene(Phaser: typeof import('phaser'), options: Puzz
       }
     }
     private pointerMove(pointer: PhaserTypes.Input.Pointer) {
+      if (this.blocked) return;
+      const point = logicalPointer(this, pointer, this.viewport);
       if (this.scrollGesture?.id === pointer.id && pointer.isDown) {
-        const distance = pointer.y - this.scrollGesture.start.y;
+        const distance = point.y - this.scrollGesture.start.y;
         if (Math.abs(distance) > 6) this.scrollTo(this.scrollGesture.startScroll - distance, true);
         return;
       }
       const gesture = this.gesture;
       if (!gesture || gesture.id !== pointer.id || !pointer.isDown || options.level.mode !== 'jigsaw' || !gesture.fromTray) return;
-      if (Math.hypot(pointer.x - gesture.start.x, pointer.y - gesture.start.y) > 6) gesture.dragged = true;
+      if (Math.hypot(point.x - gesture.start.x, point.y - gesture.start.y) > 6) gesture.dragged = true;
       if (!gesture.dragged) return;
       const image = this.images.get(gesture.pieceId), texture = this.texturesByPiece.get(gesture.pieceId);
       if (!image || !texture) return;
       const scale = this.layout.board.width / this.sourceWidth;
       // Once picked up, the complete piece follows the pointer across the viewport boundary.
       image.setCrop().setDisplaySize(texture.width * scale, texture.height * scale)
-        .setPosition(pointer.x - texture.width * scale / 2, pointer.y - texture.height * scale / 2).setDepth(10);
+        .setPosition(point.x - texture.width * scale / 2, point.y - texture.height * scale / 2).setDepth(10);
     }
     private pointerUp(pointer: PhaserTypes.Input.Pointer) {
+      if (this.blocked) { this.gesture = null; this.scrollGesture = null; return; }
       if (this.scrollGesture?.id === pointer.id) { this.scrollGesture = null; return; }
       const gesture = this.gesture;
       if (!gesture || gesture.id !== pointer.id) return;
       this.gesture = null;
-      const point = { x: pointer.x, y: pointer.y };
+      const point = logicalPointer(this, pointer, this.viewport);
       const moved = Math.hypot(point.x - gesture.start.x, point.y - gesture.start.y) > 6;
       if (options.level.mode === 'rotation') {
         if (moved) return;
@@ -273,7 +282,7 @@ export function createPuzzleScene(Phaser: typeof import('phaser'), options: Puzz
       this.renderBoard(); this.emitChange(); this.finishIfComplete();
     }
     private scrollTo(offset: number, keepSwipe = false) {
-      if (!this.ready || this.disposed || !this.layout.tray) return;
+      if (!this.ready || this.disposed || this.blocked || !this.layout.tray) return;
       const next = Math.max(0, Math.min(this.layout.trayMaxScroll, Number.isFinite(offset) ? offset : 0));
       // A wheel/scrollbar action cancels a pending piece gesture, never places it or increments progress.
       const hadPieceGesture = this.gesture !== null;
@@ -283,7 +292,7 @@ export function createPuzzleScene(Phaser: typeof import('phaser'), options: Puzz
       this.trayScroll = next; this.renderBoard();
     }
     private wheel = (event: WheelEvent) => {
-      if (!this.ready || this.disposed || !this.layout.tray) return;
+      if (!this.ready || this.disposed || this.blocked || !this.layout.tray) return;
       const bounds = this.game.canvas.getBoundingClientRect();
       if (!bounds.width || !bounds.height) return;
       const point = { x: (event.clientX - bounds.left) * this.viewport.width / bounds.width,
@@ -298,6 +307,7 @@ export function createPuzzleScene(Phaser: typeof import('phaser'), options: Puzz
       if (this.gesture) { this.gesture = null; this.renderBoard(); }
     }
     resize(viewport: Viewport) {
+      if (this.disposed || this.blocked) return;
       const previousRowHeight = this.layout.trayRowHeight;
       this.viewport = viewport; this.gesture = null; this.scrollGesture = null;
       if (this.ready) {
@@ -305,6 +315,16 @@ export function createPuzzleScene(Phaser: typeof import('phaser'), options: Puzz
         // Preserve the fractional tray row on a resize; placement state remains untouched.
         if (previousRowHeight > 0) this.trayScroll = this.trayScroll / previousRowHeight * next.trayRowHeight;
         this.renderBoard(); this.emitChange();
+      }
+    }
+    setBlocked(blocked: boolean) {
+      if (this.disposed) return;
+      this.blocked = blocked;
+      if (this.input) this.input.enabled = !blocked;
+      if (blocked) {
+        this.pending = []; this.gesture = null; this.scrollGesture = null;
+        // Dragging moves an image only; redraw from the unchanged placement state.
+        if (this.ready) this.renderBoard();
       }
     }
     setReducedMotion(reduced: boolean) { this.reduced = reduced; if (reduced && this.ready) this.renderBoard(); }

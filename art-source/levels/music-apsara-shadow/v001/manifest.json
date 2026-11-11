@@ -1,0 +1,438 @@
+{
+  "schemaVersion": 1,
+  "levelId": "music-apsara-shadow",
+  "version": "v001",
+  "sourceNote": "开发者提供的AI教学示意；保留用户PNG原始字节和透明通道，不代表特定洞窟、年代或历史原貌复原。",
+  "processing": "8张PNG按原文件名原字节归档；仅8/1/2/3/4复制为五张英文名运行PNG。无重编码、缩放、裁切、去圈、改色、镜像或重绘；5/6/7只作标注参考。",
+  "correctOptionId": "shadow-one",
+  "correctAssetId": "shadow-apsara-intact",
+  "originals": [
+    {
+      "sourceOrder": 1,
+      "sourceFilename": "codex-clipboard-4b282de7-d8f0-4433-a666-860ef596aa42.png",
+      "archivePath": "originals/codex-clipboard-4b282de7-d8f0-4433-a666-860ef596aa42.png",
+      "sha256": "2c5e4bbab1193a3c9dd3d3058ed922cefab0cc2f2b261fe25301263f4dfc0a41",
+      "bytes": 164096,
+      "role": "clean-shadow",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "hasAlpha": true,
+      "alphaMin": 0,
+      "alphaMax": 255,
+      "transparentPixels": 754161,
+      "opaquePixels": 727208,
+      "intermediateAlphaPixels": 91147,
+      "alphaNonzeroBBox": [
+        17,
+        25,
+        1244,
+        1254
+      ],
+      "alpha128BBox": [
+        22,
+        44,
+        1241,
+        1211
+      ],
+      "alpha128Area": 756975,
+      "rgbEntirelyBlack": true
+    },
+    {
+      "sourceOrder": 2,
+      "sourceFilename": "codex-clipboard-e83d53fd-47ff-4e1c-974d-4b28ff8ecaa8.png",
+      "archivePath": "originals/codex-clipboard-e83d53fd-47ff-4e1c-974d-4b28ff8ecaa8.png",
+      "sha256": "fbafcba2bd84270b370c149eed561b1910cfc3d84ca5a064116eb92ae825382a",
+      "bytes": 123291,
+      "role": "clean-shadow",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "hasAlpha": true,
+      "alphaMin": 0,
+      "alphaMax": 255,
+      "transparentPixels": 843695,
+      "opaquePixels": 663444,
+      "intermediateAlphaPixels": 65377,
+      "alphaNonzeroBBox": [
+        17,
+        25,
+        1244,
+        1254
+      ],
+      "alpha128BBox": [
+        25,
+        44,
+        1241,
+        1211
+      ],
+      "alpha128Area": 683736,
+      "rgbEntirelyBlack": true
+    },
+    {
+      "sourceOrder": 3,
+      "sourceFilename": "codex-clipboard-22a9ee20-031a-44b2-8729-10eb7358552b.png",
+      "archivePath": "originals/codex-clipboard-22a9ee20-031a-44b2-8729-10eb7358552b.png",
+      "sha256": "c657ec2e631959631433a02dee1ab170b10b7c1e301aaffb12210c8d6084d99b",
+      "bytes": 149163,
+      "role": "clean-shadow",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "hasAlpha": true,
+      "alphaMin": 0,
+      "alphaMax": 255,
+      "transparentPixels": 796590,
+      "opaquePixels": 693612,
+      "intermediateAlphaPixels": 82314,
+      "alphaNonzeroBBox": [
+        17,
+        25,
+        1244,
+        1254
+      ],
+      "alpha128BBox": [
+        22,
+        44,
+        1241,
+        1211
+      ],
+      "alpha128Area": 720011,
+      "rgbEntirelyBlack": true
+    },
+    {
+      "sourceOrder": 4,
+      "sourceFilename": "codex-clipboard-90f460b2-1aab-497d-9f9f-5e58cff5419c.png",
+      "archivePath": "originals/codex-clipboard-90f460b2-1aab-497d-9f9f-5e58cff5419c.png",
+      "sha256": "5f4a533050df635fb34ec129d377e5a98a09eff6094687064f7d531cf20a610f",
+      "bytes": 139839,
+      "role": "clean-shadow",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "hasAlpha": true,
+      "alphaMin": 0,
+      "alphaMax": 255,
+      "transparentPixels": 818162,
+      "opaquePixels": 677663,
+      "intermediateAlphaPixels": 76691,
+      "alphaNonzeroBBox": [
+        17,
+        25,
+        1226,
+        1254
+      ],
+      "alpha128BBox": [
+        26,
+        44,
+        1220,
+        1211
+      ],
+      "alpha128Area": 701939,
+      "rgbEntirelyBlack": true
+    },
+    {
+      "sourceOrder": 5,
+      "sourceFilename": "codex-clipboard-e5c40027-632e-49e5-8d56-6284bd3461f7.png",
+      "archivePath": "originals/codex-clipboard-e5c40027-632e-49e5-8d56-6284bd3461f7.png",
+      "sha256": "9cd1f2be99589ad2dd15da6f7609dc935ed09b2b602b4b97afc286bb0f9d3009",
+      "bytes": 168653,
+      "role": "annotation-only",
+      "width": 1474,
+      "height": 1474,
+      "mode": "RGB",
+      "hasAlpha": false,
+      "alphaMin": 255,
+      "alphaMax": 255,
+      "transparentPixels": 0,
+      "opaquePixels": 2172676,
+      "intermediateAlphaPixels": 0,
+      "alphaNonzeroBBox": [
+        0,
+        0,
+        1474,
+        1474
+      ],
+      "alpha128BBox": [
+        0,
+        0,
+        1474,
+        1474
+      ],
+      "alpha128Area": 2172676,
+      "rgbEntirelyBlack": false
+    },
+    {
+      "sourceOrder": 6,
+      "sourceFilename": "codex-clipboard-0bec9e11-4936-43d4-8864-6081fc739ee0.png",
+      "archivePath": "originals/codex-clipboard-0bec9e11-4936-43d4-8864-6081fc739ee0.png",
+      "sha256": "b761aa9b6cd7051168f2b558fa551fc5ac2517a6182cf9542ecf37c93ba117a9",
+      "bytes": 205514,
+      "role": "annotation-only",
+      "width": 1474,
+      "height": 1474,
+      "mode": "RGB",
+      "hasAlpha": false,
+      "alphaMin": 255,
+      "alphaMax": 255,
+      "transparentPixels": 0,
+      "opaquePixels": 2172676,
+      "intermediateAlphaPixels": 0,
+      "alphaNonzeroBBox": [
+        0,
+        0,
+        1474,
+        1474
+      ],
+      "alpha128BBox": [
+        0,
+        0,
+        1474,
+        1474
+      ],
+      "alpha128Area": 2172676,
+      "rgbEntirelyBlack": false
+    },
+    {
+      "sourceOrder": 7,
+      "sourceFilename": "codex-clipboard-51e31975-1c35-45f9-85d6-0ad2b3f76083.png",
+      "archivePath": "originals/codex-clipboard-51e31975-1c35-45f9-85d6-0ad2b3f76083.png",
+      "sha256": "9df89461c218ef8a4cd37a7dc9299f161e5122a3e94b4146dd3e0940f3c9c082",
+      "bytes": 192529,
+      "role": "annotation-only",
+      "width": 1474,
+      "height": 1474,
+      "mode": "RGB",
+      "hasAlpha": false,
+      "alphaMin": 255,
+      "alphaMax": 255,
+      "transparentPixels": 0,
+      "opaquePixels": 2172676,
+      "intermediateAlphaPixels": 0,
+      "alphaNonzeroBBox": [
+        0,
+        0,
+        1474,
+        1474
+      ],
+      "alpha128BBox": [
+        0,
+        0,
+        1474,
+        1474
+      ],
+      "alpha128Area": 2172676,
+      "rgbEntirelyBlack": false
+    },
+    {
+      "sourceOrder": 8,
+      "sourceFilename": "codex-clipboard-89e1c0a6-c4b3-4580-a42f-61f9860af2f0.png",
+      "archivePath": "originals/codex-clipboard-89e1c0a6-c4b3-4580-a42f-61f9860af2f0.png",
+      "sha256": "d79953542159bffbe904f219d42c3c0fb161b508e0f4a365f350c33de1ca8985",
+      "bytes": 2099486,
+      "role": "color-reference",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "hasAlpha": true,
+      "alphaMin": 0,
+      "alphaMax": 255,
+      "transparentPixels": 754161,
+      "opaquePixels": 1716,
+      "intermediateAlphaPixels": 816639,
+      "alphaNonzeroBBox": [
+        17,
+        25,
+        1244,
+        1254
+      ],
+      "alpha128BBox": [
+        22,
+        44,
+        1241,
+        1211
+      ],
+      "alpha128Area": 756975,
+      "rgbEntirelyBlack": false
+    }
+  ],
+  "runtimeFiles": [
+    {
+      "assetId": "shadow-apsara-reference",
+      "optionId": null,
+      "sourceOrder": 8,
+      "sourceFilename": "codex-clipboard-89e1c0a6-c4b3-4580-a42f-61f9860af2f0.png",
+      "path": "/assets/levels/music-apsara-shadow/v001/reference.png",
+      "sha256": "d79953542159bffbe904f219d42c3c0fb161b508e0f4a365f350c33de1ca8985",
+      "sourceSha256": "d79953542159bffbe904f219d42c3c0fb161b508e0f4a365f350c33de1ca8985",
+      "bytes": 2099486,
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "byteIdenticalToOriginal": true
+    },
+    {
+      "assetId": "shadow-apsara-intact",
+      "optionId": "shadow-one",
+      "sourceOrder": 1,
+      "sourceFilename": "codex-clipboard-4b282de7-d8f0-4433-a666-860ef596aa42.png",
+      "path": "/assets/levels/music-apsara-shadow/v001/shadow-intact.png",
+      "sha256": "2c5e4bbab1193a3c9dd3d3058ed922cefab0cc2f2b261fe25301263f4dfc0a41",
+      "sourceSha256": "2c5e4bbab1193a3c9dd3d3058ed922cefab0cc2f2b261fe25301263f4dfc0a41",
+      "bytes": 164096,
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "byteIdenticalToOriginal": true
+    },
+    {
+      "assetId": "shadow-apsara-head-cloud",
+      "optionId": "shadow-two",
+      "sourceOrder": 2,
+      "sourceFilename": "codex-clipboard-e83d53fd-47ff-4e1c-974d-4b28ff8ecaa8.png",
+      "path": "/assets/levels/music-apsara-shadow/v001/shadow-head-cloud.png",
+      "sha256": "fbafcba2bd84270b370c149eed561b1910cfc3d84ca5a064116eb92ae825382a",
+      "sourceSha256": "fbafcba2bd84270b370c149eed561b1910cfc3d84ca5a064116eb92ae825382a",
+      "bytes": 123291,
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "byteIdenticalToOriginal": true
+    },
+    {
+      "assetId": "shadow-apsara-ribbon-foot",
+      "optionId": "shadow-three",
+      "sourceOrder": 3,
+      "sourceFilename": "codex-clipboard-22a9ee20-031a-44b2-8729-10eb7358552b.png",
+      "path": "/assets/levels/music-apsara-shadow/v001/shadow-ribbon-foot.png",
+      "sha256": "c657ec2e631959631433a02dee1ab170b10b7c1e301aaffb12210c8d6084d99b",
+      "sourceSha256": "c657ec2e631959631433a02dee1ab170b10b7c1e301aaffb12210c8d6084d99b",
+      "bytes": 149163,
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "byteIdenticalToOriginal": true
+    },
+    {
+      "assetId": "shadow-apsara-ribbon-cloud",
+      "optionId": "shadow-four",
+      "sourceOrder": 4,
+      "sourceFilename": "codex-clipboard-90f460b2-1aab-497d-9f9f-5e58cff5419c.png",
+      "path": "/assets/levels/music-apsara-shadow/v001/shadow-ribbon-cloud.png",
+      "sha256": "5f4a533050df635fb34ec129d377e5a98a09eff6094687064f7d531cf20a610f",
+      "sourceSha256": "5f4a533050df635fb34ec129d377e5a98a09eff6094687064f7d531cf20a610f",
+      "bytes": 139839,
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "byteIdenticalToOriginal": true
+    }
+  ],
+  "maskAudit": {
+    "threshold": "alpha >= 128",
+    "matchingDefinition": "统一1254×1254画布，不平移、不缩放；比较二值前景轮廓，不要求原始alpha灰度逐像素一致。",
+    "bboxConvention": "[left, top, right-exclusive, bottom-exclusive]",
+    "uniqueCorrectOptionId": "shadow-one",
+    "candidates": [
+      {
+        "sourceOrder": 1,
+        "optionId": "shadow-one",
+        "iou": 1.0,
+        "mismatchedPixels": 0,
+        "differenceBBox": null,
+        "rawAlphaEqual": false,
+        "rawAlphaMAE": 1.155472503936367
+      },
+      {
+        "sourceOrder": 2,
+        "optionId": "shadow-two",
+        "iou": 0.903247795501833,
+        "mismatchedPixels": 73239,
+        "differenceBBox": [
+          22,
+          132,
+          810,
+          1190
+        ],
+        "rawAlphaEqual": false,
+        "rawAlphaMAE": 12.75534748136108
+      },
+      {
+        "sourceOrder": 3,
+        "optionId": "shadow-three",
+        "iou": 0.9511687968559067,
+        "mismatchedPixels": 36964,
+        "differenceBBox": [
+          818,
+          203,
+          1140,
+          1211
+        ],
+        "rawAlphaEqual": false,
+        "rawAlphaMAE": 7.031594591088421
+      },
+      {
+        "sourceOrder": 4,
+        "optionId": "shadow-four",
+        "iou": 0.9272948247960633,
+        "mismatchedPixels": 55036,
+        "differenceBBox": [
+          22,
+          417,
+          1241,
+          1178
+        ],
+        "rawAlphaEqual": false,
+        "rawAlphaMAE": 9.916170010352836
+      }
+    ],
+    "annotationComparison": "仅内存中去掉四边110px白底，黑色max(R,G,B)<128；忽略R>150且R>1.5G、R>1.5B的红圈覆盖像素。原图未裁切或改写。",
+    "annotations": [
+      {
+        "sourceOrder": 5,
+        "matchesCleanSourceOrder": 2,
+        "matchesOptionId": "shadow-two",
+        "readOnlyComparisonCrop": [
+          110,
+          110,
+          1364,
+          1364
+        ],
+        "ignoredRedPixels": 8804,
+        "iou": 1.0,
+        "mismatchedPixels": 0,
+        "differenceBBox": null
+      },
+      {
+        "sourceOrder": 6,
+        "matchesCleanSourceOrder": 3,
+        "matchesOptionId": "shadow-three",
+        "readOnlyComparisonCrop": [
+          110,
+          110,
+          1364,
+          1364
+        ],
+        "ignoredRedPixels": 12832,
+        "iou": 1.0,
+        "mismatchedPixels": 0,
+        "differenceBBox": null
+      },
+      {
+        "sourceOrder": 7,
+        "matchesCleanSourceOrder": 4,
+        "matchesOptionId": "shadow-four",
+        "readOnlyComparisonCrop": [
+          110,
+          110,
+          1364,
+          1364
+        ],
+        "ignoredRedPixels": 10027,
+        "iou": 1.0,
+        "mismatchedPixels": 0,
+        "differenceBBox": null
+      }
+    ]
+  }
+}

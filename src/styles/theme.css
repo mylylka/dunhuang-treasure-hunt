@@ -114,3 +114,34 @@
  .result-reference .result-reference-link{font-size:16px;margin-bottom:7px}
  .result-reference .result-art-note{font-size:11px;padding-top:7px}
 }
+
+/* Phone play surfaces use the actual browser viewport, including safe-area padding. */
+@media(pointer:coarse) and (hover:none) and (orientation:landscape) and (max-height:600px){
+ .app-shell[data-screen=play]:has(.spot-screen,.puzzle-screen,.coloring-screen)::before{opacity:0}
+ .app-shell[data-screen=play]:has(.spot-screen,.puzzle-screen,.coloring-screen)>.site-header,.app-shell[data-screen=play]:has(.spot-screen,.puzzle-screen,.coloring-screen)>.site-footer{display:none}
+ .page.page-play:is(.spot-screen,.puzzle-screen,.coloring-screen){width:100%;margin:0;padding:max(6px,env(safe-area-inset-top)) max(6px,env(safe-area-inset-right)) max(6px,env(safe-area-inset-bottom)) max(6px,env(safe-area-inset-left));background:#f7f1e4}
+ .page-play:is(.spot-screen,.puzzle-screen,.coloring-screen) .game-stage{padding:0;border:0;border-image:none;background:transparent}
+}
+
+/* Compact landscape results: the review owns the remaining height, with no
+   empty counter column when a game has no numerical result. */
+@media(pointer:coarse) and (hover:none) and (orientation:landscape) and (max-height:600px){
+ .page.page-result:is(.shadow-result-screen,.hidden-object-result-screen){width:calc(100% - 24px);gap:4px;padding-block:4px}
+ .page-result:is(.shadow-result-screen,.hidden-object-result-screen) .result-heading h1{font-size:22px;line-height:1.25;margin:0}
+ .page-result:is(.shadow-result-screen,.hidden-object-result-screen) .result-review{grid-template-rows:minmax(0,1fr);gap:12px;padding-block:4px;align-items:stretch}
+ .page-result:is(.shadow-result-screen,.hidden-object-result-screen) .result-summary{display:flex;flex-direction:column;justify-content:center;align-items:stretch;width:100%;height:100%;min-width:0;min-height:0}
+ .page-result:is(.shadow-result-screen,.hidden-object-result-screen) .result-reference{width:100%;max-height:100%;overflow:auto;padding-right:6px}
+ .page-result:is(.shadow-result-screen,.hidden-object-result-screen) .result-reference h2{font-size:15px;line-height:1.3;margin-bottom:3px}
+ .page-result:is(.shadow-result-screen,.hidden-object-result-screen) .result-reference p{font-size:11px;line-height:1.45;margin-bottom:5px}
+ .page-result:is(.shadow-result-screen,.hidden-object-result-screen) .result-reference .result-reference-link{font-size:13px;line-height:1.4;margin-bottom:5px}
+ .page-result:is(.shadow-result-screen,.hidden-object-result-screen) .result-reference .result-art-note{font-size:10px;line-height:1.4;padding-top:5px}
+ .page-result:is(.shadow-result-screen,.hidden-object-result-screen) .result-actions{flex-wrap:nowrap;gap:8px}
+ .page-result:is(.shadow-result-screen,.hidden-object-result-screen) .result-actions .button{flex:1;min-width:0;min-height:44px;padding:6px 20px;font-size:11px}
+ .shadow-result-screen .result-review{grid-template-columns:minmax(0,1.35fr) minmax(0,1fr)}
+ .shadow-result-screen .shadow-result-images{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:minmax(0,1fr);align-items:stretch;height:100%;min-height:0;gap:8px}
+ .shadow-result-screen .shadow-result-images figure{grid-template-rows:minmax(0,1fr) auto;min-height:0;gap:2px}
+ .shadow-result-screen .shadow-result-images figure img{width:100%;height:100%;min-height:0;object-fit:contain}
+ .shadow-result-screen .shadow-result-images figcaption{font-size:10px;line-height:1.2}
+ .hidden-object-result-screen .result-review{grid-template-columns:minmax(0,1fr)}
+ .hidden-object-result-screen .result-image{display:none}
+}

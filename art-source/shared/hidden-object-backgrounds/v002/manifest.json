@@ -1,0 +1,160 @@
+{
+  "schemaVersion": 1,
+  "registeredDate": "2026-11-04",
+  "encoder": {
+    "tool": "cwebp",
+    "version": "1.5.0\nlibsharpyuv: 0.4.1",
+    "flags": [
+      "-q",
+      "92",
+      "-alpha_q",
+      "100",
+      "-exact",
+      "-sharp_yuv",
+      "-m",
+      "6",
+      "-metadata",
+      "icc"
+    ]
+  },
+  "policy": "Technical q92 RGB encoding only: no crop, resize, recolouring, mirroring or repainting. Dimensions and every alpha byte are verified unchanged; RGB is lossy, not bit-identical. All old PNGs and content indexes are preserved.",
+  "qualityScope": "Native RGB uses alpha>=128; offline display uses Pillow LANCZOS and warm-paper compositing (sticker max edge 180px; background width 480px). Display metrics exclude transparent blank pixels; these are not browser/GPU or real-device screenshots.",
+  "version": "hidden-object-background-webp-v002",
+  "sourcePngManifest": "art-source/shared/hidden-object-backgrounds/v001/manifest.json",
+  "sourcePngManifestSha256": "27008a9cffd5d0ca7c6ad2d29ab5c9413f8601e3d4b1c869b1001b3b3935d2f6",
+  "runtimeRoot": "public/assets/shared/hidden-object-backgrounds/v002/",
+  "summary": {
+    "imageCount": 3,
+    "pngBytes": 6008665,
+    "webpBytes": 312262,
+    "bytesSaved": 5696403,
+    "aggregateReduction": 0.94803138,
+    "minimumIndividualReduction": 0.93590892,
+    "allDimensionsUnchanged": true,
+    "allAlphaByteIdentical": true,
+    "allIccProfilesIdentical": true,
+    "meanNativeVisibleRGBMAE": 1.321831,
+    "meanOfflineVisibleRGBMAE": 0.942845,
+    "maximumOfflineVisibleRGBP99": 4.0,
+    "minimumOfflineVisibleRGBPSNR": 45.022329
+  },
+  "derivatives": [
+    {
+      "id": "hidden-object-background-ch1",
+      "kind": "background",
+      "chapter": 1,
+      "sourcePath": "public/assets/shared/hidden-object-backgrounds/v001/chapter-1-silk.png",
+      "sourceSha256": "f6fc90f637db904b065240f40223a5d36cf7a378e58c5fc9089649d9b8f1bb2d",
+      "runtimePath": "/assets/shared/hidden-object-backgrounds/v002/chapter-1-silk.webp",
+      "sourceMode": "RGB",
+      "width": 916,
+      "height": 1717,
+      "pngBytes": 2194820,
+      "webpBytes": 135668,
+      "webpSha256": "0e9e316c75f4ca71b45fc5de5cfede63dfe561cf70efcdb0f275dc7c56d4aa6b",
+      "bytesSaved": 2059152,
+      "reduction": 0.93818719,
+      "alphaByteIdentical": true,
+      "alphaSha256": "ed8bcd9d16f495925a6e160abf3d33b37c4556ce5071516649ea81fc5c865d7d",
+      "iccProfileIdentical": true,
+      "nativeVisibleRGB": {
+        "mae": 1.600121,
+        "p99": 5.0,
+        "max": 16,
+        "psnrDb": 41.861959
+      },
+      "offlineDisplay": {
+        "size": [
+          480,
+          900
+        ],
+        "resampler": "Pillow LANCZOS",
+        "paper": "#fffaf1",
+        "visibleContentRGB": {
+          "mae": 1.070746,
+          "p99": 4.0,
+          "max": 9,
+          "psnrDb": 45.022329
+        }
+      }
+    },
+    {
+      "id": "hidden-object-background-ch2",
+      "kind": "background",
+      "chapter": 2,
+      "sourcePath": "public/assets/shared/hidden-object-backgrounds/v001/chapter-2-celadon.png",
+      "sourceSha256": "242902e238fe093b5c9aa201dd5eebd08cfecd60da0def093851bfc3f5075b2f",
+      "runtimePath": "/assets/shared/hidden-object-backgrounds/v002/chapter-2-celadon.webp",
+      "sourceMode": "RGB",
+      "width": 916,
+      "height": 1717,
+      "pngBytes": 1724693,
+      "webpBytes": 42698,
+      "webpSha256": "78c01c3818f7fabc50f254bcbe93e79bf68c8f14b4505b16e016aec507d42490",
+      "bytesSaved": 1681995,
+      "reduction": 0.97524313,
+      "alphaByteIdentical": true,
+      "alphaSha256": "ed8bcd9d16f495925a6e160abf3d33b37c4556ce5071516649ea81fc5c865d7d",
+      "iccProfileIdentical": true,
+      "nativeVisibleRGB": {
+        "mae": 1.017044,
+        "p99": 4.0,
+        "max": 10,
+        "psnrDb": 45.451286
+      },
+      "offlineDisplay": {
+        "size": [
+          480,
+          900
+        ],
+        "resampler": "Pillow LANCZOS",
+        "paper": "#fffaf1",
+        "visibleContentRGB": {
+          "mae": 0.850493,
+          "p99": 3.0,
+          "max": 8,
+          "psnrDb": 46.798039
+        }
+      }
+    },
+    {
+      "id": "hidden-object-background-ch3",
+      "kind": "background",
+      "chapter": 3,
+      "sourcePath": "public/assets/shared/hidden-object-backgrounds/v001/chapter-3-plaster.png",
+      "sourceSha256": "2412323c1209470a3cdd73b5bd9369933596330204070cb5f7009678784131e5",
+      "runtimePath": "/assets/shared/hidden-object-backgrounds/v002/chapter-3-plaster.webp",
+      "sourceMode": "RGB",
+      "width": 916,
+      "height": 1717,
+      "pngBytes": 2089152,
+      "webpBytes": 133896,
+      "webpSha256": "0c0baccb77895b09514f6a4655f3f66ca5e71d4c380f4a2cd87fa09bb639f321",
+      "bytesSaved": 1955256,
+      "reduction": 0.93590892,
+      "alphaByteIdentical": true,
+      "alphaSha256": "ed8bcd9d16f495925a6e160abf3d33b37c4556ce5071516649ea81fc5c865d7d",
+      "iccProfileIdentical": true,
+      "nativeVisibleRGB": {
+        "mae": 1.348327,
+        "p99": 5.0,
+        "max": 13,
+        "psnrDb": 43.258403
+      },
+      "offlineDisplay": {
+        "size": [
+          480,
+          900
+        ],
+        "resampler": "Pillow LANCZOS",
+        "paper": "#fffaf1",
+        "visibleContentRGB": {
+          "mae": 0.907297,
+          "p99": 3.0,
+          "max": 9,
+          "psnrDb": 46.403619
+        }
+      }
+    }
+  ]
+}

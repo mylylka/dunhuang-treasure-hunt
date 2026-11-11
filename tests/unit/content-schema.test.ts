@@ -1,8 +1,41 @@
 import { describe, expect, it } from 'vitest';
 import { assertShellAssets, parseCatalog } from '../../src/services/content-schema';
 import { makeCatalog } from '../fixtures/catalog';
+import shadowLevel from '../../src/content/levels/music-apsara-shadow.json';
+
+function shadowCatalog() {
+  const fixture = makeCatalog();
+  return { schemaVersion: 1, themes: [{ ...fixture.themes[0], id: 'music', coverAssetId: shadowLevel.referenceAssetId, introLevelId: shadowLevel.id, allowedGameTypes: ['shadow-match'] }],
+    assets: [shadowLevel.referenceAssetId, ...shadowLevel.options.map(option => option.assetId)]
+      .map(id => ({ ...fixture.assets[0], id, width: 1254, height: 1254 })), levels: [structuredClone(shadowLevel)] };
+}
 
 describe('内容目录校验', () => {
+  it('影子配对采用独立四选一配置，不需要差异或计时字段', () => {
+    const parsed = parseCatalog(shadowCatalog()).levels[0];
+    expect(parsed.gameType).toBe('shadow-match');
+    expect('differences' in parsed).toBe(false);
+    expect('timeLimitSeconds' in parsed).toBe(false);
+  });
+  it('影子配对拒绝丢失答案、重复选项或共用参照图片', () => {
+    const input = shadowCatalog();
+    input.levels[0].correctOptionId = 'missing-shadow';
+    expect(() => parseCatalog(input)).toThrow(/正确影子不在选项/);
+    const duplicate = shadowCatalog();
+    duplicate.levels[0].options[1] = { ...duplicate.levels[0].options[0] };
+    expect(() => parseCatalog(duplicate)).toThrow(/编号重复/);
+    const sameImage = shadowCatalog();
+    sameImage.levels[0].options[0].assetId = shadowLevel.referenceAssetId;
+    expect(() => parseCatalog(sameImage)).toThrow(/素材不得重复/);
+  });
+  it('影子配对拒绝不同画布、缺图及越界提示', () => {
+    const dimensions = shadowCatalog(); dimensions.assets[1].width = 1000;
+    expect(() => parseCatalog(dimensions)).toThrow(/相同画布/);
+    const missing = shadowCatalog(); missing.levels[0].options[1].assetId = 'missing-shadow';
+    expect(() => parseCatalog(missing)).toThrow(/missing-shadow/);
+    const hint = shadowCatalog(); hint.levels[0].hints[0].region.x = .9;
+    expect(() => parseCatalog(hint)).toThrow(/提示区域越界/);
+  });
   it('文化链接可不附加说明，但标题和网址仍须有效', () => {
     const catalog = makeCatalog(); catalog.levels[0].source.note = '';
     expect(parseCatalog(catalog).levels[0].source.note).toBe('');
@@ -100,6 +133,10 @@ describe('内容目录校验', () => {
     const square = { ...input, assets: catalog.assets.map(asset => ({ ...asset, width: 1440, height: 1440 })) };
     expect(parseCatalog(square).levels[0]).toMatchObject({ gameType: 'puzzle', mode: 'rotation', rows: 3, columns: 3 });
     expect(parseCatalog({ ...square, levels: [{ ...puzzle, mode: 'jigsaw', rows: 3, columns: 4 }] }).levels[0]).toMatchObject({ rows: 3, columns: 4 });
+    expect(parseCatalog({ ...square, levels: [{ ...puzzle, mode: 'gallery-order', sliceCount: 12 }] }).levels[0]).toMatchObject({ mode: 'gallery-order', sliceCount: 12 });
+    expect(() => parseCatalog({ ...square, levels: [{ ...puzzle, mode: 'gallery-order' }] })).toThrow(/须配置切片数量/);
+    expect(() => parseCatalog({ ...square, levels: [{ ...puzzle, mode: 'gallery-order', sliceCount: 1 }] })).toThrow();
+    expect(() => parseCatalog({ ...square, levels: [{ ...puzzle, mode: 'jigsaw', sliceCount: 12 }] })).toThrow(/仅画廊排序/);
     expect(() => parseCatalog({ ...square, levels: [{ ...puzzle, rows: 0 }] })).toThrow();
     expect(() => parseCatalog({ ...square, levels: [{ ...puzzle, rows: 8, columns: 8 }] })).toThrow(/最多支持48片/);
     expect(() => parseCatalog({ ...square, levels: [{ ...puzzle, imageAssetId: 'missing-puzzle' }] })).toThrow(/missing-puzzle/);

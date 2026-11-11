@@ -1,0 +1,16 @@
+{
+  "processing": "EXIF, RGB, proportional downsize, WebP93; no crop, upscaling or content edits",
+  "sourceFile": "九色鹿全图.jpg",
+  "sourceSize": [
+    12918,
+    2150
+  ],
+  "sourceSha256": "9e02ef42a87e854956b701f1befdc9e6cdca53d30dec465c9437e2720334648f",
+  "runtimeFile": "public/assets/levels/puzzle-nine-colored-deer/v001/full-scroll.webp",
+  "runtimeSize": [
+    4096,
+    682
+  ],
+  "runtimeSha256": "e33c225588c28fa87154edc061c9759fa1acb45659667078c1d2f34d3abe3fc6",
+  "origin": "此前已登记的九色鹿长卷原图及运行派生，原素材和记录保留在原工作区。"
+}
