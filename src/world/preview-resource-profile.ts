@@ -64,6 +64,8 @@ const profiles = {
   },
 } as const satisfies Record<string, WorldPreviewResourceProfile>;
 
+export const TERRAIN_RESOURCE_PROFILE: WorldPreviewResourceProfile = profiles.terrain;
+
 export function worldPreviewResourceProfile(path: string, declaredEntry?: string): WorldPreviewResourceProfile | undefined {
   const entry = declaredEntry ?? path.split('/').at(-1);
   switch (entry) {
@@ -89,7 +91,7 @@ export function worldPreviewResourceProfile(path: string, declaredEntry?: string
   }
   if (/^music-pavilion-v00[1-6]\.html$/.test(entry ?? '')) return profiles['music-route'];
   if (/^mogao-v0(?:0[1-9]|1[0-3])\.html$/.test(entry ?? '')) return profiles['cliff-route'];
-  if (/^terrain-v0(?:0[1-9]|1[0-3])\.html$/.test(entry ?? '')) return profiles.terrain;
+  if (/^terrain-v0(?:0[1-9]|1[0-3])\.html$/.test(entry ?? '')) return TERRAIN_RESOURCE_PROFILE;
   return undefined;
 }
 

@@ -30,7 +30,8 @@ import { createGalleryGamePortal } from './first-gallery-portal-light';
 import { MUSIC_GAME_PORTAL_CENTER, nearMusicGamePortal } from './music-game-portal';
 import { mogaoExhibitStartCheckpoint, restrictMogaoExhibitCheckpoint } from './mogao-exhibit-session';
 import { advanceMogaoHallArrival, createMogaoHallArrival, findMogaoHallArrival, isMogaoHallAtDoor, mogaoHallArrivalDelta, mogaoHallTitleCamera, mogaoHallTitleYaw, type MogaoHallArrival } from './mogao-exhibit-arrival';
-import { worldPreviewResourceProfile } from './preview-resource-profile';
+import { TERRAIN_RESOURCE_PROFILE, worldPreviewResourceProfile } from './preview-resource-profile';
+import { isMobilePhone } from '../services/mobile-landscape';
 import { upperFollowPose, settleUpperCamera, isUpperStairSurface } from './mogao-upper-camera';
 import { TERRAIN_REGIONS } from '../content/world/terrain-layout-v001';
 import { toTerrainPoint } from '../content/world/terrain-layout-v001';
@@ -101,6 +102,8 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   let musicGalleryUnlocked = !!options.musicGalleryUnlocked;
   let prewarmCliffTower = false;
   const previewResources = worldPreviewResourceProfile(window.location.pathname, document.documentElement.dataset.previewResourceEntry);
+  const mobileTerrainStreaming = terrain && document.getElementById('root')?.dataset.mobileTerrainStreaming === 'v001' &&
+    isMobilePhone();
   let exhibitGateLocked = options.mogaoExhibit?.gateLocked ?? false;
   let exhibitGateReported = !exhibitGateLocked;
   let hallAGateLocked = options.mogaoExhibit?.hallAGateLocked ?? false;
@@ -310,7 +313,8 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   const cinematicPreview = !!options.cinematics || musicPreview;
   const director = !terrain && options.cinematics ? createCinematicDirector(options.cinematics.seen, options.cinematics.onSeen) : null;
   let earlyIntent = false, shotHeading = checkpoint.heading, snapFollow = false;
-  const previewLoading = { previewResources, connectedGalleries: connected, previewStart: checkpoint.position, previewStartSurface: checkpoint.walkSurface,
+  const previewLoading = { previewResources: previewResources ?? (mobileTerrainStreaming ? TERRAIN_RESOURCE_PROFILE : undefined),
+    connectedGalleries: connected, previewStart: checkpoint.position, previewStartSurface: checkpoint.walkSurface,
     compactConnectedTerrain: connected && coarsePointer,
     cliffUnlockedAtStart: connected && firstGalleryUnlocked() && musicGalleryUnlocked,
     ...(options.mogaoExhibit ? {

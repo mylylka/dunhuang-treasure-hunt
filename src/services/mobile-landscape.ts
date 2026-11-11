@@ -13,7 +13,7 @@ export interface MobileOrientation {
   viewportHeight?: number;
 }
 
-export function isPhonePortrait(device: MobileOrientation): boolean {
+function isPhoneDevice(device: MobileOrientation): boolean {
   const shortSide = Math.min(device.screenWidth, device.screenHeight);
   const smallScreen = Number.isFinite(shortSide) && shortSide > 0 && shortSide <= 600;
   const viewportShort = Math.min(device.viewportWidth ?? 0, device.viewportHeight ?? 0);
@@ -24,12 +24,15 @@ export function isPhonePortrait(device: MobileOrientation): boolean {
   // plus touch points and either touch-oriented media signal still identifies a phone.
   const touchPhone = smallScreen && touch && ((device.coarsePointer && device.noHover)
     || (device.maxTouchPoints > 0 && (device.coarsePointer || device.noHover)));
-  return device.portrait && (knownPhone || touchPhone);
+  return knownPhone || touchPhone;
 }
 
-export function getMobileLandscapeBlocked(): boolean {
-  if (typeof window === 'undefined') return false;
-  return isPhonePortrait({
+export function isPhonePortrait(device: MobileOrientation): boolean {
+  return device.portrait && isPhoneDevice(device);
+}
+
+function readMobileOrientation(): MobileOrientation {
+  return {
     screenWidth: window.screen.width || window.innerWidth,
     screenHeight: window.screen.height || window.innerHeight,
     maxTouchPoints: window.navigator.maxTouchPoints,
@@ -42,7 +45,15 @@ export function getMobileLandscapeBlocked(): boolean {
     noHover: window.matchMedia('(hover: none)').matches,
     // Use the live viewport: WebKit's orientation media state can lag a resized mobile viewport.
     portrait: window.innerHeight > window.innerWidth,
-  });
+  };
+}
+
+export function isMobilePhone(): boolean {
+  return typeof window !== 'undefined' && isPhoneDevice(readMobileOrientation());
+}
+
+export function getMobileLandscapeBlocked(): boolean {
+  return typeof window !== 'undefined' && isPhonePortrait(readMobileOrientation());
 }
 
 const listeners = new Set<() => void>();
