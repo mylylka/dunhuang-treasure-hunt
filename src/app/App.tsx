@@ -88,6 +88,17 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
     return () => window.removeEventListener('hashchange', handleHash);
   }, []);
 
+  useEffect(() => {
+    if (route.page !== 'play-latest') return;
+    const theme = catalog.themes.find(item => item.id === route.themeId);
+    const choices = theme?.allowedGameTypes.includes(route.gameType)
+      ? getLevelChoices(catalog, route.themeId, route.gameType) : [];
+    const latest = choices.filter(choice => choice.status === 'available').at(-1);
+    const path = latest ? playPath(latest.id) : levelsPath(route.themeId, route.gameType);
+    window.history.replaceState(window.history.state, '', `#${path}`);
+    setRoute(readRoute());
+  }, [catalog, route]);
+
   const routeKey = getRouteKey(route);
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
@@ -217,7 +228,7 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
     const image = catalog.assets.find(asset => asset.id === level.baseAssetId)!;
     const total = gameReady ? gameTotal : level.differences.length;
     return <div className="page page-play">
-      <div className="play-topline"><Breadcrumb catalog={catalog} items={[{ label: `${gameNames[level.gameType]}关卡`, href: `#${levelsPath(theme.id, level.gameType)}` }]} /><div className="play-view-actions"><button type="button" className="text-link" disabled={!gameReady} onClick={() => setInspectorOpen(true)}>放大观察</button></div></div>
+      <div className="play-topline"><Breadcrumb catalog={catalog} items={[{ label: `${gameNames[level.gameType]}关卡`, href: `#${levelsPath(theme.id, level.gameType, level.id)}` }]} /><div className="play-view-actions"><button type="button" className="text-link" disabled={!gameReady} onClick={() => setInspectorOpen(true)}>放大观察</button></div></div>
       <header className="play-heading"><div><h1>{level.title}</h1></div><div className="observation-count" data-testid="game-progress" aria-label={`已找到 ${foundIds.length} 处，共 ${total} 处`}><span>{foundIds.length}</span><span className="count-divider">/</span><span>{total}</span><small>处变化</small></div></header>
       <section className="game-stage" aria-label="找不同游戏区"><div className="stage-topline"><span>点击任一幅图中发生变化的位置</span><PlaceholderLabel catalog={catalog} assetIds={[level.baseAssetId, level.editedAssetId]}>待替换 · 功能占位图</PlaceholderLabel></div><PhaserPlayer key={`${level.id}-${playerRun}`} level={level} baseImageUrl={getAssetUrl(catalog, level.baseAssetId)} editedImageUrl={getAssetUrl(catalog, level.editedAssetId)} imageAspectRatio={image.width / image.height} reducedMotion={progress.settings.reducedMotion} onEvent={onGameEvent} command={command} />{!gameReady && !gameError && <p className="game-loading" role="status">正在准备观察画面…</p>}</section>
       {gameError ? <div className="notice notice-error game-error" role="alert"><div><strong>画面暂时无法打开</strong><p>{gameError}</p></div><button type="button" className="button button-secondary button-small" onClick={() => { setGameError(null); setGameReady(false); setPlayerRun((value) => value + 1); }}>重新加载画面</button></div> : <div className="hint-note" role="status" aria-live="polite" data-testid="hint-status"><p>{hintStatus}</p></div>}
@@ -229,6 +240,7 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
   function renderResult(level: Level, theme: ThemeDefinition) {
     const isColoring = level.gameType === 'coloring';
     const isPuzzle = level.gameType === 'puzzle';
+    const catalogHref = `#${levelsPath(theme.id, level.gameType, level.gameType === 'spot-difference' ? level.id : undefined)}`;
     const playablePuzzles = isPuzzle ? getLevelChoices(catalog, theme.id, 'puzzle')
       .filter(choice => choice.status === 'available') : [];
     const puzzleIndex = playablePuzzles.findIndex(choice => choice.id === level.id);
@@ -237,12 +249,12 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
     if (!progress.completed[level.id]) return <div className="page narrow-page empty-state"><h1>{isColoring ? '先完成活动，再回看作品' : '先完成活动，再回看发现'}</h1><a className="button button-primary" href={`#${playPath(level.id)}`}>{isColoring ? '前往填色' : '前往观察'}</a></div>;
     if (level.gameType === 'coloring' && !Object.keys(artworkColors(artworks, level)).length) return <div className="page narrow-page empty-state"><h1>{hasOlderArtwork(artworks, level) ? '线稿已更新，旧作品已保留' : '当前作品还未着色'}</h1>{renderArtworkNotice()}<a className="button button-primary" href={`#${playPath(level.id)}`}>继续填色</a></div>;
     return <div className={`page page-result${isColoring || isPuzzle ? ' is-coloring-result' : ''}`}>
-      <Breadcrumb catalog={catalog} items={[{ label: `${gameNames[level.gameType]}关卡`, href: `#${levelsPath(theme.id, level.gameType)}` }]} />
+      <Breadcrumb catalog={catalog} items={[{ label: `${gameNames[level.gameType]}关卡`, href: catalogHref }]} />
       <header className="result-heading"><h1>{isColoring ? '作品完成' : isPuzzle ? '拼图完成' : '观察完成'}</h1></header>
       {renderSaveNotice()}
       {isColoring && renderArtworkNotice()}
       <section className="result-review"><div className="result-image">{level.gameType === 'coloring' ? <ColoringResult level={level} catalog={catalog} colors={artworkColors(artworks, level)} /> : level.gameType === 'puzzle' ? <Asset catalog={catalog} id={level.imageAssetId} alt="拼合完成的完整图像" eager /> : <><Asset catalog={catalog} id={level.baseAssetId} alt="本次观察参考图" eager /><PlaceholderLabel catalog={catalog} assetIds={[level.baseAssetId]} /></>}</div><div className="result-summary">{level.gameType === 'spot-difference' && <strong className="result-count">{level.differences.length}<span>处发现</span></strong>}<SourceNote level={level} /></div></section>
-      <div className={`result-actions${isPuzzle ? ' puzzle-result-actions' : ''}`}><a className="button button-primary" href={`#${levelsPath(theme.id, level.gameType)}`}><span className="button-label">返回关卡</span></a><button type="button" className="button button-secondary" onClick={() => replay(level.id)}><span className="button-label">{isColoring ? '继续创作' : isPuzzle ? '再拼一次' : '再观察一次'}</span></button>{nextPuzzle && <a className="button button-primary" href={`#${playPath(nextPuzzle.id)}`}><span className="button-label">下一关</span></a>}</div>
+      <div className={`result-actions${isPuzzle ? ' puzzle-result-actions' : ''}`}><a className="button button-primary" href={catalogHref}><span className="button-label">返回关卡</span></a><button type="button" className="button button-secondary" onClick={() => replay(level.id)}><span className="button-label">{isColoring ? '继续创作' : isPuzzle ? '再拼一次' : '再观察一次'}</span></button>{nextPuzzle && <a className="button button-primary" href={`#${playPath(nextPuzzle.id)}`}><span className="button-label">下一关</span></a>}</div>
     </div>;
   }
 
@@ -268,7 +280,7 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
         onBack={() => goTo(themePath(theme.id))} onReview={() => goTo(themePath(theme.id))}
         hrefForGame={type => `#${levelsPath(theme.id, type)}`} />;
       else if (theme.allowedGameTypes.includes(route.gameType)) page = <LevelSelectScreen catalog={catalog} theme={theme}
-        gameType={route.gameType} progress={progress} onBack={() => goTo(gamesPath(theme.id))}
+        gameType={route.gameType} focusLevelId={route.focusLevelId} progress={progress} onBack={() => goTo(gamesPath(theme.id))}
         hrefForLevel={id => `#${playPath(id)}`} />;
     }
   } else if (route.page === 'play' || route.page === 'result') {
@@ -278,7 +290,7 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
       page = route.page === 'result' ? renderResult(level, theme) : renderLevel(level, theme);
     }
   }
-  if (!page) page = <div className="page narrow-page empty-state"><h1>页面不存在</h1><a className="button button-primary" href="#/">返回首页</a></div>;
+  if (!page && route.page !== 'play-latest') page = <div className="page narrow-page empty-state"><h1>页面不存在</h1><a className="button button-primary" href="#/">返回首页</a></div>;
 
   return <div className="app-shell" data-screen={route.page} data-reduced-motion={progress.settings.reducedMotion ? 'true' : 'false'} style={assetStyle} onClickCapture={sound.onInterfaceClick}>
     <a className="skip-link" href="#main-content" onClick={(event) => { event.preventDefault(); mainRef.current?.focus(); }}>跳到主要内容</a>

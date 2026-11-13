@@ -75,3 +75,15 @@ test('三兔与旋转按交付比例展示，找到五处指定变化后独立�
   await expect(page.getByRole('heading', { name: '观察完成', exact: true })).toBeVisible();
   expect(await page.evaluate(key => JSON.parse(localStorage.getItem(key)!).completed, progressKey)).toEqual(completed);
 });
+
+test('一键打开最后一关已开放的找不同，返回后定位到该关所在页', async ({ page }) => {
+  await page.goto('/?preview=verification#/play-latest/patterns/spot-difference');
+  await expect(page).toHaveURL(/\?preview=verification#\/play\/patterns-rabbits$/);
+  await expect(page.getByRole('button', { name: '给我提示', exact: true })).toBeEnabled({ timeout: 45_000 });
+  await page.getByRole('link', { name: '返回找不同关卡', exact: true }).click();
+  await expect(page).toHaveURL(/#\/theme\/patterns\/games\/spot-difference\?level=patterns-rabbits$/);
+  const card = page.locator('.level-choice-card[data-level-id="patterns-rabbits"]');
+  await expect(card.getByRole('link', { name: '开始观察', exact: true })).toBeInViewport();
+  await page.reload();
+  await expect(card.getByRole('link', { name: '开始观察', exact: true })).toBeInViewport();
+});

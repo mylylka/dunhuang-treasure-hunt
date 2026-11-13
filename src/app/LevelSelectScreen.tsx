@@ -8,6 +8,7 @@ export interface LevelSelectScreenProps {
   catalog: ContentCatalog;
   theme: ThemeDefinition;
   gameType: GameType;
+  focusLevelId?: string;
   progress: ProgressData;
   onBack: () => void;
   hrefForLevel: (levelId: string) => string;
@@ -44,13 +45,15 @@ function usePageLayout(slotRef: RefObject<HTMLDivElement | null>) {
 }
 
 /** Plans describe future content; only catalog levels can be launched or completed. */
-export function LevelSelectScreen({ catalog, theme, gameType, progress, onBack, hrefForLevel }: LevelSelectScreenProps) {
-  const [page, setPage] = useState(0);
+export function LevelSelectScreen({ catalog, theme, gameType, focusLevelId, progress, onBack, hrefForLevel }: LevelSelectScreenProps) {
+  const [page, setPage] = useState<number>();
   const slotRef = useRef<HTMLDivElement>(null);
   const layout = usePageLayout(slotRef);
   const choices = getLevelChoices(catalog, theme.id, gameType);
   const pageCount = Math.max(1, Math.ceil(choices.length / layout.pageSize));
-  const index = Math.min(page, pageCount - 1);
+  const focusedIndex = choices.findIndex(choice => choice.id === focusLevelId && choice.status === 'available');
+  const initialPage = Math.floor(Math.max(0, focusedIndex) / layout.pageSize);
+  const index = Math.min(page ?? initialPage, pageCount - 1);
   const visible = choices.slice(index * layout.pageSize, (index + 1) * layout.pageSize);
   const availableCount = choices.filter(choice => choice.status === 'available').length;
   const gridStyle = {

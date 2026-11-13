@@ -818,7 +818,7 @@ test('真实画布点击、无限提示、重开、完成与刷新保存', async
 test('中途退出与多次进入不残留局内发现状态', async ({ page }) => {
   await startGame(page); await clickDifference(page, 0, 'reference');
   await page.getByRole('link', { name: '返回找不同关卡', exact: true }).locator('img').click();
-  await expect(page).toHaveURL(/#\/theme\/patterns\/games\/spot-difference$/);
+  await expect(page).toHaveURL(/#\/theme\/patterns\/games\/spot-difference\?level=patterns-intro$/);
   await page.getByRole('link', { name: /^开始观察/ }).first().click();
   await expect(page.getByRole('button', { name: '给我提示' })).toBeEnabled();
   await expect(page.getByTestId('game-progress')).toHaveAttribute('aria-label', progressLabel(0));
