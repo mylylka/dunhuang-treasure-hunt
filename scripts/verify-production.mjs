@@ -560,7 +560,7 @@ try {
     await verifyScreen(`${observation.title}结果`);
   }
 
-  expect(coloringLevels).toHaveLength(4);
+  expect(coloringLevels).toHaveLength(5);
   for (const [index, coloring] of coloringLevels.entries()) {
     await page.setViewportSize({ width: 1440, height: 1000 });
     await page.goto(`${baseUrl}/#/play/${coloring.id}`);
@@ -573,7 +573,7 @@ try {
       y: geometry.image.y + largest.point.y * geometry.image.height,
     } });
     await expect(page.getByTestId('coloring-status')).toContainText('已着色 1 个区域');
-    const saved = await page.evaluate(({ id, version }) => JSON.parse(localStorage.getItem('dunhuang:artworks:v1')).artworks[id][version].colors,
+    const saved = await page.evaluate(({ id, version }) => JSON.parse(localStorage.getItem('dunhuang:artworks:v2')).artworks[id][version].colors,
       { id: coloring.id, version: coloring.artworkVersion });
     expect(saved[String(largest.id)]).toBe(coloring.palette[0].color.toLowerCase());
     await verifyVisible(host.locator('canvas'));
@@ -752,7 +752,7 @@ try {
     }
   }
   if (errors.length) throw new Error(errors.join('\n'));
-  console.log(`生产构建验证通过：七屏教学、${availableDifferenceCount}关找不同清晰标签、四关同屏参考填色及PNG、9块旋转与12/20片不规则拼图；电脑/手机横竖屏布局、碎片区连续滚动、封面和标题入口、真实点击拖拽与独立通关保存。`);
+  console.log(`生产构建验证通过：七屏教学、${availableDifferenceCount}关找不同清晰标签、${coloringLevels.length}关同屏参考填色及PNG、9块旋转与12/20片不规则拼图；电脑/手机横竖屏布局、碎片区连续滚动、封面和标题入口、真实点击拖拽与独立通关保存。`);
   }
 } finally {
   await browser?.close();

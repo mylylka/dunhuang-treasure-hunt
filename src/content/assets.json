@@ -646,5 +646,95 @@
     "placeholder": false,
     "version": "hidden-object-chapters-v001",
     "sourceNote": "用户已确认的AI章节底图；原始PNG逐字节归档并接入，不改色、不裁切、不重绘，不代表真实壁画复原。来源与SHA见art-source/shared/hidden-object-backgrounds/v001/manifest.json。"
+  },
+  {
+    "id": "coloring-floral-scroll-reference",
+    "path": "/assets/levels/coloring-floral-scroll/coloring-floral-scroll-reference-v001.png",
+    "width": 449,
+    "height": 913,
+    "kind": "level",
+    "placeholder": false,
+    "version": "v001-796eded2173f",
+    "sourceNote": "开发者提供的彩色参考图，保留原文件。"
+  },
+  {
+    "id": "coloring-floral-scroll-line",
+    "path": "/assets/levels/coloring-floral-scroll/coloring-floral-scroll-line-v001.png",
+    "width": 561,
+    "height": 1152,
+    "kind": "level",
+    "placeholder": false,
+    "version": "v001-cae256c9a22e",
+    "sourceNote": "根据开发者提供的彩色参考图生成的黑白线稿。"
+  },
+  {
+    "id": "coloring-floral-scroll-regions",
+    "path": "/assets/levels/coloring-floral-scroll/coloring-floral-scroll-regions-v001.png",
+    "width": 561,
+    "height": 1152,
+    "kind": "level",
+    "placeholder": false,
+    "version": "v001-69df1f9b7639",
+    "sourceNote": "由线稿闭合区域生成的 RGB 区域图，编号 0 不可填。"
+  },
+  {
+    "id": "coloring-lotus-rosette-reference",
+    "path": "/assets/levels/coloring-lotus-rosette/coloring-lotus-rosette-reference-v001.png",
+    "width": 394,
+    "height": 391,
+    "kind": "level",
+    "placeholder": false,
+    "version": "v001-a7d6d4715e09",
+    "sourceNote": "开发者提供的彩色参考图，保留原文件。"
+  },
+  {
+    "id": "coloring-lotus-rosette-line",
+    "path": "/assets/levels/coloring-lotus-rosette/coloring-lotus-rosette-line-v001.png",
+    "width": 1152,
+    "height": 1148,
+    "kind": "level",
+    "placeholder": false,
+    "version": "v001-49aa3a66d0f7",
+    "sourceNote": "根据开发者提供的彩色参考图生成的黑白线稿。"
+  },
+  {
+    "id": "coloring-lotus-rosette-regions",
+    "path": "/assets/levels/coloring-lotus-rosette/coloring-lotus-rosette-regions-v001.png",
+    "width": 1152,
+    "height": 1148,
+    "kind": "level",
+    "placeholder": false,
+    "version": "v001-c4be0216c833",
+    "sourceNote": "由线稿闭合区域生成的 RGB 区域图，编号 0 不可填。"
+  },
+  {
+    "id": "coloring-deer-medallion-reference",
+    "path": "/assets/levels/coloring-deer-medallion/coloring-deer-medallion-reference-v001.png",
+    "width": 406,
+    "height": 577,
+    "kind": "level",
+    "placeholder": false,
+    "version": "v001-ad207ba36537",
+    "sourceNote": "开发者提供的彩色参考图，保留原文件。"
+  },
+  {
+    "id": "coloring-deer-medallion-line",
+    "path": "/assets/levels/coloring-deer-medallion/coloring-deer-medallion-line-v001.png",
+    "width": 1060,
+    "height": 1112,
+    "kind": "level",
+    "placeholder": false,
+    "version": "v001-bf0a01f32434",
+    "sourceNote": "根据开发者提供的彩色参考图生成的黑白线稿。"
+  },
+  {
+    "id": "coloring-deer-medallion-regions",
+    "path": "/assets/levels/coloring-deer-medallion/coloring-deer-medallion-regions-v001.png",
+    "width": 1060,
+    "height": 1112,
+    "kind": "level",
+    "placeholder": false,
+    "version": "v001-6e7a51d08a2f",
+    "sourceNote": "由线稿闭合区域生成的 RGB 区域图，编号 0 不可填。"
   }
 ]

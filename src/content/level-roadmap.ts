@@ -35,12 +35,21 @@ export type LevelChoice =
   | { id: string; title: string; status: 'available'; level: Level; roadmap?: LevelRoadmapEntry }
   | { id: string; title: string; status: 'planned'; roadmap: LevelRoadmapEntry };
 
+const coloringLevelOrder = new Map<string, number>([
+  'coloring-floral-scroll',
+  'coloring-lotus-rosette',
+  'coloring-deer-medallion',
+  'coloring-three-rabbits',
+  'coloring-feitian-lotus',
+].map((id, index) => [id, index]));
+
 /** Availability comes only from the actual catalog, never from a roadmap slot. */
 export function getLevelChoices(catalog: Pick<ContentCatalog, 'levels'>, themeId: string, gameType: GameType): LevelChoice[] {
   const levels = catalog.levels.filter(level => level.themeId === themeId && level.gameType === gameType);
-  // 新增填色关接在原有关卡之后，避免文件名字母序改变既有的前后关关系。
-  if (themeId === 'patterns' && gameType === 'coloring') levels.sort((a, b) =>
-    Number(a.id === 'coloring-feitian-lotus') - Number(b.id === 'coloring-feitian-lotus'));
+  if (themeId === 'patterns' && gameType === 'coloring') {
+    levels.sort((a, b) => (coloringLevelOrder.get(a.id) ?? coloringLevelOrder.size)
+      - (coloringLevelOrder.get(b.id) ?? coloringLevelOrder.size));
+  }
   if (gameType === 'hidden-object') levels.sort((a, b) => {
     const first = a.gameType === 'hidden-object' ? a.chapter : undefined;
     const second = b.gameType === 'hidden-object' ? b.chapter : undefined;

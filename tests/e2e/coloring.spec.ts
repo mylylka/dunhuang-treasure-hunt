@@ -123,7 +123,11 @@ async function recordedAnimation(page: Page) {
 }
 
 test('真实目录开放五关找不同、三关拼图和五关填色', async ({ page }) => {
-  expect(coloringLevels).toHaveLength(5);
+  const expectedColoringOrder = [
+    'coloring-floral-scroll', 'coloring-lotus-rosette', 'coloring-deer-medallion',
+    'coloring-three-rabbits', 'coloring-feitian-lotus',
+  ];
+  expect(coloringLevels.map(level => level.id).sort()).toEqual([...expectedColoringOrder].sort());
   expect(observationLevels).toHaveLength(5);
   expect(squareLevels).toHaveLength(3);
   await page.goto('/#/theme/patterns/games');
@@ -132,6 +136,9 @@ test('真实目录开放五关找不同、三关拼图和五关填色', async ({
   await page.getByRole('link', { name: '填色', exact: true }).click();
   await expect(page.getByRole('heading', { name: '填色关卡', exact: true })).toBeVisible();
   await expect(page.getByTestId('level-catalog-summary')).toHaveText('共 5 关5 关开放');
+  const cards = page.locator('.level-choice-card[data-status=available]');
+  expect(await cards.evaluateAll(elements => elements.map(element => element.getAttribute('data-level-id'))))
+    .toEqual(expectedColoringOrder);
 });
 
 for (const level of coloringLevels) {
@@ -238,7 +245,7 @@ test('缩放拖动及窗口变化或手机竖屏中断保留作品，拖动不�
 });
 
 test('电脑填色滚轮以鼠标位置连续缩放，保留倍率按钮且不改作品或滚动整页', async ({ page }) => {
-  const level = coloringLevels.find(level => level.id === 'coloring-grape-pomegranate')!;
+  const level = coloringLevels.find(level => level.id === 'coloring-three-rabbits')!;
   await page.setViewportSize({ width: 1279, height: 925 });
   await startColoring(page, level);
   await clickRegion(page, level);

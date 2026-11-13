@@ -11,7 +11,9 @@ const progressKey = 'dunhuang:progress:v1';
 const artworkKey = 'dunhuang:artworks:v2';
 const legacyArtworkKey = 'dunhuang:artworks:v1';
 const timestamp = '2026-11-03T00:00:00.000Z';
-const paint = byId('coloring-grape-lotus') as ColoringLevel;
+const paint = byId('coloring-floral-scroll') as ColoringLevel;
+const nextPaintId = 'coloring-lotus-rosette';
+const lastPaintId = 'coloring-feitian-lotus';
 const paintRegion = [...paint.regions].sort((a, b) => b.pixelCount - a.pixelCount)[0];
 const existingProgress: ProgressData = {
   version: 1, completed: { 'patterns-scrolls': timestamp }, settings: { reducedMotion: true },
@@ -21,8 +23,8 @@ const resultCases = [
   { id: 'patterns-scrolls', next: null },
   { id: 'puzzle-lotus-ceiling', next: 'puzzle-three-rabbits' },
   { id: 'puzzle-twin-dragons', next: null },
-  { id: 'coloring-grape-lotus', next: 'coloring-grape-pomegranate' },
-  { id: 'coloring-three-rabbits', next: null },
+  { id: paint.id, next: nextPaintId },
+  { id: lastPaintId, next: null },
   { id: hiddenLevels[0].id, next: hiddenLevels[1]?.id ?? null },
   { id: hiddenLevels[hiddenLevels.length - 1].id, next: null },
   { id: 'music-apsara-shadow', next: null },
@@ -162,7 +164,7 @@ test('真实填色后跳关保留自动保存作品，不提交也不新增通�
   await seedExistingProgress(page);
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await openPlay(page, paint.id);
-  await expectPlayNavigation(page, null, 'coloring-grape-pomegranate');
+  await expectPlayNavigation(page, null, nextPaintId);
   const host = page.getByTestId('phaser-player');
   await expect.poll(async () => {
     const raw = await host.getAttribute('data-layout'), box = await host.boundingBox();
@@ -180,7 +182,7 @@ test('真实填色后跳关保留自动保存作品，不提交也不新增通�
   expect(saved).not.toHaveProperty('submittedAt');
   expect(await progress(page)).toEqual(existingProgress);
   await page.getByTestId('level-advance').click();
-  await expect(page).toHaveURL(/\/#\/play\/coloring-grape-pomegranate$/);
+  await expect(page).toHaveURL(new RegExp(`/#/play/${nextPaintId}$`));
   expect(await artwork(page, paint)).toEqual(saved);
   expect(await artwork(page, paint)).not.toHaveProperty('submittedAt');
   expect(await progress(page)).toEqual(existingProgress);
@@ -203,8 +205,8 @@ for (const viewport of [{ width: 640, height: 300 }, { width: 852, height: 330 }
         { id: 'patterns-intro', previous: null, next: 'patterns-lotus' },
         { id: 'patterns-scrolls', previous: 'patterns-lotus', next: null },
         { id: 'puzzle-twin-dragons', previous: 'puzzle-three-rabbits', next: null },
-        { id: paint.id, previous: null, next: 'coloring-grape-pomegranate' },
-        { id: 'coloring-three-rabbits', previous: 'coloring-lotus-camellia', next: null },
+        { id: paint.id, previous: null, next: nextPaintId },
+        { id: lastPaintId, previous: 'coloring-three-rabbits', next: null },
         { id: hiddenLevels[0].id, previous: null, next: hiddenLevels[1]?.id ?? null },
         { id: hiddenLevels[hiddenLevels.length - 1].id, previous: hiddenLevels[hiddenLevels.length - 2]?.id ?? null, next: null },
         { id: 'music-apsara-shadow', previous: null, next: null },
