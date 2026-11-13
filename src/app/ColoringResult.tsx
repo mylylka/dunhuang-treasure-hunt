@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { getAssetUrl } from '../content';
 import { renderColoringArtwork } from '../games/coloring/render';
-import type { ColoringLevel, ContentCatalog, RegionColors } from '../types';
+import type { ColoringLevel, ContentCatalog, RegionColors, RegionMaterials } from '../types';
 import '../styles/coloring-result.css';
 
-export function ColoringResult({ level, catalog, colors }: { level: ColoringLevel; catalog: ContentCatalog; colors: RegionColors }) {
+export function ColoringResult({ level, catalog, colors, materials }: { level: ColoringLevel; catalog: ContentCatalog; colors: RegionColors; materials?: RegionMaterials }) {
   const slot = useRef<HTMLDivElement>(null);
   const artwork = useRef<HTMLCanvasElement | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -13,7 +13,7 @@ export function ColoringResult({ level, catalog, colors }: { level: ColoringLeve
   useEffect(() => {
     const abort = new AbortController();
     setReady(false); setError(null);
-    renderColoringArtwork({ lineImageUrl: getAssetUrl(catalog, level.lineAssetId), regionMapImageUrl: getAssetUrl(catalog, level.regionMapAssetId), colors, signal: abort.signal })
+    renderColoringArtwork({ lineImageUrl: getAssetUrl(catalog, level.lineAssetId), regionMapImageUrl: getAssetUrl(catalog, level.regionMapAssetId), colors, materials, signal: abort.signal })
       .then(canvas => {
         if (abort.signal.aborted || !slot.current) return;
         canvas.setAttribute('role', 'img');
@@ -25,7 +25,7 @@ export function ColoringResult({ level, catalog, colors }: { level: ColoringLeve
         if (!abort.signal.aborted) setError(reason instanceof Error ? reason.message : '作品预览未能加载，请重试。');
       });
     return () => { abort.abort(); artwork.current = null; };
-  }, [level, catalog, colors, attempt]);
+  }, [level, catalog, colors, materials, attempt]);
   function exportPng() {
     artwork.current?.toBlob(blob => {
       if (!blob) { setError('作品导出失败，请重试。'); return; }

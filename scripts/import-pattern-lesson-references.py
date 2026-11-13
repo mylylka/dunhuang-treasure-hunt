@@ -5,12 +5,12 @@ Existing archived originals are immutable: a changed source requires a new versi
 """
 from __future__ import annotations
 
-import hashlib
-import json
-import urllib.request
+from datetime import date
 from pathlib import Path
 
 from PIL import Image
+
+from asset_intake import AssetIntake, read_json, write_json
 
 ROOT = Path(__file__).resolve().parents[1]
 ARCHIVE = ROOT / "art-source/references/patterns/v001"
@@ -33,45 +33,57 @@ REFERENCES = [
 
 
 def main() -> None:
-    ARCHIVE.mkdir(parents=True, exist_ok=True)
-    RUNTIME.mkdir(parents=True, exist_ok=True)
+    intake = AssetIntake(ROOT)
+    with intake.transaction():
+        import_references(intake)
+
+
+def encode_png(source: Path, destination: Path) -> None:
+    with Image.open(source) as image:
+        mode = 'RGBA' if 'A' in image.getbands() else 'RGB'
+        image.convert(mode).save(destination, 'PNG', optimize=True)
+
+
+def import_references(intake: AssetIntake) -> None:
     assets_path = ROOT / "src/content/assets.json"
-    assets = json.loads(assets_path.read_text())
-    notes = []
+    notes_path = ARCHIVE / 'source-notes.json'
+    previous_assets = read_json(assets_path)
+    assets = list(previous_assets)
+    previous_notes = read_json(notes_path, {})
+    notes = {row['id']: row for row in previous_notes.get('references', [])}
     for ref in REFERENCES:
+        old = notes.get(ref['id'], {})
         archived = ARCHIVE / ref["original"]
         local = Path(ref["userFile"]) if "userFile" in ref else ROOT / "work" / ref["file"]
-        if local.exists():
-            data = local.read_bytes()
-        elif archived.exists():
-            data = archived.read_bytes()
-        else:
-            data = urllib.request.urlopen(ref["imageUrl"], timeout=40).read()
-        if archived.exists() and archived.read_bytes() != data:
-            raise RuntimeError(f"Archived original changed; create a new version: {archived}")
-        if not archived.exists():
-            archived.write_bytes(data)
-        with Image.open(archived) as image:
-            image.load()
-            width, height = image.size
-            runtime = RUNTIME / f"{ref['id']}-v001.png"
-            image.convert("RGBA" if "A" in image.getbands() else "RGB").save(runtime, optimize=True)
+        original = intake.original(old.get('originalPath', str(archived.relative_to(ROOT))),
+                                   expected=old.get('sha256'), local=local, url=ref.get('imageUrl'))
+        runtime = RUNTIME / f"{ref['id']}-v001.png"
+        runtime_path = f'/assets/lessons/patterns/{runtime.name}'
+        if old and old['runtimePath'] != runtime_path:
+            raise ValueError(f'Unexpected registered runtime path: {runtime_path}')
+        result = intake.derive(original, runtime, 'PNG', {'mode': 'RGB or RGBA', 'optimize': True}, encode_png,
+                               prior=old.get('derivation'), legacy_size=(old['width'], old['height']) if old else None)
+        width, height = result.size
         source_note = f"真实教学参考图。{ref['publisher']}。{ref['verification']}。原件与来源登记见 art-source/references/patterns/v001/source-notes.json。仅转PNG，不放大、不调色、不抹水印。".replace("婧婧", "开发者")
-        item = {"id": ref["id"], "path": f"/assets/lessons/patterns/{runtime.name}", "width": width, "height": height, "kind": "teaching", "placeholder": False, "version": "reference-v001", "sourceNote": source_note}
+        item = {"id": ref["id"], "path": runtime_path, "width": width, "height": height, "kind": "teaching", "placeholder": False, "version": "reference-v001", "sourceNote": source_note}
         found = next((asset for asset in assets if asset["id"] == ref["id"]), None)
         if found is None:
             assets.append(item)
         elif found.get("version", "") > item["version"]:
             # Rebuilding an old archive must not downgrade an actively used newer source.
             pass
-        elif found != item:
+        elif (found != item and (not old or any(found.get(key) != item[key]
+                                               for key in ('path', 'width', 'height')))):
             raise RuntimeError(f"Asset already registered differently: {ref['id']}")
-        entry = {key: value for key, value in ref.items() if key not in ("file", "userFile")}
-        entry.update({"originalPath": str(archived.relative_to(ROOT)), "originalFilename": ref["original"], "width": width, "height": height, "sha256": hashlib.sha256(data).hexdigest(), "runtimePath": item["path"], "retrievedOn": "2026-10-28", "processing": "完整保留画面、比例、文字和原有水印；仅格式转换为PNG，不上采样、补画、调色或去水印。", "rights": "版权归原权利人；可访问不等于开放许可，未标称开放授权。"})
-        notes.append(entry)
+        if old:
+            entry = {**old, 'originalPath': original.reference}
+        else:
+            entry = {key: value for key, value in ref.items() if key not in ("file", "userFile")}
+            entry.update({"originalPath": original.reference, "originalFilename": ref["original"], "width": width, "height": height, "sha256": original.sha256, "runtimePath": item["path"], "retrievedOn": date.today().isoformat(), "processing": "完整保留画面、比例、文字和原有水印；仅格式转换为PNG，不上采样、补画、调色或去水印。", "rights": "版权归原权利人；可访问不等于开放许可，未标称开放授权。", "derivation": result.provenance()})
+        notes[ref['id']] = entry
         print(f"{ref['id']}: {width}×{height}")
-    (ARCHIVE / "source-notes.json").write_text(json.dumps({"version": 1, "purpose": "《敦煌寻宝记》本地教学原型参考图；正式实物与用户补充整理图分别标注", "references": notes}, ensure_ascii=False, indent=2) + "\n")
-    assets_path.write_text(json.dumps(assets, ensure_ascii=False, indent=2) + "\n")
+    write_json(notes_path, {"version": 1, "purpose": "《敦煌寻宝记》本地教学原型参考图；正式实物与用户补充整理图分别标注", **previous_notes, "references": list(notes.values())}, existing=previous_notes)
+    write_json(assets_path, assets, existing=previous_assets)
 
 
 if __name__ == "__main__":

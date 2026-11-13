@@ -1,0 +1,6533 @@
+{
+  "id": "dunhuang-stickers-v001",
+  "groups": [
+    {
+      "id": "pipa",
+      "label": "琵琶"
+    },
+    {
+      "id": "drum",
+      "label": "鼓"
+    },
+    {
+      "id": "bell",
+      "label": "铃铛"
+    },
+    {
+      "id": "flute",
+      "label": "笛子"
+    },
+    {
+      "id": "panpipes",
+      "label": "排箫"
+    },
+    {
+      "id": "cymbals",
+      "label": "钹"
+    },
+    {
+      "id": "ribbon",
+      "label": "飘带"
+    },
+    {
+      "id": "crown",
+      "label": "头冠"
+    },
+    {
+      "id": "necklace",
+      "label": "项链"
+    },
+    {
+      "id": "earring",
+      "label": "耳坠"
+    },
+    {
+      "id": "bracelet",
+      "label": "手镯"
+    },
+    {
+      "id": "belt",
+      "label": "腰带"
+    },
+    {
+      "id": "boots",
+      "label": "靴子"
+    },
+    {
+      "id": "deer",
+      "label": "鹿"
+    },
+    {
+      "id": "peacock",
+      "label": "孔雀"
+    },
+    {
+      "id": "rabbit",
+      "label": "兔子"
+    },
+    {
+      "id": "horse",
+      "label": "马"
+    },
+    {
+      "id": "camel",
+      "label": "骆驼"
+    },
+    {
+      "id": "ox",
+      "label": "牛"
+    },
+    {
+      "id": "lion",
+      "label": "狮子"
+    },
+    {
+      "id": "fish",
+      "label": "鱼"
+    },
+    {
+      "id": "lotus",
+      "label": "莲花"
+    },
+    {
+      "id": "seedpod",
+      "label": "莲蓬"
+    },
+    {
+      "id": "lotus-leaf",
+      "label": "荷叶"
+    },
+    {
+      "id": "flower",
+      "label": "花形"
+    },
+    {
+      "id": "leaf",
+      "label": "叶片"
+    },
+    {
+      "id": "round-pattern",
+      "label": "圆纹"
+    },
+    {
+      "id": "diamond-pattern",
+      "label": "菱纹"
+    },
+    {
+      "id": "flame-pattern",
+      "label": "火焰纹"
+    },
+    {
+      "id": "incense-burner",
+      "label": "香炉"
+    },
+    {
+      "id": "candleholder",
+      "label": "烛台"
+    },
+    {
+      "id": "bowl",
+      "label": "碗"
+    },
+    {
+      "id": "scroll",
+      "label": "卷轴"
+    },
+    {
+      "id": "bead-string",
+      "label": "珠串"
+    }
+  ],
+  "sprites": [
+    {
+      "id": "ho-instruments-001",
+      "categoryId": "instruments",
+      "path": "/assets/shared/hidden-object/v002/instruments-001.png",
+      "width": 284,
+      "height": 512,
+      "groupIds": [
+        "pipa"
+      ],
+      "hitPoint": {
+        "x": 0.498239,
+        "y": 0.499023
+      }
+    },
+    {
+      "id": "ho-instruments-002",
+      "categoryId": "instruments",
+      "path": "/assets/shared/hidden-object/v002/instruments-002.png",
+      "width": 236,
+      "height": 512,
+      "groupIds": [
+        "pipa"
+      ],
+      "hitPoint": {
+        "x": 0.497881,
+        "y": 0.499023
+      }
+    },
+    {
+      "id": "ho-instruments-003",
+      "categoryId": "instruments",
+      "path": "/assets/shared/hidden-object/v002/instruments-003.png",
+      "width": 306,
+      "height": 512,
+      "groupIds": [
+        "pipa"
+      ],
+      "hitPoint": {
+        "x": 0.498366,
+        "y": 0.499023
+      }
+    },
+    {
+      "id": "ho-instruments-004",
+      "categoryId": "instruments",
+      "path": "/assets/shared/hidden-object/v002/instruments-004.png",
+      "width": 254,
+      "height": 512,
+      "groupIds": [
+        "pipa"
+      ],
+      "hitPoint": {
+        "x": 0.498031,
+        "y": 0.499023
+      }
+    },
+    {
+      "id": "ho-instruments-005",
+      "categoryId": "instruments",
+      "path": "/assets/shared/hidden-object/v002/instruments-005.png",
+      "width": 354,
+      "height": 512,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498588,
+        "y": 0.499023
+      }
+    },
+    {
+      "id": "ho-instruments-006",
+      "categoryId": "instruments",
+      "path": "/assets/shared/hidden-object/v002/instruments-006.png",
+      "width": 365,
+      "height": 512,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.499023
+      }
+    },
+    {
+      "id": "ho-instruments-007",
+      "categoryId": "instruments",
+      "path": "/assets/shared/hidden-object/v002/instruments-007.png",
+      "width": 284,
+      "height": 512,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498239,
+        "y": 0.499023
+      }
+    },
+    {
+      "id": "ho-instruments-008",
+      "categoryId": "instruments",
+      "path": "/assets/shared/hidden-object/v002/instruments-008.png",
+      "width": 289,
+      "height": 512,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.499023
+      }
+    },
+    {
+      "id": "ho-instruments-009",
+      "categoryId": "instruments",
+      "path": "/assets/shared/hidden-object/v002/instruments-009.png",
+      "width": 288,
+      "height": 512,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498264,
+        "y": 0.499023
+      }
+    },
+    {
+      "id": "ho-instruments-010",
+      "categoryId": "instruments",
+      "path": "/assets/shared/hidden-object/v002/instruments-010.png",
+      "width": 269,
+      "height": 512,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.499023
+      }
+    },
+    {
+      "id": "ho-instruments-011",
+      "categoryId": "instruments",
+      "path": "/assets/shared/hidden-object/v002/instruments-011.png",
+      "width": 212,
+      "height": 466,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.379717,
+        "y": 0.490343
+      }
+    },
+    {
+      "id": "ho-instruments-012",
+      "categoryId": "instruments",
+      "path": "/assets/shared/hidden-object/v002/instruments-012.png",
+      "width": 123,
+      "height": 438,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498858
+      }
+    },
+    {
+      "id": "ho-instruments-013",
+      "categoryId": "instruments",
+      "path": "/assets/shared/hidden-object/v002/instruments-013.png",
+      "width": 145,
+      "height": 458,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498908
+      }
+    },
+    {
+      "id": "ho-instruments-014",
+      "categoryId": "instruments",
+      "path": "/assets/shared/hidden-object/v002/instruments-014.png",
+      "width": 128,
+      "height": 418,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.496094,
+        "y": 0.498804
+      }
+    },
+    {
+      "id": "ho-instruments-015",
+      "categoryId": "instruments",
+      "path": "/assets/shared/hidden-object/v002/instruments-015.png",
+      "width": 129,
+      "height": 441,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-instruments-016",
+      "categoryId": "instruments",
+      "path": "/assets/shared/hidden-object/v002/instruments-016.png",
+      "width": 285,
+      "height": 383,
+      "groupIds": [
+        "panpipes"
+      ],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-instruments-017",
+      "categoryId": "instruments",
+      "path": "/assets/shared/hidden-object/v002/instruments-017.png",
+      "width": 276,
+      "height": 383,
+      "groupIds": [
+        "panpipes"
+      ],
+      "hitPoint": {
+        "x": 0.498188,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-instruments-018",
+      "categoryId": "instruments",
+      "path": "/assets/shared/hidden-object/v002/instruments-018.png",
+      "width": 270,
+      "height": 401,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498148,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-instruments-019",
+      "categoryId": "instruments",
+      "path": "/assets/shared/hidden-object/v002/instruments-019.png",
+      "width": 260,
+      "height": 444,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498077,
+        "y": 0.498874
+      }
+    },
+    {
+      "id": "ho-instruments-020",
+      "categoryId": "instruments",
+      "path": "/assets/shared/hidden-object/v002/instruments-020.png",
+      "width": 233,
+      "height": 459,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-instruments-021",
+      "categoryId": "instruments",
+      "path": "/assets/shared/hidden-object/v002/instruments-021.png",
+      "width": 289,
+      "height": 460,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.548443,
+        "y": 0.498913
+      }
+    },
+    {
+      "id": "ho-instruments-022",
+      "categoryId": "instruments",
+      "path": "/assets/shared/hidden-object/v002/instruments-022.png",
+      "width": 419,
+      "height": 309,
+      "groupIds": [
+        "flute"
+      ],
+      "hitPoint": {
+        "x": 0.4642,
+        "y": 0.399676
+      }
+    },
+    {
+      "id": "ho-instruments-023",
+      "categoryId": "instruments",
+      "path": "/assets/shared/hidden-object/v002/instruments-023.png",
+      "width": 512,
+      "height": 318,
+      "groupIds": [
+        "flute"
+      ],
+      "hitPoint": {
+        "x": 0.483398,
+        "y": 0.441824
+      }
+    },
+    {
+      "id": "ho-instruments-024",
+      "categoryId": "instruments",
+      "path": "/assets/shared/hidden-object/v002/instruments-024.png",
+      "width": 465,
+      "height": 314,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.482796,
+        "y": 0.437898
+      }
+    },
+    {
+      "id": "ho-instruments-025",
+      "categoryId": "instruments",
+      "path": "/assets/shared/hidden-object/v002/instruments-025.png",
+      "width": 305,
+      "height": 387,
+      "groupIds": [
+        "drum"
+      ],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-instruments-026",
+      "categoryId": "instruments",
+      "path": "/assets/shared/hidden-object/v002/instruments-026.png",
+      "width": 333,
+      "height": 351,
+      "groupIds": [
+        "drum"
+      ],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-instruments-027",
+      "categoryId": "instruments",
+      "path": "/assets/shared/hidden-object/v002/instruments-027.png",
+      "width": 311,
+      "height": 393,
+      "groupIds": [
+        "drum"
+      ],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-instruments-028",
+      "categoryId": "instruments",
+      "path": "/assets/shared/hidden-object/v002/instruments-028.png",
+      "width": 378,
+      "height": 359,
+      "groupIds": [
+        "drum"
+      ],
+      "hitPoint": {
+        "x": 0.498677,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-instruments-029",
+      "categoryId": "instruments",
+      "path": "/assets/shared/hidden-object/v002/instruments-029.png",
+      "width": 291,
+      "height": 352,
+      "groupIds": [
+        "drum"
+      ],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.49858
+      }
+    },
+    {
+      "id": "ho-instruments-030",
+      "categoryId": "instruments",
+      "path": "/assets/shared/hidden-object/v002/instruments-030.png",
+      "width": 302,
+      "height": 327,
+      "groupIds": [
+        "drum"
+      ],
+      "hitPoint": {
+        "x": 0.498344,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-instruments-031",
+      "categoryId": "instruments",
+      "path": "/assets/shared/hidden-object/v002/instruments-031.png",
+      "width": 348,
+      "height": 363,
+      "groupIds": [
+        "cymbals"
+      ],
+      "hitPoint": {
+        "x": 0.498563,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-instruments-032",
+      "categoryId": "instruments",
+      "path": "/assets/shared/hidden-object/v002/instruments-032.png",
+      "width": 356,
+      "height": 326,
+      "groupIds": [
+        "cymbals"
+      ],
+      "hitPoint": {
+        "x": 0.498596,
+        "y": 0.498466
+      }
+    },
+    {
+      "id": "ho-instruments-033",
+      "categoryId": "instruments",
+      "path": "/assets/shared/hidden-object/v002/instruments-033.png",
+      "width": 421,
+      "height": 348,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498563
+      }
+    },
+    {
+      "id": "ho-instruments-034",
+      "categoryId": "instruments",
+      "path": "/assets/shared/hidden-object/v002/instruments-034.png",
+      "width": 207,
+      "height": 382,
+      "groupIds": [
+        "bell"
+      ],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498691
+      }
+    },
+    {
+      "id": "ho-instruments-035",
+      "categoryId": "instruments",
+      "path": "/assets/shared/hidden-object/v002/instruments-035.png",
+      "width": 194,
+      "height": 395,
+      "groupIds": [
+        "bell"
+      ],
+      "hitPoint": {
+        "x": 0.497423,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-instruments-036",
+      "categoryId": "instruments",
+      "path": "/assets/shared/hidden-object/v002/instruments-036.png",
+      "width": 241,
+      "height": 369,
+      "groupIds": [
+        "bell"
+      ],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-instruments-037",
+      "categoryId": "instruments",
+      "path": "/assets/shared/hidden-object/v002/instruments-037.png",
+      "width": 288,
+      "height": 335,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498264,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-instruments-038",
+      "categoryId": "instruments",
+      "path": "/assets/shared/hidden-object/v002/instruments-038.png",
+      "width": 259,
+      "height": 323,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-instruments-039",
+      "categoryId": "instruments",
+      "path": "/assets/shared/hidden-object/v002/instruments-039.png",
+      "width": 306,
+      "height": 319,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498366,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-instruments-040",
+      "categoryId": "instruments",
+      "path": "/assets/shared/hidden-object/v002/instruments-040.png",
+      "width": 309,
+      "height": 349,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-instruments-041",
+      "categoryId": "instruments",
+      "path": "/assets/shared/hidden-object/v002/instruments-041.png",
+      "width": 222,
+      "height": 345,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.497748,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-instruments-042",
+      "categoryId": "instruments",
+      "path": "/assets/shared/hidden-object/v002/instruments-042.png",
+      "width": 273,
+      "height": 344,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498547
+      }
+    },
+    {
+      "id": "ho-instruments-043",
+      "categoryId": "instruments",
+      "path": "/assets/shared/hidden-object/v002/instruments-043.png",
+      "width": 245,
+      "height": 347,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-instruments-044",
+      "categoryId": "instruments",
+      "path": "/assets/shared/hidden-object/v002/instruments-044.png",
+      "width": 292,
+      "height": 344,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498288,
+        "y": 0.498547
+      }
+    },
+    {
+      "id": "ho-instruments-045",
+      "categoryId": "instruments",
+      "path": "/assets/shared/hidden-object/v002/instruments-045.png",
+      "width": 270,
+      "height": 358,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.475926,
+        "y": 0.490223
+      }
+    },
+    {
+      "id": "ho-instruments-046",
+      "categoryId": "instruments",
+      "path": "/assets/shared/hidden-object/v002/instruments-046.png",
+      "width": 206,
+      "height": 265,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.497573,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-instruments-047",
+      "categoryId": "instruments",
+      "path": "/assets/shared/hidden-object/v002/instruments-047.png",
+      "width": 198,
+      "height": 245,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.497475,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-instruments-048",
+      "categoryId": "instruments",
+      "path": "/assets/shared/hidden-object/v002/instruments-048.png",
+      "width": 214,
+      "height": 240,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.497664,
+        "y": 0.497917
+      }
+    },
+    {
+      "id": "ho-instruments-049",
+      "categoryId": "instruments",
+      "path": "/assets/shared/hidden-object/v002/instruments-049.png",
+      "width": 494,
+      "height": 344,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498988,
+        "y": 0.498547
+      }
+    },
+    {
+      "id": "ho-instruments-050",
+      "categoryId": "instruments",
+      "path": "/assets/shared/hidden-object/v002/instruments-050.png",
+      "width": 501,
+      "height": 303,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-instruments-051",
+      "categoryId": "instruments",
+      "path": "/assets/shared/hidden-object/v002/instruments-051.png",
+      "width": 304,
+      "height": 308,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498355,
+        "y": 0.498377
+      }
+    },
+    {
+      "id": "ho-clothing-001",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-001.png",
+      "width": 353,
+      "height": 385,
+      "groupIds": [
+        "ribbon"
+      ],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-clothing-002",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-002.png",
+      "width": 288,
+      "height": 313,
+      "groupIds": [
+        "ribbon"
+      ],
+      "hitPoint": {
+        "x": 0.467014,
+        "y": 0.50639
+      }
+    },
+    {
+      "id": "ho-clothing-003",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-003.png",
+      "width": 350,
+      "height": 317,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.507143,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-clothing-004",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-004.png",
+      "width": 336,
+      "height": 342,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.516369,
+        "y": 0.568713
+      }
+    },
+    {
+      "id": "ho-clothing-005",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-005.png",
+      "width": 393,
+      "height": 328,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.501524
+      }
+    },
+    {
+      "id": "ho-clothing-006",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-006.png",
+      "width": 335,
+      "height": 334,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498503
+      }
+    },
+    {
+      "id": "ho-clothing-007",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-007.png",
+      "width": 372,
+      "height": 319,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498656,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-clothing-008",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-008.png",
+      "width": 352,
+      "height": 301,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.49858,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-clothing-009",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-009.png",
+      "width": 389,
+      "height": 320,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498437
+      }
+    },
+    {
+      "id": "ho-clothing-010",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-010.png",
+      "width": 371,
+      "height": 307,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-clothing-011",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-011.png",
+      "width": 368,
+      "height": 302,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498641,
+        "y": 0.498344
+      }
+    },
+    {
+      "id": "ho-clothing-012",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-012.png",
+      "width": 342,
+      "height": 350,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498538,
+        "y": 0.498571
+      }
+    },
+    {
+      "id": "ho-clothing-013",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-013.png",
+      "width": 281,
+      "height": 338,
+      "groupIds": [
+        "crown"
+      ],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498521
+      }
+    },
+    {
+      "id": "ho-clothing-014",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-014.png",
+      "width": 377,
+      "height": 362,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.505305,
+        "y": 0.43232
+      }
+    },
+    {
+      "id": "ho-clothing-015",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-015.png",
+      "width": 309,
+      "height": 336,
+      "groupIds": [
+        "crown"
+      ],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498512
+      }
+    },
+    {
+      "id": "ho-clothing-016",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-016.png",
+      "width": 310,
+      "height": 414,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498387,
+        "y": 0.498792
+      }
+    },
+    {
+      "id": "ho-clothing-017",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-017.png",
+      "width": 325,
+      "height": 332,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498494
+      }
+    },
+    {
+      "id": "ho-clothing-018",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-018.png",
+      "width": 355,
+      "height": 313,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.511268,
+        "y": 0.509585
+      }
+    },
+    {
+      "id": "ho-clothing-019",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-019.png",
+      "width": 339,
+      "height": 340,
+      "groupIds": [
+        "necklace"
+      ],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498529
+      }
+    },
+    {
+      "id": "ho-clothing-020",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-020.png",
+      "width": 290,
+      "height": 316,
+      "groupIds": [
+        "necklace"
+      ],
+      "hitPoint": {
+        "x": 0.498276,
+        "y": 0.498418
+      }
+    },
+    {
+      "id": "ho-clothing-021",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-021.png",
+      "width": 363,
+      "height": 340,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498529
+      }
+    },
+    {
+      "id": "ho-clothing-022",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-022.png",
+      "width": 295,
+      "height": 271,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-clothing-023",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-023.png",
+      "width": 193,
+      "height": 341,
+      "groupIds": [
+        "earring"
+      ],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-clothing-024",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-024.png",
+      "width": 116,
+      "height": 338,
+      "groupIds": [
+        "earring"
+      ],
+      "hitPoint": {
+        "x": 0.49569,
+        "y": 0.498521
+      }
+    },
+    {
+      "id": "ho-clothing-025",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-025.png",
+      "width": 115,
+      "height": 333,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-clothing-026",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-026.png",
+      "width": 166,
+      "height": 336,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.496988,
+        "y": 0.498512
+      }
+    },
+    {
+      "id": "ho-clothing-027",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-027.png",
+      "width": 326,
+      "height": 230,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498466,
+        "y": 0.497826
+      }
+    },
+    {
+      "id": "ho-clothing-028",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-028.png",
+      "width": 289,
+      "height": 195,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-clothing-029",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-029.png",
+      "width": 328,
+      "height": 211,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498476,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-clothing-030",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-030.png",
+      "width": 324,
+      "height": 192,
+      "groupIds": [
+        "bracelet"
+      ],
+      "hitPoint": {
+        "x": 0.498457,
+        "y": 0.518229
+      }
+    },
+    {
+      "id": "ho-clothing-031",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-031.png",
+      "width": 327,
+      "height": 201,
+      "groupIds": [
+        "bracelet"
+      ],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-clothing-032",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-032.png",
+      "width": 347,
+      "height": 205,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.509756
+      }
+    },
+    {
+      "id": "ho-clothing-033",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-033.png",
+      "width": 304,
+      "height": 313,
+      "groupIds": [
+        "belt"
+      ],
+      "hitPoint": {
+        "x": 0.498355,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-clothing-034",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-034.png",
+      "width": 357,
+      "height": 313,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-clothing-035",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-035.png",
+      "width": 381,
+      "height": 310,
+      "groupIds": [
+        "belt"
+      ],
+      "hitPoint": {
+        "x": 0.481627,
+        "y": 0.48871
+      }
+    },
+    {
+      "id": "ho-clothing-036",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-036.png",
+      "width": 335,
+      "height": 327,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-clothing-037",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-037.png",
+      "width": 356,
+      "height": 309,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498596,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-clothing-038",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-038.png",
+      "width": 322,
+      "height": 310,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498447,
+        "y": 0.498387
+      }
+    },
+    {
+      "id": "ho-clothing-039",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-039.png",
+      "width": 342,
+      "height": 315,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.489766,
+        "y": 0.503175
+      }
+    },
+    {
+      "id": "ho-clothing-040",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-040.png",
+      "width": 336,
+      "height": 328,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.50744,
+        "y": 0.498476
+      }
+    },
+    {
+      "id": "ho-clothing-041",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-041.png",
+      "width": 325,
+      "height": 348,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498563
+      }
+    },
+    {
+      "id": "ho-clothing-042",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-042.png",
+      "width": 310,
+      "height": 321,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.482258,
+        "y": 0.506231
+      }
+    },
+    {
+      "id": "ho-clothing-043",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-043.png",
+      "width": 347,
+      "height": 308,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498377
+      }
+    },
+    {
+      "id": "ho-clothing-044",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-044.png",
+      "width": 374,
+      "height": 339,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.458556,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-clothing-045",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-045.png",
+      "width": 263,
+      "height": 336,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498512
+      }
+    },
+    {
+      "id": "ho-clothing-046",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-046.png",
+      "width": 241,
+      "height": 300,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498333
+      }
+    },
+    {
+      "id": "ho-clothing-047",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-047.png",
+      "width": 209,
+      "height": 330,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.501515
+      }
+    },
+    {
+      "id": "ho-clothing-048",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-048.png",
+      "width": 196,
+      "height": 313,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.497449,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-clothing-049",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-049.png",
+      "width": 139,
+      "height": 358,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498603
+      }
+    },
+    {
+      "id": "ho-clothing-050",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-050.png",
+      "width": 210,
+      "height": 362,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.497619,
+        "y": 0.498619
+      }
+    },
+    {
+      "id": "ho-clothing-051",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-051.png",
+      "width": 346,
+      "height": 275,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498555,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-clothing-052",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-052.png",
+      "width": 315,
+      "height": 334,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.598413,
+        "y": 0.483533
+      }
+    },
+    {
+      "id": "ho-clothing-053",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-053.png",
+      "width": 387,
+      "height": 296,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.489664,
+        "y": 0.488176
+      }
+    },
+    {
+      "id": "ho-clothing-054",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-054.png",
+      "width": 337,
+      "height": 271,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.523739,
+        "y": 0.51845
+      }
+    },
+    {
+      "id": "ho-clothing-055",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-055.png",
+      "width": 352,
+      "height": 246,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.49858,
+        "y": 0.497967
+      }
+    },
+    {
+      "id": "ho-clothing-056",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-056.png",
+      "width": 324,
+      "height": 290,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498457,
+        "y": 0.498276
+      }
+    },
+    {
+      "id": "ho-clothing-057",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-057.png",
+      "width": 204,
+      "height": 236,
+      "groupIds": [
+        "boots"
+      ],
+      "hitPoint": {
+        "x": 0.497549,
+        "y": 0.497881
+      }
+    },
+    {
+      "id": "ho-clothing-058",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-058.png",
+      "width": 315,
+      "height": 241,
+      "groupIds": [
+        "boots"
+      ],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-clothing-059",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-059.png",
+      "width": 394,
+      "height": 232,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498731,
+        "y": 0.497845
+      }
+    },
+    {
+      "id": "ho-clothing-060",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-060.png",
+      "width": 340,
+      "height": 205,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498529,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-clothing-061",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-061.png",
+      "width": 323,
+      "height": 235,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-clothing-062",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-062.png",
+      "width": 325,
+      "height": 223,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-clothing-063",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-063.png",
+      "width": 350,
+      "height": 258,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498571,
+        "y": 0.498062
+      }
+    },
+    {
+      "id": "ho-clothing-064",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-064.png",
+      "width": 346,
+      "height": 267,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498555,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-clothing-065",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-065.png",
+      "width": 358,
+      "height": 261,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498603,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-clothing-066",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-066.png",
+      "width": 342,
+      "height": 260,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498538,
+        "y": 0.498077
+      }
+    },
+    {
+      "id": "ho-clothing-067",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-067.png",
+      "width": 367,
+      "height": 287,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-clothing-068",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-068.png",
+      "width": 351,
+      "height": 270,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498148
+      }
+    },
+    {
+      "id": "ho-clothing-069",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-069.png",
+      "width": 352,
+      "height": 383,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.512784,
+        "y": 0.520888
+      }
+    },
+    {
+      "id": "ho-clothing-070",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-070.png",
+      "width": 356,
+      "height": 421,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498596,
+        "y": 0.507126
+      }
+    },
+    {
+      "id": "ho-clothing-071",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-071.png",
+      "width": 402,
+      "height": 374,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498756,
+        "y": 0.498663
+      }
+    },
+    {
+      "id": "ho-clothing-072",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-072.png",
+      "width": 278,
+      "height": 391,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498201,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-clothing-073",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-073.png",
+      "width": 263,
+      "height": 387,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.507605,
+        "y": 0.518088
+      }
+    },
+    {
+      "id": "ho-clothing-074",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-074.png",
+      "width": 284,
+      "height": 394,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.47007,
+        "y": 0.516497
+      }
+    },
+    {
+      "id": "ho-clothing-075",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-075.png",
+      "width": 322,
+      "height": 386,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.541925,
+        "y": 0.498705
+      }
+    },
+    {
+      "id": "ho-clothing-076",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-076.png",
+      "width": 269,
+      "height": 329,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-clothing-077",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-077.png",
+      "width": 257,
+      "height": 321,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-clothing-078",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-078.png",
+      "width": 249,
+      "height": 312,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498397
+      }
+    },
+    {
+      "id": "ho-clothing-079",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-079.png",
+      "width": 243,
+      "height": 394,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498731
+      }
+    },
+    {
+      "id": "ho-clothing-080",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-080.png",
+      "width": 193,
+      "height": 330,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498485
+      }
+    },
+    {
+      "id": "ho-clothing-081",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-081.png",
+      "width": 136,
+      "height": 306,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.444853,
+        "y": 0.495098
+      }
+    },
+    {
+      "id": "ho-clothing-082",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-082.png",
+      "width": 188,
+      "height": 376,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.49734,
+        "y": 0.49867
+      }
+    },
+    {
+      "id": "ho-clothing-083",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-083.png",
+      "width": 222,
+      "height": 296,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.56982,
+        "y": 0.498311
+      }
+    },
+    {
+      "id": "ho-clothing-084",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-084.png",
+      "width": 147,
+      "height": 312,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.42517,
+        "y": 0.482372
+      }
+    },
+    {
+      "id": "ho-clothing-085",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-085.png",
+      "width": 290,
+      "height": 356,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498276,
+        "y": 0.498596
+      }
+    },
+    {
+      "id": "ho-clothing-086",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-086.png",
+      "width": 311,
+      "height": 345,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-clothing-087",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-087.png",
+      "width": 289,
+      "height": 355,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-clothing-088",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-088.png",
+      "width": 159,
+      "height": 359,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-clothing-089",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-089.png",
+      "width": 146,
+      "height": 362,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.496575,
+        "y": 0.498619
+      }
+    },
+    {
+      "id": "ho-clothing-090",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-090.png",
+      "width": 147,
+      "height": 358,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498603
+      }
+    },
+    {
+      "id": "ho-clothing-091",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-091.png",
+      "width": 140,
+      "height": 375,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.496429,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-clothing-092",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-092.png",
+      "width": 130,
+      "height": 364,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.496154,
+        "y": 0.498626
+      }
+    },
+    {
+      "id": "ho-clothing-093",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-093.png",
+      "width": 162,
+      "height": 363,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.496914,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-clothing-094",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-094.png",
+      "width": 332,
+      "height": 192,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498494,
+        "y": 0.502604
+      }
+    },
+    {
+      "id": "ho-clothing-095",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-095.png",
+      "width": 264,
+      "height": 190,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498106,
+        "y": 0.497368
+      }
+    },
+    {
+      "id": "ho-clothing-096",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-096.png",
+      "width": 314,
+      "height": 170,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498408,
+        "y": 0.497059
+      }
+    },
+    {
+      "id": "ho-clothing-097",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-097.png",
+      "width": 273,
+      "height": 195,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.489011,
+        "y": 0.546154
+      }
+    },
+    {
+      "id": "ho-clothing-098",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-098.png",
+      "width": 247,
+      "height": 194,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.497423
+      }
+    },
+    {
+      "id": "ho-clothing-099",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-099.png",
+      "width": 253,
+      "height": 169,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-clothing-100",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-100.png",
+      "width": 237,
+      "height": 178,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.497191
+      }
+    },
+    {
+      "id": "ho-clothing-101",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-101.png",
+      "width": 359,
+      "height": 481,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-clothing-102",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-102.png",
+      "width": 316,
+      "height": 457,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498418,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-clothing-103",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-103.png",
+      "width": 335,
+      "height": 481,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.48209,
+        "y": 0.504158
+      }
+    },
+    {
+      "id": "ho-clothing-104",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-104.png",
+      "width": 381,
+      "height": 473,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.463255,
+        "y": 0.519027
+      }
+    },
+    {
+      "id": "ho-clothing-105",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-105.png",
+      "width": 309,
+      "height": 438,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498858
+      }
+    },
+    {
+      "id": "ho-clothing-106",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-106.png",
+      "width": 354,
+      "height": 445,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498588,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-clothing-107",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-107.png",
+      "width": 418,
+      "height": 380,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498804,
+        "y": 0.498684
+      }
+    },
+    {
+      "id": "ho-clothing-108",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-108.png",
+      "width": 349,
+      "height": 420,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.49881
+      }
+    },
+    {
+      "id": "ho-clothing-109",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-109.png",
+      "width": 318,
+      "height": 397,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.47327,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-clothing-110",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-110.png",
+      "width": 150,
+      "height": 376,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.496667,
+        "y": 0.49867
+      }
+    },
+    {
+      "id": "ho-clothing-111",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-111.png",
+      "width": 173,
+      "height": 410,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.49878
+      }
+    },
+    {
+      "id": "ho-clothing-112",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-112.png",
+      "width": 197,
+      "height": 438,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498858
+      }
+    },
+    {
+      "id": "ho-clothing-113",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-113.png",
+      "width": 138,
+      "height": 420,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.496377,
+        "y": 0.49881
+      }
+    },
+    {
+      "id": "ho-clothing-114",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-114.png",
+      "width": 147,
+      "height": 418,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498804
+      }
+    },
+    {
+      "id": "ho-clothing-115",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-115.png",
+      "width": 187,
+      "height": 386,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498705
+      }
+    },
+    {
+      "id": "ho-clothing-116",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-116.png",
+      "width": 313,
+      "height": 373,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.615016,
+        "y": 0.521448
+      }
+    },
+    {
+      "id": "ho-clothing-117",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-117.png",
+      "width": 349,
+      "height": 425,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-clothing-118",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-118.png",
+      "width": 297,
+      "height": 407,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-clothing-119",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-119.png",
+      "width": 282,
+      "height": 449,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498227,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-clothing-120",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-120.png",
+      "width": 226,
+      "height": 428,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.497788,
+        "y": 0.498832
+      }
+    },
+    {
+      "id": "ho-clothing-121",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-121.png",
+      "width": 336,
+      "height": 427,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498512,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-clothing-122",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-122.png",
+      "width": 298,
+      "height": 441,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498322,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-clothing-123",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-123.png",
+      "width": 217,
+      "height": 261,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-clothing-124",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-124.png",
+      "width": 240,
+      "height": 304,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.497917,
+        "y": 0.498355
+      }
+    },
+    {
+      "id": "ho-clothing-125",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-125.png",
+      "width": 241,
+      "height": 291,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-clothing-126",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-126.png",
+      "width": 355,
+      "height": 301,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-clothing-127",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-127.png",
+      "width": 270,
+      "height": 235,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498148,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-clothing-128",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-128.png",
+      "width": 287,
+      "height": 241,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-clothing-129",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-129.png",
+      "width": 358,
+      "height": 257,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498603,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-clothing-130",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-130.png",
+      "width": 293,
+      "height": 243,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-clothing-131",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-131.png",
+      "width": 173,
+      "height": 335,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-clothing-132",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-132.png",
+      "width": 186,
+      "height": 283,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.497312,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-clothing-133",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-133.png",
+      "width": 292,
+      "height": 314,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498288,
+        "y": 0.498408
+      }
+    },
+    {
+      "id": "ho-clothing-134",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-134.png",
+      "width": 337,
+      "height": 291,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-clothing-135",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-135.png",
+      "width": 358,
+      "height": 279,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498603,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-clothing-136",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-136.png",
+      "width": 315,
+      "height": 296,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498311
+      }
+    },
+    {
+      "id": "ho-clothing-137",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-137.png",
+      "width": 323,
+      "height": 304,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.475232,
+        "y": 0.527961
+      }
+    },
+    {
+      "id": "ho-clothing-138",
+      "categoryId": "clothing",
+      "path": "/assets/shared/hidden-object/v002/clothing-138.png",
+      "width": 281,
+      "height": 267,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-animals-001",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-001.png",
+      "width": 336,
+      "height": 393,
+      "groupIds": [
+        "deer"
+      ],
+      "hitPoint": {
+        "x": 0.498512,
+        "y": 0.502545
+      }
+    },
+    {
+      "id": "ho-animals-002",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-002.png",
+      "width": 337,
+      "height": 390,
+      "groupIds": [
+        "deer"
+      ],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498718
+      }
+    },
+    {
+      "id": "ho-animals-003",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-003.png",
+      "width": 381,
+      "height": 393,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.497375,
+        "y": 0.522901
+      }
+    },
+    {
+      "id": "ho-animals-004",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-004.png",
+      "width": 338,
+      "height": 386,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498521,
+        "y": 0.498705
+      }
+    },
+    {
+      "id": "ho-animals-005",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-005.png",
+      "width": 353,
+      "height": 387,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-animals-006",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-006.png",
+      "width": 299,
+      "height": 400,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.49875
+      }
+    },
+    {
+      "id": "ho-animals-007",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-007.png",
+      "width": 266,
+      "height": 362,
+      "groupIds": [
+        "peacock"
+      ],
+      "hitPoint": {
+        "x": 0.49812,
+        "y": 0.498619
+      }
+    },
+    {
+      "id": "ho-animals-008",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-008.png",
+      "width": 406,
+      "height": 354,
+      "groupIds": [
+        "peacock"
+      ],
+      "hitPoint": {
+        "x": 0.498768,
+        "y": 0.498588
+      }
+    },
+    {
+      "id": "ho-animals-009",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-009.png",
+      "width": 375,
+      "height": 343,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-animals-010",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-010.png",
+      "width": 345,
+      "height": 328,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498476
+      }
+    },
+    {
+      "id": "ho-animals-011",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-011.png",
+      "width": 350,
+      "height": 319,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498571,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-animals-012",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-012.png",
+      "width": 291,
+      "height": 326,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498466
+      }
+    },
+    {
+      "id": "ho-animals-013",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-013.png",
+      "width": 297,
+      "height": 345,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-animals-014",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-014.png",
+      "width": 327,
+      "height": 334,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498503
+      }
+    },
+    {
+      "id": "ho-animals-015",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-015.png",
+      "width": 342,
+      "height": 286,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.501462,
+        "y": 0.494755
+      }
+    },
+    {
+      "id": "ho-animals-016",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-016.png",
+      "width": 325,
+      "height": 226,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.497788
+      }
+    },
+    {
+      "id": "ho-animals-017",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-017.png",
+      "width": 329,
+      "height": 272,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498162
+      }
+    },
+    {
+      "id": "ho-animals-018",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-018.png",
+      "width": 332,
+      "height": 307,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498494,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-animals-019",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-019.png",
+      "width": 411,
+      "height": 324,
+      "groupIds": [
+        "rabbit"
+      ],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.507716
+      }
+    },
+    {
+      "id": "ho-animals-020",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-020.png",
+      "width": 380,
+      "height": 310,
+      "groupIds": [
+        "rabbit"
+      ],
+      "hitPoint": {
+        "x": 0.498684,
+        "y": 0.559677
+      }
+    },
+    {
+      "id": "ho-animals-021",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-021.png",
+      "width": 310,
+      "height": 313,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498387,
+        "y": 0.407348
+      }
+    },
+    {
+      "id": "ho-animals-022",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-022.png",
+      "width": 352,
+      "height": 379,
+      "groupIds": [
+        "horse"
+      ],
+      "hitPoint": {
+        "x": 0.49858,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-animals-023",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-023.png",
+      "width": 319,
+      "height": 406,
+      "groupIds": [
+        "horse"
+      ],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498768
+      }
+    },
+    {
+      "id": "ho-animals-024",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-024.png",
+      "width": 384,
+      "height": 403,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498698,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-animals-025",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-025.png",
+      "width": 327,
+      "height": 368,
+      "groupIds": [
+        "camel"
+      ],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498641
+      }
+    },
+    {
+      "id": "ho-animals-026",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-026.png",
+      "width": 385,
+      "height": 272,
+      "groupIds": [
+        "camel"
+      ],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498162
+      }
+    },
+    {
+      "id": "ho-animals-027",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-027.png",
+      "width": 334,
+      "height": 353,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498503,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-animals-028",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-028.png",
+      "width": 332,
+      "height": 306,
+      "groupIds": [
+        "ox"
+      ],
+      "hitPoint": {
+        "x": 0.498494,
+        "y": 0.498366
+      }
+    },
+    {
+      "id": "ho-animals-029",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-029.png",
+      "width": 383,
+      "height": 287,
+      "groupIds": [
+        "ox"
+      ],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-animals-030",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-030.png",
+      "width": 346,
+      "height": 300,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498555,
+        "y": 0.498333
+      }
+    },
+    {
+      "id": "ho-animals-031",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-031.png",
+      "width": 319,
+      "height": 328,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498476
+      }
+    },
+    {
+      "id": "ho-animals-032",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-032.png",
+      "width": 354,
+      "height": 323,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498588,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-animals-033",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-033.png",
+      "width": 340,
+      "height": 322,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498529,
+        "y": 0.498447
+      }
+    },
+    {
+      "id": "ho-animals-034",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-034.png",
+      "width": 355,
+      "height": 324,
+      "groupIds": [
+        "lion"
+      ],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498457
+      }
+    },
+    {
+      "id": "ho-animals-035",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-035.png",
+      "width": 387,
+      "height": 347,
+      "groupIds": [
+        "lion"
+      ],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-animals-036",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-036.png",
+      "width": 279,
+      "height": 334,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498503
+      }
+    },
+    {
+      "id": "ho-animals-037",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-037.png",
+      "width": 335,
+      "height": 418,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.496411
+      }
+    },
+    {
+      "id": "ho-animals-038",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-038.png",
+      "width": 352,
+      "height": 420,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.49858,
+        "y": 0.49881
+      }
+    },
+    {
+      "id": "ho-animals-039",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-039.png",
+      "width": 375,
+      "height": 421,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.518667,
+        "y": 0.511876
+      }
+    },
+    {
+      "id": "ho-animals-040",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-040.png",
+      "width": 376,
+      "height": 452,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.49867,
+        "y": 0.498894
+      }
+    },
+    {
+      "id": "ho-animals-041",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-041.png",
+      "width": 359,
+      "height": 467,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.491643,
+        "y": 0.485011
+      }
+    },
+    {
+      "id": "ho-animals-042",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-042.png",
+      "width": 309,
+      "height": 476,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.50105
+      }
+    },
+    {
+      "id": "ho-animals-043",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-043.png",
+      "width": 354,
+      "height": 311,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498588,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-animals-044",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-044.png",
+      "width": 313,
+      "height": 329,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-animals-045",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-045.png",
+      "width": 348,
+      "height": 309,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498563,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-animals-046",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-046.png",
+      "width": 378,
+      "height": 253,
+      "groupIds": [
+        "fish"
+      ],
+      "hitPoint": {
+        "x": 0.498677,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-animals-047",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-047.png",
+      "width": 318,
+      "height": 244,
+      "groupIds": [
+        "fish"
+      ],
+      "hitPoint": {
+        "x": 0.498428,
+        "y": 0.497951
+      }
+    },
+    {
+      "id": "ho-animals-048",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-048.png",
+      "width": 427,
+      "height": 256,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498047
+      }
+    },
+    {
+      "id": "ho-animals-049",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-049.png",
+      "width": 330,
+      "height": 373,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498485,
+        "y": 0.491957
+      }
+    },
+    {
+      "id": "ho-animals-050",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-050.png",
+      "width": 334,
+      "height": 351,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498503,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-animals-051",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-051.png",
+      "width": 392,
+      "height": 345,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.503827,
+        "y": 0.494203
+      }
+    },
+    {
+      "id": "ho-animals-052",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-052.png",
+      "width": 342,
+      "height": 389,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498538,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-animals-053",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-053.png",
+      "width": 360,
+      "height": 350,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498611,
+        "y": 0.498571
+      }
+    },
+    {
+      "id": "ho-animals-054",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-054.png",
+      "width": 351,
+      "height": 385,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-animals-055",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-055.png",
+      "width": 271,
+      "height": 365,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-animals-056",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-056.png",
+      "width": 331,
+      "height": 367,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.503021,
+        "y": 0.513624
+      }
+    },
+    {
+      "id": "ho-animals-057",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-057.png",
+      "width": 368,
+      "height": 356,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.509511,
+        "y": 0.448034
+      }
+    },
+    {
+      "id": "ho-animals-058",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-058.png",
+      "width": 297,
+      "height": 379,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.577441,
+        "y": 0.502639
+      }
+    },
+    {
+      "id": "ho-animals-059",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-059.png",
+      "width": 512,
+      "height": 345,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.499023,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-animals-060",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-060.png",
+      "width": 328,
+      "height": 349,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498476,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-animals-061",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-061.png",
+      "width": 355,
+      "height": 349,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-animals-062",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-062.png",
+      "width": 359,
+      "height": 338,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.438719,
+        "y": 0.563609
+      }
+    },
+    {
+      "id": "ho-animals-063",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-063.png",
+      "width": 428,
+      "height": 320,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498832,
+        "y": 0.498437
+      }
+    },
+    {
+      "id": "ho-animals-064",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-064.png",
+      "width": 303,
+      "height": 328,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498476
+      }
+    },
+    {
+      "id": "ho-animals-065",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-065.png",
+      "width": 315,
+      "height": 328,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498476
+      }
+    },
+    {
+      "id": "ho-animals-066",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-066.png",
+      "width": 345,
+      "height": 363,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-animals-067",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-067.png",
+      "width": 330,
+      "height": 341,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498485,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-animals-068",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-068.png",
+      "width": 350,
+      "height": 332,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498571,
+        "y": 0.498494
+      }
+    },
+    {
+      "id": "ho-animals-069",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-069.png",
+      "width": 308,
+      "height": 310,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498377,
+        "y": 0.498387
+      }
+    },
+    {
+      "id": "ho-animals-070",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-070.png",
+      "width": 341,
+      "height": 223,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-animals-071",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-071.png",
+      "width": 333,
+      "height": 254,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498031
+      }
+    },
+    {
+      "id": "ho-animals-072",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-072.png",
+      "width": 295,
+      "height": 270,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498148
+      }
+    },
+    {
+      "id": "ho-animals-073",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-073.png",
+      "width": 333,
+      "height": 270,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498148
+      }
+    },
+    {
+      "id": "ho-animals-074",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-074.png",
+      "width": 408,
+      "height": 449,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498775,
+        "y": 0.506682
+      }
+    },
+    {
+      "id": "ho-animals-075",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-075.png",
+      "width": 382,
+      "height": 321,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498691,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-animals-076",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-076.png",
+      "width": 356,
+      "height": 358,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498596,
+        "y": 0.498603
+      }
+    },
+    {
+      "id": "ho-animals-077",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-077.png",
+      "width": 358,
+      "height": 362,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498603,
+        "y": 0.498619
+      }
+    },
+    {
+      "id": "ho-animals-078",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-078.png",
+      "width": 331,
+      "height": 355,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-animals-079",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-079.png",
+      "width": 307,
+      "height": 336,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498512
+      }
+    },
+    {
+      "id": "ho-animals-080",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-080.png",
+      "width": 353,
+      "height": 291,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-animals-081",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-081.png",
+      "width": 325,
+      "height": 323,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-animals-082",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-082.png",
+      "width": 370,
+      "height": 289,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498649,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-animals-083",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-083.png",
+      "width": 317,
+      "height": 311,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-animals-084",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-084.png",
+      "width": 367,
+      "height": 299,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-animals-085",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-085.png",
+      "width": 255,
+      "height": 325,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-animals-086",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-086.png",
+      "width": 326,
+      "height": 322,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498466,
+        "y": 0.498447
+      }
+    },
+    {
+      "id": "ho-animals-087",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-087.png",
+      "width": 332,
+      "height": 308,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498494,
+        "y": 0.498377
+      }
+    },
+    {
+      "id": "ho-animals-088",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-088.png",
+      "width": 461,
+      "height": 325,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-animals-089",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-089.png",
+      "width": 336,
+      "height": 374,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498512,
+        "y": 0.498663
+      }
+    },
+    {
+      "id": "ho-animals-090",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-090.png",
+      "width": 314,
+      "height": 333,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498408,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-animals-091",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-091.png",
+      "width": 376,
+      "height": 432,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.493351,
+        "y": 0.515046
+      }
+    },
+    {
+      "id": "ho-animals-092",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-092.png",
+      "width": 345,
+      "height": 453,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-animals-093",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-093.png",
+      "width": 309,
+      "height": 432,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498843
+      }
+    },
+    {
+      "id": "ho-animals-094",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-094.png",
+      "width": 291,
+      "height": 512,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.499023
+      }
+    },
+    {
+      "id": "ho-animals-095",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-095.png",
+      "width": 394,
+      "height": 485,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.519036,
+        "y": 0.516495
+      }
+    },
+    {
+      "id": "ho-animals-096",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-096.png",
+      "width": 414,
+      "height": 512,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498792,
+        "y": 0.499023
+      }
+    },
+    {
+      "id": "ho-animals-097",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-097.png",
+      "width": 344,
+      "height": 348,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498547,
+        "y": 0.498563
+      }
+    },
+    {
+      "id": "ho-animals-098",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-098.png",
+      "width": 317,
+      "height": 310,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498387
+      }
+    },
+    {
+      "id": "ho-animals-099",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-099.png",
+      "width": 337,
+      "height": 304,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498355
+      }
+    },
+    {
+      "id": "ho-animals-100",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-100.png",
+      "width": 335,
+      "height": 249,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.49403,
+        "y": 0.455823
+      }
+    },
+    {
+      "id": "ho-animals-101",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-101.png",
+      "width": 364,
+      "height": 317,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498626,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-animals-102",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-102.png",
+      "width": 298,
+      "height": 349,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498322,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-animals-103",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-103.png",
+      "width": 337,
+      "height": 395,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-animals-104",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-104.png",
+      "width": 380,
+      "height": 432,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498684,
+        "y": 0.498843
+      }
+    },
+    {
+      "id": "ho-animals-105",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-105.png",
+      "width": 438,
+      "height": 418,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498858,
+        "y": 0.498804
+      }
+    },
+    {
+      "id": "ho-animals-106",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-106.png",
+      "width": 367,
+      "height": 422,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498815
+      }
+    },
+    {
+      "id": "ho-animals-107",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-107.png",
+      "width": 341,
+      "height": 404,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498762
+      }
+    },
+    {
+      "id": "ho-animals-108",
+      "categoryId": "animals",
+      "path": "/assets/shared/hidden-object/v002/animals-108.png",
+      "width": 394,
+      "height": 438,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498731,
+        "y": 0.498858
+      }
+    },
+    {
+      "id": "ho-patterns-001",
+      "categoryId": "patterns",
+      "path": "/assets/shared/hidden-object/v002/patterns-001.png",
+      "width": 356,
+      "height": 370,
+      "groupIds": [
+        "round-pattern"
+      ],
+      "hitPoint": {
+        "x": 0.498596,
+        "y": 0.498649
+      }
+    },
+    {
+      "id": "ho-patterns-002",
+      "categoryId": "patterns",
+      "path": "/assets/shared/hidden-object/v002/patterns-002.png",
+      "width": 357,
+      "height": 369,
+      "groupIds": [
+        "round-pattern"
+      ],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-patterns-003",
+      "categoryId": "patterns",
+      "path": "/assets/shared/hidden-object/v002/patterns-003.png",
+      "width": 337,
+      "height": 350,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498571
+      }
+    },
+    {
+      "id": "ho-patterns-004",
+      "categoryId": "patterns",
+      "path": "/assets/shared/hidden-object/v002/patterns-004.png",
+      "width": 351,
+      "height": 378,
+      "groupIds": [
+        "diamond-pattern"
+      ],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498677
+      }
+    },
+    {
+      "id": "ho-patterns-005",
+      "categoryId": "patterns",
+      "path": "/assets/shared/hidden-object/v002/patterns-005.png",
+      "width": 361,
+      "height": 395,
+      "groupIds": [
+        "diamond-pattern"
+      ],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-patterns-006",
+      "categoryId": "patterns",
+      "path": "/assets/shared/hidden-object/v002/patterns-006.png",
+      "width": 350,
+      "height": 380,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498571,
+        "y": 0.498684
+      }
+    },
+    {
+      "id": "ho-patterns-007",
+      "categoryId": "patterns",
+      "path": "/assets/shared/hidden-object/v002/patterns-007.png",
+      "width": 362,
+      "height": 370,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498619,
+        "y": 0.498649
+      }
+    },
+    {
+      "id": "ho-patterns-008",
+      "categoryId": "patterns",
+      "path": "/assets/shared/hidden-object/v002/patterns-008.png",
+      "width": 377,
+      "height": 377,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-patterns-009",
+      "categoryId": "patterns",
+      "path": "/assets/shared/hidden-object/v002/patterns-009.png",
+      "width": 363,
+      "height": 377,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-patterns-010",
+      "categoryId": "patterns",
+      "path": "/assets/shared/hidden-object/v002/patterns-010.png",
+      "width": 377,
+      "height": 349,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-patterns-011",
+      "categoryId": "patterns",
+      "path": "/assets/shared/hidden-object/v002/patterns-011.png",
+      "width": 370,
+      "height": 290,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498649,
+        "y": 0.498276
+      }
+    },
+    {
+      "id": "ho-patterns-012",
+      "categoryId": "patterns",
+      "path": "/assets/shared/hidden-object/v002/patterns-012.png",
+      "width": 367,
+      "height": 342,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498538
+      }
+    },
+    {
+      "id": "ho-patterns-013",
+      "categoryId": "patterns",
+      "path": "/assets/shared/hidden-object/v002/patterns-013.png",
+      "width": 349,
+      "height": 434,
+      "groupIds": [
+        "flame-pattern"
+      ],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498848
+      }
+    },
+    {
+      "id": "ho-patterns-014",
+      "categoryId": "patterns",
+      "path": "/assets/shared/hidden-object/v002/patterns-014.png",
+      "width": 331,
+      "height": 471,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-patterns-015",
+      "categoryId": "patterns",
+      "path": "/assets/shared/hidden-object/v002/patterns-015.png",
+      "width": 351,
+      "height": 442,
+      "groupIds": [
+        "flame-pattern"
+      ],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498869
+      }
+    },
+    {
+      "id": "ho-patterns-016",
+      "categoryId": "patterns",
+      "path": "/assets/shared/hidden-object/v002/patterns-016.png",
+      "width": 379,
+      "height": 425,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-patterns-017",
+      "categoryId": "patterns",
+      "path": "/assets/shared/hidden-object/v002/patterns-017.png",
+      "width": 383,
+      "height": 443,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-patterns-018",
+      "categoryId": "patterns",
+      "path": "/assets/shared/hidden-object/v002/patterns-018.png",
+      "width": 328,
+      "height": 407,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498476,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-patterns-019",
+      "categoryId": "patterns",
+      "path": "/assets/shared/hidden-object/v002/patterns-019.png",
+      "width": 351,
+      "height": 332,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498494
+      }
+    },
+    {
+      "id": "ho-patterns-020",
+      "categoryId": "patterns",
+      "path": "/assets/shared/hidden-object/v002/patterns-020.png",
+      "width": 390,
+      "height": 303,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498718,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-patterns-021",
+      "categoryId": "patterns",
+      "path": "/assets/shared/hidden-object/v002/patterns-021.png",
+      "width": 345,
+      "height": 313,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-patterns-022",
+      "categoryId": "patterns",
+      "path": "/assets/shared/hidden-object/v002/patterns-022.png",
+      "width": 366,
+      "height": 211,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498634,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-patterns-023",
+      "categoryId": "patterns",
+      "path": "/assets/shared/hidden-object/v002/patterns-023.png",
+      "width": 365,
+      "height": 256,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498047
+      }
+    },
+    {
+      "id": "ho-patterns-024",
+      "categoryId": "patterns",
+      "path": "/assets/shared/hidden-object/v002/patterns-024.png",
+      "width": 369,
+      "height": 199,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-patterns-025",
+      "categoryId": "patterns",
+      "path": "/assets/shared/hidden-object/v002/patterns-025.png",
+      "width": 399,
+      "height": 93,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-patterns-026",
+      "categoryId": "patterns",
+      "path": "/assets/shared/hidden-object/v002/patterns-026.png",
+      "width": 327,
+      "height": 274,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498175
+      }
+    },
+    {
+      "id": "ho-patterns-027",
+      "categoryId": "patterns",
+      "path": "/assets/shared/hidden-object/v002/patterns-027.png",
+      "width": 343,
+      "height": 315,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-patterns-028",
+      "categoryId": "patterns",
+      "path": "/assets/shared/hidden-object/v002/patterns-028.png",
+      "width": 318,
+      "height": 193,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498428,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-patterns-029",
+      "categoryId": "patterns",
+      "path": "/assets/shared/hidden-object/v002/patterns-029.png",
+      "width": 371,
+      "height": 187,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-patterns-030",
+      "categoryId": "patterns",
+      "path": "/assets/shared/hidden-object/v002/patterns-030.png",
+      "width": 332,
+      "height": 207,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498494,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-patterns-031",
+      "categoryId": "patterns",
+      "path": "/assets/shared/hidden-object/v002/patterns-031.png",
+      "width": 383,
+      "height": 310,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498387
+      }
+    },
+    {
+      "id": "ho-patterns-032",
+      "categoryId": "patterns",
+      "path": "/assets/shared/hidden-object/v002/patterns-032.png",
+      "width": 366,
+      "height": 298,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498634,
+        "y": 0.498322
+      }
+    },
+    {
+      "id": "ho-patterns-033",
+      "categoryId": "patterns",
+      "path": "/assets/shared/hidden-object/v002/patterns-033.png",
+      "width": 382,
+      "height": 273,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498691,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-patterns-034",
+      "categoryId": "patterns",
+      "path": "/assets/shared/hidden-object/v002/patterns-034.png",
+      "width": 366,
+      "height": 209,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498634,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-patterns-035",
+      "categoryId": "patterns",
+      "path": "/assets/shared/hidden-object/v002/patterns-035.png",
+      "width": 369,
+      "height": 206,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.497573
+      }
+    },
+    {
+      "id": "ho-patterns-036",
+      "categoryId": "patterns",
+      "path": "/assets/shared/hidden-object/v002/patterns-036.png",
+      "width": 362,
+      "height": 205,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498619,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-patterns-037",
+      "categoryId": "patterns",
+      "path": "/assets/shared/hidden-object/v002/patterns-037.png",
+      "width": 370,
+      "height": 374,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498649,
+        "y": 0.498663
+      }
+    },
+    {
+      "id": "ho-patterns-038",
+      "categoryId": "patterns",
+      "path": "/assets/shared/hidden-object/v002/patterns-038.png",
+      "width": 367,
+      "height": 379,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-patterns-039",
+      "categoryId": "patterns",
+      "path": "/assets/shared/hidden-object/v002/patterns-039.png",
+      "width": 370,
+      "height": 378,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498649,
+        "y": 0.498677
+      }
+    },
+    {
+      "id": "ho-plants-001",
+      "categoryId": "plants",
+      "path": "/assets/shared/hidden-object/v002/plants-001.png",
+      "width": 512,
+      "height": 348,
+      "groupIds": [
+        "lotus"
+      ],
+      "hitPoint": {
+        "x": 0.499023,
+        "y": 0.498563
+      }
+    },
+    {
+      "id": "ho-plants-002",
+      "categoryId": "plants",
+      "path": "/assets/shared/hidden-object/v002/plants-002.png",
+      "width": 512,
+      "height": 404,
+      "groupIds": [
+        "lotus"
+      ],
+      "hitPoint": {
+        "x": 0.499023,
+        "y": 0.498762
+      }
+    },
+    {
+      "id": "ho-plants-003",
+      "categoryId": "plants",
+      "path": "/assets/shared/hidden-object/v002/plants-003.png",
+      "width": 512,
+      "height": 402,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.499023,
+        "y": 0.498756
+      }
+    },
+    {
+      "id": "ho-plants-004",
+      "categoryId": "plants",
+      "path": "/assets/shared/hidden-object/v002/plants-004.png",
+      "width": 383,
+      "height": 387,
+      "groupIds": [
+        "seedpod"
+      ],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-plants-005",
+      "categoryId": "plants",
+      "path": "/assets/shared/hidden-object/v002/plants-005.png",
+      "width": 371,
+      "height": 393,
+      "groupIds": [
+        "seedpod"
+      ],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-plants-006",
+      "categoryId": "plants",
+      "path": "/assets/shared/hidden-object/v002/plants-006.png",
+      "width": 432,
+      "height": 388,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498843,
+        "y": 0.498711
+      }
+    },
+    {
+      "id": "ho-plants-007",
+      "categoryId": "plants",
+      "path": "/assets/shared/hidden-object/v002/plants-007.png",
+      "width": 497,
+      "height": 365,
+      "groupIds": [
+        "lotus-leaf"
+      ],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-plants-008",
+      "categoryId": "plants",
+      "path": "/assets/shared/hidden-object/v002/plants-008.png",
+      "width": 512,
+      "height": 316,
+      "groupIds": [
+        "lotus-leaf"
+      ],
+      "hitPoint": {
+        "x": 0.499023,
+        "y": 0.498418
+      }
+    },
+    {
+      "id": "ho-plants-009",
+      "categoryId": "plants",
+      "path": "/assets/shared/hidden-object/v002/plants-009.png",
+      "width": 452,
+      "height": 350,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498894,
+        "y": 0.498571
+      }
+    },
+    {
+      "id": "ho-plants-010",
+      "categoryId": "plants",
+      "path": "/assets/shared/hidden-object/v002/plants-010.png",
+      "width": 438,
+      "height": 362,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498858,
+        "y": 0.498619
+      }
+    },
+    {
+      "id": "ho-plants-011",
+      "categoryId": "plants",
+      "path": "/assets/shared/hidden-object/v002/plants-011.png",
+      "width": 491,
+      "height": 353,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-plants-012",
+      "categoryId": "plants",
+      "path": "/assets/shared/hidden-object/v002/plants-012.png",
+      "width": 494,
+      "height": 379,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498988,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-plants-013",
+      "categoryId": "plants",
+      "path": "/assets/shared/hidden-object/v002/plants-013.png",
+      "width": 509,
+      "height": 360,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498611
+      }
+    },
+    {
+      "id": "ho-plants-014",
+      "categoryId": "plants",
+      "path": "/assets/shared/hidden-object/v002/plants-014.png",
+      "width": 512,
+      "height": 369,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.499023,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-plants-015",
+      "categoryId": "plants",
+      "path": "/assets/shared/hidden-object/v002/plants-015.png",
+      "width": 469,
+      "height": 361,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-plants-016",
+      "categoryId": "plants",
+      "path": "/assets/shared/hidden-object/v002/plants-016.png",
+      "width": 447,
+      "height": 412,
+      "groupIds": [
+        "flower"
+      ],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498786
+      }
+    },
+    {
+      "id": "ho-plants-017",
+      "categoryId": "plants",
+      "path": "/assets/shared/hidden-object/v002/plants-017.png",
+      "width": 454,
+      "height": 407,
+      "groupIds": [
+        "flower"
+      ],
+      "hitPoint": {
+        "x": 0.498899,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-plants-018",
+      "categoryId": "plants",
+      "path": "/assets/shared/hidden-object/v002/plants-018.png",
+      "width": 454,
+      "height": 413,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498899,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-plants-019",
+      "categoryId": "plants",
+      "path": "/assets/shared/hidden-object/v002/plants-019.png",
+      "width": 354,
+      "height": 335,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498588,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-plants-020",
+      "categoryId": "plants",
+      "path": "/assets/shared/hidden-object/v002/plants-020.png",
+      "width": 358,
+      "height": 349,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498603,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-plants-021",
+      "categoryId": "plants",
+      "path": "/assets/shared/hidden-object/v002/plants-021.png",
+      "width": 358,
+      "height": 353,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498603,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-plants-022",
+      "categoryId": "plants",
+      "path": "/assets/shared/hidden-object/v002/plants-022.png",
+      "width": 418,
+      "height": 293,
+      "groupIds": [
+        "leaf"
+      ],
+      "hitPoint": {
+        "x": 0.498804,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-plants-023",
+      "categoryId": "plants",
+      "path": "/assets/shared/hidden-object/v002/plants-023.png",
+      "width": 470,
+      "height": 302,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498936,
+        "y": 0.501656
+      }
+    },
+    {
+      "id": "ho-plants-024",
+      "categoryId": "plants",
+      "path": "/assets/shared/hidden-object/v002/plants-024.png",
+      "width": 462,
+      "height": 320,
+      "groupIds": [
+        "leaf"
+      ],
+      "hitPoint": {
+        "x": 0.498918,
+        "y": 0.498437
+      }
+    },
+    {
+      "id": "ho-plants-025",
+      "categoryId": "plants",
+      "path": "/assets/shared/hidden-object/v002/plants-025.png",
+      "width": 512,
+      "height": 248,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.499023,
+        "y": 0.497984
+      }
+    },
+    {
+      "id": "ho-plants-026",
+      "categoryId": "plants",
+      "path": "/assets/shared/hidden-object/v002/plants-026.png",
+      "width": 498,
+      "height": 237,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.490964,
+        "y": 0.567511
+      }
+    },
+    {
+      "id": "ho-plants-027",
+      "categoryId": "plants",
+      "path": "/assets/shared/hidden-object/v002/plants-027.png",
+      "width": 471,
+      "height": 256,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498047
+      }
+    },
+    {
+      "id": "ho-plants-028",
+      "categoryId": "plants",
+      "path": "/assets/shared/hidden-object/v002/plants-028.png",
+      "width": 429,
+      "height": 268,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498134
+      }
+    },
+    {
+      "id": "ho-plants-029",
+      "categoryId": "plants",
+      "path": "/assets/shared/hidden-object/v002/plants-029.png",
+      "width": 458,
+      "height": 299,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498908,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-plants-030",
+      "categoryId": "plants",
+      "path": "/assets/shared/hidden-object/v002/plants-030.png",
+      "width": 512,
+      "height": 242,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.499023,
+        "y": 0.497934
+      }
+    },
+    {
+      "id": "ho-plants-031",
+      "categoryId": "plants",
+      "path": "/assets/shared/hidden-object/v002/plants-031.png",
+      "width": 512,
+      "height": 268,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.499023,
+        "y": 0.498134
+      }
+    },
+    {
+      "id": "ho-plants-032",
+      "categoryId": "plants",
+      "path": "/assets/shared/hidden-object/v002/plants-032.png",
+      "width": 505,
+      "height": 319,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-plants-033",
+      "categoryId": "plants",
+      "path": "/assets/shared/hidden-object/v002/plants-033.png",
+      "width": 504,
+      "height": 321,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.499008,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-001",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-001.png",
+      "width": 255,
+      "height": 357,
+      "groupIds": [
+        "incense-burner"
+      ],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-002",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-002.png",
+      "width": 205,
+      "height": 365,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-003",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-003.png",
+      "width": 326,
+      "height": 380,
+      "groupIds": [
+        "incense-burner"
+      ],
+      "hitPoint": {
+        "x": 0.498466,
+        "y": 0.498684
+      }
+    },
+    {
+      "id": "ho-ritual-004",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-004.png",
+      "width": 246,
+      "height": 369,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.497967,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-005",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-005.png",
+      "width": 200,
+      "height": 370,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5575,
+        "y": 0.509459
+      }
+    },
+    {
+      "id": "ho-ritual-006",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-006.png",
+      "width": 179,
+      "height": 376,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.49867
+      }
+    },
+    {
+      "id": "ho-ritual-007",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-007.png",
+      "width": 219,
+      "height": 369,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.522831,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-008",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-008.png",
+      "width": 121,
+      "height": 372,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498656
+      }
+    },
+    {
+      "id": "ho-ritual-009",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-009.png",
+      "width": 192,
+      "height": 370,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.638021,
+        "y": 0.539189
+      }
+    },
+    {
+      "id": "ho-ritual-010",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-010.png",
+      "width": 251,
+      "height": 228,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.497807
+      }
+    },
+    {
+      "id": "ho-ritual-011",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-011.png",
+      "width": 228,
+      "height": 217,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.497807,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-012",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-012.png",
+      "width": 252,
+      "height": 215,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498016,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-013",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-013.png",
+      "width": 249,
+      "height": 247,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-014",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-014.png",
+      "width": 264,
+      "height": 232,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498106,
+        "y": 0.497845
+      }
+    },
+    {
+      "id": "ho-ritual-015",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-015.png",
+      "width": 295,
+      "height": 232,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.497845
+      }
+    },
+    {
+      "id": "ho-ritual-016",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-016.png",
+      "width": 229,
+      "height": 258,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498062
+      }
+    },
+    {
+      "id": "ho-ritual-017",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-017.png",
+      "width": 233,
+      "height": 224,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.497768
+      }
+    },
+    {
+      "id": "ho-ritual-018",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-018.png",
+      "width": 314,
+      "height": 269,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498408,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-019",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-019.png",
+      "width": 299,
+      "height": 260,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498077
+      }
+    },
+    {
+      "id": "ho-ritual-020",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-020.png",
+      "width": 175,
+      "height": 292,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498288
+      }
+    },
+    {
+      "id": "ho-ritual-021",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-021.png",
+      "width": 166,
+      "height": 302,
+      "groupIds": [
+        "candleholder"
+      ],
+      "hitPoint": {
+        "x": 0.496988,
+        "y": 0.498344
+      }
+    },
+    {
+      "id": "ho-ritual-022",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-022.png",
+      "width": 248,
+      "height": 286,
+      "groupIds": [
+        "candleholder"
+      ],
+      "hitPoint": {
+        "x": 0.497984,
+        "y": 0.498252
+      }
+    },
+    {
+      "id": "ho-ritual-023",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-023.png",
+      "width": 178,
+      "height": 301,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.497191,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-024",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-024.png",
+      "width": 126,
+      "height": 295,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.496032,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-025",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-025.png",
+      "width": 139,
+      "height": 295,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-026",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-026.png",
+      "width": 159,
+      "height": 402,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498756
+      }
+    },
+    {
+      "id": "ho-ritual-027",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-027.png",
+      "width": 270,
+      "height": 380,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.483333,
+        "y": 0.511842
+      }
+    },
+    {
+      "id": "ho-ritual-028",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-028.png",
+      "width": 254,
+      "height": 376,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.51378,
+        "y": 0.49867
+      }
+    },
+    {
+      "id": "ho-ritual-029",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-029.png",
+      "width": 273,
+      "height": 386,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.459707,
+        "y": 0.51943
+      }
+    },
+    {
+      "id": "ho-ritual-030",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-030.png",
+      "width": 212,
+      "height": 418,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.497642,
+        "y": 0.498804
+      }
+    },
+    {
+      "id": "ho-ritual-031",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-031.png",
+      "width": 210,
+      "height": 368,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.497619,
+        "y": 0.498641
+      }
+    },
+    {
+      "id": "ho-ritual-032",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-032.png",
+      "width": 268,
+      "height": 366,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498134,
+        "y": 0.498634
+      }
+    },
+    {
+      "id": "ho-ritual-033",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-033.png",
+      "width": 264,
+      "height": 384,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498106,
+        "y": 0.498698
+      }
+    },
+    {
+      "id": "ho-ritual-034",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-034.png",
+      "width": 255,
+      "height": 210,
+      "groupIds": [
+        "bowl"
+      ],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.497619
+      }
+    },
+    {
+      "id": "ho-ritual-035",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-035.png",
+      "width": 259,
+      "height": 217,
+      "groupIds": [
+        "bowl"
+      ],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-036",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-036.png",
+      "width": 227,
+      "height": 226,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.497788
+      }
+    },
+    {
+      "id": "ho-ritual-037",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-037.png",
+      "width": 231,
+      "height": 200,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.4975
+      }
+    },
+    {
+      "id": "ho-ritual-038",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-038.png",
+      "width": 274,
+      "height": 221,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498175,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-039",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-039.png",
+      "width": 267,
+      "height": 228,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.497807
+      }
+    },
+    {
+      "id": "ho-ritual-040",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-040.png",
+      "width": 270,
+      "height": 230,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498148,
+        "y": 0.497826
+      }
+    },
+    {
+      "id": "ho-ritual-041",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-041.png",
+      "width": 229,
+      "height": 222,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.497748
+      }
+    },
+    {
+      "id": "ho-ritual-042",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-042.png",
+      "width": 288,
+      "height": 309,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498264,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-043",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-043.png",
+      "width": 282,
+      "height": 318,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498227,
+        "y": 0.498428
+      }
+    },
+    {
+      "id": "ho-ritual-044",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-044.png",
+      "width": 280,
+      "height": 296,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498214,
+        "y": 0.498311
+      }
+    },
+    {
+      "id": "ho-ritual-045",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-045.png",
+      "width": 306,
+      "height": 307,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498366,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-046",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-046.png",
+      "width": 306,
+      "height": 309,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498366,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-047",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-047.png",
+      "width": 401,
+      "height": 282,
+      "groupIds": [
+        "scroll"
+      ],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498227
+      }
+    },
+    {
+      "id": "ho-ritual-048",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-048.png",
+      "width": 276,
+      "height": 238,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498188,
+        "y": 0.497899
+      }
+    },
+    {
+      "id": "ho-ritual-049",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-049.png",
+      "width": 388,
+      "height": 257,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498711,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-050",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-050.png",
+      "width": 320,
+      "height": 298,
+      "groupIds": [
+        "scroll"
+      ],
+      "hitPoint": {
+        "x": 0.498437,
+        "y": 0.498322
+      }
+    },
+    {
+      "id": "ho-ritual-051",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-051.png",
+      "width": 339,
+      "height": 281,
+      "groupIds": [
+        "bead-string"
+      ],
+      "hitPoint": {
+        "x": 0.5059,
+        "y": 0.503559
+      }
+    },
+    {
+      "id": "ho-ritual-052",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-052.png",
+      "width": 318,
+      "height": 296,
+      "groupIds": [
+        "bead-string"
+      ],
+      "hitPoint": {
+        "x": 0.485849,
+        "y": 0.478041
+      }
+    },
+    {
+      "id": "ho-ritual-053",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-053.png",
+      "width": 331,
+      "height": 292,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498288
+      }
+    },
+    {
+      "id": "ho-ritual-054",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-054.png",
+      "width": 352,
+      "height": 512,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.455966,
+        "y": 0.508789
+      }
+    },
+    {
+      "id": "ho-ritual-055",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-055.png",
+      "width": 465,
+      "height": 502,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.472043,
+        "y": 0.437251
+      }
+    },
+    {
+      "id": "ho-ritual-056",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-056.png",
+      "width": 353,
+      "height": 512,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.466006,
+        "y": 0.500977
+      }
+    },
+    {
+      "id": "ho-ritual-057",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-057.png",
+      "width": 279,
+      "height": 512,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.499023
+      }
+    },
+    {
+      "id": "ho-ritual-058",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-058.png",
+      "width": 310,
+      "height": 512,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.514516,
+        "y": 0.499023
+      }
+    },
+    {
+      "id": "ho-ritual-059",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-059.png",
+      "width": 193,
+      "height": 512,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.499023
+      }
+    },
+    {
+      "id": "ho-ritual-060",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-060.png",
+      "width": 206,
+      "height": 512,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.497573,
+        "y": 0.499023
+      }
+    },
+    {
+      "id": "ho-ritual-061",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-061.png",
+      "width": 422,
+      "height": 512,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498815,
+        "y": 0.499023
+      }
+    },
+    {
+      "id": "ho-ritual-062",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-062.png",
+      "width": 388,
+      "height": 484,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498711,
+        "y": 0.498967
+      }
+    },
+    {
+      "id": "ho-ritual-063",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-063.png",
+      "width": 310,
+      "height": 462,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498387,
+        "y": 0.498918
+      }
+    },
+    {
+      "id": "ho-ritual-064",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-064.png",
+      "width": 217,
+      "height": 487,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-065",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-065.png",
+      "width": 335,
+      "height": 479,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-066",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-066.png",
+      "width": 366,
+      "height": 510,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.495902,
+        "y": 0.497059
+      }
+    },
+    {
+      "id": "ho-ritual-067",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-067.png",
+      "width": 289,
+      "height": 302,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498344
+      }
+    },
+    {
+      "id": "ho-ritual-068",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-068.png",
+      "width": 255,
+      "height": 311,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-069",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-069.png",
+      "width": 234,
+      "height": 314,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.497863,
+        "y": 0.498408
+      }
+    },
+    {
+      "id": "ho-ritual-070",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-070.png",
+      "width": 230,
+      "height": 333,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.497826,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-071",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-071.png",
+      "width": 210,
+      "height": 306,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.45,
+        "y": 0.498366
+      }
+    },
+    {
+      "id": "ho-ritual-072",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-072.png",
+      "width": 184,
+      "height": 316,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.497283,
+        "y": 0.498418
+      }
+    },
+    {
+      "id": "ho-ritual-073",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-073.png",
+      "width": 192,
+      "height": 301,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.497396,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-074",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-074.png",
+      "width": 222,
+      "height": 297,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.497748,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-075",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-075.png",
+      "width": 226,
+      "height": 203,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.497788,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-076",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-076.png",
+      "width": 215,
+      "height": 227,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-077",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-077.png",
+      "width": 251,
+      "height": 212,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.497642
+      }
+    },
+    {
+      "id": "ho-ritual-078",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-078.png",
+      "width": 233,
+      "height": 227,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-079",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-079.png",
+      "width": 240,
+      "height": 192,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.497917,
+        "y": 0.497396
+      }
+    },
+    {
+      "id": "ho-ritual-080",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-080.png",
+      "width": 230,
+      "height": 210,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.497826,
+        "y": 0.497619
+      }
+    },
+    {
+      "id": "ho-ritual-081",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-081.png",
+      "width": 244,
+      "height": 223,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.518443,
+        "y": 0.517937
+      }
+    },
+    {
+      "id": "ho-ritual-082",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-082.png",
+      "width": 250,
+      "height": 219,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-083",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-083.png",
+      "width": 139,
+      "height": 316,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498418
+      }
+    },
+    {
+      "id": "ho-ritual-084",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-084.png",
+      "width": 158,
+      "height": 300,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.496835,
+        "y": 0.498333
+      }
+    },
+    {
+      "id": "ho-ritual-085",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-085.png",
+      "width": 127,
+      "height": 314,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498408
+      }
+    },
+    {
+      "id": "ho-ritual-086",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-086.png",
+      "width": 124,
+      "height": 321,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.495968,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-087",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-087.png",
+      "width": 129,
+      "height": 318,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498428
+      }
+    },
+    {
+      "id": "ho-ritual-088",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-088.png",
+      "width": 184,
+      "height": 334,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.497283,
+        "y": 0.498503
+      }
+    },
+    {
+      "id": "ho-ritual-089",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-089.png",
+      "width": 144,
+      "height": 344,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.496528,
+        "y": 0.498547
+      }
+    },
+    {
+      "id": "ho-ritual-090",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-090.png",
+      "width": 162,
+      "height": 348,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.496914,
+        "y": 0.498563
+      }
+    },
+    {
+      "id": "ho-ritual-091",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-091.png",
+      "width": 238,
+      "height": 349,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.497899,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-092",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-092.png",
+      "width": 134,
+      "height": 334,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.496269,
+        "y": 0.498503
+      }
+    },
+    {
+      "id": "ho-ritual-093",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-093.png",
+      "width": 174,
+      "height": 287,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.497126,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-094",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-094.png",
+      "width": 254,
+      "height": 182,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498031,
+        "y": 0.497253
+      }
+    },
+    {
+      "id": "ho-ritual-095",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-095.png",
+      "width": 224,
+      "height": 273,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.497768,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-096",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-096.png",
+      "width": 193,
+      "height": 239,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-097",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-097.png",
+      "width": 252,
+      "height": 210,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498016,
+        "y": 0.497619
+      }
+    },
+    {
+      "id": "ho-ritual-098",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-098.png",
+      "width": 235,
+      "height": 206,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.497573
+      }
+    },
+    {
+      "id": "ho-ritual-099",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-099.png",
+      "width": 222,
+      "height": 207,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.497748,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-100",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-100.png",
+      "width": 225,
+      "height": 210,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.497619
+      }
+    },
+    {
+      "id": "ho-ritual-101",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-101.png",
+      "width": 249,
+      "height": 205,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-102",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-102.png",
+      "width": 257,
+      "height": 186,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.497312
+      }
+    },
+    {
+      "id": "ho-ritual-103",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-103.png",
+      "width": 225,
+      "height": 213,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-104",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-104.png",
+      "width": 247,
+      "height": 223,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-105",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-105.png",
+      "width": 196,
+      "height": 170,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.497449,
+        "y": 0.497059
+      }
+    },
+    {
+      "id": "ho-ritual-106",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-106.png",
+      "width": 215,
+      "height": 171,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-107",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-107.png",
+      "width": 237,
+      "height": 175,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-108",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-108.png",
+      "width": 254,
+      "height": 173,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498031,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-109",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-109.png",
+      "width": 196,
+      "height": 265,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.497449,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-110",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-110.png",
+      "width": 290,
+      "height": 268,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498276,
+        "y": 0.498134
+      }
+    },
+    {
+      "id": "ho-ritual-111",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-111.png",
+      "width": 217,
+      "height": 272,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498162
+      }
+    },
+    {
+      "id": "ho-ritual-112",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-112.png",
+      "width": 199,
+      "height": 276,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498188
+      }
+    },
+    {
+      "id": "ho-ritual-113",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-113.png",
+      "width": 252,
+      "height": 255,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498016,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-114",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-114.png",
+      "width": 233,
+      "height": 254,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498031
+      }
+    },
+    {
+      "id": "ho-ritual-115",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-115.png",
+      "width": 233,
+      "height": 256,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498047
+      }
+    },
+    {
+      "id": "ho-ritual-116",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-116.png",
+      "width": 235,
+      "height": 250,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498
+      }
+    },
+    {
+      "id": "ho-ritual-117",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-117.png",
+      "width": 267,
+      "height": 219,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-118",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-118.png",
+      "width": 194,
+      "height": 218,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.497423,
+        "y": 0.497706
+      }
+    },
+    {
+      "id": "ho-ritual-119",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-119.png",
+      "width": 459,
+      "height": 233,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-120",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-120.png",
+      "width": 200,
+      "height": 262,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.4975,
+        "y": 0.498092
+      }
+    },
+    {
+      "id": "ho-ritual-121",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-121.png",
+      "width": 338,
+      "height": 166,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498521,
+        "y": 0.496988
+      }
+    },
+    {
+      "id": "ho-ritual-122",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-122.png",
+      "width": 254,
+      "height": 273,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498031,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-123",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-123.png",
+      "width": 298,
+      "height": 234,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498322,
+        "y": 0.497863
+      }
+    },
+    {
+      "id": "ho-ritual-124",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-124.png",
+      "width": 264,
+      "height": 270,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498106,
+        "y": 0.542593
+      }
+    },
+    {
+      "id": "ho-ritual-125",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-125.png",
+      "width": 220,
+      "height": 304,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.511364,
+        "y": 0.521382
+      }
+    },
+    {
+      "id": "ho-ritual-126",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-126.png",
+      "width": 310,
+      "height": 277,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498387,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-127",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-127.png",
+      "width": 311,
+      "height": 280,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498214
+      }
+    },
+    {
+      "id": "ho-ritual-128",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-128.png",
+      "width": 273,
+      "height": 294,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498299
+      }
+    },
+    {
+      "id": "ho-ritual-129",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-129.png",
+      "width": 475,
+      "height": 304,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498355
+      }
+    },
+    {
+      "id": "ho-ritual-130",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-130.png",
+      "width": 285,
+      "height": 340,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498529
+      }
+    },
+    {
+      "id": "ho-ritual-131",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-131.png",
+      "width": 233,
+      "height": 329,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-132",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-132.png",
+      "width": 291,
+      "height": 316,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498418
+      }
+    },
+    {
+      "id": "ho-ritual-133",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-133.png",
+      "width": 301,
+      "height": 303,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-134",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-134.png",
+      "width": 233,
+      "height": 322,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498447
+      }
+    },
+    {
+      "id": "ho-ritual-135",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-135.png",
+      "width": 302,
+      "height": 324,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498344,
+        "y": 0.498457
+      }
+    },
+    {
+      "id": "ho-ritual-136",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-136.png",
+      "width": 304,
+      "height": 314,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.498355,
+        "y": 0.498408
+      }
+    },
+    {
+      "id": "ho-ritual-137",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-137.png",
+      "width": 148,
+      "height": 369,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.496622,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-138",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-138.png",
+      "width": 117,
+      "height": 393,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-139",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-139.png",
+      "width": 172,
+      "height": 376,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.497093,
+        "y": 0.49867
+      }
+    },
+    {
+      "id": "ho-ritual-140",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-140.png",
+      "width": 183,
+      "height": 361,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-141",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-141.png",
+      "width": 162,
+      "height": 380,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.496914,
+        "y": 0.498684
+      }
+    },
+    {
+      "id": "ho-ritual-142",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-142.png",
+      "width": 246,
+      "height": 345,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.518293,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-143",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-143.png",
+      "width": 246,
+      "height": 324,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.497967,
+        "y": 0.498457
+      }
+    },
+    {
+      "id": "ho-ritual-144",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-144.png",
+      "width": 246,
+      "height": 327,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.497967,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-145",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-145.png",
+      "width": 182,
+      "height": 355,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.497253,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-146",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-146.png",
+      "width": 323,
+      "height": 346,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498555
+      }
+    },
+    {
+      "id": "ho-ritual-147",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-147.png",
+      "width": 356,
+      "height": 333,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.51264,
+        "y": 0.460961
+      }
+    },
+    {
+      "id": "ho-ritual-148",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-148.png",
+      "width": 347,
+      "height": 345,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-149",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-149.png",
+      "width": 341,
+      "height": 339,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "id": "ho-ritual-150",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-150.png",
+      "width": 285,
+      "height": 334,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498503
+      }
+    },
+    {
+      "id": "ho-ritual-151",
+      "categoryId": "ritual",
+      "path": "/assets/shared/hidden-object/v002/ritual-151.png",
+      "width": 341,
+      "height": 320,
+      "groupIds": [],
+      "hitPoint": {
+        "x": 0.5,
+        "y": 0.498437
+      }
+    }
+  ]
+}

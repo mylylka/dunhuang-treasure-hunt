@@ -1,7 +1,7 @@
 import type { GameType } from '../types';
 
-export type Route = { page: 'home' | 'help' | 'settings' | 'missing' }
-  | { page: 'theme' | 'play' | 'result'; id: string }
+export type Route = { page: 'home' | 'themes' | 'help' | 'settings' | 'missing' } | { page: 'theme'; id: string }
+  | { page: 'play' | 'result'; id: string }
   | { page: 'games'; themeId: string }
   | { page: 'play-latest'; themeId: string; gameType: GameType }
   | { page: 'levels'; themeId: string; gameType: GameType; focusLevelId?: string };
@@ -9,7 +9,7 @@ export type Route = { page: 'home' | 'help' | 'settings' | 'missing' }
 const gameTypes: GameType[] = ['spot-difference', 'puzzle', 'coloring', 'hidden-object', 'shadow-match'];
 export const gameNames: Record<GameType, string> = {
   'spot-difference': '找不同', puzzle: '拼图', coloring: '填色',
-  'hidden-object': '线索找物', 'shadow-match': '影子配对',
+  'hidden-object': '计时找物', 'shadow-match': '影子配对',
 };
 
 export function readRoute(hash = window.location.hash): Route {
@@ -19,9 +19,11 @@ export function readRoute(hash = window.location.hash): Route {
   try { parts = path.replace(/^#\/?/, '').split('/').filter(Boolean).map(decodeURIComponent); }
   catch { return { page: 'missing' }; }
   if (!parts.length) return { page: 'home' };
-  if (parts.length === 1 && (parts[0] === 'help' || parts[0] === 'settings')) return { page: parts[0] };
-  if (parts.length === 2 && ['theme', 'play', 'result'].includes(parts[0])) {
-    return { page: parts[0] as 'theme' | 'play' | 'result', id: parts[1] };
+  if (parts.length === 1 && (parts[0] === 'help' || parts[0] === 'settings' || parts[0] === 'themes')) return { page: parts[0] };
+  if (parts.length === 2) {
+    const [page, id] = parts;
+    if (page === 'theme') return { page: 'theme', id };
+    if (page === 'play' || page === 'result') return { page, id };
   }
   if (parts[0] === 'play-latest' && parts.length === 3 && gameTypes.includes(parts[2] as GameType)) {
     return { page: 'play-latest', themeId: parts[1], gameType: parts[2] as GameType };

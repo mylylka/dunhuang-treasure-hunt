@@ -1,0 +1,22 @@
+.level-advance{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;text-align:center;line-height:1.35}
+.level-navigation{display:contents}
+.level-navigation .level-advance:disabled{opacity:.38;cursor:default}
+.level-title-word{display:inline-block;white-space:nowrap}
+@media(pointer:coarse) and (hover:none) and (orientation:landscape) and (max-height:600px){
+ .app-shell[data-screen=result]>.site-header,.app-shell[data-screen=result]>.site-footer{display:none}
+ .level-advance .button-label{white-space:normal}
+ .page-result .result-actions .button{min-height:44px}
+}
+
+.app-shell .page-play{--level-control-color:#4d4b42}
+.app-shell .page-play .level-navigation .level-advance,.app-shell .page-play .level-navigation .level-advance:hover{color:var(--level-control-color);font-family:inherit}
+@media(pointer:coarse) and (hover:none) and (orientation:landscape) and (max-height:600px){
+ .app-shell .page-play{--level-control-color:var(--blue)}
+ .app-shell .hidden-object-screen{--level-control-color:#64523d}
+}
+
+/* Main-screen navigation is always plain text, on desktop and phone alike. */
+.app-shell .page-play .level-navigation .level-advance{border:0;border-image:none;border-radius:0;background:transparent;box-shadow:none}
+.app-shell .page-play .level-navigation .level-advance .button-label{transform:none;white-space:nowrap}
+
+.app-shell .page-play .level-navigation>.level-advance[data-testid],.app-shell .page-play .level-navigation>.level-advance[data-testid]:hover{color:var(--level-control-color);border:0;border-image:none;background:transparent;box-shadow:none}

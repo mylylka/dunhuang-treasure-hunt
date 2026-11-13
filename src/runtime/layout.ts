@@ -1,4 +1,5 @@
 import type { Point, Rectangle } from './geometry';
+import type { ImageView } from './image-view';
 
 export interface GameLayout {
   width: number;
@@ -8,10 +9,13 @@ export interface GameLayout {
   edited: Rectangle;
   referenceLabel: Point;
   editedLabel: Point;
+  view?: ImageView;
+  renderedReference?: Rectangle;
+  renderedEdited?: Rectangle;
 }
 
 /** Rectangles are CSS pixels, fitted into the complete available width and height. */
-export function calculateLayout(containerWidth: number, containerHeight?: number, imageAspectRatio = 1.5): GameLayout {
+export function calculateLayout(containerWidth: number, containerHeight?: number, imageAspectRatio = 1.5, compact = false): GameLayout {
   const ratio = Number.isFinite(imageAspectRatio) && imageAspectRatio > 0 ? imageAspectRatio : 1.5;
   const width = Math.max(1, Math.floor(Number.isFinite(containerWidth) ? containerWidth : 1));
   // Content-height fallback keeps standalone callers working; the runtime always supplies both axes.
@@ -25,10 +29,10 @@ export function calculateLayout(containerWidth: number, containerHeight?: number
     : fallbackImageWidth / ratio + 24 + fallbackPadding * 2;
   const height = Math.max(1, Math.floor(containerHeight === undefined
     ? Math.ceil(fallbackHeight) : Number.isFinite(containerHeight) ? containerHeight : 1));
-  const padding = Math.min(8, width / 20, height / 20);
+  const padding = Math.min(compact ? 2 : 8, width / 20, height / 20);
   const fit = (stacked: boolean) => {
-    const gap = Math.min(stacked ? 18 : 24, (stacked ? height : width) / 12);
-    const labelHeight = Math.min(24, height / (stacked ? 6 : 3));
+    const gap = Math.min(compact ? 8 : stacked ? 18 : 24, (stacked ? height : width) / 12);
+    const labelHeight = Math.min(compact ? 20 : 24, height / (stacked ? 6 : 3));
     const availableWidth = stacked ? width - padding * 2 : (width - padding * 2 - gap) / 2;
     const availableHeight = stacked
       ? (height - padding * 2 - gap - labelHeight * 2) / 2
@@ -39,7 +43,7 @@ export function calculateLayout(containerWidth: number, containerHeight?: number
   const horizontal = fit(false);
   // The HUD can leave a portrait phone with a near-square slot. Compare the actual
   // fitted images rather than assuming that slot orientation equals device orientation.
-  const stacked = containerHeight === undefined ? fallbackStacked : vertical.imageWidth >= horizontal.imageWidth;
+  const stacked = compact ? false : containerHeight === undefined ? fallbackStacked : vertical.imageWidth >= horizontal.imageWidth;
   const { gap, labelHeight, imageWidth } = stacked ? vertical : horizontal;
   const imageHeight = imageWidth / ratio;
   const groupWidth = stacked ? imageWidth : imageWidth * 2 + gap;

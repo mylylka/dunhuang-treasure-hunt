@@ -1,0 +1,52 @@
+[
+  {
+    "id": "shadow-apsara-reference",
+    "path": "/assets/levels/music-apsara-shadow/v001/reference.png",
+    "width": 1254,
+    "height": 1254,
+    "kind": "level",
+    "placeholder": false,
+    "version": "shadow-apsara-v001",
+    "sourceNote": "开发者提供的AI教学示意；保留用户PNG原始字节和透明通道，不代表特定洞窟、年代或历史原貌复原。"
+  },
+  {
+    "id": "shadow-apsara-intact",
+    "path": "/assets/levels/music-apsara-shadow/v001/shadow-intact.png",
+    "width": 1254,
+    "height": 1254,
+    "kind": "level",
+    "placeholder": false,
+    "version": "shadow-apsara-v001",
+    "sourceNote": "开发者提供的AI教学示意；保留用户PNG原始字节和透明通道，不代表特定洞窟、年代或历史原貌复原。"
+  },
+  {
+    "id": "shadow-apsara-head-cloud",
+    "path": "/assets/levels/music-apsara-shadow/v001/shadow-head-cloud.png",
+    "width": 1254,
+    "height": 1254,
+    "kind": "level",
+    "placeholder": false,
+    "version": "shadow-apsara-v001",
+    "sourceNote": "开发者提供的AI教学示意；保留用户PNG原始字节和透明通道，不代表特定洞窟、年代或历史原貌复原。"
+  },
+  {
+    "id": "shadow-apsara-ribbon-foot",
+    "path": "/assets/levels/music-apsara-shadow/v001/shadow-ribbon-foot.png",
+    "width": 1254,
+    "height": 1254,
+    "kind": "level",
+    "placeholder": false,
+    "version": "shadow-apsara-v001",
+    "sourceNote": "开发者提供的AI教学示意；保留用户PNG原始字节和透明通道，不代表特定洞窟、年代或历史原貌复原。"
+  },
+  {
+    "id": "shadow-apsara-ribbon-cloud",
+    "path": "/assets/levels/music-apsara-shadow/v001/shadow-ribbon-cloud.png",
+    "width": 1254,
+    "height": 1254,
+    "kind": "level",
+    "placeholder": false,
+    "version": "shadow-apsara-v001",
+    "sourceNote": "开发者提供的AI教学示意；保留用户PNG原始字节和透明通道，不代表特定洞窟、年代或历史原貌复原。"
+  }
+]

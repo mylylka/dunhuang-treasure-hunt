@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "music-apsara-shadow",
+  "themeId": "music",
+  "gameType": "shadow-match",
+  "title": "飞天寻影",
+  "subtitle": "飞天文化 · 影子配对",
+  "objective": "选择与彩色飞天轮廓完全一致的影子。",
+  "difficulty": "细节观察",
+  "estimatedMinutes": 2,
+  "thumbnailAssetId": "shadow-apsara-reference",
+  "teachingNote": "开发者提供的AI教学示意，用于比较人物姿态、飘带与云朵的轮廓，不是原壁画照片或历史原貌复原。",
+  "source": {
+    "title": "敦煌研究院 · 文化资料入口",
+    "url": "https://www.dha.ac.cn/",
+    "note": "本关观察飞天图像中的姿态与曲线，不据示意图认定具体洞窟、年代或服饰制度。"
+  },
+  "referenceAssetId": "shadow-apsara-reference",
+  "options": [
+    { "id": "shadow-one", "assetId": "shadow-apsara-intact" },
+    { "id": "shadow-two", "assetId": "shadow-apsara-head-cloud" },
+    { "id": "shadow-three", "assetId": "shadow-apsara-ribbon-foot" },
+    { "id": "shadow-four", "assetId": "shadow-apsara-ribbon-cloud" }
+  ],
+  "correctOptionId": "shadow-one",
+  "hints": [
+    { "text": "先看头顶与发髻，轮廓应完整连续。", "region": { "x": 0.28, "y": 0.10, "width": 0.29, "height": 0.22 } },
+    { "text": "沿着右侧飘带末端比较，不能少一截。", "region": { "x": 0.67, "y": 0.14, "width": 0.32, "height": 0.36 } },
+    { "text": "看看左下云朵的外缘，凸起和转折都应一致。", "region": { "x": 0.01, "y": 0.60, "width": 0.40, "height": 0.36 } },
+    { "text": "再比较右下脚尖，完整的外轮廓不能缺失。", "region": { "x": 0.69, "y": 0.74, "width": 0.26, "height": 0.23 } }
+  ]
+}

@@ -526,5 +526,125 @@
     "placeholder": false,
     "version": "user-rabbits-v001",
     "sourceNote": "开发者交付的第一张图为 AI 变化稿。以参照图为底，仅合入登记的五处变化。原稿及范围见 art-source/levels/patterns-rabbits/v001/。"
+  },
+  {
+    "id": "coloring-feitian-lotus-reference",
+    "path": "/assets/levels/coloring-feitian-lotus/coloring-feitian-lotus-reference-v001.png",
+    "width": 1086,
+    "height": 1448,
+    "kind": "level",
+    "placeholder": false,
+    "version": "user-art-v001-3d3fa6883767",
+    "sourceNote": "开发者交付的持莲图配色参考，保留原图和构图；来源与处理登记见 art-source/levels/coloring-feitian-lotus/v001/。"
+  },
+  {
+    "id": "coloring-feitian-lotus-line",
+    "path": "/assets/levels/coloring-feitian-lotus/coloring-feitian-lotus-line-v001.png",
+    "width": 1086,
+    "height": 1448,
+    "kind": "level",
+    "placeholder": false,
+    "version": "user-art-v001-4fcc8b0cce02",
+    "sourceNote": "开发者交付的持莲图线稿，原稿及处理登记见 art-source/levels/coloring-feitian-lotus/v001/。"
+  },
+  {
+    "id": "coloring-feitian-lotus-regions",
+    "path": "/assets/levels/coloring-feitian-lotus/coloring-feitian-lotus-regions-v001.png",
+    "width": 1086,
+    "height": 1448,
+    "kind": "level",
+    "placeholder": false,
+    "version": "region-map-v001",
+    "sourceNote": "基于持莲线稿派生的 RGB24 区域编号图，零表示不可填；处理登记见 art-source/levels/coloring-feitian-lotus/v001/。"
+  },
+  {
+    "id": "puzzle-nine-colored-deer-image",
+    "path": "/assets/levels/puzzle-nine-colored-deer/v001/full-scroll.webp",
+    "width": 4096,
+    "height": 682,
+    "kind": "level",
+    "placeholder": false,
+    "version": "mogao-story-v002",
+    "sourceNote": "原作位于莫高窟第257窟西壁中段。原图及派生登记见 art-source/levels/puzzle-nine-colored-deer/v001/。"
+  },
+  {
+    "id": "shadow-apsara-reference",
+    "path": "/assets/levels/music-apsara-shadow/v001/reference.png",
+    "width": 1254,
+    "height": 1254,
+    "kind": "level",
+    "placeholder": false,
+    "version": "user-shadow-v001",
+    "sourceNote": "开发者交付的AI教学示意，原始透明PNG逐字节接入，不重绘、不裁切、不改色。原稿与SHA登记见art-source/levels/music-apsara-shadow/v001/manifest.json；红圈标注图仅作设计参考，不进入游戏候选。"
+  },
+  {
+    "id": "shadow-apsara-intact",
+    "path": "/assets/levels/music-apsara-shadow/v001/shadow-intact.png",
+    "width": 1254,
+    "height": 1254,
+    "kind": "level",
+    "placeholder": false,
+    "version": "user-shadow-v001",
+    "sourceNote": "开发者交付的AI教学示意，原始透明PNG逐字节接入，不重绘、不裁切、不改色。原稿与SHA登记见art-source/levels/music-apsara-shadow/v001/manifest.json；红圈标注图仅作设计参考，不进入游戏候选。"
+  },
+  {
+    "id": "shadow-apsara-head-cloud",
+    "path": "/assets/levels/music-apsara-shadow/v001/shadow-head-cloud.png",
+    "width": 1254,
+    "height": 1254,
+    "kind": "level",
+    "placeholder": false,
+    "version": "user-shadow-v001",
+    "sourceNote": "开发者交付的AI教学示意，原始透明PNG逐字节接入，不重绘、不裁切、不改色。原稿与SHA登记见art-source/levels/music-apsara-shadow/v001/manifest.json；红圈标注图仅作设计参考，不进入游戏候选。"
+  },
+  {
+    "id": "shadow-apsara-ribbon-foot",
+    "path": "/assets/levels/music-apsara-shadow/v001/shadow-ribbon-foot.png",
+    "width": 1254,
+    "height": 1254,
+    "kind": "level",
+    "placeholder": false,
+    "version": "user-shadow-v001",
+    "sourceNote": "开发者交付的AI教学示意，原始透明PNG逐字节接入，不重绘、不裁切、不改色。原稿与SHA登记见art-source/levels/music-apsara-shadow/v001/manifest.json；红圈标注图仅作设计参考，不进入游戏候选。"
+  },
+  {
+    "id": "shadow-apsara-ribbon-cloud",
+    "path": "/assets/levels/music-apsara-shadow/v001/shadow-ribbon-cloud.png",
+    "width": 1254,
+    "height": 1254,
+    "kind": "level",
+    "placeholder": false,
+    "version": "user-shadow-v001",
+    "sourceNote": "开发者交付的AI教学示意，原始透明PNG逐字节接入，不重绘、不裁切、不改色。原稿与SHA登记见art-source/levels/music-apsara-shadow/v001/manifest.json；红圈标注图仅作设计参考，不进入游戏候选。"
+  },
+  {
+    "id": "hidden-object-background-ch1",
+    "path": "/assets/shared/hidden-object-backgrounds/v001/chapter-1-silk.png",
+    "width": 916,
+    "height": 1717,
+    "kind": "background",
+    "placeholder": false,
+    "version": "hidden-object-chapters-v001",
+    "sourceNote": "用户已确认的AI章节底图；原始PNG逐字节归档并接入，不改色、不裁切、不重绘，不代表真实壁画复原。来源与SHA见art-source/shared/hidden-object-backgrounds/v001/manifest.json。"
+  },
+  {
+    "id": "hidden-object-background-ch2",
+    "path": "/assets/shared/hidden-object-backgrounds/v001/chapter-2-celadon.png",
+    "width": 916,
+    "height": 1717,
+    "kind": "background",
+    "placeholder": false,
+    "version": "hidden-object-chapters-v001",
+    "sourceNote": "用户已确认的AI章节底图；原始PNG逐字节归档并接入，不改色、不裁切、不重绘，不代表真实壁画复原。来源与SHA见art-source/shared/hidden-object-backgrounds/v001/manifest.json。"
+  },
+  {
+    "id": "hidden-object-background-ch3",
+    "path": "/assets/shared/hidden-object-backgrounds/v001/chapter-3-plaster.png",
+    "width": 916,
+    "height": 1717,
+    "kind": "background",
+    "placeholder": false,
+    "version": "hidden-object-chapters-v001",
+    "sourceNote": "用户已确认的AI章节底图；原始PNG逐字节归档并接入，不改色、不裁切、不重绘，不代表真实壁画复原。来源与SHA见art-source/shared/hidden-object-backgrounds/v001/manifest.json。"
   }
 ]

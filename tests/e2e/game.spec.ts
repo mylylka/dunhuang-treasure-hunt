@@ -2,6 +2,8 @@ import { expect, test as base, type Locator, type Page } from '@playwright/test'
 import { readFileSync, readdirSync } from 'node:fs';
 import type { AssetDefinition, Level, SpotDifferenceLevel } from '../../src/types';
 import { patternLesson } from '../../src/content/lessons/patterns';
+import { compactPlayableViewport, desktopNarrowViewport, isMobileProject, mobileLandscapeViewport, mobilePortraitViewport, supportedResizeViewports } from './supported-viewports';
+import { dragSpotView, expectSpotSynchronized, readSpotView, setSpotZoom } from './spot-view-controls';
 
 const level = JSON.parse(readFileSync('src/content/levels/patterns-intro.json', 'utf8')) as SpotDifferenceLevel;
 const allLevels = readdirSync('src/content/levels').filter(name => name.endsWith('.json')).map(name => JSON.parse(readFileSync(`src/content/levels/${name}`, 'utf8')) as Level);
@@ -169,7 +171,7 @@ async function expectTeachingFits(page: Page, unitIndex: number) {
 async function inspectTeachingSources(page: Page) {
   const opener = page.getByRole('button', { name: '资料', exact: true });
   // Safari does not retain pointer-button focus. Keyboard entry gives focus
-  // restoration a defined target, just as the art-inspector check does below.
+  // restoration a defined target for the teaching sources dialog.
   await opener.focus();
   await opener.press('Enter');
   const dialog = page.getByRole('dialog', { name: '教学资料' });
@@ -291,10 +293,15 @@ async function expectGameFits(page: Page) {
   await expectInsideViewport(page, canvas);
   await expectInsideViewport(page, page.getByRole('button', { name: '给我提示' }));
   await expectInsideViewport(page, page.getByRole('button', { name: '重新开始' }));
-  await expectInsideViewport(page, page.getByRole('button', { name: '放大观察', exact: true }));
+  await expect(page.getByRole('button', { name: '放大观察', exact: true })).toHaveCount(0);
+  await expect(page.getByTestId('art-inspector')).toHaveCount(0);
+  const cycle = page.getByRole('button', { name: /^同步缩放两图/ });
+  if (await cycle.isVisible()) await expectInsideViewport(page, cycle);
+  else for (const name of ['放大两图', '缩小两图', '复位']) await expectInsideViewport(page, page.getByRole('button', { name, exact: true }));
   await expect(page.getByRole('button', { name: '学习目标与来源' })).toHaveCount(0);
   await expectInsideViewport(page, page.getByTestId('game-progress'));
-  await expectInsideViewport(page, page.getByTestId('hint-status'));
+  // Empty hint rows no longer reserve picture height; an actual hint is a visible overlay.
+  if (await page.getByTestId('hint-status').count()) await expectInsideViewport(page, page.getByTestId('hint-status'));
   await expectDocumentFits(page);
 
   await expect.poll(async () => {
@@ -352,53 +359,41 @@ async function inspectResultReference(page: Page) {
 
 async function inspectArtwork(page: Page) {
   const progressBefore = await page.getByTestId('game-progress').getAttribute('aria-label');
-  const opener = page.getByRole('button', { name: '放大观察', exact: true });
-  // Open with the keyboard so restoring focus has a defined keyboard target;
-  // Safari intentionally leaves pointer-activated buttons unfocused.
-  await opener.focus();
-  await opener.press('Enter');
-  const inspector = page.getByTestId('art-inspector');
-  const picture = page.getByTestId('art-inspector-image');
-  const returnButton = inspector.getByRole('button', { name: '返回游戏' });
-  await expectInsideViewport(page, inspector);
-  await expectInsideViewport(page, inspector.getByRole('button', { name: '关闭放大观察' }));
-  await expectInsideViewport(page, returnButton);
-  await expectInsideViewport(page, picture);
+  const viewport = page.viewportSize()!;
+  await expect(page.getByRole('button', { name: '放大观察', exact: true })).toHaveCount(0);
+  await expect(page.getByTestId('art-inspector')).toHaveCount(0);
+  expectSpotSynchronized(await readSpotView(page), 1.5);
+  await setSpotZoom(page, 2, true);
+  await dragSpotView(page, 'reference');
+  expectSpotSynchronized(await readSpotView(page), 1.5);
+  await setSpotZoom(page, 3);
+  await dragSpotView(page, 'edited', { x: -.1, y: .1 });
+  const viewBeforeResize = (await readSpotView(page)).view;
+  expectSpotSynchronized(await readSpotView(page), 1.5);
+  await page.setViewportSize({ width: viewport.width + 16, height: viewport.height - 8 });
   await expect.poll(async () => {
-    const bounds = await picture.boundingBox();
-    return !!bounds && bounds.width > 100 && Math.abs(bounds.width / bounds.height - 1.5) < 0.001;
-  }, { message: '放大观察图应为可见的完整3:2观察窗口' }).toBe(true);
-  await expect(picture).toHaveAttribute('data-view', 'full');
-  await expect(picture).toHaveAttribute('data-side', 'reference');
-  await expect(picture).toHaveCSS('background-size', '100% 100%');
-
-  await inspector.getByRole('button', { name: '右上 2×', exact: true }).click();
-  await expect(picture).toHaveAttribute('data-view', 'upper-right');
-  await expect(picture).toHaveCSS('background-size', '200% 200%');
-  await expect(picture).toHaveCSS('background-position', '100% 0%');
-  await inspector.getByRole('button', { name: '变化图 B', exact: true }).click();
-  await expect(picture).toHaveAttribute('data-side', 'edited');
-  await expect(picture).toHaveAttribute('data-view', 'upper-right');
-  await expect(inspector.getByRole('button', { name: '变化图 B', exact: true })).toHaveAttribute('aria-pressed', 'true');
-  await expectInsideViewport(page, picture);
-  await expectInsideViewport(page, returnButton);
-  await expectDocumentFits(page);
-
-  await returnButton.click();
-  await expect(inspector).toBeHidden();
-  await expect(page.getByTestId('game-progress')).toHaveAttribute('aria-label', progressBefore!);
-  await expect(opener).toBeFocused();
-  // Also exercise the ordinary pointer entry and the top close control.
-  await opener.click();
-  await expectInsideViewport(page, inspector);
-  await inspector.getByRole('button', { name: '关闭放大观察' }).click();
-  await expect(inspector).toBeHidden();
+    const current = await readSpotView(page);
+    const bounds = (await page.getByTestId('phaser-player').boundingBox())!;
+    return current.width === Math.floor(bounds.width) && current.height === Math.floor(bounds.height);
+  }).toBe(true);
+  expect((await readSpotView(page)).view).toEqual(viewBeforeResize);
+  expectSpotSynchronized(await readSpotView(page), 1.5);
+  await page.setViewportSize(viewport);
+  await expect.poll(async () => {
+    const current = await readSpotView(page);
+    const bounds = (await page.getByTestId('phaser-player').boundingBox())!;
+    return current.width === Math.floor(bounds.width) && current.height === Math.floor(bounds.height);
+  }).toBe(true);
+  await setSpotZoom(page, 1, true);
+  const restored = await readSpotView(page);
+  expect(restored.view).toEqual({ zoom: 1, center: { x: .5, y: .5 } });
+  expectSpotSynchronized(restored, 1.5);
   await expect(page.getByTestId('game-progress')).toHaveAttribute('aria-label', progressBefore!);
   await expectGameFits(page);
 }
 
 async function inspectStaticScreens(page: Page) {
-  await page.goto('/');
+  await page.goto('/#/themes');
   await expectHomeTitle(page);
   await expectInsideViewport(page, page.locator('.theme-patterns'));
   await expectDocumentFits(page);
@@ -411,8 +406,8 @@ async function inspectStaticScreens(page: Page) {
   await expectButtonCentered(page.getByRole('link', { name: /^开始观察/ }).first());
   await expectDocumentFits(page);
 
-  await page.goto('/#/theme/music');
-  await expectInsideViewport(page, page.getByRole('heading', { level: 1, name: '飞天、乐舞与服饰' }));
+  await page.goto('/#/theme/stories');
+  await expectInsideViewport(page, page.getByRole('heading', { level: 1, name: '壁画故事与宗教文化' }));
   await expectInsideViewport(page, page.getByRole('link', { name: '返回首页', exact: true }));
   await expectDocumentFits(page);
 
@@ -491,7 +486,7 @@ test.describe('首次学习与游戏层级', () => {
   });
 
   test('首页进入主题先展示教学，顶部可直接玩，跳过小考不会伪记学完', async ({ page }) => {
-    await page.goto('/'); await expectHomeTitle(page);
+    await page.goto('/#/themes'); await expectHomeTitle(page);
     await expect(page.locator('.theme-patterns')).toHaveAttribute('href', '#/theme/patterns');
     await page.locator('.theme-patterns').click();
     await expectTeachingFits(page, 0);
@@ -500,7 +495,7 @@ test.describe('首次学习与游戏层级', () => {
     let record = await page.evaluate(({ key, id }) => JSON.parse(localStorage.getItem(key)!).books[id], { key: learningKey, id: patternLesson.id });
     expect(record.completedAt).toBeUndefined();
     expect(await page.evaluate(key => localStorage.getItem(key), progressKey)).toBeNull();
-    await page.goto('/'); await expectHomeTitle(page);
+    await page.goto('/#/themes'); await expectHomeTitle(page);
     await page.locator('.theme-patterns').click();
     await expect(page).toHaveURL(/#\/theme\/patterns$/);
     await page.getByRole('navigation', { name: '教学章节' }).getByRole('button').last().click();
@@ -539,7 +534,7 @@ test.describe('首次学习与游戏层级', () => {
     test.setTimeout(90_000);
     const errors: string[] = [];
     page.on('pageerror', error => errors.push(error.message));
-    await page.goto('/');
+    await page.goto('/#/themes');
     await page.locator('.theme-patterns').click();
     await expect(page).toHaveURL(/#\/theme\/patterns$/);
     await completeTeaching(page, true);
@@ -573,9 +568,10 @@ test.describe('首次学习与游戏层级', () => {
     expect(errors).toEqual([]);
   });
 
-  for (const viewport of [{ width: 360, height: 640 }, { width: 844, height: 390 }]) {
-    test(`${viewport.width}×${viewport.height}：七屏教学安全区、卷草查看、六题及资料均能操作`, async ({ page }) => {
+  for (const size of ['compact', 'landscape'] as const) {
+    test(`${size === 'compact' ? '桌面窄窗360×640 / 手机横屏640×360' : '横屏窗口844×390'}：七屏教学安全区、卷草查看、六题及资料均能操作`, async ({ page }, testInfo) => {
       test.setTimeout(90_000);
+      const viewport = size === 'compact' ? compactPlayableViewport(testInfo) : mobileLandscapeViewport;
       await page.setViewportSize(viewport);
       await page.goto('/#/theme/patterns');
       await completeTeaching(page, true);
@@ -639,7 +635,7 @@ test.describe('首次学习与游戏层级', () => {
 test.describe('已完成导览的再次访问', () => {
   test.use({ lessonReady: true });
   test('已有学习记录也从首页进入教学，直接玩不改写原完成时间', async ({ page }) => {
-    await page.goto('/'); await expectHomeTitle(page);
+    await page.goto('/#/themes'); await expectHomeTitle(page);
     await expect(page.locator('.theme-patterns')).toHaveAttribute('href', '#/theme/patterns');
     await page.locator('.theme-patterns').click();
     await expectTeachingFits(page, 0);
@@ -653,7 +649,7 @@ test.describe('已完成导览的再次访问', () => {
 
 test('1279×925 首页三幅图尺寸相等、保持3:2，题名紧跟图片且按钮正文居中', async ({ page }) => {
   await page.setViewportSize({ width: 1279, height: 925 });
-  await page.goto('/');
+  await page.goto('/#/themes');
   await expectHomeTitle(page);
   const cards = page.locator('.select-theme-card');
   await expect(cards).toHaveCount(3);
@@ -687,22 +683,22 @@ test('1279×925 首页三幅图尺寸相等、保持3:2，题名紧跟图片且�
 
 test('首页主题、三个玩法与关卡分别导航，未开放内容没有假入口', async ({ page }) => {
   const errors: string[] = []; page.on('pageerror', error => errors.push(error.message));
-  await page.goto('/');
+  await page.goto('/#/themes');
   await expect(page.getByRole('heading', { level: 1, name: '敦煌寻宝记' })).toBeVisible();
   await expect(page.locator('a[href*="/play/"]')).toHaveCount(0);
   await expect(page.getByText('开始第一次观察')).toHaveCount(0);
   await expect(page.locator('.theme-row')).toHaveCount(3);
   await expectInsideViewport(page, page.locator('.theme-patterns'));
   await expectDocumentFits(page);
-  const selectMusic = page.getByRole('button', { name: '查看主题：飞天、乐舞与服饰' });
-  if (await selectMusic.isVisible()) await selectMusic.click();
-  await page.locator('.theme-music').click();
-  await expect(page.getByRole('heading', { level: 1, name: '飞天、乐舞与服饰' })).toBeVisible();
+  const selectStories = page.getByRole('button', { name: '查看主题：壁画故事与宗教文化' });
+  if (await selectStories.isVisible()) await selectStories.click();
+  await page.locator('.theme-stories').click();
+  await expect(page.getByRole('heading', { level: 1, name: '壁画故事与宗教文化' })).toBeVisible();
   await expect(page.getByText('主题尚未开放', { exact: true })).toBeVisible();
   await expect(page.getByRole('link', { name: /^开始观察/ }).first()).toHaveCount(0);
   const back = page.getByRole('link', { name: '返回首页', exact: true });
   await back.locator('img').click();
-  await expect(page).toHaveURL(/#\/$/);
+  await expect(page).toHaveURL(/#\/themes$/);
   // Hash navigation updates the URL before React renders the home screen.
   // Wait for that screen before asking whether its mobile-only switch exists.
   await expect(page.getByRole('heading', { level: 1, name: '敦煌寻宝记' })).toBeVisible();
@@ -728,31 +724,25 @@ test('首页主题、三个玩法与关卡分别导航，未开放内容没有�
   expect(errors).toEqual([]);
 });
 
-test('六关规划位清楚区分已开放与筹备中，筹备位不生成游戏记录', async ({ page }) => {
+test('六关规划位清楚区分已开放与筹备中，筹备位不生成游戏记录', async ({ page }, testInfo) => {
   const titles = ['藻井寻踪', '莲瓣与团花', '忍冬与卷草', '联珠与几何', '三兔与旋转', '色彩与层次'];
-  for (const viewport of [{ width: 1279, height: 925 }, { width: 360, height: 640 }, { width: 844, height: 390 }]) {
+  for (const viewport of [{ width: 1279, height: 925 }, ...supportedResizeViewports(testInfo)]) {
     await page.setViewportSize(viewport);
     await page.goto(levelsUrl);
-    // The ResizeObserver changes the number of cards after the viewport changes.
-    // Wait for that layout before taking an array of locators for the current page.
-    await expect(page.locator('.level-select-screen')).toHaveAttribute('data-page-size', viewport.width === 1279 ? '6' : '2');
+    await expect(page.locator('.level-select-screen')).toHaveAttribute('data-layout', 'scroll');
+    const list = page.getByTestId('level-choice-scroll');
+    await expect(list).toBeVisible();
+    await expect(page.locator('.level-choice-card')).toHaveCount(6);
+    if (viewport.width >= 800) await expect.poll(async () => Number(await page.locator('.level-select-screen').getAttribute('data-columns'))).toBeGreaterThanOrEqual(3);
     await expect(page.getByTestId('level-catalog-summary')).toHaveText(`共 6 关${availableDifferenceCount} 关开放`);
-    // A same-address navigation can preserve the current React page in Chromium.
-    // Traverse back through the real pager before collecting every planned slot.
-    const previous = page.getByRole('button', { name: '上一页', exact: true });
-    for (let step = 0; step < 6 && await previous.count() && await previous.isEnabled(); step++) {
-      const pager = page.locator('.selection-pagination > span');
-      const previousPage = await pager.textContent();
-      await previous.click();
-      await expect(pager).not.toHaveText(previousPage!);
-    }
-    if (await previous.count()) await expect(previous).toBeDisabled();
+    await expect(page.getByRole('button', { name: '上一页', exact: true })).toHaveCount(0);
+    await expect(page.getByRole('button', { name: '下一页', exact: true })).toHaveCount(0);
+    await list.evaluate(element => { element.scrollTop = 0; });
+    const header = await page.locator('.level-select-screen .selection-topbar').boundingBox();
     const seen = new Set<string>();
-    for (let pageIndex = 0; pageIndex < 6; pageIndex++) {
-      const cards = page.locator('.level-choice-card');
-      await expect(cards.first()).toBeVisible();
-      if (viewport.width === 1279) await expect(cards).toHaveCount(6);
-      for (const card of await cards.all()) {
+    const cards = page.locator('.level-choice-card');
+    for (const card of await cards.all()) {
+        await card.scrollIntoViewIfNeeded();
         await expectInsideViewport(page, card);
         seen.add((await card.getByRole('heading', { level: 2 }).textContent())!);
         if (await card.getAttribute('data-status') === 'planned') {
@@ -762,15 +752,11 @@ test('六关规划位清楚区分已开放与筹备中，筹备位不生成游�
           await expect(card.getByRole('button')).toHaveCount(0);
           await expect(card.locator('.completed-label')).toHaveCount(0);
         }
-      }
-      await expectDocumentFits(page);
-      const next = page.getByRole('button', { name: '下一页', exact: true });
-      if (!await next.count() || !await next.isEnabled()) break;
-      const pager = page.locator('.selection-pagination > span');
-      const previousPage = await pager.textContent();
-      await next.click();
-      await expect(pager).not.toHaveText(previousPage!);
     }
+    await list.evaluate(element => { element.scrollTop = element.scrollHeight; });
+    await expectInsideViewport(page, cards.last());
+    expect(await page.locator('.level-select-screen .selection-topbar').boundingBox()).toEqual(header);
+    await expectDocumentFits(page);
     expect([...seen]).toEqual(titles);
     expect(await page.evaluate(key => localStorage.getItem(key), progressKey)).toBeNull();
   }
@@ -992,14 +978,12 @@ test('忍冬卷草圆润红瓣：四边首次点击共用第五处且中央独�
   expect(await page.evaluate(key => Object.keys(JSON.parse(localStorage.getItem(key)!).completed), progressKey)).toEqual([scrolls.id]);
 });
 
-for (const viewport of [
-  { name: '小竖屏', width: 360, height: 640 },
-  { name: '手机横屏', width: 844, height: 390 },
-]) {
-  test(`${viewport.name}${viewport.width}×${viewport.height}：主要页面与完整游戏均在屏幕内`, async ({ page }, testInfo) => {
+for (const size of ['compact', 'landscape'] as const) {
+  test(`${size === 'compact' ? '桌面窄窗360×640 / 手机横屏640×360' : '横屏窗口844×390'}：主要页面与完整游戏均在屏幕内`, async ({ page }, testInfo) => {
     const errors: string[] = [];
     page.on('pageerror', error => errors.push(error.message));
-    await page.setViewportSize({ width: viewport.width, height: viewport.height });
+    const viewport = size === 'compact' ? compactPlayableViewport(testInfo) : mobileLandscapeViewport;
+    await page.setViewportSize(viewport);
     await inspectStaticScreens(page);
     await startGame(page);
     await inspectArtwork(page);
@@ -1015,14 +999,20 @@ for (const viewport of [
   });
 }
 
-test('桌面到竖屏再到横屏：发现状态与提示级别保持，画面重新适配', async ({ page }) => {
+test('桌面窄窗或手机竖屏中断后返回横屏：发现状态与提示级别保持', async ({ page }, testInfo) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await startGame(page);
   await clickDifference(page, 0, 'reference');
   await page.getByRole('button', { name: '给我提示' }).click();
   await expect(page.getByTestId('hint-status')).toContainText(level.differences[1].hint);
 
-  await page.setViewportSize({ width: 360, height: 640 });
+  await page.setViewportSize(isMobileProject(testInfo) ? mobilePortraitViewport : desktopNarrowViewport);
+  if (isMobileProject(testInfo)) {
+    await expect(page.getByTestId('mobile-landscape-gate')).toBeVisible();
+    await expectDocumentFits(page);
+    await page.setViewportSize(mobileLandscapeViewport);
+    await expect(page.getByTestId('mobile-landscape-gate')).not.toBeVisible();
+  }
   await expectGameFits(page);
   await expect(page.getByTestId('game-progress')).toHaveAttribute('aria-label', progressLabel(1));
   await page.getByRole('button', { name: '给我提示' }).click();
@@ -1046,7 +1036,7 @@ test('桌面到竖屏再到横屏：发现状态与提示级别保持，画面�
   expect(completed).toEqual(['patterns-intro']);
 });
 
-test('增加关卡后按实际空间分页，每关均能通过按钮访问', async ({ page }) => {
+test('增加关卡后全部列入纵向滚动目录，每关均能通过按钮访问', async ({ page }, testInfo) => {
   const levels = [level, ...Array.from({ length: 5 }, (_, index) => ({
     ...level, id: `test-pagination-${index}`, title: `观察活动 ${index + 2}：认识纹样中的组成与形状`,
   }))];
@@ -1057,18 +1047,20 @@ test('增加关卡后按实际空间分页，每关均能通过按钮访问', as
     expect(source).toContain('levels: Object.values(levelFiles)');
     await route.fulfill({ response, body: source.replace('levels: Object.values(levelFiles)', `levels: ${JSON.stringify(levels)}`) });
   });
-  for (const viewport of [{ width: 1000, height: 600 }, { width: 360, height: 640 }, { width: 844, height: 390 }]) {
+  for (const viewport of [{ width: 1000, height: 600 }, ...supportedResizeViewports(testInfo)]) {
     await page.setViewportSize(viewport);
-    await page.goto('/');
+    await page.goto('/#/themes');
     await page.locator('.theme-patterns').click();
     await page.getByRole('button', { name: '直接玩游戏', exact: true }).click();
     await page.getByRole('link', { name: '找不同', exact: true }).click();
+    const list = page.getByTestId('level-choice-scroll');
+    await expect(list).toBeVisible();
+    await expect(page.getByRole('button', { name: '下一页', exact: true })).toHaveCount(0);
     const seen = new Set<string>();
-    for (let pageIndex = 0; pageIndex < 12; pageIndex++) {
       const cards = page.locator('.level-choice-card');
-      await expect(cards.first()).toBeVisible();
+      expect(await cards.count()).toBeGreaterThanOrEqual(levels.length);
       for (const card of await cards.all()) {
-        await expectInsideViewport(page, card);
+        await card.scrollIntoViewIfNeeded();
         if (await card.getAttribute('data-status') === 'planned') {
           await expect(card.getByRole('link')).toHaveCount(0);
           await expect(card).toContainText('筹备中');
@@ -1078,19 +1070,15 @@ test('增加关卡后按实际空间分页，每关均能通过按钮访问', as
         await expect(links).toHaveCount(3);
         const href = await links.first().getAttribute('href');
         for (const link of await links.all()) {
+          await link.scrollIntoViewIfNeeded();
           await expectInsideViewport(page, link);
           await expect(link).toHaveAttribute('href', href!);
         }
         seen.add(href!);
       }
-      await expectDocumentFits(page);
-      const next = page.getByRole('button', { name: '下一页' });
-      if (!await next.count() || !await next.isEnabled()) break;
-      const pager = page.locator('.selection-pagination > span');
-      const previousPage = await pager.textContent();
-      await next.click();
-      await expect(pager).not.toHaveText(previousPage!);
-    }
+    await list.evaluate(element => { element.scrollTop = element.scrollHeight; });
+    await expectInsideViewport(page, cards.last().locator('.selected-level-start'));
+    await expectDocumentFits(page);
     expect(seen.size).toBe(levels.length);
   }
 });

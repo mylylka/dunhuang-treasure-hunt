@@ -123,6 +123,49 @@ describe('共用温润木石音效播放器', () => {
     const h = harness(); h.context.resume.mockRejectedValueOnce(new Error('blocked'));
     await expect(h.player.unlock()).resolves.toBeUndefined(); h.player.play('button'); await settle(); expect(h.sources).toHaveLength(0);
   });
+  it('显形音效预解码后同步启动，未就绪时不会补播', async () => {
+    let finishLoading!: (value: AudioBuffer) => void;
+    const h = harness(() => new Promise(resolve => { finishLoading = resolve; }));
+    await h.player.unlock();
+    const loading = h.player.prepare('complete');
+    expect(h.player.playPrepared('complete')).toBe(false);
+    await settle();
+    finishLoading(buffer('complete'));
+    await loading;
+    expect(h.sources).toHaveLength(0);
+    expect(h.player.playPrepared('complete')).toBe(true);
+    expect(h.sources[0].start).toHaveBeenCalledTimes(1);
+    h.player.stopCue('complete');
+    expect(h.sources[0].stop).toHaveBeenCalledTimes(1);
+  });
+  it('较早的恢复请求未完成时，下一次主动手势仍能恢复并播放当前反馈', async () => {
+    const h = harness();
+    h.context.resume.mockImplementationOnce(() => new Promise<void>(() => {}));
+    void h.player.unlock(); h.player.play('button'); await settle();
+    expect(h.sources).toHaveLength(0);
+    // A mobile browser may leave the first request pending outside an accepted gesture.
+    void h.player.unlock(); await settle();
+    expect(h.context.resume).toHaveBeenCalledTimes(2);
+    expect(h.sources.map(source => source.buffer?.duration)).toEqual([.165]);
+  });
+  it('旧恢复请求较晚失败，不会撤销后续手势已经恢复的音效', async () => {
+    const h = harness(); let rejectFirst!: (reason: Error) => void;
+    h.context.resume.mockImplementationOnce(() => new Promise<void>((_resolve, reject) => { rejectFirst = reject; }));
+    void h.player.unlock(); void h.player.unlock(); await settle();
+    rejectFirst(new Error('previous gesture was blocked')); await settle();
+    h.player.play('fill'); await settle();
+    expect(h.context.resume).toHaveBeenCalledTimes(2);
+    expect(h.sources.map(source => source.buffer?.duration)).toEqual([.295]);
+  });
+  it('中断期间停止会取消旧反馈，新的主动手势恢复后只播放新动作', async () => {
+    const h = harness(); await h.player.unlock();
+    h.context.state = 'interrupted';
+    h.context.resume.mockImplementationOnce(() => new Promise<void>(() => {}));
+    void h.player.unlock(); h.player.play('success'); await settle();
+    h.player.stop();
+    void h.player.unlock(); h.player.play('button'); await settle();
+    expect(h.sources.map(source => source.buffer?.duration)).toEqual([.165]);
+  });
   it('上下文已关闭时不抛错，也不请求无用的音频', async () => {
     const h = harness(); await h.player.unlock(); h.context.state = 'closed';
     expect(() => h.player.play('complete')).not.toThrow(); await settle();

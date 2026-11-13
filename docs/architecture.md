@@ -1,6 +1,8 @@
+> 此文档保留自早期版本；关卡数量、入口、教学流程及手机布局已更新。当前独立分支请先读 [2D 接管说明](2d-game-handoff.md)，实际运行以代码为准。
+
 # 架构与继续开发
 
-## 当前边界
+## 早期项目边界（历史记录）
 
 React 负责导航、文化教学、玩法与关卡选择、提示面板、结果和长期记录；Phaser 4.2.1 负责当前关卡的图像和输入。主题引用玩法，不为每个主题复制玩法代码。正式目录目前有12关：5关找不同（`patterns-intro`、`patterns-lotus`、`patterns-scrolls`、`patterns-geometry`、`patterns-rabbits`）、4关填色（`coloring-three-rabbits`、`coloring-lotus-camellia`、`coloring-grape-pomegranate`、`coloring-grape-lotus`）和3关拼图（`puzzle-lotus-ceiling`、`puzzle-three-rabbits`、`puzzle-twin-dragons`）。纹样主题七屏教学和三个玩法已接入，其余两个主题仍未开放。
 
@@ -8,7 +10,7 @@ React 负责导航、文化教学、玩法与关卡选择、提示面板、结�
 
 应用占据当前动态视口（`100dvh`），首页、文化教学、玩法选择、该玩法关卡、游玩和结果是独立屏幕，使用 hash 路由切换。页面主体不纵向滚动；手机首页通过主题按钮切换封面。关卡目录按实际可用空间展示6、3或2张卡片，超过当前容量后分页；桌面常规视口同时展示六关，手机分页。帮助、教学正文和资料弹窗可在专用文字区域内部滚动。
 
-`src/app/navigation.ts` 集中管理路由解析与路径。`#/` 是主题首页；`#/theme/patterns` 是文化导览；`#/theme/patterns/games` 是三种玩法；`#/theme/patterns/games/spot-difference` 是找不同关卡；`#/play/patterns-intro` 与结果地址保留稳定关卡ID。首页的主题链接始终进入导览，已有完成记录也不会跳过。教学顶部onSkip只导航到玩法选择；直接链接和游玩不受学习完成记录限制。旧游戏记录不受影响。
+`src/app/navigation.ts` 集中管理路由解析与路径。`#/` 是主题首页；`#/theme/patterns` 是文化导览；`#/theme/patterns/games` 是三种玩法；`#/theme/patterns/games/spot-difference` 是找不同关卡；`#/play/patterns-intro` 与结果地址保留稳定关卡ID。当时首页的主题链接进入导览，已有完成记录也不会跳过。教学顶部onSkip只导航到玩法选择；直接链接和游玩不受学习完成记录限制。旧游戏记录不受影响。
 
 `ThemeCards`、`TeachingScreen`、`GameSelectScreen`、`LevelSelectScreen` 各管一层界面。三张主题卡共用相同3:2图框与14px图文间距；玩法选择的填色封面用cover铺满横版图框，此裁切仅作用于入口封面，游玩和参考图仍完整等比。正式关卡卡片提供封面、标题和按钮三个独立链接，可点击或键盘进入；筹备卡片没有链接。拼图目录按钮始终为“开始拼图”，已完成状态另外展示，结果页的重玩操作仍为“再拼一次”。主题卡不能让全高容器把标题推到屏幕底部。装饰按钮使用独立正文容器，正文以按钮真实中心对齐，方向符号不参与正文居中。
 

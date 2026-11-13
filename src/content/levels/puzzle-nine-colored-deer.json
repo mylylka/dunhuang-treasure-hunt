@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "puzzle-nine-colored-deer",
+  "themeId": "stories",
+  "gameType": "puzzle",
+  "title": "九色鹿王本生",
+  "subtitle": "北魏 · 莫高窟第257窟 · 12幅排序",
+  "objective": "拖动画面，按壁画从左到右的原始顺序排列。",
+  "difficulty": "入门",
+  "estimatedMinutes": 5,
+  "thumbnailAssetId": "puzzle-nine-colored-deer-image",
+  "imageAssetId": "puzzle-nine-colored-deer-image",
+  "mode": "gallery-order",
+  "sliceCount": 12,
+  "rows": 2,
+  "columns": 6,
+  "seed": 257012,
+  "teachingNote": "先找两端：一端是九色鹿救人，另一端是王后向国王索求鹿皮。再观察两路情节怎样在画卷中央相遇。",
+  "source": {
+    "title": "敦煌研究院：莫高窟第257窟",
+    "url": "https://www.dha.ac.cn/info/1425/3548.htm",
+    "note": "原作位于莫高窟第257窟西壁中段。"
+  }
+}

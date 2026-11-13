@@ -1,6 +1,8 @@
 import { expect, test, type Page } from '@playwright/test';
 import { readFileSync, readdirSync } from 'node:fs';
 import type { AssetDefinition, ColoringLevel, Level, SpotDifferenceLevel } from '../../src/types';
+import { isMobileProject, mobileLandscapeViewport, mobilePortraitViewport, supportedResizeViewports } from './supported-viewports';
+import { dragSpotView, expectSpotSynchronized, readSpotView, setSpotZoom } from './spot-view-controls';
 
 const levels = readdirSync('src/content/levels').filter(name => name.endsWith('.json'))
   .map(name => JSON.parse(readFileSync(`src/content/levels/${name}`, 'utf8')) as Level);
@@ -11,7 +13,8 @@ const squareLevels = observationLevels.filter(level => {
   const image = assets.find(asset => asset.id === level.baseAssetId);
   return image && image.width === image.height;
 });
-const artworkKey = 'dunhuang:artworks:v1';
+const artworkKey = 'dunhuang:artworks:v2';
+const legacyArtworkKey = 'dunhuang:artworks:v1';
 const progressKey = 'dunhuang:progress:v1';
 const imageLoadTimeout = 45_000;
 test.setTimeout(60_000);
@@ -26,8 +29,13 @@ async function expectFits(page: Page) {
     && scrollX === 0 && scrollY === 0)).toBe(true);
   await expect(page.getByTestId('phaser-player').locator('canvas')).toBeInViewport({ ratio: 0.999 });
   for (const name of ['完成作品', '撤销', '清空重涂', '参考配色']) {
-    await expect(page.getByRole('button', { name, exact: true })).toBeInViewport({ ratio: 0.999 });
+    const control = page.getByRole('button', { name, exact: true });
+    await expect(control).toBeInViewport({ ratio: 0.999 });
+    const bounds = (await control.boundingBox())!;
+    expect(bounds.width).toBeGreaterThanOrEqual(44); expect(bounds.height).toBeGreaterThanOrEqual(44);
   }
+  await expect(page.getByRole('button', { name: '更多', exact: true })).toHaveCount(0);
+  await expect(page.getByRole('dialog', { name: '填色操作', exact: true })).toHaveCount(0);
   await expect(page.getByTestId('coloring-palette')).toBeInViewport({ ratio: 0.999 });
   const reference = page.getByTestId('coloring-inline-reference');
   const referenceImage = reference.locator('img');
@@ -49,6 +57,29 @@ async function startColoring(page: Page, level: ColoringLevel) {
   const reference = assets.find(asset => asset.id === level.referenceAssetId)!;
   const referenceUrl = new URL(reference.path, page.url()); referenceUrl.searchParams.set('v', reference.version);
   await expect(page.getByTestId('coloring-inline-reference').locator('img')).toHaveAttribute('src', referenceUrl.href);
+}
+
+async function chooseColor(page: Page, label: string) {
+  const palette = page.getByRole('dialog', { name: '完整色盘', exact: true });
+  let choice = await palette.isVisible() ? palette.getByRole('button', { name: `选择${label}`, exact: true })
+    : page.getByRole('button', { name: `选择${label}`, exact: true });
+  if (!await choice.isVisible()) {
+    await page.getByRole('button', { name: '完整色盘', exact: true }).click();
+    await expect(palette).toBeVisible();
+    choice = palette.getByRole('button', { name: `选择${label}`, exact: true });
+  }
+  await expect(choice).toBeInViewport({ ratio: .999 });
+  const bounds = (await choice.boundingBox())!;
+  expect(bounds.width).toBeGreaterThanOrEqual(44); expect(bounds.height).toBeGreaterThanOrEqual(44);
+  await choice.click();
+  if (await palette.isVisible()) {
+    const close = palette.getByRole('button', { name: '关闭完整色盘', exact: true });
+    await expect(close).toBeInViewport({ ratio: .999 });
+    const rect = (await close.boundingBox())!;
+    expect(rect.width).toBeGreaterThanOrEqual(44); expect(rect.height).toBeGreaterThanOrEqual(44);
+    await close.click();
+    await expect(palette).toBeHidden();
+  }
 }
 
 async function currentColors(page: Page, level: ColoringLevel): Promise<Record<string, string>> {
@@ -91,8 +122,8 @@ async function recordedAnimation(page: Page) {
   return page.evaluate(() => (window as unknown as { __coloringAnimationRecord: { values: string[] } }).__coloringAnimationRecord.values);
 }
 
-test('真实目录开放五关找不同、三关拼图和四关填色', async ({ page }) => {
-  expect(coloringLevels).toHaveLength(4);
+test('真实目录开放五关找不同、三关拼图和五关填色', async ({ page }) => {
+  expect(coloringLevels).toHaveLength(5);
   expect(observationLevels).toHaveLength(5);
   expect(squareLevels).toHaveLength(3);
   await page.goto('/#/theme/patterns/games');
@@ -100,7 +131,7 @@ test('真实目录开放五关找不同、三关拼图和四关填色', async ({
   await expect(page.getByRole('link', { name: '拼图', exact: true })).toBeVisible();
   await page.getByRole('link', { name: '填色', exact: true }).click();
   await expect(page.getByRole('heading', { name: '填色关卡', exact: true })).toBeVisible();
-  await expect(page.getByTestId('level-catalog-summary')).toHaveText('共 4 关4 关开放');
+  await expect(page.getByTestId('level-catalog-summary')).toHaveText('共 5 关5 关开放');
 });
 
 for (const level of coloringLevels) {
@@ -112,7 +143,7 @@ for (const level of coloringLevels) {
     await expect(page.getByRole('button', { name: '完成作品', exact: true })).toBeDisabled();
     await assertMaskPoint(page, level);
     const swatch = level.palette[0];
-    await page.getByRole('button', { name: `选择${swatch.label}`, exact: true }).click();
+    await chooseColor(page, swatch.label);
     await clickRegion(page, level);
     await expect.poll(() => currentColors(page, level)).toEqual({ [usableRegion(level).id]: swatch.color.toLowerCase() });
     await expect(page.getByTestId('coloring-status')).toContainText('已着色 1 个区域');
@@ -138,7 +169,7 @@ test('填色支持参考查看、换色、撤销、可撤销清空、刷新恢�
   await reference.getByRole('button', { name: '继续填色', exact: true }).click();
   await expect(page.getByTestId('coloring-inline-reference')).toBeInViewport({ ratio: 0.999 });
   await expect.poll(() => currentColors(page, level)).toEqual({ [region.id]: first.color.toLowerCase() });
-  await page.getByRole('button', { name: `选择${second.label}`, exact: true }).click();
+  await chooseColor(page, second.label);
   await clickRegion(page, level);
   await expect.poll(() => currentColors(page, level)).toEqual({ [region.id]: second.color.toLowerCase() });
   await page.getByRole('button', { name: '撤销', exact: true }).click();
@@ -179,7 +210,7 @@ test('填色支持参考查看、换色、撤销、可撤销清空、刷新恢�
   await expect(page.getByTestId('coloring-result-canvas')).toBeVisible({ timeout: imageLoadTimeout });
 });
 
-test('缩放拖动和旋转保留作品，拖动不能误填色', async ({ page }) => {
+test('缩放拖动及窗口变化或手机竖屏中断保留作品，拖动不能误填色', async ({ page }, testInfo) => {
   const level = coloringLevels[0]!;
   await startColoring(page, level);
   await clickRegion(page, level);
@@ -192,12 +223,74 @@ test('缩放拖动和旋转保留作品，拖动不能误填色', async ({ page 
   await page.mouse.down(); await page.mouse.move(box.x + box.width / 2 + 40, box.y + box.height / 2 + 20, { steps: 5 }); await page.mouse.up();
   await expect.poll(() => currentColors(page, level)).toEqual(saved);
   await page.getByRole('button', { name: '1×', exact: true }).click();
-  for (const viewport of [{ width: 360, height: 640 }, { width: 844, height: 390 }]) {
+  if (isMobileProject(testInfo)) {
+    await page.setViewportSize(mobilePortraitViewport);
+    await expect(page.getByTestId('mobile-landscape-gate')).toBeVisible();
+    await page.setViewportSize(mobileLandscapeViewport);
+    await expect(page.getByTestId('mobile-landscape-gate')).not.toBeVisible();
+  }
+  for (const viewport of supportedResizeViewports(testInfo)) {
     await page.setViewportSize(viewport);
     await expectFits(page);
     await expect(page.getByTestId('coloring-status')).toContainText('已着色 1 个区域');
     await expect.poll(() => currentColors(page, level)).toEqual(saved);
   }
+});
+
+test('电脑填色滚轮以鼠标位置连续缩放，保留倍率按钮且不改作品或滚动整页', async ({ page }) => {
+  const level = coloringLevels.find(level => level.id === 'coloring-grape-pomegranate')!;
+  await page.setViewportSize({ width: 1279, height: 925 });
+  await startColoring(page, level);
+  await clickRegion(page, level);
+  const saved = { [usableRegion(level).id]: level.palette[0].color.toLowerCase() };
+  await expect.poll(() => currentColors(page, level)).toEqual(saved);
+  const canvas = page.getByTestId('phaser-player').locator('canvas');
+  const element = await canvas.elementHandle();
+  const read = async () => JSON.parse((await page.getByTestId('phaser-player').getAttribute('data-layout'))!) as ColoringLayout;
+  const bounds = (await canvas.boundingBox())!;
+  const mouse = { x: Math.round(bounds.x + bounds.width * .5), y: Math.round(bounds.y + bounds.height * .43) };
+  await page.mouse.move(mouse.x, mouse.y);
+  await page.mouse.wheel(0, -100);
+  await expect.poll(async () => (await read()).zoom).toBeGreaterThan(1);
+  expect((await read()).zoom).toBeLessThan(2);
+  await page.getByRole('button', { name: '2×', exact: true }).click();
+  await expect.poll(async () => (await read()).zoom).toBe(2);
+  const before = await read();
+  const point = { x: (mouse.x - bounds.x) * before.width / bounds.width, y: (mouse.y - bounds.y) * before.height / bounds.height };
+  const source = { x: (point.x - before.image.x) / before.image.width, y: (point.y - before.image.y) / before.image.height };
+  await page.mouse.move(mouse.x, mouse.y);
+  await page.mouse.wheel(0, -90);
+  await expect.poll(async () => (await read()).zoom).toBeGreaterThan(2);
+  const after = await read();
+  expect(after.zoom).toBeLessThan(3);
+  expect((point.x - after.image.x) / after.image.width).toBeCloseTo(source.x, 4);
+  expect((point.y - after.image.y) / after.image.height).toBeCloseTo(source.y, 4);
+  await page.mouse.wheel(0, -5000);
+  await expect.poll(async () => (await read()).zoom).toBe(3);
+  await expect(page.getByRole('button', { name: '3×', exact: true })).toHaveAttribute('aria-pressed', 'true');
+  for (let i = 0; i < 3; i++) {
+    const previous = (await read()).zoom;
+    await page.mouse.wheel(0, 5000);
+    await expect.poll(async () => (await read()).zoom).toBeLessThan(previous);
+  }
+  await expect.poll(async () => (await read()).zoom).toBe(1);
+  await expect(page.getByRole('button', { name: '1×', exact: true })).toHaveAttribute('aria-pressed', 'true');
+  expect(await element!.evaluate(element => element.isConnected)).toBe(true);
+  expect(await currentColors(page, level)).toEqual(saved);
+  await expectFits(page);
+  await page.getByRole('button', { name: '参考配色', exact: true }).click();
+  const covered = await read();
+  await page.mouse.move(mouse.x, mouse.y);
+  await page.mouse.wheel(0, -100);
+  await page.getByRole('button', { name: '关闭参考配色', exact: true }).click();
+  expect((await read()).zoom).toBe(covered.zoom);
+  expect(await currentColors(page, level)).toEqual(saved);
+  // Zooming cannot create extra undo steps or submit a painting.
+  await page.getByRole('button', { name: '撤销', exact: true }).click();
+  await expect.poll(() => currentColors(page, level)).toEqual({});
+  await expect(page.getByRole('button', { name: '撤销', exact: true })).toBeDisabled();
+  expect(await page.evaluate(({ key, id }) => Boolean(JSON.parse(localStorage.getItem(key) ?? '{"completed":{}}').completed[id]),
+    { key: progressKey, id: level.id })).toBe(false);
 });
 
 test('200ms填色动效存在，系统或游戏减少动效时立即换色', async ({ page }) => {
@@ -209,7 +302,7 @@ test('200ms填色动效存在，系统或游戏减少动效时立即换色', asy
   await expect(page.getByTestId('phaser-player')).toHaveAttribute('data-animating', 'false');
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await expect(page.getByTestId('phaser-player')).toHaveAttribute('data-reduced-motion', 'true');
-  await page.getByRole('button', { name: `选择${level.palette[1].label}`, exact: true }).click();
+  await chooseColor(page, level.palette[1].label);
   await recordAnimation(page); await clickRegion(page, level);
   await expect.poll(() => currentColors(page, level)).toEqual({ [usableRegion(level).id]: level.palette[1].color.toLowerCase() });
   expect(await recordedAnimation(page)).not.toContain('true');
@@ -241,6 +334,28 @@ test('作品保存失败如实显示并可重试，不冒充写入旧通关结�
   await expectFits(page);
 });
 
+test('完成作品时保存失败，重试成功后才进入结果并记录完成', async ({ page }) => {
+  const level = coloringLevels[0]!;
+  await startColoring(page, level);
+  await clickRegion(page, level);
+  await expect.poll(() => currentColors(page, level)).toEqual({ [usableRegion(level).id]: level.palette[0].color.toLowerCase() });
+  await page.evaluate(key => {
+    const original = Storage.prototype.setItem;
+    (window as unknown as { __artworkStorageSetter: typeof original }).__artworkStorageSetter = original;
+    Storage.prototype.setItem = function (name, value) {
+      if (name === key) throw new DOMException('Test storage quota', 'QuotaExceededError');
+      return original.call(this, name, value);
+    };
+  }, artworkKey);
+  await page.getByRole('button', { name: '完成作品', exact: true }).click();
+  await expect(page.getByTestId('artwork-save-error')).toBeVisible();
+  expect(await page.evaluate(key => localStorage.getItem(key), progressKey)).toBeNull();
+  await page.evaluate(() => { Storage.prototype.setItem = (window as unknown as { __artworkStorageSetter: typeof Storage.prototype.setItem }).__artworkStorageSetter; });
+  await page.getByRole('button', { name: '重试保存作品', exact: true }).click();
+  await expect(page).toHaveURL(new RegExp(`#/result/${level.id}$`));
+  await expect.poll(() => page.evaluate(({ key, id }) => Boolean(JSON.parse(localStorage.getItem(key) ?? '{}').completed?.[id]), { key: progressKey, id: level.id })).toBe(true);
+});
+
 test('区域图加载失败保留错误与重新加载入口', async ({ page }) => {
   const level = coloringLevels[0]!;
   const map = assets.find(asset => asset.id === level.regionMapAssetId)!;
@@ -260,10 +375,11 @@ test('旧版作品和通关记录保留，新线稿不冒充成品且新旧版�
   const oldTimestamp = '2026-10-28T00:00:00.000Z';
   const oldSnapshot = { colors: { [usableRegion(level).id]: '#72408a' }, updatedAt: oldTimestamp, submittedAt: oldTimestamp };
   const oldProgress = { version: 1, completed: { 'patterns-intro': oldTimestamp, [level.id]: oldTimestamp }, settings: { reducedMotion: true } };
-  await page.addInitScript(({ workKey, gameKey, id, version, snapshot, progress }) => {
-    if (localStorage.getItem(workKey) === null) localStorage.setItem(workKey, JSON.stringify({ version: 1, artworks: { [id]: { [version]: snapshot } } }));
+  const legacyRaw = JSON.stringify({ version: 1, artworks: { [level.id]: { [oldVersion]: oldSnapshot } } }, null, 2) + '\n';
+  await page.addInitScript(({ workKey, gameKey, raw, progress }) => {
+    if (localStorage.getItem(workKey) === null) localStorage.setItem(workKey, raw);
     if (localStorage.getItem(gameKey) === null) localStorage.setItem(gameKey, JSON.stringify(progress));
-  }, { workKey: artworkKey, gameKey: progressKey, id: level.id, version: oldVersion, snapshot: oldSnapshot, progress: oldProgress });
+  }, { workKey: legacyArtworkKey, gameKey: progressKey, raw: legacyRaw, progress: oldProgress });
   await page.goto(`/#/result/${level.id}`);
   await expect(page.getByRole('heading', { name: '线稿已更新，旧作品已保留', exact: true })).toBeVisible();
   await expect(page.getByTestId('coloring-result-canvas')).toHaveCount(0);
@@ -275,18 +391,29 @@ test('旧版作品和通关记录保留，新线稿不冒充成品且新旧版�
   await expect(page.getByRole('button', { name: '完成作品', exact: true })).toBeDisabled();
   await clickRegion(page, level);
   await expect.poll(() => currentColors(page, level)).toEqual({ [usableRegion(level).id]: level.palette[0].color.toLowerCase() });
-  const retained = await page.evaluate(({ key, id }) => JSON.parse(localStorage.getItem(key)!).artworks[id], { key: artworkKey, id: level.id });
-  expect(Object.keys(retained).sort()).toEqual([oldVersion, level.artworkVersion].sort());
-  expect(retained[oldVersion]).toEqual(oldSnapshot);
+  const saved = await page.evaluate(({ key, id, version }) => {
+    const data = JSON.parse(localStorage.getItem(key)!);
+    return { version: data.version, artwork: data.artworks[id][version] };
+  }, { key: artworkKey, id: level.id, version: level.artworkVersion });
+  expect(saved.version).toBe(2);
+  expect(saved.artwork.colors).toEqual({ [usableRegion(level).id]: level.palette[0].color.toLowerCase() });
+  expect(saved.artwork.materials).toEqual({});
+  expect(saved.artwork).not.toHaveProperty('submittedAt');
+  expect(await page.evaluate(key => localStorage.getItem(key), legacyArtworkKey)).toBe(legacyRaw);
+  expect(await page.evaluate(({ key, id, version }) => JSON.parse(localStorage.getItem(key)!).artworks[id][version],
+    { key: legacyArtworkKey, id: level.id, version: oldVersion })).toEqual(oldSnapshot);
   expect(await page.evaluate(key => JSON.parse(localStorage.getItem(key)!), progressKey)).toEqual(oldProgress);
   await page.reload();
   await expect(page.getByRole('button', { name: '完成作品', exact: true })).toBeEnabled({ timeout: imageLoadTimeout });
   await expect(page.getByTestId('coloring-status')).toContainText('已着色 1 个区域');
+  expect(await currentColors(page, level)).toEqual(saved.artwork.colors);
+  expect(await page.evaluate(key => localStorage.getItem(key), legacyArtworkKey)).toBe(legacyRaw);
   expect(await page.evaluate(({ key, id, version }) => JSON.parse(localStorage.getItem(key)!).artworks[id][version],
-    { key: artworkKey, id: level.id, version: oldVersion })).toEqual(oldSnapshot);
+    { key: legacyArtworkKey, id: level.id, version: oldVersion })).toEqual(oldSnapshot);
+  expect(await page.evaluate(key => JSON.parse(localStorage.getItem(key)!), progressKey)).toEqual(oldProgress);
 });
 
-test('方图上侧4倍观察保持原生比例，返回游戏不增加发现', async ({ page }) => {
+test('方图主画布三倍观察上侧细节，双图同步且拖动复位不增加发现', async ({ page }) => {
   const level = squareLevels[0]!;
   await page.goto(`/#/play/${level.id}`);
   await expect(page.getByRole('button', { name: '给我提示', exact: true })).toBeEnabled({ timeout: imageLoadTimeout });
@@ -297,26 +424,19 @@ test('方图上侧4倍观察保持原生比例，返回游戏不增加发现', a
     y: layout.reference.y + (region.y + region.height / 2) * layout.reference.height } });
   const before = `已找到 1 处，共 ${level.differences.length} 处`;
   await expect(page.getByTestId('game-progress')).toHaveAttribute('aria-label', before);
-  const opener = page.getByRole('button', { name: '放大观察', exact: true });
-  await opener.focus(); await opener.press('Enter');
-  const inspector = page.getByTestId('art-inspector');
-  const upper = inspector.getByRole('button', { name: '上侧 4×', exact: true });
-  await upper.click();
-  await expect(upper).toHaveAttribute('aria-pressed', 'true');
-  const picture = page.getByTestId('art-inspector-image');
-  await expect(picture).toHaveAttribute('data-view', 'upper-detail');
-  await expect(picture).toHaveCSS('background-size', '400% 400%');
-  await expect(picture).toHaveCSS('background-position', '50% 29%');
-  const choices = await inspector.locator('.art-inspector-views button').allTextContents();
-  expect(choices.indexOf('上侧 4×')).toBe(choices.indexOf('中央 2×') + 1);
-  await expect.poll(async () => (await picture.boundingBox())?.width ?? 0).toBeGreaterThan(40);
-  const bounds = (await picture.boundingBox())!;
-  expect(bounds.width / bounds.height).toBeCloseTo(1, 2);
-  await inspector.getByRole('button', { name: '变化图 B', exact: true }).click();
-  await picture.click({ position: { x: bounds.width / 2, y: bounds.height / 2 } });
-  await inspector.getByRole('button', { name: '返回游戏', exact: true }).click();
-  await expect(inspector).toBeHidden();
-  await expect(opener).toBeFocused();
+  await expect(page.getByRole('button', { name: '放大观察', exact: true })).toHaveCount(0);
+  await expect(page.getByTestId('art-inspector')).toHaveCount(0);
+  await setSpotZoom(page, 3, true);
+  await dragSpotView(page, 'reference', { x: 0, y: .35 });
+  await dragSpotView(page, 'edited', { x: 0, y: .35 });
+  const upper = await readSpotView(page);
+  expect(upper.view.center.y).toBeLessThan(.4);
+  expectSpotSynchronized(upper, 1);
+  await expect(page.getByTestId('game-progress')).toHaveAttribute('aria-label', before);
+  await setSpotZoom(page, 1);
+  const restored = await readSpotView(page);
+  expect(restored.view).toEqual({ zoom: 1, center: { x: .5, y: .5 } });
+  expectSpotSynchronized(restored, 1);
   await expect(page.getByTestId('game-progress')).toHaveAttribute('aria-label', before);
   expect(await page.evaluate(key => localStorage.getItem(key), progressKey)).toBeNull();
 });
@@ -330,11 +450,13 @@ for (const level of squareLevels) {
     const host = page.getByTestId('phaser-player');
     const layout = JSON.parse((await host.getAttribute('data-layout'))!);
     expect(layout.reference.width / layout.reference.height).toBeCloseTo(1, 6);
-    await page.getByRole('button', { name: '放大观察', exact: true }).click();
-    const modalImage = page.getByTestId('art-inspector-image');
-    const imageBox = (await modalImage.boundingBox())!;
-    expect(imageBox.width / imageBox.height).toBeCloseTo(1, 2);
-    await page.getByRole('button', { name: '关闭放大观察', exact: true }).click();
+    await expect(page.getByRole('button', { name: '放大观察', exact: true })).toHaveCount(0);
+    await setSpotZoom(page, 2);
+    expectSpotSynchronized(await readSpotView(page), 1);
+    await dragSpotView(page, 'edited');
+    expectSpotSynchronized(await readSpotView(page), 1);
+    await setSpotZoom(page, 1);
+    await expect(page.getByTestId('game-progress')).toHaveAttribute('aria-label', `已找到 0 处，共 ${level.differences.length} 处`);
     for (let index = 0; index < level.differences.length; index++) {
       const current = JSON.parse((await host.getAttribute('data-layout'))!);
       const image = current[index % 2 ? 'edited' : 'reference'], region = level.differences[index].region;

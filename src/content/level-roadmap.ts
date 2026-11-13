@@ -38,6 +38,15 @@ export type LevelChoice =
 /** Availability comes only from the actual catalog, never from a roadmap slot. */
 export function getLevelChoices(catalog: Pick<ContentCatalog, 'levels'>, themeId: string, gameType: GameType): LevelChoice[] {
   const levels = catalog.levels.filter(level => level.themeId === themeId && level.gameType === gameType);
+  // 新增填色关接在原有关卡之后，避免文件名字母序改变既有的前后关关系。
+  if (themeId === 'patterns' && gameType === 'coloring') levels.sort((a, b) =>
+    Number(a.id === 'coloring-feitian-lotus') - Number(b.id === 'coloring-feitian-lotus'));
+  if (gameType === 'hidden-object') levels.sort((a, b) => {
+    const first = a.gameType === 'hidden-object' ? a.chapter : undefined;
+    const second = b.gameType === 'hidden-object' ? b.chapter : undefined;
+    if (!first || !second) return first ? -1 : second ? 1 : 0;
+    return first.order - second.order || first.level - second.level;
+  });
   const actualById = new Map(levels.map(level => [level.id, level]));
   const plans = [...levelRoadmap, ...puzzleRoadmap].filter(entry => entry.themeId === themeId && entry.gameType === gameType);
   const plannedIds = new Set(plans.map(entry => entry.id));

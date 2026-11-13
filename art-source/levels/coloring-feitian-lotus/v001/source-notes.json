@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "receivedOn": "2026-11-04",
+  "originals": [
+    {
+      "role": "line",
+      "originalFilename": "codex-clipboard-939bcf99-1e33-4c1b-b344-2a510df7cb44.png",
+      "sha256": "4fcc8b0cce021cdcae9b823767dd4fee5358075fe0c5f2a918eb9d49466990fb",
+      "size": [
+        1086,
+        1448
+      ],
+      "mode": "RGB",
+      "runtimePath": "/assets/levels/coloring-feitian-lotus/coloring-feitian-lotus-line-v001.png",
+      "processing": "原字节直接复制，未裁切、缩放、绘制或变色。"
+    },
+    {
+      "role": "reference",
+      "originalFilename": "codex-clipboard-09caf8fa-278a-4f2e-b09a-6b22625899dc.png",
+      "sha256": "3d3fa6883767412c378297db88bc19bb53bbe463892099767a8d4fa1a6cfe9e8",
+      "size": [
+        1086,
+        1448
+      ],
+      "mode": "RGB",
+      "runtimePath": "/assets/levels/coloring-feitian-lotus/coloring-feitian-lotus-reference-v001.png",
+      "processing": "原字节直接复制，未裁切、缩放、绘制或变色。"
+    }
+  ],
+  "status": "用户提供线稿与配色参考；保留完整裁切构图。",
+  "authorship": "开发者提供；未推测具体洞窟、年代或历史配色。",
+  "processingRecord": "processing.json"
+}

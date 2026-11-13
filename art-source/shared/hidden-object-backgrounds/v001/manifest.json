@@ -1,0 +1,54 @@
+{
+  "version": "hidden-object-chapters-v001",
+  "approvedDate": "2026-11-03",
+  "authorization": "User requested three backgrounds, reviewed all three, then authorized development.",
+  "sharedGenerationBrief": "Single empty Dunhuang-inspired hidden-object playing background. Portrait 8:15, full-bleed flat 2D. Central 88% nearly empty and consistently very light; delicate far side accents. Every top/middle/bottom crop equally quiet. No text/UI/labels/watermarks/people/deities/animals/recognizable flowers/instruments/clothing/utensils/central motif/scroll rods/frame/dark patches/coarse cracks/strong vignette. Low-contrast tactile texture. Artistic game background, not historical reconstruction.",
+  "scope": "Three chapter backgrounds only; object sprites stay unchanged.",
+  "assets": [
+    {
+      "id": "hidden-object-background-ch1",
+      "chapter": 1,
+      "title": "暖沙金绢帛",
+      "generationTool": "built-in imagegen",
+      "generatedSource": "/Users/liujing/.codex/generated_images/01a19405-8b6b-7183-9aad-bc280fe40054/exec-7039028d-5ded-418f-bd0a-8d66878f3696.png",
+      "archive": "art-source/shared/hidden-object-backgrounds/v001/chapter-1-silk.png",
+      "runtime": "/assets/shared/hidden-object-backgrounds/v001/chapter-1-silk.png",
+      "width": 916,
+      "height": 1717,
+      "bytes": 2194820,
+      "sha256": "f6fc90f637db904b065240f40223a5d36cf7a378e58c5fc9089649d9b8f1bb2d",
+      "promptBrief": "Warm ivory silk, pale straw gold and faint ochre; tiny woven fibres, broad barely perceptible silk undulations; sparse faded abstract ribbon/braided side flourishes.",
+      "processing": "Original PNG bytes copied intact. No recolouring, cropping, resizing or repainting."
+    },
+    {
+      "id": "hidden-object-background-ch2",
+      "chapter": 2,
+      "title": "浅青绿云气",
+      "generationTool": "built-in imagegen",
+      "generatedSource": "/Users/liujing/.codex/generated_images/01a19405-8b6b-7183-9aad-bc280fe40054/exec-6596ffb4-e1b1-4e9b-89ca-47d64bd31475.png",
+      "archive": "art-source/shared/hidden-object-backgrounds/v001/chapter-2-celadon.png",
+      "runtime": "/assets/shared/hidden-object-backgrounds/v001/chapter-2-celadon.png",
+      "width": 916,
+      "height": 1717,
+      "bytes": 1724693,
+      "sha256": "242902e238fe093b5c9aa201dd5eebd08cfecd60da0def093851bfc3f5075b2f",
+      "promptBrief": "Pale celadon, very light sage and soft blue-green mineral-pigment wash; subtle pigment blooms; airy abstract cloud currents dissolve into the side margins.",
+      "processing": "Original PNG bytes copied intact. No recolouring, cropping, resizing or repainting."
+    },
+    {
+      "id": "hidden-object-background-ch3",
+      "chapter": 3,
+      "title": "淡藕灰壁面",
+      "generationTool": "built-in imagegen",
+      "generatedSource": "/Users/liujing/.codex/generated_images/01a19405-8b6b-7183-9aad-bc280fe40054/exec-ef946764-f4a0-47a7-9532-ae7f039b8e7f.png",
+      "archive": "art-source/shared/hidden-object-backgrounds/v001/chapter-3-plaster.png",
+      "runtime": "/assets/shared/hidden-object-backgrounds/v001/chapter-3-plaster.png",
+      "width": 916,
+      "height": 1717,
+      "bytes": 2089152,
+      "sha256": "2412323c1209470a3cdd73b5bd9369933596330204070cb5f7009678784131e5",
+      "promptBrief": "Very light warm grey-lilac plaster, soft powdery mineral finish and subtle pigment flecks; sparse discontinuous geometric side fragments in faded cinnabar, antique gold and mineral green.",
+      "processing": "Original PNG bytes copied intact. No recolouring, cropping, resizing or repainting."
+    }
+  ]
+}

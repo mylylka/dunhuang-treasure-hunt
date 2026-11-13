@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "id": "music-hidden-objects-ch3-02",
+  "themeId": "music",
+  "gameType": "hidden-object",
+  "title": "器物寻踪",
+  "subtitle": "万象寻宝 · 计时找物",
+  "objective": "找到与任务卡图案、颜色完全相同的物件。",
+  "difficulty": "4种目标 · 共8件",
+  "estimatedMinutes": 2,
+  "thumbnailAssetId": "hidden-object-background-ch3",
+  "teachingNote": "物件属于开发者提供的AI教学示意。目标名称仅用于可见外形观察，不代表特定洞窟器物、历史身份、植物品种或古乐复原。",
+  "source": {
+    "title": "敦煌研究院 · 文化资料入口",
+    "url": "https://www.dha.ac.cn/",
+    "note": "游戏器形为教学示意，了解壁画中的乐舞文化时请结合实物影像与专业资料。"
+  },
+  "poolId": "dunhuang-stickers-v001",
+  "board": {
+    "width": 960,
+    "height": 1800,
+    "columns": 12,
+    "rows": 20,
+    "inset": 10,
+    "jitter": 5,
+    "minScale": 1.2,
+    "maxScale": 1.6,
+    "maxRotationDegrees": 24
+  },
+  "categoryQuotas": [
+    {
+      "categoryId": "instruments",
+      "count": 20
+    },
+    {
+      "categoryId": "clothing",
+      "count": 20
+    },
+    {
+      "categoryId": "animals",
+      "count": 20
+    },
+    {
+      "categoryId": "patterns",
+      "count": 20
+    },
+    {
+      "categoryId": "plants",
+      "count": 20
+    },
+    {
+      "categoryId": "ritual",
+      "count": 20
+    }
+  ],
+  "tasks": {
+    "groupIds": [
+      "drum",
+      "bracelet",
+      "peacock",
+      "seedpod",
+      "diamond-pattern",
+      "candleholder",
+      "scroll"
+    ],
+    "groupCount": 4,
+    "minCount": 1,
+    "maxCount": 2,
+    "totalCount": 8
+  },
+  "timeLimitSeconds": 50,
+  "chapter": {
+    "id": "music-hidden-chapter-3",
+    "title": "万象寻宝",
+    "order": 3,
+    "level": 2,
+    "backgroundAssetId": "hidden-object-background-ch3"
+  }
+}
