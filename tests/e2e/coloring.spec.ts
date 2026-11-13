@@ -5,8 +5,12 @@ import type { AssetDefinition, ColoringLevel, Level, SpotDifferenceLevel } from 
 const levels = readdirSync('src/content/levels').filter(name => name.endsWith('.json'))
   .map(name => JSON.parse(readFileSync(`src/content/levels/${name}`, 'utf8')) as Level);
 const coloringLevels = levels.filter((level): level is ColoringLevel => level.gameType === 'coloring');
-const squareLevels = levels.filter((level): level is SpotDifferenceLevel => level.gameType === 'spot-difference' && level.id !== 'patterns-intro');
 const assets = JSON.parse(readFileSync('src/content/assets.json', 'utf8')) as AssetDefinition[];
+const observationLevels = levels.filter((level): level is SpotDifferenceLevel => level.gameType === 'spot-difference');
+const squareLevels = observationLevels.filter(level => {
+  const image = assets.find(asset => asset.id === level.baseAssetId);
+  return image && image.width === image.height;
+});
 const artworkKey = 'dunhuang:artworks:v1';
 const progressKey = 'dunhuang:progress:v1';
 const imageLoadTimeout = 45_000;
@@ -87,8 +91,9 @@ async function recordedAnimation(page: Page) {
   return page.evaluate(() => (window as unknown as { __coloringAnimationRecord: { values: string[] } }).__coloringAnimationRecord.values);
 }
 
-test('真实目录开放四关找不同、三关拼图和四关填色', async ({ page }) => {
+test('真实目录开放五关找不同、三关拼图和四关填色', async ({ page }) => {
   expect(coloringLevels).toHaveLength(4);
+  expect(observationLevels).toHaveLength(5);
   expect(squareLevels).toHaveLength(3);
   await page.goto('/#/theme/patterns/games');
   await expect(page.getByRole('link', { name: '填色', exact: true })).toBeVisible();

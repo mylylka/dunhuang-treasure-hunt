@@ -506,5 +506,25 @@
     "placeholder": false,
     "version": "user-geometry-v001",
     "sourceNote": "开发者交付的 AI 教学示意，原稿完整归档；不声称对应特定洞窟或历史原貌。 以A为底，仅合入四类已确认纹样的原B像素，内向羽化；关联区域之外与A完全一致。"
+  },
+  {
+    "id": "patterns-rabbits-a",
+    "path": "/assets/levels/patterns-rabbits/patterns-rabbits-a-v001.png",
+    "width": 665,
+    "height": 662,
+    "kind": "level",
+    "placeholder": false,
+    "version": "user-rabbits-v001",
+    "sourceNote": "开发者交付的第二张图，保留原尺寸与解码像素。原摄影出处未核实。"
+  },
+  {
+    "id": "patterns-rabbits-b",
+    "path": "/assets/levels/patterns-rabbits/patterns-rabbits-b-v001.png",
+    "width": 665,
+    "height": 662,
+    "kind": "level",
+    "placeholder": false,
+    "version": "user-rabbits-v001",
+    "sourceNote": "开发者交付的第一张图为 AI 变化稿。以参照图为底，仅合入登记的五处变化。原稿及范围见 art-source/levels/patterns-rabbits/v001/。"
   }
 ]

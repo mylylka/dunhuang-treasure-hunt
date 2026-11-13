@@ -533,16 +533,17 @@ try {
     }
   }
 
-  // Exercise the new square assets at their native ratio, using real pointer input.
-  for (const square of allLevels.filter(item => item.gameType === 'spot-difference' && item.id !== level.id)) {
+  // Exercise each additional observation level at its native image ratio.
+  for (const observation of allLevels.filter(item => item.gameType === 'spot-difference' && item.id !== level.id)) {
     await page.setViewportSize({ width: 1440, height: 1000 });
-    await page.goto(`${baseUrl}/#/play/${square.id}`);
+    await page.goto(`${baseUrl}/#/play/${observation.id}`);
     await expect(page.getByRole('button', { name: '给我提示' })).toBeEnabled({ timeout: imageLoadTimeout });
-    const image = assets.find(asset => asset.id === square.baseAssetId);
-    expect([image.width, image.height]).toEqual([1254, 1254]);
+    const image = assets.find(asset => asset.id === observation.baseAssetId);
+    const edited = assets.find(asset => asset.id === observation.editedAssetId);
+    expect([image.width, image.height]).toEqual([edited.width, edited.height]);
     await verifyGameFits(image.width / image.height);
-    await captureScreenshot(`outputs/${square.id}-找不同预览.png`);
-    if (square.id === 'patterns-geometry') {
+    await captureScreenshot(`outputs/${observation.id}-找不同预览.png`);
+    if (observation.id === 'patterns-geometry') {
       for (const viewport of [{ width: 935, height: 604 }, { width: 360, height: 640 }, { width: 844, height: 390 }]) {
         await page.setViewportSize(viewport);
         await verifyGameFits(image.width / image.height);
@@ -552,9 +553,11 @@ try {
       await page.setViewportSize({ width: 1440, height: 1000 });
       await verifyGameFits(image.width / image.height);
     }
-    for (let index = 0; index < square.differences.length; index++) await hit(index, index % 2 ? 'edited' : 'reference', square);
-    await expect(page).toHaveURL(new RegExp(`result/${square.id}$`));
-    await verifyScreen(`${square.title}结果`);
+    for (let index = 0; index < observation.differences.length; index++) {
+      await hit(index, index % 2 ? 'edited' : 'reference', observation);
+    }
+    await expect(page).toHaveURL(new RegExp(`result/${observation.id}$`));
+    await verifyScreen(`${observation.title}结果`);
   }
 
   expect(coloringLevels).toHaveLength(4);

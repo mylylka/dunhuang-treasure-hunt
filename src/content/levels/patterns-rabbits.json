@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "id": "patterns-rabbits",
+  "themeId": "patterns",
+  "gameType": "spot-difference",
+  "title": "三兔与旋转：寻找五处变化",
+  "subtitle": "纹样与色彩 · AI 教学示意",
+  "objective": "比较藻井中心、外圈花瓣和飞天裙摆，找出五处变化。",
+  "difficulty": "细察",
+  "estimatedMinutes": 5,
+  "thumbnailAssetId": "patterns-rabbits-a",
+  "baseAssetId": "patterns-rabbits-a",
+  "editedAssetId": "patterns-rabbits-b",
+  "teachingNote": "观察中央兔子围绕圆心的排列，再比较外圈的花瓣和飞天。变化图经 AI 修改，用于游戏中的观察练习。",
+  "source": {
+    "title": "敦煌研究院文化资料（延伸阅读）",
+    "url": "https://www.dha.ac.cn/",
+    "note": "两图由开发者交付。原参照图的摄影出处未核实，变化图用于教学示意。"
+  },
+  "differences": [
+    {
+      "id": "red-petal",
+      "region": {
+        "x": 0.22406015037593985,
+        "y": 0.2326283987915408,
+        "width": 0.18796992481203006,
+        "height": 0.18882175226586104
+      },
+      "hint": "比较中央大莲花外圈左上方的花瓣。",
+      "detailHint": "左上方一片深蓝黑色大花瓣变成了朱红色。"
+    },
+    {
+      "id": "green-skirt",
+      "region": {
+        "x": 0.837593984962406,
+        "y": 0.7054380664652568,
+        "width": 0.11729323308270677,
+        "height": 0.1283987915407855
+      },
+      "hint": "留意画面右下方飞天的裙摆。",
+      "detailHint": "右下飞天的朱红裙摆变成了绿色。"
+    },
+    {
+      "id": "missing-rabbit",
+      "region": {
+        "x": 0.5052631578947369,
+        "y": 0.43051359516616317,
+        "width": 0.08270676691729323,
+        "height": 0.13141993957703926
+      },
+      "hint": "数一数中央浅绿色圆形图案里的兔子。",
+      "detailHint": "变化图里少了圆心右侧那只兔子。"
+    },
+    {
+      "id": "white-lotus",
+      "region": {
+        "x": 0.02556390977443609,
+        "y": 0.04229607250755287,
+        "width": 0.09172932330827067,
+        "height": 0.08157099697885196
+      },
+      "hint": "观察画面最左上角的小莲花。",
+      "detailHint": "左上角小莲花的花瓣由深色变成白色。"
+    },
+    {
+      "id": "blue-skirt",
+      "region": {
+        "x": 0.7323308270676692,
+        "y": 0.054380664652567974,
+        "width": 0.12631578947368421,
+        "height": 0.13746223564954682
+      },
+      "hint": "对比画面右上方飞天的裙摆。",
+      "detailHint": "右上飞天的朱红裙摆变成了蓝色。"
+    }
+  ]
+}
