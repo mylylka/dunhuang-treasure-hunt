@@ -45,7 +45,7 @@ async function fits(page: Page) {
 }
 
 test('闪金闪银共同撤销、覆盖、擦除和清空，刷新不复活旧画且v1原文保留', async ({ page }) => {
-  const level = levels.find(level => level.id === 'coloring-grape-pomegranate')!;
+  const level = levels.find(level => level.id === 'coloring-three-rabbits')!;
   const region = orderedRegions(level)[0];
   const legacy = `\n${JSON.stringify({ version: 1, artworks: { [level.id]: { [level.artworkVersion]: {
     colors: { [region.id]: '#72408a' }, updatedAt: '2026-10-28T00:00:00.000Z',
@@ -85,7 +85,7 @@ test('闪金闪银共同撤销、覆盖、擦除和清空，刷新不复活旧�
 });
 
 test('金银作品预览与原尺寸PNG含真实原图坐标箔纹并保留线条', async ({ page }, testInfo) => {
-  const level = levels.find(level => level.id === 'coloring-grape-pomegranate')!;
+  const level = levels.find(level => level.id === 'coloring-three-rabbits')!;
   const regions = orderedRegions(level).slice(0, 2);
   await page.emulateMedia({ reducedMotion: 'reduce' }); await open(page, level);
   await choose(page, '闪金'); await paint(page, regions[0]);
@@ -135,7 +135,7 @@ test('金银作品预览与原尺寸PNG含真实原图坐标箔纹并保留线�
   expect((await entry(page, level)).materials).toEqual({ [regions[0].id]: gold, [regions[1].id]: silver });
 });
 
-test('四个填色关都有金银入口，手机六常用格和完整色盘15格不挤占画布', async ({ browser }, testInfo) => {
+test('所有填色关都有金银入口，手机六常用格和完整色盘15格不挤占画布', async ({ browser }, testInfo) => {
   const context = await browser.newContext({ baseURL: String(testInfo.project.use.baseURL ?? 'http://127.0.0.1:5173'),
     viewport: { width: 640, height: 300 }, hasTouch: true, isMobile: true, deviceScaleFactor: 2 });
   const page = await context.newPage();

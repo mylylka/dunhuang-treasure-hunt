@@ -76,8 +76,12 @@
 .unavailable-theme-content>p{font-size:18px;color:var(--muted)}
 @media(max-width:680px){.stage-topline{font-size:11px}.button-primary,.button-secondary{min-width:138px;padding-inline:30px}.play-actions .button-secondary{min-width:145px;padding-inline:28px}.play-actions .button-plain{min-width:108px}.unavailable-theme h1{font-size:27px}}
 @media(max-height:560px){.button-primary,.button-secondary{min-height:44px}.play-actions .button-plain{min-height:44px}.unavailable-theme-content{padding-bottom:0}.unavailable-theme-content>img{max-height:65%}}
-.button:has(>.button-label){grid-template-columns:1fr;grid-auto-flow:row}
-.button:has(>.button-label)>img{position:absolute;left:26px;top:50%;transform:translateY(-50%)}
+/* Only skinned buttons centre labels independently of their ornamental icons. */
+.button:is(.button-primary,.button-secondary):has(>.button-label){grid-template-columns:1fr;grid-auto-flow:row}
+.button:is(.button-primary,.button-secondary):has(>.button-label)>img{position:absolute;left:26px;top:50%;transform:translateY(-50%)}
+/* Plain icon actions reserve a separate column for each item, including restart. */
+.button-plain:has(>img):has(>.button-label){grid-template-columns:max-content max-content;grid-auto-flow:column}
+.button-plain>img{position:static;transform:none}
 
 /* The source belongs to the completed activity, in the result screen itself. */
 .result-summary{max-height:100%}

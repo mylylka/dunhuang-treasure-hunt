@@ -1,19 +1,13 @@
 import { expect, test } from '@playwright/test';
-import { readFileSync } from 'node:fs';
-import { MUSIC_INSTRUMENTS } from '../../src/content/world/music-instruments-v001';
-const chapters = JSON.parse(readFileSync('src/content/world/flying-history-art-v001.json', 'utf8')) as unknown[];
-const musicKeys = [...chapters.map((_, index) => `chapter:${index + 1}`), ...MUSIC_INSTRUMENTS.map(({ id }) => `instrument:${id}`), 'outfit']
-  .map(key => `dunhuang:music-gallery:progress:v1:${key}`);
 
 for (const [id, title] of [['music-apsara-shadow', '配对完成'], ['music-hidden-objects-intro', '寻宝完成']] as const) {
   test(`${title}在手机横屏完整显示`, async ({ browser }, info) => {
     const context = await browser.newContext({ baseURL: String(info.project.use.baseURL), viewport: { width: 874, height: 260 }, screen: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
     const page = await context.newPage();
     try {
-      await page.addInitScript(({ id, keys }) => {
+      await page.addInitScript(({ id }) => {
         localStorage.setItem('dunhuang:progress:v1', JSON.stringify({ version: 1, completed: { [id]: '2026-11-09T00:00:00.000Z' }, settings: { reducedMotion: true } }));
-        for (const key of keys) localStorage.setItem(key, 'yes');
-      }, { id, keys: musicKeys });
+      }, { id });
       await page.goto(`/#/result/${id}`);
       await expect(page.getByRole('heading', { name: title })).toBeVisible();
       const heading = (await page.locator('.result-heading').boundingBox())!;

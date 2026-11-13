@@ -25,7 +25,7 @@ for (const viewport of [{ width: 1280, height: 925 }, { width: 640, height: 300 
     try {
       const page = await context.newPage(); const errors: string[] = [];
       page.on('pageerror', error => errors.push(error.message));
-      await page.goto('/#/play/coloring-grape-pomegranate');
+      await page.goto('/#/play/coloring-three-rabbits');
       await expect(page.getByRole('button', { name: '1×', exact: true })).toBeEnabled({ timeout: 45_000 });
       await expect(page.getByRole('button', { name: /^(更多|更多操作)$/ })).toHaveCount(0);
       expect(await page.locator('.coloring-reference-label').textContent()).toBe('参考配色');

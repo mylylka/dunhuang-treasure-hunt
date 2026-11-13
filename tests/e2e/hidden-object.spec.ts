@@ -5,7 +5,6 @@ import { createHiddenObjectRound } from '../../src/games/hidden-object/rules';
 import type { HiddenObjectPool } from '../../src/games/hidden-object/types';
 import { getHiddenObjectRuntimeImagePath } from '../../src/content/hidden-object/runtime-images';
 import { compactMobileLandscapeViewport, compactPlayableViewport, isMobileProject, mobileLandscapeViewport, mobilePortraitViewport } from './supported-viewports';
-import { MUSIC_INSTRUMENTS } from '../../src/content/world/music-instruments-v001';
 
 const level = JSON.parse(readFileSync('src/content/levels/music-hidden-objects-intro.json', 'utf8')) as HiddenObjectLevel;
 const formalHiddenLevels = readdirSync('src/content/levels').filter(name => name.endsWith('.json'))
@@ -276,7 +275,7 @@ async function dragCanvasUp(page: Page, touch: boolean) {
   await page.clock.runFor(50);
 }
 
-test('乐舞导览可跳过，首关配额与随机目标数量正确，真实点击成功才保存', async ({ page }, testInfo) => {
+test('从乐舞主题进入找物，首关配额与随机目标数量正确，真实点击成功才保存', async ({ page }, testInfo) => {
   const previous: ProgressData = { version: 1, completed: { 'patterns-intro': '2026-10-28T00:00:00.000Z' }, settings: { reducedMotion: true } };
   const previousLearning = JSON.stringify({ version: 1, books: {} });
   await page.addInitScript(({ progressKey, learningKey, previous, previousLearning }) => {
@@ -284,8 +283,6 @@ test('乐舞导览可跳过，首关配额与随机目标数量正确，真实�
     if (!localStorage.getItem(learningKey)) localStorage.setItem(learningKey, previousLearning);
   }, { progressKey, learningKey, previous, previousLearning });
   await page.goto('/#/theme/music');
-  await expect(page.getByRole('button', { name: '直接玩游戏', exact: true })).toBeVisible();
-  await page.getByRole('button', { name: '直接玩游戏', exact: true }).click();
   await page.locator('a[href="#/theme/music/games/hidden-object"]').click();
   await expect(page.locator('.level-choice-card[data-status="available"]')).toHaveCount(formalHiddenLevels.length);
   await page.locator(`a[href="#/play/${level.id}"]`).first().click();
@@ -313,7 +310,7 @@ test('乐舞导览可跳过，首关配额与随机目标数量正确，真实�
   expect(saved.completed[level.id]).toMatch(/^\d{4}-\d\d-\d\dT/);
   expect(Object.keys(saved.completed).sort()).toEqual(['patterns-intro', level.id].sort());
   expect(saved.settings).toEqual(previous.settings);
-  // Visiting the actual guide can record a visit, but skipping does not invent other chapters.
+  // Entering a game must leave the existing learning record intact.
   const learningBeforeRefresh = await page.evaluate(key => localStorage.getItem(key), learningKey);
   await page.reload();
   await expect(page.getByRole('heading', { name: '寻宝完成', exact: true })).toBeVisible();
@@ -478,9 +475,6 @@ test('开始按钮事件后立即失焦，延迟执行的开始命令不得在�
 });
 
 test('配置时限耗尽停止寻找且不保存完成，重试恢复完整时限', async ({ page }, testInfo) => {
-  const chapters = JSON.parse(readFileSync('src/content/world/flying-history-art-v001.json', 'utf8')) as unknown[];
-  const keys = [...chapters.map((_, index) => `chapter:${index + 1}`), ...MUSIC_INSTRUMENTS.map(({ id }) => `instrument:${id}`), 'outfit'];
-  await page.addInitScript(keys => { for (const key of keys) localStorage.setItem(`dunhuang:music-gallery:progress:v1:${key}`, 'yes'); }, keys);
   await freezeReadyClock(page);
   await start(page);
   await findOne(page, isMobileProject(testInfo), 1);

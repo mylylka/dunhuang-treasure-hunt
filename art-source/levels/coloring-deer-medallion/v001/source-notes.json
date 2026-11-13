@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "receivedOn": "2026-11-13",
+  "reference": {
+    "file": "微信图片_20261113185213_223_231.png",
+    "sha256": "ad207ba36537075ccd753603cb416d286b9d8acb78be6f2ffd47bc0ebf07922a",
+    "source": "开发者提供；保留原始图像和署名标记。"
+  },
+  "generatedLine": {
+    "file": "line-generated.png",
+    "sha256": "954bafa904c8c699415e3a4a95f99a0a77f9b9eec915b3b640f6a41bbd9a561e",
+    "method": "使用内置 imagegen 将参考彩色图转成闭合黑白线稿。",
+    "prompt": "Use case: precise-object-edit. Edit target: the attached original color illustration. Make one black-and-white coloring-book line drawing for a click-to-fill game, tracing the leaping deer facing left framed by a ring of rounded leaf and flower ornaments. Preserve the original silhouette, two sweeping antlers and branching tines, all visible legs and small inner torso ornament, and the surrounding leaf motifs and circles. Preserve the original arrangement, proportions, silhouette, and identifiable shapes, with enough white margin so every outer contour is fully in frame. Convert each meaningful color area into a white interior bounded by a clean continuous black line. Close all region boundaries wherever the original supports them. Use evenly weighted crisp black outlines on plain pure white, with no grayscale shading, solid black fields, added decoration, typography or graphic overlays. Keep small details legible but do not subdivide large areas or invent extra detail. The output is a single illustration.",
+    "refinementPrompt": "Edit first image only. Second is the source color reference. Repair a coloring book outline for digital flood filling. Preserve the leaping deer, pose, antlers, ornaments, line style and overall pattern. Carefully CONNECT the open-ended outer border strokes of the big mirrored leaves to the neighboring inner boundary curves, especially at the left and right tips of the top and bottom leaf pairs, also both side leaves and the two small circular ornament outlines on the right. A decorative outer band should be an independently clickable CLOSED pocket of white in every leaf motif, matching the tan bands in the colored reference. No intentional gaps where an outside border comes close to a neighboring line: strokes must meet with visible overlap. All motif contours and decorative bands must be visibly closed. No additional pattern, no black filled spaces, pure black line and white background, single artwork."
+  },
+  "processing": {
+    "line": "依据笔画边界收紧构图并加白边，按比例缩放，归一化黑白对比。",
+    "regionMap": "依据笔画阈值 36 做四邻域连通分析；与画幅边缘连通的外底留白，略去小于 85 像素或安全半径小于 6 像素的细碎区域。",
+    "runtimeDimensions": [
+      1060,
+      1112
+    ],
+    "regionCount": 46,
+    "artworkVersion": "v001-bf0a01f32434-6e7a51d08a2f",
+    "sha256": {
+      "reference": "ad207ba36537075ccd753603cb416d286b9d8acb78be6f2ffd47bc0ebf07922a",
+      "line": "bf0a01f3243491ed8f5bc67ac0b3320998e62c048a77acc035970bf0cc8facdc",
+      "regions": "6e7a51d08a2fe404c1ae29e9e347febb5c1e0e889e7d12ff421a72cb8610fe48"
+    }
+  }
+}

@@ -1,4 +1,4 @@
-import { expect, test, type Page } from '@playwright/test';
+import { devices, expect, test, type Page } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 import type { ColoringLevel, Level, ShadowMatchLevel } from '../../src/types';
 
@@ -104,9 +104,10 @@ test('手机初始竖屏只显示统一提示，全部2D入口不启动内容，
     await page.goto(`/#${route}`); await expect(gate(page)).toHaveCount(0);
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
   }
-  const desktop = await browser.newContext({ viewport: { width: 360, height: 640 }, screen: { width: 1440, height: 1000 }, isMobile: false, hasTouch: false });
+  const desktop = await browser.newContext({ baseURL: new URL(page.url()).origin, viewport: { width: 360, height: 640 }, screen: { width: 1440, height: 1000 }, isMobile: false, hasTouch: false, userAgent: devices['Desktop Chrome'].userAgent });
   try {
-    const narrow = await desktop.newPage(); await narrow.goto('http://127.0.0.1:5173/#/play/music-apsara-shadow');
+    const narrow = await desktop.newPage(); await narrow.goto('/#/play/music-apsara-shadow');
+    expect(await narrow.evaluate(() => navigator.userAgent)).not.toMatch(/iPhone|iPod|Android.*Mobile/i);
     await expect(narrow.getByRole('button', { name: '配对提示', exact: true })).toBeEnabled({ timeout: 45_000 });
     await expect(gate(narrow)).toBeHidden(); await noScroll(narrow);
   } finally { await desktop.close(); }

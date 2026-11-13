@@ -1,0 +1,401 @@
+{
+  "schemaVersion": 1,
+  "version": "v003",
+  "poolId": "dunhuang-stickers-v001",
+  "sourcePool": "art-source/shared/hidden-object-elements/v002/pool-v002.json",
+  "sourcePoolSha256": "3532d684b304c7178dbc8821d2620d4b541fca64a7c2a9ca1b3b79ec57f51aef",
+  "activePool": "src/content/hidden-object/pool.json",
+  "activePoolSha256": "ac8292552d1752bfa27b43e6ae0c9eece1768fcadd80abf7694bdb9b64b2362e",
+  "spriteCount": 520,
+  "targetGroupCount": 34,
+  "targetCandidateCount": 75,
+  "targetCandidatesByCategory": {
+    "instruments": 19,
+    "clothing": 14,
+    "animals": 16,
+    "plants": 10,
+    "patterns": 6,
+    "ritual": 10
+  },
+  "pixelPolicy": "仅扩展目标分类元数据，520张贴纸继续引用v002原字节；不重画、不改色、不镜像、不修改尺寸或命中点。",
+  "namingPolicy": "名称仅描述图示可见外形；不声称真实洞窟、年代、器物用途、植物学或宗教身份。",
+  "reviewSheet": "target-review.png",
+  "reviewSheetSha256": "0ef82a4ae9005e7363aed1f151d8c1294d8b65530757b8f3e9e7d775866508f8",
+  "sources": [
+    {
+      "spriteId": "ho-instruments-001",
+      "runtimePath": "/assets/shared/hidden-object/v002/instruments-001.png",
+      "sha256": "a449010d46f6e0e790f33a7901b45333693ee41c621221fc777a37da9c3b78ed"
+    },
+    {
+      "spriteId": "ho-instruments-002",
+      "runtimePath": "/assets/shared/hidden-object/v002/instruments-002.png",
+      "sha256": "ebd80741eb2670ae595736f8eca5f467f47d6b66758fed52a624ea1baea20e3e"
+    },
+    {
+      "spriteId": "ho-instruments-003",
+      "runtimePath": "/assets/shared/hidden-object/v002/instruments-003.png",
+      "sha256": "05a6e2eabead056c3e3a43655c72e9d57aaaeae1e35112255f19bb516617d322"
+    },
+    {
+      "spriteId": "ho-instruments-004",
+      "runtimePath": "/assets/shared/hidden-object/v002/instruments-004.png",
+      "sha256": "bea24f30b7f55a4042923edfb382ed411bb67d096884a07b0bf9a68ac22399db"
+    },
+    {
+      "spriteId": "ho-instruments-025",
+      "runtimePath": "/assets/shared/hidden-object/v002/instruments-025.png",
+      "sha256": "1413dec53024e6940fb78937c79b9d5fafa6c4bfbaf9849306b9010dcf42be8b"
+    },
+    {
+      "spriteId": "ho-instruments-026",
+      "runtimePath": "/assets/shared/hidden-object/v002/instruments-026.png",
+      "sha256": "292a11895e7c0111c5f493d6eb37160ef59c25cca71abd3d8085dfe046ad0ecd"
+    },
+    {
+      "spriteId": "ho-instruments-027",
+      "runtimePath": "/assets/shared/hidden-object/v002/instruments-027.png",
+      "sha256": "8dc91f37c9955ac906b451c2b1d6ab586075d3771f67d4d417d29e5059bfa201"
+    },
+    {
+      "spriteId": "ho-instruments-028",
+      "runtimePath": "/assets/shared/hidden-object/v002/instruments-028.png",
+      "sha256": "0a7a3f07eecfa2c904b6b8418be4637ed3bb64b0e0bb716b449e26d3105bc7fb"
+    },
+    {
+      "spriteId": "ho-instruments-029",
+      "runtimePath": "/assets/shared/hidden-object/v002/instruments-029.png",
+      "sha256": "123b52995ed087cf0e4241e7f96ba8a11b4f3732a2aaa32342b129880d2cea7d"
+    },
+    {
+      "spriteId": "ho-instruments-030",
+      "runtimePath": "/assets/shared/hidden-object/v002/instruments-030.png",
+      "sha256": "763ccf855ff6665dd5db36340cbdd2caf6a6dc0ee227568cae20b93074437259"
+    },
+    {
+      "spriteId": "ho-instruments-034",
+      "runtimePath": "/assets/shared/hidden-object/v002/instruments-034.png",
+      "sha256": "779bbf4973bbf2986c6b560f5a29baca867eea736da9dc044fd0d2effc97cbae"
+    },
+    {
+      "spriteId": "ho-instruments-035",
+      "runtimePath": "/assets/shared/hidden-object/v002/instruments-035.png",
+      "sha256": "9c8cfdd41bf723720c921b329529106c373091993dc9535d5d9ed1ff78123050"
+    },
+    {
+      "spriteId": "ho-instruments-036",
+      "runtimePath": "/assets/shared/hidden-object/v002/instruments-036.png",
+      "sha256": "74d6ef25e047089d64eae1515637db9a481fd6728f520df3fc91beeb3dc678d8"
+    },
+    {
+      "spriteId": "ho-instruments-022",
+      "runtimePath": "/assets/shared/hidden-object/v002/instruments-022.png",
+      "sha256": "319cda047386e5bf2dfad52ebd4cd370656adcf5fc644bed3ca61ae69979d6cc"
+    },
+    {
+      "spriteId": "ho-instruments-023",
+      "runtimePath": "/assets/shared/hidden-object/v002/instruments-023.png",
+      "sha256": "985eba97b5c9af68b260eece7fea947238fa7f4b067164db4f118f5656bfb319"
+    },
+    {
+      "spriteId": "ho-instruments-016",
+      "runtimePath": "/assets/shared/hidden-object/v002/instruments-016.png",
+      "sha256": "dfea09e0fcfa55afacf726ea23eb342165abd83dc313c1a887257acb11f4af38"
+    },
+    {
+      "spriteId": "ho-instruments-017",
+      "runtimePath": "/assets/shared/hidden-object/v002/instruments-017.png",
+      "sha256": "83bee698bf018c871d05a4ed7f7d1b2d0b0206a6553c5b6692c7a54941c1f6f7"
+    },
+    {
+      "spriteId": "ho-instruments-031",
+      "runtimePath": "/assets/shared/hidden-object/v002/instruments-031.png",
+      "sha256": "f225154ffd4c32568c44f2ef52c325c87ede20c848aa515eed59c58b88407d36"
+    },
+    {
+      "spriteId": "ho-instruments-032",
+      "runtimePath": "/assets/shared/hidden-object/v002/instruments-032.png",
+      "sha256": "fcc234de3ccfe6919599274a143b247529be3dc65af7e0bc4c189c06dafe86ac"
+    },
+    {
+      "spriteId": "ho-clothing-001",
+      "runtimePath": "/assets/shared/hidden-object/v002/clothing-001.png",
+      "sha256": "6d435813c3c9ea367840988c0c69aa2c896ce14dd34d14865525f6b0a63410bf"
+    },
+    {
+      "spriteId": "ho-clothing-002",
+      "runtimePath": "/assets/shared/hidden-object/v002/clothing-002.png",
+      "sha256": "7d0d0bcc6df2a274273621a6447255b97e007c1f05406215cad6445340d1d1dd"
+    },
+    {
+      "spriteId": "ho-clothing-013",
+      "runtimePath": "/assets/shared/hidden-object/v002/clothing-013.png",
+      "sha256": "355c186dd0b571d210bbb808c60f8f791819d8366b81c7b12d3a63f46fc969bf"
+    },
+    {
+      "spriteId": "ho-clothing-015",
+      "runtimePath": "/assets/shared/hidden-object/v002/clothing-015.png",
+      "sha256": "f5b7cd12dce74bd22b3cd95dad8c1eb007a3c5b2b51fb61530090ea3e34ba0cd"
+    },
+    {
+      "spriteId": "ho-clothing-019",
+      "runtimePath": "/assets/shared/hidden-object/v002/clothing-019.png",
+      "sha256": "c6b18b31249b2eea3704bc2bd64eccfb173da301393a870121f1ff0d88b01c2e"
+    },
+    {
+      "spriteId": "ho-clothing-020",
+      "runtimePath": "/assets/shared/hidden-object/v002/clothing-020.png",
+      "sha256": "669b2de3dd6fb7e4bbd33708b2195a89fa40c9439ae246199f28a505a28fbac0"
+    },
+    {
+      "spriteId": "ho-clothing-023",
+      "runtimePath": "/assets/shared/hidden-object/v002/clothing-023.png",
+      "sha256": "f4d6abd998d35075260d8d462e082248f71b3c4cb8eb038134f3b4407724abeb"
+    },
+    {
+      "spriteId": "ho-clothing-024",
+      "runtimePath": "/assets/shared/hidden-object/v002/clothing-024.png",
+      "sha256": "95debbd770f4ccd0bdad6094ce85d293fa2567eb1dc966d4ab0ca328625fdd60"
+    },
+    {
+      "spriteId": "ho-clothing-030",
+      "runtimePath": "/assets/shared/hidden-object/v002/clothing-030.png",
+      "sha256": "c741d77bd4ba3986ff294bc36f9951fdd5c01e6f485e1076febb920504895a4d"
+    },
+    {
+      "spriteId": "ho-clothing-031",
+      "runtimePath": "/assets/shared/hidden-object/v002/clothing-031.png",
+      "sha256": "6bf883f54b2eedea859b953e3a87165b5ce53e856798a0628c523c68b3a03891"
+    },
+    {
+      "spriteId": "ho-clothing-033",
+      "runtimePath": "/assets/shared/hidden-object/v002/clothing-033.png",
+      "sha256": "3c0caeab2dc88891e6edc913520eb4ecfba59ea3b9852203b7893724f8ba0e94"
+    },
+    {
+      "spriteId": "ho-clothing-035",
+      "runtimePath": "/assets/shared/hidden-object/v002/clothing-035.png",
+      "sha256": "34aef71eb96b77b004744ee00557b104d548a037ca153bbe8c376baf2f909051"
+    },
+    {
+      "spriteId": "ho-clothing-057",
+      "runtimePath": "/assets/shared/hidden-object/v002/clothing-057.png",
+      "sha256": "367877929e9c90d29d5b17471ba276fe8ecc035ee207f1ee3cce3b0025c9a30f"
+    },
+    {
+      "spriteId": "ho-clothing-058",
+      "runtimePath": "/assets/shared/hidden-object/v002/clothing-058.png",
+      "sha256": "50f486a142b713f67ffb20d766be182e211536af5ae92bbe45d5a76030e0e817"
+    },
+    {
+      "spriteId": "ho-animals-001",
+      "runtimePath": "/assets/shared/hidden-object/v002/animals-001.png",
+      "sha256": "a418d3c924eb87e9fc1ea7c58c16cef738936c0cfa434b9a9c9cf0482a6d897e"
+    },
+    {
+      "spriteId": "ho-animals-002",
+      "runtimePath": "/assets/shared/hidden-object/v002/animals-002.png",
+      "sha256": "96ddad04250c59a27c9ff816bfe5bcc8e31a4c24a7bbe8f9a363f7d2122478b4"
+    },
+    {
+      "spriteId": "ho-animals-007",
+      "runtimePath": "/assets/shared/hidden-object/v002/animals-007.png",
+      "sha256": "e111d50d8f58f4fd8dfdbecbf46a77fb31694a6adeeda98c74ec80ef5d347574"
+    },
+    {
+      "spriteId": "ho-animals-008",
+      "runtimePath": "/assets/shared/hidden-object/v002/animals-008.png",
+      "sha256": "6e0cf2794f5b0f6d48bc0a4d779701af14af4c351fa58535ab954527e1ca9d6e"
+    },
+    {
+      "spriteId": "ho-animals-019",
+      "runtimePath": "/assets/shared/hidden-object/v002/animals-019.png",
+      "sha256": "dc1419cc2ca6c0c75981ed346ce08c6d3b3fedaec4f3f737233f304acc147257"
+    },
+    {
+      "spriteId": "ho-animals-020",
+      "runtimePath": "/assets/shared/hidden-object/v002/animals-020.png",
+      "sha256": "ecf42d8c470066bc0b21a739b9195d072d9d98a65698de26ad2117f073459331"
+    },
+    {
+      "spriteId": "ho-animals-022",
+      "runtimePath": "/assets/shared/hidden-object/v002/animals-022.png",
+      "sha256": "4e8915cab21621d6253a3685c638c959fd0c6b4333dce28186de5b642085e8f7"
+    },
+    {
+      "spriteId": "ho-animals-023",
+      "runtimePath": "/assets/shared/hidden-object/v002/animals-023.png",
+      "sha256": "c5d638b24c2bf9078f29eb830d98fada56fb7bae0207a4bc164b3efca203f5ff"
+    },
+    {
+      "spriteId": "ho-animals-025",
+      "runtimePath": "/assets/shared/hidden-object/v002/animals-025.png",
+      "sha256": "10a7f394aa41458c78b4b30927ed7ded43eba0fca82ab91f5689927f1266fbc5"
+    },
+    {
+      "spriteId": "ho-animals-026",
+      "runtimePath": "/assets/shared/hidden-object/v002/animals-026.png",
+      "sha256": "55f8d5778041d28ed5bac1decda280c005bc488ee5b49fbcae19545863c8019d"
+    },
+    {
+      "spriteId": "ho-animals-028",
+      "runtimePath": "/assets/shared/hidden-object/v002/animals-028.png",
+      "sha256": "a22d31a5027984fd62fa7e06aa87b7d09956fcb5fce88dfda70bcb013b099dfe"
+    },
+    {
+      "spriteId": "ho-animals-029",
+      "runtimePath": "/assets/shared/hidden-object/v002/animals-029.png",
+      "sha256": "5558835c8a268eb84d0e43527cdc809ea926d8d08e9010da6cf3a95b6fdab304"
+    },
+    {
+      "spriteId": "ho-animals-034",
+      "runtimePath": "/assets/shared/hidden-object/v002/animals-034.png",
+      "sha256": "8a3c79647c7087a8bd8c5739a72ed2178b223f51ad7fdc4136312bd0c43ced3d"
+    },
+    {
+      "spriteId": "ho-animals-035",
+      "runtimePath": "/assets/shared/hidden-object/v002/animals-035.png",
+      "sha256": "643044bbb4ba0e60e2095f3aaf8fb005008af3a7941a970142ff13c7d371ebbc"
+    },
+    {
+      "spriteId": "ho-animals-046",
+      "runtimePath": "/assets/shared/hidden-object/v002/animals-046.png",
+      "sha256": "f65c96486498a770ffbe70c3103b36b28d601b564b0c89fcbd3d9ac26fdd5176"
+    },
+    {
+      "spriteId": "ho-animals-047",
+      "runtimePath": "/assets/shared/hidden-object/v002/animals-047.png",
+      "sha256": "bab9c6e42b1f8d73732314e4fe83b41030329093baf0738a82fa29f9ade8a29f"
+    },
+    {
+      "spriteId": "ho-plants-001",
+      "runtimePath": "/assets/shared/hidden-object/v002/plants-001.png",
+      "sha256": "b6b21e6e3cc6a0fe4948e1880c0d7845bb2cf795430f0def9d440507755b0047"
+    },
+    {
+      "spriteId": "ho-plants-002",
+      "runtimePath": "/assets/shared/hidden-object/v002/plants-002.png",
+      "sha256": "e57a12774bed9514b3bc81d4233cb7d231dd7a27de216464bbee9e33edb04b4c"
+    },
+    {
+      "spriteId": "ho-plants-004",
+      "runtimePath": "/assets/shared/hidden-object/v002/plants-004.png",
+      "sha256": "5845402ca88a484077fb8c6ac421114f83cea00437f2bd321b3eb934beb797a2"
+    },
+    {
+      "spriteId": "ho-plants-005",
+      "runtimePath": "/assets/shared/hidden-object/v002/plants-005.png",
+      "sha256": "d98d2c012095df8e14365ae00842c7721abc421d69ddff820c3ef7d15133d1d4"
+    },
+    {
+      "spriteId": "ho-plants-007",
+      "runtimePath": "/assets/shared/hidden-object/v002/plants-007.png",
+      "sha256": "356eb72188d74d3e50118426155cbd7207660c6c2d6797b7ff012c6348148a9b"
+    },
+    {
+      "spriteId": "ho-plants-008",
+      "runtimePath": "/assets/shared/hidden-object/v002/plants-008.png",
+      "sha256": "ddf62030adb93eeb93817528a29f590c560ed2357c84256798fdec06484c799b"
+    },
+    {
+      "spriteId": "ho-plants-016",
+      "runtimePath": "/assets/shared/hidden-object/v002/plants-016.png",
+      "sha256": "795d9119093cece23dc9fd32456726ab2a31af3f76e250982abe06f91e4c986b"
+    },
+    {
+      "spriteId": "ho-plants-017",
+      "runtimePath": "/assets/shared/hidden-object/v002/plants-017.png",
+      "sha256": "76635fabb120d37359c811e021d3d51959d44718971bb32afdc56b6a830120a4"
+    },
+    {
+      "spriteId": "ho-plants-022",
+      "runtimePath": "/assets/shared/hidden-object/v002/plants-022.png",
+      "sha256": "b5798608f6d3a18fc36e545638d4448a8c2337b9f24471dc818cba58b2b32e63"
+    },
+    {
+      "spriteId": "ho-plants-024",
+      "runtimePath": "/assets/shared/hidden-object/v002/plants-024.png",
+      "sha256": "05afbc3ee7a04bb909e1be4c327c4db45b95e21a9b929142a78b4005134e1bc8"
+    },
+    {
+      "spriteId": "ho-patterns-001",
+      "runtimePath": "/assets/shared/hidden-object/v002/patterns-001.png",
+      "sha256": "65bf84dbe2424e4670b707622c9cb7d6e3d5a2d0b465074751933a39e40e83bb"
+    },
+    {
+      "spriteId": "ho-patterns-002",
+      "runtimePath": "/assets/shared/hidden-object/v002/patterns-002.png",
+      "sha256": "650689ff6c4fd4b9851b7471abb3b4df6a3bf81a16536fb3723ef7fc14ddfe08"
+    },
+    {
+      "spriteId": "ho-patterns-004",
+      "runtimePath": "/assets/shared/hidden-object/v002/patterns-004.png",
+      "sha256": "2fdf8b68affc02a3a83ae66ceb493f6b3e0ed3e0c062327c50196e11cf71fb6b"
+    },
+    {
+      "spriteId": "ho-patterns-005",
+      "runtimePath": "/assets/shared/hidden-object/v002/patterns-005.png",
+      "sha256": "7073b4edb65d437925d56338cc8ce7b9f5f2138069a940394616aa19caffef27"
+    },
+    {
+      "spriteId": "ho-patterns-013",
+      "runtimePath": "/assets/shared/hidden-object/v002/patterns-013.png",
+      "sha256": "46e9eddf4941263929f1738d4c22ba4ece01e06a5c594424446d7e7fcdb9b398"
+    },
+    {
+      "spriteId": "ho-patterns-015",
+      "runtimePath": "/assets/shared/hidden-object/v002/patterns-015.png",
+      "sha256": "e1128991d5aff37500f6324a60926fda420b27611b33dcd9a66b64a182245e08"
+    },
+    {
+      "spriteId": "ho-ritual-001",
+      "runtimePath": "/assets/shared/hidden-object/v002/ritual-001.png",
+      "sha256": "d45a89e75a78c7a77798e2ea73e5c0b38aaf83a8f9ab8c1ba758c381fd43c693"
+    },
+    {
+      "spriteId": "ho-ritual-003",
+      "runtimePath": "/assets/shared/hidden-object/v002/ritual-003.png",
+      "sha256": "4104850ea051cd6faafd2d9e63950e41987913bc42e990fed9a583ab11a3dd03"
+    },
+    {
+      "spriteId": "ho-ritual-021",
+      "runtimePath": "/assets/shared/hidden-object/v002/ritual-021.png",
+      "sha256": "be8c7c208c75596c6645848ed7956f82b3a8ed75c929b4eaa446ccb26288ff7a"
+    },
+    {
+      "spriteId": "ho-ritual-022",
+      "runtimePath": "/assets/shared/hidden-object/v002/ritual-022.png",
+      "sha256": "4841c632899a99afa3770b47ecc5e2e4fdd9219801dd15f2531a805751921282"
+    },
+    {
+      "spriteId": "ho-ritual-034",
+      "runtimePath": "/assets/shared/hidden-object/v002/ritual-034.png",
+      "sha256": "aec028f64e1a4b0f621c0fb94ea236bcd99eedf9368f72555adbbc3e3f669d0a"
+    },
+    {
+      "spriteId": "ho-ritual-035",
+      "runtimePath": "/assets/shared/hidden-object/v002/ritual-035.png",
+      "sha256": "5115316fa016841f864885a4115b20a10c6ae609d9ad57296845f11571eb6156"
+    },
+    {
+      "spriteId": "ho-ritual-047",
+      "runtimePath": "/assets/shared/hidden-object/v002/ritual-047.png",
+      "sha256": "e5e6b1891b18761817f1b500f8a57f55724847cc9241a3828a7b61707e80d905"
+    },
+    {
+      "spriteId": "ho-ritual-050",
+      "runtimePath": "/assets/shared/hidden-object/v002/ritual-050.png",
+      "sha256": "774d48d4fba637443e2c86ad54b277289490ac52935ed969c56b359dadb44a24"
+    },
+    {
+      "spriteId": "ho-ritual-051",
+      "runtimePath": "/assets/shared/hidden-object/v002/ritual-051.png",
+      "sha256": "7d8d39329e0999ca163503ebe1da2acbcfda681584b1ea145f17f02702610611"
+    },
+    {
+      "spriteId": "ho-ritual-052",
+      "runtimePath": "/assets/shared/hidden-object/v002/ritual-052.png",
+      "sha256": "5ab44a05968dc868c0fe21085d60a42353afc54dcf210960457122973db9b164"
+    }
+  ]
+}

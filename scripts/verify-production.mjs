@@ -2,6 +2,7 @@ import { chromium, expect } from '@playwright/test';
 import { readFile, readdir } from 'node:fs/promises';
 import { spawn } from 'node:child_process';
 import { createHash } from 'node:crypto';
+import { fileURLToPath } from 'node:url';
 import { verifyHiddenObjectProduction } from './verify-hidden-object-production.mjs';
 import { verifyShadowMatchProduction } from './verify-shadow-match-production.mjs';
 
@@ -27,13 +28,11 @@ async function isReady() {
 }
 try {
   if (!await isReady()) {
-    server = spawn(process.execPath, [new URL('./serve-preview.mjs', import.meta.url).pathname, '--no-open'], { stdio: 'pipe' });
+    server = spawn(process.execPath, [fileURLToPath(new URL('./serve-preview.mjs', import.meta.url)), '--no-open'], { stdio: 'pipe' });
     for (let i = 0; i < 60 && !await isReady(); i++) await new Promise(resolve => setTimeout(resolve, 100));
     if (!await isReady()) throw new Error('生产预览服务未能启动');
   }
   browser = await chromium.launch({ channel: process.platform === 'darwin' ? 'chrome' : undefined, args: ['--enable-unsafe-swiftshader'] });
-  // This is a desktop context. Narrow/landscape windows below check desktop resizing;
-  // genuine phone orientation and touch interruption are covered by mobile-landscape E2E.
   const page = await browser.newPage({ viewport: { width: 1440, height: 1000 }, deviceScaleFactor: 1 });
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
@@ -323,8 +322,8 @@ try {
         await verifyTeachingSources();
         if (capture) await captureScreenshot('outputs/文化教学预览.png');
         const viewport = page.viewportSize();
-        if (viewport.width === 360) await captureScreenshot('outputs/桌面窄窗文化教学预览.png');
-        if (viewport.width === 844) await captureScreenshot('outputs/桌面横屏窗口文化教学预览.png');
+        if (viewport.width === 360) await captureScreenshot('outputs/手机文化教学预览.png');
+        if (viewport.width === 844) await captureScreenshot('outputs/手机横屏文化教学预览.png');
       }
       if (allPanels) {
         const choices = page.getByRole('group', { name: '选择观察内容' }).getByRole('button');
@@ -364,8 +363,8 @@ try {
       await expect(finish).toBeEnabled(); await verifyVisible(finish);
       await page.locator('.lesson-copy').evaluate(element => { element.scrollTop = 0; });
       if (capture) await captureScreenshot('outputs/知识小考预览.png');
-      if (page.viewportSize().width === 360) await captureScreenshot('outputs/桌面窄窗知识小考预览.png');
-      if (page.viewportSize().width === 844) await captureScreenshot('outputs/桌面横屏窗口知识小考预览.png');
+      if (page.viewportSize().width === 360) await captureScreenshot('outputs/手机知识小考预览.png');
+      if (page.viewportSize().width === 844) await captureScreenshot('outputs/手机横屏知识小考预览.png');
       await finish.click();
     }
     if (allPanels) expect(observedPanels).toBe(19);
@@ -395,78 +394,11 @@ try {
           && image.x >= 0 && image.y >= 0 && image.x + image.width <= layout.width + 1
           && image.y + image.height <= layout.height + 1 && Math.abs(image.width / image.height - aspectRatio) < 0.001);
     }, imageAspectRatio), { message: '两张完整图片应在当前视口内等比显示' }).toBe(true);
-    for (const name of ['给我提示', '重新开始']) await verifyVisible(page.getByRole('button', { name, exact: true }));
-    await expect(page.getByRole('button', { name: '放大观察', exact: true })).toHaveCount(0);
-    await expect(page.getByTestId('art-inspector')).toHaveCount(0);
-    const cycle = page.getByRole('button', { name: /^同步缩放两图/ });
-    if (await cycle.isVisible()) await verifyVisible(cycle);
-    else for (const name of ['放大两图', '缩小两图', '复位']) await verifyVisible(page.getByRole('button', { name, exact: true }));
-    // Empty hints no longer reserve a row; populated hints must remain visible in the picture overlay.
-    if (await page.getByTestId('hint-status').count()) await verifyVisible(page.getByTestId('hint-status'));
+    for (const name of ['给我提示', '重新开始', '放大观察']) await verifyVisible(page.getByRole('button', { name, exact: true }));
+    await verifyVisible(page.getByTestId('hint-status'));
     await verifyVisible(page.getByTestId('game-progress'));
-    const hintControl = page.getByRole('button', { name: '给我提示', exact: true });
-    // This compact plain control centers its icon and text together; decorated buttons
-    // elsewhere retain the stricter independent label-centering assertion above.
-    await expect.poll(() => hintControl.evaluate(button => {
-      const outer = button.getBoundingClientRect();
-      const children = [...button.children].map(child => child.getBoundingClientRect()).filter(r => r.width > 0 && r.height > 0);
-      if (!children.length) return false;
-      const left = Math.min(...children.map(r => r.left)), right = Math.max(...children.map(r => r.right));
-      return outer.width >= 44 && outer.height >= 44
-        && Math.abs((left + right) / 2 - (outer.left + outer.right) / 2) <= 1
-        && children.every(r => r.left >= outer.left && r.right <= outer.right && r.top >= outer.top && r.bottom <= outer.bottom);
-    })).toBe(true);
+    await verifyButtonCentered(page.getByRole('button', { name: '给我提示', exact: true }));
     await verifyScreen('游玩屏幕');
-  }
-
-  async function verifySpotCanvasView(aspectRatio) {
-    const host = page.getByTestId('phaser-player');
-    const canvas = host.locator('canvas');
-    const current = async () => JSON.parse(await host.getAttribute('data-layout'));
-    const progress = await page.getByTestId('game-progress').getAttribute('aria-label');
-    const previousRecord = await page.evaluate(key => localStorage.getItem(key), progressKey);
-    const zoomTo = async target => {
-      for (let step = 0; step < 4; step++) {
-        const before = (await current()).view.zoom;
-        if (Math.abs(before - target) < .001) return;
-        const cycle = page.getByRole('button', { name: /^同步缩放两图/ });
-        const control = await cycle.isVisible() ? cycle : target === 1
-          ? page.getByRole('button', { name: '复位', exact: true })
-          : page.getByRole('button', { name: before < target ? '放大两图' : '缩小两图', exact: true });
-        await control.click();
-        await expect.poll(async () => (await current()).view.zoom).not.toBe(before);
-      }
-      await expect.poll(async () => (await current()).view.zoom).toBe(target);
-    };
-    const synchronized = data => {
-      for (const [pane, image] of [[data.reference, data.renderedReference], [data.edited, data.renderedEdited]]) {
-        expect(image.width / image.height, '主画布放大后保持原图比例').toBeCloseTo(aspectRatio, 5);
-        expect(image.width / pane.width, '两侧共用同一倍率').toBeCloseTo(data.view.zoom, 5);
-        expect((pane.x + pane.width / 2 - image.x) / image.width, '两侧共用同一原图水平位置').toBeCloseTo(data.view.center.x, 5);
-        expect((pane.y + pane.height / 2 - image.y) / image.height, '两侧共用同一原图纵向位置').toBeCloseTo(data.view.center.y, 5);
-      }
-    };
-    await zoomTo(2);
-    for (const side of ['reference', 'edited']) {
-      const before = await current(), pane = before[side], bounds = await canvas.boundingBox();
-      synchronized(before);
-      const point = { x: bounds.x + pane.x + pane.width / 2, y: bounds.y + pane.y + pane.height / 2 };
-      await page.mouse.move(point.x, point.y);
-      await page.mouse.down();
-      await page.mouse.move(point.x + pane.width * .12, point.y + pane.height * .1, { steps: 6 });
-      await page.mouse.up();
-      await expect.poll(async () => (await current()).view.center, { message: '在任意一侧真实拖动都应同步移动两图' }).not.toEqual(before.view.center);
-      synchronized(await current());
-    }
-    await zoomTo(3);
-    synchronized(await current());
-    await zoomTo(1);
-    const reset = await current();
-    expect(reset.view).toEqual({ zoom: 1, center: { x: .5, y: .5 } });
-    synchronized(reset);
-    await expect(page.getByTestId('game-progress'), '缩放及拖动不能增加发现').toHaveAttribute('aria-label', progress);
-    expect(await page.evaluate(key => localStorage.getItem(key), progressKey), '观察操作不能写入完成记录').toBe(previousRecord);
-    await verifyGameFits(aspectRatio);
   }
 
   if (process.argv.includes('--teaching-layout-only')) {
@@ -483,7 +415,7 @@ try {
   await expect(page.getByRole('button', { name: '给我提示' })).toBeEnabled({ timeout: imageLoadTimeout });
   expect(await page.evaluate(key => localStorage.getItem(key), learningKey)).toBeNull();
   expect(await page.evaluate(key => localStorage.getItem(key), progressKey)).toBeNull();
-  await page.goto(`${baseUrl}/#/themes`); await verifyHomeTitle();
+  await page.goto(baseUrl); await verifyHomeTitle();
   await expect(page.locator('.theme-row')).toHaveCount(3);
   await expect(page.locator('a[href*="/play/"]')).toHaveCount(0);
   await expect(page.getByText('开始第一次观察')).toHaveCount(0);
@@ -499,7 +431,7 @@ try {
   const skipped = await page.evaluate(key => Object.values(JSON.parse(localStorage.getItem(key) ?? '{"books":{}}').books)[0] ?? {}, learningKey);
   expect(skipped.completedAt).toBeUndefined();
   expect(await page.evaluate(key => localStorage.getItem(key), progressKey)).toBeNull();
-  await page.goto(`${baseUrl}/#/themes`); await verifyHomeTitle(); await page.locator('.theme-patterns').click();
+  await page.goto(baseUrl); await verifyHomeTitle(); await page.locator('.theme-patterns').click();
   await walkTeaching(true, true);
   const learned = await page.evaluate(key => JSON.parse(localStorage.getItem(key)), learningKey);
   const learningRecords = Object.values(learned.books);
@@ -532,7 +464,6 @@ try {
   await verifyCssImage('.game-stage', 'border-image-source');
   await verifyCssImage('.button-secondary', 'border-image-source');
   await verifyGameFits();
-  await verifySpotCanvasView(1.5);
   await expect(page.getByRole('button', { name: '学习目标与来源' })).toHaveCount(0);
   await captureScreenshot('outputs/首关美术预览.png');
 
@@ -554,12 +485,12 @@ try {
   await page.getByRole('button', { name: '给我提示' }).click();
   await expect(page.getByTestId('hint-status')).toContainText(level.differences[1].detailHint);
   await verifyGameFits();
-  await captureScreenshot('outputs/桌面窄窗美术预览.png');
+  await captureScreenshot('outputs/手机美术预览.png');
   await page.setViewportSize({ width: 844, height: 390 });
   await expect.poll(async () => JSON.parse(await page.getByTestId('phaser-player').getAttribute('data-layout')).stacked).toBe(false);
   await verifyGameFits();
   await expect(page.getByTestId('game-progress')).toHaveAttribute('aria-label', progressLabel(1));
-  await captureScreenshot('outputs/桌面横屏窗口美术预览.png');
+  await captureScreenshot('outputs/手机横屏美术预览.png');
   for (let index = 1; index < level.differences.length; index++) {
     await hit(index, index % 2 === 0 ? 'reference' : 'edited');
     if (index < level.differences.length - 1) await expect(page.getByTestId('game-progress')).toHaveAttribute('aria-label', progressLabel(index + 1));
@@ -574,7 +505,7 @@ try {
   await expect(resultReference).not.toContainText('婧婧');
   await expect(page.locator('.dialog-discoveries')).toHaveCount(0);
   await expect(page.getByRole('button', { name: '查看发现与文化来源' })).toHaveCount(0);
-  await captureScreenshot('outputs/通关结果桌面横屏窗口预览.png');
+  await captureScreenshot('outputs/通关结果手机预览.png');
   await page.setViewportSize({ width: 1279, height: 925 });
   await verifyScreen('桌面结果文化参考');
   await verifyVisible(resultReference);
@@ -586,7 +517,7 @@ try {
   await page.getByRole('link', { name: '返回关卡', exact: true }).click();
   await verifyButtonCentered(page.getByRole('link', { name: '再次观察', exact: true }));
   await page.getByRole('button', { name: '返回游戏选择', exact: true }).click();
-  await page.goto(`${baseUrl}/#/themes`); await verifyHomeTitle();
+  await page.goto(baseUrl); await verifyHomeTitle();
   await expect(page.locator('.theme-patterns')).toHaveAttribute('href', '#/theme/patterns');
   await page.locator('.theme-patterns').click();
   await expect(page.getByTestId('teaching-screen')).toHaveAttribute('data-unit-id', 'locations');
@@ -597,26 +528,38 @@ try {
     await page.getByRole('link', { name: '找不同', exact: true }).click();
     await verifyVisible(page.getByRole('link', { name: '再次观察', exact: true }));
     await verifyButtonCentered(page.getByRole('link', { name: '再次观察', exact: true }));
-    await verifyScreen('桌面窄窗关卡选择');
-    for (const route of ['/themes', '/theme/music', '/help', '/settings']) {
+    await verifyScreen('手机关卡选择');
+    for (const route of ['/', '/theme/music', '/help', '/settings']) {
       await page.goto(`${baseUrl}/#${route}`);
       await verifyScreen(`${viewport.width}×${viewport.height} ${route}`);
     }
   }
 
-  // Exercise the new square assets at their native ratio, using real pointer input.
-  for (const square of allLevels.filter(item => item.gameType === 'spot-difference' && item.id !== level.id)) {
+  // Exercise each additional observation level at its native image ratio.
+  for (const observation of allLevels.filter(item => item.gameType === 'spot-difference' && item.id !== level.id)) {
     await page.setViewportSize({ width: 1440, height: 1000 });
-    await page.goto(`${baseUrl}/#/play/${square.id}`);
+    await page.goto(`${baseUrl}/#/play/${observation.id}`);
     await expect(page.getByRole('button', { name: '给我提示' })).toBeEnabled({ timeout: imageLoadTimeout });
-    const image = assets.find(asset => asset.id === square.baseAssetId);
-    expect([image.width, image.height]).toEqual([1254, 1254]);
+    const image = assets.find(asset => asset.id === observation.baseAssetId);
+    const edited = assets.find(asset => asset.id === observation.editedAssetId);
+    expect([image.width, image.height]).toEqual([edited.width, edited.height]);
     await verifyGameFits(image.width / image.height);
-    await verifySpotCanvasView(image.width / image.height);
-    await captureScreenshot(`outputs/${square.id}-找不同预览.png`);
-    for (let index = 0; index < square.differences.length; index++) await hit(index, index % 2 ? 'edited' : 'reference', square);
-    await expect(page).toHaveURL(new RegExp(`result/${square.id}$`));
-    await verifyScreen(`${square.title}结果`);
+    await captureScreenshot(`outputs/${observation.id}-找不同预览.png`);
+    if (observation.id === 'patterns-geometry') {
+      for (const viewport of [{ width: 935, height: 604 }, { width: 360, height: 640 }, { width: 844, height: 390 }]) {
+        await page.setViewportSize(viewport);
+        await verifyGameFits(image.width / image.height);
+        await expect(page.getByTestId('game-progress')).toHaveAttribute('aria-label', '已找到 0 处，共 4 处');
+        await captureScreenshot(`outputs/${viewport.width === 935 ? '紧凑窗口' : viewport.width === 360 ? '手机' : '手机横屏'}联珠与几何预览.png`);
+      }
+      await page.setViewportSize({ width: 1440, height: 1000 });
+      await verifyGameFits(image.width / image.height);
+    }
+    for (let index = 0; index < observation.differences.length; index++) {
+      await hit(index, index % 2 ? 'edited' : 'reference', observation);
+    }
+    await expect(page).toHaveURL(new RegExp(`result/${observation.id}$`));
+    await verifyScreen(`${observation.title}结果`);
   }
 
   expect(coloringLevels).toHaveLength(5);
@@ -650,7 +593,7 @@ try {
         for (const name of ['撤销', '清空重涂', '完成作品', '参考配色']) await verifyVisible(page.getByRole('button', { name, exact: true }));
         await expect(page.getByTestId('coloring-status')).toContainText('已着色 1 个区域');
         await verifyScreen(`${viewport.width}×${viewport.height}填色`);
-        await captureScreenshot(`outputs/${viewport.width === 360 ? '桌面窄窗' : '桌面横屏窗口'}填色预览.png`);
+        await captureScreenshot(`outputs/${viewport.width === 360 ? '手机' : '手机横屏'}填色预览.png`);
       }
       await page.getByRole('button', { name: '完成作品', exact: true }).click();
       await expect(page.getByTestId('coloring-result-canvas')).toBeVisible({ timeout: imageLoadTimeout });
@@ -660,7 +603,7 @@ try {
         await verifyVisible(page.getByRole('button', { name: '导出PNG', exact: true }));
         await verifyVisible(page.getByRole('link', { name: '返回关卡', exact: true }));
         await verifyScreen(`${viewport.width}×${viewport.height}填色作品结果`);
-        await captureScreenshot(`outputs/${viewport.width === 360 ? '桌面窄窗' : viewport.width === 844 ? '桌面横屏窗口' : ''}填色作品结果预览.png`);
+        await captureScreenshot(`outputs/${viewport.width === 360 ? '手机' : viewport.width === 844 ? '手机横屏' : ''}填色作品结果预览.png`);
       }
       const download = page.waitForEvent('download');
       await page.getByRole('button', { name: '导出PNG', exact: true }).click();
@@ -676,15 +619,6 @@ try {
       return !!bounds && data.width === Math.floor(bounds.width) && data.height === Math.floor(bounds.height);
     }).toBe(true);
     return JSON.parse(await host.getAttribute('data-layout'));
-  }
-  async function openPuzzleAction(name) {
-    await expect(page.getByRole('button', { name: '更多操作', exact: true })).toHaveCount(0);
-    await expect(page.getByRole('dialog', { name: '更多操作', exact: true })).toHaveCount(0);
-    const action = page.getByRole('button', { name, exact: true });
-    await verifyVisible(action);
-    const rect = await action.boundingBox();
-    expect(rect.width).toBeGreaterThanOrEqual(44); expect(rect.height).toBeGreaterThanOrEqual(44);
-    return action;
   }
   async function puzzleClick(rectangle) {
     await page.getByTestId('phaser-player').locator('canvas').click({ position: {
@@ -740,8 +674,7 @@ try {
       expect(state.pieces).toHaveLength(total);
       expect(state.board.width / state.board.height).toBeCloseTo(1, 6);
       await verifyVisible(page.getByTestId('phaser-player').locator('canvas'));
-      await verifyVisible(page.getByRole('button', { name: '拼图提示', exact: true }));
-      for (const name of ['查看原图', '重新拼图']) await openPuzzleAction(name);
+      for (const name of ['查看原图', '拼图提示', '重新拼图']) await verifyVisible(page.getByRole('button', { name, exact: true }));
       if (puzzle.mode === 'jigsaw') {
         await expect(page.getByRole('button', { name: '上一组', exact: true })).toHaveCount(0);
         await expect(page.getByRole('button', { name: '下一组', exact: true })).toHaveCount(0);
@@ -754,21 +687,16 @@ try {
           expect(scrolled.pieces.some(piece => !piece.placed && piece.visible && !piece.fullyVisible)).toBe(true);
           await verifyScreen(`${puzzle.title}碎片区局部滚动 ${viewport.width}`);
           if (puzzle.id === 'puzzle-twin-dragons' && viewport.width !== 844) {
-            await captureScreenshot(`outputs/${viewport.width === 360 ? '桌面窄窗-' : ''}双龙碎片滚动预览.png`);
+            await captureScreenshot(`outputs/${viewport.width === 360 ? '手机-' : ''}双龙碎片滚动预览.png`);
           }
           await puzzleScrollTo(0);
         }
       }
       await verifyScreen(`${puzzle.title} ${viewport.width}×${viewport.height}`);
-      await captureScreenshot(`outputs/${viewport.width === 360 ? '桌面窄窗-' : viewport.width === 844 ? '桌面横屏窗口-' : ''}${puzzle.id}-拼图预览.png`);
+      await captureScreenshot(`outputs/${viewport.width === 360 ? '手机-' : viewport.width === 844 ? '手机横屏-' : ''}${puzzle.id}-拼图预览.png`);
     }
-    await (await openPuzzleAction('查看原图')).click();
-    const reference = page.getByRole('dialog', { name: `${puzzle.title} · 原图`, exact: true });
-    const referenceImage = reference.locator('img');
-    await verifyVisible(referenceImage);
-    await expect(referenceImage).toHaveCSS('object-fit', 'contain');
-    const referenceAsset = assets.find(asset => asset.id === puzzle.imageAssetId);
-    expect(await referenceImage.evaluate(image => [image.naturalWidth, image.naturalHeight])).toEqual([referenceAsset.width, referenceAsset.height]);
+    await page.getByRole('button', { name: '查看原图', exact: true }).click();
+    await verifyVisible(page.getByRole('dialog').locator('img'));
     await page.getByRole('button', { name: '返回拼图', exact: true }).click();
     await page.setViewportSize({ width: 1440, height: 1000 });
     if (puzzle.mode === 'rotation') {
@@ -817,7 +745,7 @@ try {
       await verifyVisible(page.getByRole('button', { name: '再拼一次', exact: true }));
       if (nextId) await verifyVisible(nextLink);
       await verifyScreen(`${puzzle.title}结果操作 ${viewport.width}×${viewport.height}`);
-      if (puzzle.id === 'puzzle-lotus-ceiling') await captureScreenshot(`outputs/${viewport.width === 360 ? '桌面窄窗-' : viewport.width === 844 ? '桌面横屏窗口-' : ''}莲花平棋结果预览.png`);
+      if (puzzle.id === 'puzzle-lotus-ceiling') await captureScreenshot(`outputs/${viewport.width === 360 ? '手机-' : viewport.width === 844 ? '手机横屏-' : ''}莲花平棋结果预览.png`);
     }
     if (nextId) {
       await nextLink.click();
@@ -826,10 +754,9 @@ try {
     }
   }
   const hiddenContext = await browser.newContext({
-    viewport: { width: 1440, height: 1000 }, deviceScaleFactor: 2,
+    baseURL: baseUrl,
     storageState: await page.context().storageState(),
   });
-  await page.close();
   try {
     const hiddenPage = await hiddenContext.newPage();
     await verifyHiddenObjectProduction(hiddenPage, baseUrl);
@@ -839,7 +766,7 @@ try {
   }
   finally { await hiddenContext.close(); }
   if (errors.length) throw new Error(errors.join('\n'));
-  console.log('生产构建验证通过：七屏教学、三关找不同、五关填色及PNG、三关拼图、三章九关计时找物目录及首关实玩、一关飞天影子配对；电脑常规/窄窗/横屏窗口布局（真实手机方向另由专项E2E验证）、内部滚动、真实操作、放大对照与独立通关保存。');
+  console.log(`生产构建验证通过：七屏教学、${availableDifferenceCount}关找不同、${coloringLevels.length}关填色及PNG、${puzzleLevels.length}关拼图、三章九关计时找物与影子配对；电脑/手机布局、碎片区连续滚动、真实点击拖拽与独立通关保存。`);
   }
 } finally {
   await browser?.close();

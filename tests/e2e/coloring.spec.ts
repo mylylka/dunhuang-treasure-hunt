@@ -7,8 +7,12 @@ import { dragSpotView, expectSpotSynchronized, readSpotView, setSpotZoom } from 
 const levels = readdirSync('src/content/levels').filter(name => name.endsWith('.json'))
   .map(name => JSON.parse(readFileSync(`src/content/levels/${name}`, 'utf8')) as Level);
 const coloringLevels = levels.filter((level): level is ColoringLevel => level.gameType === 'coloring');
-const squareLevels = levels.filter((level): level is SpotDifferenceLevel => level.gameType === 'spot-difference' && level.id !== 'patterns-intro');
 const assets = JSON.parse(readFileSync('src/content/assets.json', 'utf8')) as AssetDefinition[];
+const observationLevels = levels.filter((level): level is SpotDifferenceLevel => level.gameType === 'spot-difference');
+const squareLevels = observationLevels.filter(level => {
+  const image = assets.find(asset => asset.id === level.baseAssetId);
+  return image && image.width === image.height;
+});
 const artworkKey = 'dunhuang:artworks:v2';
 const legacyArtworkKey = 'dunhuang:artworks:v1';
 const progressKey = 'dunhuang:progress:v1';
@@ -118,15 +122,23 @@ async function recordedAnimation(page: Page) {
   return page.evaluate(() => (window as unknown as { __coloringAnimationRecord: { values: string[] } }).__coloringAnimationRecord.values);
 }
 
-test('真实目录开放三关找不同、三关拼图和五关填色', async ({ page }) => {
-  expect(coloringLevels).toHaveLength(5);
-  expect(squareLevels).toHaveLength(2);
+test('真实目录开放五关找不同、三关拼图和五关填色', async ({ page }) => {
+  const expectedColoringOrder = [
+    'coloring-floral-scroll', 'coloring-lotus-rosette', 'coloring-deer-medallion',
+    'coloring-three-rabbits', 'coloring-feitian-lotus',
+  ];
+  expect(coloringLevels.map(level => level.id).sort()).toEqual([...expectedColoringOrder].sort());
+  expect(observationLevels).toHaveLength(5);
+  expect(squareLevels).toHaveLength(3);
   await page.goto('/#/theme/patterns/games');
   await expect(page.getByRole('link', { name: '填色', exact: true })).toBeVisible();
   await expect(page.getByRole('link', { name: '拼图', exact: true })).toBeVisible();
   await page.getByRole('link', { name: '填色', exact: true }).click();
   await expect(page.getByRole('heading', { name: '填色关卡', exact: true })).toBeVisible();
   await expect(page.getByTestId('level-catalog-summary')).toHaveText('共 5 关5 关开放');
+  const cards = page.locator('.level-choice-card[data-status=available]');
+  expect(await cards.evaluateAll(elements => elements.map(element => element.getAttribute('data-level-id'))))
+    .toEqual(expectedColoringOrder);
 });
 
 for (const level of coloringLevels) {
@@ -233,7 +245,7 @@ test('缩放拖动及窗口变化或手机竖屏中断保留作品，拖动不�
 });
 
 test('电脑填色滚轮以鼠标位置连续缩放，保留倍率按钮且不改作品或滚动整页', async ({ page }) => {
-  const level = coloringLevels.find(level => level.id === 'coloring-grape-pomegranate')!;
+  const level = coloringLevels.find(level => level.id === 'coloring-three-rabbits')!;
   await page.setViewportSize({ width: 1279, height: 925 });
   await startColoring(page, level);
   await clickRegion(page, level);
@@ -332,7 +344,6 @@ test('作品保存失败如实显示并可重试，不冒充写入旧通关结�
 test('完成作品时保存失败，重试成功后才进入结果并记录完成', async ({ page }) => {
   const level = coloringLevels[0]!;
   await startColoring(page, level);
-  // The compact edition must never write a 2D artwork into the full 3D gallery save.
   await page.evaluate(() => localStorage.setItem('dunhuang:first-gallery:v1', '原三馆存档'));
   await clickRegion(page, level);
   await expect.poll(() => currentColors(page, level)).toEqual({ [usableRegion(level).id]: level.palette[0].color.toLowerCase() });
@@ -440,7 +451,7 @@ test('方图主画布三倍观察上侧细节，双图同步且拖动复位不�
 });
 
 for (const level of squareLevels) {
-  test(`${level.title}保持1254方图原比例，可发现五处并单独保存`, async ({ page }) => {
+  test(`${level.title}保持1254方图原比例，可按配置差异数完成并单独保存`, async ({ page }) => {
     const source = assets.find(asset => asset.id === level.baseAssetId)!;
     expect([source.width, source.height]).toEqual([1254, 1254]);
     await page.goto(`/#/play/${level.id}`);
@@ -460,7 +471,7 @@ for (const level of squareLevels) {
       const image = current[index % 2 ? 'edited' : 'reference'], region = level.differences[index].region;
       await host.locator('canvas').click({ position: { x: image.x + (region.x + region.width / 2) * image.width,
         y: image.y + (region.y + region.height / 2) * image.height } });
-      if (index < level.differences.length - 1) await expect(page.getByTestId('game-progress')).toHaveAttribute('aria-label', `已找到 ${index + 1} 处，共 5 处`);
+      if (index < level.differences.length - 1) await expect(page.getByTestId('game-progress')).toHaveAttribute('aria-label', `已找到 ${index + 1} 处，共 ${level.differences.length} 处`);
     }
     await expect(page).toHaveURL(new RegExp(`/#/result/${level.id}$`));
     expect(await page.evaluate(key => Object.keys(JSON.parse(localStorage.getItem(key)!).completed), progressKey)).toEqual([level.id]);

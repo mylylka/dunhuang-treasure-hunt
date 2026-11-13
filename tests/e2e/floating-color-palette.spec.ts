@@ -4,7 +4,7 @@ import type { ColoringLevel } from '../../src/types';
 
 test.use({ viewport: { width: 852, height: 330 }, isMobile: true, hasTouch: true, deviceScaleFactor: 3 });
 test.setTimeout(60_000);
-const level = JSON.parse(readFileSync('src/content/levels/coloring-grape-pomegranate.json', 'utf8')) as ColoringLevel;
+const level = JSON.parse(readFileSync('src/content/levels/coloring-three-rabbits.json', 'utf8')) as ColoringLevel;
 const palette = (page: Page) => page.getByTestId('floating-color-palette');
 const host = (page: Page) => page.getByTestId('phaser-player');
 const saved = (page: Page) => page.evaluate(() => localStorage.getItem('dunhuang:artworks:v2'));

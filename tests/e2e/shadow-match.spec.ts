@@ -166,13 +166,12 @@ async function choose(page: Page, label: string, touch: boolean) {
   else await option(page, label).click();
 }
 
-test('真实入口可跳过导览，错选不保存，正确选择才完成且刷新重玩保留旧记录', async ({ page }, testInfo) => {
+test('从乐舞主题进入，错选不保存，正确选择才完成且刷新重玩保留旧记录', async ({ page }, testInfo) => {
   const previous: ProgressData = { version: 1, completed: { 'patterns-intro': '2026-10-28T00:00:00.000Z' }, settings: { reducedMotion: true } };
   await page.addInitScript(({ key, value }) => {
     if (!localStorage.getItem(key)) localStorage.setItem(key, JSON.stringify(value));
   }, { key: progressKey, value: previous });
   await page.goto('/#/theme/music');
-  await page.getByRole('button', { name: '直接玩游戏', exact: true }).click();
   await page.locator('a[href="#/theme/music/games/shadow-match"]').click();
   await expect(page.locator('.level-choice-card[data-status="available"]')).toHaveCount(1);
   await page.getByRole('link', { name: '开始配对', exact: true }).click();

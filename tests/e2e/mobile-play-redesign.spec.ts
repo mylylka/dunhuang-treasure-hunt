@@ -8,7 +8,7 @@ test.use({ browserName: 'chromium', channel: process.platform === 'darwin' ? 'ch
   viewport: { width: 852, height: 330 }, deviceScaleFactor: 3, isMobile: true, hasTouch: true });
 test.setTimeout(60_000);
 const spot = JSON.parse(readFileSync('src/content/levels/patterns-lotus.json', 'utf8')) as SpotDifferenceLevel;
-const paint = JSON.parse(readFileSync('src/content/levels/coloring-grape-pomegranate.json', 'utf8')) as ColoringLevel;
+const paint = JSON.parse(readFileSync('src/content/levels/coloring-three-rabbits.json', 'utf8')) as ColoringLevel;
 const host = (page: Page) => page.getByTestId('phaser-player');
 const layout = async (page: Page) => JSON.parse((await host(page).getAttribute('data-layout'))!);
 const center = (r: Rectangle): Point => ({ x: r.x + r.width / 2, y: r.y + r.height / 2 });
@@ -114,7 +114,7 @@ test('填色双指连续缩放不着色，三档按钮保留，高清画布点�
   const errors: string[] = []; page.on('pageerror', e => errors.push(e.message));
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await ready(page, paint.id, '1×');
-  await expectNavigation(page, 'coloring-grape-lotus', 'coloring-lotus-camellia');
+  await expectNavigation(page, 'coloring-deer-medallion', 'coloring-feitian-lotus');
   const stored = () => page.evaluate(() => localStorage.getItem('dunhuang:artworks:v2'));
   let l = await layout(page); expect(l.image.height).toBeGreaterThan(280);
   for (const name of ['1×', '2×', '3×', '撤销', '清空重涂', '完成作品', '参考配色', '完整色盘']) {
@@ -146,7 +146,7 @@ test('填色双指连续缩放不着色，三档按钮保留，高清画布点�
   await expect(page.getByTestId('mobile-landscape-gate')).toBeHidden();
   await expect.poll(async () => (await layout(page)).zoom).toBeCloseTo(zoom, 6);
   expect(await stored()).toEqual(saved); await fitted(page);
-  await expectNavigation(page, 'coloring-grape-lotus', 'coloring-lotus-camellia');
+  await expectNavigation(page, 'coloring-deer-medallion', 'coloring-feitian-lotus');
   await page.getByRole('button', { name: '1×', exact: true }).click();
   await page.screenshot({ path: 'outputs/手机横屏-正式填色.png', scale: 'css' });
   const savedColors = JSON.parse(saved!).artworks[paint.id][paint.artworkVersion].colors;

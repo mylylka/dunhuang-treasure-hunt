@@ -458,6 +458,76 @@
     "sourceNote": "开发者授权使用内置image_gen局部补线；完整AI候选仅按登记范围配准合入原稿，修复范围外像素不变。RGB24区域ID蒙版，0不可填；真实相连区域联动着色。 记录见art-source/levels/coloring-grape-lotus/v002/source-notes.json。"
   },
   {
+    "id": "puzzle-lotus-ceiling-image",
+    "path": "/assets/levels/puzzle-lotus-ceiling/puzzle-lotus-ceiling-image-v002.png",
+    "width": 1440,
+    "height": 1440,
+    "kind": "level",
+    "placeholder": false,
+    "version": "user-puzzle-v002",
+    "sourceNote": "开发者交付拼图图像，用户授权局部去除右下平台水印。仅采用登记范围，其他像素保持不变。原稿及处理记录见art-source/levels/puzzle-lotus-ceiling/v002/source-notes.json。"
+  },
+  {
+    "id": "puzzle-three-rabbits-image",
+    "path": "/assets/levels/puzzle-three-rabbits/puzzle-three-rabbits-image-v002.png",
+    "width": 1440,
+    "height": 1440,
+    "kind": "level",
+    "placeholder": false,
+    "version": "user-puzzle-v002",
+    "sourceNote": "开发者交付拼图图像，用户授权局部去除右下平台水印。仅采用登记范围，其他像素保持不变。原稿及处理记录见art-source/levels/puzzle-three-rabbits/v002/source-notes.json。"
+  },
+  {
+    "id": "puzzle-twin-dragons-image",
+    "path": "/assets/levels/puzzle-twin-dragons/puzzle-twin-dragons-image-v002.png",
+    "width": 1440,
+    "height": 1440,
+    "kind": "level",
+    "placeholder": false,
+    "version": "user-puzzle-v002",
+    "sourceNote": "开发者交付拼图图像，用户授权局部去除右下平台水印。仅采用登记范围，其他像素保持不变。原稿及处理记录见art-source/levels/puzzle-twin-dragons/v002/source-notes.json。"
+  },
+  {
+    "id": "patterns-geometry-a",
+    "path": "/assets/levels/patterns-geometry/patterns-geometry-a-v001.png",
+    "width": 1254,
+    "height": 1254,
+    "kind": "level",
+    "placeholder": false,
+    "version": "user-geometry-v001",
+    "sourceNote": "开发者交付的 AI 教学示意，原稿完整归档；不声称对应特定洞窟或历史原貌。 A保持原稿像素与完整比例。"
+  },
+  {
+    "id": "patterns-geometry-b",
+    "path": "/assets/levels/patterns-geometry/patterns-geometry-b-v001.png",
+    "width": 1254,
+    "height": 1254,
+    "kind": "level",
+    "placeholder": false,
+    "version": "user-geometry-v001",
+    "sourceNote": "开发者交付的 AI 教学示意，原稿完整归档；不声称对应特定洞窟或历史原貌。 以A为底，仅合入四类已确认纹样的原B像素，内向羽化；关联区域之外与A完全一致。"
+  },
+  {
+    "id": "patterns-rabbits-a",
+    "path": "/assets/levels/patterns-rabbits/patterns-rabbits-a-v001.png",
+    "width": 665,
+    "height": 662,
+    "kind": "level",
+    "placeholder": false,
+    "version": "user-rabbits-v001",
+    "sourceNote": "开发者交付的第二张图，保留原尺寸与解码像素。原摄影出处未核实。"
+  },
+  {
+    "id": "patterns-rabbits-b",
+    "path": "/assets/levels/patterns-rabbits/patterns-rabbits-b-v001.png",
+    "width": 665,
+    "height": 662,
+    "kind": "level",
+    "placeholder": false,
+    "version": "user-rabbits-v001",
+    "sourceNote": "开发者交付的第一张图为 AI 变化稿。以参照图为底，仅合入登记的五处变化。原稿及范围见 art-source/levels/patterns-rabbits/v001/。"
+  },
+  {
     "id": "coloring-feitian-lotus-reference",
     "path": "/assets/levels/coloring-feitian-lotus/coloring-feitian-lotus-reference-v001.png",
     "width": 1086,
@@ -488,44 +558,14 @@
     "sourceNote": "基于持莲线稿派生的 RGB24 区域编号图，零表示不可填；处理登记见 art-source/levels/coloring-feitian-lotus/v001/。"
   },
   {
-    "id": "puzzle-lotus-ceiling-image",
-    "path": "/assets/levels/puzzle-lotus-ceiling/puzzle-lotus-ceiling-image-v002.png",
-    "width": 1440,
-    "height": 1440,
-    "kind": "level",
-    "placeholder": false,
-    "version": "user-puzzle-v002",
-    "sourceNote": "开发者交付拼图图像，用户授权局部去除右下平台水印。仅采用登记范围，其他像素保持不变。原稿及处理记录见art-source/levels/puzzle-lotus-ceiling/v002/source-notes.json。"
-  },
-  {
     "id": "puzzle-nine-colored-deer-image",
-    "path": "/assets/world/story/v002/full-scroll.webp",
+    "path": "/assets/levels/puzzle-nine-colored-deer/v001/full-scroll.webp",
     "width": 4096,
     "height": 682,
     "kind": "level",
     "placeholder": false,
     "version": "mogao-story-v002",
-    "sourceNote": "沿用第三馆九色鹿演绎的展陈长卷。原作位于莫高窟第257窟西壁中段。"
-  },
-  {
-    "id": "puzzle-three-rabbits-image",
-    "path": "/assets/levels/puzzle-three-rabbits/puzzle-three-rabbits-image-v002.png",
-    "width": 1440,
-    "height": 1440,
-    "kind": "level",
-    "placeholder": false,
-    "version": "user-puzzle-v002",
-    "sourceNote": "开发者交付拼图图像，用户授权局部去除右下平台水印。仅采用登记范围，其他像素保持不变。原稿及处理记录见art-source/levels/puzzle-three-rabbits/v002/source-notes.json。"
-  },
-  {
-    "id": "puzzle-twin-dragons-image",
-    "path": "/assets/levels/puzzle-twin-dragons/puzzle-twin-dragons-image-v002.png",
-    "width": 1440,
-    "height": 1440,
-    "kind": "level",
-    "placeholder": false,
-    "version": "user-puzzle-v002",
-    "sourceNote": "开发者交付拼图图像，用户授权局部去除右下平台水印。仅采用登记范围，其他像素保持不变。原稿及处理记录见art-source/levels/puzzle-twin-dragons/v002/source-notes.json。"
+    "sourceNote": "原作位于莫高窟第257窟西壁中段。原图及派生登记见 art-source/levels/puzzle-nine-colored-deer/v001/。"
   },
   {
     "id": "shadow-apsara-reference",
@@ -606,5 +646,95 @@
     "placeholder": false,
     "version": "hidden-object-chapters-v001",
     "sourceNote": "用户已确认的AI章节底图；原始PNG逐字节归档并接入，不改色、不裁切、不重绘，不代表真实壁画复原。来源与SHA见art-source/shared/hidden-object-backgrounds/v001/manifest.json。"
+  },
+  {
+    "id": "coloring-floral-scroll-reference",
+    "path": "/assets/levels/coloring-floral-scroll/coloring-floral-scroll-reference-v001.png",
+    "width": 449,
+    "height": 913,
+    "kind": "level",
+    "placeholder": false,
+    "version": "v001-796eded2173f",
+    "sourceNote": "开发者提供的彩色参考图，保留原文件。"
+  },
+  {
+    "id": "coloring-floral-scroll-line",
+    "path": "/assets/levels/coloring-floral-scroll/coloring-floral-scroll-line-v001.png",
+    "width": 561,
+    "height": 1152,
+    "kind": "level",
+    "placeholder": false,
+    "version": "v001-cae256c9a22e",
+    "sourceNote": "根据开发者提供的彩色参考图生成的黑白线稿。"
+  },
+  {
+    "id": "coloring-floral-scroll-regions",
+    "path": "/assets/levels/coloring-floral-scroll/coloring-floral-scroll-regions-v001.png",
+    "width": 561,
+    "height": 1152,
+    "kind": "level",
+    "placeholder": false,
+    "version": "v001-69df1f9b7639",
+    "sourceNote": "由线稿闭合区域生成的 RGB 区域图，编号 0 不可填。"
+  },
+  {
+    "id": "coloring-lotus-rosette-reference",
+    "path": "/assets/levels/coloring-lotus-rosette/coloring-lotus-rosette-reference-v001.png",
+    "width": 394,
+    "height": 391,
+    "kind": "level",
+    "placeholder": false,
+    "version": "v001-a7d6d4715e09",
+    "sourceNote": "开发者提供的彩色参考图，保留原文件。"
+  },
+  {
+    "id": "coloring-lotus-rosette-line",
+    "path": "/assets/levels/coloring-lotus-rosette/coloring-lotus-rosette-line-v001.png",
+    "width": 1152,
+    "height": 1148,
+    "kind": "level",
+    "placeholder": false,
+    "version": "v001-49aa3a66d0f7",
+    "sourceNote": "根据开发者提供的彩色参考图生成的黑白线稿。"
+  },
+  {
+    "id": "coloring-lotus-rosette-regions",
+    "path": "/assets/levels/coloring-lotus-rosette/coloring-lotus-rosette-regions-v001.png",
+    "width": 1152,
+    "height": 1148,
+    "kind": "level",
+    "placeholder": false,
+    "version": "v001-c4be0216c833",
+    "sourceNote": "由线稿闭合区域生成的 RGB 区域图，编号 0 不可填。"
+  },
+  {
+    "id": "coloring-deer-medallion-reference",
+    "path": "/assets/levels/coloring-deer-medallion/coloring-deer-medallion-reference-v001.png",
+    "width": 406,
+    "height": 577,
+    "kind": "level",
+    "placeholder": false,
+    "version": "v001-ad207ba36537",
+    "sourceNote": "开发者提供的彩色参考图，保留原文件。"
+  },
+  {
+    "id": "coloring-deer-medallion-line",
+    "path": "/assets/levels/coloring-deer-medallion/coloring-deer-medallion-line-v001.png",
+    "width": 1060,
+    "height": 1112,
+    "kind": "level",
+    "placeholder": false,
+    "version": "v001-bf0a01f32434",
+    "sourceNote": "根据开发者提供的彩色参考图生成的黑白线稿。"
+  },
+  {
+    "id": "coloring-deer-medallion-regions",
+    "path": "/assets/levels/coloring-deer-medallion/coloring-deer-medallion-regions-v001.png",
+    "width": 1060,
+    "height": 1112,
+    "kind": "level",
+    "placeholder": false,
+    "version": "v001-6e7a51d08a2f",
+    "sourceNote": "由线稿闭合区域生成的 RGB 区域图，编号 0 不可填。"
   }
 ]

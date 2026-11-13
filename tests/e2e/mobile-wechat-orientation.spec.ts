@@ -1,7 +1,4 @@
 import { expect, test } from '@playwright/test';
-import { readFileSync } from 'node:fs';
-
-const viewed = (JSON.parse(readFileSync('src/content/world/mogao-exhibit-v001.json', 'utf8')) as { items: { id: string }[] }).items.map(item => item.id);
 const phoneUA = 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 Mobile/15E148 MicroMessenger';
 
 test('手机内嵌浏览器能力报告不完整时，竖屏阻挡并在横屏保留同一局', async ({ browser }, info) => {
@@ -9,10 +6,7 @@ test('手机内嵌浏览器能力报告不完整时，竖屏阻挡并在横屏�
     screen: { width: 393, height: 852 }, userAgent: phoneUA, isMobile: true, hasTouch: true });
   const page = await context.newPage();
   try {
-    await page.addInitScript(({ viewed }) => {
-      for (const id of ['bandits', 'burning-house', 'story-demo', 'novice-story']) localStorage.setItem(`dunhuang:mogao-hall-a:progress:v2:${id}`, 'complete');
-      localStorage.setItem('dunhuang:mogao-hall-a:progress:v2:award', 'received');
-      localStorage.setItem('dunhuang:mogao-exhibit:progress:v1', JSON.stringify({ version: 1, viewed, introSeen: true, noticeSeen: true }));
+    await page.addInitScript(() => {
       Object.defineProperty(navigator, 'maxTouchPoints', { configurable: true, get: () => 0 });
       const original = window.matchMedia.bind(window);
       window.matchMedia = (query: string) => {
@@ -24,7 +18,7 @@ test('手机内嵌浏览器能力报告不完整时，竖屏阻挡并在横屏�
           return typeof value === 'function' ? value.bind(target) : value;
         } });
       };
-    }, { viewed });
+    });
     await page.goto('/#/play/puzzle-nine-colored-deer');
     const gate = page.getByTestId('mobile-landscape-gate');
     await expect(gate).toBeVisible();

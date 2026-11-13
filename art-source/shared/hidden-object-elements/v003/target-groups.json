@@ -1,0 +1,397 @@
+{
+  "schemaVersion": 1,
+  "reviewDate": "2026-11-03",
+  "reviewer": "Codex visual inspection",
+  "scope": "精确图片任务的可见外形分类，不是器物考据或历史身份鉴定；未列入的图片不推定为反例。",
+  "reviewInputs": [
+    "work/hidden-target-review-instruments-01.png",
+    "work/hidden-target-review-clothing-01.png",
+    "work/hidden-target-review-animals-01.png",
+    "work/hidden-target-review-plants-01.png",
+    "work/hidden-target-review-patterns-01.png",
+    "work/hidden-target-review-ritual-01.png"
+  ],
+  "groups": [
+    {
+      "id": "pipa",
+      "label": "琵琶",
+      "categoryId": "instruments",
+      "spriteIds": [
+        "ho-instruments-001",
+        "ho-instruments-002",
+        "ho-instruments-003",
+        "ho-instruments-004"
+      ],
+      "visualRationale": "梨形琴身、长颈与弦；保留原已登记组。",
+      "status": "reviewed-for-exact-image-matching"
+    },
+    {
+      "id": "drum",
+      "label": "鼓",
+      "categoryId": "instruments",
+      "spriteIds": [
+        "ho-instruments-025",
+        "ho-instruments-026",
+        "ho-instruments-027",
+        "ho-instruments-028",
+        "ho-instruments-029",
+        "ho-instruments-030"
+      ],
+      "visualRationale": "可见鼓面与鼓身；保留原已登记组。",
+      "status": "reviewed-for-exact-image-matching"
+    },
+    {
+      "id": "bell",
+      "label": "铃铛",
+      "categoryId": "instruments",
+      "spriteIds": [
+        "ho-instruments-034",
+        "ho-instruments-035",
+        "ho-instruments-036"
+      ],
+      "visualRationale": "悬环、钟形主体与下垂部件；保留原已登记组。",
+      "status": "reviewed-for-exact-image-matching"
+    },
+    {
+      "id": "flute",
+      "label": "笛子",
+      "categoryId": "instruments",
+      "spriteIds": [
+        "ho-instruments-022",
+        "ho-instruments-023"
+      ],
+      "visualRationale": "横向管身与明确指孔；不将未知竖管一并命名。",
+      "status": "reviewed-for-exact-image-matching"
+    },
+    {
+      "id": "panpipes",
+      "label": "排箫",
+      "categoryId": "instruments",
+      "spriteIds": [
+        "ho-instruments-016",
+        "ho-instruments-017"
+      ],
+      "visualRationale": "并列且长短渐变的多根管身。",
+      "status": "reviewed-for-exact-image-matching"
+    },
+    {
+      "id": "cymbals",
+      "label": "钹",
+      "categoryId": "instruments",
+      "spriteIds": [
+        "ho-instruments-031",
+        "ho-instruments-032"
+      ],
+      "visualRationale": "成对圆盘与中央握持部；一张PNG仍只计一个实例。",
+      "status": "reviewed-for-exact-image-matching"
+    },
+    {
+      "id": "ribbon",
+      "label": "飘带",
+      "categoryId": "clothing",
+      "spriteIds": [
+        "ho-clothing-001",
+        "ho-clothing-002"
+      ],
+      "visualRationale": "连续卷曲的长条织物轮廓。",
+      "status": "reviewed-for-exact-image-matching"
+    },
+    {
+      "id": "crown",
+      "label": "头冠",
+      "categoryId": "clothing",
+      "spriteIds": [
+        "ho-clothing-013",
+        "ho-clothing-015"
+      ],
+      "visualRationale": "拱形佩戴底边与向上冠饰。",
+      "status": "reviewed-for-exact-image-matching"
+    },
+    {
+      "id": "necklace",
+      "label": "项链",
+      "categoryId": "clothing",
+      "spriteIds": [
+        "ho-clothing-019",
+        "ho-clothing-020"
+      ],
+      "visualRationale": "弧形链条与垂饰；仅作外观名称。",
+      "status": "reviewed-for-exact-image-matching"
+    },
+    {
+      "id": "earring",
+      "label": "耳坠",
+      "categoryId": "clothing",
+      "spriteIds": [
+        "ho-clothing-023",
+        "ho-clothing-024"
+      ],
+      "visualRationale": "单件挂钩或挂环连下垂饰件。",
+      "status": "reviewed-for-exact-image-matching"
+    },
+    {
+      "id": "bracelet",
+      "label": "手镯",
+      "categoryId": "clothing",
+      "spriteIds": [
+        "ho-clothing-030",
+        "ho-clothing-031"
+      ],
+      "visualRationale": "明确中空的环形镯身。",
+      "status": "reviewed-for-exact-image-matching"
+    },
+    {
+      "id": "belt",
+      "label": "腰带",
+      "categoryId": "clothing",
+      "spriteIds": [
+        "ho-clothing-033",
+        "ho-clothing-035"
+      ],
+      "visualRationale": "横向环带、搭扣与下垂织物。",
+      "status": "reviewed-for-exact-image-matching"
+    },
+    {
+      "id": "boots",
+      "label": "靴子",
+      "categoryId": "clothing",
+      "spriteIds": [
+        "ho-clothing-057",
+        "ho-clothing-058"
+      ],
+      "visualRationale": "鞋底、鞋尖与高于脚踝的靴筒。",
+      "status": "reviewed-for-exact-image-matching"
+    },
+    {
+      "id": "deer",
+      "label": "鹿",
+      "categoryId": "animals",
+      "spriteIds": [
+        "ho-animals-001",
+        "ho-animals-002"
+      ],
+      "visualRationale": "四足、鹿角及斑点；不据配色认定物种或故事身份。",
+      "status": "reviewed-for-exact-image-matching"
+    },
+    {
+      "id": "peacock",
+      "label": "孔雀",
+      "categoryId": "animals",
+      "spriteIds": [
+        "ho-animals-007",
+        "ho-animals-008"
+      ],
+      "visualRationale": "冠羽与具有眼斑的长尾或开屏尾。",
+      "status": "reviewed-for-exact-image-matching"
+    },
+    {
+      "id": "rabbit",
+      "label": "兔子",
+      "categoryId": "animals",
+      "spriteIds": [
+        "ho-animals-019",
+        "ho-animals-020"
+      ],
+      "visualRationale": "长耳、兔形头与后足。",
+      "status": "reviewed-for-exact-image-matching"
+    },
+    {
+      "id": "horse",
+      "label": "马",
+      "categoryId": "animals",
+      "spriteIds": [
+        "ho-animals-022",
+        "ho-animals-023"
+      ],
+      "visualRationale": "马形头、鬃毛、蹄与长尾；排除带翼变体。",
+      "status": "reviewed-for-exact-image-matching"
+    },
+    {
+      "id": "camel",
+      "label": "骆驼",
+      "categoryId": "animals",
+      "spriteIds": [
+        "ho-animals-025",
+        "ho-animals-026"
+      ],
+      "visualRationale": "长颈与驼峰；站立或卧姿仍按任务精确图片判定。",
+      "status": "reviewed-for-exact-image-matching"
+    },
+    {
+      "id": "ox",
+      "label": "牛",
+      "categoryId": "animals",
+      "spriteIds": [
+        "ho-animals-028",
+        "ho-animals-029"
+      ],
+      "visualRationale": "牛形口鼻、角、蹄与躯干。",
+      "status": "reviewed-for-exact-image-matching"
+    },
+    {
+      "id": "lion",
+      "label": "狮子",
+      "categoryId": "animals",
+      "spriteIds": [
+        "ho-animals-034",
+        "ho-animals-035"
+      ],
+      "visualRationale": "狮形头部、鬃毛与四足；不认定宗教或神兽身份。",
+      "status": "reviewed-for-exact-image-matching"
+    },
+    {
+      "id": "fish",
+      "label": "鱼",
+      "categoryId": "animals",
+      "spriteIds": [
+        "ho-animals-046",
+        "ho-animals-047"
+      ],
+      "visualRationale": "鱼鳍、鳞片与尾鳍。",
+      "status": "reviewed-for-exact-image-matching"
+    },
+    {
+      "id": "lotus",
+      "label": "莲花",
+      "categoryId": "plants",
+      "spriteIds": [
+        "ho-plants-001",
+        "ho-plants-002"
+      ],
+      "visualRationale": "多层尖瓣、中心花心与下部花托。",
+      "status": "reviewed-for-exact-image-matching"
+    },
+    {
+      "id": "seedpod",
+      "label": "莲蓬",
+      "categoryId": "plants",
+      "spriteIds": [
+        "ho-plants-004",
+        "ho-plants-005"
+      ],
+      "visualRationale": "多孔蓬面与杯状主体。",
+      "status": "reviewed-for-exact-image-matching"
+    },
+    {
+      "id": "lotus-leaf",
+      "label": "荷叶",
+      "categoryId": "plants",
+      "spriteIds": [
+        "ho-plants-007",
+        "ho-plants-008"
+      ],
+      "visualRationale": "展开或折曲叶面与放射叶脉。",
+      "status": "reviewed-for-exact-image-matching"
+    },
+    {
+      "id": "flower",
+      "label": "花形",
+      "categoryId": "plants",
+      "spriteIds": [
+        "ho-plants-016",
+        "ho-plants-017"
+      ],
+      "visualRationale": "放射状多瓣花形；不推断具体植物品种。",
+      "status": "reviewed-for-exact-image-matching"
+    },
+    {
+      "id": "leaf",
+      "label": "叶片",
+      "categoryId": "plants",
+      "spriteIds": [
+        "ho-plants-022",
+        "ho-plants-024"
+      ],
+      "visualRationale": "单片尖端叶形与叶脉；不推断具体植物品种。",
+      "status": "reviewed-for-exact-image-matching"
+    },
+    {
+      "id": "round-pattern",
+      "label": "圆纹",
+      "categoryId": "patterns",
+      "spriteIds": [
+        "ho-patterns-001",
+        "ho-patterns-002"
+      ],
+      "visualRationale": "完整圆形边界及内部装饰；不认定纹样学名。",
+      "status": "reviewed-for-exact-image-matching"
+    },
+    {
+      "id": "diamond-pattern",
+      "label": "菱纹",
+      "categoryId": "patterns",
+      "spriteIds": [
+        "ho-patterns-004",
+        "ho-patterns-005"
+      ],
+      "visualRationale": "明确菱形外边界及内部装饰。",
+      "status": "reviewed-for-exact-image-matching"
+    },
+    {
+      "id": "flame-pattern",
+      "label": "火焰纹",
+      "categoryId": "patterns",
+      "spriteIds": [
+        "ho-patterns-013",
+        "ho-patterns-015"
+      ],
+      "visualRationale": "向上尖出的火焰形轮廓；不附会象征意义。",
+      "status": "reviewed-for-exact-image-matching"
+    },
+    {
+      "id": "incense-burner",
+      "label": "香炉",
+      "categoryId": "ritual",
+      "spriteIds": [
+        "ho-ritual-001",
+        "ho-ritual-003"
+      ],
+      "visualRationale": "带盖、足与烟气的炉形器物；仅命名图示外观。",
+      "status": "reviewed-for-exact-image-matching"
+    },
+    {
+      "id": "candleholder",
+      "label": "烛台",
+      "categoryId": "ritual",
+      "spriteIds": [
+        "ho-ritual-021",
+        "ho-ritual-022"
+      ],
+      "visualRationale": "可见蜡烛、火焰和承托台座。",
+      "status": "reviewed-for-exact-image-matching"
+    },
+    {
+      "id": "bowl",
+      "label": "碗",
+      "categoryId": "ritual",
+      "spriteIds": [
+        "ho-ritual-034",
+        "ho-ritual-035"
+      ],
+      "visualRationale": "敞口、中空碗身；不认定具体供奉用途。",
+      "status": "reviewed-for-exact-image-matching"
+    },
+    {
+      "id": "scroll",
+      "label": "卷轴",
+      "categoryId": "ritual",
+      "spriteIds": [
+        "ho-ritual-047",
+        "ho-ritual-050"
+      ],
+      "visualRationale": "卷起或展开的纸面与轴端。",
+      "status": "reviewed-for-exact-image-matching"
+    },
+    {
+      "id": "bead-string",
+      "label": "珠串",
+      "categoryId": "ritual",
+      "spriteIds": [
+        "ho-ritual-051",
+        "ho-ritual-052"
+      ],
+      "visualRationale": "连续成串的圆珠和流苏；不认定宗教用途。",
+      "status": "reviewed-for-exact-image-matching"
+    }
+  ]
+}

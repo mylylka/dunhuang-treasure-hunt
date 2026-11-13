@@ -17,7 +17,7 @@ export const levelRoadmap: readonly LevelRoadmapEntry[] = [
   { id: 'patterns-intro', themeId: 'patterns', gameType: 'spot-difference', title: '藻井寻踪', plannedDifferenceCount: 5, learningFocus: '中心与外圈', motif: 'caisson' },
   { id: 'patterns-lotus', themeId: 'patterns', gameType: 'spot-difference', title: '莲瓣与团花', plannedDifferenceCount: 5, learningFocus: '花瓣层次', motif: 'lotus' },
   { id: 'patterns-scrolls', themeId: 'patterns', gameType: 'spot-difference', title: '忍冬与卷草', plannedDifferenceCount: 5, learningFocus: '叶形曲线', motif: 'scroll' },
-  { id: 'patterns-geometry', themeId: 'patterns', gameType: 'spot-difference', title: '联珠与几何', plannedDifferenceCount: 5, learningFocus: '重复单元', motif: 'beads' },
+  { id: 'patterns-geometry', themeId: 'patterns', gameType: 'spot-difference', title: '联珠与几何', plannedDifferenceCount: 4, learningFocus: '重复单元', motif: 'beads' },
   { id: 'patterns-rabbits', themeId: 'patterns', gameType: 'spot-difference', title: '三兔与旋转', plannedDifferenceCount: 5, learningFocus: '共用轮廓与方向', motif: 'rabbits' },
   { id: 'patterns-colors', themeId: 'patterns', gameType: 'spot-difference', title: '色彩与层次', plannedDifferenceCount: 6, learningFocus: '冷暖与明暗', motif: 'colors' },
 ];
@@ -35,12 +35,21 @@ export type LevelChoice =
   | { id: string; title: string; status: 'available'; level: Level; roadmap?: LevelRoadmapEntry }
   | { id: string; title: string; status: 'planned'; roadmap: LevelRoadmapEntry };
 
+const coloringLevelOrder = new Map<string, number>([
+  'coloring-floral-scroll',
+  'coloring-lotus-rosette',
+  'coloring-deer-medallion',
+  'coloring-three-rabbits',
+  'coloring-feitian-lotus',
+].map((id, index) => [id, index]));
+
 /** Availability comes only from the actual catalog, never from a roadmap slot. */
 export function getLevelChoices(catalog: Pick<ContentCatalog, 'levels'>, themeId: string, gameType: GameType): LevelChoice[] {
   const levels = catalog.levels.filter(level => level.themeId === themeId && level.gameType === gameType);
-  // 新增填色关接在原有关卡之后，避免文件名字母序改变既有的前后关关系。
-  if (themeId === 'patterns' && gameType === 'coloring') levels.sort((a, b) =>
-    Number(a.id === 'coloring-feitian-lotus') - Number(b.id === 'coloring-feitian-lotus'));
+  if (themeId === 'patterns' && gameType === 'coloring') {
+    levels.sort((a, b) => (coloringLevelOrder.get(a.id) ?? coloringLevelOrder.size)
+      - (coloringLevelOrder.get(b.id) ?? coloringLevelOrder.size));
+  }
   if (gameType === 'hidden-object') levels.sort((a, b) => {
     const first = a.gameType === 'hidden-object' ? a.chapter : undefined;
     const second = b.gameType === 'hidden-object' ? b.chapter : undefined;

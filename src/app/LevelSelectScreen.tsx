@@ -8,6 +8,7 @@ export interface LevelSelectScreenProps {
   catalog: ContentCatalog;
   theme: ThemeDefinition;
   gameType: GameType;
+  focusLevelId?: string;
   progress: ProgressData;
   onBack: () => void;
   hrefForLevel: (levelId: string) => string;
@@ -83,13 +84,19 @@ function useLevelGridLayout(slotRef: RefObject<HTMLDivElement | null>, chaptered
 }
 
 /** Plans describe future content; only catalog levels can be launched or completed. */
-export function LevelSelectScreen({ catalog, theme, gameType, progress, onBack, hrefForLevel }: LevelSelectScreenProps) {
+export function LevelSelectScreen({ catalog, theme, gameType, focusLevelId, progress, onBack, hrefForLevel }: LevelSelectScreenProps) {
   const slotRef = useRef<HTMLDivElement>(null);
   const choices = getLevelChoices(catalog, theme.id, gameType);
   const chaptered = gameType === 'hidden-object' && choices.some(choice => choice.status === 'available'
     && choice.level.gameType === 'hidden-object' && Boolean(choice.level.chapter));
   const chapters = chaptered ? groupHiddenObjectChoices(choices) : [];
   const layout = useLevelGridLayout(slotRef, chaptered);
+  useLayoutEffect(() => {
+    if (!focusLevelId) return;
+    const focusedCard = Array.from(slotRef.current?.querySelectorAll<HTMLElement>('[data-level-id]') ?? [])
+      .find(card => card.dataset.levelId === focusLevelId);
+    focusedCard?.scrollIntoView({ block: 'nearest', behavior: 'instant' });
+  }, [focusLevelId, layout]);
   const availableCount = choices.filter(choice => choice.status === 'available').length;
   const gridStyle = {
     '--level-card-height': `${layout.cardHeight}px`, '--level-card-gap': `${layout.gap}px`,

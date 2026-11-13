@@ -1,17 +1,12 @@
 import { expect, test, type Page } from '@playwright/test';
-import { readFileSync } from 'node:fs';
 
 const levelId = 'puzzle-nine-colored-deer';
 const order = async (page: Page) => (await page.locator('.gallery-screen').getAttribute('data-gallery-order'))!.split(',').map(Number);
 
 async function open(page: Page, completed = false) {
-  const viewed = (JSON.parse(readFileSync('src/content/world/mogao-exhibit-v001.json', 'utf8')) as { items: { id: string }[] }).items.map(item => item.id);
-  await page.addInitScript(({ viewed, completed, levelId }) => {
-    for (const id of ['bandits', 'burning-house', 'story-demo', 'novice-story']) localStorage.setItem(`dunhuang:mogao-hall-a:progress:v2:${id}`, 'complete');
-    localStorage.setItem('dunhuang:mogao-hall-a:progress:v2:award', 'received');
-    localStorage.setItem('dunhuang:mogao-exhibit:progress:v1', JSON.stringify({ version: 1, viewed, introSeen: true, noticeSeen: true }));
+  await page.addInitScript(({ completed, levelId }) => {
     if (completed) localStorage.setItem('dunhuang:progress:v1', JSON.stringify({ version: 1, completed: { [levelId]: '2026-11-01T00:00:00.000Z' }, settings: { reducedMotion: true } }));
-  }, { viewed, completed, levelId });
+  }, { completed, levelId });
   await page.goto(`/#/play/${levelId}`);
   await expect(page.locator('.gallery-screen')).toBeVisible();
   await expect(page.getByTestId('gallery-piece')).toHaveCount(12);

@@ -25,6 +25,7 @@ import { MUSIC_PLAYER_COLLIDERS, MUSIC_SESSION_KEY } from '../world/music-pavili
 import type { WorldCheckpoint } from '../world/types';
 import { WorldBoundary } from './WorldBoundary';
 import { getAssetUrl } from '../content';
+import { getLevelChoices } from '../content/level-roadmap';
 import { getNextOpenLevel } from '../services/level-sequence';
 import { LevelAdvanceControl, LevelNavigationProvider } from './LevelAdvanceControl';
 import { ThemeCards } from './ThemeCards';
@@ -266,6 +267,17 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
     };
   }, []);
 
+  useEffect(() => {
+    if (route.page !== 'play-latest') return;
+    const theme = catalog.themes.find(item => item.id === route.themeId);
+    const choices = theme?.allowedGameTypes.includes(route.gameType)
+      ? getLevelChoices(catalog, route.themeId, route.gameType) : [];
+    const latest = choices.filter(choice => choice.status === 'available').at(-1);
+    const path = latest ? playPath(latest.id) : levelsPath(route.themeId, route.gameType);
+    window.history.replaceState(window.history.state, '', `#${path}`);
+    setRoute(readRoute());
+  }, [catalog, route]);
+
   const routeKey = getRouteKey(route);
   useEffect(() => {
     if (route.page === 'themes') enteredFromWorld.current = false;
@@ -475,7 +487,7 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
     }
     return <SpotDifferenceScreen key={level.id} level={level} catalog={catalog}
       reducedMotion={progress.settings.reducedMotion} onEvent={onGameEvent}
-      onBack={() => goTo(levelsPath(theme.id, 'spot-difference'))} />;
+      onBack={() => goTo(levelsPath(theme.id, 'spot-difference', level.id))} />;
   }
 
   function renderResult(level: Level, theme: ThemeDefinition) {
@@ -515,7 +527,7 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
     </div>;
     if (level.gameType === 'coloring' && !Object.keys(artworkColors(artworks, level)).length) return <div className="page narrow-page empty-state"><h1>{hasOlderArtwork(artworks, level) ? '线稿已更新，旧作品已保留' : '当前作品还未着色'}</h1>{renderArtworkNotice()}<a className="button button-primary" href={`#${playPath(level.id)}`}>继续填色</a></div>;
     return <div className={`page page-result${isColoring || isPuzzle ? ' is-coloring-result' : ''}`}>
-      <Breadcrumb catalog={catalog} items={[{ label: `${gameNames[level.gameType]}关卡`, href: `#${levelsPath(theme.id, level.gameType)}` }]} />
+      <Breadcrumb catalog={catalog} items={[{ label: `${gameNames[level.gameType]}关卡`, href: `#${levelsPath(theme.id, level.gameType, level.gameType === 'spot-difference' ? level.id : undefined)}` }]} />
       <header className="result-heading"><h1>{isColoring ? '作品完成' : isPuzzle ? '拼图完成' : '观察完成'}</h1></header>
       {renderSaveNotice()}
       {isColoring && renderArtworkNotice()}
@@ -583,7 +595,7 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
     }}
     onCheckpoint={next => { if (worldRevision === currentWorldRevision.current) persistWorld(next); }} /></Suspense></WorldBoundary>;
   let page: ReactNode;
-  const routeTheme = route.page === 'games' || route.page === 'levels' ? route.themeId :
+  const routeTheme = route.page === 'games' || route.page === 'levels' || route.page === 'play-latest' ? route.themeId :
     route.page === 'play' || route.page === 'result' ? catalog.levels.find(level => level.id === route.id)?.themeId : undefined;
   const easelAllowed = !!gallery && !!easelEntry.current && canOpenFirstGalleryRoute(gallery.data, route, catalog, easelEntry.current, galleryCompatibility);
   const routeAllowed = easelEntry.current ? easelAllowed : routeTheme !== 'patterns' || unlocked.includes('patterns');
@@ -614,7 +626,7 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
         onBack={() => goTo(enteredFromWorld.current ? '/' : '/themes')}
         hrefForGame={type => `#${levelsPath(theme.id, type)}`} />;
       else if (theme.allowedGameTypes.includes(route.gameType)) page = <LevelSelectScreen catalog={catalog} theme={theme}
-        gameType={route.gameType} progress={progress} onBack={() => goTo(gamesPath(theme.id))}
+        gameType={route.gameType} focusLevelId={route.focusLevelId} progress={progress} onBack={() => goTo(gamesPath(theme.id))}
         hrefForLevel={id => `#${playPath(id)}`} />;
     }
   } else if (route.page === 'play' || route.page === 'result') {
@@ -635,7 +647,7 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
     {gallerySaveError && route.page === 'result' && <div className="global-notice">{renderGallerySaveNotice()}</div>}
     <main id="main-content" ref={mainRef} tabIndex={-1} key={galleryWorldMounted ? 'gallery-world' : routeKey}>
       {galleryWorldMounted && <div className="gallery-world-slot" hidden={galleryWorldSuspended} inert={galleryWorldSuspended}>{renderWorld(galleryWorldSuspended)}</div>}
-      {['themes', 'games', 'levels', 'play', 'result'].includes(route.page)
+      {['themes', 'games', 'levels', 'play-latest', 'play', 'result'].includes(route.page)
         ? <MobileLandscapeGuard active>{page}</MobileLandscapeGuard> : page}
     </main>
 
