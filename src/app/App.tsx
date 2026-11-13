@@ -44,7 +44,7 @@ import { GalleryResetSettings } from './GalleryResetSettings';
 import { useSound } from './useSound';
 import { artworkColors, artworkMaterials, hasOlderArtwork, loadArtworks, saveArtworks, withArtwork, type ArtworksData } from '../services/artworks';
 import { canOpenFirstGalleryRoute, getFirstGalleryAccess, importGalleryArtworks, isFirstGalleryUnlocked, loadFirstGallery, markGalleryCeremonySeen, submitGalleryArtwork, subscribeFirstGallery } from '../services/first-gallery';
-import { clearGalleryColoringEntry, FIRST_GALLERY_EASEL_LEVEL, FIRST_GALLERY_ENTRY_CLAIM, FIRST_GALLERY_WORLD_SESSION_KEY, newGallerySubmissionId, readGalleryColoringEntry, saveGalleryColoringDraft, startGalleryColoring, type FirstGalleryColoringEntry } from '../services/first-gallery-entry';
+import { CAISSON_ONLY_WORLD_SESSION_KEY, clearGalleryColoringEntry, FIRST_GALLERY_EASEL_LEVEL, FIRST_GALLERY_ENTRY_CLAIM, FIRST_GALLERY_WORLD_SESSION_KEY, newGallerySubmissionId, readGalleryColoringEntry, saveGalleryColoringDraft, startGalleryColoring, type FirstGalleryColoringEntry } from '../services/first-gallery-entry';
 import { SpotDifferenceScreen } from './SpotDifferenceScreen';
 import { loadProgress, saveProgress, withCompletedLevel } from '../services/progress';
 import { unlockedGameThemes } from '../services/game-world-access';
@@ -86,9 +86,10 @@ function SourceNote({ level }: { level: LevelMetadata }) {
 export default function App({ catalog }: { catalog: ContentCatalog }) {
   const sound = useSound();
   const [firstGallery] = useState(() => document.getElementById('root')?.dataset.firstGallery === 'v001');
+  const [caissonOnly] = useState(() => document.getElementById('root')?.dataset.caissonOnly === 'v001');
   const [connectedGalleries] = useState(() => document.getElementById('root')?.dataset.connectedGalleries === 'v001');
   const [musicGalleryEnabled] = useState(() => connectedGalleries || document.getElementById('root')?.dataset.musicGallery === 'v001');
-  const galleryResetAvailable = firstGallery || musicGalleryEnabled || document.getElementById('root')?.dataset.mogaoExhibit === 'v001';
+  const galleryResetAvailable = !caissonOnly && (firstGallery || musicGalleryEnabled || document.getElementById('root')?.dataset.mogaoExhibit === 'v001');
   const musicGallery = useMusicGalleryProgress(musicGalleryEnabled);
   const musicGamesLocked = musicGalleryEnabled && !musicGallery.unlocked;
   const [gallery, setGallery] = useState(() => firstGallery ? loadFirstGallery() : null);
@@ -99,9 +100,10 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
   const [gallerySaveError, setGallerySaveError] = useState<string | null>(null);
   const [galleryCompatibility, setGalleryCompatibility] = useState(false);
   const galleryRetry = useRef<(() => void) | null>(null);
+  const artworkRetry = useRef<(() => void) | null>(null);
   const ordinaryRequest = useRef<string | null>(null);
   const easelEntry = useRef<FirstGalleryColoringEntry | null>(
-    firstGallery ? readGalleryColoringEntry(window.history.state?.[FIRST_GALLERY_ENTRY_CLAIM]) : null,
+    firstGallery && !caissonOnly ? readGalleryColoringEntry(window.history.state?.[FIRST_GALLERY_ENTRY_CLAIM]) : null,
   );
   const [initialLoad] = useState(() => loadProgress());
   const [initialArtworks] = useState(() => loadArtworks());
@@ -119,7 +121,7 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
   const completedThisRun = useRef(false);
   const shellRef = useRef<HTMLDivElement>(null);
   const mainRef = useRef<HTMLElement>(null);
-  const [worldSessionOptions] = useState(() => connectedGalleries ? CONNECTED_GALLERY_SESSION_OPTIONS : firstGallery ? { ...TERRAIN_FIRST_GALLERY_SESSION_OPTIONS, key: FIRST_GALLERY_WORLD_SESSION_KEY } : document.getElementById('root')?.dataset.musicCompanion === 'v002' ? (document.getElementById('root')?.dataset.musicGuide === 'v001' ? MUSIC_GUIDE_SESSION_OPTIONS : MUSIC_COMPANION_SESSION_OPTIONS_V2) : document.getElementById('root')?.dataset.musicCompanion === 'v001' ? MUSIC_COMPANION_SESSION_OPTIONS : document.getElementById('root')?.dataset.mogaoExhibit === 'v001' ? MOGAO_EXHIBIT_SESSION_OPTIONS : document.getElementById('root')?.dataset.mogaoUpper === 'v002' ? UPPER_SESSION_OPTIONS : document.getElementById('root')?.dataset.terrain === 'v001' ? TERRAIN_SESSION_OPTIONS : document.getElementById('root')?.dataset.flowRevision === 'v013' ? MOGAO_SESSION_OPTIONS_V13 : document.getElementById('root')?.dataset.mogao === 'v012' ? MOGAO_SESSION_OPTIONS_V12 : document.getElementById('root')?.dataset.mogao === 'v011' ? MOGAO_SESSION_OPTIONS_V11 : document.getElementById('root')?.dataset.mogao === 'v010' ? MOGAO_SESSION_OPTIONS_V10 : document.getElementById('root')?.dataset.mogao === 'v009' ? MOGAO_SESSION_OPTIONS_V9 : document.getElementById('root')?.dataset.mogao === 'v008' ? MOGAO_SESSION_OPTIONS_V8 : document.getElementById('root')?.dataset.mogao === 'v007' ? MOGAO_SESSION_OPTIONS_V7 : document.getElementById('root')?.dataset.mogao === 'v006' ? MOGAO_SESSION_OPTIONS_V6 : document.getElementById('root')?.dataset.mogao === 'v003' ? MOGAO_SESSION_OPTIONS_V3 : document.getElementById('root')?.dataset.mogao === 'v002' ? MOGAO_SESSION_OPTIONS_V2 : document.getElementById('root')?.dataset.mogao === 'v001' ? MOGAO_SESSION_OPTIONS : document.getElementById('root')?.dataset.musicPavilion === 'v006' ? { ...MUSIC_SESSION_OPTIONS_V4, key: 'dunhuang:music-pavilion-preview:v6' } : document.getElementById('root')?.dataset.musicPavilion === 'v005' ? { ...MUSIC_SESSION_OPTIONS_V4, key: 'dunhuang:music-pavilion-preview:v5' } : document.getElementById('root')?.dataset.musicPavilion === 'v004' ? MUSIC_SESSION_OPTIONS_V4 : document.getElementById('root')?.dataset.flyingVoice === 'v001' ? { ...MUSIC_SESSION_OPTIONS_V3, key: FLYING_VOICE_SESSION_KEY } : document.getElementById('root')?.dataset.musicPavilion === 'v003' ? MUSIC_SESSION_OPTIONS_V3 : document.getElementById('root')?.dataset.musicPavilion === 'v002' ? MUSIC_SESSION_OPTIONS_V2 : document.getElementById('root')?.dataset.musicPavilion === 'v001'
+  const [worldSessionOptions] = useState(() => connectedGalleries ? CONNECTED_GALLERY_SESSION_OPTIONS : firstGallery ? { ...TERRAIN_FIRST_GALLERY_SESSION_OPTIONS, key: caissonOnly ? CAISSON_ONLY_WORLD_SESSION_KEY : FIRST_GALLERY_WORLD_SESSION_KEY } : document.getElementById('root')?.dataset.musicCompanion === 'v002' ? (document.getElementById('root')?.dataset.musicGuide === 'v001' ? MUSIC_GUIDE_SESSION_OPTIONS : MUSIC_COMPANION_SESSION_OPTIONS_V2) : document.getElementById('root')?.dataset.musicCompanion === 'v001' ? MUSIC_COMPANION_SESSION_OPTIONS : document.getElementById('root')?.dataset.mogaoExhibit === 'v001' ? MOGAO_EXHIBIT_SESSION_OPTIONS : document.getElementById('root')?.dataset.mogaoUpper === 'v002' ? UPPER_SESSION_OPTIONS : document.getElementById('root')?.dataset.terrain === 'v001' ? TERRAIN_SESSION_OPTIONS : document.getElementById('root')?.dataset.flowRevision === 'v013' ? MOGAO_SESSION_OPTIONS_V13 : document.getElementById('root')?.dataset.mogao === 'v012' ? MOGAO_SESSION_OPTIONS_V12 : document.getElementById('root')?.dataset.mogao === 'v011' ? MOGAO_SESSION_OPTIONS_V11 : document.getElementById('root')?.dataset.mogao === 'v010' ? MOGAO_SESSION_OPTIONS_V10 : document.getElementById('root')?.dataset.mogao === 'v009' ? MOGAO_SESSION_OPTIONS_V9 : document.getElementById('root')?.dataset.mogao === 'v008' ? MOGAO_SESSION_OPTIONS_V8 : document.getElementById('root')?.dataset.mogao === 'v007' ? MOGAO_SESSION_OPTIONS_V7 : document.getElementById('root')?.dataset.mogao === 'v006' ? MOGAO_SESSION_OPTIONS_V6 : document.getElementById('root')?.dataset.mogao === 'v003' ? MOGAO_SESSION_OPTIONS_V3 : document.getElementById('root')?.dataset.mogao === 'v002' ? MOGAO_SESSION_OPTIONS_V2 : document.getElementById('root')?.dataset.mogao === 'v001' ? MOGAO_SESSION_OPTIONS : document.getElementById('root')?.dataset.musicPavilion === 'v006' ? { ...MUSIC_SESSION_OPTIONS_V4, key: 'dunhuang:music-pavilion-preview:v6' } : document.getElementById('root')?.dataset.musicPavilion === 'v005' ? { ...MUSIC_SESSION_OPTIONS_V4, key: 'dunhuang:music-pavilion-preview:v5' } : document.getElementById('root')?.dataset.musicPavilion === 'v004' ? MUSIC_SESSION_OPTIONS_V4 : document.getElementById('root')?.dataset.flyingVoice === 'v001' ? { ...MUSIC_SESSION_OPTIONS_V3, key: FLYING_VOICE_SESSION_KEY } : document.getElementById('root')?.dataset.musicPavilion === 'v003' ? MUSIC_SESSION_OPTIONS_V3 : document.getElementById('root')?.dataset.musicPavilion === 'v002' ? MUSIC_SESSION_OPTIONS_V2 : document.getElementById('root')?.dataset.musicPavilion === 'v001'
     ? { key: MUSIC_SESSION_KEY, colliders: MUSIC_PLAYER_COLLIDERS } : {});
   const [initialWorld] = useState(() => loadWorldSession(undefined, worldSessionOptions));
   const worldCheckpoint = useRef(initialWorld.data);
@@ -238,10 +240,10 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
       setGallery(next);
     };
     const unsubscribe = subscribeFirstGallery(refresh);
-    importGalleryArtworks(catalog);
+    if (!caissonOnly) importGalleryArtworks(catalog);
     refresh(false);
     return unsubscribe;
-  }, [firstGallery, catalog]);
+  }, [firstGallery, caissonOnly, catalog]);
 
   useEffect(() => {
     const root = shellRef.current;
@@ -271,6 +273,7 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
     window.scrollTo({ top: 0, behavior: 'instant' });
     mainRef.current?.focus({ preventScroll: true });
     completedThisRun.current = false;
+    artworkRetry.current = null;
     if (route.page === 'play') {
       ordinaryRequest.current = null;
       galleryRetry.current = null;
@@ -325,7 +328,7 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
     </div>;
   }
 
-  const unlocked = unlockedGameThemes();
+  const unlocked = caissonOnly ? catalog.themes.map(theme => theme.id) : unlockedGameThemes();
   if (musicGallery.unlocked && !unlocked.includes('music')) unlocked.push('music');
   if (galleryCompatibility && !unlocked.includes('patterns')) unlocked.push('patterns');
   if (receivedMogaoFoliosThisVisit.current && !unlocked.includes('stories')) unlocked.push('stories');
@@ -381,7 +384,7 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
   }
 
   function renderArtworkNotice() {
-    return artworkSaveError && <div className="notice notice-error notice-compact" role="alert" data-testid="artwork-save-error"><p>{artworkSaveError}</p><button type="button" className="button button-secondary button-small" data-testid="retry-artwork-save" onClick={() => persistArtworks(artworksRef.current)}><span className="button-label">重试保存作品</span></button></div>;
+    return artworkSaveError && <div className="notice notice-error notice-compact" role="alert" data-testid="artwork-save-error"><p>{artworkSaveError}</p><button type="button" className="button button-secondary button-small" data-testid="retry-artwork-save" onClick={() => artworkRetry.current ? artworkRetry.current() : persistArtworks(artworksRef.current)}><span className="button-label">重试保存作品</span></button></div>;
   }
 
   function renderGallerySaveNotice() {
@@ -413,6 +416,7 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
       const savedSource = entry?.sourceArtworkId ? gallery?.data.artworks[entry.sourceArtworkId] : undefined;
       const source = entry?.draft ?? (savedSource?.levelId === level.id && savedSource.artworkVersion === level.artworkVersion ? savedSource : undefined);
       const save = (colors: RegionColors, materials: RegionMaterials) => {
+        artworkRetry.current = null;
         persistArtworks(withArtwork(artworksRef.current, level, colors, false, undefined, materials));
         if (entry) easelEntry.current = saveGalleryColoringDraft(entry.token, colors, materials) ?? easelEntry.current;
         // Undoing a failed submission opens a new edit. Do not let its retry
@@ -424,6 +428,18 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
       };
       const complete = (colors: RegionColors, materials: RegionMaterials) => {
         if (completedThisRun.current) return;
+        if (caissonOnly && !entry) {
+          const submit = () => {
+            if (!persistArtworks(withArtwork(artworksRef.current, level, colors, true, new Date().toISOString(), materials))) {
+              artworkRetry.current = submit;
+              return;
+            }
+            artworkRetry.current = null;
+            onGameEvent({ type: 'completed', levelId: level.id });
+          };
+          submit();
+          return;
+        }
         const requestId = entry?.token ?? (ordinaryRequest.current ??= newGallerySubmissionId());
         const submittedAt = new Date().toISOString();
         let legacySaved = !!entry;

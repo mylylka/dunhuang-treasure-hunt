@@ -7,6 +7,9 @@ import { FIRST_GALLERY_EASEL_LEVEL, readGalleryColoringEntry, type FirstGalleryC
 import type { StorageLike } from './progress';
 
 export const FIRST_GALLERY_STORAGE_KEY = 'dunhuang:first-gallery:v1';
+export const CAISSON_ONLY_GALLERY_STORAGE_KEY = 'dunhuang:first-gallery-caisson:v1';
+export const isCaissonOnlyMode = () => typeof document !== 'undefined' && document.getElementById('root')?.dataset.caissonOnly === 'v001';
+const activeStorageKey = () => isCaissonOnlyMode() ? CAISSON_ONLY_GALLERY_STORAGE_KEY : FIRST_GALLERY_STORAGE_KEY;
 const CHANGE_EVENT = 'dunhuang:first-gallery-change';
 const muralPart = z.enum(['lotus', 'bird', 'grapes']);
 export type FirstGalleryMuralPart = z.infer<typeof muralPart>;
@@ -88,7 +91,7 @@ export function canOpenFirstGalleryRoute(state: FirstGalleryState, route: Route,
 
 export function loadFirstGallery(storage?: StorageLike): { data: FirstGalleryState; warning: string | null } {
   try {
-    const raw = (storage ?? window.localStorage).getItem(FIRST_GALLERY_STORAGE_KEY);
+    const raw = (storage ?? window.localStorage).getItem(activeStorageKey());
     return { data: raw === null ? emptyFirstGallery() : schema.parse(JSON.parse(raw)), warning: null };
   } catch {
     return { data: emptyFirstGallery(), warning: '第一馆记录暂时无法读取。原记录已保留。' };
@@ -96,8 +99,9 @@ export function loadFirstGallery(storage?: StorageLike): { data: FirstGallerySta
 }
 
 export function subscribeFirstGallery(onChange: (local: boolean) => void): () => void {
+  const storageKey = activeStorageKey();
   const receiveStorage = (event: StorageEvent) => {
-    if (event.key === FIRST_GALLERY_STORAGE_KEY || event.key === null) onChange(false);
+    if (event.key === storageKey || event.key === null) onChange(false);
   };
   const receiveLocal = () => onChange(true);
   window.addEventListener(CHANGE_EVENT, receiveLocal);
@@ -112,9 +116,10 @@ function updateFirstGallery(update: (previous: FirstGalleryState, storage: Stora
   storage?: StorageLike): FirstGallerySave {
   try {
     const target = storage ?? window.localStorage;
+    const storageKey = activeStorageKey();
     // Re-read immediately before each synchronous write so updates from a
     // different tab and edits to unrelated gallery fields are preserved.
-    const raw = target.getItem(FIRST_GALLERY_STORAGE_KEY);
+    const raw = target.getItem(storageKey);
     let damaged = false;
     let previous = emptyFirstGallery();
     if (raw !== null) {
@@ -124,15 +129,15 @@ function updateFirstGallery(update: (previous: FirstGalleryState, storage: Stora
     const updated = update(previous, target);
     if (updated === previous) return { ok: true, data: previous };
     const data = schema.parse(updated);
-    if (raw !== target.getItem(FIRST_GALLERY_STORAGE_KEY)) throw new Error('Concurrent gallery edit');
+    if (raw !== target.getItem(storageKey)) throw new Error('Concurrent gallery edit');
     if (damaged && raw !== null) {
       let suffix = Date.now();
-      while (target.getItem(`${FIRST_GALLERY_STORAGE_KEY}:unreadable:${suffix}`) !== null) suffix++;
-      target.setItem(`${FIRST_GALLERY_STORAGE_KEY}:unreadable:${suffix}`, raw);
+      while (target.getItem(`${storageKey}:unreadable:${suffix}`) !== null) suffix++;
+      target.setItem(`${storageKey}:unreadable:${suffix}`, raw);
     }
     const serialized = JSON.stringify(data);
-    target.setItem(FIRST_GALLERY_STORAGE_KEY, serialized);
-    if (target.getItem(FIRST_GALLERY_STORAGE_KEY) !== serialized) throw new Error('Concurrent gallery write');
+    target.setItem(storageKey, serialized);
+    if (target.getItem(storageKey) !== serialized) throw new Error('Concurrent gallery write');
     if (!storage) window.dispatchEvent(new Event(CHANGE_EVENT));
     return { ok: true, data };
   } catch {

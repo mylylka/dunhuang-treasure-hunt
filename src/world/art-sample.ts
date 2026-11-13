@@ -1,4 +1,5 @@
 import { createMusicInteriorDecoration } from './music-interior-decoration';
+import { isCaissonOnlyMode } from '../services/first-gallery';
 import { createMusicInteriorLighting } from './music-interior-lighting';
 import { createMusicThreeWallMural } from './music-three-wall-mural';
 import type { createMusicInstrumentDisplay } from './music-instrument-display';
@@ -246,7 +247,8 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
   const enhancedEnvironment=options.terrainVersion==='v001' && options.environmentVersion==='v001';
   const firstGallery = !!options.firstGalleryStart && enhancedEnvironment;
   const connectedGalleries = firstGallery && !!options.connectedGalleries;
-  const compactConnectedTerrain = connectedGalleries && !!options.compactConnectedTerrain;
+  const currentFirstGalleryVisuals = connectedGalleries || (firstGallery && isCaissonOnlyMode());
+  const compactConnectedTerrain = currentFirstGalleryVisuals && !!options.compactConnectedTerrain;
   const initialRegion = firstGalleryStreamRegion(options.firstGalleryStart ?? { x: 0, z: 0 });
   const firstGalleryInitialGroups: readonly PreviewResourceGroup[] = connectedGalleries
     ? connectedGalleryEntryGroups(options.firstGalleryStart!, options.previewStartSurface) : [initialRegion ?? 'courtyard'];
@@ -593,7 +595,7 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
     if (cliffAtStart) return path;
     if (index === 0 && !firstGalleryInitialGroups.includes('cliff-galleries')) return distantCliffPath;
     return undefined;
-  }) : initialRegion === 'cliff' ? [cliffPaths[0], undefined, cliffPaths[2], cliffPaths[3]]
+  }) : currentFirstGalleryVisuals ? [] : initialRegion === 'cliff' ? [cliffPaths[0], undefined, cliffPaths[2], cliffPaths[3]]
     : initialRegion === null ? ['mogao-massing/v003/mountain.glb'] : [];
   const scopedCliffPaths = cliffPaths.map((path, index) => {
     if (initialGroup === 'cliff-interior') return index === 1 || index === 4 ? path : undefined;
@@ -828,18 +830,18 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
     return Promise.all(PATTERN_STATIONS.map(async station => ({ station, model: (await load(station.asset)).scene })));
   }
   function attachCourtyard(courtyard: GLTF, patternModels: Awaited<ReturnType<typeof loadPatterns>>, caissonModel?: GLTF) {
-    if (connectedGalleries) refineCourtyardRocks(courtyard.scene);
+    if (currentFirstGalleryVisuals) refineCourtyardRocks(courtyard.scene);
     courtyard.scene.traverse(object => {
       if (object instanceof THREE.Mesh) { object.castShadow = true; object.receiveShadow = true; }
       const name = String(object.userData.semanticGroup ?? object.name);
-      if (connectedGalleries && /^(tree-|shrub-)/.test(name)) {
+      if (currentFirstGalleryVisuals && /^(tree-|shrub-)/.test(name)) {
         object.visible = false;
       }
     });
     courtyard.scene.position.set(-12, 0, 2);
     if(terrain)courtyardExpansion=applyTerrainCourtyardExpansion(courtyard.scene);
     if (compactConnectedTerrain) applyFirstGalleryCourtyardPaving(courtyard.scene);
-    if (connectedGalleries) applyFirstGalleryHallPaving(courtyard.scene);
+    if (currentFirstGalleryVisuals) applyFirstGalleryHallPaving(courtyard.scene);
     if(terrain)courtyardShadows=prepareTerrainCourtyardShadows(courtyard.scene);
     if (terrain) {
       for (const { station, model } of patternModels) {
@@ -984,7 +986,7 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
         attachMusicCourtyard(root, musicTreeModel);
         await attachMusicPavilionInterior(root);
         if (disposed) return;
-      } else if (!connectedGalleries && (firstGallery || profile?.mode === 'terrain')) {
+      } else if (!currentFirstGalleryVisuals && (firstGallery || profile?.mode === 'terrain')) {
         showDistantMusicSilhouette();
       }
     }
@@ -1222,6 +1224,7 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
   function updateFirstGalleryStreaming(position: WorldPoint, musicUnlocked: boolean, cliffUnlocked = false,
     surfaceId?: string | null, buddhaGateOpen?: boolean, hallAGateOpen?: boolean, prewarmCliffTower = false) {
     if (!streamReady || disposed) return;
+    if (!connectedGalleries && currentFirstGalleryVisuals) return;
     if (connectedGalleries) {
       if (connectedCliffUnlocked !== cliffUnlocked) {
         connectedCliffUnlocked = cliffUnlocked;
@@ -1268,6 +1271,7 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
   }
   function firstGalleryEntryStatus(position: WorldPoint, surfaceId?: string | null,
     musicUnlocked = true, cliffUnlocked = true) {
+    if (!connectedGalleries && currentFirstGalleryVisuals) return null;
     if (connectedGalleries) return checkPreviewEntry(connectedGalleryEntryGroups(position, surfaceId).flatMap(group => {
       if (group === 'cliff' && cliffUnlocked) return ['cliff', 'cliff-tower'] as const;
       return group === 'courtyard' || (group === 'music' ? musicUnlocked : cliffUnlocked) ? [group] : [];

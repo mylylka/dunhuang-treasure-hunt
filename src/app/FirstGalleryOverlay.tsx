@@ -103,7 +103,7 @@ export function FirstGalleryOverlay(props: Props) {
   useEffect(() => { runtime?.setGalleryInteractionBlocked?.(occupied); }, [occupied, runtime]);
   useEffect(() => () => { runtime?.setGalleryInteractionBlocked?.(false); }, [runtime]);
   useEffect(() => {
-    if (!runtime || !ready) return;
+    if (!runtime || !ready || document.getElementById('root')?.dataset.caissonOnly === 'v001') return;
     setDisplayReady(false);
     const record = data.displayedArtworkId ? data.artworks[data.displayedArtworkId] : null;
     const level = catalog.levels.find(item => item.id === (record?.levelId ?? 'coloring-feitian-lotus'));

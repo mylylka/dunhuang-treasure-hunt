@@ -7,6 +7,7 @@ import type { WorldCheckpoint } from '../world/types';
 import type { StorageLike } from './progress';
 
 export const FIRST_GALLERY_WORLD_SESSION_KEY = 'dunhuang:first-gallery-world:v1';
+export const CAISSON_ONLY_WORLD_SESSION_KEY = 'dunhuang:first-gallery-caisson-world:v1';
 export const FIRST_GALLERY_MURAL_MARKER_KEY = 'dunhuang:first-gallery-mural-marker:v1';
 export const FIRST_GALLERY_EASEL_LEVEL = 'coloring-feitian-lotus';
 export const FIRST_GALLERY_ENTRY_KEY = 'dunhuang:first-gallery-easel:v1';

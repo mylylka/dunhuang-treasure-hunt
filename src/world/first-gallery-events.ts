@@ -14,16 +14,16 @@ export interface FirstGallerySnapshot {
   mural?: FirstGalleryMuralSnapshot;
   muralPreparation?: 'loading' | 'failed';
 }
-export function galleryNearby(point: WorldPoint): GalleryInteraction | null {
+export function galleryNearby(point: WorldPoint, caissonOnly = false): GalleryInteraction | null {
   const p = fromTerrainPoint('courtyard', point);
   const distance = (target: keyof typeof GALLERY_TARGETS) => Math.hypot(point.x - GALLERY_TARGETS[target].x, point.z - GALLERY_TARGETS[target].z);
-  if (distance('easel') < 4.0) return 'easel';
-  if (Math.hypot(point.x - muralObserver.x, point.z - muralObserver.z) <= .9) return 'mural';
+  if (!caissonOnly && distance('easel') < 4.0) return 'easel';
+  if (!caissonOnly && Math.hypot(point.x - muralObserver.x, point.z - muralObserver.z) <= .9) return 'mural';
   const caissonDepth = p.z + 15;
   // Extend only the entrance-facing edge, by two of the hall's 17/13 m tiles.
   const approachReach = caissonDepth > 0 ? 3.9 + 2 * (17 / 13) : 3.9;
   if (Math.hypot((p.x + 12) / 3.9, caissonDepth / approachReach) < 1) return 'caisson';
-  if (distance('scroll') < 3.0) return 'scroll';
+  if (!caissonOnly && distance('scroll') < 3.0) return 'scroll';
   return null;
 }
 /** Whole building footprints, including side/rear approaches, share the same
@@ -36,7 +36,7 @@ export function galleryBlockedRegion(point: WorldPoint, unlocked: boolean, cliff
   return null;
 }
 /** One short cue at a time. No timers survive leaving or a new input. */
-export function createFirstGalleryEvents(initialSeen: readonly GalleryInteraction[] = []) {
+export function createFirstGalleryEvents(initialSeen: readonly GalleryInteraction[] = [], caissonOnly = false) {
   const seen = new Set<GalleryInteraction>(initialSeen);
   let nearby: GalleryInteraction | null = null, queue: readonly GalleryLine[] = [], index = 0, time = 0, still = 0, cueId = 0;
   let introduction: GalleryInteraction | null = null, finishedIntroduction: GalleryInteraction | null = null;
@@ -83,7 +83,7 @@ export function createFirstGalleryEvents(initialSeen: readonly GalleryInteractio
     },
     update(point: WorldPoint, moving: boolean, dt: number, completed: { mural: boolean; caisson: boolean; easel: boolean; unlocked: boolean }, allowIntroduction = true, audioManaged = false, elapsedSeconds = dt) {
       easelCompleted = completed.easel;
-      const next = galleryNearby(point);
+      const next = galleryNearby(point, caissonOnly);
       if (next !== nearby) { cancel(); nearby = next; }
       gateTime -= dt; if (gateTime <= 0) gate = null;
       if (moving) {

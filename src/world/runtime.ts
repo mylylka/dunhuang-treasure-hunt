@@ -9,7 +9,8 @@ import { createGalleryPortalWalk, GALLERY_PORTAL_PRELUDE, galleryPortalPreludePh
 import { GALLERY_INTRO, GALLERY_TARGETS, type GalleryTarget } from '../content/world/first-gallery-v001';
 import { createFirstGalleryNarration } from './first-gallery-narration';
 import type { FirstGalleryNarrationId } from '../content/world/first-gallery-narration';
-import { completeGalleryMuralPart, loadFirstGallery, subscribeFirstGallery, isFirstGalleryUnlocked, markGalleryIntroductionSeen } from '../services/first-gallery';
+import { completeGalleryMuralPart, loadFirstGallery, subscribeFirstGallery, isFirstGalleryUnlocked, isCaissonOnlyMode, markGalleryIntroductionSeen } from '../services/first-gallery';
+import { isCaissonOnlyWalkable } from './caisson-only-scope';
 import { createMusicCompanionV2 } from './companion-follow-v002';
 import { companionPreviewCheckpointV2, musicGuidePreviewCheckpoint, sanitizeMusicCompanionCheckpoint } from './music-companion-session-v002';
 import { createMusicGuideVisit } from './music-guide-visit';
@@ -99,6 +100,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   let view: WorldView = 'follow';
   const terrain = options.terrainVersion === 'v001';
   const connected = !!options.connectedGalleries;
+  const caissonOnly = !!options.firstGallery && isCaissonOnlyMode();
   let musicGalleryUnlocked = !!options.musicGalleryUnlocked;
   let prewarmCliffTower = false;
   const previewResources = worldPreviewResourceProfile(window.location.pathname, document.documentElement.dataset.previewResourceEntry);
@@ -117,7 +119,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   let previewAttempt: { position: WorldCheckpoint['position']; surface?: string } | undefined;
   let galleryState = options.firstGallery ? loadFirstGallery().data : null;
   const firstGalleryUnlocked = () => !!galleryState && isFirstGalleryUnlocked(galleryState);
-  const gallery = options.firstGallery ? createFirstGalleryEvents(galleryState?.introductionsSeen) : null;
+  const gallery = options.firstGallery ? createFirstGalleryEvents(galleryState?.introductionsSeen, caissonOnly) : null;
   const galleryNarration = gallery ? createFirstGalleryNarration(options.sound ?? defaultSoundPreferences()) : null;
   const galleryCaissonGaze = gallery ? createBuddhaGaze() : null;
   let galleryCaissonStage: 'waiting' | 'speaking' | 'offered' | 'closed' = 'waiting';
@@ -140,11 +142,11 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   let portalStarted = false;
   let galleryStepped = false;
   let savedMuralMarker = false;
-  if (gallery) {
+  if (gallery && !caissonOnly) {
     try { savedMuralMarker = sessionStorage.getItem(FIRST_GALLERY_MURAL_MARKER_KEY) === '1'; }
     catch { /* The invitation can still be remembered in this runtime. */ }
   }
-  const mural = gallery ? createFirstGalleryMural((part, replayParts) => {
+  const mural = gallery && !caissonOnly ? createFirstGalleryMural((part, replayParts) => {
     if (replayParts) { galleryDisplay?.setParts(replayParts); return true; }
     return completeGalleryMuralPart(part).ok;
   }, savedMuralMarker) : null;
@@ -276,6 +278,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   if (connected) {
     checkpoint = sanitizeConnectedGalleryCheckpoint(options.initial, firstGalleryUnlocked(), musicGalleryUnlocked);
   } else {
+    if (caissonOnly && !isCaissonOnlyWalkable(checkpoint.position)) checkpoint = { ...checkpoint, position: { ...TERRAIN_SPAWN }, heading: TERRAIN_REGIONS.courtyard.yaw, cameraYaw: TERRAIN_REGIONS.courtyard.yaw, walkSurface: undefined };
     if (galleryState && galleryBlockedRegion(checkpoint.position, firstGalleryUnlocked())) checkpoint = { ...checkpoint, position: { ...TERRAIN_SPAWN }, heading: TERRAIN_REGIONS.courtyard.yaw, cameraYaw: TERRAIN_REGIONS.courtyard.yaw };
     if(musicInterior)checkpoint=sanitizeMusicCompanionCheckpoint(options.initial,interiorNavigation,!!guideVisit);
     if(upper)checkpoint=UPPER_SESSION_OPTIONS.sanitizeCheckpoint!(options.initial);
@@ -310,12 +313,14 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   canvas.tabIndex = 0; canvas.setAttribute('aria-label', '3D探索画面，WASD或方向键移动，按住鼠标左键或右键拖动或右侧触屏滑动观察，滚轮缩放，点击物品互动');
   canvas.dataset.worldCanvas = 'true';
   canvas.style.display = 'block'; canvas.style.width = '100%'; canvas.style.height = '100%'; canvas.style.touchAction = 'none';
-  const cinematicPreview = !!options.cinematics || musicPreview;
+  // The first-gallery terrain has no cinematic director, but it still needs
+  // the full art-sample options when the music pavilion is not enabled.
+  const cinematicPreview = !!options.cinematics || musicPreview || !!options.firstGallery;
   const director = !terrain && options.cinematics ? createCinematicDirector(options.cinematics.seen, options.cinematics.onSeen) : null;
   let earlyIntent = false, shotHeading = checkpoint.heading, snapFollow = false;
   const previewLoading = { previewResources: previewResources ?? (mobileTerrainStreaming ? TERRAIN_RESOURCE_PROFILE : undefined),
     connectedGalleries: connected, previewStart: checkpoint.position, previewStartSurface: checkpoint.walkSurface,
-    compactConnectedTerrain: connected && coarsePointer,
+    compactConnectedTerrain: (connected || caissonOnly) && coarsePointer,
     cliffUnlockedAtStart: connected && firstGalleryUnlocked() && musicGalleryUnlocked,
     ...(options.mogaoExhibit ? {
       mogaoExhibitVersion: 'v001' as const,
@@ -324,7 +329,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
       mogaoExhibitInteriorPath: coarsePointer ? 'mogao-upper/v003/interior-mobile.glb' : undefined,
       onMogaoExhibitChange: () => schedule(),
     } : {}) };
-  const world = createArtSampleScene(cinematicPreview ? { travelerPath: connected && options.firstGallery && isMobilePhone()
+  const world = createArtSampleScene(cinematicPreview ? { travelerPath: (connected || caissonOnly) && options.firstGallery && isMobilePhone()
     ? TERRAIN_TRAVELER_MOBILE_MODEL : TERRAIN_TRAVELER_MODEL, ...previewLoading,
     musicMuralTextureLimit: musicInterior ? Math.min(renderer.capabilities.maxTextureSize, coarsePointer ? 2048 : 4096) : undefined,
     musicBalconyV2: options.musicBalconyV2,
@@ -393,7 +398,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   }
   function updateGalleryCaissonObservation(dt: number) {
     if (!gallery || !galleryCaissonGaze || options.terrainCaissonVersion !== 'v001') return;
-    const near = inFirstGallery() && galleryNearby(checkpoint.position) === 'caisson';
+    const near = inFirstGallery() && galleryNearby(checkpoint.position, caissonOnly) === 'caisson';
     if (!near) {
       galleryCaissonGaze.update(false, false, 0);
       galleryCaissonStage = 'waiting';
@@ -520,7 +525,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   }
   function blockEncounterVoices(blocked:boolean){encounterVoices?.music.setBlocked(blocked);encounterVoices?.mural.setBlocked(blocked);}
   function nearestDiscovery(): DiscoveryId | null {
-    if (!loaded || exhibitArrival || hallArrival?.phase==='waiting') return null;
+    if (caissonOnly || !loaded || exhibitArrival || hallArrival?.phase==='waiting') return null;
     const p = checkpoint.position;
     if(upper&&(upperFloorHeight(p,checkpoint.walkSurface,!!options.mogaoExhibit)??0)>17.1)return null;
     if (musicPreview && inMusicGallery() && musicAudioInScope && world.music && world.musicFlyingReady?.() !== false &&
@@ -967,6 +972,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
       const upperNext = assisted?.walk ?? (upperNavigation ? moveUpperPlayer(walk, delta, exhibitGateBlocks(), hallAGateBlocks(), !!options.mogaoExhibit) : null);
       const musicNext = guideWalk?.walk ?? musicAssisted?.walk ?? (musicNavigation ? companionV2?.constrainPlayerMove(walk, delta) : null);
       let next = musicNext?.position ?? (companionV1 ? companionV1.constrainPlayerMove(checkpoint.position,delta) : upperNext?.position ?? (terrain ? moveTerrainPlayer(checkpoint.position,delta,!!options.firstGallery) : mogaoV8 ? mogaoV8Rules.moveMogaoPlayer(checkpoint.position,delta) : mogaoV7 ? mogaoV7Rules.moveMogaoPlayer(checkpoint.position,delta) : movePlayer(checkpoint.position,delta,colliders,bounds)));
+      if (caissonOnly && !isCaissonOnlyWalkable(next)) next = checkpoint.position;
       let nextSurface = (musicNext ?? upperNext)?.surfaceId ?? undefined;
       const attemptedMove = nextSurface !== previousSurface || Math.hypot(next.x - checkpoint.position.x, next.z - checkpoint.position.z) > .00001;
       const galleryBlock = galleryState && attemptedMove ? connected
@@ -1540,7 +1546,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     observeGalleryCaisson(enabled) {
       if (!gallery || !terrain || options.terrainCaissonVersion !== 'v001' || !loaded || disposed || failed || view !== 'follow') return;
       if (enabled) {
-        if (!canControlCamera() || !inFirstGallery() || galleryNearby(checkpoint.position) !== 'caisson') return;
+        if (!canControlCamera() || !inFirstGallery() || galleryNearby(checkpoint.position, caissonOnly) !== 'caisson') return;
         if (galleryCaissonStage === 'closed') galleryCaissonStage = 'offered';
       } else {
         galleryNarration?.cancel('caisson');

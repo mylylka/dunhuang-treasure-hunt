@@ -78,6 +78,7 @@ interface Props {
 
 export default function WorldScreen(props: Props) {
   const connectedGalleries = !!props.connectedGalleries;
+  const caissonOnly = document.getElementById('root')?.dataset.caissonOnly === 'v001';
   const terrain=document.getElementById('root')?.dataset.terrain==='v001';
   const upperPreview=connectedGalleries || document.getElementById('root')?.dataset.mogaoUpper==='v002';
   const exhibitPreview=connectedGalleries || document.getElementById('root')?.dataset.mogaoExhibit==='v001';
@@ -182,7 +183,7 @@ export default function WorldScreen(props: Props) {
   const revisitIntro = exhibit.intro?.first === false ? exhibit.intro.hall : null;
   const arrivalActive = !!arrival || !!directFirstIntro;
   const mogaoGameUnlocked = exhibitPreview && (exhibit.receivedBoth || storedMogaoGameAccess);
-  const gameWorldAvailable = props.gameWorldAvailable || !!musicGallery?.unlocked || mogaoGameUnlocked;
+  const gameWorldAvailable = caissonOnly || props.gameWorldAvailable || !!musicGallery?.unlocked || mogaoGameUnlocked;
   const exhibitRef = useRef(exhibit);
   exhibitRef.current = exhibit;
   const portal = snapshot.gallery?.portal;
@@ -210,9 +211,10 @@ export default function WorldScreen(props: Props) {
   }, []);
 
   const requestGallery = useCallback((id: GalleryInteraction, object?: 'lotus' | 'bird' | 'grapes') => {
+    if (caissonOnly && id !== 'caisson') return;
     if (flags.current.locked || flags.current.galleryOccupied || flags.current.exhibitOccupied) return;
     setGalleryRequest({ id, object, serial: ++galleryCounter.current });
-  }, []);
+  }, [caissonOnly]);
   const startInteraction = useCallback(() => {
     if (flags.current.galleryOccupied || flags.current.exhibitOccupied || flags.current.arrivalActive) return;
     const gallery = runtime.current?.snapshot().gallery?.nearby;
@@ -575,7 +577,7 @@ export default function WorldScreen(props: Props) {
     <div className="world-host" ref={host} data-testid="world-host" data-ready={ready} aria-label="3D探索世界" inert={locked || choosing || exhibitOccupied || arrivalActive || view === 'story' ? true : undefined} />
     <output hidden data-testid="world-position" data-x={snapshot.checkpoint.position.x.toFixed(3)} data-z={snapshot.checkpoint.position.z.toFixed(3)} data-walk-surface={snapshot.checkpoint.walkSurface} data-upper-height={snapshot.upper?.height.toFixed(3)} />
     <div className="world-hud" inert={view === 'story' || flyingHistoryActive || locked || choosing || exhibitOccupied ? true : undefined}>
-      {terrain && ready && <WorldMiniMap
+      {terrain && ready && !caissonOnly && <WorldMiniMap
         imageUrl={`${import.meta.env.BASE_URL}assets/world/world-map/v001/world-map.png`}
         marker={mapAvailable ? worldMinimapPosition(snapshot.checkpoint.position) : null}
         unlockedGalleries={props.unlockedMapGalleries} available={mapAvailable}

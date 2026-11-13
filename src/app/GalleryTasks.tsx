@@ -57,7 +57,9 @@ function TaskGroups({ groups, discloseItems = false }: { groups: GalleryTaskGrou
 function FirstGalleryTaskGroups() {
   const [progress, setProgress] = useState(() => loadFirstGallery().data);
   useEffect(() => subscribeFirstGallery(() => setProgress(loadFirstGallery().data)), []);
-  return <TaskGroups groups={firstGalleryTasks(progress)} />;
+  const caissonOnly = document.getElementById('root')?.dataset.caissonOnly === 'v001';
+  const tasks = firstGalleryTasks(progress);
+  return <TaskGroups groups={caissonOnly ? tasks.filter(task => task.label === '三兔共耳') : tasks} />;
 }
 
 function CurrentGalleryTasks({ gallery, musicProgress, muralProgress, exhibitProgress }: ProgressProps & { gallery: GalleryTaskArea | null }) {
