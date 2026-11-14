@@ -1,5 +1,6 @@
 import { createMusicInteriorDecoration } from './music-interior-decoration';
 import { isCaissonOnlyMode } from '../services/first-gallery';
+import { CAISSON_ONLY_HIDDEN_COURTYARD_OBJECTS } from './caisson-only-props';
 import { createMusicInteriorLighting } from './music-interior-lighting';
 import { createMusicThreeWallMural } from './music-three-wall-mural';
 import type { createMusicInstrumentDisplay } from './music-instrument-display';
@@ -54,7 +55,7 @@ import {placeTerrainTowerTrees} from './terrain-trees-v001';
 import {TERRAIN_TOWER_TREES} from '../content/world/terrain-trees-v001';
 import {fromTerrainPoint, terrainHeight, toTerrainPoint, TERRAIN_SCENERY_SOURCE_OVERRIDES, type TerrainRegion} from '../content/world/terrain-layout-v001';
 import { GLTFLoader, type GLTF } from 'three/addons/loaders/GLTFLoader.js';
-import { TERRAIN_COURTYARD_MODEL, TERRAIN_FIRST_GALLERY_COURTYARD_MODEL, TERRAIN_TRAVELER_MOBILE_MODEL, TERRAIN_TRAVELER_MODEL, TRIPO_TRAVELER_MODEL, WORLD_ART_SAMPLE, worldAssetUrl } from '../content/world/assets';
+import { CAISSON_TRAVELER_MODEL, TERRAIN_COURTYARD_MODEL, TERRAIN_FIRST_GALLERY_COURTYARD_MODEL, TERRAIN_TRAVELER_MOBILE_MODEL, TERRAIN_TRAVELER_MODEL, TRIPO_TRAVELER_MODEL, WORLD_ART_SAMPLE, worldAssetUrl } from '../content/world/assets';
 import { tripoTravelerClips } from './tripo-traveler';
 import { connectedGalleryApproachGroups, connectedGalleryEntryGroups, firstGalleryApproachVenue, firstGalleryEntryVenue, firstGalleryStreamRegion, type FirstGalleryVenue } from './first-gallery-streaming';
 import { previewApproachRegions, previewRegionAt, type PreviewResourceGroup, type WorldPreviewResourceProfile } from './preview-resource-profile';
@@ -828,13 +829,15 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
     models.push(group); musicSilhouette = group;
   }
   function loadPatterns(load: (path: string) => Promise<GLTF>) {
-    return Promise.all(PATTERN_STATIONS.map(async station => ({ station, model: (await load(station.asset)).scene })));
+    const stations = firstGallery && isCaissonOnlyMode() ? [] : PATTERN_STATIONS;
+    return Promise.all(stations.map(async station => ({ station, model: (await load(station.asset)).scene })));
   }
   function attachCourtyard(courtyard: GLTF, patternModels: Awaited<ReturnType<typeof loadPatterns>>, caissonModel?: GLTF) {
     if (currentFirstGalleryVisuals) refineCourtyardRocks(courtyard.scene);
     courtyard.scene.traverse(object => {
       if (object instanceof THREE.Mesh) { object.castShadow = true; object.receiveShadow = true; }
       const name = String(object.userData.semanticGroup ?? object.name);
+      if (firstGallery && isCaissonOnlyMode() && CAISSON_ONLY_HIDDEN_COURTYARD_OBJECTS.has(name)) object.visible = false;
       if (currentFirstGalleryVisuals && /^(tree-|shrub-)/.test(name)) {
         object.visible = false;
       }
@@ -900,7 +903,7 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
   const ready = Promise.race([Promise.all([loading, music?.ready, terrain?.ready, landscapeLoading,bactrianCaravans?.ready,upperLoading,patternLoading,exhibitLoading,guideLoading]),deadline]).then(async ([[courtyard, avatar, [tree, shrub, dunes], [exterior, interior, tower, entry, buddha], towerTreeModels, musicTreeModel, caissonModel],,,landscapeModels,,upperModel,patternModels,exhibit,guideModel]) => {
     if (disposed) return;
     attachLandscape(landscapeModels);
-    const isTripoTraveler = options.travelerPath === TRIPO_TRAVELER_MODEL;
+    const isTripoTraveler = options.travelerPath === TRIPO_TRAVELER_MODEL || options.travelerPath === CAISSON_TRAVELER_MODEL;
     const travelerClips = isTripoTraveler ? tripoTravelerClips(avatar.animations) : avatar.animations;
     const required: TravelerAction[] = ['Idle', 'Walk', 'Run'];
     if (options.presentationClips) required.push('Greeting', 'HallLookUp');

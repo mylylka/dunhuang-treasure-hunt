@@ -45,7 +45,8 @@ describe('连续滚动关卡目录', () => {
     const original = JSON.stringify({ catalog, progress });
     const markup = render(catalog, progress);
     const cards = [...markup.matchAll(/<article\b[^>]*>[\s\S]*?<\/article>/g)].map(match => match[0]);
-    expect(cards).toHaveLength(11);
+    expect(cards).toHaveLength(10);
+    expect(markup).not.toContain('data-level-id="patterns-colors"');
     expect(markup).toContain('data-testid="level-choice-scroll"');
     expect(markup).not.toContain('关卡分页');
     expect(markup).not.toContain('上一页');
@@ -68,7 +69,8 @@ describe('连续滚动关卡目录', () => {
     const catalog: ContentCatalog = { ...fixture, themes: [{ ...fixture.themes[0], id: 'patterns' }], levels: [puzzle] };
     const progress: ProgressData = { version: 1, completed: { [puzzle.id]: '2026-11-01T00:00:00.000Z' }, settings: { reducedMotion: false } };
     const markup = render(catalog, progress, 'puzzle');
-    expect(markup.match(/data-status="planned"/g)).toHaveLength(5);
+    expect(markup.match(/data-status="planned"/g)).toHaveLength(4);
+    expect(markup).not.toContain('data-level-id="puzzle-caisson-panorama"');
     expect(markup).toContain('开始拼图');
     expect(markup).not.toContain('再拼一次');
     expect(markup).toContain('已完成');

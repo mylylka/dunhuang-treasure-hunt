@@ -10,6 +10,7 @@ import { MUSIC_COURTYARD_TREE } from '../content/world/music-courtyard-tree-v001
 import {retiredCourtyardHallCameraBox,TERRAIN_FIRST_GALLERY_HALL_CAMERA_BOXES,TERRAIN_HALL_CAMERA_BOXES,TERRAIN_HALL_GEOMETRY} from './terrain-hall-v003';
 import {TERRAIN_CAISSON_CAMERA_BOXES} from './terrain-caisson-v001';
 import { PATTERN_STATIONS } from './pattern-interactives';
+import { CAISSON_ONLY_HIDDEN_COURTYARD_OBJECTS } from './caisson-only-props';
 import { toTerrainPoint, fromTerrainPoint, terrainRegionAt, terrainSurfaceHeight, TERRAIN_PLAYER_COLLIDERS, TERRAIN_FIRST_GALLERY_PLAYER_COLLIDERS, TERRAIN_COURTYARD_LOCAL_COLLIDERS, TERRAIN_FIRST_GALLERY_COURTYARD_LOCAL_COLLIDERS, TERRAIN_MUSIC_LOCAL_SOLIDS } from './terrain-rules-v001';
 
 export function terrainVector(region: TerrainRegion, point: THREE.Vector3, inverse = false) {
@@ -58,19 +59,23 @@ function courtyardCameraSpace(solids: typeof TERRAIN_COURTYARD_LOCAL_COLLIDERS, 
 }
 const courtyardSpace = courtyardCameraSpace(TERRAIN_COURTYARD_LOCAL_COLLIDERS, TERRAIN_COURTYARD_CAMERA_BOXES);
 const firstGalleryCourtyardSpace = courtyardCameraSpace(TERRAIN_FIRST_GALLERY_COURTYARD_LOCAL_COLLIDERS, [...courtyardPerimeterBoxes, ...TERRAIN_FIRST_GALLERY_HALL_CAMERA_BOXES]);
+const caissonOnlyCourtyardSpace = courtyardCameraSpace(
+  TERRAIN_FIRST_GALLERY_COURTYARD_LOCAL_COLLIDERS.filter(solid => !CAISSON_ONLY_HIDDEN_COURTYARD_OBJECTS.has(solid.id ?? '')),
+  [...courtyardPerimeterBoxes, ...TERRAIN_FIRST_GALLERY_HALL_CAMERA_BOXES.filter(box => !CAISSON_ONLY_HIDDEN_COURTYARD_OBJECTS.has(box.id))],
+);
 // Each local region keeps only its own geometry. The retired route dune and
 // the other two buildings must never shorten a camera in this new layout.
 const localSpace:CameraSpace={subjectHeight:.65,boxes:legacyCliffSpace.boxes.slice(legacyMusicSpace.boxes.length),cylinders:MOGAO_SOLIDS.flatMap(s=>s.circle?[{...s.circle,id:s.id!,minY:-.2,maxY:s.height}]:[])};
-export function terrainCameraSpace(includeCaisson=false, firstGallery=false, openMusicBalcony=false): CameraSpace {
+export function terrainCameraSpace(includeCaisson=false, firstGallery=false, openMusicBalcony=false, caissonOnly=false): CameraSpace {
   const orientedBoxes:NonNullable<CameraSpace['orientedBoxes']>[number][]=[];
-  const baseCourtyard = firstGallery ? firstGalleryCourtyardSpace : courtyardSpace;
+  const baseCourtyard = caissonOnly ? caissonOnlyCourtyardSpace : firstGallery ? firstGalleryCourtyardSpace : courtyardSpace;
   const currentCourtyard = includeCaisson ? { ...baseCourtyard, boxes: [...baseCourtyard.boxes, ...TERRAIN_CAISSON_CAMERA_BOXES.map(definitionBox)] } : baseCourtyard;
   for(const [region,source] of [['courtyard',currentCourtyard],['music',openMusicBalcony ? openMusicSpace : musicSpace],['cliff',localSpace]] as const){
     const zero=toTerrainPoint(region,{x:0,y:0,z:0});
     const inverse=new THREE.Matrix4().makeRotationY(TERRAIN_REGIONS[region].yaw).setPosition(zero.x,zero.y,zero.z).invert();
     for(const bounds of source.boxes)orientedBoxes.push({bounds,inverse});
   }
-  for (const { position, yaw, halfWidth, halfDepth, height } of PATTERN_STATIONS) {
+  for (const { position, yaw, halfWidth, halfDepth, height } of caissonOnly ? [] : PATTERN_STATIONS) {
     const origin = toTerrainPoint('courtyard', position);
     const inverse = new THREE.Matrix4().makeRotationY(TERRAIN_REGIONS.courtyard.yaw + yaw)
       .setPosition(origin.x, origin.y, origin.z).invert();
@@ -97,12 +102,12 @@ export function clearTerrainCamera(target: THREE.Vector3, eye: THREE.Vector3) {
   return candidate;
 }
 
-export function terrainFollowPose(x: number, y: number, z: number, yaw: number, space: CameraSpace, firstGallery = false, openMusicBalcony = false) {
+export function terrainFollowPose(x: number, y: number, z: number, yaw: number, space: CameraSpace, firstGallery = false, openMusicBalcony = false, caissonOnly = false) {
   const region = terrainRegionAt({ x, z });
   let pose: { position: THREE.Vector3; target: THREE.Vector3 };
   if (region) {
     const p = fromTerrainPoint(region, { x, y, z }), localYaw = yaw - TERRAIN_REGIONS[region].yaw;
-    const groundCamera = region === 'music' ? (openMusicBalcony ? openMusicSpace : musicSpace) : firstGallery ? firstGalleryCourtyardSpace : courtyardSpace;
+    const groundCamera = region === 'music' ? (openMusicBalcony ? openMusicSpace : musicSpace) : caissonOnly ? caissonOnlyCourtyardSpace : firstGallery ? firstGalleryCourtyardSpace : courtyardSpace;
     const original = region === 'cliff'
       ? mogaoFollowPose(p.x, p.y, p.z, localYaw, localSpace)
       : followCameraPose(p.x, p.y, p.z, localYaw, groundCamera);

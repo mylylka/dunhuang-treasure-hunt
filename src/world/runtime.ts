@@ -210,8 +210,9 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   const musicV4=musicPreview&&(options.musicVersion==='v004'||musicV5);
   const musicV3=musicPreview&&options.musicVersion==='v003';
   const musicV2=musicPreview&&(options.musicVersion==='v002'||musicV3||musicV4);
-  const travelCamera=musicV2?createTravelCamera():null;
-  const yawLimit=musicV2?normalizedYaw:clampCameraYaw;
+  // Reuse the connected world's travel camera in the first-gallery-only entry.
+  const travelCamera = musicV2 || caissonOnly ? createTravelCamera() : null;
+  const yawLimit = travelCamera ? normalizedYaw : clampCameraYaw;
   const bounds=terrain?TERRAIN_BOUNDS:mogao?MOGAO_LAYOUT.bounds:musicV4?MUSIC_LAYOUT_V4.bounds:musicV3?MUSIC_LAYOUT_V3.bounds:musicV2?MUSIC_LAYOUT_V2.bounds:undefined;
   const regionColliders=terrain?TERRAIN_PLAYER_COLLIDERS:mogao?MOGAO_PLAYER_COLLIDERS:musicV4?MUSIC_PLAYER_COLLIDERS_V4:musicV3?MUSIC_PLAYER_COLLIDERS_V3:musicV2?MUSIC_PLAYER_COLLIDERS_V2:MUSIC_PLAYER_COLLIDERS;
   const baseFlyingPose=musicV4?flyingCameraPoseV4:musicV3?flyingCameraPoseV3:musicV2?flyingCameraPoseV2:flyingCameraPose;
@@ -236,7 +237,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     return terrain ? terrainPose('music', pose) : pose;
   }
   const nearMural=(p:{x:number;z:number})=>baseNearMural(localPoint('music',p));
-  const cameraSpace=terrain?terrainCameraSpace(options.terrainCaissonVersion==='v001',!!options.firstGallery,musicV6):mogao?(mogaoV11?mogaoCameraSpaceV11:mogaoV8?mogaoCameraSpaceV8:mogaoV7?mogaoCameraSpaceV7:mogaoV6?mogaoCameraSpaceV6:mogaoV3?mogaoCameraSpaceV3:mogaoV2?mogaoCameraSpaceV2:mogaoCameraSpace)():musicPreview?(musicV4?musicCameraSpaceV4(musicV6):musicV3?musicCameraSpaceV3():musicV2?musicCameraSpaceV2():musicCameraSpace()):undefined;
+  const cameraSpace=terrain?terrainCameraSpace(options.terrainCaissonVersion==='v001',!!options.firstGallery,musicV6,caissonOnly):mogao?(mogaoV11?mogaoCameraSpaceV11:mogaoV8?mogaoCameraSpaceV8:mogaoV7?mogaoCameraSpaceV7:mogaoV6?mogaoCameraSpaceV6:mogaoV3?mogaoCameraSpaceV3:mogaoV2?mogaoCameraSpaceV2:mogaoCameraSpace)():musicPreview?(musicV4?musicCameraSpaceV4(musicV6):musicV3?musicCameraSpaceV3():musicV2?musicCameraSpaceV2():musicCameraSpace()):undefined;
   const usesMusicSurface = (surface?: string) => musicInterior && !!surface && (!connected || isMusicWalkSurface(surface));
   const usesUpperSurface = (surface?: string) => upper && !!surface && (!connected || isMogaoWalkSurface(surface));
   function heightAt(p: WorldCheckpoint['position']) {
@@ -265,7 +266,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
       pose.position=settleUpperCamera(pose.target,pose.position,buddhaGateLocked,exhibit,aLocked);
       return pose;
     }
-    const original=terrain?terrainFollowPose(x,y,z,yaw,cameraSpace!,!!options.firstGallery,musicV6):mogao?(mogaoV11?mogaoFollowPoseV11:mogaoV8?mogaoFollowPoseV8:mogaoV7?mogaoFollowPoseV7:mogaoV6?mogaoFollowPoseV6:mogaoV3?mogaoFollowPoseV3:mogaoV2?mogaoFollowPoseV2:mogaoFollowPose)(x,y,z,yaw,cameraSpace!):followCameraPose(x,y,z,yaw,cameraSpace);
+    const original=terrain?terrainFollowPose(x,y,z,yaw,cameraSpace!,!!options.firstGallery,musicV6,caissonOnly):mogao?(mogaoV11?mogaoFollowPoseV11:mogaoV8?mogaoFollowPoseV8:mogaoV7?mogaoFollowPoseV7:mogaoV6?mogaoFollowPoseV6:mogaoV3?mogaoFollowPoseV3:mogaoV2?mogaoFollowPoseV2:mogaoFollowPose)(x,y,z,yaw,cameraSpace!):followCameraPose(x,y,z,yaw,cameraSpace);
     const pose=zoomFollowPose(original,zoomOffset);
     const subject=cameraSpace?.subjectHeight===undefined?undefined:new THREE.Vector3(x,y+cameraSpace.subjectHeight,z);
     pose.position=terrain&&cameraSpace&&subject
@@ -274,7 +275,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
       :settleFollowCamera(pose.target,pose.position,pose.position,cameraSpace,subject);
     return pose;
   };
-  let checkpoint: WorldCheckpoint = { ...options.initial, position: terrain ? sanitizeTerrainPosition(options.initial.position, !!options.firstGallery) : sanitizePosition(options.initial.position, musicPreview ? regionColliders : undefined, bounds), cameraYaw: yawLimit(options.initial.cameraYaw), visitedEvents: [...options.initial.visitedEvents] };
+  let checkpoint: WorldCheckpoint = { ...options.initial, position: terrain ? sanitizeTerrainPosition(options.initial.position, !!options.firstGallery, caissonOnly) : sanitizePosition(options.initial.position, musicPreview ? regionColliders : undefined, bounds), cameraYaw: yawLimit(options.initial.cameraYaw), visitedEvents: [...options.initial.visitedEvents] };
   if (connected) {
     checkpoint = sanitizeConnectedGalleryCheckpoint(options.initial, firstGalleryUnlocked(), musicGalleryUnlocked);
   } else {
@@ -978,7 +979,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
       const delta = guidedDelta ?? guideWalk?.delta ?? { x: vector.x * desiredSpeed * movementDt, z: vector.z * desiredSpeed * movementDt };
       const upperNext = assisted?.walk ?? (upperNavigation ? moveUpperPlayer(walk, delta, exhibitGateBlocks(), hallAGateBlocks(), !!options.mogaoExhibit) : null);
       const musicNext = guideWalk?.walk ?? musicAssisted?.walk ?? (musicNavigation ? companionV2?.constrainPlayerMove(walk, delta) : null);
-      let next = musicNext?.position ?? (companionV1 ? companionV1.constrainPlayerMove(checkpoint.position,delta) : upperNext?.position ?? (terrain ? moveTerrainPlayer(checkpoint.position,delta,!!options.firstGallery) : mogaoV8 ? mogaoV8Rules.moveMogaoPlayer(checkpoint.position,delta) : mogaoV7 ? mogaoV7Rules.moveMogaoPlayer(checkpoint.position,delta) : movePlayer(checkpoint.position,delta,colliders,bounds)));
+      let next = musicNext?.position ?? (companionV1 ? companionV1.constrainPlayerMove(checkpoint.position,delta) : upperNext?.position ?? (terrain ? moveTerrainPlayer(checkpoint.position,delta,!!options.firstGallery,caissonOnly) : mogaoV8 ? mogaoV8Rules.moveMogaoPlayer(checkpoint.position,delta) : mogaoV7 ? mogaoV7Rules.moveMogaoPlayer(checkpoint.position,delta) : movePlayer(checkpoint.position,delta,colliders,bounds)));
       if (caissonOnly && !isCaissonOnlyWalkable(next)) next = checkpoint.position;
       let nextSurface = (musicNext ?? upperNext)?.surfaceId ?? undefined;
       const attemptedMove = nextSurface !== previousSurface || Math.hypot(next.x - checkpoint.position.x, next.z - checkpoint.position.z) > .00001;

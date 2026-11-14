@@ -3,7 +3,7 @@ import { travelerModelPath } from '../../src/content/world/assets';
 import { MUSIC_INSTRUMENTS } from '../../src/content/world/music-instruments-v001';
 
 const selectionKey = 'dunhuang:traveler-selection:v1';
-const galleryKey = 'dunhuang:first-gallery:v1';
+const galleryKey = 'dunhuang:first-gallery-caisson:v1';
 
 function watchAssetRequests(page: Page) {
   const models = new Set<string>();
@@ -75,7 +75,7 @@ test('开场默认选中鸣沙，切换只改变插画状态，确认后才加�
   expect(await pickedTraveler(page)).toBe('classic');
 });
 
-test('设置可更换旅人，重载沿用林澈、馆内位置及任务记录', async ({ page, isMobile }) => {
+test('设置可更换旅人，刷新重新选角并沿用上次选择、站位和任务记录', async ({ page, isMobile }) => {
   test.setTimeout(150_000);
   await page.addInitScript(({ galleryKey, selectionKey }) => {
     if (!localStorage.getItem(selectionKey)) localStorage.setItem(selectionKey, 'classic');
@@ -84,14 +84,16 @@ test('设置可更换旅人，重载沿用林澈、馆内位置及任务记录',
       ceremonySeen: false, artworks: {}, displayedArtworkId: null,
     }));
   }, { galleryKey, selectionKey });
-  const { models, previews } = watchAssetRequests(page);
-  await page.goto('/?view=mural');
+  const { models } = watchAssetRequests(page);
+  await page.goto('/?view=caisson');
   const world = page.getByTestId('world-host');
+  await expect(classicRadio(page)).toBeChecked({ timeout: 30_000 });
+  expect([...models]).toEqual([]);
+  await enterButton(page).click();
   await expect(world).toHaveAttribute('data-ready', 'true', { timeout: 60_000 });
   const position = () => page.getByTestId('world-position').evaluate(el => [el.getAttribute('data-x'), el.getAttribute('data-z')]);
   const originalPosition = await position();
   const originalProgress = await page.evaluate(key => localStorage.getItem(key), galleryKey);
-  expect([...previews]).toEqual([]);
   const settings = page.getByRole('navigation', { name: '世界导航' }).getByRole('link', { name: '设置' });
   if (isMobile) await settings.tap();
   else await settings.click();
@@ -113,11 +115,13 @@ test('设置可更换旅人，重载沿用林澈、馆内位置及任务记录',
   expect(travelerRequests(models)).toEqual([assetPath(travelerModelPath('tripo', isMobile))]);
   expect(await position()).toEqual(originalPosition);
   models.clear();
-  previews.clear();
   await page.reload();
-  await expect(world).toHaveAttribute('data-ready', 'true', { timeout: 60_000 });
+  await expect(modernRadio(page)).toBeChecked({ timeout: 30_000 });
   expect(await pickedTraveler(page)).toBe('tripo');
-  expect([...previews]).toEqual([]);
+  await expect(world).toHaveCount(0);
+  expect([...models]).toEqual([]);
+  await enterButton(page).click();
+  await expect(world).toHaveAttribute('data-ready', 'true', { timeout: 60_000 });
   expect(travelerRequests(models)).toEqual([assetPath(travelerModelPath('tripo', isMobile))]);
   expect(await position()).toEqual(originalPosition);
   expect(await page.evaluate(key => localStorage.getItem(key), galleryKey)).toBe(originalProgress);

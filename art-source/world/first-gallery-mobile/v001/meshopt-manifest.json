@@ -1,0 +1,26 @@
+{
+  "encoder": "meshoptimizer@1.1.1",
+  "encoding": "EXT_meshopt_compression lossless ATTRIBUTES",
+  "records": [
+    {
+      "source": "public/assets/world/courtyard/v007/courtyard.glb",
+      "sourceBytes": 14912608,
+      "sourceSha256": "6db9f3a1fec51488689878145620c4b9cd9b57efb5316ad1a220ef21d6d835b2",
+      "output": "public/assets/world/courtyard/v007/courtyard-meshopt-mobile.glb",
+      "outputBytes": 10556264,
+      "outputSha256": "a7f31dd06cbc7a812bda7ccb042f641e0676675751652bbd1f5ef78b502ed584",
+      "compressedViews": 1363,
+      "verification": "Every compressed buffer view was decoded and compared byte-for-byte. Original GLB preserved."
+    },
+    {
+      "source": "public/assets/world/traveler-tripo/v002/traveler.glb",
+      "sourceBytes": 7918856,
+      "sourceSha256": "81b6b7c5a02fb6e84fd807be2f003e5e99f8f92daaeb7788dd62eec1ca084609",
+      "output": "public/assets/world/traveler-tripo/v002/traveler-meshopt-mobile.glb",
+      "outputBytes": 6132368,
+      "outputSha256": "42587ac09c79ce7a2633bb11beb772c4aa5b120418c140249254371fb608d45d",
+      "compressedViews": 149,
+      "verification": "Every compressed buffer view was decoded and compared byte-for-byte. Original GLB preserved."
+    }
+  ]
+}

@@ -14,8 +14,9 @@ const positions: Record<string, [number, number, number]> = {
   easel: [-6.5, -3.9, -2.18], mural: [FIRST_GALLERY_MURAL_OBSERVER.x, FIRST_GALLERY_MURAL_OBSERVER.z, 0], caisson: [-12, -14, 0], scroll: [-19, -1.7, 2.45],
 };
 const query = new URLSearchParams(location.search), station = query.get('view');
-const sessionKey = isCaissonOnlyMode() ? CAISSON_ONLY_WORLD_SESSION_KEY : FIRST_GALLERY_WORLD_SESSION_KEY;
-if (station && positions[station] && (!isCaissonOnlyMode() || station === 'caisson')) {
+const caissonOnly = isCaissonOnlyMode();
+const sessionKey = caissonOnly ? CAISSON_ONLY_WORLD_SESSION_KEY : FIRST_GALLERY_WORLD_SESSION_KEY;
+if (station && positions[station] && (!caissonOnly || station === 'caisson')) {
   const [x, z, yaw] = positions[station], point = toTerrainPoint('courtyard', { x, z });
   const checkpoint = defaultWorldCheckpoint(TERRAIN_SPAWN);
   checkpoint.position = { x: point.x, z: point.z }; checkpoint.heading = checkpoint.cameraYaw = yaw + TERRAIN_REGIONS.courtyard.yaw;
@@ -23,8 +24,8 @@ if (station && positions[station] && (!isCaissonOnlyMode() || station === 'caiss
   query.delete('view'); history.replaceState(null, '', `${location.pathname}${query.size ? `?${query}` : ''}${location.hash}`);
 }
 const connected = document.getElementById('root')?.dataset.connectedGalleries === 'v001';
-const travelerSelectionEnabled = connected || isCaissonOnlyMode();
-const travelerId = travelerSelectionEnabled ? readTravelerSelection() : 'classic';
+// The short preview waits for a new confirmation on every page load.
+const travelerId = caissonOnly ? null : connected ? readTravelerSelection() : 'classic';
 if (travelerId && (!location.hash || location.hash === '#' || location.hash === '#/')) {
   let preloadCourtyard = true;
   try {
@@ -34,7 +35,7 @@ if (travelerId && (!location.hash || location.hash === '#' || location.hash === 
       preloadCourtyard = terrainRegionAt(checkpoint.position) === 'courtyard';
     }
   } catch { /* Invalid sessions fall back to the first courtyard. */ }
-  const traveler = travelerModelPath(travelerId, travelerSelectionEnabled && isMobilePhone());
+  const traveler = travelerModelPath(travelerId, connected && isMobilePhone());
   const paths = preloadCourtyard ? [TERRAIN_FIRST_GALLERY_COURTYARD_MODEL, traveler] : [traveler];
   for (const path of paths) {
     const preload = document.createElement('link');

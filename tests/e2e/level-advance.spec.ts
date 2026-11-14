@@ -20,10 +20,11 @@ const existingProgress: ProgressData = {
 };
 const resultCases = [
   { id: 'patterns-intro', next: 'patterns-lotus' },
-  { id: 'patterns-scrolls', next: null },
+  { id: 'patterns-scrolls', next: 'patterns-geometry' },
   { id: 'puzzle-lotus-ceiling', next: 'puzzle-three-rabbits' },
   { id: 'puzzle-twin-dragons', next: null },
   { id: paint.id, next: nextPaintId },
+  { id: nextPaintId, next: 'coloring-deer-medallion' },
   { id: lastPaintId, next: null },
   { id: hiddenLevels[0].id, next: hiddenLevels[1]?.id ?? null },
   { id: hiddenLevels[hiddenLevels.length - 1].id, next: null },
@@ -131,6 +132,15 @@ async function expectResultAction(page: Page, id: string, next: string | null) {
     expect(await primary.getAttribute('data-next-level-id')).toBeNull();
     await expect(page.getByRole('link', { name: '下一关', exact: true })).toHaveCount(0);
   }
+  if (level.gameType === 'coloring') {
+    await expect(page.locator('.result-reference')).toHaveCount(0);
+    await expect(page.getByRole('link', { name: '游戏世界', exact: true })).toHaveCount(0);
+    const artwork = page.getByTestId('coloring-result-canvas');
+    await expect(artwork).toBeVisible();
+    const artworkBounds = (await artwork.boundingBox())!, actionsBounds = (await page.locator('.result-actions').boundingBox())!;
+    expect(Math.abs((artworkBounds.x + artworkBounds.width / 2) - (actionsBounds.x + actionsBounds.width / 2))).toBeLessThan(3);
+    if (id === nextPaintId && await page.evaluate(() => innerWidth >= 1000)) expect(artworkBounds.width).toBeGreaterThan(400);
+  }
   await expectFits(page);
 }
 
@@ -203,10 +213,10 @@ for (const viewport of [{ width: 640, height: 300 }, { width: 852, height: 330 }
       page.on('pageerror', error => errors.push(error.message));
       const playCases = [
         { id: 'patterns-intro', previous: null, next: 'patterns-lotus' },
-        { id: 'patterns-scrolls', previous: 'patterns-lotus', next: null },
+        { id: 'patterns-scrolls', previous: 'patterns-lotus', next: 'patterns-geometry' },
         { id: 'puzzle-twin-dragons', previous: 'puzzle-three-rabbits', next: null },
         { id: paint.id, previous: null, next: nextPaintId },
-        { id: lastPaintId, previous: 'coloring-three-rabbits', next: null },
+        { id: lastPaintId, previous: 'coloring-deer-medallion', next: null },
         { id: hiddenLevels[0].id, previous: null, next: hiddenLevels[1]?.id ?? null },
         { id: hiddenLevels[hiddenLevels.length - 1].id, previous: hiddenLevels[hiddenLevels.length - 2]?.id ?? null, next: null },
         { id: 'music-apsara-shadow', previous: null, next: null },

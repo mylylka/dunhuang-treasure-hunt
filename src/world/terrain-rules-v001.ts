@@ -12,6 +12,7 @@ import { MOGAO_SESSION_OPTIONS, mogaoSurfaceHeight, inMogaoRoom } from './mogao-
 import type { WorldPoint } from './types';
 import { TERRAIN_TOWER_TREES } from '../content/world/terrain-trees-v001';
 import { PATTERN_STATION_SOLIDS } from './pattern-interactives';
+import { CAISSON_ONLY_HIDDEN_COURTYARD_OBJECTS } from './caisson-only-props';
 import { COURTYARD_ROCK_SCALE, ENLARGED_COURTYARD_ROCKS } from '../content/world/courtyard-rock-refinement-v001';
 
 export * from '../content/world/terrain-layout-v001';
@@ -117,6 +118,10 @@ const firstGalleryRocks = TERRAIN_FIRST_GALLERY_COURTYARD_LOCAL_COLLIDERS
 const firstGalleryById = new Map([...firstGalleryFurniture, ...firstGalleryRocks].map(solid => [solid.id, solid]));
 export const TERRAIN_FIRST_GALLERY_PLAYER_COLLIDERS: readonly WorldCollider[] = TERRAIN_PLAYER_COLLIDERS
   .map(solid => firstGalleryById.get(solid.id ?? '') ?? solid);
+export const TERRAIN_CAISSON_ONLY_PLAYER_COLLIDERS = TERRAIN_FIRST_GALLERY_PLAYER_COLLIDERS.filter(
+  solid => solid.id !== 'terrain-courtyard-mural-station' && solid.id !== 'terrain-courtyard-coloring-station'
+    && !CAISSON_ONLY_HIDDEN_COURTYARD_OBJECTS.has((solid.id ?? '').replace(/^terrain-courtyard-/, '')),
+);
 
 /** Sand is continuous; building floors and accepted stair ramps retain scale. */
 export function terrainSurfaceHeight(p: WorldPoint): number {
@@ -150,14 +155,14 @@ function surfaceSlope(p: WorldPoint) {
   const dz = (terrainSurfaceHeight({ x: p.x, z: p.z + e }) - terrainSurfaceHeight({ x: p.x, z: p.z - e })) / (2 * e);
   return Math.hypot(dx, dz);
 }
-export function isTerrainWalkable(p: WorldPoint, firstGallery = false): boolean {
+export function isTerrainWalkable(p: WorldPoint, firstGallery = false, caissonOnly = false): boolean {
   const bankClearance = PLAYER_RADIUS + .35;
-  return isWalkable(p, firstGallery ? TERRAIN_FIRST_GALLERY_PLAYER_COLLIDERS : TERRAIN_PLAYER_COLLIDERS, TERRAIN_BOUNDS)
+  return isWalkable(p, caissonOnly ? TERRAIN_CAISSON_ONLY_PLAYER_COLLIDERS : firstGallery ? TERRAIN_FIRST_GALLERY_PLAYER_COLLIDERS : TERRAIN_PLAYER_COLLIDERS, TERRAIN_BOUNDS)
     && (!lakeMayBeWithin(p.x, p.z, bankClearance) || lakeSignedDistance(p.x, p.z) >= bankClearance - .00001)
     && surfaceSlope(p) <= TERRAIN_MAX_WALK_SLOPE;
 }
-export function sanitizeTerrainPosition(p: WorldPoint, firstGallery = false): WorldPoint {
-  return isTerrainWalkable(p, firstGallery) ? { ...p } : { ...TERRAIN_SPAWN };
+export function sanitizeTerrainPosition(p: WorldPoint, firstGallery = false, caissonOnly = false): WorldPoint {
+  return isTerrainWalkable(p, firstGallery, caissonOnly) ? { ...p } : { ...TERRAIN_SPAWN };
 }
 export const TERRAIN_SESSION_OPTIONS = {
   key: TERRAIN_SESSION_KEY, bounds: TERRAIN_BOUNDS, colliders: TERRAIN_PLAYER_COLLIDERS,
@@ -167,16 +172,21 @@ export const TERRAIN_FIRST_GALLERY_SESSION_OPTIONS = {
   ...TERRAIN_SESSION_OPTIONS, colliders: TERRAIN_FIRST_GALLERY_PLAYER_COLLIDERS,
   sanitizePosition: (point: WorldPoint) => sanitizeTerrainPosition(point, true),
 };
+export const TERRAIN_CAISSON_ONLY_SESSION_OPTIONS = {
+  ...TERRAIN_FIRST_GALLERY_SESSION_OPTIONS, colliders: TERRAIN_CAISSON_ONLY_PLAYER_COLLIDERS,
+  spawn: { ...TERRAIN_SPAWN, heading: TERRAIN_REGIONS.courtyard.yaw },
+  sanitizePosition: (point: WorldPoint) => sanitizeTerrainPosition(point, true, true),
+};
 
 /** Substeps stop tunnelling through walls, steep banks and either crescent tip. */
-export function moveTerrainPlayer(position: WorldPoint, delta: WorldPoint, firstGallery = false): WorldPoint {
+export function moveTerrainPlayer(position: WorldPoint, delta: WorldPoint, firstGallery = false, caissonOnly = false): WorldPoint {
   const length = Math.hypot(delta.x, delta.z);
   if (!Number.isFinite(length) || !length) return { ...position };
   const count = Math.ceil(length / (PLAYER_RADIUS * .4)), steps = Math.min(128, count), fraction = Math.min(1, 128 / count) / steps;
   let result = { ...position };
   for (let i = 0; i < steps; i++) {
     const step = { x: delta.x * fraction, z: delta.z * fraction }, combined = { x: result.x + step.x, z: result.z + step.z };
-    if (isTerrainWalkable(combined, firstGallery) && Math.abs(terrainSurfaceHeight(combined) - terrainSurfaceHeight(result)) <= Math.hypot(step.x, step.z) * TERRAIN_MAX_WALK_SLOPE + .035) {
+    if (isTerrainWalkable(combined, firstGallery, caissonOnly) && Math.abs(terrainSurfaceHeight(combined) - terrainSurfaceHeight(result)) <= Math.hypot(step.x, step.z) * TERRAIN_MAX_WALK_SLOPE + .035) {
       result = combined; continue;
     }
     // Slide along an actual obstacle only after trying the intended diagonal;
@@ -185,7 +195,7 @@ export function moveTerrainPlayer(position: WorldPoint, delta: WorldPoint, first
       const distance = delta[axis] * fraction;
       if (!distance) continue;
       const next = { ...result, [axis]: result[axis] + distance };
-      if (isTerrainWalkable(next, firstGallery) && Math.abs(terrainSurfaceHeight(next) - terrainSurfaceHeight(result)) <= Math.abs(distance) * TERRAIN_MAX_WALK_SLOPE + .035) result = next;
+      if (isTerrainWalkable(next, firstGallery, caissonOnly) && Math.abs(terrainSurfaceHeight(next) - terrainSurfaceHeight(result)) <= Math.abs(distance) * TERRAIN_MAX_WALK_SLOPE + .035) result = next;
     }
   }
   return result;

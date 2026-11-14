@@ -14,6 +14,7 @@ test('精简版保留三兔共耳互动并写入独立记录', async ({ page }) 
     if (response.status() >= 400 && new URL(response.url()).pathname.includes('/assets/world/')) missingWorldAssets.push(response.url());
   });
   await page.goto('/?view=caisson');
+  await page.getByRole('button', { name: '开启敦煌之旅' }).click({ timeout: 30_000 });
   await page.getByRole('button', { name: '抬头看看' }).click({ timeout: 90_000 });
   const magnify = page.getByRole('button', { name: '放大看看' });
   await expect.poll(async () => {

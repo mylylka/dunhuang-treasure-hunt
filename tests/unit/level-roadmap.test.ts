@@ -1,13 +1,14 @@
 import { describe, expect, it } from 'vitest';
 import { getLevelChoices, levelRoadmap } from '../../src/content/level-roadmap';
+import type { Level } from '../../src/types';
 import { makeLevel } from '../fixtures/catalog';
 
 const patternLevel = (id: string) => ({ ...makeLevel(id), themeId: 'patterns' });
 
 describe('规划关卡与正式关卡分开管理', () => {
-  it('没有正式内容时，六个筹备位都不包含可玩的关卡对象', () => {
+  it('没有正式内容时，只展示仍保留的筹备位且不包含可玩的关卡对象', () => {
     const choices = getLevelChoices({ levels: [] }, 'patterns', 'spot-difference');
-    expect(choices.map(choice => choice.title)).toEqual(['藻井寻踪', '莲瓣与团花', '忍冬与卷草', '联珠与几何', '三兔与旋转', '色彩与层次']);
+    expect(choices.map(choice => choice.title)).toEqual(['藻井寻踪', '莲瓣与团花', '忍冬与卷草', '联珠与几何', '三兔与旋转']);
     expect(choices.every(choice => choice.status === 'planned' && !('level' in choice))).toBe(true);
     expect(levelRoadmap.map(entry => entry.plannedDifferenceCount)).toEqual([5, 5, 5, 4, 5, 6]);
   });
@@ -15,7 +16,7 @@ describe('规划关卡与正式关卡分开管理', () => {
   it('只按实际目录开放首关，差异数量和图片来自正式内容', () => {
     const level = patternLevel('patterns-intro');
     const choices = getLevelChoices({ levels: [level] }, 'patterns', 'spot-difference');
-    expect(choices).toHaveLength(6);
+    expect(choices).toHaveLength(5);
     const open = choices.filter(choice => choice.status === 'available');
     expect(open).toHaveLength(1);
     expect(open[0].id).toBe(level.id);
@@ -30,7 +31,7 @@ describe('规划关卡与正式关卡分开管理', () => {
   it('与规划同ID的新正式关替换筹备位，不重复出现', () => {
     const level = patternLevel('patterns-lotus');
     const choices = getLevelChoices({ levels: [patternLevel('patterns-intro'), level] }, 'patterns', 'spot-difference');
-    expect(choices).toHaveLength(6);
+    expect(choices).toHaveLength(5);
     expect(choices.filter(choice => choice.id === level.id)).toHaveLength(1);
     expect(choices[1]).toMatchObject({ id: level.id, title: '莲瓣与团花', status: 'available', level });
   });
@@ -38,7 +39,7 @@ describe('规划关卡与正式关卡分开管理', () => {
   it('路线之外的真实新增关全部保留，六关测试目录不会被规划吞掉', () => {
     const levels = [patternLevel('patterns-intro'), ...Array.from({ length: 5 }, (_, index) => patternLevel(`test-pagination-${index}`))];
     const choices = getLevelChoices({ levels }, 'patterns', 'spot-difference');
-    expect(choices).toHaveLength(11);
+    expect(choices).toHaveLength(10);
     expect(choices.filter(choice => choice.status === 'available').map(choice => choice.id)).toEqual(levels.map(level => level.id));
     expect(new Set(choices.map(choice => choice.id)).size).toBe(choices.length);
   });
@@ -48,7 +49,7 @@ describe('规划关卡与正式关卡分开管理', () => {
     const choices = getLevelChoices({ levels: [otherTheme] }, 'patterns', 'spot-difference');
     expect(choices.every(choice => choice.status === 'planned')).toBe(true);
     const puzzles = getLevelChoices({ levels: [otherTheme] }, 'patterns', 'puzzle');
-    expect(puzzles).toHaveLength(6);
+    expect(puzzles).toHaveLength(5);
     expect(puzzles.every(choice => choice.status === 'planned' && !('level' in choice))).toBe(true);
     expect(getLevelChoices({ levels: [otherTheme] }, 'different-theme', 'spot-difference'))
       .toEqual([{ id: otherTheme.id, title: otherTheme.title, status: 'available', level: otherTheme }]);
@@ -60,5 +61,22 @@ describe('规划关卡与正式关卡分开管理', () => {
     getLevelChoices(catalog, 'patterns', 'spot-difference');
     expect(JSON.stringify(catalog)).toBe(before);
     expect(catalog.levels).toHaveLength(1);
+  });
+
+  it('从玩家选关中隐藏三兔填色关与已撤下的两个占位，同时保留原始内容数据', () => {
+    const coloringIds = [
+      'coloring-floral-scroll', 'coloring-lotus-rosette', 'coloring-deer-medallion',
+      'coloring-three-rabbits', 'coloring-feitian-lotus',
+    ];
+    const colorings = coloringIds.map(id => ({ ...patternLevel(id), gameType: 'coloring' as const }) as unknown as Level);
+    const coloringChoices = getLevelChoices({ levels: colorings }, 'patterns', 'coloring');
+    expect(coloringChoices.map(choice => choice.id)).toEqual([
+      'coloring-floral-scroll', 'coloring-lotus-rosette', 'coloring-deer-medallion', 'coloring-feitian-lotus',
+    ]);
+    expect(colorings).toHaveLength(5);
+    expect(getLevelChoices({ levels: [] }, 'patterns', 'spot-difference').map(choice => choice.id))
+      .not.toContain('patterns-colors');
+    expect(getLevelChoices({ levels: [] }, 'patterns', 'puzzle').map(choice => choice.id))
+      .not.toContain('puzzle-caisson-panorama');
   });
 });

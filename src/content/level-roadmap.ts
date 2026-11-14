@@ -39,13 +39,21 @@ const coloringLevelOrder = new Map<string, number>([
   'coloring-floral-scroll',
   'coloring-lotus-rosette',
   'coloring-deer-medallion',
-  'coloring-three-rabbits',
   'coloring-feitian-lotus',
 ].map((id, index) => [id, index]));
 
+// Keep archived level data intact for saved artwork and older links, while
+// omitting removed activities and the two rejected roadmap slots from menus.
+const hiddenLevelChoiceIds = new Set([
+  'coloring-three-rabbits',
+  'patterns-colors',
+  'puzzle-caisson-panorama',
+]);
+
 /** Availability comes only from the actual catalog, never from a roadmap slot. */
 export function getLevelChoices(catalog: Pick<ContentCatalog, 'levels'>, themeId: string, gameType: GameType): LevelChoice[] {
-  const levels = catalog.levels.filter(level => level.themeId === themeId && level.gameType === gameType);
+  const levels = catalog.levels.filter(level => level.themeId === themeId && level.gameType === gameType
+    && !hiddenLevelChoiceIds.has(level.id));
   if (themeId === 'patterns' && gameType === 'coloring') {
     levels.sort((a, b) => (coloringLevelOrder.get(a.id) ?? coloringLevelOrder.size)
       - (coloringLevelOrder.get(b.id) ?? coloringLevelOrder.size));
@@ -57,7 +65,8 @@ export function getLevelChoices(catalog: Pick<ContentCatalog, 'levels'>, themeId
     return first.order - second.order || first.level - second.level;
   });
   const actualById = new Map(levels.map(level => [level.id, level]));
-  const plans = [...levelRoadmap, ...puzzleRoadmap].filter(entry => entry.themeId === themeId && entry.gameType === gameType);
+  const plans = [...levelRoadmap, ...puzzleRoadmap].filter(entry => entry.themeId === themeId && entry.gameType === gameType
+    && !hiddenLevelChoiceIds.has(entry.id));
   const plannedIds = new Set(plans.map(entry => entry.id));
   return [
     ...plans.map((roadmap): LevelChoice => {

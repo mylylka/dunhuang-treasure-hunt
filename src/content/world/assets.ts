@@ -23,6 +23,8 @@ export const WORLD_ART_SAMPLE = {
 export const TERRAIN_COURTYARD_MODEL = 'courtyard/v006/courtyard.glb';
 export const TERRAIN_FIRST_GALLERY_COURTYARD_MODEL = 'courtyard/v007/courtyard.glb';
 export const TERRAIN_TRAVELER_MODEL = 'traveler-tripo/v002/traveler.glb';
+/** Player model supplied for the standalone first-gallery edition. */
+export const CAISSON_TRAVELER_MODEL = 'traveler-tripo/v004/traveler.glb';
 /** Phone-only 2K texture derivative; original geometry and animations are retained. */
 export const TERRAIN_TRAVELER_MOBILE_MODEL = 'traveler-tripo/v003/traveler-mobile-2k-candidate.glb';
 export const TRIPO_TRAVELER_MODEL = 'traveler-tripo/v004/traveler.glb';

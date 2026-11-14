@@ -1,6 +1,6 @@
 import { MUSIC_COMPANION_SESSION_OPTIONS_V2, MUSIC_GUIDE_SESSION_OPTIONS } from '../world/music-companion-session-v002';
 import { MUSIC_COMPANION_SESSION_OPTIONS } from '../world/music-companion-session';
-import { TERRAIN_FIRST_GALLERY_SESSION_OPTIONS, TERRAIN_SESSION_OPTIONS } from '../world/terrain-rules-v001';
+import { TERRAIN_CAISSON_ONLY_SESSION_OPTIONS, TERRAIN_FIRST_GALLERY_SESSION_OPTIONS, TERRAIN_SESSION_OPTIONS } from '../world/terrain-rules-v001';
 import { UPPER_SESSION_OPTIONS } from '../world/mogao-upper-session';
 import { MOGAO_EXHIBIT_SESSION_OPTIONS } from '../world/mogao-exhibit-session';
 import { CONNECTED_GALLERY_SESSION_OPTIONS } from '../world/connected-gallery-session';
@@ -94,7 +94,7 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
   const [connectedGalleries] = useState(() => document.getElementById('root')?.dataset.connectedGalleries === 'v001');
   const travelerSelectionEnabled = connectedGalleries || caissonOnly;
   const [travelerId, setTravelerId] = useState(() => travelerSelectionEnabled ? readTravelerSelection() : null);
-  const [choosingTraveler, setChoosingTraveler] = useState(false);
+  const [choosingTraveler, setChoosingTraveler] = useState(caissonOnly);
   const [musicGalleryEnabled] = useState(() => connectedGalleries || document.getElementById('root')?.dataset.musicGallery === 'v001');
   const galleryResetAvailable = !caissonOnly && (firstGallery || musicGalleryEnabled || document.getElementById('root')?.dataset.mogaoExhibit === 'v001');
   const musicGallery = useMusicGalleryProgress(musicGalleryEnabled);
@@ -128,7 +128,7 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
   const completedThisRun = useRef(false);
   const shellRef = useRef<HTMLDivElement>(null);
   const mainRef = useRef<HTMLElement>(null);
-  const [worldSessionOptions] = useState(() => connectedGalleries ? CONNECTED_GALLERY_SESSION_OPTIONS : firstGallery ? { ...TERRAIN_FIRST_GALLERY_SESSION_OPTIONS, key: caissonOnly ? CAISSON_ONLY_WORLD_SESSION_KEY : FIRST_GALLERY_WORLD_SESSION_KEY } : document.getElementById('root')?.dataset.musicCompanion === 'v002' ? (document.getElementById('root')?.dataset.musicGuide === 'v001' ? MUSIC_GUIDE_SESSION_OPTIONS : MUSIC_COMPANION_SESSION_OPTIONS_V2) : document.getElementById('root')?.dataset.musicCompanion === 'v001' ? MUSIC_COMPANION_SESSION_OPTIONS : document.getElementById('root')?.dataset.mogaoExhibit === 'v001' ? MOGAO_EXHIBIT_SESSION_OPTIONS : document.getElementById('root')?.dataset.mogaoUpper === 'v002' ? UPPER_SESSION_OPTIONS : document.getElementById('root')?.dataset.terrain === 'v001' ? TERRAIN_SESSION_OPTIONS : document.getElementById('root')?.dataset.flowRevision === 'v013' ? MOGAO_SESSION_OPTIONS_V13 : document.getElementById('root')?.dataset.mogao === 'v012' ? MOGAO_SESSION_OPTIONS_V12 : document.getElementById('root')?.dataset.mogao === 'v011' ? MOGAO_SESSION_OPTIONS_V11 : document.getElementById('root')?.dataset.mogao === 'v010' ? MOGAO_SESSION_OPTIONS_V10 : document.getElementById('root')?.dataset.mogao === 'v009' ? MOGAO_SESSION_OPTIONS_V9 : document.getElementById('root')?.dataset.mogao === 'v008' ? MOGAO_SESSION_OPTIONS_V8 : document.getElementById('root')?.dataset.mogao === 'v007' ? MOGAO_SESSION_OPTIONS_V7 : document.getElementById('root')?.dataset.mogao === 'v006' ? MOGAO_SESSION_OPTIONS_V6 : document.getElementById('root')?.dataset.mogao === 'v003' ? MOGAO_SESSION_OPTIONS_V3 : document.getElementById('root')?.dataset.mogao === 'v002' ? MOGAO_SESSION_OPTIONS_V2 : document.getElementById('root')?.dataset.mogao === 'v001' ? MOGAO_SESSION_OPTIONS : document.getElementById('root')?.dataset.musicPavilion === 'v006' ? { ...MUSIC_SESSION_OPTIONS_V4, key: 'dunhuang:music-pavilion-preview:v6' } : document.getElementById('root')?.dataset.musicPavilion === 'v005' ? { ...MUSIC_SESSION_OPTIONS_V4, key: 'dunhuang:music-pavilion-preview:v5' } : document.getElementById('root')?.dataset.musicPavilion === 'v004' ? MUSIC_SESSION_OPTIONS_V4 : document.getElementById('root')?.dataset.flyingVoice === 'v001' ? { ...MUSIC_SESSION_OPTIONS_V3, key: FLYING_VOICE_SESSION_KEY } : document.getElementById('root')?.dataset.musicPavilion === 'v003' ? MUSIC_SESSION_OPTIONS_V3 : document.getElementById('root')?.dataset.musicPavilion === 'v002' ? MUSIC_SESSION_OPTIONS_V2 : document.getElementById('root')?.dataset.musicPavilion === 'v001'
+  const [worldSessionOptions] = useState(() => connectedGalleries ? CONNECTED_GALLERY_SESSION_OPTIONS : firstGallery ? { ...(caissonOnly ? TERRAIN_CAISSON_ONLY_SESSION_OPTIONS : TERRAIN_FIRST_GALLERY_SESSION_OPTIONS), key: caissonOnly ? CAISSON_ONLY_WORLD_SESSION_KEY : FIRST_GALLERY_WORLD_SESSION_KEY } : document.getElementById('root')?.dataset.musicCompanion === 'v002' ? (document.getElementById('root')?.dataset.musicGuide === 'v001' ? MUSIC_GUIDE_SESSION_OPTIONS : MUSIC_COMPANION_SESSION_OPTIONS_V2) : document.getElementById('root')?.dataset.musicCompanion === 'v001' ? MUSIC_COMPANION_SESSION_OPTIONS : document.getElementById('root')?.dataset.mogaoExhibit === 'v001' ? MOGAO_EXHIBIT_SESSION_OPTIONS : document.getElementById('root')?.dataset.mogaoUpper === 'v002' ? UPPER_SESSION_OPTIONS : document.getElementById('root')?.dataset.terrain === 'v001' ? TERRAIN_SESSION_OPTIONS : document.getElementById('root')?.dataset.flowRevision === 'v013' ? MOGAO_SESSION_OPTIONS_V13 : document.getElementById('root')?.dataset.mogao === 'v012' ? MOGAO_SESSION_OPTIONS_V12 : document.getElementById('root')?.dataset.mogao === 'v011' ? MOGAO_SESSION_OPTIONS_V11 : document.getElementById('root')?.dataset.mogao === 'v010' ? MOGAO_SESSION_OPTIONS_V10 : document.getElementById('root')?.dataset.mogao === 'v009' ? MOGAO_SESSION_OPTIONS_V9 : document.getElementById('root')?.dataset.mogao === 'v008' ? MOGAO_SESSION_OPTIONS_V8 : document.getElementById('root')?.dataset.mogao === 'v007' ? MOGAO_SESSION_OPTIONS_V7 : document.getElementById('root')?.dataset.mogao === 'v006' ? MOGAO_SESSION_OPTIONS_V6 : document.getElementById('root')?.dataset.mogao === 'v003' ? MOGAO_SESSION_OPTIONS_V3 : document.getElementById('root')?.dataset.mogao === 'v002' ? MOGAO_SESSION_OPTIONS_V2 : document.getElementById('root')?.dataset.mogao === 'v001' ? MOGAO_SESSION_OPTIONS : document.getElementById('root')?.dataset.musicPavilion === 'v006' ? { ...MUSIC_SESSION_OPTIONS_V4, key: 'dunhuang:music-pavilion-preview:v6' } : document.getElementById('root')?.dataset.musicPavilion === 'v005' ? { ...MUSIC_SESSION_OPTIONS_V4, key: 'dunhuang:music-pavilion-preview:v5' } : document.getElementById('root')?.dataset.musicPavilion === 'v004' ? MUSIC_SESSION_OPTIONS_V4 : document.getElementById('root')?.dataset.flyingVoice === 'v001' ? { ...MUSIC_SESSION_OPTIONS_V3, key: FLYING_VOICE_SESSION_KEY } : document.getElementById('root')?.dataset.musicPavilion === 'v003' ? MUSIC_SESSION_OPTIONS_V3 : document.getElementById('root')?.dataset.musicPavilion === 'v002' ? MUSIC_SESSION_OPTIONS_V2 : document.getElementById('root')?.dataset.musicPavilion === 'v001'
     ? { key: MUSIC_SESSION_KEY, colliders: MUSIC_PLAYER_COLLIDERS } : {});
   const [initialWorld] = useState(() => loadWorldSession(undefined, worldSessionOptions));
   const worldCheckpoint = useRef(initialWorld.data);
@@ -352,6 +352,9 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
   if (receivedMogaoFoliosThisVisit.current && !unlocked.includes('stories')) unlocked.push('stories');
   const availableThemes = catalog.themes.filter(theme => unlocked.includes(theme.id));
   const gameWorldAvailable = availableThemes.length > 0 && !easelEntry.current;
+  const isInsideGameWorld = route.page === 'themes' || route.page === 'games' || route.page === 'levels'
+    || route.page === 'play-latest' || route.page === 'play' || route.page === 'result';
+  const showGameWorldLink = gameWorldAvailable && !isInsideGameWorld;
   const openGameWorld = useCallback((event: MouseEvent<HTMLAnchorElement>) => {
     if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return false;
     event.preventDefault();
@@ -532,13 +535,23 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
       {resultActions('再配一次')}
     </div>;
     if (level.gameType === 'coloring' && !Object.keys(artworkColors(artworks, level)).length) return <div className="page narrow-page empty-state"><h1>{hasOlderArtwork(artworks, level) ? '线稿已更新，旧作品已保留' : '当前作品还未着色'}</h1>{renderArtworkNotice()}<a className="button button-primary" href={`#${playPath(level.id)}`}>继续填色</a></div>;
-    return <div className={`page page-result${isColoring || isPuzzle ? ' is-coloring-result' : ''}`}>
+    return <div className={`page page-result${isColoring ? ' is-coloring-result' : isPuzzle ? ' is-puzzle-result' : ''}`} data-testid={isColoring ? 'coloring-result-page' : undefined}>
       <Breadcrumb catalog={catalog} items={[{ label: `${gameNames[level.gameType]}关卡`, href: `#${levelsPath(theme.id, level.gameType, level.gameType === 'spot-difference' ? level.id : undefined)}` }]} />
       <header className="result-heading"><h1>{isColoring ? '作品完成' : isPuzzle ? '拼图完成' : '观察完成'}</h1></header>
       {renderSaveNotice()}
       {isColoring && renderArtworkNotice()}
-      {isColoring && <p className="notice notice-compact">可以到 3D 世界的画架，从作品库选择这幅画来展示。</p>}
-      <section className="result-review"><div className="result-image">{level.gameType === 'coloring' ? <ColoringResult level={level} catalog={catalog} colors={artworkColors(artworks, level)} materials={artworkMaterials(artworks, level)} /> : level.gameType === 'puzzle' ? <Asset catalog={catalog} id={level.imageAssetId} alt="拼合完成的完整图像" eager /> : <><Asset catalog={catalog} id={level.baseAssetId} alt="本次观察参考图" eager /><PlaceholderLabel catalog={catalog} assetIds={[level.baseAssetId]} /></>}</div><div className="result-summary">{level.gameType === 'spot-difference' && <strong className="result-count">{level.differences.length}<span>处发现</span></strong>}<SourceNote level={level} /></div></section>
+      {isColoring && <p className="notice notice-compact coloring-gallery-note">可以到 3D 世界的画架，从作品库选择这幅画来展示。</p>}
+      <section className={`result-review${isColoring ? ' coloring-result-review' : ''}`}>
+        <div className={`result-image${isColoring ? ' coloring-result-image' : ''}`}>
+          {isColoring ? <ColoringResult level={level} catalog={catalog} colors={artworkColors(artworks, level)} materials={artworkMaterials(artworks, level)} />
+            : isPuzzle ? <Asset catalog={catalog} id={level.imageAssetId} alt="拼合完成的完整图像" eager />
+              : <><Asset catalog={catalog} id={level.baseAssetId} alt="本次观察参考图" eager /><PlaceholderLabel catalog={catalog} assetIds={[level.baseAssetId]} /></>}
+        </div>
+        {!isColoring && <div className="result-summary">
+          {level.gameType === 'spot-difference' && <strong className="result-count">{level.differences.length}<span>处发现</span></strong>}
+          <SourceNote level={level} />
+        </div>}
+      </section>
       {resultActions(isColoring ? '继续创作' : isPuzzle ? '再拼一次' : '再观察一次')}
     </div>;
   }
@@ -660,7 +673,7 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
 
   return <div ref={shellRef} className="app-shell" data-screen={route.page} data-traveler-selection={travelerSelectionVisible || undefined} data-reduced-motion={progress.settings.reducedMotion ? 'true' : 'false'} style={assetStyle} onClickCapture={sound.onInterfaceClick}>
     <a className="skip-link" href="#main-content" onClick={(event) => { event.preventDefault(); mainRef.current?.focus(); }}>跳到主要内容</a>
-    <header className="site-header"><a className="brand" href="#/" aria-label="敦煌寻宝记，返回首页"><span className="brand-mark" aria-hidden="true">敦</span><strong>敦煌寻宝记</strong></a><nav className="header-nav" aria-label="主导航"><a href="#/" data-testid="world-return" aria-label="漫游世界" aria-current={route.page === 'home' ? 'page' : undefined}>漫游世界</a>{gameWorldAvailable && <a href="#/themes" aria-current={route.page === 'themes' ? 'page' : undefined}>游戏世界</a>}<a href="#/help" aria-current={route.page === 'help' ? 'page' : undefined}>指南</a><a href="#/settings" aria-current={route.page === 'settings' ? 'page' : undefined}>设置</a></nav></header>
+    <header className="site-header"><a className="brand" href="#/" aria-label="敦煌寻宝记，返回首页"><span className="brand-mark" aria-hidden="true">敦</span><strong>敦煌寻宝记</strong></a><nav className="header-nav" aria-label="主导航"><a href="#/" data-testid="world-return" aria-label="漫游世界" aria-current={route.page === 'home' ? 'page' : undefined}>漫游世界</a>{showGameWorldLink && <a href="#/themes" aria-current={route.page === 'themes' ? 'page' : undefined}>游戏世界</a>}<a href="#/help" aria-current={route.page === 'help' ? 'page' : undefined}>指南</a><a href="#/settings" aria-current={route.page === 'settings' ? 'page' : undefined}>设置</a></nav></header>
     {loadWarning && <div className="global-notice notice" role="status"><p>{loadWarning}</p><button className="text-link" onClick={() => setLoadWarning(null)} type="button">知道了</button></div>}
     {saveError && route.page !== 'result' && route.page !== 'settings' && <div className="global-notice">{renderSaveNotice(true)}</div>}
     {gallery?.warning && route.page !== 'home' && <div className="global-notice notice" role="status"><p>{gallery.warning}</p></div>}
