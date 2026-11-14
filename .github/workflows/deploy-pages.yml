@@ -1,9 +1,12 @@
 name: Deploy to GitHub Pages
 
+# 自动触发已禁用（2026-11-09，刘老师确认保持现状）：
+#   1) 构建产物 1.4GB 超过 GitHub Pages「已发布站点 ≤ 1GB」上限，且部署 >10 分钟会超时
+#   2) main 分支当前是旧源码（public/assets 仅 103 文件），CI 会构建出残缺版本（artifact 仅 117.5MB）
+#   3) Pages 仍是 legacy 模式（source = gh-pages 分支），与 actions/deploy-pages 要求的 build_type=workflow 互斥
+# 启用前必须先：同步最新源码到 main → public/assets 瘦身到 <1GB → Pages 切换为 GitHub Actions 模式
+# 当前发布流程：本地 npm run build → GitHub REST API 上传 outputs/web/ 到 gh-pages 分支
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
 
 permissions:
