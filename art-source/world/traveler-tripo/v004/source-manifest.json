@@ -1,0 +1,10 @@
+{
+  "version": "v004",
+  "original": "vault:sha256:b7a6c5c7725d147f92594206775e53994574edd5d61eb7f7321ae4cf0318a183",
+  "originalSha256": "b7a6c5c7725d147f92594206775e53994574edd5d61eb7f7321ae4cf0318a183",
+  "suppliedFile": "tripo_convert_680e6c13-31ff-4499-be26-a5c0b42c62e2.glb",
+  "bytes": 7144556,
+  "runtime": "public/assets/world/traveler-tripo/v004/traveler.glb",
+  "runtimeSha256": "b7a6c5c7725d147f92594206775e53994574edd5d61eb7f7321ae4cf0318a183",
+  "runtimeMethod": "APFS copy-on-write clone; original mesh, materials, rig and animation preserved"
+}

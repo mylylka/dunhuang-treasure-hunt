@@ -1,0 +1,334 @@
+.app-shell[data-traveler-selection] > .site-header { display: none; }
+.app-shell[data-traveler-selection]::before { background: none; }
+
+.traveler-selection {
+  --traveler-ink: #582a19;
+  --traveler-gold: #ffe8b0;
+  position: relative;
+  isolation: isolate;
+  flex: 1;
+  min-width: 0;
+  overflow: auto;
+  background: #e4b484;
+  color: var(--traveler-ink);
+}
+
+.traveler-landscape {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: left top;
+  pointer-events: none;
+  user-select: none;
+}
+
+.traveler-selection-layout {
+  --name-height: clamp(28px, 5.9dvh, 58px);
+  --action-height: clamp(44px, 8.8dvh, 87px);
+  --action-bottom: max(3.9dvh, env(safe-area-inset-bottom));
+  --figure-floor: max(23dvh, calc(var(--action-height) + var(--action-bottom) + var(--name-height) + 31px));
+  position: relative;
+  min-height: max(100%, 215px);
+}
+
+.traveler-stage {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.traveler-option {
+  --figure-x: 46%;
+  --figure-height: min(71dvh, calc(100dvh - var(--figure-floor) - 12px), 49vw);
+  --figure-ratio: .813;
+  --foot-x: 32%;
+  --name-x: 46%;
+  --figure-brightness: .86;
+  --figure-contrast: .96;
+  --edge-opacity: 0;
+  position: absolute;
+  inset: 0;
+}
+
+.traveler-option[data-traveler="tripo"] {
+  --figure-x: 74.5%;
+  --figure-height: min(68dvh, calc(100dvh - var(--figure-floor) - 12px), 47vw);
+  --figure-ratio: .744;
+  --foot-x: 16%;
+  --name-x: 74.5%;
+}
+
+.traveler-option:has(input:checked) {
+  --figure-brightness: 1.035;
+  --figure-contrast: 1.025;
+  --edge-opacity: 1;
+}
+
+.traveler-figure {
+  position: absolute;
+  left: var(--figure-x);
+  bottom: var(--figure-floor);
+  display: block;
+  height: var(--figure-height);
+  width: calc(var(--figure-height) * var(--figure-ratio));
+  transform: translateX(-50%);
+  isolation: isolate;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.traveler-figure::before,
+.traveler-figure::after {
+  content: "";
+  position: absolute;
+  left: var(--foot-x);
+  bottom: -.45%;
+  transform: translate(-37%, 44%) rotate(-5deg);
+  pointer-events: none;
+}
+
+.traveler-figure::before {
+  width: 56%;
+  height: 8%;
+  background: radial-gradient(ellipse, #6838208a 6%, #633c3151 37%, transparent 72%);
+  mix-blend-mode: multiply;
+}
+
+.traveler-figure::after {
+  width: 70%;
+  height: 10%;
+  background: radial-gradient(ellipse, transparent 36%, #fff6c5d1 53%, #ffe7a45e 62%, transparent 73%);
+  opacity: var(--edge-opacity);
+  transition: opacity .22s ease;
+}
+
+.traveler-figure img {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+  filter: brightness(var(--figure-brightness)) contrast(var(--figure-contrast))
+    drop-shadow(0 0 5px rgb(255 222 153 / calc(var(--edge-opacity) * .47)));
+  transition: filter .23s ease;
+  user-select: none;
+  pointer-events: none;
+}
+
+.traveler-selection-name {
+  position: absolute;
+  isolation: isolate;
+  z-index: 2;
+  left: var(--name-x);
+  bottom: calc(var(--figure-floor) - var(--name-height) - .65dvh);
+  display: grid;
+  min-width: max(80px, 10.2vw);
+  height: var(--name-height);
+  padding-inline: 15px 11px;
+  place-items: center;
+  transform: translateX(-50%);
+  color: #fae0bb;
+  text-shadow: 0 1px 2px #482719b0;
+  font: 600 clamp(17px, 3.9dvh, 45px)/1.05 "Kaiti SC", STKaiti, var(--serif);
+  letter-spacing: .115em;
+  white-space: nowrap;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: color .23s ease, text-shadow .23s ease;
+}
+
+.traveler-selection-name::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 9% -1% 6%;
+  background: linear-gradient(169deg, #b46544 2%, #8b3c28 55%, #a9553e);
+  opacity: .73;
+  clip-path: polygon(
+    4% 32%, 1% 26%, 8% 22%, 11% 15%, 23% 10%, 18% 7%, 42% 3%,
+    65% 5%, 73% 8%, 71% 11%, 91% 16%, 88% 22%, 99% 32%, 94% 38%,
+    100% 44%, 93% 49%, 98% 56%, 91% 63%, 95% 68%, 86% 71%,
+    92% 77%, 76% 84%, 80% 89%, 55% 96%, 36% 97%, 21% 92%, 22% 86%,
+    7% 85%, 12% 76%, 1% 74%, 7% 65%, 2% 60%, 6% 53%, 0 48%, 6% 41%
+  );
+  transition: opacity .23s ease, filter .23s ease;
+}
+
+.traveler-selection-name::after {
+  content: "";
+  position: absolute;
+  inset-inline: 17%;
+  bottom: 14%;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--traveler-gold), transparent);
+  opacity: calc(var(--edge-opacity) * .63);
+  transition: opacity .23s ease;
+}
+
+.traveler-option:has(input:checked) .traveler-selection-name {
+  color: #fff2d2;
+  text-shadow: 0 1px 3px #5a2717;
+}
+
+.traveler-option:has(input:checked) .traveler-selection-name::before {
+  opacity: 1;
+  filter: saturate(1.17) contrast(1.07);
+}
+
+.traveler-avatar { display: none; }
+
+@media (hover: hover) {
+  .traveler-option:has(:is(.traveler-figure, .traveler-selection-name):hover):has(input:not(:checked)) {
+    --figure-brightness: .95;
+  }
+
+  .traveler-option:has(:is(.traveler-figure, .traveler-selection-name):hover) .traveler-selection-name {
+    color: #fff2d2;
+  }
+}
+
+.traveler-option:has(input:focus-visible) :is(.traveler-selection-name, .traveler-avatar img),
+.traveler-selection-actions :focus-visible {
+  outline: 2px solid #6b3423;
+  outline-offset: 3px;
+}
+
+.traveler-selection-actions {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  bottom: var(--action-bottom);
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  transform: translateX(-50%);
+}
+
+.traveler-selection-actions .traveler-selection-enter {
+  min-height: 44px;
+  height: var(--action-height);
+  min-width: clamp(195px, 26vw, 440px);
+  padding-inline: 27px;
+  gap: .52em;
+  border-image: none;
+  background: var(--secondary-button-image) no-repeat center / 100% 100%;
+  color: var(--traveler-ink);
+  font: 600 clamp(17px, 3.65dvh, 39px)/1.18 "Kaiti SC", STKaiti, var(--serif);
+  text-shadow: 0 1px 1px #ffebc3;
+  cursor: pointer;
+}
+
+.traveler-selection-enter span { font: 1.06em / 1 var(--serif); }
+
+.traveler-selection-actions a {
+  min-height: 24px;
+  align-content: center;
+  padding: 0 .48em;
+  color: #512d20;
+  font-size: clamp(12px, 1.58dvh, 17px);
+  text-shadow: 0 0 6px #ffedbd, 0 0 3px #ffedbd;
+  text-decoration: underline;
+  text-underline-offset: .2em;
+}
+
+.traveler-selection[data-phone] .traveler-selection-layout {
+  --figure-floor: max(24dvh, calc(env(safe-area-inset-bottom) + 76px));
+  --name-height: clamp(25px, 7dvh, 38px);
+}
+
+.traveler-selection[data-phone] .traveler-option {
+  --figure-x: 60.5%;
+  --name-x: var(--figure-x);
+  --figure-height: min(73dvh, calc(100dvh - var(--figure-floor) - 8px), 57vw);
+}
+
+.traveler-selection[data-phone] .traveler-option:has(input:not(:checked)) :is(.traveler-figure, .traveler-selection-name) {
+  display: none;
+}
+
+.traveler-selection[data-phone] .traveler-option:has(input:not(:checked)) .traveler-avatar {
+  display: grid;
+}
+
+.traveler-selection[data-phone] .traveler-selection-name {
+  bottom: calc(var(--figure-floor) - var(--name-height));
+  min-width: 74px;
+  font-size: clamp(17px, 5.6dvh, 24px);
+}
+
+.traveler-selection[data-phone] .traveler-selection-actions { bottom: max(2.5%, env(safe-area-inset-bottom)); }
+.traveler-selection[data-phone] .traveler-selection-actions .traveler-selection-enter {
+  height: clamp(44px, 14dvh, 62px);
+  min-width: clamp(156px, 25vw, 248px);
+  padding-inline: 20px;
+  font-size: clamp(15px, 4.5dvh, 24px);
+}
+
+.traveler-avatar {
+  position: absolute;
+  z-index: 2;
+  left: 84%;
+  bottom: 33%;
+  gap: 0;
+  justify-items: center;
+  min-width: 44px;
+  transform: translateX(-50%);
+  color: #fff0d0;
+  text-shadow: 0 1px 2px #552b1c;
+  font: 600 clamp(13px, 4.6dvh, 21px)/1.2 "Kaiti SC", STKaiti, var(--serif);
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.traveler-avatar img {
+  width: clamp(45px, 20dvh, 84px);
+  aspect-ratio: 1;
+  border: 1px solid #ac7847;
+  border-radius: 50%;
+  background: #ffe0a9;
+  box-shadow: 0 0 0 2px #f8d6a4, 0 3px 10px #713e2550;
+}
+
+.traveler-avatar span {
+  margin-top: -2px;
+  padding: .13em .75em;
+  background: #8c4832;
+  clip-path: polygon(2% 9%, 96% 0, 98% 18%, 93% 28%, 100% 46%, 97% 78%, 89% 89%, 56% 100%, 4% 92%, 9% 74%, 0 51%, 5% 35%, 0 22%);
+}
+
+@media (orientation: landscape) {
+  .traveler-selection[data-phone] .traveler-landscape {
+    object-fit: cover;
+    object-position: left bottom;
+  }
+
+  .traveler-selection[data-phone] .traveler-selection-actions {
+    left: max(28%, calc(env(safe-area-inset-left) + 100px));
+  }
+}
+
+@media (orientation: landscape) and (min-aspect-ratio: 2/1) {
+  .traveler-selection[data-phone] .traveler-landscape {
+    object-fit: fill;
+  }
+}
+
+@media (orientation: portrait) {
+  .traveler-landscape {
+    object-position: 0 0;
+  }
+  .traveler-selection-layout { --figure-floor: 21dvh; }
+  .traveler-option { --figure-x: 29%; --name-x: var(--figure-x); }
+  .traveler-option[data-traveler="tripo"] { --figure-x: 71%; --name-x: var(--figure-x); }
+  .traveler-selection[data-phone] .traveler-selection-layout { --figure-floor: 23dvh; }
+  .traveler-selection[data-phone] .traveler-option {
+    --figure-x: 45%;
+    --figure-height: min(58dvh, 93vw);
+  }
+  .traveler-selection[data-phone] .traveler-avatar { left: 86%; }
+}

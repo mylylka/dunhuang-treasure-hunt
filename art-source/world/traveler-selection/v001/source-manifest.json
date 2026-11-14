@@ -1,0 +1,41 @@
+{
+  "version": "v001",
+  "description": "开场选择角色使用实际运行模型的等比例透明全身立绘。",
+  "render": {
+    "renderer": "Blender 5.2.3 Cycles",
+    "lighting": "暖色主光、柔和冷色补光和暖色轮廓光",
+    "camera": "约 17° 正交三分之四视角",
+    "colorManagement": "Standard, exposure -2.05",
+    "renderWidth": 560,
+    "renderHeight": 560,
+    "outputWidth": 240,
+    "outputHeight": 424,
+    "silhouetteHeight": 400,
+    "format": "WebP RGBA",
+    "quality": 85
+  },
+  "portraits": [
+    {
+      "id": "classic",
+      "source": "public/assets/world/traveler-tripo/v002/traveler.glb",
+      "sourceSha256": "81b6b7c5a02fb6e84fd807be2f003e5e99f8f92daaeb7788dd62eec1ca084609",
+      "animation": "Idle",
+      "blenderFrame": 8,
+      "cameraYawDegrees": 163,
+      "output": "public/assets/world/traveler-selection/v001/classic.webp",
+      "outputSha256": "e82a522c05fcf56cf96c768ee49ae289e080e860e2e7a9466797f9589ae5f69c",
+      "outputBytes": 17062
+    },
+    {
+      "id": "tripo",
+      "source": "public/assets/world/traveler-tripo/v004/traveler.glb",
+      "sourceSha256": "b7a6c5c7725d147f92594206775e53994574edd5d61eb7f7321ae4cf0318a183",
+      "animation": "standing_relax.001",
+      "blenderFrame": 12,
+      "cameraYawDegrees": 17,
+      "output": "public/assets/world/traveler-selection/v001/tripo.webp",
+      "outputSha256": "a738722a83c2d2b29a278a346ec0a394fd91d5d77741930df757ac5bcd6677f7",
+      "outputBytes": 17616
+    }
+  ]
+}

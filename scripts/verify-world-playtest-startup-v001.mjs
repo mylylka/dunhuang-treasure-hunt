@@ -37,7 +37,9 @@ try {
       const page = await context.newPage();
       const errors = [];
       page.on('pageerror', error => errors.push(error.message));
-      await page.addInitScript(() => {
+      await page.addInitScript(firstGallery => {
+        // Measure 3D startup with the default avatar already chosen.
+        if (firstGallery) localStorage.setItem('dunhuang:traveler-selection:v1', 'classic');
         performance.setResourceTimingBufferSize(1000);
         window.playtestBoot = {};
         new MutationObserver(() => {
@@ -46,7 +48,7 @@ try {
           if (host?.getAttribute('data-ready') === 'true') window.playtestBoot.ready ??= performance.now();
           if (document.querySelector('[data-testid="world-error"]')) window.playtestBoot.error ??= performance.now();
         }).observe(document, { childList: true, subtree: true, attributes: true, attributeFilter: ['data-ready'] });
-      });
+      }, key === 'first-gallery');
       const cdp = await context.newCDPSession(page);
       await cdp.send('Network.enable');
       if (profile) {

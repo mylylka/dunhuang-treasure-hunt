@@ -76,7 +76,7 @@ import { musicCameraSpaceV3, flyingCameraPoseV3 } from './music-pavilion-v003';
 import { musicCameraSpaceV2, flyingCameraPoseV2 } from './music-pavilion-v002';
 import { createTravelCamera, normalizedYaw } from './travel-camera';
 import { flyingDialogue } from '../content/world/flying-dialogue';
-import { TERRAIN_TRAVELER_MOBILE_MODEL, TERRAIN_TRAVELER_MODEL, worldAssetUrl } from '../content/world/assets';
+import { travelerModelPath, worldAssetUrl } from '../content/world/assets';
 import { createFlyingVoice } from './flying-voice';
 import { createFlyingHistory } from './flying-history';
 import { createMusicArrivalAudio } from './music-arrival-audio';
@@ -318,7 +318,15 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   const cinematicPreview = !!options.cinematics || musicPreview || !!options.firstGallery;
   const director = !terrain && options.cinematics ? createCinematicDirector(options.cinematics.seen, options.cinematics.onSeen) : null;
   let earlyIntent = false, shotHeading = checkpoint.heading, snapFollow = false;
-  const previewLoading = { previewResources: previewResources ?? (mobileTerrainStreaming ? TERRAIN_RESOURCE_PROFILE : undefined),
+  const travelerId = options.travelerId ?? (caissonOnly ? 'tripo' : 'classic');
+  const previewLoading = {
+    ...(options.travelerId || cinematicPreview ? {
+      travelerPath: travelerModelPath(travelerId, (connected || caissonOnly) && !!options.firstGallery && isMobilePhone()),
+      animationRates: travelerId === 'tripo'
+        ? { walk: WALK_SPEED / 1.1517, run: RUN_SPEED / 4.195 }
+        : { walk: WALK_SPEED / 1.20591, run: RUN_SPEED / 4.39490 },
+    } : {}),
+    previewResources: previewResources ?? (mobileTerrainStreaming ? TERRAIN_RESOURCE_PROFILE : undefined),
     connectedGalleries: connected, previewStart: checkpoint.position, previewStartSurface: checkpoint.walkSurface,
     compactConnectedTerrain: (connected || caissonOnly) && coarsePointer,
     cliffUnlockedAtStart: connected && firstGalleryUnlocked() && musicGalleryUnlocked,
@@ -329,13 +337,12 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
       mogaoExhibitInteriorPath: coarsePointer ? 'mogao-upper/v003/interior-mobile.glb' : undefined,
       onMogaoExhibitChange: () => schedule(),
     } : {}) };
-  const world = createArtSampleScene(cinematicPreview ? { travelerPath: (connected || caissonOnly) && options.firstGallery && isMobilePhone()
-    ? TERRAIN_TRAVELER_MOBILE_MODEL : TERRAIN_TRAVELER_MODEL, ...previewLoading,
+  const world = createArtSampleScene(cinematicPreview ? { ...previewLoading,
     musicMuralTextureLimit: musicInterior ? Math.min(renderer.capabilities.maxTextureSize, coarsePointer ? 2048 : 4096) : undefined,
     musicBalconyV2: options.musicBalconyV2,
     musicGuide: !!guideVisit,
     musicInstrumentDisplay: musicInstrumentDisplay ? { mobile: coarsePointer, onChange: () => schedule() } : undefined,
-    firstGalleryStart: options.firstGallery ? checkpoint.position : undefined, companion: !!companion, animationRates: { walk: WALK_SPEED / 1.20591, run: RUN_SPEED / 4.39490 }, presentationClips: true, sampleNature: true, terrainVersion:options.terrainVersion, environmentVersion:options.environmentVersion, terrainCaissonVersion:options.terrainCaissonVersion, mogao, mogaoVersion:options.mogaoVersion, mogaoUpperVersion:options.mogaoUpperVersion, mogaoSurfaceVersion:options.mogaoSurfaceVersion, mogaoFacadeVersion:options.mogaoFacadeVersion, musicPavilion: musicPreview, musicVersion: options.musicVersion, musicInteriorVersion:musicInterior?'v001':undefined, flyingAwakened: checkpoint.visitedEvents.includes('flying') } : previewLoading);
+    firstGalleryStart: options.firstGallery ? checkpoint.position : undefined, companion: !!companion, presentationClips: true, sampleNature: true, terrainVersion:options.terrainVersion, environmentVersion:options.environmentVersion, terrainCaissonVersion:options.terrainCaissonVersion, mogao, mogaoVersion:options.mogaoVersion, mogaoUpperVersion:options.mogaoUpperVersion, mogaoSurfaceVersion:options.mogaoSurfaceVersion, mogaoFacadeVersion:options.mogaoFacadeVersion, musicPavilion: musicPreview, musicVersion: options.musicVersion, musicInteriorVersion:musicInterior?'v001':undefined, flyingAwakened: checkpoint.visitedEvents.includes('flying') } : previewLoading);
   let mogaoGamePortal = options.mogaoExhibit?.gamePortalUnlocked ? createMogaoGamePortal(world.scene) : null;
   const createMusicGamePortal = () => createGalleryGamePortal(world.scene, 'music-courtyard-game-portal', MUSIC_GAME_PORTAL_CENTER);
   let musicGamePortal = musicInterior && options.musicGamePortal?.unlocked ? createMusicGamePortal() : null;
@@ -345,7 +352,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     musicGamePortal?.dispose();
     musicGamePortal = null;
   }
-  const galleryGaze = gallery ? createFirstGalleryGaze(world.traveler) : null;
+  const galleryGaze = gallery ? createFirstGalleryGaze(world.traveler, travelerId === 'tripo' ? 1 : -1) : null;
   function cancelGalleryCue() {
     gallery?.cancel();
     galleryNarration?.cancel('cue');

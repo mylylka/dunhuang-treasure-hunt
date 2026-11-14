@@ -22,6 +22,7 @@ import type { SoundPreferences } from '../services/sound-settings';
 import { discoveryReducer, discoveryView, initialDiscoveryState } from '../world/events';
 import { withVisitedDiscovery } from '../world/session';
 import type { WorldCheckpoint, WorldRuntime, WorldSnapshot } from '../world/types';
+import type { TravelerId } from '../content/world/assets';
 import type { MogaoHallAStoryId } from '../world/mogao-hall-a-scene';
 import { isFirstGalleryUnlocked, loadFirstGallery } from '../services/first-gallery';
 import type { WorldRewardId } from '../content/world/mogao-rewards-v001';
@@ -55,6 +56,8 @@ type RewardOverlay = { kind: 'award'; id: WorldRewardId } | { kind: 'guide' }
 interface Props {
   firstGallery?: boolean;
   connectedGalleries?: boolean;
+  travelerId?: TravelerId;
+  onChooseTraveler?(): void;
   suspended?: boolean;
   catalog?: ContentCatalog;
   onGalleryColoring?(checkpoint: WorldCheckpoint, artworkId?: string): boolean;
@@ -79,6 +82,7 @@ interface Props {
 export default function WorldScreen(props: Props) {
   const connectedGalleries = !!props.connectedGalleries;
   const caissonOnly = document.getElementById('root')?.dataset.caissonOnly === 'v001';
+  const { travelerId } = props;
   const terrain=document.getElementById('root')?.dataset.terrain==='v001';
   const upperPreview=connectedGalleries || document.getElementById('root')?.dataset.mogaoUpper==='v002';
   const exhibitPreview=connectedGalleries || document.getElementById('root')?.dataset.mogaoExhibit==='v001';
@@ -283,6 +287,7 @@ export default function WorldScreen(props: Props) {
       instance = createWorldRuntime(host.current, {
         firstGallery: callbacks.current.firstGallery, onGalleryInteract: requestGallery,
         connectedGalleries,
+        travelerId,
         musicGalleryUnlocked: callbacks.current.musicGallery?.unlocked,
         musicBalconyV2, flyingHistory: flyingHistoryPreview,
         onMusicFlyingChapter: index => callbacks.current.musicGallery?.record({ type: 'chapter', index }),
@@ -364,7 +369,7 @@ export default function WorldScreen(props: Props) {
       if (musicPreview) Reflect.deleteProperty(window, '__musicPavilion');
       if (cinematicPreview) Reflect.deleteProperty(window, '__characterCinematics');
     };
-  }, [attempt, startInteraction, openMogaoGames, openMusicGames, connectedGalleries, exhibitPreview, musicBalconyV2, musicGuidePreview, musicInstrumentPreview, flyingHistoryPreview, stopGuideVoice]);
+  }, [attempt, startInteraction, openMogaoGames, openMusicGames, connectedGalleries, travelerId, exhibitPreview, musicBalconyV2, musicGuidePreview, musicInstrumentPreview, flyingHistoryPreview, stopGuideVoice]);
 
   useLayoutEffect(() => {
     if (wasSuspended.current && !suspended) leavingToTheme.current = false;
@@ -712,7 +717,7 @@ export default function WorldScreen(props: Props) {
       <button type="button" onClick={() => { if (props.saveWarning) persist(); if (musicGallery?.saveFailed) musicGallery.retry(); }}>重试保存</button>
     </div>}
     {!ready && !error && <div className="world-cover" onKeyDown={trapCoverFocus} tabIndex={-1}><h2>{props.galleryReturningFromColoring ? '作品已保存，正在返回院内画架…' : '正在准备探索世界…'}</h2>{inFirstGallery && <span>第一馆探索正在准备</span>}{directGameWorld}</div>}
-    {error && <div className="world-cover" role="alertdialog" aria-modal="true" aria-labelledby="world-error-title" onKeyDown={trapCoverFocus} tabIndex={-1} data-testid="world-error"><h2 id="world-error-title">3D画面暂未打开</h2><p>{error}</p><div><button type="button" className="world-primary" onClick={() => { dispatch({ type: 'exit' }); setAttempt(value => value + 1); }} data-testid="world-retry">重新加载</button>{directGameWorld}{!gameWorldAvailable && props.onGalleryFallback && <button type="button" onClick={props.onGalleryFallback}>兼容游玩 · 纹样小游戏</button>}</div></div>}
+    {error && <div className="world-cover" role="alertdialog" aria-modal="true" aria-labelledby="world-error-title" onKeyDown={trapCoverFocus} tabIndex={-1} data-testid="world-error"><h2 id="world-error-title">3D画面暂未打开</h2><p>{error}</p><div><button type="button" className="world-primary" onClick={() => { dispatch({ type: 'exit' }); setAttempt(value => value + 1); }} data-testid="world-retry">重新加载</button>{props.onChooseTraveler && <button type="button" onClick={props.onChooseTraveler}>重新选人</button>}{directGameWorld}{!gameWorldAvailable && props.onGalleryFallback && <button type="button" onClick={props.onGalleryFallback}>兼容游玩 · 纹样小游戏</button>}</div></div>}
     {view === 'story' && !error && <WorldStoryPlayer key={`${event.mode!=='exploring'?event.id:''}-${storyReplay}`} story={event.mode!=='exploring'&&event.id==='novice-story'?noviceStory:caveKeys?deerStoryV009:undefined} backdrop={storyBackdrop} reducedMotion={props.reducedMotion || systemReduced} omitEnding={exhibitGroundStory} exhibitNarration={exhibitGroundStory} blocked={locked||choosing} paused={locked || choosing || (event.mode === 'observing' && event.paused)} sound={props.sound} onComplete={finishStoryPlayback} onClose={finishEvent} />}
     {hallStory && !error && <div style={{ display: 'contents' }}
       onPointerDownCapture={() => { hallStoryPointer.current = true; }}

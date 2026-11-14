@@ -108,6 +108,7 @@ export interface WorldRuntime {
   dispose(): void;
 }
 export interface WorldRuntimeOptions {
+  travelerId?: import('../content/world/assets').TravelerId;
   connectedGalleries?: boolean;
   musicGalleryUnlocked?: boolean;
   firstGallery?: boolean;

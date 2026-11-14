@@ -2,8 +2,8 @@ import { describe, expect, it } from 'vitest';
 import * as THREE from 'three';
 import { createFirstGalleryGaze } from '../../src/world/first-gallery-gaze';
 
-function character() {
-  const traveler = new THREE.Group();
+function character(bindPoseForwardZ: -1 | 1 = -1) {
+  const traveler = new THREE.Group(), model = new THREE.Group();
   const hips = new THREE.Bone();
   hips.rotation.y = Math.PI / 2; // The official joint's bind frame also faces +X.
   const neck = new THREE.Bone(); neck.name = 'mixamorigNeck'; neck.position.y = 1.3;
@@ -11,11 +11,13 @@ function character() {
   const end = new THREE.Bone(); end.name = 'mixamorigHeadTop_End'; end.position.y = .1;
   head.add(end); neck.add(head); hips.add(neck);
   const mesh = new THREE.SkinnedMesh();
-  traveler.add(hips, mesh);
+  traveler.add(model);
+  model.add(hips, mesh);
   traveler.updateMatrixWorld(true);
   mesh.bind(new THREE.Skeleton([hips, neck, head, end]));
+  if (bindPoseForwardZ === 1) model.rotation.y = Math.PI;
   const mixer = new THREE.AnimationMixer(traveler);
-  const gaze = createFirstGalleryGaze(traveler);
+  const gaze = createFirstGalleryGaze(traveler, bindPoseForwardZ);
   function frame(dt = 1 / 60, heading = 0) {
     gaze.beforeAnimation();
     traveler.rotation.y = heading;
@@ -48,6 +50,14 @@ describe('first gallery traveler gaze', () => {
     for (let i = 0; i < 90; i++) f.frame();
     expect(f.traveler.rotation.y).toBeLessThan(-1);
     expect(f.traveler.position.toArray()).toEqual([0, 0, 0]);
+    expectAimed(f, target);
+  });
+
+  it('aims the second traveler after its opposite bind-pose heading is corrected', () => {
+    const f = character(1), target = new THREE.Vector3(.9, 1, -4);
+    f.gaze.start(target);
+    for (let i = 0; i < 75; i++) f.frame();
+    expect(f.traveler.rotation.y).toBe(0);
     expectAimed(f, target);
   });
 

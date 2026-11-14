@@ -1,0 +1,39 @@
+{
+  "version": "v003",
+  "description": "选人专用面部气色调整及高清静态预览。延用原人物模型、动作帧和透明轮廓。",
+  "atlasTreatment": "根据绑定姿态的脸与耳朵坐标以及原 4K 贴图颜色筛选皮肤，轻微提高暖红成分并保留纹理。左右面颊、鼻尖、耳廓与唇部叠加低幅度软边色彩。",
+  "lighting": "120mm 全身机位。主光移到前上方、增大柔光面，辅光从冷蓝改为中性偏暖，保留原暖色轮廓光和 AgX 色彩变换。无景深。",
+  "runtime": "实时选人通过材质的着色器使用相同的脸部区域和原贴图色彩筛选，作用范围限于单独加载的选人网格。离线处理过的贴图只用于这里登记的两张预览图。",
+  "portraits": [
+    {
+      "id": "classic",
+      "source": "public/assets/world/traveler-tripo/v002/traveler.glb",
+      "sourceSha256": "81b6b7c5a02fb6e84fd807be2f003e5e99f8f92daaeb7788dd62eec1ca084609",
+      "animation": "Greeting",
+      "blenderFrame": 32,
+      "cameraYawDegrees": 170,
+      "output": "public/assets/world/traveler-selection/v003/classic.webp",
+      "outputDimensions": [
+        416,
+        824
+      ],
+      "outputBytes": 44224,
+      "outputSha256": "3e659f4a6c74d4591588791f19c5bd3707ef552820d6d8ada40c3ca3032f9007"
+    },
+    {
+      "id": "tripo",
+      "source": "public/assets/world/traveler-tripo/v004/traveler.glb",
+      "sourceSha256": "b7a6c5c7725d147f92594206775e53994574edd5d61eb7f7321ae4cf0318a183",
+      "animation": "look_around.001",
+      "blenderFrame": 52,
+      "cameraYawDegrees": -16,
+      "output": "public/assets/world/traveler-selection/v003/tripo.webp",
+      "outputDimensions": [
+        416,
+        824
+      ],
+      "outputBytes": 38894,
+      "outputSha256": "ebe1c6ba5d5ae770d6492363b671d529c198a23d28e198441be57cfa67afb2dc"
+    }
+  ]
+}

@@ -54,7 +54,8 @@ import {placeTerrainTowerTrees} from './terrain-trees-v001';
 import {TERRAIN_TOWER_TREES} from '../content/world/terrain-trees-v001';
 import {fromTerrainPoint, terrainHeight, toTerrainPoint, TERRAIN_SCENERY_SOURCE_OVERRIDES, type TerrainRegion} from '../content/world/terrain-layout-v001';
 import { GLTFLoader, type GLTF } from 'three/addons/loaders/GLTFLoader.js';
-import { TERRAIN_COURTYARD_MODEL, TERRAIN_FIRST_GALLERY_COURTYARD_MODEL, TERRAIN_TRAVELER_MOBILE_MODEL, TERRAIN_TRAVELER_MODEL, WORLD_ART_SAMPLE, worldAssetUrl } from '../content/world/assets';
+import { TERRAIN_COURTYARD_MODEL, TERRAIN_FIRST_GALLERY_COURTYARD_MODEL, TERRAIN_TRAVELER_MOBILE_MODEL, TERRAIN_TRAVELER_MODEL, TRIPO_TRAVELER_MODEL, WORLD_ART_SAMPLE, worldAssetUrl } from '../content/world/assets';
+import { tripoTravelerClips } from './tripo-traveler';
 import { connectedGalleryApproachGroups, connectedGalleryEntryGroups, firstGalleryApproachVenue, firstGalleryEntryVenue, firstGalleryStreamRegion, type FirstGalleryVenue } from './first-gallery-streaming';
 import { previewApproachRegions, previewRegionAt, type PreviewResourceGroup, type WorldPreviewResourceProfile } from './preview-resource-profile';
 import type { WorldPoint } from './types';
@@ -75,7 +76,7 @@ function hasMusicDetails(music: ArtSampleMusic | null): music is ReturnType<type
   return !!music && 'loadDetail' in music;
 }
 export interface ArtSampleSceneOptions {
-  /** Explicit isolated-preview override; normal game entry keeps the approved asset. */
+  /** Explicit asset path for the chosen traveler or an isolated preview. */
   travelerPath?: string;
   /** Clip playback rate at the existing reference movement speeds. */
   animationRates?: { walk: number; run: number };
@@ -899,10 +900,12 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
   const ready = Promise.race([Promise.all([loading, music?.ready, terrain?.ready, landscapeLoading,bactrianCaravans?.ready,upperLoading,patternLoading,exhibitLoading,guideLoading]),deadline]).then(async ([[courtyard, avatar, [tree, shrub, dunes], [exterior, interior, tower, entry, buddha], towerTreeModels, musicTreeModel, caissonModel],,,landscapeModels,,upperModel,patternModels,exhibit,guideModel]) => {
     if (disposed) return;
     attachLandscape(landscapeModels);
+    const isTripoTraveler = options.travelerPath === TRIPO_TRAVELER_MODEL;
+    const travelerClips = isTripoTraveler ? tripoTravelerClips(avatar.animations) : avatar.animations;
     const required: TravelerAction[] = ['Idle', 'Walk', 'Run'];
     if (options.presentationClips) required.push('Greeting', 'HallLookUp');
     if (v5) required.push('LookAround');
-    if (required.some(name => !avatar.animations.some(clip => clip.name === name))) {
+    if (required.some(name => !travelerClips.some(clip => clip.name === name))) {
       throw new Error('model-animation-incomplete');
     }
     avatar.scene.traverse(object => {
@@ -1007,11 +1010,13 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
       if(!bounds.isEmpty())canopies.push({bounds:bounds.expandByScalar(.2),materials:[...copies.values()],opacity:1});
     }
     character = avatar.scene; traveler.add(character);
+    // Align the supplied model to the movement and camera heading convention.
+    if (isTripoTraveler) character.rotation.y += Math.PI;
     mixer = new THREE.AnimationMixer(character);
-    for (const name of required) actions.set(name, mixer.clipAction(avatar.animations.find(clip => clip.name === name)!));
+    for (const name of required) actions.set(name, mixer.clipAction(travelerClips.find(clip => clip.name === name)!));
     actions.get('Idle')!.play();
     mixer.update(0);
-    if(modern){
+    if (modern || isTripoTraveler) {
       // Measure in model space: runtime may already have placed its parent on a high platform.
       const placedAt=traveler.position.clone();traveler.position.set(0,0,0);traveler.updateMatrixWorld(true);
       character.updateMatrixWorld(true);
@@ -1023,7 +1028,7 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
     caveLighting?.addTraveler(avatar.scene);
     if (guideModel) attachMusicGuide(guideModel);
     else if (options.companion && !options.musicGuide) {
-      companion=createCompanionAvatar(avatar.scene,avatar.animations,{walkRate:options.animationRates?.walk,runRate:options.animationRates?.run,restHeight});
+      companion=createCompanionAvatar(avatar.scene,travelerClips,{walkRate:options.animationRates?.walk,runRate:options.animationRates?.run,restHeight});
       environment.scene.add(companion.root);
     }
     if (options.musicInteriorVersion && (!connectedGalleries || music)) attachMusicInteriorLighting();

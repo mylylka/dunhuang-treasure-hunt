@@ -1,0 +1,259 @@
+{
+  "version": "v004",
+  "sources": [
+    {
+      "providedFilename": "选择旅人背景图.png",
+      "use": "用户提供的选人素材",
+      "original": "vault:sha256:e9b652cdff7745686f0fa3d3ad083eb2ce4e74073c8a7b0bf3d7b0cdf3d9f85d",
+      "originalSha256": "e9b652cdff7745686f0fa3d3ad083eb2ce4e74073c8a7b0bf3d7b0cdf3d9f85d",
+      "originalDimensions": [
+        1672,
+        941
+      ],
+      "originalBytes": 2418624,
+      "runtimeAssets": [
+        {
+          "use": "选人背景，保留原有标题与说明",
+          "runtime": "public/assets/world/traveler-selection/v004/background.webp",
+          "runtimeSha256": "724adc11a3d66f23eb2dffb8d9f401c23540f8830597d73979a8e9569809c7ac",
+          "dimensions": [
+            1672,
+            941
+          ],
+          "runtimeBytes": 250232,
+          "recipe": {
+            "orientation": "EXIF",
+            "mode": "RGB",
+            "quality": 87,
+            "method": 6,
+            "alphaQuality": 100,
+            "crop": null,
+            "resize": null
+          },
+          "derivation": {
+            "fingerprint": "42d562e79d81ce98b32e2df062e2196a59f23aaba73a6ea17b946ff8b6cf7144",
+            "sha256": "724adc11a3d66f23eb2dffb8d9f401c23540f8830597d73979a8e9569809c7ac"
+          }
+        }
+      ]
+    },
+    {
+      "providedFilename": "鸣沙.png",
+      "use": "用户提供的选人素材",
+      "original": "vault:sha256:e1597c65da37f71ba5729a65b17eb22bb1c853d3639fc100040a70ab3a513341",
+      "originalSha256": "e1597c65da37f71ba5729a65b17eb22bb1c853d3639fc100040a70ab3a513341",
+      "originalDimensions": [
+        1086,
+        1448
+      ],
+      "originalBytes": 1734229,
+      "runtimeAssets": [
+        {
+          "use": "鸣沙全身",
+          "runtime": "public/assets/world/traveler-selection/v004/classic.webp",
+          "runtimeSha256": "9defcade261610a58c297663d709cf207579735eaffb9289668f807464f60680",
+          "dimensions": [
+            1067,
+            1313
+          ],
+          "runtimeBytes": 381700,
+          "recipe": {
+            "orientation": "EXIF",
+            "mode": "RGBA",
+            "quality": 90,
+            "method": 6,
+            "alphaQuality": 100,
+            "crop": [
+              8,
+              83,
+              1075,
+              1396
+            ],
+            "resize": null
+          },
+          "derivation": {
+            "fingerprint": "9694af467ee5ed397f70aea2f6e63fbf1909c641bb0501bbce2591db971b277f",
+            "sha256": "9defcade261610a58c297663d709cf207579735eaffb9289668f807464f60680"
+          }
+        },
+        {
+          "use": "鸣沙手机头像",
+          "runtime": "public/assets/world/traveler-selection/v004/classic-avatar.webp",
+          "runtimeSha256": "f9cbc4e9ec990541218e54164315e3712c757e7fee68e7fcc4632f0251c85ce6",
+          "dimensions": [
+            192,
+            192
+          ],
+          "runtimeBytes": 20654,
+          "recipe": {
+            "orientation": "EXIF",
+            "mode": "RGBA",
+            "quality": 90,
+            "method": 6,
+            "alphaQuality": 100,
+            "crop": [
+              552,
+              116,
+              914,
+              478
+            ],
+            "resize": [
+              192,
+              192
+            ]
+          },
+          "derivation": {
+            "fingerprint": "4483161c10b8eb6bb024874d317116354a32eaecdc93c05a7f81b6bc14be3158",
+            "sha256": "f9cbc4e9ec990541218e54164315e3712c757e7fee68e7fcc4632f0251c85ce6"
+          }
+        },
+        {
+          "use": "手机端全身派生",
+          "runtime": "public/assets/world/traveler-selection/v004/classic-compact.webp",
+          "runtimeSha256": "e2f83a7cd136cb649322cdf4b9fc215214f0091c68d44ce0f9274f5864891902",
+          "dimensions": [
+            528,
+            650
+          ],
+          "runtimeBytes": 113926,
+          "recipe": {
+            "orientation": "EXIF",
+            "mode": "RGBA",
+            "quality": 87,
+            "method": 6,
+            "alphaQuality": 100,
+            "crop": [
+              8,
+              83,
+              1075,
+              1396
+            ],
+            "resize": [
+              528,
+              650
+            ]
+          },
+          "derivation": {
+            "fingerprint": "b0a6a7f96987813914daf4546f0705e2d1473c5e84878efd8cbdd9a7cdfe96b9",
+            "sha256": "e2f83a7cd136cb649322cdf4b9fc215214f0091c68d44ce0f9274f5864891902"
+          }
+        }
+      ]
+    },
+    {
+      "providedFilename": "林澈.png",
+      "use": "用户提供的选人素材",
+      "original": "vault:sha256:5d8ade6c620e7d90fe7f4160756e81626ea035ee1121bb3cc103563538677e46",
+      "originalSha256": "5d8ade6c620e7d90fe7f4160756e81626ea035ee1121bb3cc103563538677e46",
+      "originalDimensions": [
+        1086,
+        1448
+      ],
+      "originalBytes": 1548770,
+      "runtimeAssets": [
+        {
+          "use": "林澈全身",
+          "runtime": "public/assets/world/traveler-selection/v004/tripo.webp",
+          "runtimeSha256": "f0dbaf648c750cc400c7414d20458f2aab8d1a5fc5d1365bc850d98bf82bf6e4",
+          "dimensions": [
+            1060,
+            1424
+          ],
+          "runtimeBytes": 294854,
+          "recipe": {
+            "orientation": "EXIF",
+            "mode": "RGBA",
+            "quality": 90,
+            "method": 6,
+            "alphaQuality": 100,
+            "crop": [
+              19,
+              14,
+              1079,
+              1438
+            ],
+            "resize": null
+          },
+          "derivation": {
+            "fingerprint": "e65a7f74ad78ba1b1ef64fa894cf5d83f0866c3be2f6bc2a123eeca6be789fdd",
+            "sha256": "f0dbaf648c750cc400c7414d20458f2aab8d1a5fc5d1365bc850d98bf82bf6e4"
+          }
+        },
+        {
+          "use": "林澈手机头像",
+          "runtime": "public/assets/world/traveler-selection/v004/tripo-avatar.webp",
+          "runtimeSha256": "b8a4580946ad9be3d0f398872772a262ba66157c7ffa69a8805d6dda17f8c789",
+          "dimensions": [
+            192,
+            192
+          ],
+          "runtimeBytes": 19130,
+          "recipe": {
+            "orientation": "EXIF",
+            "mode": "RGBA",
+            "quality": 90,
+            "method": 6,
+            "alphaQuality": 100,
+            "crop": [
+              439,
+              15,
+              825,
+              401
+            ],
+            "resize": [
+              192,
+              192
+            ]
+          },
+          "derivation": {
+            "fingerprint": "28b10ca34af7784f2a366b7cfebff789a040b0fd59c74b7d44d0e392425e3802",
+            "sha256": "b8a4580946ad9be3d0f398872772a262ba66157c7ffa69a8805d6dda17f8c789"
+          }
+        },
+        {
+          "use": "手机端全身派生",
+          "runtime": "public/assets/world/traveler-selection/v004/tripo-compact.webp",
+          "runtimeSha256": "72c8520ef318189495e3741ea64e8e923d85274a0a0ceee2a91c1f3affe94ea2",
+          "dimensions": [
+            484,
+            650
+          ],
+          "runtimeBytes": 82524,
+          "recipe": {
+            "orientation": "EXIF",
+            "mode": "RGBA",
+            "quality": 87,
+            "method": 6,
+            "alphaQuality": 100,
+            "crop": [
+              19,
+              14,
+              1079,
+              1438
+            ],
+            "resize": [
+              484,
+              650
+            ]
+          },
+          "derivation": {
+            "fingerprint": "300b403c39e12118daa417513ca864c1c0078dec0401610124c1bef0343ba4a8",
+            "sha256": "72c8520ef318189495e3741ea64e8e923d85274a0a0ceee2a91c1f3affe94ea2"
+          }
+        }
+      ]
+    },
+    {
+      "providedFilename": "敦煌寻宝记：选择旅人示意图.png",
+      "use": "构图、按钮与赭红名字笔触参考",
+      "original": "vault:sha256:d2be4274f77517d5dca5faca5087f0a49c049b6346d8ce8e1a9d50387158a858",
+      "originalSha256": "d2be4274f77517d5dca5faca5087f0a49c049b6346d8ce8e1a9d50387158a858",
+      "originalDimensions": [
+        1672,
+        941
+      ],
+      "originalBytes": 3035638,
+      "runtimeAssets": []
+    }
+  ]
+}

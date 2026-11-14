@@ -1,5 +1,9 @@
 import { expect, test } from '@playwright/test';
 
+test.beforeEach(async ({ page }) => {
+  await page.addInitScript(() => localStorage.setItem('dunhuang:traveler-selection:v1', 'classic'));
+});
+
 test('正式首页进入三馆并可触发第一馆互动', async ({ page }) => {
   test.setTimeout(90_000);
   await page.goto('/?view=mural');
