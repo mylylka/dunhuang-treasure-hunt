@@ -1,4 +1,5 @@
 import { getAssetUrl } from '../content';
+import { getLevelChoices } from '../content/level-roadmap';
 import type { ContentCatalog, GameType, ThemeDefinition } from '../types';
 import '../styles/selection.css';
 
@@ -14,10 +15,11 @@ const names: Record<GameType, string> = {
   'hidden-object': '计时找物', 'shadow-match': '影子配对',
 };
 
-function GamePreview({ catalog, theme, type }: { catalog: ContentCatalog; theme: ThemeDefinition; type: GameType }) {
-  const previewLevel = (type === 'coloring' || type === 'puzzle' || type === 'shadow-match')
-    && catalog.levels.find(level => level.themeId === theme.id && level.gameType === type);
-  const image = getAssetUrl(catalog, previewLevel ? previewLevel.thumbnailAssetId : theme.coverAssetId);
+function GamePreview({ catalog, theme, type, thumbnailId }: {
+  catalog: ContentCatalog; theme: ThemeDefinition; type: GameType; thumbnailId?: string;
+}) {
+  const useLevelCover = type === 'coloring' || type === 'puzzle' || type === 'shadow-match';
+  const image = getAssetUrl(catalog, useLevelCover && thumbnailId ? thumbnailId : theme.coverAssetId);
   return <div className={`game-choice-picture preview-${type}`}>
     <img src={image} alt="" draggable={false} />
     {type === 'spot-difference' && <span className="difference-preview-marks" aria-hidden="true"><i /><i /></span>}
@@ -37,8 +39,8 @@ export function GameSelectScreen({ catalog, theme, onBack, hrefForGame }: GameSe
     <div className="game-choice-stage">
       <div className="game-choice-grid" data-game-count={theme.allowedGameTypes.length} aria-label={`${theme.title}小游戏`}>
         {theme.allowedGameTypes.map(type => {
-          const available = catalog.levels.some(level => level.themeId === theme.id && level.gameType === type);
-          const content = <><GamePreview catalog={catalog} theme={theme} type={type} /><h2>{names[type]}</h2>{!available && <span className="selection-state">未开放</span>}</>;
+          const available = getLevelChoices(catalog, theme.id, type).find(choice => choice.status === 'available');
+          const content = <><GamePreview catalog={catalog} theme={theme} type={type} thumbnailId={available?.level.thumbnailAssetId} /><h2>{names[type]}</h2>{!available && <span className="selection-state">未开放</span>}</>;
           return available
             ? <a key={type} className={`game-choice-card game-choice-${type}`} href={hrefForGame(type)}>{content}</a>
             : <button key={type} className={`game-choice-card game-choice-${type}`} type="button" disabled>{content}</button>;

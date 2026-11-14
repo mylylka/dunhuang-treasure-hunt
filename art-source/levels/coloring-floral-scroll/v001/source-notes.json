@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "receivedOn": "2026-11-13",
+  "reference": {
+    "file": "微信图片_20261113185411_227_231.png",
+    "sha256": "796eded2173ffa8bf0a5f17f47439e55183ac1b9d37e0b6224a993d2659b0b71",
+    "source": "开发者提供；保留原始图像和署名标记。"
+  },
+  "generatedLine": {
+    "file": "line-generated.png",
+    "sha256": "3130e549f49a9b4eb3c0f6f81987d6bffa04bf385729b9a35bf6d137f85861f5",
+    "method": "使用内置 imagegen 将参考彩色图转成闭合黑白线稿。",
+    "prompt": "Use case: precise-object-edit. Edit target: the attached original color illustration. Make one black-and-white coloring-book line drawing for a click-to-fill game, tracing the tall, asymmetric curling floral scroll. Preserve the three major upward cloud curves, the five-lobed blossom and its center, the layered lower curl and the long tapering double tail. Preserve the original arrangement, proportions, silhouette, and identifiable shapes, with enough white margin so every outer contour is fully in frame. Convert each meaningful color area into a white interior bounded by a clean continuous black line. Close all region boundaries wherever the original supports them. Use evenly weighted crisp black outlines on plain pure white, with no grayscale shading, solid black fields, added decoration, typography or graphic overlays. Keep small details legible but do not subdivide large areas or invent extra detail. The output is a single illustration."
+  },
+  "processing": {
+    "line": "依据笔画边界收紧构图并加白边，按比例缩放，归一化黑白对比。",
+    "regionMap": "依据笔画阈值 36 做四邻域连通分析；与画幅边缘连通的外底留白，略去小于 85 像素或安全半径小于 6 像素的细碎区域。",
+    "runtimeDimensions": [
+      561,
+      1152
+    ],
+    "regionCount": 30,
+    "artworkVersion": "v001-cae256c9a22e-69df1f9b7639",
+    "sha256": {
+      "reference": "796eded2173ffa8bf0a5f17f47439e55183ac1b9d37e0b6224a993d2659b0b71",
+      "line": "cae256c9a22e0e99041bb76f12c3d3cf53fc0e908b9f448a1ae0a2370fb4f973",
+      "regions": "69df1f9b763952baba60378369e98e895fd836f7e1d76dc1d9bdaddcdda3472b"
+    }
+  }
+}

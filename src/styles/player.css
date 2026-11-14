@@ -1,1 +1,15 @@
 .game-image-label{position:absolute;z-index:2;pointer-events:none;font:500 14px/18px "PingFang SC","Microsoft YaHei",sans-serif;color:#55442e;white-space:nowrap}
+
+/* Give every observation level the same image-first layout in shorter windows. */
+@media (max-height: 760px) {
+  .app-shell[data-screen=play]:has(.page-play) > .site-header,
+  .app-shell[data-screen=play]:has(.page-play) > .site-footer { display: none; }
+  .page.page-play { padding-block: 8px; gap: 6px; }
+  .page-play .play-heading h1 { font-size: 24px; line-height: 1.25; margin-top: 0; }
+  .page-play .game-stage { padding: 12px 18px 16px; border-image-width: 23px; }
+  .page-play .stage-topline { min-height: 18px; padding-bottom: 3px; }
+  .page-play .hint-note { min-height: 23px; padding-block: 0; }
+}
+@media (max-width: 680px) and (max-height: 760px) {
+  .page-play .play-heading h1 { font-size: 20px; }
+}

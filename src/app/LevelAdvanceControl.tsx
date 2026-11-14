@@ -10,7 +10,7 @@ const LevelNavigationContext = createContext<LevelNavigation | null>(null);
 export function LevelNavigationProvider({ catalog, level, children, restricted = false }: {
   catalog: Pick<ContentCatalog, 'levels'>; level: Level; children: ReactNode; restricted?: boolean;
 }) {
-  return <LevelNavigationContext value={{ previous: restricted ? null : getPreviousOpenLevel(catalog, level), next: restricted ? null : getNextOpenLevel(catalog, level), directory: levelsPath(level.themeId, level.gameType) }}>
+  return <LevelNavigationContext value={{ previous: restricted ? null : getPreviousOpenLevel(catalog, level), next: restricted ? null : getNextOpenLevel(catalog, level), directory: levelsPath(level.themeId, level.gameType, level.gameType === 'spot-difference' ? level.id : undefined) }}>
     {children}
   </LevelNavigationContext>;
 }

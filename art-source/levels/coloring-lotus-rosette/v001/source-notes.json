@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "receivedOn": "2026-11-13",
+  "reference": {
+    "file": "微信图片_20261113185253_225_231.png",
+    "sha256": "a7d6d4715e09e44778bcd43dd7b0c9cc33d05310555013eeff54a40be0891a64",
+    "source": "开发者提供；保留原始图像和署名标记。"
+  },
+  "generatedLine": {
+    "file": "line-generated.png",
+    "sha256": "39e6a2f3da7bc4fd7c675dfb56f5d6f755db128d97752adc21f7777649f625d8",
+    "method": "使用内置 imagegen 将参考彩色图转成闭合黑白线稿。",
+    "prompt": "Use case: precise-object-edit. Edit target: the attached original color illustration. Make one black-and-white coloring-book line drawing for a click-to-fill game, tracing the square eight-pointed lotus rosette. Preserve the eight radial tips, nested outer and inner petals, four diagonal leaves and central upright three-petal lotus. Match its symmetry and trace the boundaries between the original color fields. Preserve the original arrangement, proportions, silhouette, and identifiable shapes, with enough white margin so every outer contour is fully in frame. Convert each meaningful color area into a white interior bounded by a clean continuous black line. Close all region boundaries wherever the original supports them. Use evenly weighted crisp black outlines on plain pure white, with no grayscale shading, solid black fields, added decoration, typography or graphic overlays. Keep small details legible but do not subdivide large areas or invent extra detail. The output is a single illustration."
+  },
+  "processing": {
+    "line": "依据笔画边界收紧构图并加白边，按比例缩放，归一化黑白对比。",
+    "regionMap": "依据笔画阈值 36 做四邻域连通分析；与画幅边缘连通的外底留白，略去小于 85 像素或安全半径小于 6 像素的细碎区域。",
+    "runtimeDimensions": [
+      1152,
+      1148
+    ],
+    "regionCount": 41,
+    "artworkVersion": "v001-49aa3a66d0f7-c4be0216c833",
+    "sha256": {
+      "reference": "a7d6d4715e09e44778bcd43dd7b0c9cc33d05310555013eeff54a40be0891a64",
+      "line": "49aa3a66d0f72e9cca05913230c374783366d600e45683a585ab8419759794d1",
+      "regions": "c4be0216c833b4fa13fd970f950b0b62b6511729ce45db816a65b5d28490af74"
+    }
+  }
+}

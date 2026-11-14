@@ -1,0 +1,3075 @@
+{
+  "version": "user-geometry-v001",
+  "receivedOn": "2026-10-30",
+  "creator": "开发者",
+  "originals": [
+    {
+      "filename": "连珠与几何A.png",
+      "path": "art-source/levels/patterns-geometry/v001/连珠与几何A.png",
+      "sha256": "7a18191894577e40b468ac0441f4db2f3ad7d68a35734736ce203fd684bb105c"
+    },
+    {
+      "filename": "连珠与几何B.png",
+      "path": "art-source/levels/patterns-geometry/v001/连珠与几何B.png",
+      "sha256": "94f0f665388a8e3813d4e765f8c74a1371827b22b9a05a644e2fd4e36b3560e7"
+    }
+  ],
+  "sourceSize": [
+    1254,
+    1254
+  ],
+  "runtimeSize": [
+    1254,
+    1254
+  ],
+  "cultureStatus": "用户交付的教学美术；沿用项目AI教学示意标注，不推断具体洞窟、年代或真实历史配色。",
+  "displayTitle": "联珠与几何",
+  "originalFilenamePrefix": "连珠与几何",
+  "processing": "原稿逐字节归档。A按原尺寸转换为RGB PNG，像素不变；B不做几何变换，以A为底，仅复制原B中登记的四类纹样局部。矩形使用内向smoothstep羽化3像素（八角花2像素），圆珠仅复制半径14像素内部并在外缘2像素过渡。半圆珠蒙版裁在所在边带内。蒙版不越出点击区域。未裁切画幅、放大、调色、生成或重画内容。",
+  "mask": "art-source/levels/patterns-geometry/v001/difference-mask.png",
+  "targets": [
+    {
+      "id": "diamond-inlay",
+      "pieceCount": 32,
+      "pieces": [
+        {
+          "box": [
+            389,
+            235,
+            461,
+            273
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 3
+        },
+        {
+          "box": [
+            294,
+            235,
+            366,
+            273
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 3
+        },
+        {
+          "box": [
+            489,
+            235,
+            561,
+            273
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 3
+        },
+        {
+          "box": [
+            589,
+            235,
+            661,
+            273
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 3
+        },
+        {
+          "box": [
+            689,
+            235,
+            761,
+            273
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 3
+        },
+        {
+          "box": [
+            789,
+            235,
+            861,
+            273
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 3
+        },
+        {
+          "box": [
+            887,
+            235,
+            959,
+            273
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 3
+        },
+        {
+          "box": [
+            288,
+            975,
+            360,
+            1009
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 3
+        },
+        {
+          "box": [
+            390,
+            975,
+            462,
+            1009
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 3
+        },
+        {
+          "box": [
+            489,
+            975,
+            561,
+            1009
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 3
+        },
+        {
+          "box": [
+            589,
+            975,
+            661,
+            1009
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 3
+        },
+        {
+          "box": [
+            689,
+            975,
+            761,
+            1009
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 3
+        },
+        {
+          "box": [
+            789,
+            975,
+            861,
+            1009
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 3
+        },
+        {
+          "box": [
+            887,
+            975,
+            959,
+            1009
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 3
+        },
+        {
+          "box": [
+            238,
+            299,
+            274,
+            355
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 3
+        },
+        {
+          "box": [
+            238,
+            396,
+            274,
+            452
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 3
+        },
+        {
+          "box": [
+            238,
+            494,
+            274,
+            550
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 3
+        },
+        {
+          "box": [
+            238,
+            592,
+            274,
+            648
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 3
+        },
+        {
+          "box": [
+            238,
+            690,
+            274,
+            746
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 3
+        },
+        {
+          "box": [
+            238,
+            790,
+            274,
+            846
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 3
+        },
+        {
+          "box": [
+            238,
+            890,
+            274,
+            946
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 3
+        },
+        {
+          "box": [
+            974,
+            299,
+            1010,
+            355
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 3
+        },
+        {
+          "box": [
+            974,
+            396,
+            1010,
+            452
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 3
+        },
+        {
+          "box": [
+            974,
+            494,
+            1010,
+            550
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 3
+        },
+        {
+          "box": [
+            974,
+            592,
+            1010,
+            648
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 3
+        },
+        {
+          "box": [
+            974,
+            690,
+            1010,
+            746
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 3
+        },
+        {
+          "box": [
+            974,
+            790,
+            1010,
+            846
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 3
+        },
+        {
+          "box": [
+            974,
+            890,
+            1010,
+            946
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 3
+        },
+        {
+          "box": [
+            241,
+            240,
+            281,
+            280
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 3
+        },
+        {
+          "box": [
+            968,
+            240,
+            1007,
+            280
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 3
+        },
+        {
+          "box": [
+            239,
+            968,
+            280,
+            1008
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 3
+        },
+        {
+          "box": [
+            968,
+            968,
+            1007,
+            1008
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 3
+        }
+      ],
+      "everyPieceContainsChangedPixels": true
+    },
+    {
+      "id": "orange-pearl",
+      "pieceCount": 144,
+      "pieces": [
+        {
+          "box": [
+            184,
+            466,
+            219,
+            501
+          ],
+          "shape": "circle-interior",
+          "center": [
+            201,
+            483
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            185,
+            183,
+            220,
+            218
+          ],
+          "shape": "circle-interior",
+          "center": [
+            202,
+            200
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            256,
+            183,
+            291,
+            218
+          ],
+          "shape": "circle-interior",
+          "center": [
+            273,
+            200
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            326,
+            183,
+            361,
+            218
+          ],
+          "shape": "circle-interior",
+          "center": [
+            343,
+            200
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            396,
+            183,
+            431,
+            218
+          ],
+          "shape": "circle-interior",
+          "center": [
+            413,
+            200
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            466,
+            183,
+            501,
+            218
+          ],
+          "shape": "circle-interior",
+          "center": [
+            483,
+            200
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            536,
+            183,
+            571,
+            218
+          ],
+          "shape": "circle-interior",
+          "center": [
+            553,
+            200
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            607,
+            183,
+            642,
+            218
+          ],
+          "shape": "circle-interior",
+          "center": [
+            624,
+            200
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            677,
+            183,
+            712,
+            218
+          ],
+          "shape": "circle-interior",
+          "center": [
+            694,
+            200
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            747,
+            183,
+            782,
+            218
+          ],
+          "shape": "circle-interior",
+          "center": [
+            764,
+            200
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            818,
+            183,
+            853,
+            218
+          ],
+          "shape": "circle-interior",
+          "center": [
+            835,
+            200
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            888,
+            183,
+            923,
+            218
+          ],
+          "shape": "circle-interior",
+          "center": [
+            905,
+            200
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            959,
+            183,
+            994,
+            218
+          ],
+          "shape": "circle-interior",
+          "center": [
+            976,
+            200
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            1030,
+            183,
+            1064,
+            218
+          ],
+          "shape": "circle-interior",
+          "center": [
+            1047,
+            200
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            181,
+            1027,
+            216,
+            1062
+          ],
+          "shape": "circle-interior",
+          "center": [
+            198,
+            1044
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            251,
+            1027,
+            286,
+            1062
+          ],
+          "shape": "circle-interior",
+          "center": [
+            268,
+            1044
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            321,
+            1027,
+            356,
+            1062
+          ],
+          "shape": "circle-interior",
+          "center": [
+            338,
+            1044
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            391,
+            1027,
+            426,
+            1062
+          ],
+          "shape": "circle-interior",
+          "center": [
+            408,
+            1044
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            462,
+            1027,
+            497,
+            1062
+          ],
+          "shape": "circle-interior",
+          "center": [
+            479,
+            1044
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            532,
+            1027,
+            567,
+            1062
+          ],
+          "shape": "circle-interior",
+          "center": [
+            549,
+            1044
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            603,
+            1027,
+            638,
+            1062
+          ],
+          "shape": "circle-interior",
+          "center": [
+            620,
+            1044
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            674,
+            1027,
+            709,
+            1062
+          ],
+          "shape": "circle-interior",
+          "center": [
+            691,
+            1044
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            744,
+            1027,
+            779,
+            1062
+          ],
+          "shape": "circle-interior",
+          "center": [
+            761,
+            1044
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            815,
+            1027,
+            850,
+            1062
+          ],
+          "shape": "circle-interior",
+          "center": [
+            832,
+            1044
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            886,
+            1027,
+            921,
+            1062
+          ],
+          "shape": "circle-interior",
+          "center": [
+            903,
+            1044
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            957,
+            1027,
+            992,
+            1062
+          ],
+          "shape": "circle-interior",
+          "center": [
+            974,
+            1044
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            1029,
+            1027,
+            1064,
+            1062
+          ],
+          "shape": "circle-interior",
+          "center": [
+            1046,
+            1044
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            185,
+            256,
+            220,
+            291
+          ],
+          "shape": "circle-interior",
+          "center": [
+            202,
+            273
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            1030,
+            256,
+            1065,
+            291
+          ],
+          "shape": "circle-interior",
+          "center": [
+            1047,
+            273
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            184,
+            326,
+            219,
+            361
+          ],
+          "shape": "circle-interior",
+          "center": [
+            201,
+            343
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            1030,
+            326,
+            1065,
+            361
+          ],
+          "shape": "circle-interior",
+          "center": [
+            1047,
+            343
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            184,
+            396,
+            219,
+            431
+          ],
+          "shape": "circle-interior",
+          "center": [
+            201,
+            413
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            1030,
+            396,
+            1065,
+            431
+          ],
+          "shape": "circle-interior",
+          "center": [
+            1047,
+            413
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            1030,
+            466,
+            1065,
+            501
+          ],
+          "shape": "circle-interior",
+          "center": [
+            1047,
+            483
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            183,
+            536,
+            218,
+            571
+          ],
+          "shape": "circle-interior",
+          "center": [
+            200,
+            553
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            1030,
+            536,
+            1065,
+            571
+          ],
+          "shape": "circle-interior",
+          "center": [
+            1047,
+            553
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            183,
+            606,
+            218,
+            641
+          ],
+          "shape": "circle-interior",
+          "center": [
+            200,
+            623
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            1030,
+            606,
+            1065,
+            641
+          ],
+          "shape": "circle-interior",
+          "center": [
+            1047,
+            623
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            183,
+            676,
+            218,
+            711
+          ],
+          "shape": "circle-interior",
+          "center": [
+            200,
+            693
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            1030,
+            676,
+            1065,
+            711
+          ],
+          "shape": "circle-interior",
+          "center": [
+            1047,
+            693
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            182,
+            746,
+            217,
+            781
+          ],
+          "shape": "circle-interior",
+          "center": [
+            199,
+            763
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            1030,
+            746,
+            1065,
+            781
+          ],
+          "shape": "circle-interior",
+          "center": [
+            1047,
+            763
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            182,
+            816,
+            217,
+            851
+          ],
+          "shape": "circle-interior",
+          "center": [
+            199,
+            833
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            1030,
+            816,
+            1065,
+            851
+          ],
+          "shape": "circle-interior",
+          "center": [
+            1047,
+            833
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            182,
+            886,
+            217,
+            921
+          ],
+          "shape": "circle-interior",
+          "center": [
+            199,
+            903
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            1030,
+            886,
+            1065,
+            921
+          ],
+          "shape": "circle-interior",
+          "center": [
+            1047,
+            903
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            181,
+            957,
+            216,
+            992
+          ],
+          "shape": "circle-interior",
+          "center": [
+            198,
+            974
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            1030,
+            957,
+            1065,
+            992
+          ],
+          "shape": "circle-interior",
+          "center": [
+            1047,
+            974
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            221,
+            180,
+            256,
+            199
+          ],
+          "shape": "circle-interior",
+          "center": [
+            238,
+            181
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            221,
+            202,
+            256,
+            221
+          ],
+          "shape": "circle-interior",
+          "center": [
+            238,
+            219
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            216,
+            1027,
+            251,
+            1045
+          ],
+          "shape": "circle-interior",
+          "center": [
+            233,
+            1027
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            216,
+            1045,
+            251,
+            1063
+          ],
+          "shape": "circle-interior",
+          "center": [
+            233,
+            1062
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            180,
+            221,
+            199,
+            256
+          ],
+          "shape": "circle-interior",
+          "center": [
+            181,
+            238
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            202,
+            221,
+            221,
+            256
+          ],
+          "shape": "circle-interior",
+          "center": [
+            219,
+            238
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            1028,
+            221,
+            1047,
+            256
+          ],
+          "shape": "circle-interior",
+          "center": [
+            1029,
+            238
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            1047,
+            221,
+            1065,
+            256
+          ],
+          "shape": "circle-interior",
+          "center": [
+            1064,
+            238
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            291,
+            180,
+            326,
+            199
+          ],
+          "shape": "circle-interior",
+          "center": [
+            308,
+            181
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            291,
+            202,
+            326,
+            221
+          ],
+          "shape": "circle-interior",
+          "center": [
+            308,
+            219
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            287,
+            1027,
+            322,
+            1045
+          ],
+          "shape": "circle-interior",
+          "center": [
+            304,
+            1027
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            287,
+            1045,
+            322,
+            1063
+          ],
+          "shape": "circle-interior",
+          "center": [
+            304,
+            1062
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            180,
+            291,
+            199,
+            326
+          ],
+          "shape": "circle-interior",
+          "center": [
+            181,
+            308
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            202,
+            291,
+            221,
+            326
+          ],
+          "shape": "circle-interior",
+          "center": [
+            219,
+            308
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            1028,
+            291,
+            1047,
+            326
+          ],
+          "shape": "circle-interior",
+          "center": [
+            1029,
+            308
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            1047,
+            291,
+            1065,
+            326
+          ],
+          "shape": "circle-interior",
+          "center": [
+            1064,
+            308
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            362,
+            180,
+            397,
+            199
+          ],
+          "shape": "circle-interior",
+          "center": [
+            379,
+            181
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            362,
+            202,
+            397,
+            221
+          ],
+          "shape": "circle-interior",
+          "center": [
+            379,
+            219
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            357,
+            1027,
+            392,
+            1045
+          ],
+          "shape": "circle-interior",
+          "center": [
+            374,
+            1027
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            357,
+            1045,
+            392,
+            1063
+          ],
+          "shape": "circle-interior",
+          "center": [
+            374,
+            1062
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            180,
+            361,
+            199,
+            396
+          ],
+          "shape": "circle-interior",
+          "center": [
+            181,
+            378
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            202,
+            361,
+            221,
+            396
+          ],
+          "shape": "circle-interior",
+          "center": [
+            219,
+            378
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            1028,
+            361,
+            1047,
+            396
+          ],
+          "shape": "circle-interior",
+          "center": [
+            1029,
+            378
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            1047,
+            361,
+            1065,
+            396
+          ],
+          "shape": "circle-interior",
+          "center": [
+            1064,
+            378
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            432,
+            180,
+            467,
+            199
+          ],
+          "shape": "circle-interior",
+          "center": [
+            449,
+            181
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            432,
+            202,
+            467,
+            221
+          ],
+          "shape": "circle-interior",
+          "center": [
+            449,
+            219
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            428,
+            1027,
+            463,
+            1045
+          ],
+          "shape": "circle-interior",
+          "center": [
+            445,
+            1027
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            428,
+            1045,
+            463,
+            1063
+          ],
+          "shape": "circle-interior",
+          "center": [
+            445,
+            1062
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            180,
+            431,
+            199,
+            466
+          ],
+          "shape": "circle-interior",
+          "center": [
+            181,
+            448
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            202,
+            431,
+            221,
+            466
+          ],
+          "shape": "circle-interior",
+          "center": [
+            219,
+            448
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            1028,
+            431,
+            1047,
+            466
+          ],
+          "shape": "circle-interior",
+          "center": [
+            1029,
+            448
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            1047,
+            431,
+            1065,
+            466
+          ],
+          "shape": "circle-interior",
+          "center": [
+            1064,
+            448
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            502,
+            180,
+            537,
+            199
+          ],
+          "shape": "circle-interior",
+          "center": [
+            519,
+            181
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            502,
+            202,
+            537,
+            221
+          ],
+          "shape": "circle-interior",
+          "center": [
+            519,
+            219
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            498,
+            1027,
+            533,
+            1045
+          ],
+          "shape": "circle-interior",
+          "center": [
+            515,
+            1027
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            498,
+            1045,
+            533,
+            1063
+          ],
+          "shape": "circle-interior",
+          "center": [
+            515,
+            1062
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            180,
+            501,
+            199,
+            536
+          ],
+          "shape": "circle-interior",
+          "center": [
+            181,
+            518
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            202,
+            501,
+            221,
+            536
+          ],
+          "shape": "circle-interior",
+          "center": [
+            219,
+            518
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            1028,
+            501,
+            1047,
+            536
+          ],
+          "shape": "circle-interior",
+          "center": [
+            1029,
+            518
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            1047,
+            501,
+            1065,
+            536
+          ],
+          "shape": "circle-interior",
+          "center": [
+            1064,
+            518
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            573,
+            180,
+            608,
+            199
+          ],
+          "shape": "circle-interior",
+          "center": [
+            590,
+            181
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            573,
+            202,
+            608,
+            221
+          ],
+          "shape": "circle-interior",
+          "center": [
+            590,
+            219
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            569,
+            1027,
+            604,
+            1045
+          ],
+          "shape": "circle-interior",
+          "center": [
+            586,
+            1027
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            569,
+            1045,
+            604,
+            1063
+          ],
+          "shape": "circle-interior",
+          "center": [
+            586,
+            1062
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            180,
+            571,
+            199,
+            606
+          ],
+          "shape": "circle-interior",
+          "center": [
+            181,
+            588
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            202,
+            571,
+            221,
+            606
+          ],
+          "shape": "circle-interior",
+          "center": [
+            219,
+            588
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            1028,
+            571,
+            1047,
+            606
+          ],
+          "shape": "circle-interior",
+          "center": [
+            1029,
+            588
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            1047,
+            571,
+            1065,
+            606
+          ],
+          "shape": "circle-interior",
+          "center": [
+            1064,
+            588
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            643,
+            180,
+            678,
+            199
+          ],
+          "shape": "circle-interior",
+          "center": [
+            660,
+            181
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            643,
+            202,
+            678,
+            221
+          ],
+          "shape": "circle-interior",
+          "center": [
+            660,
+            219
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            640,
+            1027,
+            675,
+            1045
+          ],
+          "shape": "circle-interior",
+          "center": [
+            657,
+            1027
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            640,
+            1045,
+            675,
+            1063
+          ],
+          "shape": "circle-interior",
+          "center": [
+            657,
+            1062
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            180,
+            641,
+            199,
+            676
+          ],
+          "shape": "circle-interior",
+          "center": [
+            181,
+            658
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            202,
+            641,
+            221,
+            676
+          ],
+          "shape": "circle-interior",
+          "center": [
+            219,
+            658
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            1028,
+            641,
+            1047,
+            676
+          ],
+          "shape": "circle-interior",
+          "center": [
+            1029,
+            658
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            1047,
+            641,
+            1065,
+            676
+          ],
+          "shape": "circle-interior",
+          "center": [
+            1064,
+            658
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            713,
+            180,
+            748,
+            199
+          ],
+          "shape": "circle-interior",
+          "center": [
+            730,
+            181
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            713,
+            202,
+            748,
+            221
+          ],
+          "shape": "circle-interior",
+          "center": [
+            730,
+            219
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            710,
+            1027,
+            745,
+            1045
+          ],
+          "shape": "circle-interior",
+          "center": [
+            727,
+            1027
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            710,
+            1045,
+            745,
+            1063
+          ],
+          "shape": "circle-interior",
+          "center": [
+            727,
+            1062
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            180,
+            711,
+            199,
+            746
+          ],
+          "shape": "circle-interior",
+          "center": [
+            181,
+            728
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            202,
+            711,
+            221,
+            746
+          ],
+          "shape": "circle-interior",
+          "center": [
+            219,
+            728
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            1028,
+            711,
+            1047,
+            746
+          ],
+          "shape": "circle-interior",
+          "center": [
+            1029,
+            728
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            1047,
+            711,
+            1065,
+            746
+          ],
+          "shape": "circle-interior",
+          "center": [
+            1064,
+            728
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            783,
+            180,
+            818,
+            199
+          ],
+          "shape": "circle-interior",
+          "center": [
+            800,
+            181
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            783,
+            202,
+            818,
+            221
+          ],
+          "shape": "circle-interior",
+          "center": [
+            800,
+            219
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            781,
+            1027,
+            816,
+            1045
+          ],
+          "shape": "circle-interior",
+          "center": [
+            798,
+            1027
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            781,
+            1045,
+            816,
+            1063
+          ],
+          "shape": "circle-interior",
+          "center": [
+            798,
+            1062
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            180,
+            781,
+            199,
+            816
+          ],
+          "shape": "circle-interior",
+          "center": [
+            181,
+            798
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            202,
+            781,
+            221,
+            816
+          ],
+          "shape": "circle-interior",
+          "center": [
+            219,
+            798
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            1028,
+            781,
+            1047,
+            816
+          ],
+          "shape": "circle-interior",
+          "center": [
+            1029,
+            798
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            1047,
+            781,
+            1065,
+            816
+          ],
+          "shape": "circle-interior",
+          "center": [
+            1064,
+            798
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            854,
+            180,
+            889,
+            199
+          ],
+          "shape": "circle-interior",
+          "center": [
+            871,
+            181
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            854,
+            202,
+            889,
+            221
+          ],
+          "shape": "circle-interior",
+          "center": [
+            871,
+            219
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            851,
+            1027,
+            886,
+            1045
+          ],
+          "shape": "circle-interior",
+          "center": [
+            868,
+            1027
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            851,
+            1045,
+            886,
+            1063
+          ],
+          "shape": "circle-interior",
+          "center": [
+            868,
+            1062
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            180,
+            851,
+            199,
+            886
+          ],
+          "shape": "circle-interior",
+          "center": [
+            181,
+            868
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            202,
+            851,
+            221,
+            886
+          ],
+          "shape": "circle-interior",
+          "center": [
+            219,
+            868
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            1028,
+            851,
+            1047,
+            886
+          ],
+          "shape": "circle-interior",
+          "center": [
+            1029,
+            868
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            1047,
+            851,
+            1065,
+            886
+          ],
+          "shape": "circle-interior",
+          "center": [
+            1064,
+            868
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            924,
+            180,
+            959,
+            199
+          ],
+          "shape": "circle-interior",
+          "center": [
+            941,
+            181
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            924,
+            202,
+            959,
+            221
+          ],
+          "shape": "circle-interior",
+          "center": [
+            941,
+            219
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            922,
+            1027,
+            957,
+            1045
+          ],
+          "shape": "circle-interior",
+          "center": [
+            939,
+            1027
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            922,
+            1045,
+            957,
+            1063
+          ],
+          "shape": "circle-interior",
+          "center": [
+            939,
+            1062
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            180,
+            921,
+            199,
+            956
+          ],
+          "shape": "circle-interior",
+          "center": [
+            181,
+            938
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            202,
+            921,
+            221,
+            956
+          ],
+          "shape": "circle-interior",
+          "center": [
+            219,
+            938
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            1028,
+            921,
+            1047,
+            956
+          ],
+          "shape": "circle-interior",
+          "center": [
+            1029,
+            938
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            1047,
+            921,
+            1065,
+            956
+          ],
+          "shape": "circle-interior",
+          "center": [
+            1064,
+            938
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            994,
+            180,
+            1029,
+            199
+          ],
+          "shape": "circle-interior",
+          "center": [
+            1011,
+            181
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            994,
+            202,
+            1029,
+            221
+          ],
+          "shape": "circle-interior",
+          "center": [
+            1011,
+            219
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            993,
+            1027,
+            1028,
+            1045
+          ],
+          "shape": "circle-interior",
+          "center": [
+            1010,
+            1027
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            993,
+            1045,
+            1028,
+            1063
+          ],
+          "shape": "circle-interior",
+          "center": [
+            1010,
+            1062
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            180,
+            991,
+            199,
+            1026
+          ],
+          "shape": "circle-interior",
+          "center": [
+            181,
+            1008
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            202,
+            991,
+            221,
+            1026
+          ],
+          "shape": "circle-interior",
+          "center": [
+            219,
+            1008
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            1028,
+            991,
+            1047,
+            1026
+          ],
+          "shape": "circle-interior",
+          "center": [
+            1029,
+            1008
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            1047,
+            991,
+            1065,
+            1026
+          ],
+          "shape": "circle-interior",
+          "center": [
+            1064,
+            1008
+          ],
+          "radiusPixels": 14,
+          "inwardFeatherPixels": 2
+        }
+      ],
+      "everyPieceContainsChangedPixels": true
+    },
+    {
+      "id": "pale-leaf-border",
+      "pieceCount": 4,
+      "pieces": [
+        {
+          "box": [
+            379,
+            376,
+            872,
+            410
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 3
+        },
+        {
+          "box": [
+            379,
+            410,
+            413,
+            836
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 3
+        },
+        {
+          "box": [
+            838,
+            410,
+            872,
+            836
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 3
+        },
+        {
+          "box": [
+            379,
+            836,
+            872,
+            870
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 3
+        }
+      ],
+      "everyPieceContainsChangedPixels": true
+    },
+    {
+      "id": "red-ground-flower",
+      "pieceCount": 48,
+      "pieces": [
+        {
+          "box": [
+            456,
+            325,
+            515,
+            363
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            595,
+            325,
+            655,
+            363
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            735,
+            325,
+            795,
+            363
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            330,
+            329,
+            371,
+            366
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            877,
+            329,
+            920,
+            366
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            330,
+            880,
+            371,
+            920
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            877,
+            880,
+            920,
+            920
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            453,
+            881,
+            513,
+            919
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            595,
+            881,
+            655,
+            919
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            737,
+            881,
+            797,
+            919
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            328,
+            452,
+            364,
+            512
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            328,
+            589,
+            364,
+            649
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            328,
+            728,
+            364,
+            788
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            884,
+            452,
+            920,
+            512
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            884,
+            589,
+            920,
+            649
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            884,
+            728,
+            920,
+            788
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            396,
+            325,
+            432,
+            337
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            396,
+            353,
+            432,
+            365
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            396,
+            883,
+            432,
+            895
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            396,
+            909,
+            432,
+            921
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            537,
+            325,
+            573,
+            337
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            537,
+            353,
+            573,
+            365
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            537,
+            883,
+            573,
+            895
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            537,
+            909,
+            573,
+            921
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            677,
+            325,
+            713,
+            337
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            677,
+            353,
+            713,
+            365
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            677,
+            883,
+            713,
+            895
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            677,
+            909,
+            713,
+            921
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            817,
+            325,
+            853,
+            337
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            817,
+            353,
+            853,
+            365
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            817,
+            883,
+            853,
+            895
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            817,
+            909,
+            853,
+            921
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            329,
+            395,
+            341,
+            431
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            355,
+            395,
+            367,
+            431
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            884,
+            395,
+            896,
+            431
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            909,
+            395,
+            921,
+            431
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            329,
+            534,
+            341,
+            570
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            355,
+            534,
+            367,
+            570
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            884,
+            534,
+            896,
+            570
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            909,
+            534,
+            921,
+            570
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            329,
+            673,
+            341,
+            709
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            355,
+            673,
+            367,
+            709
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            884,
+            673,
+            896,
+            709
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            909,
+            673,
+            921,
+            709
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            329,
+            812,
+            341,
+            848
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            355,
+            812,
+            367,
+            848
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            884,
+            812,
+            896,
+            848
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 2
+        },
+        {
+          "box": [
+            909,
+            812,
+            921,
+            848
+          ],
+          "shape": "rectangle",
+          "inwardFeatherPixels": 2
+        }
+      ],
+      "everyPieceContainsChangedPixels": true
+    }
+  ],
+  "checks": {
+    "outsideRegionChangedPixels": 0,
+    "everyAcceptedPieceContainsChangedPixels": true,
+    "referencePixelsMatchOriginalA": true
+  },
+  "runtime": [
+    {
+      "path": "public/assets/levels/patterns-geometry/patterns-geometry-a-v001.png",
+      "sha256": "0980009672cfc6e9a94ccff49309d2a7ca6083317405cc0a7c8bd6781ca1ecf3"
+    },
+    {
+      "path": "public/assets/levels/patterns-geometry/patterns-geometry-b-v001.png",
+      "sha256": "dea95e74951fdfde61ad2c721b3acb565aa573c44378f9679f6bbc4a25079372"
+    }
+  ]
+}

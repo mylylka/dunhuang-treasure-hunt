@@ -1,6 +1,7 @@
 import { expect, test, type Locator, type Page } from '@playwright/test';
 import { readFileSync, readdirSync } from 'node:fs';
 import type { ColoringLevel, HiddenObjectLevel, Level, ProgressData } from '../../src/types';
+import { unlockMusicForTest, unlockPatternsForTest } from './gallery-unlock-fixtures';
 
 const levels = readdirSync('src/content/levels').filter(name => name.endsWith('.json')).sort()
   .map(name => JSON.parse(readFileSync(`src/content/levels/${name}`, 'utf8')) as Level);
@@ -11,25 +12,29 @@ const progressKey = 'dunhuang:progress:v1';
 const artworkKey = 'dunhuang:artworks:v2';
 const legacyArtworkKey = 'dunhuang:artworks:v1';
 const timestamp = '2026-11-03T00:00:00.000Z';
-const paint = byId('coloring-grape-lotus') as ColoringLevel;
+const paint = byId('coloring-floral-scroll') as ColoringLevel;
+const nextPaintId = 'coloring-lotus-rosette';
+const lastPaintId = 'coloring-feitian-lotus';
 const paintRegion = [...paint.regions].sort((a, b) => b.pixelCount - a.pixelCount)[0];
 const existingProgress: ProgressData = {
   version: 1, completed: { 'patterns-scrolls': timestamp }, settings: { reducedMotion: true },
 };
 const resultCases = [
   { id: 'patterns-intro', next: 'patterns-lotus' },
-  { id: 'patterns-scrolls', next: null },
+  { id: 'patterns-scrolls', next: 'patterns-geometry' },
   { id: 'puzzle-lotus-ceiling', next: 'puzzle-three-rabbits' },
   { id: 'puzzle-twin-dragons', next: null },
-  { id: 'coloring-grape-lotus', next: 'coloring-grape-pomegranate' },
-  { id: 'coloring-three-rabbits', next: null },
+  { id: paint.id, next: nextPaintId },
+  { id: nextPaintId, next: 'coloring-deer-medallion' },
+  { id: lastPaintId, next: null },
+  { id: 'coloring-grape-lotus', next: null },
   { id: hiddenLevels[0].id, next: hiddenLevels[1]?.id ?? null },
   { id: hiddenLevels[hiddenLevels.length - 1].id, next: null },
   { id: 'music-apsara-shadow', next: null },
 ];
 test.setTimeout(90_000);
 
-const directory = (level: Level) => `#/theme/${level.themeId}/games/${level.gameType}`;
+const directory = (level: Level) => `#/theme/${level.themeId}/games/${level.gameType}${level.gameType === 'spot-difference' ? `?level=${level.id}` : ''}`;
 const progress = (page: Page) => page.evaluate(key => JSON.parse(localStorage.getItem(key) ?? 'null'), progressKey);
 const artwork = (page: Page, level: ColoringLevel) => page.evaluate(({ key, id, version }) =>
   JSON.parse(localStorage.getItem(key) ?? '{"artworks":{}}').artworks[id]?.[version] ?? null,
@@ -39,6 +44,13 @@ async function seedExistingProgress(page: Page) {
   await page.addInitScript(({ key, value }) => localStorage.setItem(key, JSON.stringify(value)),
     { key: progressKey, value: existingProgress });
 }
+
+async function unlock2D(page: Page) {
+  await unlockPatternsForTest(page);
+  await unlockMusicForTest(page);
+}
+
+test.beforeEach(async ({ page }) => unlock2D(page));
 
 /** Test-context records only. No fixture is added to the production catalog or storage code. */
 async function seedCompletedResultFixtures(page: Page) {
@@ -129,6 +141,15 @@ async function expectResultAction(page: Page, id: string, next: string | null) {
     expect(await primary.getAttribute('data-next-level-id')).toBeNull();
     await expect(page.getByRole('link', { name: '下一关', exact: true })).toHaveCount(0);
   }
+  if (level.gameType === 'coloring') {
+    await expect(page.locator('.result-reference')).toHaveCount(0);
+    await expect(page.getByRole('link', { name: '游戏世界', exact: true })).toHaveCount(0);
+    const artwork = page.getByTestId('coloring-result-canvas');
+    await expect(artwork).toBeVisible();
+    const artworkBounds = (await artwork.boundingBox())!, actionsBounds = (await page.locator('.result-actions').boundingBox())!;
+    expect(Math.abs((artworkBounds.x + artworkBounds.width / 2) - (actionsBounds.x + actionsBounds.width / 2))).toBeLessThan(3);
+    if (id === nextPaintId && await page.evaluate(() => innerWidth >= 1000)) expect(artworkBounds.width).toBeGreaterThan(400);
+  }
   await expectFits(page);
 }
 
@@ -162,7 +183,7 @@ test('真实填色后跳关保留自动保存作品，不提交也不新增通�
   await seedExistingProgress(page);
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await openPlay(page, paint.id);
-  await expectPlayNavigation(page, null, 'coloring-grape-pomegranate');
+  await expectPlayNavigation(page, null, nextPaintId);
   const host = page.getByTestId('phaser-player');
   await expect.poll(async () => {
     const raw = await host.getAttribute('data-layout'), box = await host.boundingBox();
@@ -180,7 +201,7 @@ test('真实填色后跳关保留自动保存作品，不提交也不新增通�
   expect(saved).not.toHaveProperty('submittedAt');
   expect(await progress(page)).toEqual(existingProgress);
   await page.getByTestId('level-advance').click();
-  await expect(page).toHaveURL(/\/#\/play\/coloring-grape-pomegranate$/);
+  await expect(page).toHaveURL(new RegExp(`/#/play/${nextPaintId}$`));
   expect(await artwork(page, paint)).toEqual(saved);
   expect(await artwork(page, paint)).not.toHaveProperty('submittedAt');
   expect(await progress(page)).toEqual(existingProgress);
@@ -197,14 +218,15 @@ for (const viewport of [{ width: 640, height: 300 }, { width: 852, height: 330 }
       hasTouch: true, isMobile: true, deviceScaleFactor: 2, reducedMotion: 'reduce' });
     try {
       const page = await context.newPage();
+      await unlock2D(page);
       const errors: string[] = [];
       page.on('pageerror', error => errors.push(error.message));
       const playCases = [
         { id: 'patterns-intro', previous: null, next: 'patterns-lotus' },
-        { id: 'patterns-scrolls', previous: 'patterns-lotus', next: null },
+        { id: 'patterns-scrolls', previous: 'patterns-lotus', next: 'patterns-geometry' },
         { id: 'puzzle-twin-dragons', previous: 'puzzle-three-rabbits', next: null },
-        { id: paint.id, previous: null, next: 'coloring-grape-pomegranate' },
-        { id: 'coloring-three-rabbits', previous: 'coloring-lotus-camellia', next: null },
+        { id: paint.id, previous: null, next: nextPaintId },
+        { id: lastPaintId, previous: 'coloring-deer-medallion', next: null },
         { id: hiddenLevels[0].id, previous: null, next: hiddenLevels[1]?.id ?? null },
         { id: hiddenLevels[hiddenLevels.length - 1].id, previous: hiddenLevels[hiddenLevels.length - 2]?.id ?? null, next: null },
         { id: 'music-apsara-shadow', previous: null, next: null },

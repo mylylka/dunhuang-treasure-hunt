@@ -45,15 +45,19 @@ describe('同主题同玩法的关间导航', () => {
     expect(getPreviousOpenLevel({ levels: [makeLevel('actual')] }, makeLevel('missing'))).toBeNull();
   });
 
-  it('新增飞天持莲填色关接在原有关卡之后', () => {
-    const first = levelForGame('coloring-grape-lotus', 'coloring', 'patterns');
-    const last = levelForGame('coloring-three-rabbits', 'coloring', 'patterns');
-    const added = levelForGame('coloring-feitian-lotus', 'coloring', 'patterns');
-    const catalog = { levels: [added, first, last] };
-    expect(getNextOpenLevel(catalog, first)).toBe(last);
-    expect(getNextOpenLevel(catalog, last)).toBe(added);
-    expect(getPreviousOpenLevel(catalog, added)).toBe(last);
-    expect(getNextOpenLevel(catalog, added)).toBeNull();
+  it('移除三兔关后其余填色关按可见目录顺序导航', () => {
+    const sequence = [
+      'coloring-floral-scroll', 'coloring-lotus-rosette', 'coloring-deer-medallion',
+      'coloring-feitian-lotus',
+    ].map(id => levelForGame(id, 'coloring', 'patterns'));
+    const hiddenLevel = levelForGame('coloring-three-rabbits', 'coloring', 'patterns');
+    const catalog = { levels: [...sequence, hiddenLevel].reverse() };
+    for (const [index, level] of sequence.entries()) {
+      expect(getPreviousOpenLevel(catalog, level)).toBe(sequence[index - 1] ?? null);
+      expect(getNextOpenLevel(catalog, level)).toBe(sequence[index + 1] ?? null);
+    }
+    expect(getPreviousOpenLevel(catalog, hiddenLevel)).toBeNull();
+    expect(getNextOpenLevel(catalog, hiddenLevel)).toBeNull();
   });
 
   it('四字题名按双字词组换行，题名冒号之后仍由完整无障碍名称承载', () => {
