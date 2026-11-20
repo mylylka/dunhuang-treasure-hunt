@@ -25,3 +25,11 @@ export const TERRAIN_FIRST_GALLERY_COURTYARD_MODEL = 'courtyard/v007/courtyard.g
 export const TERRAIN_TRAVELER_MODEL = 'traveler-tripo/v002/traveler.glb';
 /** Phone-only 2K texture derivative; original geometry and animations are retained. */
 export const TERRAIN_TRAVELER_MOBILE_MODEL = 'traveler-tripo/v003/traveler-mobile-2k-candidate.glb';
+export const TRIPO_TRAVELER_MODEL = 'traveler-tripo/v004/traveler.glb';
+
+export type TravelerId = 'classic' | 'tripo';
+
+export function travelerModelPath(travelerId: TravelerId, mobile: boolean): string {
+  if (travelerId === 'tripo') return TRIPO_TRAVELER_MODEL;
+  return mobile ? TERRAIN_TRAVELER_MOBILE_MODEL : TERRAIN_TRAVELER_MODEL;
+}

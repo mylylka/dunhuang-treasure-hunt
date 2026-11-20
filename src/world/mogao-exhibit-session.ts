@@ -18,8 +18,8 @@ export function mogaoExhibitStartCheckpoint(): WorldCheckpoint {
   return defaultWorldCheckpoint(exhibitSpawn);
 }
 
-export function restrictMogaoExhibitCheckpoint(checkpoint: WorldCheckpoint, bFinished: boolean, aFinished = true): WorldCheckpoint {
-  const safe = sanitizeUpperPreviewCheckpoint(checkpoint, true);
+export function restrictMogaoExhibitCheckpoint(checkpoint: WorldCheckpoint, bFinished: boolean, aFinished = true, connected = false): WorldCheckpoint {
+  const safe = sanitizeUpperPreviewCheckpoint(checkpoint, true, connected);
   if (bFinished && aFinished) return safe;
   const local = upperFromWorld(safe.position);
   const nearDoor = local.x < 15.5 && local.z > -14.7;
@@ -32,10 +32,10 @@ export function restrictMogaoExhibitCheckpoint(checkpoint: WorldCheckpoint, bFin
   return { ...safe, position: { x: inside.x, z: inside.z }, walkSurface: `hall-${blockedHall}` };
 }
 
-const sanitize = (checkpoint: WorldCheckpoint, progressStorage?: StorageLike) =>
+const sanitize = (checkpoint: WorldCheckpoint, progressStorage?: StorageLike, connected = false) =>
   restrictMogaoExhibitCheckpoint(checkpoint,
     finishedMogaoExhibit(loadMogaoExhibitProgress(progressStorage).data),
-    finishedMogaoHallA(loadMogaoHallAProgress(progressStorage).data));
+    finishedMogaoHallA(loadMogaoHallAProgress(progressStorage).data), connected);
 
 export const MOGAO_EXHIBIT_SESSION_OPTIONS = {
   ...UPPER_SESSION_OPTIONS, key: MOGAO_EXHIBIT_SESSION_KEY, spawn: exhibitSpawn, sanitizeCheckpoint: sanitize,

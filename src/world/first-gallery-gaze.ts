@@ -10,12 +10,11 @@ const OBJECT_UP_LIMIT = 20 * DEG;
 const CAISSON_UP_LIMIT = 30 * DEG;
 const EPSILON = 1e-4;
 const UP = new THREE.Vector3(0, 1, 0);
-const FORWARD = new THREE.Vector3(0, 0, -1);
 const angle = (value: number) => Math.atan2(Math.sin(value), Math.cos(value));
 const bearing = (vector: THREE.Vector3) => Math.atan2(-vector.x, -vector.z);
 const elevation = (vector: THREE.Vector3) => Math.atan2(vector.y, Math.hypot(vector.x, vector.z));
 
-function findRig(traveler: THREE.Group) {
+function findRig(traveler: THREE.Group, bindPoseForwardZ: -1 | 1) {
   let skin: THREE.SkinnedMesh | undefined;
   traveler.traverse(node => {
     if (!skin && node instanceof THREE.SkinnedMesh
@@ -26,9 +25,8 @@ function findRig(traveler: THREE.Group) {
   const head = bones.find(bone => /^(?:mixamorig:?)?Head$/.test(bone.name));
   if (!head) return undefined;
   const neck = bones.find(bone => /^(?:mixamorig:?)?Neck$/.test(bone.name));
-  // The GLB declares its bind-pose front as -Z. Head joint axes are not
-  // aligned with the character axes, so derive the face vector in joint space.
-  const face = FORWARD.clone().transformDirection(boneInverses[bones.indexOf(head)]);
+  // Joint axes differ from a model’s bind-pose axes. Derive the face vector in joint space.
+  const face = new THREE.Vector3(0, 0, bindPoseForwardZ).transformDirection(boneInverses[bones.indexOf(head)]);
   return { head, neck, face };
 }
 
@@ -40,7 +38,7 @@ function ease(current: number, target: number, dt: number, rate: number, maxSpee
 
 /** Render-only gaze for the official traveler. Call beforeAnimation before
  * writing the base pose, then update after the AnimationMixer and before render. */
-export function createFirstGalleryGaze(traveler: THREE.Group) {
+export function createFirstGalleryGaze(traveler: THREE.Group, bindPoseForwardZ: -1 | 1 = -1) {
   let rig: ReturnType<typeof findRig>;
   let target: THREE.Vector3 | null = null;
   let kind: FirstGalleryGazeKind = 'object';
@@ -84,7 +82,7 @@ export function createFirstGalleryGaze(traveler: THREE.Group) {
     if (!target && !bodyTurn && !headYaw && !headPitch) return;
     const dt = Number.isFinite(delta) ? THREE.MathUtils.clamp(delta, 0, .1) : 0;
     const heading = Number.isFinite(baseHeading) ? baseHeading : traveler.rotation.y;
-    rig ??= findRig(traveler);
+    rig ??= findRig(traveler, bindPoseForwardZ);
     traveler.getWorldPosition(origin);
     if (target) direction.copy(target).sub(origin);
     const horizontal = target ? Math.hypot(direction.x, direction.z) : 0;

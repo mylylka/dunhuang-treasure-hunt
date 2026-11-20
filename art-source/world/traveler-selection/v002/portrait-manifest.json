@@ -1,0 +1,71 @@
+{
+  "version": "v002",
+  "description": "选人场景专用静态透明渲染，从现有运行模型摆姿后全身取景。",
+  "render": {
+    "renderer": "Blender 5.2.3 Cycles",
+    "resolution": [
+      1152,
+      1152
+    ],
+    "samples": 60,
+    "camera": {
+      "lensMm": 120,
+      "target": "全身",
+      "depthOfField": false
+    },
+    "lighting": "左上方暖色柔光、偏中性的天光补光与低强度暖色轮廓光",
+    "colorManagement": "AgX Medium High Contrast, exposure -1.35",
+    "outputResolution": [
+      416,
+      824
+    ],
+    "silhouetteHeight": 792,
+    "format": "WebP RGBA",
+    "quality": 86,
+    "alphaQuality": 100
+  },
+  "portraits": [
+    {
+      "id": "classic",
+      "source": "public/assets/world/traveler-tripo/v002/traveler.glb",
+      "sourceSha256": "81b6b7c5a02fb6e84fd807be2f003e5e99f8f92daaeb7788dd62eec1ca084609",
+      "sourceTextureResolution": [
+        4096,
+        4096
+      ],
+      "animation": "Greeting",
+      "blenderFrame": 32,
+      "cameraYawDegrees": 170,
+      "output": "public/assets/world/traveler-selection/v002/classic.webp",
+      "outputSha256": "ec0867065a6da935ff4cf6885cd2d6912ff1db0d2929f353f6aba7fef869b68a",
+      "outputBytes": 42926,
+      "silhouetteBounds": [
+        93,
+        16,
+        323,
+        808
+      ]
+    },
+    {
+      "id": "tripo",
+      "source": "public/assets/world/traveler-tripo/v004/traveler.glb",
+      "sourceSha256": "b7a6c5c7725d147f92594206775e53994574edd5d61eb7f7321ae4cf0318a183",
+      "sourceTextureResolution": [
+        4096,
+        4096
+      ],
+      "animation": "look_around.001",
+      "blenderFrame": 52,
+      "cameraYawDegrees": -16,
+      "output": "public/assets/world/traveler-selection/v002/tripo.webp",
+      "outputSha256": "dce02b68d434f710b783c8d47456bda27042e645018e8ee1e22e6cf6a5c7d7ec",
+      "outputBytes": 38626,
+      "silhouetteBounds": [
+        66,
+        16,
+        350,
+        808
+      ]
+    }
+  ]
+}

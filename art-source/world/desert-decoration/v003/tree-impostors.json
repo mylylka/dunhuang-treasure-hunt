@@ -1,0 +1,69 @@
+{
+  "version": 1,
+  "runtimeSource": "src/content/world/desert-tree-impostors-v001.ts",
+  "columns": 8,
+  "rows": 5,
+  "atlasWidth": 768,
+  "atlasHeight": 480,
+  "tileSize": 96,
+  "gutter": 4,
+  "elevationDegrees": 7,
+  "byteBudget": 81920,
+  "bytes": 46554,
+  "sha256": "cf898dc79d7d089de828d4493d032b5488b0e17f06d349103a6169e1a4ebde41",
+  "webpQuality": 68,
+  "shapes": {
+    "t01": {
+      "row": 0,
+      "width": 2.1207,
+      "height": 2.84309,
+      "centerY": 1.26394
+    },
+    "t02": {
+      "row": 1,
+      "width": 2.55529,
+      "height": 3.86175,
+      "centerY": 1.72334
+    },
+    "t03": {
+      "row": 2,
+      "width": 5.09493,
+      "height": 3.71664,
+      "centerY": 1.64515
+    },
+    "tower-tree-stylized": {
+      "row": 3,
+      "width": 17.64661,
+      "height": 28.34194,
+      "centerY": 12.28845
+    },
+    "tower-tree-broad": {
+      "row": 4,
+      "width": 24.29149,
+      "height": 29.00697,
+      "centerY": 12.48006
+    }
+  },
+  "originals": {
+    "t01": {
+      "originalPath": "vault:sha256:a985a5db9b7ba8a9a21f21e0dca64d7f25de1296056be4f96dd9a106084d19f0",
+      "originalSha256": "a985a5db9b7ba8a9a21f21e0dca64d7f25de1296056be4f96dd9a106084d19f0"
+    },
+    "t02": {
+      "originalPath": "vault:sha256:ccf4044e5f8fe2a3343a3110b17292b7075e4f1883087e73126474d463e9adc6",
+      "originalSha256": "ccf4044e5f8fe2a3343a3110b17292b7075e4f1883087e73126474d463e9adc6"
+    },
+    "t03": {
+      "originalPath": "vault:sha256:07c62fe03a5125528658a3b018a6f82ab3bcf1966d143d2aef5d1a010f83c2fe",
+      "originalSha256": "07c62fe03a5125528658a3b018a6f82ab3bcf1966d143d2aef5d1a010f83c2fe"
+    },
+    "tower-tree-stylized": {
+      "originalPath": "public/assets/world/tower-trees/v001/stylized-tree.glb",
+      "originalSha256": "b77cf3eabe2abd4875c273e37a04965f1c68de70875c3071e5a47288ea87bdb8"
+    },
+    "tower-tree-broad": {
+      "originalPath": "public/assets/world/tower-trees/v001/broad-tree.glb",
+      "originalSha256": "e5acab2b961f644ec290e8cae391b38336531b71225e0818bcde8d8c09249fad"
+    }
+  }
+}

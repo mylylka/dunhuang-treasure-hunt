@@ -10,7 +10,8 @@ const elevation=THREE.MathUtils.degToRad(ENVIRONMENT_SUN_ELEVATION_DEGREES);
 export const ENVIRONMENT_SUN_DIRECTION = new THREE.Vector3(
   Math.sin(azimuth)*Math.cos(elevation),Math.sin(elevation),-Math.cos(azimuth)*Math.cos(elevation),
 );
-const STATIC_LAYER=27,DYNAMIC_LAYER=28,BAKE_VIEW_LAYER=29;
+export const ENVIRONMENT_STATIC_SHADOW_LAYER = 27;
+const STATIC_LAYER=ENVIRONMENT_STATIC_SHADOW_LAYER,DYNAMIC_LAYER=28,BAKE_VIEW_LAYER=29;
 const DETAIL_REGIONS=[['courtyard',45],['music',55],['cliff',90]] as const;
 const KEY='environment-static-sun-v001';
 
@@ -35,6 +36,7 @@ export interface EnvironmentLighting {
   refresh(renderer:THREE.WebGLRenderer):void;
   includeReceivers(root:THREE.Object3D):void;
   excludeReceivers(root:THREE.Object3D):void;
+  forgetStreamedMeshes(root:THREE.Object3D):void;
   /** Call after positioning/animating the traveler. The render hook also synchronizes its shadow proxy. */
   updateTraveler(position:THREE.Vector3):void;
   inspect():{
@@ -49,6 +51,12 @@ export interface EnvironmentLighting {
 const VERTEX_HEADER=/* glsl */`
 varying vec3 vEnvironmentShadowPosition;
 varying vec3 vEnvironmentShadowNormal;
+`;
+const TILE_WEIGHT=/* glsl */`
+float environmentTileWeight(vec3 q,float fade) {
+  float edge=min(min(q.x,1.0-q.x),min(q.y,1.0-q.y));
+  return smoothstep(0.0,fade,edge)*step(0.0,q.z)*step(q.z,1.0);
+}
 `;
 const FRAGMENT_HEADER=/* glsl */`
 varying vec3 vEnvironmentShadowPosition;
@@ -78,10 +86,7 @@ vec3 environmentShadowCoord(mat4 matrix,vec4 parameters) {
   #endif
   return q.xyz;
 }
-float environmentTileWeight(vec3 q,float fade) {
-  float edge=min(min(q.x,1.0-q.x),min(q.y,1.0-q.y));
-  return smoothstep(0.0,fade,edge)*step(0.0,q.z)*step(q.z,1.0);
-}
+${TILE_WEIGHT}
 vec2 environmentDepthGradient(vec3 q) {
   vec3 dx=dFdx(q),dy=dFdy(q);
   float determinant=dx.x*dy.y-dx.y*dy.x;
@@ -125,22 +130,78 @@ float environmentStaticShadow() {
 #endif
 `;
 
-/** This insertion is deliberately limited to the real sun's directional direct-light term.
- * Hemisphere/caisson/cave fills and emissive artwork retain their existing behavior. */
-export function environmentShadowShaderSource(vertex:string,fragment:string):{vertex:string;fragment:string} {
+// The ridge foliage spans the approach and the distant banks of the music
+// court. Both maps use the same orthographic sun. A single linear comparison
+// has a hardware 2x2 PCF footprint; cross-fade only in the court tile margin.
+const RIDGE_FRAGMENT_HEADER=/* glsl */`
+uniform vec3 uEnvironmentSunDirection;
+#if defined(USE_SHADOWMAP) && defined(SHADOWMAP_TYPE_PCF)
+uniform sampler2DShadow uEnvironmentShadow0;
+uniform sampler2DShadow uEnvironmentShadow2;
+uniform mat4 uEnvironmentShadowMatrix0;
+uniform mat4 uEnvironmentShadowMatrix2;
+uniform vec4 uEnvironmentShadowParameters0;
+uniform vec4 uEnvironmentShadowParameters2;
+${TILE_WEIGHT}
+vec3 environmentRidgeCoord(vec3 position,mat4 matrix,vec4 parameters,float grazing) {
+  // Shift toward the light to avoid a neighbouring blade or an interpolated
+  // back-face normal pushing the lookup into the plant. Retain each map's
+  // independently scaled depth bias at the low, 30-degree sun angle.
+  vec3 offset=uEnvironmentSunDirection*parameters.z*(.40+.42*grazing);
+  vec3 q=(matrix*vec4(position+offset,1.0)).xyz;
+  float bias=parameters.y*(1.0+.40*grazing);
+  #ifdef USE_REVERSED_DEPTH_BUFFER
+    q.z-=bias;
+  #else
+    q.z+=bias;
+  #endif
+  return q;
+}
+float environmentRidgeShadow(vec3 viewPosition,float facing) {
+  // MeshStandardMaterial already interpolates vViewPosition for its BRDF.
+  // Avoid two duplicate vec3 varyings and their vertex work on tiny leaves.
+  vec3 worldPosition=cameraPosition-transpose(mat3(viewMatrix))*viewPosition;
+  float grazing=1.0-smoothstep(.05,.65,facing);
+  vec3 court=environmentRidgeCoord(worldPosition,uEnvironmentShadowMatrix2,uEnvironmentShadowParameters2,grazing);
+  float weight=environmentTileWeight(court,.13);
+  if(weight>=1.0)return texture(uEnvironmentShadow2,court);
+  vec3 world=environmentRidgeCoord(worldPosition,uEnvironmentShadowMatrix0,uEnvironmentShadowParameters0,grazing);
+  float coverage=environmentTileWeight(world,.025);
+  float base=coverage>0.0?mix(1.0,texture(uEnvironmentShadow0,world),coverage):1.0;
+  return weight>0.0?mix(base,texture(uEnvironmentShadow2,court),weight):base;
+}
+#endif
+`;
+
+/** Apply the static map to direct sun and shape the outdoor courtyard's sky fill. */
+export function environmentShadowShaderSource(vertex:string,fragment:string,ridgeFoliage=false,firstGalleryArchitecture=false):{vertex:string;fragment:string} {
   const vertexAnchor='#include <shadowmap_vertex>',lightAnchor='#include <lights_fragment_begin>';
   if(!vertex.includes(vertexAnchor)||!fragment.includes(lightAnchor))throw new Error('environment-shadow-shader-anchor-missing');
-  const lighting=THREE.ShaderChunk.lights_fragment_begin.replace(
+  const shadow=ridgeFoliage
+    ? 'environmentRidgeShadow(vViewPosition,dot(geometryNormal,directLight.direction))'
+    : 'environmentStaticShadow()';
+  // Back-facing MeshStandard foliage receives zero direct irradiance. Its sky
+  // fill and leaf transmission still render without visiting the shadow map.
+  const facing=ridgeFoliage?' && dot(geometryNormal,directLight.direction)>0.0':'';
+  let lighting=THREE.ShaderChunk.lights_fragment_begin.replace(
     'getDirectionalLightInfo( directionalLight, directLight );',
     `getDirectionalLightInfo( directionalLight, directLight );
     #if defined(USE_SHADOWMAP) && defined(SHADOWMAP_TYPE_PCF)
-    if(receiveShadow && dot(directionalLight.direction,transformDirection(uEnvironmentSunDirection,viewMatrix))>.99999)
-      directLight.color*=environmentStaticShadow();
+    if(receiveShadow && dot(directionalLight.direction,transformDirection(uEnvironmentSunDirection,viewMatrix))>.99999${facing})
+      directLight.color*=${shadow};
     #endif`,
   );
+  if(firstGalleryArchitecture){
+    // Open sky and reflection from the surrounding sand fill the shaded facade.
+    // Preserve the sign of the cosine so a grazing facade and a wall facing
+    // away from the sun can receive different fill while both are in shade.
+    const skyFill='getHemisphereLightIrradiance( hemisphereLights[ i ], geometryNormal )';
+    lighting=lighting.replace(skyFill,`${skyFill} * mix(.42, 1.0, smoothstep(-.90, .15,
+      dot(geometryNormal, transformDirection(uEnvironmentSunDirection, viewMatrix))))`);
+  }
   return {
-    vertex:VERTEX_HEADER+vertex.replace(vertexAnchor,`${vertexAnchor}\n vEnvironmentShadowPosition=worldPosition.xyz;\n vEnvironmentShadowNormal=transformNormalByInverseViewMatrix(transformedNormal,viewMatrix);`),
-    fragment:FRAGMENT_HEADER+fragment.replace(lightAnchor,lighting),
+    vertex:ridgeFoliage?vertex:VERTEX_HEADER+vertex.replace(vertexAnchor,`${vertexAnchor}\n vEnvironmentShadowPosition=worldPosition.xyz;\n vEnvironmentShadowNormal=transformNormalByInverseViewMatrix(transformedNormal,viewMatrix);`),
+    fragment:(ridgeFoliage?RIDGE_FRAGMENT_HEADER:FRAGMENT_HEADER)+fragment.replace(lightAnchor,lighting),
   };
 }
 
@@ -270,20 +331,24 @@ export function createEnvironmentLighting(scene:THREE.Scene,traveler:THREE.Objec
       if(installedMaterials.has(material))continue;
       installedMaterials.add(material);
       const before=material.onBeforeCompile,key=material.customProgramCacheKey;
+      const ridgeFoliage=material.userData.oasisRidgeFoliage===true;
+      const firstGalleryArchitecture=material.userData.firstGalleryArchitecture===true;
       // Three's default key reads onBeforeCompile, so capture it before wrapping.
       const originalKey=key===THREE.Material.prototype.customProgramCacheKey ? before.toString() : null;
       const installed:THREE.Material['onBeforeCompile']=function(this:THREE.Material,shader,renderer){
         before.call(this,shader,renderer);
         shader.uniforms.uEnvironmentSunDirection={value:ENVIRONMENT_SUN_DIRECTION};
         for(const [i,tile]of tiles.entries()){
+          if(ridgeFoliage && tile.id!=='world' && tile.id!=='music')continue;
           shader.uniforms[`uEnvironmentShadow${i}`]={value:tile.target.depthTexture};
           shader.uniforms[`uEnvironmentShadowMatrix${i}`]={value:tile.matrix};
           shader.uniforms[`uEnvironmentShadowParameters${i}`]={value:tile.parameters};
         }
-        const source=environmentShadowShaderSource(shader.vertexShader,shader.fragmentShader);
+        const source=environmentShadowShaderSource(shader.vertexShader,shader.fragmentShader,ridgeFoliage,firstGalleryArchitecture);
         shader.vertexShader=source.vertex;shader.fragmentShader=source.fragment;
       };
-      material.onBeforeCompile=installed;material.customProgramCacheKey=()=>`${originalKey??key.call(material)}|${KEY}`;
+      material.onBeforeCompile=installed;
+      material.customProgramCacheKey=()=>`${originalKey??key.call(material)}|${KEY}${ridgeFoliage?'|ridge-foliage':''}${firstGalleryArchitecture?'|first-gallery-architecture':''}`;
       material.needsUpdate=true;hooks.push({material,before,key,installed});
     }
   }
@@ -421,6 +486,15 @@ export function createEnvironmentLighting(scene:THREE.Scene,traveler:THREE.Objec
     prepare,refresh,updateTraveler,
     includeReceivers(root:THREE.Object3D) {
       if (prepared && !disposed) installMaterials(root);
+    },
+    forgetStreamedMeshes(root:THREE.Object3D) {
+      root.traverse(object => {
+        const original = layers.get(object);
+        if (original === undefined) return;
+        if (object.layers.isEnabled(STATIC_LAYER)) staticCasters--;
+        object.layers.mask = original;
+        layers.delete(object);
+      });
     },
     excludeReceivers(root:THREE.Object3D) {
       root.traverse(object => {

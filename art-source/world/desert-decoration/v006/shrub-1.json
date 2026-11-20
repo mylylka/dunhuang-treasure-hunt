@@ -1,0 +1,51 @@
+{
+  "version": 6,
+  "id": "shrub-1",
+  "sourceName": "灌木丛1.glb",
+  "originalPath": "vault:sha256:69853877d5fc5ac6f74ffe866f1000877860075b35e84ab085101a88d3c63958",
+  "sourceSha256": "69853877d5fc5ac6f74ffe866f1000877860075b35e84ab085101a88d3c63958",
+  "sourceBytes": 3912644,
+  "sourceTriangles": 61175,
+  "silhouette": {
+    "near": [
+      0.8922,
+      0.8949,
+      0.9238,
+      0.8991,
+      0.9003,
+      0.891,
+      0.9287,
+      0.9011
+    ],
+    "fallback": [
+      0.7297,
+      0.7602,
+      0.7866,
+      0.7504,
+      0.7475,
+      0.7928,
+      0.8204,
+      0.7556
+    ]
+  },
+  "near": {
+    "path": "public/assets/world/desert-decoration/v006/shrub-1.glb",
+    "bytes": 59668,
+    "sha256": "c9feecaf0b62d67d7c05db9912072ddc868d793d5af667127f9960895b095de3",
+    "gzip3Bytes": 36168,
+    "triangles": 950,
+    "maxTexture": 256
+  },
+  "fallback": {
+    "path": "src/content/world/desert-decoration-shrub-v006.ts",
+    "bytes": 7049,
+    "sha256": "2f922b731ab09d63e431fec58e48838c1b41532ae7565631778979b658274c9d",
+    "gzip3Bytes": 4183,
+    "triangles": 352
+  },
+  "bounds": {
+    "path": "src/content/world/desert-decoration-bounds-v006.json",
+    "bytes": 112,
+    "sha256": "1c91a3c7c2bf66e0b1da3a32b8da02014e419f323ab888d801837b3cc3ade712"
+  }
+}

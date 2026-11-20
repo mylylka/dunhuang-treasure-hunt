@@ -9,6 +9,10 @@ const galleryKey = 'dunhuang:first-gallery:v1';
 const worldKey = 'dunhuang:first-gallery-world:v1';
 const oldArtworksKey = 'dunhuang:artworks:v2';
 
+async function selectClassicTraveler(page: Page) {
+  await page.addInitScript(() => localStorage.setItem('dunhuang:traveler-selection:v1', 'classic'));
+}
+
 async function denySaveTo(page: Page, key: string) {
   await page.evaluate(key => {
     const original = Storage.prototype.setItem;
@@ -40,6 +44,7 @@ test('剧情入口拒绝 2D 直链和伪造画架查询参数', async ({ page })
 });
 
 test('3D仍在加载时可直接进入游戏世界，飞天只显示可玩的两种玩法', async ({ page, isMobile }) => {
+  await selectClassicTraveler(page);
   const chapters = JSON.parse(readFileSync('src/content/world/flying-history-art-v001.json', 'utf8')) as unknown[];
   const unlockedMusic = [
     ...chapters.map((_, index) => `chapter:${index + 1}`),
@@ -51,7 +56,7 @@ test('3D仍在加载时可直接进入游戏世界，飞天只显示可玩的两
   }, unlockedMusic);
   let unblockModel!: () => void;
   const blockedModel = new Promise<void>(resolve => { unblockModel = resolve; });
-  await page.route('**/traveler-tripo/v002/traveler.glb', async route => {
+  await page.route('**/traveler-tripo/{v002,v003}/*.glb', async route => {
     await blockedModel;
     await route.abort();
   });
@@ -126,6 +131,7 @@ test('普通填色两次保存都成功才进结果，新收藏不会改动画�
 
 test('现场画架正常完成后自动回到同一站位并挂画', async ({ page, isMobile }) => {
   test.setTimeout(120000);
+  await selectClassicTraveler(page);
   await page.goto(`${galleryPath}?view=easel`);
   const interact = page.getByTestId('gallery-interact');
   const world = page.getByTestId('world-host');
@@ -181,6 +187,7 @@ test('现场画架正常完成后自动回到同一站位并挂画', async ({ pa
 
 test('3D 素材确实加载失败才提供兼容游玩，回世界重新遵守门禁', async ({ page }) => {
   test.setTimeout(90000);
+  await selectClassicTraveler(page);
   await page.route('**/*.glb', route => route.abort());
   await page.goto(galleryPath);
   const failure = page.getByTestId('world-error');
@@ -197,6 +204,7 @@ test('3D 素材确实加载失败才提供兼容游玩，回世界重新遵守�
 
 test('画架限制相邻关，刷新、后退和保存失败都保护来源与现场', async ({ page }) => {
   test.setTimeout(120000);
+  await selectClassicTraveler(page);
   await page.goto(`${galleryPath}?view=easel`);
   const interact = page.getByTestId('gallery-interact');
   const enter = async () => {

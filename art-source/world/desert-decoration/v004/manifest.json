@@ -1,0 +1,51 @@
+{
+  "version": 4,
+  "id": "small-tree-2",
+  "sourceName": "小树2.glb",
+  "originalPath": "vault:sha256:9ce83a11b3987b1d5a88a98b182864fd76f9d3d4da1ef5279389770cf68c2209",
+  "sourceSha256": "9ce83a11b3987b1d5a88a98b182864fd76f9d3d4da1ef5279389770cf68c2209",
+  "sourceBytes": 3738372,
+  "sourceTriangles": 58501,
+  "silhouette": {
+    "near": [
+      0.9321,
+      0.9494,
+      0.96,
+      0.9412,
+      0.9314,
+      0.955,
+      0.9495,
+      0.9402
+    ],
+    "fallback": [
+      0.8124,
+      0.8717,
+      0.8433,
+      0.8235,
+      0.8139,
+      0.8834,
+      0.8435,
+      0.8275
+    ]
+  },
+  "near": {
+    "path": "public/assets/world/desert-decoration/v004/small-tree-2.glb",
+    "bytes": 230960,
+    "sha256": "c21b780df754f4a8be7807ec4ebc4bb002e2452dddac3790083a4983f6591942",
+    "gzip3Bytes": 142478,
+    "triangles": 4648,
+    "maxTexture": 512
+  },
+  "fallback": {
+    "path": "src/content/world/desert-decoration-small-tree-v004.ts",
+    "bytes": 21193,
+    "sha256": "fe32e022916ee77734a34b72cf192350e82be0e56be10ed47346e71afae55218",
+    "triangles": 1316,
+    "gzipBytes": 12528
+  },
+  "bounds": {
+    "path": "src/content/world/desert-decoration-bounds-v004.json",
+    "bytes": 117,
+    "sha256": "3e2bd64c238e77c787c2d88a95b133b9fdda17b7aeb94f9176a2461954c322bd"
+  }
+}

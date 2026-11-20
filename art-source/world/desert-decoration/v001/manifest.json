@@ -1,0 +1,2087 @@
+{
+  "version": 1,
+  "catalog": {
+    "file": "敦煌地面装饰模型集合_图片目录.pdf",
+    "originalPath": "vault:sha256:c35a3d5570b8f5315d1efb37a0d19191a796285f298929b519497076c8d7747b",
+    "originalSha256": "c35a3d5570b8f5315d1efb37a0d19191a796285f298929b519497076c8d7747b"
+  },
+  "blender": "5.2.3 LTS",
+  "totalBytes": 3539504,
+  "totalGzipBytesEstimate": 1557819,
+  "assets": [
+    {
+      "id": "c01b",
+      "zone": "A",
+      "url": "assets/world/desert-decoration/v001/c01b.glb",
+      "sourceVault": "vault:sha256:a4d54e8f788eb395d2d499fe14b68e4739b18f98ee5af52cc28e12f276fdbdb2",
+      "sha256": "f923417c7184a39b92cffa5f34f93b9f2d1d76926f50906ce39027768616ceaf",
+      "bytes": 442532,
+      "gzipBytesEstimate": 128318,
+      "triangles": 4438,
+      "meshCount": 1,
+      "primitiveCount": 1,
+      "materialCount": 1,
+      "alphaModes": [
+        "OPAQUE"
+      ],
+      "textures": [],
+      "extensionsRequired": [],
+      "width": 1.3000000715255737,
+      "height": 0.40458250045776367,
+      "depth": 0.7792308330535889,
+      "bounds": {
+        "min": [
+          -0.6500000357627869,
+          0,
+          -0.38961541652679443
+        ],
+        "max": [
+          0.6500000357627869,
+          0.40458250045776367,
+          0.38961541652679443
+        ]
+      },
+      "sourceDimensions": [
+        1.3000000715255737,
+        0.40458250045776367,
+        0.7792308330535889
+      ],
+      "textureBytesEstimate": 0
+    },
+    {
+      "id": "c02",
+      "zone": "D",
+      "url": "assets/world/desert-decoration/v001/c02.glb",
+      "sourceVault": "vault:sha256:58a141782eeb4a6623b02c4b56733a6e57a66282c73d2c31756283dcd009d755",
+      "sha256": "e8fa80d29429a9ccaed43cb13e78cbdf0b8fe1fc1bc051b1cccec57c4df09248",
+      "bytes": 67268,
+      "gzipBytesEstimate": 20102,
+      "triangles": 648,
+      "meshCount": 1,
+      "primitiveCount": 1,
+      "materialCount": 1,
+      "alphaModes": [
+        "OPAQUE"
+      ],
+      "textures": [],
+      "extensionsRequired": [],
+      "width": 1.2999999523162842,
+      "height": 0.3944416642189026,
+      "depth": 0.7149801254272461,
+      "bounds": {
+        "min": [
+          -0.6499999761581421,
+          0,
+          -0.35749006271362305
+        ],
+        "max": [
+          0.6499999761581421,
+          0.3944416642189026,
+          0.35749006271362305
+        ]
+      },
+      "sourceDimensions": [
+        1.2999999523162842,
+        0.3944416642189026,
+        0.7149801254272461
+      ],
+      "textureBytesEstimate": 0
+    },
+    {
+      "id": "c03b",
+      "zone": "A",
+      "url": "assets/world/desert-decoration/v001/c03b.glb",
+      "sourceVault": "vault:sha256:0dead3e7bc0e852d093823f52be2c6e728492ea60444eecfb2a15475d6868c96",
+      "sha256": "90755f5d8684659e03b84274ae3951b1514f7a21e3d8d249943944732440c95f",
+      "bytes": 433028,
+      "gzipBytesEstimate": 123385,
+      "triangles": 4348,
+      "meshCount": 1,
+      "primitiveCount": 1,
+      "materialCount": 1,
+      "alphaModes": [
+        "OPAQUE"
+      ],
+      "textures": [],
+      "extensionsRequired": [],
+      "width": 1.350000023841858,
+      "height": 0.536783754825592,
+      "depth": 1.0424799919128418,
+      "bounds": {
+        "min": [
+          -0.675000011920929,
+          0,
+          -0.5212399959564209
+        ],
+        "max": [
+          0.675000011920929,
+          0.536783754825592,
+          0.5212399959564209
+        ]
+      },
+      "sourceDimensions": [
+        1.350000023841858,
+        0.536783754825592,
+        1.0424799919128418
+      ],
+      "textureBytesEstimate": 0
+    },
+    {
+      "id": "c04",
+      "zone": "A",
+      "url": "assets/world/desert-decoration/v001/c04.glb",
+      "sourceVault": "vault:sha256:92459bb6f5d04d269a3b5861a602fabe8d8bc896233115f167d83132100b09aa",
+      "sha256": "ae0c8b596f160a428aa903f9882fcb151a67aecab36f60be120a92e15ceda477",
+      "bytes": 203984,
+      "gzipBytesEstimate": 75263,
+      "triangles": 2010,
+      "meshCount": 1,
+      "primitiveCount": 1,
+      "materialCount": 1,
+      "alphaModes": [
+        "OPAQUE"
+      ],
+      "textures": [],
+      "extensionsRequired": [],
+      "width": 1.3499999046325684,
+      "height": 0.39013808965682983,
+      "depth": 0.8166470527648926,
+      "bounds": {
+        "min": [
+          -0.6749999523162842,
+          0,
+          -0.4083235263824463
+        ],
+        "max": [
+          0.6749999523162842,
+          0.39013808965682983,
+          0.4083235263824463
+        ]
+      },
+      "sourceDimensions": [
+        1.3499999046325684,
+        0.39013808965682983,
+        0.8166470527648926
+      ],
+      "textureBytesEstimate": 0
+    },
+    {
+      "id": "g02",
+      "zone": "A",
+      "url": "assets/world/desert-decoration/v001/g02.glb",
+      "sourceVault": "vault:sha256:dae10e85dfc9365e82d1c216296429f5bae1bb1315f20a257a5c8ee92d00a69c",
+      "sha256": "448e655f0c6c3fc863a45a38f46a726ac3d561d8e6301e5a2e6b5381a73a888f",
+      "bytes": 78692,
+      "gzipBytesEstimate": 24082,
+      "triangles": 760,
+      "meshCount": 1,
+      "primitiveCount": 1,
+      "materialCount": 1,
+      "alphaModes": [
+        "OPAQUE"
+      ],
+      "textures": [],
+      "extensionsRequired": [],
+      "width": 0.7799999713897705,
+      "height": 0.36974141001701355,
+      "depth": 0.6609519720077515,
+      "bounds": {
+        "min": [
+          -0.38999998569488525,
+          0,
+          -0.33047598600387573
+        ],
+        "max": [
+          0.38999998569488525,
+          0.36974141001701355,
+          0.33047598600387573
+        ]
+      },
+      "sourceDimensions": [
+        0.7799999713897705,
+        0.36974141001701355,
+        0.6609519720077515
+      ],
+      "textureBytesEstimate": 0
+    },
+    {
+      "id": "r01",
+      "zone": "A",
+      "url": "assets/world/desert-decoration/v001/r01.glb",
+      "sourceVault": "vault:sha256:fb68909c645f26519a9cbc85f35883da117dfd479b751ea0ebaa25b17f20932c",
+      "sha256": "b5483c162862dc1d0fa894452b8ef43db0760f30911aec208aa39ad57d99e0cc",
+      "bytes": 4368,
+      "gzipBytesEstimate": 1590,
+      "triangles": 34,
+      "meshCount": 1,
+      "primitiveCount": 1,
+      "materialCount": 1,
+      "alphaModes": [
+        "OPAQUE"
+      ],
+      "textures": [],
+      "extensionsRequired": [],
+      "width": 0.48000001907348633,
+      "height": 0.27000001072883606,
+      "depth": 0.37999993562698364,
+      "bounds": {
+        "min": [
+          -0.24000000953674316,
+          0,
+          -0.18999996781349182
+        ],
+        "max": [
+          0.24000000953674316,
+          0.27000001072883606,
+          0.18999996781349182
+        ]
+      },
+      "sourceDimensions": [
+        0.48000001907348633,
+        0.27000001072883606,
+        0.37999993562698364
+      ],
+      "textureBytesEstimate": 0
+    },
+    {
+      "id": "r02",
+      "zone": "D",
+      "url": "assets/world/desert-decoration/v001/r02.glb",
+      "sourceVault": "vault:sha256:28a2a23b09fe9f0ee372f61b1bdf5bba1d10610a9ffe0d39c75b688525a7e084",
+      "sha256": "ef249888e9f065ecab7621062ce735ef00665e09b96b17e184eacabcc8f5fa2a",
+      "bytes": 36148,
+      "gzipBytesEstimate": 10638,
+      "triangles": 448,
+      "meshCount": 1,
+      "primitiveCount": 1,
+      "materialCount": 1,
+      "alphaModes": [
+        "OPAQUE"
+      ],
+      "textures": [],
+      "extensionsRequired": [],
+      "width": 1.1200000047683716,
+      "height": 0.35999998450279236,
+      "depth": 0.7200000286102295,
+      "bounds": {
+        "min": [
+          -0.5600000023841858,
+          0,
+          -0.36000001430511475
+        ],
+        "max": [
+          0.5600000023841858,
+          0.35999998450279236,
+          0.36000001430511475
+        ]
+      },
+      "sourceDimensions": [
+        1.1200000047683716,
+        0.35999998450279236,
+        0.7200000286102295
+      ],
+      "textureBytesEstimate": 0
+    },
+    {
+      "id": "r03",
+      "zone": "D",
+      "url": "assets/world/desert-decoration/v001/r03.glb",
+      "sourceVault": "vault:sha256:2f95f6e71b33d43da5eb88683293142aca364d8efbcf16d566c6f69af54b8a52",
+      "sha256": "b0a53928d140194af664b1f21a25976d1fc2545f2254c8095a23b99645f29f77",
+      "bytes": 5528,
+      "gzipBytesEstimate": 1893,
+      "triangles": 46,
+      "meshCount": 1,
+      "primitiveCount": 1,
+      "materialCount": 1,
+      "alphaModes": [
+        "OPAQUE"
+      ],
+      "textures": [],
+      "extensionsRequired": [],
+      "width": 0.764728307723999,
+      "height": 1.2200000286102295,
+      "depth": 0.6081929802894592,
+      "bounds": {
+        "min": [
+          -0.3823641538619995,
+          0,
+          -0.3040964901447296
+        ],
+        "max": [
+          0.3823641538619995,
+          1.2200000286102295,
+          0.3040964901447296
+        ]
+      },
+      "sourceDimensions": [
+        0.764728307723999,
+        1.2200000286102295,
+        0.6081929802894592
+      ],
+      "textureBytesEstimate": 0
+    },
+    {
+      "id": "r04",
+      "zone": "D",
+      "url": "assets/world/desert-decoration/v001/r04.glb",
+      "sourceVault": "vault:sha256:16439a421a5bc4a132d9c86a53ef8bff3324c5c229d2fd812abed1e394c3c9d5",
+      "sha256": "8a57d96578228e7a6e1bf36b405fbd82ee1ff4ea9f926534241399d990746f9b",
+      "bytes": 16172,
+      "gzipBytesEstimate": 4768,
+      "triangles": 160,
+      "meshCount": 1,
+      "primitiveCount": 1,
+      "materialCount": 1,
+      "alphaModes": [
+        "OPAQUE"
+      ],
+      "textures": [],
+      "extensionsRequired": [],
+      "width": 1.5,
+      "height": 0.572468101978302,
+      "depth": 1.0483152866363525,
+      "bounds": {
+        "min": [
+          -0.75,
+          0,
+          -0.5241576433181763
+        ],
+        "max": [
+          0.75,
+          0.572468101978302,
+          0.5241576433181763
+        ]
+      },
+      "sourceDimensions": [
+        1.5,
+        0.572468101978302,
+        1.0483152866363525
+      ],
+      "textureBytesEstimate": 0
+    },
+    {
+      "id": "s02",
+      "zone": "B",
+      "url": "assets/world/desert-decoration/v001/s02.glb",
+      "sourceVault": "vault:sha256:0236ed6eb5a82e308936a0256cb95e03f085bb919bf80f96e63f2983e74b3934",
+      "sha256": "0c392b57926e3b6456d0bb45695933e9d454ce5b818f6937b3350e1e67062cae",
+      "bytes": 326620,
+      "gzipBytesEstimate": 98053,
+      "triangles": 3270,
+      "meshCount": 1,
+      "primitiveCount": 1,
+      "materialCount": 1,
+      "alphaModes": [
+        "OPAQUE"
+      ],
+      "textures": [],
+      "extensionsRequired": [],
+      "width": 1.1346590518951416,
+      "height": 1.0500000715255737,
+      "depth": 0.9430926442146301,
+      "bounds": {
+        "min": [
+          -0.5673295259475708,
+          0,
+          -0.47154632210731506
+        ],
+        "max": [
+          0.5673295259475708,
+          1.0500000715255737,
+          0.47154632210731506
+        ]
+      },
+      "sourceDimensions": [
+        1.1346590518951416,
+        1.0500000715255737,
+        0.9430926442146301
+      ],
+      "textureBytesEstimate": 0
+    },
+    {
+      "id": "s04b",
+      "zone": "A",
+      "url": "assets/world/desert-decoration/v001/s04b.glb",
+      "sourceVault": "vault:sha256:b274c7f8e565823b5ab231506e633c0dd36dc88a320364dbeb96a4c42668753e",
+      "sha256": "d5755b7eed2fc1f7005971f86a6276db20fd1707b82c5ce93c1e48018f158142",
+      "bytes": 131000,
+      "gzipBytesEstimate": 39975,
+      "triangles": 1802,
+      "meshCount": 1,
+      "primitiveCount": 1,
+      "materialCount": 1,
+      "alphaModes": [
+        "OPAQUE"
+      ],
+      "textures": [],
+      "extensionsRequired": [],
+      "width": 0.8199999332427979,
+      "height": 0.41999995708465576,
+      "depth": 0.5,
+      "bounds": {
+        "min": [
+          -0.4099999666213989,
+          0,
+          -0.25
+        ],
+        "max": [
+          0.4099999666213989,
+          0.41999995708465576,
+          0.25
+        ]
+      },
+      "sourceDimensions": [
+        0.8199999332427979,
+        0.41999995708465576,
+        0.5
+      ],
+      "textureBytesEstimate": 0
+    },
+    {
+      "id": "t01",
+      "zone": "B",
+      "url": "assets/world/desert-decoration/v001/t01.glb",
+      "sourceVault": "vault:sha256:a985a5db9b7ba8a9a21f21e0dca64d7f25de1296056be4f96dd9a106084d19f0",
+      "sha256": "7331e0dd722a13c060092e03e74be7bdbe3b83b58149d4052927e4f0ec404d6e",
+      "bytes": 505544,
+      "gzipBytesEstimate": 163539,
+      "triangles": 5610,
+      "meshCount": 1,
+      "primitiveCount": 1,
+      "materialCount": 1,
+      "alphaModes": [
+        "OPAQUE"
+      ],
+      "textures": [],
+      "extensionsRequired": [],
+      "width": 1.9096019268035889,
+      "height": 2.5,
+      "depth": 1.6187655925750732,
+      "bounds": {
+        "min": [
+          -0.9548009634017944,
+          0,
+          -0.8093827962875366
+        ],
+        "max": [
+          0.9548009634017944,
+          2.5,
+          0.8093827962875366
+        ]
+      },
+      "sourceDimensions": [
+        1.9096019268035889,
+        2.5,
+        1.6187655925750732
+      ],
+      "textureBytesEstimate": 0
+    },
+    {
+      "id": "t02",
+      "zone": "B",
+      "url": "assets/world/desert-decoration/v001/t02.glb",
+      "sourceVault": "vault:sha256:ccf4044e5f8fe2a3343a3110b17292b7075e4f1883087e73126474d463e9adc6",
+      "sha256": "9e4da734c82708b1fa0121497144c640e143703dd1012afdbfc2281a572c03a6",
+      "bytes": 564704,
+      "gzipBytesEstimate": 278542,
+      "triangles": 8891,
+      "meshCount": 1,
+      "primitiveCount": 1,
+      "materialCount": 1,
+      "alphaModes": [
+        "OPAQUE"
+      ],
+      "textures": [],
+      "extensionsRequired": [],
+      "width": 2.300929546356201,
+      "height": 3.3999998569488525,
+      "depth": 1.5720207691192627,
+      "bounds": {
+        "min": [
+          -1.1504647731781006,
+          0,
+          -0.7860103845596313
+        ],
+        "max": [
+          1.1504647731781006,
+          3.3999998569488525,
+          0.7860103845596313
+        ]
+      },
+      "sourceDimensions": [
+        2.300929546356201,
+        3.3999998569488525,
+        1.5720207691192627
+      ],
+      "textureBytesEstimate": 0,
+      "geometryRecipe": "Preserve four outline vertices of each leaf, simplify branch tubes"
+    },
+    {
+      "id": "w01b",
+      "zone": "B",
+      "url": "assets/world/desert-decoration/v001/w01b.glb",
+      "sourceVault": "vault:sha256:541e541269ae8798eef2067bc04f1ce7274a09a409c4951dcf8e76d88f2403e0",
+      "sha256": "04da79fadea5f483ca253a6083d581275866add6c7bb17e4691f99b12d55a63c",
+      "bytes": 103212,
+      "gzipBytesEstimate": 29061,
+      "triangles": 1108,
+      "meshCount": 1,
+      "primitiveCount": 1,
+      "materialCount": 1,
+      "alphaModes": [
+        "OPAQUE"
+      ],
+      "textures": [],
+      "extensionsRequired": [],
+      "width": 1.1141579151153564,
+      "height": 1.0199999809265137,
+      "depth": 0.9978145360946655,
+      "bounds": {
+        "min": [
+          -0.5570789575576782,
+          0,
+          -0.49890726804733276
+        ],
+        "max": [
+          0.5570789575576782,
+          1.0199999809265137,
+          0.49890726804733276
+        ]
+      },
+      "sourceDimensions": [
+        1.1141579151153564,
+        1.0199999809265137,
+        0.9978145360946655
+      ],
+      "textureBytesEstimate": 0
+    },
+    {
+      "id": "rock-shrub-3",
+      "zone": "C",
+      "url": "assets/world/desert-decoration/v001/rock-shrub-3.glb",
+      "sourceVault": "vault:sha256:13fe098bbd7082533873444d165fff584332cfbf9cb67da8d9459f21a29b8bed",
+      "sha256": "4c786d129ac7cc449cf4cd5e03a45f2b50396536d99e870a685e765a8a8c5479",
+      "bytes": 345616,
+      "gzipBytesEstimate": 312721,
+      "triangles": 4300,
+      "meshCount": 1,
+      "primitiveCount": 1,
+      "materialCount": 1,
+      "alphaModes": [
+        "OPAQUE"
+      ],
+      "textures": [
+        {
+          "width": 512,
+          "height": 512,
+          "format": "JPEG",
+          "bytes": 35362
+        }
+      ],
+      "extensionsRequired": [],
+      "width": 0.9831182658672333,
+      "height": 0.44091796875,
+      "depth": 0.97802734375,
+      "bounds": {
+        "min": [
+          -0.4907970428466797,
+          0,
+          -0.489013671875
+        ],
+        "max": [
+          0.4923212230205536,
+          0.44091796875,
+          0.489013671875
+        ]
+      },
+      "sourceDimensions": [
+        0.99951171875,
+        0.44091796875,
+        0.97802734375
+      ],
+      "textureBytesEstimate": 1398102
+    },
+    {
+      "id": "shrub-2",
+      "zone": "C",
+      "url": "assets/world/desert-decoration/v001/shrub-2.glb",
+      "sourceVault": "vault:sha256:2203bebd827f5faf057fe2cbdba12ee43604448a8723be78508bcbbd6572a577",
+      "sha256": "fd604461fe94d0bbdbffdbf3c43fed7aa23a74ea2bed8b37f06c03ab5d83a4d0",
+      "bytes": 275088,
+      "gzipBytesEstimate": 245889,
+      "triangles": 3600,
+      "meshCount": 1,
+      "primitiveCount": 1,
+      "materialCount": 1,
+      "alphaModes": [
+        "OPAQUE"
+      ],
+      "textures": [
+        {
+          "width": 512,
+          "height": 512,
+          "format": "JPEG",
+          "bytes": 46190
+        }
+      ],
+      "extensionsRequired": [],
+      "width": 0.9969399273395538,
+      "height": 0.5727986097335815,
+      "depth": 0.9984744787216187,
+      "bounds": {
+        "min": [
+          -0.49718406796455383,
+          0,
+          -0.499755859375
+        ],
+        "max": [
+          0.499755859375,
+          0.5727986097335815,
+          0.49871861934661865
+        ]
+      },
+      "sourceDimensions": [
+        0.99951171875,
+        0.57861328125,
+        0.99951171875
+      ],
+      "textureBytesEstimate": 1398102
+    }
+  ],
+  "catalogEntries": [
+    {
+      "number": 1,
+      "preview": "C01_岩石与灌木_预览.png",
+      "sourceFile": "C01_岩石与灌木.glb",
+      "status": "hold",
+      "sourceSha256": "42cf8d5d688e963ae011c0a9017eb50a228bf27b350f89489c47d6b9859088b6",
+      "sourceBytes": 267516,
+      "sourceModel": {
+        "triangles": 3310,
+        "meshCount": 3,
+        "primitiveCount": 16,
+        "materialCount": 16,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [],
+        "extensionsRequired": []
+      },
+      "reason": "同类备选"
+    },
+    {
+      "number": 2,
+      "preview": "C01B_斜楔岩与圆垫灌木_预览.png",
+      "sourceFile": "C01B_斜楔岩与圆垫灌木.glb",
+      "status": "adopt",
+      "sourceSha256": "a4d54e8f788eb395d2d499fe14b68e4739b18f98ee5af52cc28e12f276fdbdb2",
+      "sourceBytes": 343868,
+      "sourceModel": {
+        "triangles": 4438,
+        "meshCount": 3,
+        "primitiveCount": 12,
+        "materialCount": 12,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [],
+        "extensionsRequired": []
+      },
+      "assetId": "c01b",
+      "zone": "A",
+      "originalPath": "vault:sha256:a4d54e8f788eb395d2d499fe14b68e4739b18f98ee5af52cc28e12f276fdbdb2",
+      "originalSha256": "a4d54e8f788eb395d2d499fe14b68e4739b18f98ee5af52cc28e12f276fdbdb2",
+      "url": "assets/world/desert-decoration/v001/c01b.glb"
+    },
+    {
+      "number": 3,
+      "preview": "C02_层叠岩石与枯草_预览.png",
+      "sourceFile": "C02_层叠岩石与枯草.glb",
+      "status": "adopt",
+      "sourceSha256": "58a141782eeb4a6623b02c4b56733a6e57a66282c73d2c31756283dcd009d755",
+      "sourceBytes": 77324,
+      "sourceModel": {
+        "triangles": 648,
+        "meshCount": 7,
+        "primitiveCount": 36,
+        "materialCount": 12,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [],
+        "extensionsRequired": []
+      },
+      "assetId": "c02",
+      "zone": "D",
+      "originalPath": "vault:sha256:58a141782eeb4a6623b02c4b56733a6e57a66282c73d2c31756283dcd009d755",
+      "originalSha256": "58a141782eeb4a6623b02c4b56733a6e57a66282c73d2c31756283dcd009d755",
+      "url": "assets/world/desert-decoration/v001/c02.glb"
+    },
+    {
+      "number": 4,
+      "preview": "C02B_斜交岩片与裂隙草_预览.png",
+      "sourceFile": "C02B_斜交岩片与裂隙草.glb",
+      "status": "hold",
+      "sourceSha256": "b12ccc71d1d163976864fe57b71fa05aae17da32313310771fa722e6835a601e",
+      "sourceBytes": 30116,
+      "sourceModel": {
+        "triangles": 252,
+        "meshCount": 5,
+        "primitiveCount": 17,
+        "materialCount": 9,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [],
+        "extensionsRequired": []
+      },
+      "reason": "同类备选"
+    },
+    {
+      "number": 5,
+      "preview": "C03_双灌木与散石_预览.png",
+      "sourceFile": "C03_双灌木与散石.glb",
+      "status": "hold",
+      "sourceSha256": "549bbdf2e53342f3d4151bcca4fa12aff21e2f67ebfcb51766fe76d10126d841",
+      "sourceBytes": 371624,
+      "sourceModel": {
+        "triangles": 5478,
+        "meshCount": 7,
+        "primitiveCount": 31,
+        "materialCount": 18,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [],
+        "extensionsRequired": []
+      },
+      "reason": "同类备选"
+    },
+    {
+      "number": 6,
+      "preview": "C03B_风展灌木与错落散石_预览.png",
+      "sourceFile": "C03B_风展灌木与错落散石.glb",
+      "status": "adopt",
+      "sourceSha256": "0dead3e7bc0e852d093823f52be2c6e728492ea60444eecfb2a15475d6868c96",
+      "sourceBytes": 343516,
+      "sourceModel": {
+        "triangles": 4348,
+        "meshCount": 6,
+        "primitiveCount": 23,
+        "materialCount": 16,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [],
+        "extensionsRequired": []
+      },
+      "assetId": "c03b",
+      "zone": "A",
+      "originalPath": "vault:sha256:0dead3e7bc0e852d093823f52be2c6e728492ea60444eecfb2a15475d6868c96",
+      "originalSha256": "0dead3e7bc0e852d093823f52be2c6e728492ea60444eecfb2a15475d6868c96",
+      "url": "assets/world/desert-decoration/v001/c03b.glb"
+    },
+    {
+      "number": 7,
+      "preview": "C04_碎石与稀疏草束_预览.png",
+      "sourceFile": "C04_碎石与稀疏草束.glb",
+      "status": "adopt",
+      "sourceSha256": "92459bb6f5d04d269a3b5861a602fabe8d8bc896233115f167d83132100b09aa",
+      "sourceBytes": 187728,
+      "sourceModel": {
+        "triangles": 2010,
+        "meshCount": 9,
+        "primitiveCount": 43,
+        "materialCount": 19,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [],
+        "extensionsRequired": []
+      },
+      "assetId": "c04",
+      "zone": "A",
+      "originalPath": "vault:sha256:92459bb6f5d04d269a3b5861a602fabe8d8bc896233115f167d83132100b09aa",
+      "originalSha256": "92459bb6f5d04d269a3b5861a602fabe8d8bc896233115f167d83132100b09aa",
+      "url": "assets/world/desert-decoration/v001/c04.glb"
+    },
+    {
+      "number": 8,
+      "preview": "C04B_卧枝灌木与散石_预览.png",
+      "sourceFile": "C04B_卧枝灌木与散石.glb",
+      "status": "hold",
+      "sourceSha256": "b33098bc8b103af588800988ea3e128d90b34fd363ccd68e32140f792e00bd08",
+      "sourceBytes": 172824,
+      "sourceModel": {
+        "triangles": 2054,
+        "meshCount": 9,
+        "primitiveCount": 29,
+        "materialCount": 17,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [],
+        "extensionsRequired": []
+      },
+      "reason": "同类备选"
+    },
+    {
+      "number": 9,
+      "preview": "G02_三簇混合草丛_预览.png",
+      "sourceFile": "G02_三簇混合草丛.glb",
+      "status": "adopt",
+      "sourceSha256": "dae10e85dfc9365e82d1c216296429f5bae1bb1315f20a257a5c8ee92d00a69c",
+      "sourceBytes": 72176,
+      "sourceModel": {
+        "triangles": 760,
+        "meshCount": 3,
+        "primitiveCount": 17,
+        "materialCount": 6,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [],
+        "extensionsRequired": []
+      },
+      "assetId": "g02",
+      "zone": "A",
+      "originalPath": "vault:sha256:dae10e85dfc9365e82d1c216296429f5bae1bb1315f20a257a5c8ee92d00a69c",
+      "originalSha256": "dae10e85dfc9365e82d1c216296429f5bae1bb1315f20a257a5c8ee92d00a69c",
+      "url": "assets/world/desert-decoration/v001/g02.glb"
+    },
+    {
+      "number": 10,
+      "preview": "R01_小型棱角石_预览.png",
+      "sourceFile": "R01_小型棱角石.glb",
+      "status": "adopt",
+      "sourceSha256": "fb68909c645f26519a9cbc85f35883da117dfd479b751ea0ebaa25b17f20932c",
+      "sourceBytes": 5116,
+      "sourceModel": {
+        "triangles": 34,
+        "meshCount": 1,
+        "primitiveCount": 1,
+        "materialCount": 1,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [],
+        "extensionsRequired": []
+      },
+      "assetId": "r01",
+      "zone": "A",
+      "originalPath": "vault:sha256:fb68909c645f26519a9cbc85f35883da117dfd479b751ea0ebaa25b17f20932c",
+      "originalSha256": "fb68909c645f26519a9cbc85f35883da117dfd479b751ea0ebaa25b17f20932c",
+      "url": "assets/world/desert-decoration/v001/r01.glb"
+    },
+    {
+      "number": 11,
+      "preview": "R02_扁平层叠砂岩_预览.png",
+      "sourceFile": "R02_扁平层叠砂岩.glb",
+      "status": "adopt",
+      "sourceSha256": "28a2a23b09fe9f0ee372f61b1bdf5bba1d10610a9ffe0d39c75b688525a7e084",
+      "sourceBytes": 41808,
+      "sourceModel": {
+        "triangles": 448,
+        "meshCount": 1,
+        "primitiveCount": 6,
+        "materialCount": 6,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [],
+        "extensionsRequired": []
+      },
+      "assetId": "r02",
+      "zone": "D",
+      "originalPath": "vault:sha256:28a2a23b09fe9f0ee372f61b1bdf5bba1d10610a9ffe0d39c75b688525a7e084",
+      "originalSha256": "28a2a23b09fe9f0ee372f61b1bdf5bba1d10610a9ffe0d39c75b688525a7e084",
+      "url": "assets/world/desert-decoration/v001/r02.glb"
+    },
+    {
+      "number": 12,
+      "preview": "R03_竖立棱角岩石_预览.png",
+      "sourceFile": "R03_竖立棱角岩石.glb",
+      "status": "adopt",
+      "sourceSha256": "2f95f6e71b33d43da5eb88683293142aca364d8efbcf16d566c6f69af54b8a52",
+      "sourceBytes": 10048,
+      "sourceModel": {
+        "triangles": 46,
+        "meshCount": 1,
+        "primitiveCount": 7,
+        "materialCount": 7,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [],
+        "extensionsRequired": []
+      },
+      "assetId": "r03",
+      "zone": "D",
+      "originalPath": "vault:sha256:2f95f6e71b33d43da5eb88683293142aca364d8efbcf16d566c6f69af54b8a52",
+      "originalSha256": "2f95f6e71b33d43da5eb88683293142aca364d8efbcf16d566c6f69af54b8a52",
+      "url": "assets/world/desert-decoration/v001/r03.glb"
+    },
+    {
+      "number": 13,
+      "preview": "R04_自然岩石堆_预览.png",
+      "sourceFile": "R04_自然岩石堆.glb",
+      "status": "adopt",
+      "sourceSha256": "16439a421a5bc4a132d9c86a53ef8bff3324c5c229d2fd812abed1e394c3c9d5",
+      "sourceBytes": 30352,
+      "sourceModel": {
+        "triangles": 160,
+        "meshCount": 4,
+        "primitiveCount": 27,
+        "materialCount": 7,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [],
+        "extensionsRequired": []
+      },
+      "assetId": "r04",
+      "zone": "D",
+      "originalPath": "vault:sha256:16439a421a5bc4a132d9c86a53ef8bff3324c5c229d2fd812abed1e394c3c9d5",
+      "originalSha256": "16439a421a5bc4a132d9c86a53ef8bff3324c5c229d2fd812abed1e394c3c9d5",
+      "url": "assets/world/desert-decoration/v001/r04.glb"
+    },
+    {
+      "number": 14,
+      "preview": "R05_碎石小群.png",
+      "sourceFile": "R05_碎石小群.glb",
+      "status": "hold",
+      "sourceSha256": "a7b3a84fc30b8603be4f0067566b42351471ae75d5b0dc36c873f66e2caa5634",
+      "sourceBytes": 66884,
+      "sourceModel": {
+        "triangles": 560,
+        "meshCount": 7,
+        "primitiveCount": 7,
+        "materialCount": 7,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [],
+        "extensionsRequired": []
+      },
+      "reason": "同类备选"
+    },
+    {
+      "number": 15,
+      "preview": "S01-B_横向扁宽型矮灌木_预览.png",
+      "sourceFile": "S01-B_横向扁宽型矮灌木.glb",
+      "status": "hold",
+      "sourceSha256": "396ffb2d280ed8453ea454e4c865c3fff30a6e197a720665d6db848ec2533122",
+      "sourceBytes": 40980,
+      "sourceModel": {
+        "triangles": 532,
+        "meshCount": 2,
+        "primitiveCount": 8,
+        "materialCount": 8,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [],
+        "extensionsRequired": []
+      },
+      "reason": "S01 硬切面组首版暂缓"
+    },
+    {
+      "number": 16,
+      "preview": "S01-C_偏冠不对称型矮灌木_预览.png",
+      "sourceFile": "S01-C_偏冠不对称型矮灌木.glb",
+      "status": "hold",
+      "sourceSha256": "c1cbf2f5fde5f687d04ee19e86708ffbf969fd1ca3e6105d0d95b9d99b584715",
+      "sourceBytes": 37104,
+      "sourceModel": {
+        "triangles": 448,
+        "meshCount": 2,
+        "primitiveCount": 8,
+        "materialCount": 8,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [],
+        "extensionsRequired": []
+      },
+      "reason": "S01 硬切面组首版暂缓"
+    },
+    {
+      "number": 17,
+      "preview": "S01-D_双团簇型矮灌木_预览 (1).png",
+      "sourceFile": "S01-D_双团簇型矮灌木 (1).glb",
+      "status": "duplicate",
+      "sourceSha256": "f74ef1430271f29bb29f44596990f41ea1a607b2623ea9622ba7f4451dbadce9",
+      "sourceBytes": 40032,
+      "sourceModel": {
+        "triangles": 494,
+        "meshCount": 2,
+        "primitiveCount": 8,
+        "materialCount": 8,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [],
+        "extensionsRequired": []
+      },
+      "reason": "与第18项的GLB字节相同"
+    },
+    {
+      "number": 18,
+      "preview": "S01-D_双团簇型矮灌木_预览.png",
+      "sourceFile": "S01-D_双团簇型矮灌木.glb",
+      "status": "hold",
+      "sourceSha256": "f74ef1430271f29bb29f44596990f41ea1a607b2623ea9622ba7f4451dbadce9",
+      "sourceBytes": 40032,
+      "sourceModel": {
+        "triangles": 494,
+        "meshCount": 2,
+        "primitiveCount": 8,
+        "materialCount": 8,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [],
+        "extensionsRequired": []
+      },
+      "reason": "S01 硬切面组首版暂缓"
+    },
+    {
+      "number": 19,
+      "preview": "S01-E_松散透空型矮灌木_预览.png",
+      "sourceFile": "S01-E_松散透空型矮灌木.glb",
+      "status": "hold",
+      "sourceSha256": "7b61727ae8a2f434c89919d474ef7bfee74926823010f2086195d1703cd5cdd4",
+      "sourceBytes": 59700,
+      "sourceModel": {
+        "triangles": 772,
+        "meshCount": 2,
+        "primitiveCount": 8,
+        "materialCount": 8,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [],
+        "extensionsRequired": []
+      },
+      "reason": "S01 硬切面组首版暂缓"
+    },
+    {
+      "number": 20,
+      "preview": "S01_圆簇型矮灌木.png",
+      "sourceFile": "S01_圆簇型矮灌木.glb",
+      "status": "hold",
+      "sourceSha256": "e1a326d1fd6b0f9d56c5f5c3c273906de61322d9a73dcd65d7c2a003b96f0c98",
+      "sourceBytes": 74792,
+      "sourceModel": {
+        "triangles": 1032,
+        "meshCount": 2,
+        "primitiveCount": 8,
+        "materialCount": 8,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [],
+        "extensionsRequired": []
+      },
+      "reason": "S01 硬切面组首版暂缓"
+    },
+    {
+      "number": 21,
+      "preview": "S02_红柳灌木_预览.png",
+      "sourceFile": "S02_红柳灌木.glb",
+      "status": "adopt",
+      "sourceSha256": "0236ed6eb5a82e308936a0256cb95e03f085bb919bf80f96e63f2983e74b3934",
+      "sourceBytes": 254216,
+      "sourceModel": {
+        "triangles": 3270,
+        "meshCount": 2,
+        "primitiveCount": 9,
+        "materialCount": 9,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [],
+        "extensionsRequired": []
+      },
+      "assetId": "s02",
+      "zone": "B",
+      "originalPath": "vault:sha256:0236ed6eb5a82e308936a0256cb95e03f085bb919bf80f96e63f2983e74b3934",
+      "originalSha256": "0236ed6eb5a82e308936a0256cb95e03f085bb919bf80f96e63f2983e74b3934",
+      "url": "assets/world/desert-decoration/v001/s02.glb"
+    },
+    {
+      "number": 22,
+      "preview": "S04-B_匍匐丛生型枯黄灌木_预览.png",
+      "sourceFile": "S04-B_匍匐丛生型枯黄灌木.glb",
+      "status": "adopt",
+      "sourceSha256": "b274c7f8e565823b5ab231506e633c0dd36dc88a320364dbeb96a4c42668753e",
+      "sourceBytes": 106140,
+      "sourceModel": {
+        "triangles": 1802,
+        "meshCount": 2,
+        "primitiveCount": 9,
+        "materialCount": 9,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [],
+        "extensionsRequired": []
+      },
+      "assetId": "s04b",
+      "zone": "A",
+      "originalPath": "vault:sha256:b274c7f8e565823b5ab231506e633c0dd36dc88a320364dbeb96a4c42668753e",
+      "originalSha256": "b274c7f8e565823b5ab231506e633c0dd36dc88a320364dbeb96a4c42668753e",
+      "url": "assets/world/desert-decoration/v001/s04b.glb"
+    },
+    {
+      "number": 23,
+      "preview": "S04_枯黄灌木_预览.png",
+      "sourceFile": "S04_枯黄灌木.glb",
+      "status": "hold",
+      "sourceSha256": "4d36ba9d8d7fe1b9f99f1aa0df48f2ba6a228bb0e794e666ea207cf6ce9e54e7",
+      "sourceBytes": 72788,
+      "sourceModel": {
+        "triangles": 1188,
+        "meshCount": 2,
+        "primitiveCount": 9,
+        "materialCount": 9,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [],
+        "extensionsRequired": []
+      },
+      "reason": "同类备选"
+    },
+    {
+      "number": 24,
+      "preview": "T01_小胡杨树_预览.png",
+      "sourceFile": "T01_小胡杨树.glb",
+      "status": "adopt",
+      "sourceSha256": "a985a5db9b7ba8a9a21f21e0dca64d7f25de1296056be4f96dd9a106084d19f0",
+      "sourceBytes": 388408,
+      "sourceModel": {
+        "triangles": 5610,
+        "meshCount": 2,
+        "primitiveCount": 9,
+        "materialCount": 9,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [],
+        "extensionsRequired": []
+      },
+      "assetId": "t01",
+      "zone": "B",
+      "originalPath": "vault:sha256:a985a5db9b7ba8a9a21f21e0dca64d7f25de1296056be4f96dd9a106084d19f0",
+      "originalSha256": "a985a5db9b7ba8a9a21f21e0dca64d7f25de1296056be4f96dd9a106084d19f0",
+      "url": "assets/world/desert-decoration/v001/t01.glb"
+    },
+    {
+      "number": 25,
+      "preview": "T02_弯曲胡杨树_预览.png",
+      "sourceFile": "T02_弯曲胡杨树.glb",
+      "status": "adopt",
+      "sourceSha256": "ccf4044e5f8fe2a3343a3110b17292b7075e4f1883087e73126474d463e9adc6",
+      "sourceBytes": 1476372,
+      "sourceModel": {
+        "triangles": 21216,
+        "meshCount": 2,
+        "primitiveCount": 9,
+        "materialCount": 9,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [],
+        "extensionsRequired": []
+      },
+      "assetId": "t02",
+      "zone": "B",
+      "originalPath": "vault:sha256:ccf4044e5f8fe2a3343a3110b17292b7075e4f1883087e73126474d463e9adc6",
+      "originalSha256": "ccf4044e5f8fe2a3343a3110b17292b7075e4f1883087e73126474d463e9adc6",
+      "url": "assets/world/desert-decoration/v001/t02.glb"
+    },
+    {
+      "number": 26,
+      "preview": "T03_展冠胡杨树_预览.png",
+      "sourceFile": "T03_展冠胡杨树.glb",
+      "status": "hold",
+      "sourceSha256": "07c62fe03a5125528658a3b018a6f82ab3bcf1966d143d2aef5d1a010f83c2fe",
+      "sourceBytes": 1481112,
+      "sourceModel": {
+        "triangles": 21288,
+        "meshCount": 2,
+        "primitiveCount": 9,
+        "materialCount": 9,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [],
+        "extensionsRequired": []
+      },
+      "reason": "同类备选"
+    },
+    {
+      "number": 27,
+      "preview": "T04_丛生胡杨树_预览.png",
+      "sourceFile": "T04_丛生胡杨树.glb",
+      "status": "hold",
+      "sourceSha256": "d2ae923d02e19c074b06520fd19bac01478544b51de270db2fa7f2f9cb6d6054",
+      "sourceBytes": 1482592,
+      "sourceModel": {
+        "triangles": 21340,
+        "meshCount": 2,
+        "primitiveCount": 9,
+        "materialCount": 9,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [],
+        "extensionsRequired": []
+      },
+      "reason": "同类备选"
+    },
+    {
+      "number": 28,
+      "preview": "W01_水边芦苇_预览.png",
+      "sourceFile": "W01_水边芦苇.glb",
+      "status": "hold",
+      "sourceSha256": "43ab4aa0ce56fdfcafe1fa4c78fb316b8bca2de114d67f3c6cf20c2513d045ac",
+      "sourceBytes": 51300,
+      "sourceModel": {
+        "triangles": 634,
+        "meshCount": 5,
+        "primitiveCount": 16,
+        "materialCount": 10,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [],
+        "extensionsRequired": []
+      },
+      "reason": "同类备选"
+    },
+    {
+      "number": 29,
+      "preview": "W01B_弯叶苇丛与分枝穗_预览.png",
+      "sourceFile": "W01B_弯叶苇丛与分枝穗.glb",
+      "status": "adopt",
+      "sourceSha256": "541e541269ae8798eef2067bc04f1ce7274a09a409c4951dcf8e76d88f2403e0",
+      "sourceBytes": 95640,
+      "sourceModel": {
+        "triangles": 1108,
+        "meshCount": 8,
+        "primitiveCount": 26,
+        "materialCount": 11,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [],
+        "extensionsRequired": []
+      },
+      "assetId": "w01b",
+      "zone": "B",
+      "originalPath": "vault:sha256:541e541269ae8798eef2067bc04f1ce7274a09a409c4951dcf8e76d88f2403e0",
+      "originalSha256": "541e541269ae8798eef2067bc04f1ce7274a09a409c4951dcf8e76d88f2403e0",
+      "url": "assets/world/desert-decoration/v001/w01b.glb"
+    },
+    {
+      "number": 30,
+      "preview": "双峰骆驼3d模型.png",
+      "sourceFile": "双峰骆驼3d模型.glb",
+      "status": "hold",
+      "sourceSha256": "8e6d68ecdcdca4e111c5a524376ef580394a233627770bf138a0c3163d94f2c1",
+      "sourceBytes": 2393904,
+      "sourceModel": {
+        "triangles": 55800,
+        "meshCount": 1,
+        "primitiveCount": 1,
+        "materialCount": 1,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [
+          {
+            "width": 2048,
+            "height": 2048,
+            "format": "JPEG",
+            "bytes": 528424
+          }
+        ],
+        "extensionsRequired": []
+      },
+      "reason": "沿用现有远景驼队"
+    },
+    {
+      "number": 31,
+      "preview": "大树1.png",
+      "sourceFile": "大树1.glb",
+      "status": "hold",
+      "sourceSha256": "a6d84488f401e1102ecb5f5b92bb56ebaef1264dcf21c47b64c4e1d095913450",
+      "sourceBytes": 4231240,
+      "sourceModel": {
+        "triangles": 58064,
+        "meshCount": 1,
+        "primitiveCount": 1,
+        "materialCount": 1,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [
+          {
+            "width": 2048,
+            "height": 2048,
+            "format": "JPEG",
+            "bytes": 980728
+          }
+        ],
+        "extensionsRequired": []
+      },
+      "reason": "同类备选"
+    },
+    {
+      "number": 32,
+      "preview": "大树10.png",
+      "sourceFile": "大树10.glb",
+      "status": "hold",
+      "sourceSha256": "4ac92b79938209b72b4ae8c6577f97567749ea9a4ec166fb3787b846f8d9ccda",
+      "sourceBytes": 2842628,
+      "sourceModel": {
+        "triangles": 45530,
+        "meshCount": 1,
+        "primitiveCount": 1,
+        "materialCount": 1,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [
+          {
+            "width": 2048,
+            "height": 2048,
+            "format": "JPEG",
+            "bytes": 844279
+          }
+        ],
+        "extensionsRequired": []
+      },
+      "reason": "同类备选"
+    },
+    {
+      "number": 33,
+      "preview": "大树11.png",
+      "sourceFile": "大树11.glb",
+      "status": "hold",
+      "sourceSha256": "e9c67f77852c658040d8d958983c72c7710f99b4be58db10b2d410867fcdc583",
+      "sourceBytes": 3251904,
+      "sourceModel": {
+        "triangles": 44907,
+        "meshCount": 1,
+        "primitiveCount": 1,
+        "materialCount": 1,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [
+          {
+            "width": 2048,
+            "height": 2048,
+            "format": "JPEG",
+            "bytes": 1032645
+          }
+        ],
+        "extensionsRequired": []
+      },
+      "reason": "同类备选"
+    },
+    {
+      "number": 34,
+      "preview": "大树2.png",
+      "sourceFile": "大树2.glb",
+      "status": "hold",
+      "sourceSha256": "51ae3e79744882d27f8166f447374183dc3726666bf301c574ab937cf83de9bc",
+      "sourceBytes": 3161492,
+      "sourceModel": {
+        "triangles": 58726,
+        "meshCount": 1,
+        "primitiveCount": 1,
+        "materialCount": 1,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [
+          {
+            "width": 2048,
+            "height": 2048,
+            "format": "JPEG",
+            "bytes": 752224
+          }
+        ],
+        "extensionsRequired": []
+      },
+      "reason": "同类备选"
+    },
+    {
+      "number": 35,
+      "preview": "大树3.png",
+      "sourceFile": "大树3.glb",
+      "status": "hold",
+      "sourceSha256": "1c431f1855c541b56f2be9893065f26438d3c2c518f2df8a3740eb02240e669d",
+      "sourceBytes": 3646272,
+      "sourceModel": {
+        "triangles": 45490,
+        "meshCount": 1,
+        "primitiveCount": 1,
+        "materialCount": 1,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [
+          {
+            "width": 2048,
+            "height": 2048,
+            "format": "JPEG",
+            "bytes": 952822
+          }
+        ],
+        "extensionsRequired": []
+      },
+      "reason": "同类备选"
+    },
+    {
+      "number": 36,
+      "preview": "大树4.png",
+      "sourceFile": "大树4.glb",
+      "status": "hold",
+      "sourceSha256": "4ea0cb5311fdc84d453ab35efb33a998934594b741efbe81f645e8048610d181",
+      "sourceBytes": 2880892,
+      "sourceModel": {
+        "triangles": 37987,
+        "meshCount": 1,
+        "primitiveCount": 1,
+        "materialCount": 1,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [
+          {
+            "width": 2048,
+            "height": 2048,
+            "format": "JPEG",
+            "bytes": 924081
+          }
+        ],
+        "extensionsRequired": []
+      },
+      "reason": "同类备选"
+    },
+    {
+      "number": 37,
+      "preview": "大树5.png",
+      "sourceFile": "大树5.glb",
+      "status": "hold",
+      "sourceSha256": "72229f67b143fd0c919062eb83427566e3af099524a837928e7bbdb73f5726c8",
+      "sourceBytes": 3102636,
+      "sourceModel": {
+        "triangles": 38379,
+        "meshCount": 1,
+        "primitiveCount": 1,
+        "materialCount": 1,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [
+          {
+            "width": 2048,
+            "height": 2048,
+            "format": "JPEG",
+            "bytes": 1020561
+          }
+        ],
+        "extensionsRequired": []
+      },
+      "reason": "同类备选"
+    },
+    {
+      "number": 38,
+      "preview": "大树6.png",
+      "sourceFile": "大树6.glb",
+      "status": "hold",
+      "sourceSha256": "04570bcb6f7d1286cd762b04640b900a28b5b325a06474cf22b844dbefa22f20",
+      "sourceBytes": 3162212,
+      "sourceModel": {
+        "triangles": 57600,
+        "meshCount": 1,
+        "primitiveCount": 1,
+        "materialCount": 1,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [
+          {
+            "width": 2048,
+            "height": 2048,
+            "format": "JPEG",
+            "bytes": 909073
+          }
+        ],
+        "extensionsRequired": []
+      },
+      "reason": "同类备选"
+    },
+    {
+      "number": 39,
+      "preview": "大树7.png",
+      "sourceFile": "大树7.glb",
+      "status": "hold",
+      "sourceSha256": "4aa39331a868a32f3f9cc481cb5243cb114a7dae0d3620aaf2002798ac7ff6e2",
+      "sourceBytes": 3124140,
+      "sourceModel": {
+        "triangles": 47962,
+        "meshCount": 1,
+        "primitiveCount": 1,
+        "materialCount": 1,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [
+          {
+            "width": 2048,
+            "height": 2048,
+            "format": "JPEG",
+            "bytes": 845053
+          }
+        ],
+        "extensionsRequired": []
+      },
+      "reason": "同类备选"
+    },
+    {
+      "number": 40,
+      "preview": "大树8.png",
+      "sourceFile": "大树8.glb",
+      "status": "hold",
+      "sourceSha256": "a9bcdfd1097cb1fb0a44adcf68e555435c2e6277e75a0b1165376f62f07b410d",
+      "sourceBytes": 3625772,
+      "sourceModel": {
+        "triangles": 48679,
+        "meshCount": 1,
+        "primitiveCount": 1,
+        "materialCount": 1,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [
+          {
+            "width": 2048,
+            "height": 2048,
+            "format": "JPEG",
+            "bytes": 921414
+          }
+        ],
+        "extensionsRequired": []
+      },
+      "reason": "庭院先复用现行主树并补低景"
+    },
+    {
+      "number": 41,
+      "preview": "大树9.png",
+      "sourceFile": "大树9.glb",
+      "status": "reuse",
+      "sourceSha256": "f71e07fbb7076f5c5b8539c1acd248b8835bb51279c77459c21d4466ce725b2b",
+      "sourceBytes": 4150860,
+      "sourceModel": {
+        "triangles": 51801,
+        "meshCount": 1,
+        "primitiveCount": 1,
+        "materialCount": 1,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [
+          {
+            "width": 2048,
+            "height": 2048,
+            "format": "JPEG",
+            "bytes": 768197
+          }
+        ],
+        "extensionsRequired": []
+      },
+      "reason": "与现行乐舞坊主树 GLB 字节一致",
+      "zone": "C",
+      "runtimePath": "music-courtyard-tree/v001/music-courtyard-tree.glb"
+    },
+    {
+      "number": 42,
+      "preview": "小树1.png",
+      "sourceFile": "小树1.glb",
+      "status": "hold",
+      "sourceSha256": "ba2121e3794d0d0dd491e9baf6bff1df106125114ff9ac959c7d1c832e70f4b0",
+      "sourceBytes": 3906800,
+      "sourceModel": {
+        "triangles": 56807,
+        "meshCount": 1,
+        "primitiveCount": 1,
+        "materialCount": 1,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [
+          {
+            "width": 2048,
+            "height": 2048,
+            "format": "JPEG",
+            "bytes": 940393
+          }
+        ],
+        "extensionsRequired": []
+      },
+      "reason": "同类备选"
+    },
+    {
+      "number": 43,
+      "preview": "小树2.png",
+      "sourceFile": "小树2.glb",
+      "status": "hold",
+      "sourceSha256": "9ce83a11b3987b1d5a88a98b182864fd76f9d3d4da1ef5279389770cf68c2209",
+      "sourceBytes": 3738372,
+      "sourceModel": {
+        "triangles": 58501,
+        "meshCount": 1,
+        "primitiveCount": 1,
+        "materialCount": 1,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [
+          {
+            "width": 2048,
+            "height": 2048,
+            "format": "JPEG",
+            "bytes": 912688
+          }
+        ],
+        "extensionsRequired": []
+      },
+      "reason": "庭院先复用现行主树并补低景"
+    },
+    {
+      "number": 44,
+      "preview": "小树3.png",
+      "sourceFile": "小树3.glb",
+      "status": "hold",
+      "sourceSha256": "9a207f80277a0c2b6b98871279b43cc1de25eca4663ea73f792a4efbb5f9d3aa",
+      "sourceBytes": 2535440,
+      "sourceModel": {
+        "triangles": 29125,
+        "meshCount": 1,
+        "primitiveCount": 1,
+        "materialCount": 1,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [
+          {
+            "width": 2048,
+            "height": 2048,
+            "format": "JPEG",
+            "bytes": 975468
+          }
+        ],
+        "extensionsRequired": []
+      },
+      "reason": "同类备选"
+    },
+    {
+      "number": 45,
+      "preview": "小树4.png",
+      "sourceFile": "小树4.glb",
+      "status": "hold",
+      "sourceSha256": "5615bf660fe20f3c35279eade9cd72d2b5ec097b36136aa967eb5bdd46f78023",
+      "sourceBytes": 2391556,
+      "sourceModel": {
+        "triangles": 29207,
+        "meshCount": 1,
+        "primitiveCount": 1,
+        "materialCount": 1,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [
+          {
+            "width": 2048,
+            "height": 2048,
+            "format": "JPEG",
+            "bytes": 837164
+          }
+        ],
+        "extensionsRequired": []
+      },
+      "reason": "同类备选"
+    },
+    {
+      "number": 46,
+      "preview": "岩石1.png",
+      "sourceFile": "岩石1.glb",
+      "status": "hold",
+      "sourceSha256": "80482a11ab306b18fe230f605d81368b8367dcec931731eb45097b84190e4991",
+      "sourceBytes": 2689760,
+      "sourceModel": {
+        "triangles": 51856,
+        "meshCount": 1,
+        "primitiveCount": 1,
+        "materialCount": 1,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [
+          {
+            "width": 2048,
+            "height": 2048,
+            "format": "JPEG",
+            "bytes": 759191
+          }
+        ],
+        "extensionsRequired": []
+      },
+      "reason": "同类备选"
+    },
+    {
+      "number": 47,
+      "preview": "岩石2.png",
+      "sourceFile": "岩石2.glb",
+      "status": "hold",
+      "sourceSha256": "9dedca9721a5773377ed31534f1cb765769093571b773a018f9dde692428659f",
+      "sourceBytes": 2915472,
+      "sourceModel": {
+        "triangles": 54991,
+        "meshCount": 1,
+        "primitiveCount": 1,
+        "materialCount": 1,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [
+          {
+            "width": 2048,
+            "height": 2048,
+            "format": "JPEG",
+            "bytes": 939973
+          }
+        ],
+        "extensionsRequired": []
+      },
+      "reason": "同类备选"
+    },
+    {
+      "number": 48,
+      "preview": "岩石灌木1.png",
+      "sourceFile": "岩石灌木1.glb",
+      "status": "hold",
+      "sourceSha256": "6f6d9c8f254885ce2fb275305ab262a57aa83640a317e63fe12be66c8d85b39a",
+      "sourceBytes": 2737176,
+      "sourceModel": {
+        "triangles": 44617,
+        "meshCount": 1,
+        "primitiveCount": 1,
+        "materialCount": 1,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [
+          {
+            "width": 2048,
+            "height": 2048,
+            "format": "JPEG",
+            "bytes": 755679
+          }
+        ],
+        "extensionsRequired": []
+      },
+      "reason": "模型网格带有大面积矩形底板"
+    },
+    {
+      "number": 49,
+      "preview": "岩石灌木2.png",
+      "sourceFile": "岩石灌木2.glb",
+      "status": "hold",
+      "sourceSha256": "a3066e428b0dc647e9087be6903cbb4c3e4d3ebcad5e8dfd0af875fb4116bd3d",
+      "sourceBytes": 2836056,
+      "sourceModel": {
+        "triangles": 58059,
+        "meshCount": 1,
+        "primitiveCount": 1,
+        "materialCount": 1,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [
+          {
+            "width": 2048,
+            "height": 2048,
+            "format": "JPEG",
+            "bytes": 679362
+          }
+        ],
+        "extensionsRequired": []
+      },
+      "reason": "同类备选"
+    },
+    {
+      "number": 50,
+      "preview": "岩石灌木3.png",
+      "sourceFile": "岩石灌木3.glb",
+      "status": "adopt",
+      "sourceSha256": "13fe098bbd7082533873444d165fff584332cfbf9cb67da8d9459f21a29b8bed",
+      "sourceBytes": 3952872,
+      "sourceModel": {
+        "triangles": 56599,
+        "meshCount": 1,
+        "primitiveCount": 1,
+        "materialCount": 1,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [
+          {
+            "width": 2048,
+            "height": 2048,
+            "format": "JPEG",
+            "bytes": 778882
+          }
+        ],
+        "extensionsRequired": []
+      },
+      "assetId": "rock-shrub-3",
+      "zone": "C",
+      "originalPath": "vault:sha256:13fe098bbd7082533873444d165fff584332cfbf9cb67da8d9459f21a29b8bed",
+      "originalSha256": "13fe098bbd7082533873444d165fff584332cfbf9cb67da8d9459f21a29b8bed",
+      "url": "assets/world/desert-decoration/v001/rock-shrub-3.glb"
+    },
+    {
+      "number": 51,
+      "preview": "岩石灌木4.png",
+      "sourceFile": "岩石灌木4.glb",
+      "status": "hold",
+      "sourceSha256": "8e746f976452474bb0faf4a5e3eb8c6ddc76d8af6f97a1585febfcdfae486b3e",
+      "sourceBytes": 3613756,
+      "sourceModel": {
+        "triangles": 58028,
+        "meshCount": 1,
+        "primitiveCount": 1,
+        "materialCount": 1,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [
+          {
+            "width": 2048,
+            "height": 2048,
+            "format": "JPEG",
+            "bytes": 799257
+          }
+        ],
+        "extensionsRequired": []
+      },
+      "reason": "同类备选"
+    },
+    {
+      "number": 52,
+      "preview": "岩石灌木5.png",
+      "sourceFile": "岩石灌木5.glb",
+      "status": "hold",
+      "sourceSha256": "50e652c1ff2cfec4f037c486b1f4e0e64b6b18c205c32167aab899ccc2425a4c",
+      "sourceBytes": 4005664,
+      "sourceModel": {
+        "triangles": 55014,
+        "meshCount": 1,
+        "primitiveCount": 1,
+        "materialCount": 1,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [
+          {
+            "width": 2048,
+            "height": 2048,
+            "format": "JPEG",
+            "bytes": 963816
+          }
+        ],
+        "extensionsRequired": []
+      },
+      "reason": "同类备选"
+    },
+    {
+      "number": 53,
+      "preview": "岩石灌木6.png",
+      "sourceFile": "岩石灌木6.glb",
+      "status": "hold",
+      "sourceSha256": "2ae97b558e56fa725da286327f2510d24a32aad179808e9a9ef6490acedd4859",
+      "sourceBytes": 4049168,
+      "sourceModel": {
+        "triangles": 56303,
+        "meshCount": 1,
+        "primitiveCount": 1,
+        "materialCount": 1,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [
+          {
+            "width": 2048,
+            "height": 2048,
+            "format": "JPEG",
+            "bytes": 978028
+          }
+        ],
+        "extensionsRequired": []
+      },
+      "reason": "同类备选"
+    },
+    {
+      "number": 54,
+      "preview": "岩石灌木7.png",
+      "sourceFile": "岩石灌木7.glb",
+      "status": "hold",
+      "sourceSha256": "d16931e83495c168900f991f2e1b2bc4e73a98335b26266deb865360eb75d949",
+      "sourceBytes": 3790084,
+      "sourceModel": {
+        "triangles": 56337,
+        "meshCount": 1,
+        "primitiveCount": 1,
+        "materialCount": 1,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [
+          {
+            "width": 2048,
+            "height": 2048,
+            "format": "JPEG",
+            "bytes": 813958
+          }
+        ],
+        "extensionsRequired": []
+      },
+      "reason": "同类备选"
+    },
+    {
+      "number": 55,
+      "preview": "灌木丛1.png",
+      "sourceFile": "灌木丛1.glb",
+      "status": "hold",
+      "sourceSha256": "69853877d5fc5ac6f74ffe866f1000877860075b35e84ab085101a88d3c63958",
+      "sourceBytes": 3912644,
+      "sourceModel": {
+        "triangles": 61175,
+        "meshCount": 1,
+        "primitiveCount": 1,
+        "materialCount": 1,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [
+          {
+            "width": 2048,
+            "height": 2048,
+            "format": "JPEG",
+            "bytes": 853574
+          }
+        ],
+        "extensionsRequired": []
+      },
+      "reason": "同类备选"
+    },
+    {
+      "number": 56,
+      "preview": "灌木丛2.png",
+      "sourceFile": "灌木丛2.glb",
+      "status": "adopt",
+      "sourceSha256": "2203bebd827f5faf057fe2cbdba12ee43604448a8723be78508bcbbd6572a577",
+      "sourceBytes": 4347452,
+      "sourceModel": {
+        "triangles": 60965,
+        "meshCount": 1,
+        "primitiveCount": 1,
+        "materialCount": 1,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [
+          {
+            "width": 2048,
+            "height": 2048,
+            "format": "JPEG",
+            "bytes": 1007760
+          }
+        ],
+        "extensionsRequired": []
+      },
+      "assetId": "shrub-2",
+      "zone": "C",
+      "originalPath": "vault:sha256:2203bebd827f5faf057fe2cbdba12ee43604448a8723be78508bcbbd6572a577",
+      "originalSha256": "2203bebd827f5faf057fe2cbdba12ee43604448a8723be78508bcbbd6572a577",
+      "url": "assets/world/desert-decoration/v001/shrub-2.glb"
+    },
+    {
+      "number": 57,
+      "preview": "灌木丛4.png",
+      "sourceFile": "灌木丛4.glb",
+      "status": "hold",
+      "sourceSha256": "e73b176a9a5fd21e0be2aa600ff5ceb5155fb31d09af9c3f763bba80d198607a",
+      "sourceBytes": 4027940,
+      "sourceModel": {
+        "triangles": 58250,
+        "meshCount": 1,
+        "primitiveCount": 1,
+        "materialCount": 1,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [
+          {
+            "width": 2048,
+            "height": 2048,
+            "format": "JPEG",
+            "bytes": 922137
+          }
+        ],
+        "extensionsRequired": []
+      },
+      "reason": "同类备选"
+    },
+    {
+      "number": 58,
+      "preview": "灌木丛5.png",
+      "sourceFile": "灌木丛5.glb",
+      "status": "hold",
+      "sourceSha256": "fc605def5fcd8f72aa3e02db505fbbad07c936f5f8cad8b9ef0b8660c4088c93",
+      "sourceBytes": 4492700,
+      "sourceModel": {
+        "triangles": 62253,
+        "meshCount": 1,
+        "primitiveCount": 1,
+        "materialCount": 1,
+        "alphaModes": [
+          "OPAQUE"
+        ],
+        "textures": [
+          {
+            "width": 2048,
+            "height": 2048,
+            "format": "JPEG",
+            "bytes": 1065294
+          }
+        ],
+        "extensionsRequired": []
+      },
+      "reason": "同类备选"
+    }
+  ],
+  "reuse": [
+    "现行乐舞坊主树",
+    "现行远景驼队"
+  ]
+}

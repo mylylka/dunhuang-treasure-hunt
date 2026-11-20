@@ -1,4 +1,6 @@
 import * as THREE from 'three';
+import { OASIS_OBSTACLES } from './desert-oasis-obstacles-v013';
+import { isReplacedCourtyardRock } from '../content/world/courtyard-rock-refinement-v001';
 import { CAMERA_CLEARANCE, COURTYARD_CAMERA_BOXES, followCameraPose, settleFollowCamera, type CameraSpace } from './camera';
 import { MOGAO_SOLIDS } from './mogao-rules-v008';
 import { mogaoCameraSpace, mogaoFollowPose, settleStairCamera } from './mogao-camera-v011';
@@ -6,11 +8,12 @@ import { musicCameraSpaceV4 } from './music-pavilion-v004';
 import { MUSIC_LAYOUT_V4, musicPavilionCameraColliderTop } from './music-pavilion-rules-v004';
 import { TERRAIN_REGIONS, TERRAIN_SCENERY_SOURCE_OVERRIDES, terrainCourtyardPartTransform, type TerrainRegion } from '../content/world/terrain-layout-v001';
 import { TERRAIN_TOWER_TREES } from '../content/world/terrain-trees-v001';
+import { CONNECTED_DESERT_VEGETATION } from '../content/world/desert-vegetation';
 import { MUSIC_COURTYARD_TREE } from '../content/world/music-courtyard-tree-v001';
 import {retiredCourtyardHallCameraBox,TERRAIN_FIRST_GALLERY_HALL_CAMERA_BOXES,TERRAIN_HALL_CAMERA_BOXES,TERRAIN_HALL_GEOMETRY} from './terrain-hall-v003';
 import {TERRAIN_CAISSON_CAMERA_BOXES} from './terrain-caisson-v001';
 import { PATTERN_STATIONS } from './pattern-interactives';
-import { toTerrainPoint, fromTerrainPoint, terrainRegionAt, terrainSurfaceHeight, TERRAIN_PLAYER_COLLIDERS, TERRAIN_FIRST_GALLERY_PLAYER_COLLIDERS, TERRAIN_COURTYARD_LOCAL_COLLIDERS, TERRAIN_FIRST_GALLERY_COURTYARD_LOCAL_COLLIDERS, TERRAIN_MUSIC_LOCAL_SOLIDS } from './terrain-rules-v001';
+import { toTerrainPoint, fromTerrainPoint, terrainRegionAt, terrainSurfaceHeight, TERRAIN_PLAYER_COLLIDERS, TERRAIN_FIRST_GALLERY_PLAYER_COLLIDERS, CONNECTED_TERRAIN_PLAYER_COLLIDERS, COMPOSED_CONNECTED_TERRAIN_PLAYER_COLLIDERS, isRetiredConnectedVegetation, TERRAIN_COURTYARD_LOCAL_COLLIDERS, TERRAIN_FIRST_GALLERY_COURTYARD_LOCAL_COLLIDERS, TERRAIN_MUSIC_LOCAL_SOLIDS } from './terrain-rules-v001';
 
 export function terrainVector(region: TerrainRegion, point: THREE.Vector3, inverse = false) {
   const p = (inverse ? fromTerrainPoint : toTerrainPoint)(region, point);
@@ -29,13 +32,16 @@ function mappedBox(region: TerrainRegion, box: THREE.Box3) {
 const legacyMusicSpace = musicCameraSpaceV4(), legacyCliffSpace = mogaoCameraSpace();
 const solidBox=(s:{minX:number;maxX:number;minZ:number;maxZ:number;height:number})=>new THREE.Box3(new THREE.Vector3(s.minX,-.2,s.minZ),new THREE.Vector3(s.maxX,s.height,s.maxZ)).expandByScalar(CAMERA_CLEARANCE);
 const definitionBox=(b:{min:number[];max:number[]})=>new THREE.Box3(new THREE.Vector3(...b.min as [number,number,number]),new THREE.Vector3(...b.max as [number,number,number])).expandByScalar(CAMERA_CLEARANCE);
-function musicCourtyardCameraSpace(openBalcony: boolean): CameraSpace {
+function musicCourtyardCameraSpace(openBalcony: boolean, connected = false): CameraSpace {
+  const includeCourtyardTree = !connected || CONNECTED_DESERT_VEGETATION;
   return {
     ...legacyMusicSpace,
     boxes: [
-      ...TERRAIN_MUSIC_LOCAL_SOLIDS.filter(s => !s.circle).map(s => solidBox({ ...s, height: musicPavilionCameraColliderTop(s, openBalcony) })),
+      ...TERRAIN_MUSIC_LOCAL_SOLIDS.filter(s => !s.circle && (!connected || !isRetiredConnectedVegetation(s.id))).map(s => solidBox({ ...s, height: musicPavilionCameraColliderTop(s, openBalcony) })),
       ...MUSIC_LAYOUT_V4.cameraBoxes.map(definitionBox),
-      definitionBox({ min: [...MUSIC_COURTYARD_TREE.trunkBounds.min], max: [...MUSIC_COURTYARD_TREE.trunkBounds.max] }),
+      ...(includeCourtyardTree ? [definitionBox({
+        min: [...MUSIC_COURTYARD_TREE.trunkBounds.min], max: [...MUSIC_COURTYARD_TREE.trunkBounds.max],
+      })] : []),
     ],
     cylinders: legacyMusicSpace.cylinders.filter(s => s.id.startsWith('music-')).map(s => ({ ...s, ...TERRAIN_SCENERY_SOURCE_OVERRIDES.music?.[s.id] })),
   };
@@ -57,15 +63,36 @@ function courtyardCameraSpace(solids: typeof TERRAIN_COURTYARD_LOCAL_COLLIDERS, 
   };
 }
 const courtyardSpace = courtyardCameraSpace(TERRAIN_COURTYARD_LOCAL_COLLIDERS, TERRAIN_COURTYARD_CAMERA_BOXES);
-const firstGalleryCourtyardSpace = courtyardCameraSpace(TERRAIN_FIRST_GALLERY_COURTYARD_LOCAL_COLLIDERS, [...courtyardPerimeterBoxes, ...TERRAIN_FIRST_GALLERY_HALL_CAMERA_BOXES]);
+const firstGalleryCameraBoxes = [...courtyardPerimeterBoxes, ...TERRAIN_FIRST_GALLERY_HALL_CAMERA_BOXES];
+const firstGalleryCourtyardSpace = courtyardCameraSpace(TERRAIN_FIRST_GALLERY_COURTYARD_LOCAL_COLLIDERS, firstGalleryCameraBoxes);
+const connectedCourtyardSolids = TERRAIN_FIRST_GALLERY_COURTYARD_LOCAL_COLLIDERS.filter(solid => !isRetiredConnectedVegetation(solid.id));
+const connectedCourtyardBoxes = firstGalleryCameraBoxes.filter(box => !isRetiredConnectedVegetation(box.id));
+const connectedCourtyardSpace = courtyardCameraSpace(connectedCourtyardSolids, connectedCourtyardBoxes);
+const composedCourtyardSpace = courtyardCameraSpace(
+  connectedCourtyardSolids.filter(solid => !isReplacedCourtyardRock(solid.id)), connectedCourtyardBoxes,
+);
+function selectCourtyardSpace(firstGallery: boolean, connected: boolean, composed: boolean) {
+  if (!firstGallery) return courtyardSpace;
+  if (!connected) return firstGalleryCourtyardSpace;
+  return composed ? composedCourtyardSpace : connectedCourtyardSpace;
+}
 // Each local region keeps only its own geometry. The retired route dune and
 // the other two buildings must never shorten a camera in this new layout.
 const localSpace:CameraSpace={subjectHeight:.65,boxes:legacyCliffSpace.boxes.slice(legacyMusicSpace.boxes.length),cylinders:MOGAO_SOLIDS.flatMap(s=>s.circle?[{...s.circle,id:s.id!,minY:-.2,maxY:s.height}]:[])};
-export function terrainCameraSpace(includeCaisson=false, firstGallery=false, openMusicBalcony=false): CameraSpace {
+const withoutRetiredVegetation = (space: CameraSpace): CameraSpace => ({
+  ...space, cylinders: space.cylinders.filter(cylinder => !isRetiredConnectedVegetation(cylinder.id)),
+});
+const connectedMusicSpace = withoutRetiredVegetation(musicCourtyardCameraSpace(false, true));
+const connectedOpenMusicSpace = withoutRetiredVegetation(musicCourtyardCameraSpace(true, true));
+const connectedCliffSpace = withoutRetiredVegetation(localSpace);
+export function terrainCameraSpace(includeCaisson=false, firstGallery=false, openMusicBalcony=false, connected=false, composedCourtyard=false): CameraSpace {
   const orientedBoxes:NonNullable<CameraSpace['orientedBoxes']>[number][]=[];
-  const baseCourtyard = firstGallery ? firstGalleryCourtyardSpace : courtyardSpace;
-  const currentCourtyard = includeCaisson ? { ...baseCourtyard, boxes: [...baseCourtyard.boxes, ...TERRAIN_CAISSON_CAMERA_BOXES.map(definitionBox)] } : baseCourtyard;
-  for(const [region,source] of [['courtyard',currentCourtyard],['music',openMusicBalcony ? openMusicSpace : musicSpace],['cliff',localSpace]] as const){
+  const courtyard = selectCourtyardSpace(firstGallery, connected, composedCourtyard);
+  const currentMusic = connected
+    ? (openMusicBalcony ? connectedOpenMusicSpace : connectedMusicSpace)
+    : (openMusicBalcony ? openMusicSpace : musicSpace);
+  const currentCourtyard = includeCaisson ? { ...courtyard, boxes: [...courtyard.boxes, ...TERRAIN_CAISSON_CAMERA_BOXES.map(definitionBox)] } : courtyard;
+  for(const [region,source] of [['courtyard',currentCourtyard],['music',currentMusic],['cliff',connected ? connectedCliffSpace : localSpace]] as const){
     const zero=toTerrainPoint(region,{x:0,y:0,z:0});
     const inverse=new THREE.Matrix4().makeRotationY(TERRAIN_REGIONS[region].yaw).setPosition(zero.x,zero.y,zero.z).invert();
     for(const bounds of source.boxes)orientedBoxes.push({bounds,inverse});
@@ -78,11 +105,17 @@ export function terrainCameraSpace(includeCaisson=false, firstGallery=false, ope
       new THREE.Vector3(halfWidth, height, halfDepth)).expandByScalar(CAMERA_CLEARANCE);
     orientedBoxes.push({ bounds, inverse });
   }
-  const solids = firstGallery ? TERRAIN_FIRST_GALLERY_PLAYER_COLLIDERS : TERRAIN_PLAYER_COLLIDERS;
+  const connectedColliders = composedCourtyard ? COMPOSED_CONNECTED_TERRAIN_PLAYER_COLLIDERS : CONNECTED_TERRAIN_PLAYER_COLLIDERS;
+  const firstGalleryColliders = firstGallery ? TERRAIN_FIRST_GALLERY_PLAYER_COLLIDERS : TERRAIN_PLAYER_COLLIDERS;
+  const solids = connected ? connectedColliders : firstGalleryColliders;
+  const grove = connected && composedCourtyard ? OASIS_OBSTACLES.map(item => {
+    const ground = terrainSurfaceHeight(item.circle);
+    return { ...item.circle, id: item.id!, minY: ground - .2, maxY: ground + item.height };
+  }) : [];
   return { boxes:[],orientedBoxes,subjectHeight:.65,cylinders:solids.flatMap(s=>s.circle?[{
     ...s.circle,radius:TERRAIN_TOWER_TREES.find(tree=>tree.id===s.id)?.collisionRadii.camera??s.circle.radius,
     id:s.id??'terrain-prop',minY:terrainSurfaceHeight(s.circle)-.2,maxY:s.height,
-  }]:[]) };
+  }]:[]).concat(grove) };
 }
 
 /** Terrain is checked along the whole sight arm, including after camera easing. */
@@ -97,14 +130,18 @@ export function clearTerrainCamera(target: THREE.Vector3, eye: THREE.Vector3) {
   return candidate;
 }
 
-export function terrainFollowPose(x: number, y: number, z: number, yaw: number, space: CameraSpace, firstGallery = false, openMusicBalcony = false) {
+export function terrainFollowPose(x: number, y: number, z: number, yaw: number, space: CameraSpace, firstGallery = false, openMusicBalcony = false, connected = false, composedCourtyard = false) {
   const region = terrainRegionAt({ x, z });
   let pose: { position: THREE.Vector3; target: THREE.Vector3 };
   if (region) {
     const p = fromTerrainPoint(region, { x, y, z }), localYaw = yaw - TERRAIN_REGIONS[region].yaw;
-    const groundCamera = region === 'music' ? (openMusicBalcony ? openMusicSpace : musicSpace) : firstGallery ? firstGalleryCourtyardSpace : courtyardSpace;
+    const musicCamera = connected
+      ? (openMusicBalcony ? connectedOpenMusicSpace : connectedMusicSpace)
+      : (openMusicBalcony ? openMusicSpace : musicSpace);
+    const courtyardCamera = selectCourtyardSpace(firstGallery, connected, composedCourtyard);
+    const groundCamera = region === 'music' ? musicCamera : courtyardCamera;
     const original = region === 'cliff'
-      ? mogaoFollowPose(p.x, p.y, p.z, localYaw, localSpace)
+      ? mogaoFollowPose(p.x, p.y, p.z, localYaw, connected ? connectedCliffSpace : localSpace)
       : followCameraPose(p.x, p.y, p.z, localYaw, groundCamera);
     pose = terrainPose(region, original);
   } else {

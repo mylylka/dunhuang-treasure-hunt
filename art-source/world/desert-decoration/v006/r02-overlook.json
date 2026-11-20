@@ -1,0 +1,59 @@
+{
+  "version": 6,
+  "asset": "r02",
+  "source": "public/assets/world/desert-decoration/v006/r02.glb",
+  "sourceSha256": "c7ed7dca3ba936a85fbd47e1f0c89b2b6ddd2f798a3a429bbf0866874f49f040",
+  "sourceRegistration": "art-source/world/desert-decoration/v006/r02.json",
+  "runtimeSource": "src/content/world/desert-decoration-layered-rock-v006.ts",
+  "sourceBounds": {
+    "min": [
+      -0.5600000023841858,
+      0.0,
+      -0.36000001430511475
+    ],
+    "max": [
+      0.5600000023841858,
+      0.35999998450279236,
+      0.36000001430511475
+    ]
+  },
+  "sourceTriangles": 448,
+  "triangles": 104,
+  "gzipBytes": 1465,
+  "silhouette": {
+    "azimuthStepDegrees": 45,
+    "elevationsDegrees": [
+      5,
+      16,
+      32
+    ],
+    "intersectionOverUnion": [
+      0.8785,
+      0.8837,
+      0.903,
+      0.8972,
+      0.8918,
+      0.9057,
+      0.9142,
+      0.8996,
+      0.9053,
+      0.9164,
+      0.9265,
+      0.9217,
+      0.9142,
+      0.9231,
+      0.9347,
+      0.9161,
+      0.939,
+      0.9373,
+      0.9242,
+      0.9425,
+      0.9384,
+      0.9295,
+      0.9391,
+      0.9263
+    ]
+  },
+  "sha256": "77500b01aaf433cc13d3021a42350d3ffa39943f7c8d47b55602ba1cc8485f43",
+  "bytes": 4315
+}

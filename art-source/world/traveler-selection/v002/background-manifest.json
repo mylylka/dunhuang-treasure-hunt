@@ -1,0 +1,31 @@
+{
+  "version": "v002",
+  "use": "旅人选择界面的沙漠背景",
+  "providedFilename": "敦煌沙海金色遗境.png",
+  "original": "vault:sha256:e18eb2b7fd61167ca5d7615283b75b71b44d943f42be380c480da4b8b884f2e2",
+  "originalSha256": "e18eb2b7fd61167ca5d7615283b75b71b44d943f42be380c480da4b8b884f2e2",
+  "originalDimensions": [
+    1675,
+    939
+  ],
+  "originalBytes": 2155533,
+  "runtime": "public/assets/world/traveler-selection/v002/desert.webp",
+  "runtimeSha256": "e55192b3640c9c1f26cd509b4a2a0dc4cfa0abf94c8a38273726bcdee812051a",
+  "dimensions": [
+    1675,
+    939
+  ],
+  "runtimeBytes": 133404,
+  "recipe": {
+    "orientation": "EXIF",
+    "mode": "RGB",
+    "quality": 80,
+    "method": 6,
+    "crop": null,
+    "resize": null
+  },
+  "derivation": {
+    "fingerprint": "91b161ffd082ed89321f0a297bdafa5e049959dcc1b555e45ab1666ca083d914",
+    "sha256": "e55192b3640c9c1f26cd509b4a2a0dc4cfa0abf94c8a38273726bcdee812051a"
+  }
+}

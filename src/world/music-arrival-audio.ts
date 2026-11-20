@@ -106,6 +106,7 @@ export function createMusicArrivalAudio(initial: SoundPreferences, spatial:Music
     setDucked(value:boolean){if(value!==ducked){ducked=value;apply();}},
     setPreferences(value:SoundPreferences){preferences=value;apply();},
     retry(){if(status==='error'){bytes=null;buffer=null;void load();}},
+    loading:()=>requested&&(status==='loading'||pending!==null),
     inspect:()=>{sampleAudibleClock();return {status,unlocked,gain:gainValue,playing:!!playing(),audible:audible(),audibleTime:audibleClock.seconds,currentTime:context?.currentTime??0};},
     // Preview capture reads the real mix after attenuation; it cannot mutate audio.
     recordingStream:()=>recording?.stream??null,

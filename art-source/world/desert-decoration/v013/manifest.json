@@ -1,0 +1,501 @@
+{
+  "version": 13,
+  "approvedLayout": "desert-oasis-v013",
+  "exposureImage": "V012 sun-access and sky-access, normalized unsigned RG per original crown vertex",
+  "models": {
+    "shrub-2": {
+      "near": {
+        "url": "assets/world/desert-decoration/v001/shrub-2.glb",
+        "sha256": "fd604461fe94d0bbdbffdbf3c43fed7aa23a74ea2bed8b37f06c03ab5d83a4d0",
+        "bytes": 275088,
+        "triangles": 3600
+      },
+      "far": {
+        "url": "assets/world/desert-decoration/v013/shrub-2-far.glb",
+        "sha256": "3438e328c4ab9e8fc9a12e71cbc0977a8db5e32215aa311813fb2f050053bb05",
+        "bytes": 37312,
+        "triangles": 8
+      }
+    },
+    "s04b": {
+      "near": {
+        "url": "assets/world/desert-decoration/v001/s04b.glb",
+        "sha256": "d5755b7eed2fc1f7005971f86a6276db20fd1707b82c5ce93c1e48018f158142",
+        "bytes": 131000,
+        "triangles": 1802
+      },
+      "far": {
+        "url": "assets/world/desert-decoration/v013/s04b-far.glb",
+        "sha256": "c30f373c9542de1e658709d76da9620ba8caa731f0e7c503747be925cb4b5d6b",
+        "bytes": 27680,
+        "triangles": 8
+      }
+    },
+    "g02": {
+      "near": {
+        "url": "assets/world/desert-decoration/v001/g02.glb",
+        "sha256": "448e655f0c6c3fc863a45a38f46a726ac3d561d8e6301e5a2e6b5381a73a888f",
+        "bytes": 78692,
+        "triangles": 760
+      },
+      "far": {
+        "url": "assets/world/desert-decoration/v013/g02-far.glb",
+        "sha256": "029b4d24096e0d9be0e97f69302450e7aa727b84199e0a67f40b1982001793c5",
+        "bytes": 30228,
+        "triangles": 8
+      }
+    },
+    "c03b": {
+      "near": {
+        "url": "assets/world/desert-decoration/v001/c03b.glb",
+        "sha256": "90755f5d8684659e03b84274ae3951b1514f7a21e3d8d249943944732440c95f",
+        "bytes": 433028,
+        "triangles": 4348
+      },
+      "far": {
+        "url": "assets/world/desert-decoration/v013/c03b-far.glb",
+        "sha256": "897e3b7ced9f52b40f438bf96c411b217ddeba7c9eb825dd507750402ebf0898",
+        "bytes": 24644,
+        "triangles": 8
+      }
+    },
+    "c04": {
+      "near": {
+        "url": "assets/world/desert-decoration/v001/c04.glb",
+        "sha256": "ae0c8b596f160a428aa903f9882fcb151a67aecab36f60be120a92e15ceda477",
+        "bytes": 203984,
+        "triangles": 2010
+      },
+      "far": {
+        "url": "assets/world/desert-decoration/v013/c04-far.glb",
+        "sha256": "c1769026a5942410c771bcbb703f65398bcd97836fa638e818fa10087b7f20c0",
+        "bytes": 21836,
+        "triangles": 8
+      }
+    },
+    "w01b": {
+      "near": {
+        "url": "assets/world/desert-decoration/v001/w01b.glb",
+        "sha256": "04da79fadea5f483ca253a6083d581275866add6c7bb17e4691f99b12d55a63c",
+        "bytes": 103212,
+        "triangles": 1108
+      },
+      "far": {
+        "url": "assets/world/desert-decoration/v013/w01b-far.glb",
+        "sha256": "9fd0e12fba1663917e8298eea04ba465e7142ddeb6d2e4365205919a409df7a6",
+        "bytes": 20956,
+        "triangles": 8
+      }
+    },
+    "t01": {
+      "near": {
+        "url": "assets/world/desert-decoration/v001/t01.glb",
+        "sha256": "7331e0dd722a13c060092e03e74be7bdbe3b83b58149d4052927e4f0ec404d6e",
+        "bytes": 505544,
+        "triangles": 5610
+      },
+      "far": {
+        "url": "assets/world/desert-decoration/v013/t01-far.glb",
+        "sha256": "4d33dec9522a94481f6c0bf844907064cca9ebad11df9b583c3347a2bfbf7c71",
+        "bytes": 43324,
+        "triangles": 8
+      }
+    },
+    "t02": {
+      "near": {
+        "url": "assets/world/desert-decoration/v001/t02.glb",
+        "sha256": "9e4da734c82708b1fa0121497144c640e143703dd1012afdbfc2281a572c03a6",
+        "bytes": 564704,
+        "triangles": 8891
+      },
+      "far": {
+        "url": "assets/world/desert-decoration/v013/t02-far.glb",
+        "sha256": "dac289fcb56ad3ab77f3e388837bce00c1fdad5c797fdf0d2ea5579570b2d43f",
+        "bytes": 38584,
+        "triangles": 1322
+      }
+    },
+    "t03": {
+      "near": {
+        "url": "assets/world/desert-decoration/v002/t03.glb",
+        "sha256": "298df8b42a57f36e489d7bb8cba39a8e41fc4a7e0a5380e4e2943cbf27cda752",
+        "bytes": 266808,
+        "triangles": 3414
+      },
+      "far": {
+        "url": "assets/world/desert-decoration/v013/t03-far.glb",
+        "sha256": "8c77bfa342f43c73aea38b7d1394a0da62844c3c9c3530bfcc98ebc18eac7037",
+        "bytes": 26408,
+        "triangles": 785
+      }
+    },
+    "r04": {
+      "near": {
+        "url": "assets/world/desert-decoration/v001/r04.glb",
+        "sha256": "8a57d96578228e7a6e1bf36b405fbd82ee1ff4ea9f926534241399d990746f9b",
+        "bytes": 16172,
+        "triangles": 160
+      },
+      "far": {
+        "url": "assets/world/desert-decoration/v013/r04-far.glb",
+        "sha256": "a7c1eaf8b1f1ba45f4d73774c53d0dc48f87225ce9087f11ca2acf36a629d8c3",
+        "bytes": 3648,
+        "triangles": 54
+      }
+    },
+    "c02": {
+      "near": {
+        "url": "assets/world/desert-decoration/v001/c02.glb",
+        "sha256": "e8fa80d29429a9ccaed43cb13e78cbdf0b8fe1fc1bc051b1cccec57c4df09248",
+        "bytes": 67268,
+        "triangles": 648
+      },
+      "far": {
+        "url": "assets/world/desert-decoration/v013/c02-far.glb",
+        "sha256": "aa0065162247672c9d31dd0b839877a28de0048e5ba40232303a5e1d80432a67",
+        "bytes": 19968,
+        "triangles": 8
+      }
+    },
+    "r02": {
+      "near": {
+        "url": "assets/world/desert-decoration/v006/r02.glb",
+        "sha256": "c7ed7dca3ba936a85fbd47e1f0c89b2b6ddd2f798a3a429bbf0866874f49f040",
+        "bytes": 36148,
+        "triangles": 448
+      },
+      "far": {
+        "url": "assets/world/desert-decoration/v013/r02-far.glb",
+        "sha256": "31e70115ff0f6ac7ec5daec90a49dd29c211d7dbce04eebf3a95ebec176e13f7",
+        "bytes": 3020,
+        "triangles": 54
+      }
+    },
+    "r01": {
+      "near": {
+        "url": "assets/world/desert-decoration/v001/r01.glb",
+        "sha256": "b5483c162862dc1d0fa894452b8ef43db0760f30911aec208aa39ad57d99e0cc",
+        "bytes": 4368,
+        "triangles": 34
+      },
+      "far": {
+        "url": "assets/world/desert-decoration/v001/r01.glb",
+        "sha256": "b5483c162862dc1d0fa894452b8ef43db0760f30911aec208aa39ad57d99e0cc",
+        "bytes": 4368,
+        "triangles": 34
+      }
+    },
+    "大树3": {
+      "original": "vault:sha256:1c431f1855c541b56f2be9893065f26438d3c2c518f2df8a3740eb02240e669d",
+      "sourceFile": "大树3.glb",
+      "near": {
+        "url": "assets/world/desert-decoration/v013/tree-3.glb",
+        "sha256": "04f29b8585c4e834a1ee033265f0fd585ded7157a78b0940c915d98a8859bb9c",
+        "bytes": 437932,
+        "triangles": 17628
+      },
+      "far": {
+        "url": "assets/world/desert-decoration/v013/tree-3-far.glb",
+        "sha256": "7fd488e17b7784b56eeb8c2058a6440ab88713dce8a83df771d95272f493780f",
+        "bytes": 65196,
+        "triangles": 8
+      },
+      "mid": {
+        "url": "assets/world/desert-decoration/v013/tree-3-mid.glb",
+        "sha256": "19e4d9210ca8fb28fb1c6d8fe3b9e8238758f06147ef4d63b84db865d105e9bf",
+        "bytes": 77572,
+        "triangles": 8061
+      }
+    },
+    "大树4": {
+      "original": "vault:sha256:4ea0cb5311fdc84d453ab35efb33a998934594b741efbe81f645e8048610d181",
+      "sourceFile": "大树4.glb",
+      "near": {
+        "url": "assets/world/desert-decoration/v013/tree-4.glb",
+        "sha256": "c4983663f544fa642ec166361ee3586c8ff630ee9ff28344e2f73a1dda571293",
+        "bytes": 439204,
+        "triangles": 18321
+      },
+      "far": {
+        "url": "assets/world/desert-decoration/v013/tree-4-far.glb",
+        "sha256": "b000defa89bd3db1cdad37253ddec712cb82254879fadf83e99b922b0ed5776c",
+        "bytes": 65312,
+        "triangles": 8
+      },
+      "mid": {
+        "url": "assets/world/desert-decoration/v013/tree-4-mid.glb",
+        "sha256": "3931b64badcbfad0b6a31209b67a3a42b1003249fde79d662160e24f476ab2f8",
+        "bytes": 66244,
+        "triangles": 5079
+      }
+    },
+    "大树6": {
+      "original": "vault:sha256:04570bcb6f7d1286cd762b04640b900a28b5b325a06474cf22b844dbefa22f20",
+      "sourceFile": "大树6.glb",
+      "near": {
+        "url": "assets/world/desert-decoration/v013/tree-6.glb",
+        "sha256": "40b6ff32410853505a504e8c0c6fb1d925282159534bcbed2a7f5e3e05734598",
+        "bytes": 285476,
+        "triangles": 12974
+      },
+      "far": {
+        "url": "assets/world/desert-decoration/v013/tree-6-far.glb",
+        "sha256": "c9d15be2ce955769381f72f0e78cc55a25bcb608f4ad2c922728c1fd310a3dde",
+        "bytes": 50132,
+        "triangles": 8
+      },
+      "mid": {
+        "url": "assets/world/desert-decoration/v013/tree-6-mid.glb",
+        "sha256": "58b522cf39cc139c2e5f05ed64250c9049a1456bed6032afe1d04cbb3c81d46b",
+        "bytes": 31316,
+        "triangles": 3177
+      }
+    },
+    "大树8": {
+      "original": "vault:sha256:a9bcdfd1097cb1fb0a44adcf68e555435c2e6277e75a0b1165376f62f07b410d",
+      "sourceFile": "大树8.glb",
+      "near": {
+        "url": "assets/world/desert-decoration/v013/tree-8.glb",
+        "sha256": "fb174bf0dc7db94c40f2ed8e75249b5d6ec3f823ec4a8177704b3c2f995d6667",
+        "bytes": 488464,
+        "triangles": 21403
+      },
+      "far": {
+        "url": "assets/world/desert-decoration/v013/tree-8-far.glb",
+        "sha256": "88a87a80b44c9686903fba4008a684d881409dfb9a4e76679778661f945047f8",
+        "bytes": 62456,
+        "triangles": 8
+      },
+      "mid": {
+        "url": "assets/world/desert-decoration/v013/tree-8-mid.glb",
+        "sha256": "9b240ed0236e95d6a461f80383173f01507832399b80839ea4554a74c5c1d3c1",
+        "bytes": 78172,
+        "triangles": 6771
+      }
+    },
+    "大树9": {
+      "original": "vault:sha256:f71e07fbb7076f5c5b8539c1acd248b8835bb51279c77459c21d4466ce725b2b",
+      "sourceFile": "大树9.glb",
+      "exposureSourceSha256": "26192288dc39f938feaa5999fb5a0d3b5f57f1b8fd96f3097e65fcba31173a33",
+      "near": {
+        "url": "assets/world/desert-decoration/v013/tree-9.glb",
+        "sha256": "fbdfeecfbb5e2181ab5a7b9fb4f56007366e8f3a6e143bd461a427d3f88969c8",
+        "bytes": 964568,
+        "triangles": 32885
+      },
+      "far": {
+        "url": "assets/world/desert-decoration/v013/tree-9-far.glb",
+        "sha256": "87dff5912dac5ecfa687d8930a192694028f9155567ffbc4e06c54fc30602e1b",
+        "bytes": 309200,
+        "triangles": 10506
+      }
+    },
+    "大树10": {
+      "original": "vault:sha256:4ac92b79938209b72b4ae8c6577f97567749ea9a4ec166fb3787b846f8d9ccda",
+      "sourceFile": "大树10.glb",
+      "near": {
+        "url": "assets/world/desert-decoration/v013/tree-10.glb",
+        "sha256": "308a0fdf47fc466882e5bc356901fcbc377feb7799a3c86f1d47dd765ce60718",
+        "bytes": 416592,
+        "triangles": 20071
+      },
+      "far": {
+        "url": "assets/world/desert-decoration/v013/tree-10-far.glb",
+        "sha256": "71b2217af6d80c60d3aaed37ceb113b10302a053e3be42ce5c30060cc47d09fc",
+        "bytes": 58268,
+        "triangles": 8
+      },
+      "mid": {
+        "url": "assets/world/desert-decoration/v013/tree-10-mid.glb",
+        "sha256": "0280a0e9cdf8311fc08762f249a158c9cbeb0de604b01a387fa17b125af4d70c",
+        "bytes": 73528,
+        "triangles": 5672
+      }
+    },
+    "大树11": {
+      "original": "vault:sha256:e9c67f77852c658040d8d958983c72c7710f99b4be58db10b2d410867fcdc583",
+      "sourceFile": "大树11.glb",
+      "near": {
+        "url": "assets/world/desert-decoration/v013/tree-11.glb",
+        "sha256": "1e52ba024216e121ec36b6070af814839588947dda4e3e340b385ce8555aebef",
+        "bytes": 394824,
+        "triangles": 16929
+      },
+      "far": {
+        "url": "assets/world/desert-decoration/v013/tree-11-far.glb",
+        "sha256": "2cb9150bcfb18aa546a1b8cfb70a5d41fccf5fa80141e5fd34d989f07255168c",
+        "bytes": 63660,
+        "triangles": 8
+      },
+      "mid": {
+        "url": "assets/world/desert-decoration/v013/tree-11-mid.glb",
+        "sha256": "25e004a22f193174168dc6b39a37ec0d3ed86e2ea8ced4aac7dc5f39d435dc96",
+        "bytes": 74752,
+        "triangles": 7116
+      }
+    },
+    "C04B_卧枝灌木与散石": {
+      "original": "vault:sha256:b33098bc8b103af588800988ea3e128d90b34fd363ccd68e32140f792e00bd08",
+      "sourceFile": "C04B_卧枝灌木与散石.glb",
+      "near": {
+        "url": "assets/world/desert-decoration/v013/rock-and-spreading-shrub.glb",
+        "sha256": "df1de349f506627c1adfe53de21ae0aac6af91fd350404a135ebafd97ae36e87",
+        "bytes": 47616,
+        "triangles": 2054
+      },
+      "far": {
+        "url": "assets/world/desert-decoration/v013/rock-and-spreading-shrub-far.glb",
+        "sha256": "35aee0ec08936c6c8bf8c8692c500640ab180c1bf5ee5eaccdf180a9ffcc769f",
+        "bytes": 24500,
+        "triangles": 8
+      }
+    },
+    "S04_枯黄灌木": {
+      "original": "vault:sha256:4d36ba9d8d7fe1b9f99f1aa0df48f2ba6a228bb0e794e666ea207cf6ce9e54e7",
+      "sourceFile": "S04_枯黄灌木.glb",
+      "near": {
+        "url": "assets/world/desert-decoration/v013/dry-shrub.glb",
+        "sha256": "b64161cc6047b5b340e6ab9432b43d0b19a2d55fda8cd4c36476edb1725a8869",
+        "bytes": 21696,
+        "triangles": 1188
+      },
+      "far": {
+        "url": "assets/world/desert-decoration/v013/dry-shrub-far.glb",
+        "sha256": "f61a114e015dc018485ae2bc4fed00d7406ee6b5d3509f81051d90b27d6ab3a1",
+        "bytes": 23912,
+        "triangles": 8
+      }
+    },
+    "R05_碎石小群": {
+      "original": "vault:sha256:a7b3a84fc30b8603be4f0067566b42351471ae75d5b0dc36c873f66e2caa5634",
+      "sourceFile": "R05_碎石小群.glb",
+      "near": {
+        "url": "assets/world/desert-decoration/v013/loose-rocks.glb",
+        "sha256": "fb98105058391c51e818e7c3334355ae3bd38805cb4d4d5d2ea658a992b82306",
+        "bytes": 31556,
+        "triangles": 560
+      },
+      "far": {
+        "url": "assets/world/desert-decoration/v013/loose-rocks-far.glb",
+        "sha256": "df226556a7819ff774e812af07fcb1174598ab2c6f6104c01d2ac05834b0ae94",
+        "bytes": 3488,
+        "triangles": 54
+      }
+    },
+    "W01_水边芦苇": {
+      "original": "vault:sha256:43ab4aa0ce56fdfcafe1fa4c78fb316b8bca2de114d67f3c6cf20c2513d045ac",
+      "sourceFile": "W01_水边芦苇.glb",
+      "near": {
+        "url": "assets/world/desert-decoration/v013/shore-reed.glb",
+        "sha256": "46f118a5325e0e22e47e0f9709848260b137cb08bedeb3fd1073dd80a1aaf223",
+        "bytes": 27680,
+        "triangles": 634
+      },
+      "far": {
+        "url": "assets/world/desert-decoration/v013/shore-reed-far.glb",
+        "sha256": "ef7bdd1471de312fac4025fb56eac83375253c56538c4a32aac71528c21a49f0",
+        "bytes": 18900,
+        "triangles": 8
+      }
+    },
+    "S02_红柳灌木": {
+      "original": "vault:sha256:0236ed6eb5a82e308936a0256cb95e03f085bb919bf80f96e63f2983e74b3934",
+      "sourceFile": "S02_红柳灌木.glb",
+      "near": {
+        "url": "assets/world/desert-decoration/v013/tamarisk.glb",
+        "sha256": "f01173f1635a88db9d790d17c534f21c3b991f79c9bffb8d58f2e2930d72ee6e",
+        "bytes": 73128,
+        "triangles": 3270
+      },
+      "far": {
+        "url": "assets/world/desert-decoration/v013/tamarisk-far.glb",
+        "sha256": "2ba17373eb7405b0c09c9b1ade784a77e9a9c75a8301279df3a06ae83f8e8dda",
+        "bytes": 27148,
+        "triangles": 8
+      }
+    },
+    "T03_展冠胡杨树": {
+      "original": "vault:sha256:07c62fe03a5125528658a3b018a6f82ab3bcf1966d143d2aef5d1a010f83c2fe",
+      "sourceFile": "T03_展冠胡杨树.glb",
+      "near": {
+        "url": "assets/world/desert-decoration/v013/broad-poplar.glb",
+        "sha256": "7289d252d1a53d9cddf349cdda073b217393feccb338bf9974aafde9a649b3d3",
+        "bytes": 289968,
+        "triangles": 13398
+      },
+      "far": {
+        "url": "assets/world/desert-decoration/v013/broad-poplar-far.glb",
+        "sha256": "685f8906bab841cd59764574a3b5b10b0b9ff218dbdc34d3824b7cc758af3829",
+        "bytes": 26452,
+        "triangles": 785
+      }
+    },
+    "T02_弯曲胡杨树": {
+      "original": "vault:sha256:ccf4044e5f8fe2a3343a3110b17292b7075e4f1883087e73126474d463e9adc6",
+      "sourceFile": "T02_弯曲胡杨树.glb",
+      "near": {
+        "url": "assets/world/desert-decoration/v013/curved-poplar.glb",
+        "sha256": "25674ecf584ba33c4a9b90e8bee496ce46e9958d95798aaaae0401d5eabc51ab",
+        "bytes": 295264,
+        "triangles": 13384
+      },
+      "far": {
+        "url": "assets/world/desert-decoration/v013/curved-poplar-far.glb",
+        "sha256": "be1b1168c33386085c1e3f79c93b7ef9512e06f04ad3e2fef528a3e605ccd080",
+        "bytes": 38632,
+        "triangles": 1322
+      }
+    },
+    "valley-cushion-shrub": {
+      "original": "vault:sha256:a4d54e8f788eb395d2d499fe14b68e4739b18f98ee5af52cc28e12f276fdbdb2",
+      "sourceFile": "C01B_斜楔岩与圆垫灌木.glb",
+      "originalMaterialFilter": "^C01B_(Olive_Leaf_|Shrub_)",
+      "near": {
+        "url": "assets/world/desert-decoration/v013/valley-cushion.glb",
+        "sha256": "c370a5d548cd96ef30cfb4ffa113120df0be51362a86a12a99749d62d2f5561b",
+        "bytes": 104056,
+        "triangles": 4410
+      },
+      "far": {
+        "url": "assets/world/desert-decoration/v013/valley-cushion-far.glb",
+        "sha256": "1e9da237c00e32e80cf77baa2bf02dbe6ba9458a3ce5ec00872aaceb02fc56ee",
+        "bytes": 30708,
+        "triangles": 8
+      }
+    },
+    "valley-fractured-slab": {
+      "original": "vault:sha256:b12ccc71d1d163976864fe57b71fa05aae17da32313310771fa722e6835a601e",
+      "sourceFile": "C02B_斜交岩片与裂隙草.glb",
+      "originalMaterialFilter": "^C02B_Sandstone_",
+      "near": {
+        "url": "assets/world/desert-decoration/v013/valley-slab.glb",
+        "sha256": "8cf2185149c375d85731e690d26d863ef0ef2ec98bbdacce1ce543aa91862206",
+        "bytes": 6208,
+        "triangles": 92
+      },
+      "far": {
+        "url": "assets/world/desert-decoration/v013/valley-slab.glb",
+        "sha256": "8cf2185149c375d85731e690d26d863ef0ef2ec98bbdacce1ce543aa91862206",
+        "bytes": 6208,
+        "triangles": 92
+      }
+    },
+    "valley-sage-branches": {
+      "original": "vault:sha256:b33098bc8b103af588800988ea3e128d90b34fd363ccd68e32140f792e00bd08",
+      "sourceFile": "C04B_卧枝灌木与散石.glb",
+      "originalMaterialFilter": "^C04B_(Sage_Leaf_|Shrub_)",
+      "near": {
+        "url": "assets/world/desert-decoration/v013/valley-sage.glb",
+        "sha256": "ccb567711a24856bc94a556d2ed525f72a5f8007ecd32673ca37a978dbba99f1",
+        "bytes": 42140,
+        "triangles": 1728
+      },
+      "far": {
+        "url": "assets/world/desert-decoration/v013/valley-sage-far.glb",
+        "sha256": "bb0bb18a0dcc61042286cbc7bb1000346ade65bca68cb82da89285de3f3caf12",
+        "bytes": 27108,
+        "triangles": 8
+      }
+    }
+  }
+}

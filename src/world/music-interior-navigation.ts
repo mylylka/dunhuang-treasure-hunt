@@ -1,9 +1,10 @@
+import { OASIS_MUSIC_TRUNK_SOLIDS } from './desert-oasis-obstacles-v013';
 import layoutData from '../content/world/music-interior-v005.json';
 import solidsData from '../content/world/music-interior-solids-v005.json';
 import balcony from '../content/world/music-balcony-ensemble-v001.json';
 import compactBalcony from '../content/world/music-balcony-ensemble-v002.json';
 import { fromTerrainPoint, toTerrainPoint, TERRAIN_REGIONS } from '../content/world/terrain-layout-v001';
-import { moveTerrainPlayer, terrainSurfaceHeight, isTerrainWalkable, TERRAIN_MUSIC_LOCAL_SOLIDS } from './terrain-rules-v001';
+import { moveTerrainPlayer, terrainSurfaceHeight, isTerrainWalkable, isRetiredConnectedVegetation, TERRAIN_MUSIC_LOCAL_SOLIDS } from './terrain-rules-v001';
 import { createUpperNavigation, upperSurfaceHeightAt, type UpperNavigationLayout, type UpperSolid, type UpperWalkState, type UpperWalkSurface } from './mogao-upper-navigation';
 import type { WorldPoint } from './types';
 import { MUSIC_PAVILION_BUILDINGS_V006 } from './music-pavilion-rules-v004';
@@ -31,6 +32,9 @@ export const musicInteriorFromWorld = (p: WorldPoint & { y?: number }) => fromTe
 export interface MusicInteriorNavigationOptions {
   compactBalcony?: boolean;
   additionalSolids?: readonly UpperSolid[];
+  outdoorObstacles?: readonly (WorldPoint & { radius: number })[];
+  connectedTerrain?: boolean;
+  composedCourtyard?: boolean;
 }
 
 export function createMusicInteriorNavigation(options: MusicInteriorNavigationOptions = {}) {
@@ -38,7 +42,9 @@ export function createMusicInteriorNavigation(options: MusicInteriorNavigationOp
   const performers = placement.players.map<UpperSolid>(({ id, min, max }) => ({
     id: `music-gallery-ensemble-${id}`, min, max,
   }));
-  const cameraSolids: readonly UpperSolid[] = [...buildingSolids, ...performers, ...(options.additionalSolids ?? [])];
+  const grounds = options.connectedTerrain ? buildingSolids.filter(solid => !isRetiredConnectedVegetation(solid.id)) : buildingSolids;
+  const courtTree = options.connectedTerrain && options.composedCourtyard ? OASIS_MUSIC_TRUNK_SOLIDS : [];
+  const cameraSolids: readonly UpperSolid[] = [...grounds, ...courtTree, ...performers, ...(options.additionalSolids ?? [])];
   const layout = {
     ...layoutData,
     assets: { ...layoutData.assets, building: MUSIC_PAVILION_BUILDINGS_V006.interior },
@@ -107,7 +113,7 @@ export function createMusicInteriorNavigation(options: MusicInteriorNavigationOp
   }
 
   function musicInteriorValid(state: UpperWalkState): boolean {
-    if (!state.surfaceId) return isTerrainWalkable(state.position);
+    if (!state.surfaceId) return isTerrainWalkable(state.position, false, options.outdoorObstacles, options.connectedTerrain, options.composedCourtyard);
     return validLocal(musicInteriorFromWorld(state.position), state.surfaceId);
   }
 
@@ -128,7 +134,7 @@ export function createMusicInteriorNavigation(options: MusicInteriorNavigationOp
     const moved = localMove({ position: from, surfaceId: state.surfaceId }, { x: to.x - from.x, z: to.z - from.z });
     if (moved) return toWorldState(moved);
     if (state.surfaceId) return cloneState(state);
-    const ground = moveTerrainPlayer(state.position, delta);
+    const ground = moveTerrainPlayer(state.position, delta, false, options.outdoorObstacles, options.connectedTerrain, options.composedCourtyard);
     // The real courtyard gateway is the sole transition out of the old terrain.
     const acquired = navigation.move({ position: musicInteriorFromWorld(ground), surfaceId: null }, { x: 0, z: 0 });
     return acquired?.surfaceId ? toWorldState(acquired) : { position: ground, surfaceId: null };

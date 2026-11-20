@@ -6,9 +6,9 @@ import { musicInteriorCameraSolids, musicInteriorFromWorld, musicInteriorToWorld
 
 // The true door holes, slab and individual stair treads replace the old closed
 // building proxy. Camera and actors therefore agree about what is open.
-export function createMusicInteriorCameraSpace(solids: readonly UpperSolid[]): CameraSpace {
+export function createMusicInteriorCameraSpace(solids: readonly UpperSolid[], includeCourtyardTree = true): CameraSpace {
   return {
-    boxes: [...solids, MUSIC_COURTYARD_TREE.trunkBounds].map(box => new THREE.Box3(
+    boxes: (includeCourtyardTree ? [...solids, MUSIC_COURTYARD_TREE.trunkBounds] : solids).map(box => new THREE.Box3(
       new THREE.Vector3(...box.min as [number, number, number]),
       new THREE.Vector3(...box.max as [number, number, number]),
     ).expandByScalar(.22)),

@@ -41,9 +41,9 @@ export function upperPreviewCheckpoint(view: string = 'start', exhibit = false):
 }
 
 /** Preserve the level before applying the old terrain sanitizer to outdoor points. */
-export function sanitizeUpperPreviewCheckpoint(checkpoint: WorldCheckpoint, exhibit = false): WorldCheckpoint {
+export function sanitizeUpperPreviewCheckpoint(checkpoint: WorldCheckpoint, exhibit = false, connected = false): WorldCheckpoint {
   const restored = sanitizeUpperCheckpoint(checkpoint, exhibit);
-  return restored.walkSurface ? restored : { ...restored, position: sanitizeTerrainPosition(restored.position) };
+  return restored.walkSurface ? restored : { ...restored, position: sanitizeTerrainPosition(restored.position, connected, connected) };
 }
 
 /** Old flight IDs have different heights in v2, so resolve against the old layout first. */

@@ -4,15 +4,17 @@ import {
   type TerrainRegion,
   TERRAIN_COURTYARD_EXPANSION, terrainCourtyardPartTransform,
 } from '../content/world/terrain-layout-v001';
+import { OASIS_OBSTACLES } from './desert-oasis-obstacles-v013';
 import { isWalkable, PLAYER_RADIUS, WORLD_COLLIDERS, type WorldCollider } from './movement';
 import {courtyardHallSurfaceHeight,retiredCourtyardHallCollider,TERRAIN_FIRST_GALLERY_HALL_PLAYER_SOLIDS,TERRAIN_HALL_PLAYER_SOLIDS} from './terrain-hall-v003';
 import { MUSIC_PLAYER_COLLIDERS_V4, MUSIC_SOLIDS_V4, musicSurfaceHeightV4, inMusicCourtV4 } from './music-pavilion-rules-v004';
 import {MUSIC_COURTYARD_TREE,musicCourtyardRelocationForProp,relocatedMusicPoint} from '../content/world/music-courtyard-tree-v001';
 import { MOGAO_SESSION_OPTIONS, mogaoSurfaceHeight, inMogaoRoom } from './mogao-rules-v012';
 import type { WorldPoint } from './types';
+import { CONNECTED_DESERT_VEGETATION } from '../content/world/desert-vegetation';
 import { TERRAIN_TOWER_TREES } from '../content/world/terrain-trees-v001';
 import { PATTERN_STATION_SOLIDS } from './pattern-interactives';
-import { COURTYARD_ROCK_SCALE, ENLARGED_COURTYARD_ROCKS } from '../content/world/courtyard-rock-refinement-v001';
+import { COURTYARD_ROCK_SCALE, ENLARGED_COURTYARD_ROCKS, isReplacedCourtyardRock } from '../content/world/courtyard-rock-refinement-v001';
 
 export * from '../content/world/terrain-layout-v001';
 
@@ -118,6 +120,18 @@ const firstGalleryById = new Map([...firstGalleryFurniture, ...firstGalleryRocks
 export const TERRAIN_FIRST_GALLERY_PLAYER_COLLIDERS: readonly WorldCollider[] = TERRAIN_PLAYER_COLLIDERS
   .map(solid => firstGalleryById.get(solid.id ?? '') ?? solid);
 
+export function isRetiredConnectedVegetation(id = '') {
+  const localId = id.replace(/^terrain-(?:courtyard|music|cliff)-/, '');
+  return /^(?:sample-tree-a|music-tree-\d+|mogao-v8-tree-\d+)$/.test(localId)
+    || (!CONNECTED_DESERT_VEGETATION
+      && /^(?:hall-v003-workshop-shrubs|music-courtyard-tree|tower-tree-(?:stylized|broad))$/.test(localId));
+}
+
+export const CONNECTED_TERRAIN_PLAYER_COLLIDERS = TERRAIN_FIRST_GALLERY_PLAYER_COLLIDERS
+  .filter(solid => !isRetiredConnectedVegetation(solid.id));
+export const COMPOSED_CONNECTED_TERRAIN_PLAYER_COLLIDERS = CONNECTED_TERRAIN_PLAYER_COLLIDERS
+  .filter(solid => !isReplacedCourtyardRock(solid.id));
+
 /** Sand is continuous; building floors and accepted stair ramps retain scale. */
 export function terrainSurfaceHeight(p: WorldPoint): number {
   const courtyard = fromTerrainPoint('courtyard', p);
@@ -150,14 +164,20 @@ function surfaceSlope(p: WorldPoint) {
   const dz = (terrainSurfaceHeight({ x: p.x, z: p.z + e }) - terrainSurfaceHeight({ x: p.x, z: p.z - e })) / (2 * e);
   return Math.hypot(dx, dz);
 }
-export function isTerrainWalkable(p: WorldPoint, firstGallery = false): boolean {
+export function isTerrainWalkable(p: WorldPoint, firstGallery = false,
+  additionalCircles?: readonly (WorldPoint & { radius: number })[], connected = false, composedCourtyard = false): boolean {
   const bankClearance = PLAYER_RADIUS + .35;
-  return isWalkable(p, firstGallery ? TERRAIN_FIRST_GALLERY_PLAYER_COLLIDERS : TERRAIN_PLAYER_COLLIDERS, TERRAIN_BOUNDS)
+  const connectedColliders = composedCourtyard ? COMPOSED_CONNECTED_TERRAIN_PLAYER_COLLIDERS : CONNECTED_TERRAIN_PLAYER_COLLIDERS;
+  const firstGalleryColliders = firstGallery ? TERRAIN_FIRST_GALLERY_PLAYER_COLLIDERS : TERRAIN_PLAYER_COLLIDERS;
+  const colliders = connected ? connectedColliders : firstGalleryColliders;
+  return !additionalCircles?.some(c => Math.hypot(p.x - c.x, p.z - c.z) < PLAYER_RADIUS + c.radius)
+    && (!(connected && composedCourtyard) || isWalkable(p, OASIS_OBSTACLES, TERRAIN_BOUNDS))
+    && isWalkable(p, colliders, TERRAIN_BOUNDS)
     && (!lakeMayBeWithin(p.x, p.z, bankClearance) || lakeSignedDistance(p.x, p.z) >= bankClearance - .00001)
     && surfaceSlope(p) <= TERRAIN_MAX_WALK_SLOPE;
 }
-export function sanitizeTerrainPosition(p: WorldPoint, firstGallery = false): WorldPoint {
-  return isTerrainWalkable(p, firstGallery) ? { ...p } : { ...TERRAIN_SPAWN };
+export function sanitizeTerrainPosition(p: WorldPoint, firstGallery = false, connected = false, composedCourtyard = false): WorldPoint {
+  return isTerrainWalkable(p, firstGallery, undefined, connected, composedCourtyard) ? { ...p } : { ...TERRAIN_SPAWN };
 }
 export const TERRAIN_SESSION_OPTIONS = {
   key: TERRAIN_SESSION_KEY, bounds: TERRAIN_BOUNDS, colliders: TERRAIN_PLAYER_COLLIDERS,
@@ -169,14 +189,15 @@ export const TERRAIN_FIRST_GALLERY_SESSION_OPTIONS = {
 };
 
 /** Substeps stop tunnelling through walls, steep banks and either crescent tip. */
-export function moveTerrainPlayer(position: WorldPoint, delta: WorldPoint, firstGallery = false): WorldPoint {
+export function moveTerrainPlayer(position: WorldPoint, delta: WorldPoint, firstGallery = false,
+  additionalCircles?: readonly (WorldPoint & { radius: number })[], connected = false, composedCourtyard = false): WorldPoint {
   const length = Math.hypot(delta.x, delta.z);
   if (!Number.isFinite(length) || !length) return { ...position };
   const count = Math.ceil(length / (PLAYER_RADIUS * .4)), steps = Math.min(128, count), fraction = Math.min(1, 128 / count) / steps;
   let result = { ...position };
   for (let i = 0; i < steps; i++) {
     const step = { x: delta.x * fraction, z: delta.z * fraction }, combined = { x: result.x + step.x, z: result.z + step.z };
-    if (isTerrainWalkable(combined, firstGallery) && Math.abs(terrainSurfaceHeight(combined) - terrainSurfaceHeight(result)) <= Math.hypot(step.x, step.z) * TERRAIN_MAX_WALK_SLOPE + .035) {
+    if (isTerrainWalkable(combined, firstGallery, additionalCircles, connected, composedCourtyard) && Math.abs(terrainSurfaceHeight(combined) - terrainSurfaceHeight(result)) <= Math.hypot(step.x, step.z) * TERRAIN_MAX_WALK_SLOPE + .035) {
       result = combined; continue;
     }
     // Slide along an actual obstacle only after trying the intended diagonal;
@@ -185,7 +206,7 @@ export function moveTerrainPlayer(position: WorldPoint, delta: WorldPoint, first
       const distance = delta[axis] * fraction;
       if (!distance) continue;
       const next = { ...result, [axis]: result[axis] + distance };
-      if (isTerrainWalkable(next, firstGallery) && Math.abs(terrainSurfaceHeight(next) - terrainSurfaceHeight(result)) <= Math.abs(distance) * TERRAIN_MAX_WALK_SLOPE + .035) result = next;
+      if (isTerrainWalkable(next, firstGallery, additionalCircles, connected, composedCourtyard) && Math.abs(terrainSurfaceHeight(next) - terrainSurfaceHeight(result)) <= Math.abs(distance) * TERRAIN_MAX_WALK_SLOPE + .035) result = next;
     }
   }
   return result;

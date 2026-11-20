@@ -42,6 +42,9 @@ import { MobileLandscapeGuard } from './MobileLandscapeGuard';
 import { ColoringResult } from './ColoringResult';
 import { SoundSettings } from './SoundSettings';
 import { GalleryResetSettings } from './GalleryResetSettings';
+import { TravelerSelection } from './TravelerSelection';
+import { readTravelerSelection, saveTravelerSelection, travelerProfiles } from '../services/traveler-selection';
+import type { TravelerId } from '../content/world/assets';
 import { useSound } from './useSound';
 import { artworkColors, artworkMaterials, hasOlderArtwork, loadArtworks, saveArtworks, withArtwork, type ArtworksData } from '../services/artworks';
 import { canOpenFirstGalleryRoute, getFirstGalleryAccess, importGalleryArtworks, isFirstGalleryUnlocked, loadFirstGallery, markGalleryCeremonySeen, submitGalleryArtwork, subscribeFirstGallery } from '../services/first-gallery';
@@ -88,6 +91,9 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
   const sound = useSound();
   const [firstGallery] = useState(() => document.getElementById('root')?.dataset.firstGallery === 'v001');
   const [connectedGalleries] = useState(() => document.getElementById('root')?.dataset.connectedGalleries === 'v001');
+  const [previewAllGalleries, setPreviewAllGalleries] = useState(false);
+  const [travelerId, setTravelerId] = useState(() => connectedGalleries ? readTravelerSelection() : null);
+  const [choosingTraveler, setChoosingTraveler] = useState(false);
   const [musicGalleryEnabled] = useState(() => connectedGalleries || document.getElementById('root')?.dataset.musicGallery === 'v001');
   const galleryResetAvailable = firstGallery || musicGalleryEnabled || document.getElementById('root')?.dataset.mogaoExhibit === 'v001';
   const musicGallery = useMusicGalleryProgress(musicGalleryEnabled);
@@ -124,16 +130,28 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
     ? { key: MUSIC_SESSION_KEY, colliders: MUSIC_PLAYER_COLLIDERS } : {});
   const [initialWorld] = useState(() => loadWorldSession(undefined, worldSessionOptions));
   const worldCheckpoint = useRef(initialWorld.data);
+  const previewCheckpoint = useRef<WorldCheckpoint | null>(null);
   const [worldWarning, setWorldWarning] = useState(initialWorld.warning);
   const [worldRevision, setWorldRevision] = useState(0);
   const currentWorldRevision = useRef(0);
   const enteredFromWorld = useRef(false);
   const receivedMogaoFoliosThisVisit = useRef(false);
   const persistWorld = useCallback((next: WorldCheckpoint) => {
+    if (previewCheckpoint.current) {
+      previewCheckpoint.current = next;
+      return;
+    }
     worldCheckpoint.current = next;
     const saved = saveWorldSession(next, undefined, worldSessionOptions);
     setWorldWarning(saved.ok ? null : saved.message);
   }, [worldSessionOptions]);
+
+  function togglePreviewAllGalleries() {
+    const enabled = !previewAllGalleries;
+    previewCheckpoint.current = enabled ? worldCheckpoint.current : null;
+    setWorldRevision(++currentWorldRevision.current);
+    setPreviewAllGalleries(enabled);
+  }
 
   const reloadMusicGallery = musicGallery.reload;
   const applyGalleryReset = useCallback((area: GalleryTaskArea) => {
@@ -564,6 +582,21 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
             <span className="toggle-track" aria-hidden="true" /><span className="visually-hidden">减少动效</span>
           </label>
         </div>
+        {connectedGalleries && <div className="setting-row">
+          <div><h2>漫游角色</h2>{travelerId && <p>{travelerProfiles[travelerId].name}</p>}</div>
+          <button type="button" className="button button-secondary" onClick={() => {
+            setChoosingTraveler(true);
+            goTo('/');
+          }}>更换角色</button>
+        </div>}
+        {import.meta.env.DEV && connectedGalleries && <div className="setting-row">
+          <div><h2>场馆试玩</h2><p role="status">{previewAllGalleries
+            ? '三馆路线已开放。返回漫游可直接前往任意场馆。'
+            : '临时开放三馆路线及总览地图，刷新页面后恢复。'}</p></div>
+          <button type="button" className="button button-secondary" onClick={togglePreviewAllGalleries}>
+            {previewAllGalleries ? '恢复正常门禁' : '一键解锁所有场馆'}
+          </button>
+        </div>}
         {galleryResetAvailable && <GalleryResetSettings onReset={handleGalleryReset} />}
         {renderSaveNotice()}
       </div>
@@ -572,14 +605,20 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
 
   const galleryWorldSuspended = keepGalleryWorld && route.page === 'play' &&
     route.id === FIRST_GALLERY_EASEL_LEVEL && !!easelEntry.current;
+  const confirmTraveler = (id: TravelerId) => {
+    saveTravelerSelection(id);
+    setTravelerId(id);
+    setChoosingTraveler(false);
+  };
   const unlockedMapGalleries = !connectedGalleries ? undefined :
-    gallery && isFirstGalleryUnlocked(gallery.data) ? (musicGallery.unlocked ? 3 : 2) : 1;
+    previewAllGalleries ? 3 : gallery && isFirstGalleryUnlocked(gallery.data) ? (musicGallery.unlocked ? 3 : 2) : 1;
   const renderWorld = (suspended: boolean) => <WorldBoundary gameWorldAvailable={gameWorldAvailable} onDirectGameWorld={openGameWorld} onFallback={firstGallery ? enterGalleryCompatibility : undefined}><Suspense fallback={<div className="page empty-state"><h1>正在准备探索世界…</h1>{gameWorldAvailable && <a className={previewHome ? 'button button-plain' : 'button button-secondary'} href="#/themes" onClick={openGameWorld}>直接进入游戏世界</a>}</div>}><WorldScreen
-    key={worldRevision} initial={worldCheckpoint.current} saveWarning={worldWarning} reducedMotion={progress.settings.reducedMotion} sound={sound.preferences}
+    key={worldRevision} initial={previewCheckpoint.current ?? worldCheckpoint.current} saveWarning={worldWarning} reducedMotion={progress.settings.reducedMotion} sound={sound.preferences}
     gameWorldAvailable={gameWorldAvailable}
     onDirectGameWorld={openGameWorld}
     musicGallery={musicGalleryEnabled ? musicGallery : undefined}
     unlockedMapGalleries={unlockedMapGalleries}
+    previewAllGalleries={previewAllGalleries}
     onEnterMusicGames={!musicGalleryEnabled ? undefined : at => {
       if (musicGamesLocked) return;
       persistWorld(at); enteredFromWorld.current = true; goTo(gamesPath('music'));
@@ -589,6 +628,7 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
       persistWorld(at); enteredFromWorld.current = true; goTo(gamesPath('stories'));
     }}
     firstGallery={firstGallery} connectedGalleries={connectedGalleries} suspended={suspended} catalog={catalog} onGalleryColoring={enterGalleryEasel} onGalleryFallback={firstGallery ? enterGalleryCompatibility : undefined}
+    travelerId={travelerId ?? undefined} onChooseTraveler={connectedGalleries ? () => setChoosingTraveler(true) : undefined}
     galleryReturningFromColoring={galleryReturningFromColoring} galleryPortalPending={galleryPortalPending}
     onGalleryPortalPresented={() => {
       setGalleryPortalPending(false);
@@ -608,7 +648,8 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
   const easelAllowed = !!gallery && !!easelEntry.current && canOpenFirstGalleryRoute(gallery.data, route, catalog, easelEntry.current, galleryCompatibility);
   const routeAllowed = easelEntry.current ? easelAllowed : routeTheme !== 'patterns' || unlocked.includes('patterns');
   const galleryWorldVisible = firstGallery && route.page === 'home' && routeAllowed;
-  const galleryWorldMounted = galleryWorldVisible || galleryWorldSuspended;
+  const travelerSelectionVisible = galleryWorldVisible && connectedGalleries && (choosingTraveler || !travelerId);
+  const galleryWorldMounted = (galleryWorldVisible && !travelerSelectionVisible) || galleryWorldSuspended;
   if (!routeAllowed) page = <div className="page narrow-page empty-state"><h1>这个入口尚未开放</h1>
     <p>{gallery && getFirstGalleryAccess(gallery.data, 'patterns') ? '其他场馆的小游戏暂未开放。' : '完成壁画、藻井和画架三个事件，即可解锁纹样小游戏。'}</p>
     <a className="button button-primary" href="#/">返回第一馆</a></div>;
@@ -646,7 +687,7 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
   }
   if (!page && !galleryWorldVisible && !latestDestination) page = <div className="page narrow-page empty-state"><h1>页面不存在</h1><a className="button button-primary" href="#/">返回首页</a></div>;
 
-  return <div ref={shellRef} className="app-shell" data-screen={route.page} data-reduced-motion={progress.settings.reducedMotion ? 'true' : 'false'} style={assetStyle} onClickCapture={sound.onInterfaceClick}>
+  return <div ref={shellRef} className="app-shell" data-screen={route.page} data-traveler-selection={travelerSelectionVisible || undefined} data-reduced-motion={progress.settings.reducedMotion ? 'true' : 'false'} style={assetStyle} onClickCapture={sound.onInterfaceClick}>
     <a className="skip-link" href="#main-content" onClick={(event) => { event.preventDefault(); mainRef.current?.focus(); }}>跳到主要内容</a>
     <header className="site-header"><a className="brand" href="#/" aria-label="敦煌寻宝记，返回首页"><span className="brand-mark" aria-hidden="true">敦</span><strong>敦煌寻宝记</strong></a><nav className="header-nav" aria-label="主导航"><a href="#/" data-testid="world-return" aria-label="漫游世界" aria-current={route.page === 'home' ? 'page' : undefined}>漫游世界</a>{showGameWorldLink && <a href="#/themes">游戏世界</a>}<a href="#/help" aria-current={route.page === 'help' ? 'page' : undefined}>指南</a><a href="#/settings" aria-current={route.page === 'settings' ? 'page' : undefined}>设置</a></nav></header>
     {loadWarning && <div className="global-notice notice" role="status"><p>{loadWarning}</p><button className="text-link" onClick={() => setLoadWarning(null)} type="button">知道了</button></div>}
@@ -655,6 +696,8 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
     {gallerySaveError && route.page === 'result' && <div className="global-notice">{renderGallerySaveNotice()}</div>}
     <main id="main-content" ref={mainRef} tabIndex={-1} key={galleryWorldMounted ? 'gallery-world' : routeKey}>
       {galleryWorldMounted && <div className="gallery-world-slot" hidden={galleryWorldSuspended} inert={galleryWorldSuspended}>{renderWorld(galleryWorldSuspended)}</div>}
+      {travelerSelectionVisible && <TravelerSelection current={travelerId} onConfirm={confirmTraveler}
+        onDirectGameWorld={gameWorldAvailable ? openGameWorld : undefined} />}
       {insideGameWorld
         ? <MobileLandscapeGuard active>{page}</MobileLandscapeGuard> : page}
     </main>

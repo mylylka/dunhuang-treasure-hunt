@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "source": "public/assets/world/desert-decoration/v001/rock-shrub-3.glb",
+  "sourceSha256": "4c786d129ac7cc449cf4cd5e03a45f2b50396536d99e870a685e765a8a8c5479",
+  "sourceBounds": {
+    "min": [
+      -0.4907970428466797,
+      0,
+      -0.489013671875
+    ],
+    "max": [
+      0.4923212230205536,
+      0.44091796875,
+      0.489013671875
+    ]
+  },
+  "originalPath": "vault:sha256:13fe098bbd7082533873444d165fff584332cfbf9cb67da8d9459f21a29b8bed",
+  "originalSha256": "13fe098bbd7082533873444d165fff584332cfbf9cb67da8d9459f21a29b8bed",
+  "runtimeSource": "src/content/world/desert-decoration-rock-shrub-v005.ts",
+  "triangles": 188,
+  "gzipBytes": 2732,
+  "sha256": "11b1767c2f937d9570bc800db421ad0f3980c9976cbcd9a0a1b6055dc3b3778a",
+  "bytes": 4580
+}

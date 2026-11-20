@@ -1,0 +1,259 @@
+{
+  "version": 2,
+  "assets": [
+    {
+      "id": "w01b-lod",
+      "baseId": "w01b",
+      "url": "assets/world/desert-decoration/v002/w01b-lod.glb",
+      "originalPath": "vault:sha256:541e541269ae8798eef2067bc04f1ce7274a09a409c4951dcf8e76d88f2403e0",
+      "sourceSha256": "541e541269ae8798eef2067bc04f1ce7274a09a409c4951dcf8e76d88f2403e0",
+      "bytes": 41000,
+      "sha256": "e18b0ec9bca496329b79cd926388d1e603084a2f98332f0406a3ea9663bb97ce",
+      "gzipBytesEstimate": 13430,
+      "triangles": 391,
+      "meshCount": 1,
+      "primitiveCount": 1,
+      "materialCount": 1,
+      "alphaModes": [
+        "OPAQUE"
+      ],
+      "textures": [],
+      "extensionsRequired": [],
+      "width": 1.1141579151153564,
+      "height": 1.0199999809265137,
+      "depth": 0.9978145360946655,
+      "bounds": {
+        "min": [
+          -0.5570789575576782,
+          0,
+          -0.49890726804733276
+        ],
+        "max": [
+          0.5570789575576782,
+          1.0199999809265137,
+          0.49890726804733276
+        ]
+      },
+      "textureBytesEstimate": 0,
+      "geometryRecipe": "Allocate 45% of the triangle budget to folded leaves, 34% to stems and 21% to seed heads"
+    },
+    {
+      "id": "shrub-2-lod",
+      "baseId": "shrub-2",
+      "url": "assets/world/desert-decoration/v002/shrub-2-lod.glb",
+      "originalPath": "vault:sha256:2203bebd827f5faf057fe2cbdba12ee43604448a8723be78508bcbbd6572a577",
+      "sourceSha256": "2203bebd827f5faf057fe2cbdba12ee43604448a8723be78508bcbbd6572a577",
+      "bytes": 40624,
+      "sha256": "ca1b692bc1206d3a9ebf8aa760323be60f3d97ec3bf08a4993f4c24e49894fee",
+      "gzipBytesEstimate": 36188,
+      "triangles": 453,
+      "meshCount": 1,
+      "primitiveCount": 1,
+      "materialCount": 1,
+      "alphaModes": [
+        "OPAQUE"
+      ],
+      "textures": [
+        {
+          "width": 128,
+          "height": 128,
+          "format": "JPEG",
+          "bytes": 4014
+        }
+      ],
+      "extensionsRequired": [],
+      "width": 0.9969399273395538,
+      "height": 0.5727986097335815,
+      "depth": 0.9984744787216187,
+      "bounds": {
+        "min": [
+          -0.49718406796455383,
+          0,
+          -0.499755859375
+        ],
+        "max": [
+          0.499755859375,
+          0.5727986097335815,
+          0.49871861934661865
+        ]
+      },
+      "textureBytesEstimate": 87382,
+      "geometryRecipe": "Keep the original runtime origin and the leaf coverage with up to 454 triangles"
+    },
+    {
+      "id": "t01-lod",
+      "baseId": "t01",
+      "url": "assets/world/desert-decoration/v002/t01-lod.glb",
+      "originalPath": "vault:sha256:a985a5db9b7ba8a9a21f21e0dca64d7f25de1296056be4f96dd9a106084d19f0",
+      "sourceSha256": "a985a5db9b7ba8a9a21f21e0dca64d7f25de1296056be4f96dd9a106084d19f0",
+      "bytes": 73328,
+      "sha256": "95f841475115a1e95fcc416a7020f270a530c7c918f183b1bbe64f998d911172",
+      "gzipBytesEstimate": 39464,
+      "triangles": 908,
+      "meshCount": 1,
+      "primitiveCount": 1,
+      "materialCount": 1,
+      "alphaModes": [
+        "OPAQUE"
+      ],
+      "textures": [],
+      "extensionsRequired": [],
+      "width": 1.9096019268035889,
+      "height": 2.5,
+      "depth": 1.6187655925750732,
+      "bounds": {
+        "min": [
+          -0.9548009634017944,
+          0,
+          -0.8093827962875366
+        ],
+        "max": [
+          0.9548009634017944,
+          2.5,
+          0.8093827962875366
+        ]
+      },
+      "textureBytesEstimate": 0
+    },
+    {
+      "id": "t02-lod",
+      "baseId": "t02",
+      "url": "assets/world/desert-decoration/v002/t02-lod.glb",
+      "originalPath": "vault:sha256:ccf4044e5f8fe2a3343a3110b17292b7075e4f1883087e73126474d463e9adc6",
+      "sourceSha256": "ccf4044e5f8fe2a3343a3110b17292b7075e4f1883087e73126474d463e9adc6",
+      "bytes": 120952,
+      "sha256": "24e5a0ec50507a349fadfe906c53fc26126ee73748308fca5023f41e6f87602b",
+      "gzipBytesEstimate": 66485,
+      "triangles": 1322,
+      "meshCount": 1,
+      "primitiveCount": 1,
+      "materialCount": 1,
+      "alphaModes": [
+        "OPAQUE"
+      ],
+      "textures": [],
+      "extensionsRequired": [],
+      "width": 2.300929546356201,
+      "height": 3.3999998569488525,
+      "depth": 1.5720207691192627,
+      "bounds": {
+        "min": [
+          -1.1504647731781006,
+          0,
+          -0.7860103845596313
+        ],
+        "max": [
+          1.1504647731781006,
+          3.3999998569488525,
+          0.7860103845596313
+        ]
+      },
+      "textureBytesEstimate": 0
+    },
+    {
+      "id": "s02-lod",
+      "baseId": "s02",
+      "url": "assets/world/desert-decoration/v002/s02-lod.glb",
+      "originalPath": "vault:sha256:0236ed6eb5a82e308936a0256cb95e03f085bb919bf80f96e63f2983e74b3934",
+      "sourceSha256": "0236ed6eb5a82e308936a0256cb95e03f085bb919bf80f96e63f2983e74b3934",
+      "bytes": 24940,
+      "sha256": "3047997c85f51190e72ad50ac67895b6419c00edfdd60cb4dff6e83ccc0d2d93",
+      "gzipBytesEstimate": 12746,
+      "triangles": 233,
+      "meshCount": 1,
+      "primitiveCount": 1,
+      "materialCount": 1,
+      "alphaModes": [
+        "OPAQUE"
+      ],
+      "textures": [],
+      "extensionsRequired": [],
+      "width": 1.1346590518951416,
+      "height": 1.0500000715255737,
+      "depth": 0.9430926442146301,
+      "bounds": {
+        "min": [
+          -0.5673295259475708,
+          0,
+          -0.47154632210731506
+        ],
+        "max": [
+          0.5673295259475708,
+          1.0500000715255737,
+          0.47154632210731506
+        ]
+      },
+      "textureBytesEstimate": 0
+    },
+    {
+      "id": "t03",
+      "baseId": "t03",
+      "url": "assets/world/desert-decoration/v002/t03.glb",
+      "originalPath": "vault:sha256:07c62fe03a5125528658a3b018a6f82ab3bcf1966d143d2aef5d1a010f83c2fe",
+      "sourceSha256": "07c62fe03a5125528658a3b018a6f82ab3bcf1966d143d2aef5d1a010f83c2fe",
+      "bytes": 266808,
+      "sha256": "298df8b42a57f36e489d7bb8cba39a8e41fc4a7e0a5380e4e2943cbf27cda752",
+      "gzipBytesEstimate": 141127,
+      "triangles": 3414,
+      "meshCount": 1,
+      "primitiveCount": 1,
+      "materialCount": 1,
+      "alphaModes": [
+        "OPAQUE"
+      ],
+      "textures": [],
+      "extensionsRequired": [],
+      "width": 4.494690895080566,
+      "height": 3.1999998092651367,
+      "depth": 2.9854378700256348,
+      "bounds": {
+        "min": [
+          -2.247345447540283,
+          0,
+          -1.4927189350128174
+        ],
+        "max": [
+          2.247345447540283,
+          3.1999998092651367,
+          1.4927189350128174
+        ]
+      },
+      "textureBytesEstimate": 0
+    },
+    {
+      "id": "t03-lod",
+      "baseId": "t03",
+      "url": "assets/world/desert-decoration/v002/t03-lod.glb",
+      "originalPath": "vault:sha256:07c62fe03a5125528658a3b018a6f82ab3bcf1966d143d2aef5d1a010f83c2fe",
+      "sourceSha256": "07c62fe03a5125528658a3b018a6f82ab3bcf1966d143d2aef5d1a010f83c2fe",
+      "bytes": 81248,
+      "sha256": "622efe405206717a08eca47c3051331d22cd637891f1fda47964449dbd553d7a",
+      "gzipBytesEstimate": 45743,
+      "triangles": 785,
+      "meshCount": 1,
+      "primitiveCount": 1,
+      "materialCount": 1,
+      "alphaModes": [
+        "OPAQUE"
+      ],
+      "textures": [],
+      "extensionsRequired": [],
+      "width": 4.494690895080566,
+      "height": 3.1999998092651367,
+      "depth": 2.9854378700256348,
+      "bounds": {
+        "min": [
+          -2.247345447540283,
+          0,
+          -1.4927189350128174
+        ],
+        "max": [
+          2.247345447540283,
+          3.1999998092651367,
+          1.4927189350128174
+        ]
+      },
+      "textureBytesEstimate": 0
+    }
+  ]
+}

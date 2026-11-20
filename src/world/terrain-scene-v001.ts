@@ -310,6 +310,7 @@ export function createTerrainScene(scene: THREE.Scene, enhancedEnvironment = fal
   return {
     root, ready:groundSurface?.ready ?? Promise.resolve(), attachRegionObject, groundCourtyardAttachments, addNatureTemplates, placeOutdoorShrub,
     loadGroundDetail: () => groundSurface?.loadDetail() ?? Promise.resolve(),
+    groundDetailPending: () => groundSurface?.detailPending() ?? false,
     inspect: () => ({environmentVersion:enhancedEnvironment?'v001':null,groundMaterial:groundSurface?.inspect(),groundVertices,groundTriangles,groundTiles:groundGeometries.length,
       visualBounds: {minX: xs[0], maxX: xs.at(-1), minZ: zs[0], maxZ: zs.at(-1)},
       stones: stones.length, groundedAttachments: grounded, outdoorShrubs:planted,
