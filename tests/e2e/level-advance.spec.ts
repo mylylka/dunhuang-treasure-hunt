@@ -1,6 +1,7 @@
 import { expect, test, type Locator, type Page } from '@playwright/test';
 import { readFileSync, readdirSync } from 'node:fs';
 import type { ColoringLevel, HiddenObjectLevel, Level, ProgressData } from '../../src/types';
+import { unlockMusicForTest, unlockPatternsForTest } from './gallery-unlock-fixtures';
 
 const levels = readdirSync('src/content/levels').filter(name => name.endsWith('.json')).sort()
   .map(name => JSON.parse(readFileSync(`src/content/levels/${name}`, 'utf8')) as Level);
@@ -26,13 +27,14 @@ const resultCases = [
   { id: paint.id, next: nextPaintId },
   { id: nextPaintId, next: 'coloring-deer-medallion' },
   { id: lastPaintId, next: null },
+  { id: 'coloring-grape-lotus', next: null },
   { id: hiddenLevels[0].id, next: hiddenLevels[1]?.id ?? null },
   { id: hiddenLevels[hiddenLevels.length - 1].id, next: null },
   { id: 'music-apsara-shadow', next: null },
 ];
 test.setTimeout(90_000);
 
-const directory = (level: Level) => `#/theme/${level.themeId}/games/${level.gameType}`;
+const directory = (level: Level) => `#/theme/${level.themeId}/games/${level.gameType}${level.gameType === 'spot-difference' ? `?level=${level.id}` : ''}`;
 const progress = (page: Page) => page.evaluate(key => JSON.parse(localStorage.getItem(key) ?? 'null'), progressKey);
 const artwork = (page: Page, level: ColoringLevel) => page.evaluate(({ key, id, version }) =>
   JSON.parse(localStorage.getItem(key) ?? '{"artworks":{}}').artworks[id]?.[version] ?? null,
@@ -42,6 +44,13 @@ async function seedExistingProgress(page: Page) {
   await page.addInitScript(({ key, value }) => localStorage.setItem(key, JSON.stringify(value)),
     { key: progressKey, value: existingProgress });
 }
+
+async function unlock2D(page: Page) {
+  await unlockPatternsForTest(page);
+  await unlockMusicForTest(page);
+}
+
+test.beforeEach(async ({ page }) => unlock2D(page));
 
 /** Test-context records only. No fixture is added to the production catalog or storage code. */
 async function seedCompletedResultFixtures(page: Page) {
@@ -209,6 +218,7 @@ for (const viewport of [{ width: 640, height: 300 }, { width: 852, height: 330 }
       hasTouch: true, isMobile: true, deviceScaleFactor: 2, reducedMotion: 'reduce' });
     try {
       const page = await context.newPage();
+      await unlock2D(page);
       const errors: string[] = [];
       page.on('pageerror', error => errors.push(error.message));
       const playCases = [

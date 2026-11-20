@@ -1,0 +1,12 @@
+{
+  "version": 6,
+  "asset": "r02",
+  "source": "public/assets/world/desert-decoration/v001/r02.glb",
+  "sourceSha256": "ef249888e9f065ecab7621062ce735ef00665e09b96b17e184eacabcc8f5fa2a",
+  "sourceRegistration": "art-source/world/desert-decoration/v001/manifest.json",
+  "runtime": "public/assets/world/desert-decoration/v006/r02.glb",
+  "sha256": "c7ed7dca3ba936a85fbd47e1f0c89b2b6ddd2f798a3a429bbf0866874f49f040",
+  "changedColorVertices": 610,
+  "bytes": 36148,
+  "gzip3Bytes": 11683
+}

@@ -91,7 +91,10 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
   const sound = useSound();
   const [firstGallery] = useState(() => document.getElementById('root')?.dataset.firstGallery === 'v001');
   const [caissonOnly] = useState(() => document.getElementById('root')?.dataset.caissonOnly === 'v001');
-  const [connectedGalleries] = useState(() => document.getElementById('root')?.dataset.connectedGalleries === 'v001');
+  const [connectedGalleries] = useState(() => !caissonOnly && document.getElementById('root')?.dataset.connectedGalleries === 'v001');
+  const canPreviewAllGalleries = import.meta.env.DEV && connectedGalleries
+    && document.getElementById('root')?.dataset.previewAllGalleries === 'v001';
+  const [previewAllGalleries, setPreviewAllGalleries] = useState(false);
   const travelerSelectionEnabled = connectedGalleries || caissonOnly;
   const [travelerId, setTravelerId] = useState(() => travelerSelectionEnabled ? readTravelerSelection() : null);
   const [choosingTraveler, setChoosingTraveler] = useState(caissonOnly);
@@ -132,16 +135,29 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
     ? { key: MUSIC_SESSION_KEY, colliders: MUSIC_PLAYER_COLLIDERS } : {});
   const [initialWorld] = useState(() => loadWorldSession(undefined, worldSessionOptions));
   const worldCheckpoint = useRef(initialWorld.data);
+  const previewCheckpoint = useRef<WorldCheckpoint | null>(null);
   const [worldWarning, setWorldWarning] = useState(initialWorld.warning);
   const [worldRevision, setWorldRevision] = useState(0);
   const currentWorldRevision = useRef(0);
   const enteredFromWorld = useRef(false);
   const receivedMogaoFoliosThisVisit = useRef(false);
   const persistWorld = useCallback((next: WorldCheckpoint) => {
+    if (previewCheckpoint.current) {
+      previewCheckpoint.current = next;
+      return;
+    }
     worldCheckpoint.current = next;
     const saved = saveWorldSession(next, undefined, worldSessionOptions);
     setWorldWarning(saved.ok ? null : saved.message);
   }, [worldSessionOptions]);
+
+  function togglePreviewAllGalleries() {
+    if (!canPreviewAllGalleries) return;
+    const enabled = !previewAllGalleries;
+    previewCheckpoint.current = enabled ? worldCheckpoint.current : null;
+    setWorldRevision(++currentWorldRevision.current);
+    setPreviewAllGalleries(enabled);
+  }
 
   const reloadMusicGallery = musicGallery.reload;
   const applyGalleryReset = useCallback((area: GalleryTaskArea) => {
@@ -352,9 +368,23 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
   if (receivedMogaoFoliosThisVisit.current && !unlocked.includes('stories')) unlocked.push('stories');
   const availableThemes = catalog.themes.filter(theme => unlocked.includes(theme.id));
   const gameWorldAvailable = availableThemes.length > 0 && !easelEntry.current;
-  const isInsideGameWorld = route.page === 'themes' || route.page === 'games' || route.page === 'levels'
+  const insideGameWorld = route.page === 'themes' || route.page === 'games' || route.page === 'levels'
     || route.page === 'play-latest' || route.page === 'play' || route.page === 'result';
-  const showGameWorldLink = gameWorldAvailable && !isInsideGameWorld;
+  const showGameWorldLink = gameWorldAvailable && !insideGameWorld;
+  let latestDestination: string | undefined;
+  if (route.page === 'play-latest' && !easelEntry.current) {
+    const theme = availableThemes.find(item => item.id === route.themeId);
+    if (theme?.allowedGameTypes.includes(route.gameType)) {
+      const latest = getLevelChoices(catalog, route.themeId, route.gameType).filter(choice => choice.status === 'available').at(-1);
+      latestDestination = latest ? playPath(latest.id) : levelsPath(route.themeId, route.gameType);
+    }
+  }
+  useEffect(() => {
+    if (!latestDestination) return;
+    window.history.replaceState(window.history.state, '', `#${latestDestination}`);
+    setRoute(readRoute());
+  }, [latestDestination]);
+
   const openGameWorld = useCallback((event: MouseEvent<HTMLAnchorElement>) => {
     if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return false;
     event.preventDefault();
@@ -405,7 +435,17 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
   }
 
   function renderArtworkNotice() {
-    return artworkSaveError && <div className="notice notice-error notice-compact" role="alert" data-testid="artwork-save-error"><p>{artworkSaveError}</p><button type="button" className="button button-secondary button-small" data-testid="retry-artwork-save" onClick={() => artworkRetry.current ? artworkRetry.current() : persistArtworks(artworksRef.current)}><span className="button-label">重试保存作品</span></button></div>;
+    return artworkSaveError && <div className="notice notice-error notice-compact" role="alert" data-testid="artwork-save-error">
+      <p>{artworkSaveError}</p>
+      <button type="button" className="button button-secondary button-small" data-testid="retry-artwork-save"
+        onClick={() => {
+          const retry = artworkRetry.current ?? galleryRetry.current;
+          if (retry) retry();
+          else persistArtworks(artworksRef.current);
+        }}>
+        <span className="button-label">重试保存作品</span>
+      </button>
+    </div>;
   }
 
   function renderGallerySaveNotice() {
@@ -468,7 +508,7 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
           if (!legacySaved) {
             legacySaved = persistArtworks(withArtwork(artworksRef.current, level, colors, true, submittedAt, materials));
             if (!legacySaved) {
-              setGallerySaveError('作品尚未保存，请重试。');
+              setGallerySaveError(null);
               galleryRetry.current = capture;
               return;
             }
@@ -503,12 +543,13 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
     const isColoring = level.gameType === 'coloring';
     const isPuzzle = level.gameType === 'puzzle';
     const nextLevel = getNextOpenLevel(catalog, level);
+    const directory = levelsPath(theme.id, level.gameType, level.gameType === 'spot-difference' ? level.id : undefined);
     const resultActions = (replayLabel: string) => <div className="result-actions">
       {theme.id === 'stories' && enteredFromWorld.current
         ? <a className="button button-primary" href="#/"><span className="button-label">返回第三馆一楼</span></a>
         : <LevelAdvanceControl completed className="button button-primary" />}
       <button type="button" className="button button-secondary" onClick={() => replay(level.id)}><span className="button-label">{replayLabel}</span></button>
-      {nextLevel && <a className="button button-secondary" href={`#${levelsPath(theme.id, level.gameType)}`}><span className="button-label">返回关卡</span></a>}
+      {nextLevel && <a className="button button-secondary" href={`#${directory}`}><span className="button-label">返回关卡</span></a>}
     </div>;
     if (isPuzzle && !progress.completed[level.id]) return <div className="page narrow-page empty-state"><h1>先完成拼图，再查看全图</h1><a className="button button-primary" href={`#${playPath(level.id)}`}>前往拼图</a></div>;
     if (!progress.completed[level.id]) return <div className="page narrow-page empty-state"><h1>{isColoring ? '先完成活动，再回看作品' : '先完成活动，再回看发现'}</h1><a className="button button-primary" href={`#${playPath(level.id)}`}>{isColoring ? '前往填色' : '前往观察'}</a></div>;
@@ -535,8 +576,9 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
       {resultActions('再配一次')}
     </div>;
     if (level.gameType === 'coloring' && !Object.keys(artworkColors(artworks, level)).length) return <div className="page narrow-page empty-state"><h1>{hasOlderArtwork(artworks, level) ? '线稿已更新，旧作品已保留' : '当前作品还未着色'}</h1>{renderArtworkNotice()}<a className="button button-primary" href={`#${playPath(level.id)}`}>继续填色</a></div>;
-    return <div className={`page page-result${isColoring ? ' is-coloring-result' : isPuzzle ? ' is-puzzle-result' : ''}`} data-testid={isColoring ? 'coloring-result-page' : undefined}>
-      <Breadcrumb catalog={catalog} items={[{ label: `${gameNames[level.gameType]}关卡`, href: `#${levelsPath(theme.id, level.gameType, level.gameType === 'spot-difference' ? level.id : undefined)}` }]} />
+    return <div className={`page page-result${isColoring ? ' is-coloring-result' : isPuzzle ? ' is-puzzle-result' : ''}`}
+      data-testid={isColoring ? 'coloring-result-page' : undefined}>
+      <Breadcrumb catalog={catalog} items={[{ label: `${gameNames[level.gameType]}关卡`, href: `#${directory}` }]} />
       <header className="result-heading"><h1>{isColoring ? '作品完成' : isPuzzle ? '拼图完成' : '观察完成'}</h1></header>
       {renderSaveNotice()}
       {isColoring && renderArtworkNotice()}
@@ -582,6 +624,14 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
             goTo('/');
           }}>更换角色</button>
         </div>}
+        {canPreviewAllGalleries && <div className="setting-row">
+          <div><h2>场馆试玩</h2><p role="status">{previewAllGalleries
+            ? '三馆路线已开放。返回漫游可直接前往任意场馆。'
+            : '临时开放三馆路线及总览地图，刷新页面后恢复。'}</p></div>
+          <button type="button" className="button button-secondary" onClick={togglePreviewAllGalleries}>
+            {previewAllGalleries ? '恢复正常门禁' : '一键解锁所有场馆'}
+          </button>
+        </div>}
         {galleryResetAvailable && <GalleryResetSettings onReset={handleGalleryReset} />}
         {renderSaveNotice()}
       </div>
@@ -596,13 +646,14 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
     setChoosingTraveler(false);
   };
   const unlockedMapGalleries = !connectedGalleries ? undefined :
-    gallery && isFirstGalleryUnlocked(gallery.data) ? (musicGallery.unlocked ? 3 : 2) : 1;
+    previewAllGalleries ? 3 : gallery && isFirstGalleryUnlocked(gallery.data) ? (musicGallery.unlocked ? 3 : 2) : 1;
   const renderWorld = (suspended: boolean) => <WorldBoundary gameWorldAvailable={gameWorldAvailable} onDirectGameWorld={openGameWorld} onFallback={firstGallery ? enterGalleryCompatibility : undefined}><Suspense fallback={<div className="page empty-state"><h1>正在准备探索世界…</h1>{gameWorldAvailable && <a className={previewHome ? 'button button-plain' : 'button button-secondary'} href="#/themes" onClick={openGameWorld}>直接进入游戏世界</a>}</div>}><WorldScreen
-    key={worldRevision} initial={worldCheckpoint.current} saveWarning={worldWarning} reducedMotion={progress.settings.reducedMotion} sound={sound.preferences}
+    key={worldRevision} initial={previewCheckpoint.current ?? worldCheckpoint.current} saveWarning={worldWarning} reducedMotion={progress.settings.reducedMotion} sound={sound.preferences}
     gameWorldAvailable={gameWorldAvailable}
     onDirectGameWorld={openGameWorld}
     musicGallery={musicGalleryEnabled ? musicGallery : undefined}
     unlockedMapGalleries={unlockedMapGalleries}
+    previewAllGalleries={canPreviewAllGalleries && previewAllGalleries}
     onEnterMusicGames={!musicGalleryEnabled ? undefined : at => {
       if (musicGamesLocked) return;
       persistWorld(at); enteredFromWorld.current = true; goTo(gamesPath('music'));
@@ -669,11 +720,11 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
       page = <LevelNavigationProvider catalog={catalog} level={level} restricted={!!easelEntry.current}>{route.page === 'result' ? renderResult(level, theme) : renderLevel(level, theme)}</LevelNavigationProvider>;
     }
   }
-  if (!page && !galleryWorldVisible) page = <div className="page narrow-page empty-state"><h1>页面不存在</h1><a className="button button-primary" href="#/">返回首页</a></div>;
+  if (!page && !galleryWorldVisible && !latestDestination) page = <div className="page narrow-page empty-state"><h1>页面不存在</h1><a className="button button-primary" href="#/">返回首页</a></div>;
 
   return <div ref={shellRef} className="app-shell" data-screen={route.page} data-traveler-selection={travelerSelectionVisible || undefined} data-reduced-motion={progress.settings.reducedMotion ? 'true' : 'false'} style={assetStyle} onClickCapture={sound.onInterfaceClick}>
     <a className="skip-link" href="#main-content" onClick={(event) => { event.preventDefault(); mainRef.current?.focus(); }}>跳到主要内容</a>
-    <header className="site-header"><a className="brand" href="#/" aria-label="敦煌寻宝记，返回首页"><span className="brand-mark" aria-hidden="true">敦</span><strong>敦煌寻宝记</strong></a><nav className="header-nav" aria-label="主导航"><a href="#/" data-testid="world-return" aria-label="漫游世界" aria-current={route.page === 'home' ? 'page' : undefined}>漫游世界</a>{showGameWorldLink && <a href="#/themes" aria-current={route.page === 'themes' ? 'page' : undefined}>游戏世界</a>}<a href="#/help" aria-current={route.page === 'help' ? 'page' : undefined}>指南</a><a href="#/settings" aria-current={route.page === 'settings' ? 'page' : undefined}>设置</a></nav></header>
+    <header className="site-header"><a className="brand" href="#/" aria-label="敦煌寻宝记，返回首页"><span className="brand-mark" aria-hidden="true">敦</span><strong>敦煌寻宝记</strong></a><nav className="header-nav" aria-label="主导航"><a href="#/" data-testid="world-return" aria-label="漫游世界" aria-current={route.page === 'home' ? 'page' : undefined}>漫游世界</a>{showGameWorldLink && <a href="#/themes">游戏世界</a>}<a href="#/help" aria-current={route.page === 'help' ? 'page' : undefined}>指南</a><a href="#/settings" aria-current={route.page === 'settings' ? 'page' : undefined}>设置</a></nav></header>
     {loadWarning && <div className="global-notice notice" role="status"><p>{loadWarning}</p><button className="text-link" onClick={() => setLoadWarning(null)} type="button">知道了</button></div>}
     {saveError && route.page !== 'result' && route.page !== 'settings' && <div className="global-notice">{renderSaveNotice(true)}</div>}
     {gallery?.warning && route.page !== 'home' && <div className="global-notice notice" role="status"><p>{gallery.warning}</p></div>}
@@ -682,7 +733,7 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
       {galleryWorldMounted && <div className="gallery-world-slot" hidden={galleryWorldSuspended} inert={galleryWorldSuspended}>{renderWorld(galleryWorldSuspended)}</div>}
       {travelerSelectionVisible && <TravelerSelection current={travelerId} onConfirm={confirmTraveler}
         onDirectGameWorld={gameWorldAvailable ? openGameWorld : undefined} />}
-      {['themes', 'games', 'levels', 'play-latest', 'play', 'result'].includes(route.page)
+      {insideGameWorld
         ? <MobileLandscapeGuard active>{page}</MobileLandscapeGuard> : page}
     </main>
 

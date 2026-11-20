@@ -17,15 +17,15 @@ describe('精简版第一馆', () => {
       expect(TERRAIN_FIRST_GALLERY_PLAYER_COLLIDERS.some(solid => solid.id === id)).toBe(true);
       expect(TERRAIN_CAISSON_ONLY_PLAYER_COLLIDERS.some(solid => solid.id === id)).toBe(false);
     }
-    const full = terrainCameraSpace(true, true, false, false);
-    const compact = terrainCameraSpace(true, true, false, true);
+    const full = terrainCameraSpace(true, true);
+    const compact = terrainCameraSpace(true, true, false, false, false, true);
     // Two station boxes plus three furnishings' player and camera proxies.
     expect(full.orientedBoxes!.length - compact.orientedBoxes!.length).toBe(8);
     for (const station of PATTERN_STATIONS) {
       const { x, z } = toTerrainPoint('courtyard', station.position);
       const point = { x, z };
-      expect(sanitizeTerrainPosition(point, true, true)).toEqual(point);
-      expect(sanitizeTerrainPosition(point, true, false)).toEqual(TERRAIN_SPAWN);
+      expect(sanitizeTerrainPosition(point, true, false, false, true)).toEqual(point);
+      expect(sanitizeTerrainPosition(point, true)).toEqual(TERRAIN_SPAWN);
     }
   });
   it('藻井使用独立记录，完整三馆的第一馆存档不变', () => {

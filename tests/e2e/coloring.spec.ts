@@ -3,10 +3,15 @@ import { readFileSync, readdirSync } from 'node:fs';
 import type { AssetDefinition, ColoringLevel, Level, SpotDifferenceLevel } from '../../src/types';
 import { isMobileProject, mobileLandscapeViewport, mobilePortraitViewport, supportedResizeViewports } from './supported-viewports';
 import { dragSpotView, expectSpotSynchronized, readSpotView, setSpotZoom } from './spot-view-controls';
+import { getLevelChoices } from '../../src/content/level-roadmap';
+import { unlockPatternsForTest } from './gallery-unlock-fixtures';
 
 const levels = readdirSync('src/content/levels').filter(name => name.endsWith('.json'))
   .map(name => JSON.parse(readFileSync(`src/content/levels/${name}`, 'utf8')) as Level);
 const coloringLevels = levels.filter((level): level is ColoringLevel => level.gameType === 'coloring');
+const currentColoringIds = [
+  'coloring-floral-scroll', 'coloring-lotus-rosette', 'coloring-deer-medallion', 'coloring-feitian-lotus',
+];
 const assets = JSON.parse(readFileSync('src/content/assets.json', 'utf8')) as AssetDefinition[];
 const observationLevels = levels.filter((level): level is SpotDifferenceLevel => level.gameType === 'spot-difference');
 const squareLevels = observationLevels.filter(level => {
@@ -18,6 +23,7 @@ const legacyArtworkKey = 'dunhuang:artworks:v1';
 const progressKey = 'dunhuang:progress:v1';
 const imageLoadTimeout = 45_000;
 test.setTimeout(60_000);
+test.beforeEach(async ({ page }) => unlockPatternsForTest(page));
 
 interface Rect { x: number; y: number; width: number; height: number }
 interface ColoringLayout { width: number; height: number; image: Rect; zoom: number; animating: boolean; reducedMotion: boolean }
@@ -50,8 +56,8 @@ async function expectFits(page: Page) {
   expect(referenceBounds.width / referenceBounds.height).toBeCloseTo(naturalRatio, 2);
 }
 
-async function startColoring(page: Page, level: ColoringLevel) {
-  await page.goto(`/#/play/${level.id}`);
+async function startColoring(page: Page, level: ColoringLevel, entry = '/') {
+  await page.goto(`${entry}#/play/${level.id}`);
   await expect(page.getByRole('button', { name: '1×', exact: true })).toBeEnabled({ timeout: imageLoadTimeout });
   await expect(page.getByTestId('phaser-player')).toHaveAttribute('data-game-type', 'coloring');
   const reference = assets.find(asset => asset.id === level.referenceAssetId)!;
@@ -122,12 +128,8 @@ async function recordedAnimation(page: Page) {
   return page.evaluate(() => (window as unknown as { __coloringAnimationRecord: { values: string[] } }).__coloringAnimationRecord.values);
 }
 
-test('真实目录开放五关找不同、三关拼图和五关填色', async ({ page }) => {
-  const expectedColoringOrder = [
-    'coloring-floral-scroll', 'coloring-lotus-rosette', 'coloring-deer-medallion',
-    'coloring-three-rabbits', 'coloring-feitian-lotus',
-  ];
-  expect(coloringLevels.map(level => level.id).sort()).toEqual([...expectedColoringOrder].sort());
+test('真实目录开放五关找不同、三关拼图和四关填色，保留旧作品的关卡直链', async ({ page }) => {
+  expect(getLevelChoices({ levels }, 'patterns', 'coloring').map(level => level.id)).toEqual(currentColoringIds);
   expect(observationLevels).toHaveLength(5);
   expect(squareLevels).toHaveLength(3);
   await page.goto('/#/theme/patterns/games');
@@ -135,10 +137,12 @@ test('真实目录开放五关找不同、三关拼图和五关填色', async ({
   await expect(page.getByRole('link', { name: '拼图', exact: true })).toBeVisible();
   await page.getByRole('link', { name: '填色', exact: true }).click();
   await expect(page.getByRole('heading', { name: '填色关卡', exact: true })).toBeVisible();
-  await expect(page.getByTestId('level-catalog-summary')).toHaveText('共 5 关5 关开放');
+  await expect(page.getByTestId('level-catalog-summary')).toHaveText('共 4 关4 关开放');
   const cards = page.locator('.level-choice-card[data-status=available]');
-  expect(await cards.evaluateAll(elements => elements.map(element => element.getAttribute('data-level-id'))))
-    .toEqual(expectedColoringOrder);
+  const visibleIds = await cards.evaluateAll(elements => elements.map(element => element.getAttribute('data-level-id')));
+  expect(visibleIds).toEqual(currentColoringIds.slice(0, visibleIds.length));
+  const olderLevel = coloringLevels.find(item => item.id === 'coloring-grape-lotus')!;
+  await startColoring(page, olderLevel);
 });
 
 for (const level of coloringLevels) {
@@ -341,29 +345,40 @@ test('作品保存失败如实显示并可重试，不冒充写入旧通关结�
   await expectFits(page);
 });
 
-test('完成作品时保存失败，重试成功后才进入结果并记录完成', async ({ page }) => {
-  const level = coloringLevels[0]!;
-  await startColoring(page, level);
-  await page.evaluate(() => localStorage.setItem('dunhuang:first-gallery:v1', '原三馆存档'));
-  await clickRegion(page, level);
-  await expect.poll(() => currentColors(page, level)).toEqual({ [usableRegion(level).id]: level.palette[0].color.toLowerCase() });
-  await page.evaluate(key => {
-    const original = Storage.prototype.setItem;
-    (window as unknown as { __artworkStorageSetter: typeof original }).__artworkStorageSetter = original;
-    Storage.prototype.setItem = function (name, value) {
-      if (name === key) throw new DOMException('Test storage quota', 'QuotaExceededError');
-      return original.call(this, name, value);
-    };
-  }, artworkKey);
-  await page.getByRole('button', { name: '完成作品', exact: true }).click();
-  await expect(page.getByTestId('artwork-save-error')).toBeVisible();
-  expect(await page.evaluate(key => localStorage.getItem(key), progressKey)).toBeNull();
-  await page.evaluate(() => { Storage.prototype.setItem = (window as unknown as { __artworkStorageSetter: typeof Storage.prototype.setItem }).__artworkStorageSetter; });
-  await page.getByRole('button', { name: '重试保存作品', exact: true }).click();
-  await expect(page).toHaveURL(new RegExp(`#/result/${level.id}$`));
-  await expect.poll(() => page.evaluate(({ key, id }) => Boolean(JSON.parse(localStorage.getItem(key) ?? '{}').completed?.[id]), { key: progressKey, id: level.id })).toBe(true);
-  expect(await page.evaluate(() => localStorage.getItem('dunhuang:first-gallery:v1'))).toBe('原三馆存档');
-});
+for (const compact of [true, false]) {
+  test(`${compact ? '精简版' : '三馆版'}完成作品时保存失败，重试成功后才进入结果并记录完成`, async ({ page }) => {
+    const level = coloringLevels.find(item => item.id === 'coloring-floral-scroll')!;
+    await startColoring(page, level, compact ? '/' : '/first-gallery-v001.html');
+    const readGalleryRecord = () => page.evaluate(() => JSON.parse(localStorage.getItem('dunhuang:first-gallery:v1')!));
+    const before = await readGalleryRecord();
+    await clickRegion(page, level);
+    await expect.poll(() => currentColors(page, level)).toEqual({ [usableRegion(level).id]: level.palette[0].color.toLowerCase() });
+    await page.evaluate(key => {
+      const original = Storage.prototype.setItem;
+      (window as unknown as { __artworkStorageSetter: typeof original }).__artworkStorageSetter = original;
+      Storage.prototype.setItem = function (name, value) {
+        if (name === key) throw new DOMException('Test storage quota', 'QuotaExceededError');
+        return original.call(this, name, value);
+      };
+    }, artworkKey);
+    await page.getByRole('button', { name: '完成作品', exact: true }).click();
+    await expect(page.getByTestId('artwork-save-error')).toBeVisible();
+    expect(await page.evaluate(key => localStorage.getItem(key), progressKey)).toBeNull();
+    await page.evaluate(() => { Storage.prototype.setItem = (window as unknown as { __artworkStorageSetter: typeof Storage.prototype.setItem }).__artworkStorageSetter; });
+    await page.getByRole('button', { name: '重试保存作品', exact: true }).click();
+    await expect(page).toHaveURL(new RegExp(`#/result/${level.id}$`));
+    await expect.poll(() => page.evaluate(({ key, id }) => Boolean(JSON.parse(localStorage.getItem(key) ?? '{}').completed?.[id]), { key: progressKey, id: level.id })).toBe(true);
+    const after = await readGalleryRecord();
+    if (compact) expect(after).toEqual(before);
+    else {
+      const { artworks: beforeArtworks, ...beforeProgress } = before;
+      const { artworks: afterArtworks, ...afterProgress } = after;
+      expect(afterProgress).toEqual(beforeProgress);
+      expect(Object.keys(afterArtworks)).toHaveLength(Object.keys(beforeArtworks).length + 1);
+      expect(afterArtworks).toMatchObject(beforeArtworks);
+    }
+  });
+}
 
 test('区域图加载失败保留错误与重新加载入口', async ({ page }) => {
   const level = coloringLevels[0]!;

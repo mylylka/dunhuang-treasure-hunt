@@ -177,7 +177,7 @@ export function createEnvironmentGroundMaterial(deferDetail = false) {
   function dispose() {
     if(disposed)return;disposed=true;releaseDetail();material.dispose();
   }
-  return {material,ready:deferDetail?Promise.resolve():loadDetail(),loadDetail,dispose,inspect:()=>({
+  return {material,ready:deferDetail?Promise.resolve():loadDetail(),loadDetail,detailPending:()=>status==='waiting'||status==='loading',dispose,inspect:()=>({
     version:'v001',status,loaded:status==='ready',disposed,loadedFileTextures:loadedFiles,totalTextures:textures.length,
     microTileMetres:2,controlSize:size,controlWorldBounds:{...b},controlBuildMs:Math.round(controlTimeMs),
     approximateGpuMiB:22.33,geometryDisplacement:false,staticLightInBasecolor:false,

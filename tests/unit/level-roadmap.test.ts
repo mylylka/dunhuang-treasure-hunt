@@ -63,9 +63,10 @@ describe('规划关卡与正式关卡分开管理', () => {
     expect(catalog.levels).toHaveLength(1);
   });
 
-  it('从玩家选关中隐藏三兔填色关与已撤下的两个占位，同时保留原始内容数据', () => {
+  it('从玩家选关中隐藏旧填色关与已撤下的占位，同时保留原始内容数据', () => {
     const coloringIds = [
       'coloring-floral-scroll', 'coloring-lotus-rosette', 'coloring-deer-medallion',
+      'coloring-grape-lotus', 'coloring-grape-pomegranate', 'coloring-lotus-camellia',
       'coloring-three-rabbits', 'coloring-feitian-lotus',
     ];
     const colorings = coloringIds.map(id => ({ ...patternLevel(id), gameType: 'coloring' as const }) as unknown as Level);
@@ -73,7 +74,7 @@ describe('规划关卡与正式关卡分开管理', () => {
     expect(coloringChoices.map(choice => choice.id)).toEqual([
       'coloring-floral-scroll', 'coloring-lotus-rosette', 'coloring-deer-medallion', 'coloring-feitian-lotus',
     ]);
-    expect(colorings).toHaveLength(5);
+    expect(colorings).toHaveLength(coloringIds.length);
     expect(getLevelChoices({ levels: [] }, 'patterns', 'spot-difference').map(choice => choice.id))
       .not.toContain('patterns-colors');
     expect(getLevelChoices({ levels: [] }, 'patterns', 'puzzle').map(choice => choice.id))

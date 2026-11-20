@@ -6,7 +6,10 @@ const themes = JSON.parse(readFileSync('src/content/themes.json', 'utf8')) as Th
 const levels = readdirSync('src/content/levels').filter(name => name.endsWith('.json'))
   .map(name => JSON.parse(readFileSync(`src/content/levels/${name}`, 'utf8')) as Level);
 
-test('精简版无需馆内解锁即可选择所有已有 2D 主题、游戏和关卡', async ({ page }) => {
+test('精简版无需馆内解锁即可打开 2D 目录，目录沿用当前展示范围', async ({ page }) => {
+  const archivedLevelIds = new Set([
+    'coloring-three-rabbits', 'coloring-grape-pomegranate', 'coloring-grape-lotus', 'coloring-lotus-camellia',
+  ]);
   await page.goto('/#/themes');
   const themeCards = page.getByTestId('theme-choice-grid').locator('a');
   await expect(themeCards).toHaveCount(themes.length);
@@ -18,7 +21,8 @@ test('精简版无需馆内解锁即可选择所有已有 2D 主题、游戏和�
       await expect(page.locator(`a.game-choice-${gameType}`)).toBeVisible();
       await page.goto(`/#/theme/${theme.id}/games/${gameType}`);
       for (const level of existingLevels) {
-        await expect(page.locator(`[data-level-id="${level.id}"][data-status="available"]`)).toHaveCount(1);
+        await expect(page.locator(`[data-level-id="${level.id}"][data-status="available"]`))
+          .toHaveCount(archivedLevelIds.has(level.id) ? 0 : 1);
       }
       await page.goto(`/#/theme/${theme.id}/games`);
     }
@@ -38,7 +42,7 @@ test('五种现有 2D 玩法能完成素材加载并显示操作', async ({ page
   test.setTimeout(120_000);
   const levelFor = (gameType: Level['gameType']) => levels.find(level => level.gameType === gameType)!;
   await page.goto(`/#/play/${levelFor('spot-difference').id}`);
-  await expect(page.getByRole('button', { name: '放大两图' })).toBeEnabled({ timeout: 30_000 });
+  await expect(page.getByRole('button', { name: '给我提示' })).toBeEnabled({ timeout: 30_000 });
   await page.goto(`/#/play/${levelFor('puzzle').id}`);
   await expect(page.getByRole('button', { name: '拼图提示' })).toBeEnabled({ timeout: 30_000 });
   await page.goto(`/#/play/${levelFor('coloring').id}`);

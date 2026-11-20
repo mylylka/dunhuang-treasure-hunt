@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { afterAll, describe, expect, it } from 'vitest';
 import * as THREE from 'three';
 import { musicInteriorFollowPose, settleMusicInteriorCamera } from '../../src/world/music-interior-camera';
@@ -22,7 +22,11 @@ const stairHeight = (x: number) => flight.y + (flight.endY! - flight.y) * (x - f
 // Read the delivered GLB triangles independently of navigation/camera boxes.
 // Texture loading and WebGL are unnecessary for checking real wall apertures.
 function deliveredBuilding() {
-  const bytes = readFileSync(new URL(`../../public/assets/world/${MUSIC_INTERIOR_LAYOUT.assets.building}`, import.meta.url));
+  const path = `public/assets/world/${MUSIC_INTERIOR_LAYOUT.assets.building}`;
+  const localAsset = new URL(`../../${path}`, import.meta.url);
+  // The linked development checkout also uses the main project's shared public assets.
+  const sharedAsset = new URL(`../../../../${path}`, import.meta.url);
+  const bytes = readFileSync(existsSync(localAsset) ? localAsset : sharedAsset);
   const jsonLength = bytes.readUInt32LE(12);
   const gltf = JSON.parse(bytes.subarray(20, 20 + jsonLength).toString());
   const binary = bytes.subarray(28 + jsonLength);

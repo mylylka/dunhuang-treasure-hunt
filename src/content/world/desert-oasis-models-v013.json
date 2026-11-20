@@ -1,0 +1,284 @@
+{
+  "shrub-2": {
+    "url": "assets/world/desert-decoration/v001/shrub-2.glb",
+    "lodUrl": "assets/world/desert-decoration/v013/shrub-2-far.glb",
+    "width": 0.9969399,
+    "height": 0.5727986,
+    "depth": 0.9984745,
+    "triangles": 3600,
+    "lodTriangles": 8
+  },
+  "s04b": {
+    "url": "assets/world/desert-decoration/v001/s04b.glb",
+    "lodUrl": "assets/world/desert-decoration/v013/s04b-far.glb",
+    "width": 0.8199999,
+    "height": 0.42,
+    "depth": 0.5,
+    "triangles": 1802,
+    "lodTriangles": 8
+  },
+  "g02": {
+    "url": "assets/world/desert-decoration/v001/g02.glb",
+    "lodUrl": "assets/world/desert-decoration/v013/g02-far.glb",
+    "width": 0.78,
+    "height": 0.3697414,
+    "depth": 0.660952,
+    "triangles": 760,
+    "lodTriangles": 8
+  },
+  "c03b": {
+    "url": "assets/world/desert-decoration/v001/c03b.glb",
+    "lodUrl": "assets/world/desert-decoration/v013/c03b-far.glb",
+    "width": 1.35,
+    "height": 0.5367838,
+    "depth": 1.04248,
+    "triangles": 4348,
+    "lodTriangles": 8
+  },
+  "c04": {
+    "url": "assets/world/desert-decoration/v001/c04.glb",
+    "lodUrl": "assets/world/desert-decoration/v013/c04-far.glb",
+    "width": 1.3499999,
+    "height": 0.3901381,
+    "depth": 0.8166471,
+    "triangles": 2010,
+    "lodTriangles": 8
+  },
+  "w01b": {
+    "url": "assets/world/desert-decoration/v001/w01b.glb",
+    "lodUrl": "assets/world/desert-decoration/v013/w01b-far.glb",
+    "width": 1.1141579,
+    "height": 1.02,
+    "depth": 0.9978145,
+    "triangles": 1108,
+    "lodTriangles": 8
+  },
+  "t01": {
+    "url": "assets/world/desert-decoration/v001/t01.glb",
+    "lodUrl": "assets/world/desert-decoration/v013/t01-far.glb",
+    "width": 1.9096019,
+    "height": 2.5,
+    "depth": 1.6187656,
+    "triangles": 5610,
+    "lodTriangles": 8
+  },
+  "t02": {
+    "url": "assets/world/desert-decoration/v001/t02.glb",
+    "lodUrl": "assets/world/desert-decoration/v013/t02-far.glb",
+    "width": 2.3009295,
+    "height": 3.3999999,
+    "depth": 1.5720208,
+    "triangles": 8891,
+    "lodTriangles": 1322
+  },
+  "t03": {
+    "url": "assets/world/desert-decoration/v002/t03.glb",
+    "lodUrl": "assets/world/desert-decoration/v013/t03-far.glb",
+    "width": 4.4946909,
+    "height": 3.1999998,
+    "depth": 2.9854379,
+    "triangles": 3414,
+    "lodTriangles": 785
+  },
+  "r04": {
+    "url": "assets/world/desert-decoration/v001/r04.glb",
+    "lodUrl": "assets/world/desert-decoration/v013/r04-far.glb",
+    "width": 1.5,
+    "height": 0.5724681,
+    "depth": 1.0483153,
+    "triangles": 160,
+    "lodTriangles": 54
+  },
+  "c02": {
+    "url": "assets/world/desert-decoration/v001/c02.glb",
+    "lodUrl": "assets/world/desert-decoration/v013/c02-far.glb",
+    "width": 1.3,
+    "height": 0.3944417,
+    "depth": 0.7149801,
+    "triangles": 648,
+    "lodTriangles": 8
+  },
+  "r02": {
+    "url": "assets/world/desert-decoration/v006/r02.glb",
+    "lodUrl": "assets/world/desert-decoration/v013/r02-far.glb",
+    "width": 1.12,
+    "height": 0.36,
+    "depth": 0.72,
+    "triangles": 448,
+    "lodTriangles": 54
+  },
+  "r01": {
+    "url": "assets/world/desert-decoration/v001/r01.glb",
+    "lodUrl": "assets/world/desert-decoration/v001/r01.glb",
+    "width": 0.48,
+    "height": 0.27,
+    "depth": 0.3799999,
+    "triangles": 34,
+    "lodTriangles": 34
+  },
+  "大树3": {
+    "url": "assets/world/desert-decoration/v013/tree-3.glb",
+    "lodUrl": "assets/world/desert-decoration/v013/tree-3-far.glb",
+    "width": 0.5454102,
+    "height": 0.9995117,
+    "depth": 0.496582,
+    "triangles": 17628,
+    "lodTriangles": 8,
+    "midUrl": "assets/world/desert-decoration/v013/tree-3-mid.glb",
+    "midTriangles": 8061
+  },
+  "大树4": {
+    "url": "assets/world/desert-decoration/v013/tree-4.glb",
+    "lodUrl": "assets/world/desert-decoration/v013/tree-4-far.glb",
+    "width": 0.9594727,
+    "height": 0.9995117,
+    "depth": 0.6430664,
+    "triangles": 18321,
+    "lodTriangles": 8,
+    "midUrl": "assets/world/desert-decoration/v013/tree-4-mid.glb",
+    "midTriangles": 5079
+  },
+  "大树6": {
+    "url": "assets/world/desert-decoration/v013/tree-6.glb",
+    "lodUrl": "assets/world/desert-decoration/v013/tree-6-far.glb",
+    "width": 0.7768555,
+    "height": 0.9995117,
+    "depth": 0.7924805,
+    "triangles": 12974,
+    "lodTriangles": 8,
+    "midUrl": "assets/world/desert-decoration/v013/tree-6-mid.glb",
+    "midTriangles": 3177
+  },
+  "大树8": {
+    "url": "assets/world/desert-decoration/v013/tree-8.glb",
+    "lodUrl": "assets/world/desert-decoration/v013/tree-8-far.glb",
+    "width": 0.9995117,
+    "height": 0.574707,
+    "depth": 0.6694336,
+    "triangles": 21403,
+    "lodTriangles": 8,
+    "midUrl": "assets/world/desert-decoration/v013/tree-8-mid.glb",
+    "midTriangles": 6771
+  },
+  "大树9": {
+    "url": "assets/world/desert-decoration/v013/tree-9.glb",
+    "lodUrl": "assets/world/desert-decoration/v013/tree-9-far.glb",
+    "width": 0.9995117,
+    "height": 0.9506836,
+    "depth": 0.9301758,
+    "triangles": 32885,
+    "lodTriangles": 10506
+  },
+  "大树10": {
+    "url": "assets/world/desert-decoration/v013/tree-10.glb",
+    "lodUrl": "assets/world/desert-decoration/v013/tree-10-far.glb",
+    "width": 0.9995117,
+    "height": 0.9399414,
+    "depth": 0.9770508,
+    "triangles": 20071,
+    "lodTriangles": 8,
+    "midUrl": "assets/world/desert-decoration/v013/tree-10-mid.glb",
+    "midTriangles": 5672
+  },
+  "大树11": {
+    "url": "assets/world/desert-decoration/v013/tree-11.glb",
+    "lodUrl": "assets/world/desert-decoration/v013/tree-11-far.glb",
+    "width": 0.362793,
+    "height": 0.9995117,
+    "depth": 0.3969727,
+    "triangles": 16929,
+    "lodTriangles": 8,
+    "midUrl": "assets/world/desert-decoration/v013/tree-11-mid.glb",
+    "midTriangles": 7116
+  },
+  "C04B_卧枝灌木与散石": {
+    "url": "assets/world/desert-decoration/v013/rock-and-spreading-shrub.glb",
+    "lodUrl": "assets/world/desert-decoration/v013/rock-and-spreading-shrub-far.glb",
+    "width": 1.4499999,
+    "height": 0.3138267,
+    "depth": 1.1324773,
+    "triangles": 2054,
+    "lodTriangles": 8
+  },
+  "S04_枯黄灌木": {
+    "url": "assets/world/desert-decoration/v013/dry-shrub.glb",
+    "lodUrl": "assets/world/desert-decoration/v013/dry-shrub-far.glb",
+    "width": 0.7799999,
+    "height": 0.58,
+    "depth": 0.52,
+    "triangles": 1188,
+    "lodTriangles": 8
+  },
+  "R05_碎石小群": {
+    "url": "assets/world/desert-decoration/v013/loose-rocks.glb",
+    "lodUrl": "assets/world/desert-decoration/v013/loose-rocks-far.glb",
+    "width": 0.4616614,
+    "height": 0.0457652,
+    "depth": 0.2964283,
+    "triangles": 560,
+    "lodTriangles": 54
+  },
+  "W01_水边芦苇": {
+    "url": "assets/world/desert-decoration/v013/shore-reed.glb",
+    "lodUrl": "assets/world/desert-decoration/v013/shore-reed-far.glb",
+    "width": 0.5435951,
+    "height": 1.1,
+    "depth": 0.5679571,
+    "triangles": 634,
+    "lodTriangles": 8
+  },
+  "S02_红柳灌木": {
+    "url": "assets/world/desert-decoration/v013/tamarisk.glb",
+    "lodUrl": "assets/world/desert-decoration/v013/tamarisk-far.glb",
+    "width": 1.1346591,
+    "height": 1.0500001,
+    "depth": 0.9430926,
+    "triangles": 3270,
+    "lodTriangles": 8
+  },
+  "T03_展冠胡杨树": {
+    "url": "assets/world/desert-decoration/v013/broad-poplar.glb",
+    "lodUrl": "assets/world/desert-decoration/v013/broad-poplar-far.glb",
+    "width": 4.4946911,
+    "height": 3.1999999,
+    "depth": 2.9854379,
+    "triangles": 13398,
+    "lodTriangles": 785
+  },
+  "T02_弯曲胡杨树": {
+    "url": "assets/world/desert-decoration/v013/curved-poplar.glb",
+    "lodUrl": "assets/world/desert-decoration/v013/curved-poplar-far.glb",
+    "width": 2.3009294,
+    "height": 3.4,
+    "depth": 1.5720207,
+    "triangles": 13384,
+    "lodTriangles": 1322
+  },
+  "valley-cushion-shrub": {
+    "url": "assets/world/desert-decoration/v013/valley-cushion.glb",
+    "lodUrl": "assets/world/desert-decoration/v013/valley-cushion-far.glb",
+    "width": 0.5218406,
+    "height": 0.2380675,
+    "depth": 0.6142628,
+    "triangles": 4410,
+    "lodTriangles": 8
+  },
+  "valley-fractured-slab": {
+    "url": "assets/world/desert-decoration/v013/valley-slab.glb",
+    "lodUrl": "assets/world/desert-decoration/v013/valley-slab.glb",
+    "width": 1.1909064,
+    "height": 0.4416536,
+    "depth": 0.6823471,
+    "triangles": 92,
+    "lodTriangles": 92
+  },
+  "valley-sage-branches": {
+    "url": "assets/world/desert-decoration/v013/valley-sage.glb",
+    "lodUrl": "assets/world/desert-decoration/v013/valley-sage-far.glb",
+    "width": 0.7821841,
+    "height": 0.2422459,
+    "depth": 0.6575032,
+    "triangles": 1728,
+    "lodTriangles": 8
+  }
+}

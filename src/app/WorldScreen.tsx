@@ -56,6 +56,7 @@ type RewardOverlay = { kind: 'award'; id: WorldRewardId } | { kind: 'guide' }
 interface Props {
   firstGallery?: boolean;
   connectedGalleries?: boolean;
+  previewAllGalleries?: boolean;
   travelerId?: TravelerId;
   onChooseTraveler?(): void;
   suspended?: boolean;
@@ -80,9 +81,9 @@ interface Props {
 }
 
 export default function WorldScreen(props: Props) {
-  const connectedGalleries = !!props.connectedGalleries;
   const caissonOnly = document.getElementById('root')?.dataset.caissonOnly === 'v001';
-  const { travelerId } = props;
+  const connectedGalleries = !caissonOnly && !!props.connectedGalleries;
+  const { travelerId, previewAllGalleries } = props;
   const terrain=document.getElementById('root')?.dataset.terrain==='v001';
   const upperPreview=connectedGalleries || document.getElementById('root')?.dataset.mogaoUpper==='v002';
   const exhibitPreview=connectedGalleries || document.getElementById('root')?.dataset.mogaoExhibit==='v001';
@@ -287,6 +288,7 @@ export default function WorldScreen(props: Props) {
       instance = createWorldRuntime(host.current, {
         firstGallery: callbacks.current.firstGallery, onGalleryInteract: requestGallery,
         connectedGalleries,
+        previewAllGalleries: connectedGalleries && previewAllGalleries,
         travelerId,
         musicGalleryUnlocked: callbacks.current.musicGallery?.unlocked,
         musicBalconyV2, flyingHistory: flyingHistoryPreview,
@@ -369,7 +371,7 @@ export default function WorldScreen(props: Props) {
       if (musicPreview) Reflect.deleteProperty(window, '__musicPavilion');
       if (cinematicPreview) Reflect.deleteProperty(window, '__characterCinematics');
     };
-  }, [attempt, startInteraction, openMogaoGames, openMusicGames, connectedGalleries, travelerId, exhibitPreview, musicBalconyV2, musicGuidePreview, musicInstrumentPreview, flyingHistoryPreview, stopGuideVoice]);
+  }, [attempt, startInteraction, openMogaoGames, openMusicGames, connectedGalleries, previewAllGalleries, travelerId, exhibitPreview, musicBalconyV2, musicGuidePreview, musicInstrumentPreview, flyingHistoryPreview, stopGuideVoice]);
 
   useLayoutEffect(() => {
     if (wasSuspended.current && !suspended) leavingToTheme.current = false;

@@ -42,18 +42,20 @@ import type { MogaoHallAScene } from './mogao-hall-a-scene';
 import { isMogaoHallAApproach } from '../content/world/mogao-hall-a-layout-v001';
 import {createEnvironmentLighting} from './terrain-environment-lighting-v001';
 import {applyTerrainSandstoneMaterial} from './terrain-rock-material-v001';
-import {hideConnectedCliffSandFoot} from './terrain-cliff-sand-v001';
+import {groundConnectedCliffFlank,hideConnectedCliffSandFoot} from './terrain-cliff-sand-v001';
 import {createBactrianCaravans} from './terrain-bactrian-caravans-v001';
 import {createTerrainScene} from './terrain-scene-v001';
 import {applyFirstGalleryCourtyardPaving,applyFirstGalleryHallPaving,applyTerrainCourtyardExpansion} from './terrain-courtyard-v003';
 import {refineCourtyardRocks} from './courtyard-rock-refinement-v001';
-import {prepareTerrainCourtyardShadows,updateTerrainSunShadow} from './terrain-shadow-v005';
+import {isReplacedCourtyardRock} from '../content/world/courtyard-rock-refinement-v001';
+import {markFirstGalleryArchitectureMaterials,prepareTerrainCourtyardShadows,updateTerrainSunShadow} from './terrain-shadow-v005';
 import {TERRAIN_CAISSON_CONFIG,loadCaissonCenterTexture,prepareTerrainCaisson,releaseCaissonTexture} from './terrain-caisson-v001';
 import {placeMusicCourtyardTree,relocateMusicCourtyardFurnishings} from './music-courtyard-tree-v001';
+import { CONNECTED_DESERT_VEGETATION, isEmbeddedCourtyardVegetation } from '../content/world/desert-vegetation';
 import {MUSIC_COURTYARD_TREE} from '../content/world/music-courtyard-tree-v001';
 import {placeTerrainTowerTrees} from './terrain-trees-v001';
 import {TERRAIN_TOWER_TREES} from '../content/world/terrain-trees-v001';
-import {fromTerrainPoint, terrainHeight, toTerrainPoint, TERRAIN_SCENERY_SOURCE_OVERRIDES, type TerrainRegion} from '../content/world/terrain-layout-v001';
+import {fromTerrainPoint, terrainHeight, toTerrainPoint, TERRAIN_ANCHORS, TERRAIN_SCENERY_SOURCE_OVERRIDES, type TerrainRegion} from '../content/world/terrain-layout-v001';
 import { GLTFLoader, type GLTF } from 'three/addons/loaders/GLTFLoader.js';
 import { CAISSON_TRAVELER_MODEL, TERRAIN_COURTYARD_MODEL, TERRAIN_FIRST_GALLERY_COURTYARD_MODEL, TERRAIN_TRAVELER_MOBILE_MODEL, TERRAIN_TRAVELER_MODEL, TRIPO_TRAVELER_MODEL, WORLD_ART_SAMPLE, worldAssetUrl } from '../content/world/assets';
 import { tripoTravelerClips } from './tripo-traveler';
@@ -98,6 +100,8 @@ export interface ArtSampleSceneOptions {
   environmentVersion?: 'v001';
   terrainCaissonVersion?: 'v001';
   firstGalleryStart?: WorldPoint;
+  connectedDesertOverlook?: boolean;
+  composedDesertCourtyard?: boolean;
   connectedGalleries?: boolean;
   compactConnectedTerrain?: boolean;
   cliffUnlockedAtStart?: boolean;
@@ -140,6 +144,15 @@ export interface ArtSampleScene extends GrayboxScene {
   updateTerrain?(dt: number): void;
   prepareEnvironment?(renderer:THREE.WebGLRenderer,camera:THREE.Camera):Promise<void>;
   loadGroundDetail?(): Promise<void>;
+  desertDecoration?: {
+    venueVisibility(): { music: boolean; cliff: boolean; cliffTreesDetailed: boolean };
+    streamActivity(): 'venue' | 'scenery' | null;
+    load(path: string, signal: AbortSignal, priority?: RequestPriority): Promise<THREE.Object3D>;
+    receiveShadows(root: THREE.Object3D): void;
+    forgetMeshes(root: THREE.Object3D): void;
+    release(root: THREE.Object3D): void;
+    refreshShadows(): void;
+  };
   updateFirstGalleryStreaming?(position: WorldPoint, musicUnlocked: boolean, cliffUnlocked?: boolean,
     surfaceId?: string | null, buddhaGateOpen?: boolean, hallAGateOpen?: boolean, prewarmCliffTower?: boolean): void;
   firstGalleryEntryStatus?(position: WorldPoint, surfaceId?: string | null,
@@ -248,8 +261,10 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
   }
   const enhancedEnvironment=options.terrainVersion==='v001' && options.environmentVersion==='v001';
   const firstGallery = !!options.firstGalleryStart && enhancedEnvironment;
-  const connectedGalleries = firstGallery && !!options.connectedGalleries;
-  const currentFirstGalleryVisuals = connectedGalleries || (firstGallery && isCaissonOnlyMode());
+  const caissonOnly = firstGallery && isCaissonOnlyMode();
+  const connectedGalleries = firstGallery && !caissonOnly && !!options.connectedGalleries;
+  const currentFirstGalleryVisuals = connectedGalleries || caissonOnly;
+  const includeVegetation = !connectedGalleries || CONNECTED_DESERT_VEGETATION;
   const compactConnectedTerrain = currentFirstGalleryVisuals && !!options.compactConnectedTerrain;
   const initialRegion = firstGalleryStreamRegion(options.firstGalleryStart ?? { x: 0, z: 0 });
   const firstGalleryInitialGroups: readonly PreviewResourceGroup[] = connectedGalleries
@@ -399,10 +414,22 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
   };
   const sceneryRetryAt: Partial<Record<StreamGroup, number>> = {};
   const streamControllers = new Map<StreamGroup, AbortController>();
+  let warmingCliffLandscape = false;
   let lowMountain: THREE.Object3D | null = null;
   let cliffMountainAsset: string | undefined;
   let connectedCliffUnlocked = !!options.cliffUnlockedAtStart;
   let connectedCliffTower: THREE.Object3D | null = null;
+  const cliffTreeDistance = (p: WorldPoint) => Math.hypot(p.x - TERRAIN_ANCHORS.cliffStairFoot.x,
+    p.z - TERRAIN_ANCHORS.cliffStairFoot.z);
+  let cliffTreesNearby = options.firstGalleryStart ? cliffTreeDistance(options.firstGalleryStart) < 85 : false;
+  let connectedMusicCourtyard: THREE.Object3D | null = null;
+  function decorationVenueVisibility() {
+    return {
+      music: connectedMusicCourtyard?.visible === true,
+      cliff: connectedCliffTower?.visible === true,
+      cliffTreesDetailed: towerTrees?.root.visible === true,
+    };
+  }
   let musicSilhouette: THREE.Group | null = null;
   let distantMusic: { pavilion: ArtSampleMusic; root: THREE.Object3D } | null = null;
   let nearbyStream: FirstGalleryVenue | null = null;
@@ -482,14 +509,25 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
     }
   }
   async function loadSelectedModel(path: string, signal: AbortSignal,
-    progress?: (fraction: number | null) => void): Promise<GLTF> {
+    progress?: (fraction: number | null) => void, priority?: RequestPriority): Promise<GLTF> {
     const url = new URL(worldAssetUrl(path), document.baseURI);
-    const response = await fetch(url, { signal });
+    const response = await fetch(url, { signal, priority });
     // Never include server response text in a player-visible error.
     if (!response.ok) throw new Error('model-request-failed');
     const bytes = progress && response.body ? await readGuideModel(response.body, progress) : await response.arrayBuffer();
     if (disposed || signal.aborted) throw new Error('model-request-cancelled');
     progress?.(null);
+    if (/^desert-decoration\/v01[34]\//.test(path) && !loader.meshoptDecoder && bytes.byteLength >= 20) {
+      // Small uncompressed grass and rocks should draw without waiting for a decoder.
+      // The first chunk of a GLB is its UTF-8 JSON manifest.
+      const headerSize = Math.min(new DataView(bytes).getUint32(12, true), bytes.byteLength - 20);
+      const header = new TextDecoder().decode(new Uint8Array(bytes, 20, headerSize));
+      if (header.includes('"EXT_meshopt_compression"')) {
+        const { MeshoptDecoder } = await import('three/addons/libs/meshopt_decoder.module.js');
+        if (disposed || signal.aborted) throw new Error('model-request-cancelled');
+        loader.setMeshoptDecoder(MeshoptDecoder);
+      }
+    }
     const model = await loader.parseAsync(bytes, new URL('.', url).href);
     // Image decoding may finish after abort. Each result has its own owner check.
     if (disposed || signal.aborted) {
@@ -604,7 +642,7 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
     if (initialGroup === 'cliff') return index === 1 || index === 4 ? undefined : path;
     return undefined;
   });
-  const natureAtStart = options.sampleNature && (!scoped || profile.mode === 'terrain' ||
+  const natureAtStart = !connectedGalleries && options.sampleNature && (!scoped || profile.mode === 'terrain' ||
     (initialGroup !== null && (!upper || initialGroup === 'cliff')));
   const natureIncludesDunes = !hasTerrain || (!firstGallery && !scoped);
   const caissonAtStart = caissonEnabled && courtyardAtStart;
@@ -614,7 +652,7 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
     Promise.all(natureAtStart ? ['tree-a', 'shrub-a', ...(natureIncludesDunes ? ['dunes'] : [])].map(name => loadModel(`environment-sample/v002/${name}.glb`)) : []),
     Promise.all((scoped ? scopedCliffPaths : firstGallery ? firstCliffPaths : cliffPaths).map(path => path ? loadModel(path) : undefined)),
     Promise.all(hasTerrain && !connectedGalleries && (scoped ? initialGroup === 'cliff' : !firstGallery || firstGalleryInitialGroups.includes('cliff')) ? TERRAIN_TOWER_TREES.map(tree => loadModel(tree.assetPath)) : []),
-    hasTerrain && (scoped ? initialGroup === 'music' : !firstGallery || firstGalleryInitialGroups.includes('music')) ? loadModel(MUSIC_COURTYARD_TREE.assetPath) : undefined,
+    hasTerrain && includeVegetation && (scoped ? initialGroup === 'music' : !firstGallery || firstGalleryInitialGroups.includes('music')) ? loadModel(MUSIC_COURTYARD_TREE.assetPath) : undefined,
     caissonAtStart ? loadModel(TERRAIN_CAISSON_CONFIG.asset) : undefined,
   ] as const);
   const centerTextureLoading=caissonAtStart?loadCaissonCenterTexture(new URL(worldAssetUrl(TERRAIN_CAISSON_CONFIG.centerPanel.texture),document.baseURI),controller.signal).then(texture=>{
@@ -671,6 +709,7 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
     if (connectedGalleries && kind === 'exterior') hideConnectedCliffSandFoot(model.scene);
     environment.scene.add(model.scene);
     terrain?.attachRegionObject('cliff', model.scene);
+    if (connectedGalleries && enhancedEnvironment && kind === 'exterior') groundConnectedCliffFlank(model.scene);
     if (v8 && (kind === 'interior' || kind === 'entry')) registerCavePart(model.scene, kind);
     if (v8 && kind === 'buddha') caveLighting?.addCave(model.scene);
   }
@@ -683,6 +722,7 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
     building.add(tower.scene, entry.scene);
     terrain?.attachRegionObject('cliff', building);
     connectedCliffTower = building;
+    if (towerTrees && options.connectedDesertOverlook) towerTrees.root.visible = building.visible && cliffTreesNearby;
   }
   function releaseDistantCliff(finish: typeof rockFinish) {
     if (!lowMountain) return;
@@ -740,7 +780,10 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
   }
   function attachTowerTrees(loaded: readonly GLTF[]) {
     towerTrees = placeTerrainTowerTrees(loaded.map(model => model.scene));
-    if (connectedGalleries) stream['cliff-trees'] = 'ready';
+    if (connectedGalleries) {
+      stream['cliff-trees'] = 'ready';
+      if (options.connectedDesertOverlook) towerTrees.root.visible = connectedCliffTower?.visible === true && cliffTreesNearby;
+    }
     environment.scene.add(towerTrees.root);
     for (const tree of towerTrees.trees) {
       const materials = [...new Set(tree.meshes.flatMap(mesh => Array.isArray(mesh.material) ? mesh.material : [mesh.material]))];
@@ -773,6 +816,7 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
     musicFurniture = relocateMusicCourtyardFurnishings(pavilion);
     placeMusicBuilding(root);
     if (tree) attachMusicTree(tree);
+    if (connectedGalleries) connectedMusicCourtyard = root;
   }
   async function attachMusicPavilionInterior(root: THREE.Object3D) {
     if (options.musicInteriorVersion) {
@@ -829,24 +873,33 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
     models.push(group); musicSilhouette = group;
   }
   function loadPatterns(load: (path: string) => Promise<GLTF>) {
-    const stations = firstGallery && isCaissonOnlyMode() ? [] : PATTERN_STATIONS;
+    const stations = caissonOnly ? [] : PATTERN_STATIONS;
     return Promise.all(stations.map(async station => ({ station, model: (await load(station.asset)).scene })));
   }
   function attachCourtyard(courtyard: GLTF, patternModels: Awaited<ReturnType<typeof loadPatterns>>, caissonModel?: GLTF) {
     if (currentFirstGalleryVisuals) refineCourtyardRocks(courtyard.scene);
+    const removedVegetation: THREE.Object3D[] = [];
     courtyard.scene.traverse(object => {
       if (object instanceof THREE.Mesh) { object.castShadow = true; object.receiveShadow = true; }
       const name = String(object.userData.semanticGroup ?? object.name);
-      if (firstGallery && isCaissonOnlyMode() && CAISSON_ONLY_HIDDEN_COURTYARD_OBJECTS.has(name)) object.visible = false;
-      if (currentFirstGalleryVisuals && /^(tree-|shrub-)/.test(name)) {
+      const removedPlant = !includeVegetation && isEmbeddedCourtyardVegetation(name);
+      if (removedPlant) removedVegetation.push(object);
+      const hiddenCaissonProp = caissonOnly && CAISSON_ONLY_HIDDEN_COURTYARD_OBJECTS.has(name);
+      const legacyPlant = currentFirstGalleryVisuals && /^(tree-|shrub-)/.test(name);
+      const replacedRock = connectedGalleries && options.composedDesertCourtyard && isReplacedCourtyardRock(name);
+      if (hiddenCaissonProp || legacyPlant || removedPlant || replacedRock) {
         object.visible = false;
       }
+    });
+    for (const plant of removedVegetation) plant.traverse(object => {
+      if (object instanceof THREE.Mesh) object.castShadow = false;
     });
     courtyard.scene.position.set(-12, 0, 2);
     if(terrain)courtyardExpansion=applyTerrainCourtyardExpansion(courtyard.scene);
     if (compactConnectedTerrain) applyFirstGalleryCourtyardPaving(courtyard.scene);
     if (currentFirstGalleryVisuals) applyFirstGalleryHallPaving(courtyard.scene);
     if(terrain)courtyardShadows=prepareTerrainCourtyardShadows(courtyard.scene);
+    if(firstGallery&&environmentLighting)markFirstGalleryArchitectureMaterials(courtyard.scene);
     if (terrain) {
       for (const { station, model } of patternModels) {
         const { x, y, z } = station.position;
@@ -914,11 +967,13 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
     avatar.scene.traverse(object => {
       if (object instanceof THREE.Mesh) { object.castShadow = true; object.receiveShadow = true; }
     });
-    if (options.sampleNature && tree && shrub && (dunes || terrain)) {
+    if (options.sampleNature && (connectedGalleries || (tree && shrub && (dunes || terrain)))) {
       environment.scene.traverse(object => {
         const name = String(object.userData.semanticGroup ?? object.name);
         if (/^(tree-|shrub-|road-grass|dune-|cliff-|boundary-)/.test(name)) object.visible = false;
       });
+    }
+    if (options.sampleNature && tree && shrub && (dunes || terrain)) {
       for (const model of [tree, shrub, dunes]) {
         if (!model) continue;
         model.scene.traverse(object => { if (object instanceof THREE.Mesh) { object.castShadow = true; object.receiveShadow = true; } });
@@ -1046,7 +1101,7 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
   });
 
   const sceneryDeferred = Symbol('defer-scenery-for-venue');
-  function beginStream(group: StreamGroup) {
+  function beginStream(group: StreamGroup, backgroundMountain = false) {
     const abort = new AbortController();
     stream[group] = 'loading'; streamControllers.set(group, abort);
     const deadline = setTimeout(() => abort.abort(), 60_000);
@@ -1055,7 +1110,7 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
     let incomingCaravans: ReturnType<typeof createBactrianCaravans> | null = null;
     let incomingCaissonTexture: THREE.Texture | null = null;
     const load = async (path: string) => {
-      const model = await loadModel(path, abort.signal);
+      const model = backgroundMountain ? await loadSelectedModel(path, abort.signal, undefined, 'low') : await loadModel(path, abort.signal);
       incoming.push(model.scene);
       return model;
     };
@@ -1076,14 +1131,14 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
       const root = currentMusicRoot();
       if (!candidate || !root) throw new Error('gallery-music-root-missing');
       root.visible = false;
-      const [, tree] = await Promise.all([candidate.ready, load(MUSIC_COURTYARD_TREE.assetPath)]);
+      const [, tree] = await Promise.all([candidate.ready, includeVegetation ? load(MUSIC_COURTYARD_TREE.assetPath) : undefined]);
       assertLive();
       attachMusicCourtyard(root, tree);
       root.visible = true;
       const exterior = distantMusic = { pavilion: candidate, root };
       stream['music-exterior'] = 'ready';
       // The courtyard stays usable if loading the guide or interior fails.
-      incoming.splice(incoming.indexOf(tree.scene), 1);
+      if (tree) incoming.splice(incoming.indexOf(tree.scene), 1);
       incomingMusic = null;
       return exterior;
     }
@@ -1220,19 +1275,21 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
         const index = models.indexOf(model);
         if (index >= 0) { models.splice(index, 1); releaseModel(model); }
       }
-      stream[group] = abort.signal.reason === sceneryDeferred ? 'idle' : 'failed';
+      stream[group] = backgroundMountain || abort.signal.reason === sceneryDeferred ? 'idle' : 'failed';
+      if (backgroundMountain && abort.signal.reason !== sceneryDeferred) sceneryRetryAt.cliff = performance.now() + 20_000;
       if (connectedGalleries && stream[group] === 'failed' &&
         (group === 'music-exterior' || group === 'scenery' || group === 'cliff-rocks' || group === 'cliff-trees' || group === 'cliff-tower')) {
         sceneryRetryAt[group] = performance.now() + 20_000;
       }
     }).catch(error => { if (!disposed) console.warn('gallery-stream-shadow-refresh', error); }).finally(() => {
+      if (backgroundMountain) warmingCliffLandscape = false;
       clearTimeout(deadline); streamControllers.delete(group);
     });
   }
   function updateFirstGalleryStreaming(position: WorldPoint, musicUnlocked: boolean, cliffUnlocked = false,
     surfaceId?: string | null, buddhaGateOpen?: boolean, hallAGateOpen?: boolean, prewarmCliffTower = false) {
     if (!streamReady || disposed) return;
-    if (!connectedGalleries && currentFirstGalleryVisuals) return;
+    if (caissonOnly) return;
     if (connectedGalleries) {
       if (connectedCliffUnlocked !== cliffUnlocked) {
         connectedCliffUnlocked = cliffUnlocked;
@@ -1242,6 +1299,14 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
         }
         if (!cliffUnlocked) streamControllers.get('cliff-tower')?.abort(sceneryDeferred);
       }
+      // Keep the coarse trees visible with the tower. The two full meshes
+      // only compete for bandwidth as the traveler approaches the cliff.
+      cliffTreesNearby = cliffTreeDistance(position) < (cliffTreesNearby ? 105 : 85);
+      const showCliffTrees = connectedCliffTower?.visible === true && cliffTreesNearby;
+      if (options.connectedDesertOverlook && towerTrees && towerTrees.root.visible !== showCliffTrees) {
+        towerTrees.root.visible = showCliffTrees;
+        if (lightingRenderer) environmentLighting?.refresh(lightingRenderer);
+      }
       const warmNearMusic = prewarmCliffTower && musicUnlocked && stream.music === 'ready' &&
         (surfaceId?.startsWith('music-') || firstGalleryEntryVenue(position) === 'music');
       // The last music challenge can finish beside the exit. Warm the tower
@@ -1250,8 +1315,8 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
         if (stream['cliff-tower'] === 'failed' && performance.now() >= (sceneryRetryAt['cliff-tower'] ?? Infinity)) stream['cliff-tower'] = 'idle';
         if (stream['cliff-tower'] === 'idle') beginStream('cliff-tower');
       }
-      if (distantMusic) {
-        distantMusic.root.visible = musicUnlocked;
+      if (connectedMusicCourtyard) {
+        connectedMusicCourtyard.visible = musicUnlocked;
         if (musicTree) musicTree.root.visible = musicUnlocked;
       }
       if (!musicUnlocked) streamControllers.get('music-exterior')?.abort(sceneryDeferred);
@@ -1260,9 +1325,18 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
       });
       updateLocalExhibitStreaming(position, surfaceId, approach.includes('music'));
       updatePreviewApproach(approach);
+      // The low mountain is already drawn from the lake. On desktop, use time
+      // inside the music gallery to replace it; phones already use the final compact mesh.
+      if (options.composedDesertCourtyard && musicUnlocked && surfaceId?.startsWith('music-') && stream.music === 'ready'
+        && stream.cliff === 'idle' && lowMountain && !streamControllers.size && performance.now() >= (sceneryRetryAt.cliff ?? 0)) {
+        warmingCliffLandscape = true;
+        beginStream('cliff', true);
+      }
       if (!streamControllers.size) {
         for (const group of ['music-exterior', 'cliff-rocks', 'cliff-trees', 'scenery'] as const) {
           if (group === 'music-exterior' && (!musicUnlocked || !options.musicPavilion || music)) continue;
+          if (group === 'cliff-trees' && (!includeVegetation
+            || (options.connectedDesertOverlook && (!cliffUnlocked || !cliffTreesNearby)))) continue;
           if (stream[group] === 'failed' && performance.now() >= (sceneryRetryAt[group] ?? Infinity)) stream[group] = 'idle';
           if (stream[group] === 'idle') { beginStream(group); break; }
         }
@@ -1279,7 +1353,7 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
   }
   function firstGalleryEntryStatus(position: WorldPoint, surfaceId?: string | null,
     musicUnlocked = true, cliffUnlocked = true) {
-    if (!connectedGalleries && currentFirstGalleryVisuals) return null;
+    if (caissonOnly) return null;
     if (connectedGalleries) return checkPreviewEntry(connectedGalleryEntryGroups(position, surfaceId).flatMap(group => {
       if (group === 'cliff' && cliffUnlocked) return ['cliff', 'cliff-tower'] as const;
       return group === 'courtyard' || (group === 'music' ? musicUnlocked : cliffUnlocked) ? [group] : [];
@@ -1305,6 +1379,7 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
     }
     if (streamControllers.size > Number(streamControllers.has('cliff-tower'))) {
       if (connectedGalleries) {
+        if (warmingCliffLandscape && !queue.includes('cliff')) streamControllers.get('cliff')?.abort(sceneryDeferred);
         for (const background of ['scenery', 'cliff-rocks', 'cliff-trees'] as const) {
           streamControllers.get(background)?.abort(sceneryDeferred);
         }
@@ -1551,7 +1626,37 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
       firstGalleryCourtyardReady: () => stream.courtyard === 'ready', loadGroundDetail: terrain?.loadGroundDetail } : {}),
     ...(scoped ? { updatePreviewStreaming, previewEntryStatus } : {}),
     ...(scoped || connectedGalleries ? { retryPreviewStreaming } : {}),
-    ...(connectedGalleries ? { musicCourtyardReady: () => stream['music-exterior'] === 'ready' } : {}),
+    ...(connectedGalleries ? {
+      musicCourtyardReady: () => stream['music-exterior'] === 'ready',
+      desertDecoration: {
+        venueVisibility: decorationVenueVisibility,
+        streamActivity: () => {
+          const pavilion = music ?? distantMusic?.pavilion ?? null;
+          if (terrain?.groundDetailPending() === true
+            || musicGroundFinishImporting || musicUpperReliefImporting || musicInstrumentsImporting
+            || musicGroundWalls?.inspect().status === 'loading' || musicGroundCeiling?.inspect().status === 'loading'
+            || (hasMusicDetails(pavilion) && (pavilion.detailStatus('flying') === 'loading' || pavilion.detailStatus('balcony') === 'loading'))) return 'venue';
+          for (const [group, request] of streamControllers) {
+            if (group === 'cliff' && warmingCliffLandscape && !request.signal.aborted) continue;
+            // An aborted scenery load can be handing its slot to a pending venue.
+            if (request.signal.aborted || (group !== 'cliff-rocks' && group !== 'cliff-trees' && group !== 'scenery')) return 'venue';
+          }
+          return streamControllers.size ? 'scenery' : null;
+        },
+        async load(path: string, signal: AbortSignal, priority: RequestPriority = 'low') {
+          const model = await loadSelectedModel(path, signal, undefined, priority);
+          adoptModel(model.scene);
+          return model.scene;
+        },
+        receiveShadows: (root: THREE.Object3D) => environmentLighting?.includeReceivers(root),
+        forgetMeshes: (root: THREE.Object3D) => environmentLighting?.forgetStreamedMeshes(root),
+        release(root: THREE.Object3D) {
+          environmentLighting?.excludeReceivers(root);
+          releaseModel(root);
+        },
+        refreshShadows() { if (lightingRenderer) environmentLighting?.refresh(lightingRenderer); },
+      },
+    } : {}),
     ...(deferMusicDetails ? {
       musicFlyingReady: () => hasMusicDetails(music) && music.detailStatus('flying') === 'ready',
       musicDetailsFailed: () => {
@@ -1665,7 +1770,7 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
     updateTerrain:dt=>{environmentLighting?.updateTraveler(traveler.position);musicInteriorLighting?.update(traveler.position,dt);},
     inspectTerrain:()=>terrain?{...terrain.inspect(),lighting:environmentLighting?.inspect(),rockFinish:rockFinish?.inspect(),bactrianCaravans:bactrianCaravans?.inspect(),towerTrees:towerTrees?.inspect(),courtyardExpansion,courtyardShadows,caisson,squareHall,upper:upper?{version:'v002',hiddenRailings:hiddenUpperRailings}:undefined,musicTree:musicTree?.inspect(),musicFurniture:musicFurniture?.inspect(),musicDecoration:musicDecoration?.inspect(),musicInteriorLighting:musicInteriorLighting?.inspect(),musicThreeWallMural:musicThreeWallMural?.inspect(),musicGroundFloor:{walls:musicGroundWalls?.inspect(),ceiling:musicGroundCeiling?.inspect()},musicUpperRelief:musicUpperWalls?{...musicUpperWalls.inspect(),ceiling:!!musicUpperCeiling,transition:musicTransitionTrim?.inspect(),connectedCeiling:!!musicTransitionCeiling}:undefined,streaming:firstGallery||scoped?{
       ...stream, initialRegion: initialStreamRegion, musicSilhouetteVisible: !!musicSilhouette?.visible,
-      musicBuildingVisible: !!music || !!distantMusic?.root.visible, timing: { ...streamTimings },
+      musicBuildingVisible: connectedGalleries ? decorationVenueVisibility().music : !!music, timing: { ...streamTimings },
       cliffMountainAsset, cliffTowerVisible: !!connectedCliffTower?.visible,
     }:undefined}:undefined,
     buddhaVisibleAtCenter(camera, point){

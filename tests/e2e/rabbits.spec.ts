@@ -1,5 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 import type { GameLayout } from '../../src/runtime/layout';
+import { isMobileProject } from './supported-viewports';
+import { unlockPatternsForTest } from './gallery-unlock-fixtures';
 
 const levelId = 'patterns-rabbits';
 const progressKey = 'dunhuang:progress:v1';
@@ -30,17 +32,11 @@ async function clickSourcePoint(page: Page, point: { x: number; y: number }, sid
 }
 
 test('三兔与旋转按交付比例展示，找到五处指定变化后独立保存', async ({ page }, testInfo) => {
-  const touch = testInfo.project.name === 'mobile-chromium';
+  const touch = isMobileProject(testInfo);
+  await unlockPatternsForTest(page);
   await page.goto('/#/theme/patterns/games/spot-difference');
-  await expect(page.locator('.level-select-screen')).toHaveAttribute('data-page-size', touch ? '2' : '6');
-  await expect(page.getByTestId('level-catalog-summary')).toHaveText('共 6 关5 关开放');
+  await expect(page.getByTestId('level-catalog-summary')).toHaveText('共 5 关5 关开放');
   const card = page.locator(`.level-choice-card[data-level-id="${levelId}"]`);
-  for (let index = 0; index < 2 && !await card.count(); index++) {
-    const pager = page.locator('.selection-pagination > span');
-    const previous = await pager.textContent();
-    await page.getByRole('button', { name: '下一页', exact: true }).click();
-    await expect(pager).not.toHaveText(previous!);
-  }
   await expect(card).toHaveAttribute('data-status', 'available');
   await expect(card).toContainText('5处差异');
   await card.getByRole('link', { name: '三兔与旋转', exact: true }).click();
@@ -76,14 +72,22 @@ test('三兔与旋转按交付比例展示，找到五处指定变化后独立�
   expect(await page.evaluate(key => JSON.parse(localStorage.getItem(key)!).completed, progressKey)).toEqual(completed);
 });
 
-test('一键打开最后一关已开放的找不同，返回后定位到该关所在页', async ({ page }) => {
+test('一键打开最后一关已开放的找不同，返回后滚动定位到该关', async ({ page }, testInfo) => {
+  await unlockPatternsForTest(page);
   await page.goto('/?preview=verification#/play-latest/patterns/spot-difference');
   await expect(page).toHaveURL(/\?preview=verification#\/play\/patterns-rabbits$/);
   await expect(page.getByRole('button', { name: '给我提示', exact: true })).toBeEnabled({ timeout: 45_000 });
-  await page.getByRole('link', { name: '返回找不同关卡', exact: true }).click();
+  const back = isMobileProject(testInfo) ? '返回找不同关卡' : '返回关卡';
+  await page.getByRole('button', { name: back, exact: true }).click();
   await expect(page).toHaveURL(/#\/theme\/patterns\/games\/spot-difference\?level=patterns-rabbits$/);
   const card = page.locator('.level-choice-card[data-level-id="patterns-rabbits"]');
   await expect(card.getByRole('link', { name: '开始观察', exact: true })).toBeInViewport();
   await page.reload();
   await expect(card.getByRole('link', { name: '开始观察', exact: true })).toBeInViewport();
+});
+
+test('三馆入口的一键打开最新关卡仍受第一馆解锁条件约束', async ({ page }) => {
+  await page.goto('/first-gallery-v001.html#/play-latest/patterns/spot-difference');
+  await expect(page.getByRole('heading', { name: '这个入口尚未开放' })).toBeVisible();
+  await expect(page.getByTestId('phaser-player')).toHaveCount(0);
 });

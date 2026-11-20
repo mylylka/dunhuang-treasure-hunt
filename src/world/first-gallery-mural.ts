@@ -47,6 +47,7 @@ const walkLength = distance(muralObserver, tableObserver);
 export function createFirstGalleryMural(
   savePart: (part: FirstGalleryMuralPart, replayParts?: readonly FirstGalleryMuralPart[]) => boolean,
   rememberedMarker = false,
+  connected = false,
 ) {
   let phase: Phase = 'idle', time = 0, realTime = 0, progress = 0, stalled = 0;
   let replay = false, marker = rememberedMarker, declined = rememberedMarker, waitingForLeave = false;
@@ -106,7 +107,7 @@ export function createFirstGalleryMural(
     if (dt <= 0) return position;
     const speed = Math.min(1.65, .3 + time * 3, Math.max(.28, remaining * 4));
     const scale = Math.min(1, speed * dt / remaining);
-    const next = moveTerrainPlayer(position, { x: (goal.x - position.x) * scale, z: (goal.z - position.z) * scale }, true);
+    const next = moveTerrainPlayer(position, { x: (goal.x - position.x) * scale, z: (goal.z - position.z) * scale }, true, undefined, connected);
     stalled = distance(position, next) < .001 ? stalled + dt : 0;
     if (stalled > .5) exit();
     return next;

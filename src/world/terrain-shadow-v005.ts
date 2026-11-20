@@ -121,6 +121,37 @@ function meshSemantics(mesh:THREE.Mesh,root:THREE.Object3D){
   return {role:'',id:mesh.name};
 }
 
+const COURTYARD_SHELL = /^(?:gate-|entrance-(?:roof|wing)|wall-painted-border|courtyard-(?:side-(?:wall|art)|wall-band|square-rear-|v005-))/;
+const HALL_SHELL = /^hall-v003-(?:column-|upper-|lower-eave-|high-roof-|(?:front|rear)-(?:beam-|crossbeam)|(?:left|right)-(?:beam-|long-beam))/;
+
+export function markFirstGalleryArchitectureMaterials(root:THREE.Object3D):void {
+  const shellMeshes:THREE.Mesh[]=[];
+  const otherMaterials=new Set<THREE.Material>();
+  root.traverse(object=>{
+    if(!(object instanceof THREE.Mesh))return;
+    const {id}=meshSemantics(object,root);
+    if(COURTYARD_SHELL.test(id)||HALL_SHELL.test(id))shellMeshes.push(object);
+    else for(const material of Array.isArray(object.material)?object.material:[object.material])otherMaterials.add(material);
+  });
+
+  // Painted bands and fixtures can share a material with a structural part.
+  // Split those materials while keeping their authored maps and shadow sides.
+  const variants=new Map<THREE.Material,THREE.MeshStandardMaterial>();
+  function architectureMaterial(material:THREE.Material):THREE.Material {
+    if(!(material instanceof THREE.MeshStandardMaterial))return material;
+    let variant=variants.get(material);
+    if(!variant){
+      variant=otherMaterials.has(material)?material.clone():material;
+      variant.userData.firstGalleryArchitecture=true;
+      variants.set(material,variant);
+    }
+    return variant;
+  }
+  for(const mesh of shellMeshes){
+    mesh.material=Array.isArray(mesh.material)?mesh.material.map(architectureMaterial):architectureMaterial(mesh.material);
+  }
+}
+
 /** Keep normal rendering double-sided. Only closed solid/floor volumes cast
  * their back faces, following Three's usual opaque FrontSide shadow policy.
  * The workbench alone keeps its authored double-sided caster behavior so its

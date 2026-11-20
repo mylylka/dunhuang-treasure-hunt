@@ -45,6 +45,9 @@ const coloringLevelOrder = new Map<string, number>([
 // Keep archived level data intact for saved artwork and older links, while
 // omitting removed activities and the two rejected roadmap slots from menus.
 const hiddenLevelChoiceIds = new Set([
+  'coloring-grape-lotus',
+  'coloring-grape-pomegranate',
+  'coloring-lotus-camellia',
   'coloring-three-rabbits',
   'patterns-colors',
   'puzzle-caisson-panorama',

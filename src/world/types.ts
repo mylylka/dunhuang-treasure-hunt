@@ -110,6 +110,7 @@ export interface WorldRuntime {
 export interface WorldRuntimeOptions {
   travelerId?: import('../content/world/assets').TravelerId;
   connectedGalleries?: boolean;
+  previewAllGalleries?: boolean;
   musicGalleryUnlocked?: boolean;
   firstGallery?: boolean;
   onGalleryInteract?(id: import('../content/world/first-gallery-v001').GalleryInteraction, object?: 'lotus' | 'bird' | 'grapes'): void;

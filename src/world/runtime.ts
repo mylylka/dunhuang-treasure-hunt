@@ -88,8 +88,11 @@ import { musicCameraSpace, flyingCameraPose } from './music-pavilion';
 import { createArtSampleScene } from './art-sample';
 import { createWorldInput, type WorldInputPoint } from './input';
 import { characterCameraPose, createCinematicDirector, openingHeading, openingDistance } from './character-cinematics';
-import { caissonCameraPose, clearCameraPosition, followCameraPose, settleFollowCamera } from './camera';
+import { caissonCameraPose, clearCameraPosition, followCameraPose, settleFollowCamera, type CameraCylinder } from './camera';
 import { clampCameraYaw, movePlayer, movementVector, RUN_SPEED, sanitizePosition, surfaceHeight, WALK_SPEED, WORLD_SPAWN, WORLD_COLLIDERS } from './movement';
+import { CONNECTED_DESERT_VEGETATION } from '../content/world/desert-vegetation';
+import { createDesertDecorationStreaming } from './desert-decoration-streaming';
+import { createDesertOasisStreaming, inOasisRidgeApproach } from './desert-oasis-streaming-v013';
 import type { DiscoveryId, MogaoExhibitHall, WorldCheckpoint, WorldRuntime, WorldRuntimeOptions, WorldSnapshot, WorldView } from './types';
 
 export function createWorldRuntime(container: HTMLElement, options: WorldRuntimeOptions): WorldRuntime {
@@ -99,8 +102,18 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   let paused = false;
   let view: WorldView = 'follow';
   const terrain = options.terrainVersion === 'v001';
-  const connected = !!options.connectedGalleries;
   const caissonOnly = !!options.firstGallery && isCaissonOnlyMode();
+  const connected = !caissonOnly && !!options.connectedGalleries;
+  const previewAll = connected && !!options.previewAllGalleries;
+  const desertVariant = new URLSearchParams(window.location.search).get('desertDecoration');
+  const desertEnabled = terrain && connected && !!options.environmentVersion && desertVariant !== '0';
+  const composedCourtyard = desertEnabled && desertVariant !== 'v004';
+  let desert: ReturnType<typeof createDesertDecorationStreaming> | undefined;
+  let oasis: ReturnType<typeof createDesertOasisStreaming> | undefined;
+  const pauseDesert = () => { desert?.pause(); oasis?.pause(); };
+  const disposeDesert = () => { desert?.dispose(); oasis?.dispose(); };
+  let desertHasMoved = false;
+  const desertObstacles: CameraCylinder[] = [];
   let musicGalleryUnlocked = !!options.musicGalleryUnlocked;
   let prewarmCliffTower = false;
   const previewResources = worldPreviewResourceProfile(window.location.pathname, document.documentElement.dataset.previewResourceEntry);
@@ -119,6 +132,8 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   let previewAttempt: { position: WorldCheckpoint['position']; surface?: string } | undefined;
   let galleryState = options.firstGallery ? loadFirstGallery().data : null;
   const firstGalleryUnlocked = () => !!galleryState && isFirstGalleryUnlocked(galleryState);
+  const canVisitMusic = () => previewAll || firstGalleryUnlocked();
+  const canVisitCliff = () => previewAll || (firstGalleryUnlocked() && musicGalleryUnlocked);
   const gallery = options.firstGallery ? createFirstGalleryEvents(galleryState?.introductionsSeen, caissonOnly) : null;
   const galleryNarration = gallery ? createFirstGalleryNarration(options.sound ?? defaultSoundPreferences()) : null;
   const galleryCaissonGaze = gallery ? createBuddhaGaze() : null;
@@ -149,7 +164,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   const mural = gallery && !caissonOnly ? createFirstGalleryMural((part, replayParts) => {
     if (replayParts) { galleryDisplay?.setParts(replayParts); return true; }
     return completeGalleryMuralPart(part).ok;
-  }, savedMuralMarker) : null;
+  }, savedMuralMarker, connected) : null;
   let galleryCaissonView: { entry: FirstGalleryMuralCameraPose; time: number; returning: boolean } | null = null;
   const unsubscribeGallery = options.firstGallery ? subscribeFirstGallery(local => {
     const previouslyUnlocked = !!galleryState && isFirstGalleryUnlocked(galleryState);
@@ -166,8 +181,11 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   const interiorNavigation = musicInterior && (options.musicBalconyV2 || musicInstrumentDisplay) ? createMusicInteriorNavigation({
     compactBalcony: options.musicBalconyV2,
     additionalSolids: musicInstrumentDisplay ? MUSIC_INSTRUMENT_DISPLAY_SOLIDS : undefined,
+    outdoorObstacles: desertEnabled ? desertObstacles : undefined,
+    connectedTerrain: connected,
+    composedCourtyard,
   }) : legacyMusicInteriorNavigation;
-  const interiorCameraSpace = musicInterior ? createMusicInteriorCameraSpace(interiorNavigation.cameraSolids) : undefined;
+  const interiorCameraSpace = musicInterior ? createMusicInteriorCameraSpace(interiorNavigation.cameraSolids, !connected || CONNECTED_DESERT_VEGETATION) : undefined;
   const companionV1 = options.companionVersion === 'v001' ? createMusicCompanion() : null;
   const guideVisit = options.musicGuide && musicInterior ? createMusicGuideVisit(() => {
     if (!reduced) void soundPlayer.prepare('guide-stardust');
@@ -237,7 +255,8 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     return terrain ? terrainPose('music', pose) : pose;
   }
   const nearMural=(p:{x:number;z:number})=>baseNearMural(localPoint('music',p));
-  const cameraSpace=terrain?terrainCameraSpace(options.terrainCaissonVersion==='v001',!!options.firstGallery,musicV6,caissonOnly):mogao?(mogaoV11?mogaoCameraSpaceV11:mogaoV8?mogaoCameraSpaceV8:mogaoV7?mogaoCameraSpaceV7:mogaoV6?mogaoCameraSpaceV6:mogaoV3?mogaoCameraSpaceV3:mogaoV2?mogaoCameraSpaceV2:mogaoCameraSpace)():musicPreview?(musicV4?musicCameraSpaceV4(musicV6):musicV3?musicCameraSpaceV3():musicV2?musicCameraSpaceV2():musicCameraSpace()):undefined;
+  const cameraSpace=terrain?terrainCameraSpace(options.terrainCaissonVersion==='v001',!!options.firstGallery,musicV6,connected,composedCourtyard,caissonOnly):mogao?(mogaoV11?mogaoCameraSpaceV11:mogaoV8?mogaoCameraSpaceV8:mogaoV7?mogaoCameraSpaceV7:mogaoV6?mogaoCameraSpaceV6:mogaoV3?mogaoCameraSpaceV3:mogaoV2?mogaoCameraSpaceV2:mogaoCameraSpace)():musicPreview?(musicV4?musicCameraSpaceV4(musicV6):musicV3?musicCameraSpaceV3():musicV2?musicCameraSpaceV2():musicCameraSpace()):undefined;
+  const baseCameraCylinders = cameraSpace?.cylinders ?? [];
   const usesMusicSurface = (surface?: string) => musicInterior && !!surface && (!connected || isMusicWalkSurface(surface));
   const usesUpperSurface = (surface?: string) => upper && !!surface && (!connected || isMogaoWalkSurface(surface));
   function heightAt(p: WorldCheckpoint['position']) {
@@ -266,7 +285,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
       pose.position=settleUpperCamera(pose.target,pose.position,buddhaGateLocked,exhibit,aLocked);
       return pose;
     }
-    const original=terrain?terrainFollowPose(x,y,z,yaw,cameraSpace!,!!options.firstGallery,musicV6,caissonOnly):mogao?(mogaoV11?mogaoFollowPoseV11:mogaoV8?mogaoFollowPoseV8:mogaoV7?mogaoFollowPoseV7:mogaoV6?mogaoFollowPoseV6:mogaoV3?mogaoFollowPoseV3:mogaoV2?mogaoFollowPoseV2:mogaoFollowPose)(x,y,z,yaw,cameraSpace!):followCameraPose(x,y,z,yaw,cameraSpace);
+    const original=terrain?terrainFollowPose(x,y,z,yaw,cameraSpace!,!!options.firstGallery,musicV6,connected,composedCourtyard,caissonOnly):mogao?(mogaoV11?mogaoFollowPoseV11:mogaoV8?mogaoFollowPoseV8:mogaoV7?mogaoFollowPoseV7:mogaoV6?mogaoFollowPoseV6:mogaoV3?mogaoFollowPoseV3:mogaoV2?mogaoFollowPoseV2:mogaoFollowPose)(x,y,z,yaw,cameraSpace!):followCameraPose(x,y,z,yaw,cameraSpace);
     const pose=zoomFollowPose(original,zoomOffset);
     const subject=cameraSpace?.subjectHeight===undefined?undefined:new THREE.Vector3(x,y+cameraSpace.subjectHeight,z);
     pose.position=terrain&&cameraSpace&&subject
@@ -275,9 +294,9 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
       :settleFollowCamera(pose.target,pose.position,pose.position,cameraSpace,subject);
     return pose;
   };
-  let checkpoint: WorldCheckpoint = { ...options.initial, position: terrain ? sanitizeTerrainPosition(options.initial.position, !!options.firstGallery, caissonOnly) : sanitizePosition(options.initial.position, musicPreview ? regionColliders : undefined, bounds), cameraYaw: yawLimit(options.initial.cameraYaw), visitedEvents: [...options.initial.visitedEvents] };
+  let checkpoint: WorldCheckpoint = { ...options.initial, position: terrain ? sanitizeTerrainPosition(options.initial.position, !!options.firstGallery, connected, composedCourtyard, caissonOnly) : sanitizePosition(options.initial.position, musicPreview ? regionColliders : undefined, bounds), cameraYaw: yawLimit(options.initial.cameraYaw), visitedEvents: [...options.initial.visitedEvents] };
   if (connected) {
-    checkpoint = sanitizeConnectedGalleryCheckpoint(options.initial, firstGalleryUnlocked(), musicGalleryUnlocked);
+    checkpoint = sanitizeConnectedGalleryCheckpoint(options.initial, canVisitMusic(), canVisitCliff(), composedCourtyard);
   } else {
     if (caissonOnly && !isCaissonOnlyWalkable(checkpoint.position)) checkpoint = { ...checkpoint, position: { ...TERRAIN_SPAWN }, heading: TERRAIN_REGIONS.courtyard.yaw, cameraYaw: TERRAIN_REGIONS.courtyard.yaw, walkSurface: undefined };
     if (galleryState && galleryBlockedRegion(checkpoint.position, firstGalleryUnlocked())) checkpoint = { ...checkpoint, position: { ...TERRAIN_SPAWN }, heading: TERRAIN_REGIONS.courtyard.yaw, cameraYaw: TERRAIN_REGIONS.courtyard.yaw };
@@ -330,7 +349,9 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     previewResources: previewResources ?? (mobileTerrainStreaming ? TERRAIN_RESOURCE_PROFILE : undefined),
     connectedGalleries: connected, previewStart: checkpoint.position, previewStartSurface: checkpoint.walkSurface,
     compactConnectedTerrain: (connected || caissonOnly) && coarsePointer,
-    cliffUnlockedAtStart: connected && firstGalleryUnlocked() && musicGalleryUnlocked,
+    connectedDesertOverlook: desertEnabled,
+    composedDesertCourtyard: composedCourtyard,
+    cliffUnlockedAtStart: connected && canVisitCliff(),
     ...(options.mogaoExhibit ? {
       mogaoExhibitVersion: 'v001' as const,
       mogaoExhibitGateLocked: exhibitGateLocked,
@@ -441,8 +462,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
       // The unlocked pavilion is out of shot during the first gallery's ceremony.
       // Its streaming and shadow refresh can start when the traveler resumes.
       if (inFirstGallery() && (portalLightPending || portalBusy() || portalNotice)) return;
-      const first = firstGalleryUnlocked();
-      world.updateFirstGalleryStreaming?.(position, first, first && musicGalleryUnlocked, surfaceId,
+      world.updateFirstGalleryStreaming?.(position, canVisitMusic(), canVisitCliff(), surfaceId,
         startedViewingExhibits, !hallAGateLocked, prewarmCliffTower);
       return;
     }
@@ -450,7 +470,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
       options.mogaoExhibit ? !hallAGateLocked : undefined);
   }
   const previewEntryStatus = (position: WorldCheckpoint['position'], surface?: string) => connected
-    ? world.firstGalleryEntryStatus?.(position, surface, firstGalleryUnlocked(), firstGalleryUnlocked() && musicGalleryUnlocked)
+    ? world.firstGalleryEntryStatus?.(position, surface, canVisitMusic(), canVisitCliff())
     : world.previewEntryStatus?.(position, surface);
   // The isolated scene displays only approved tree A. Its low geometry reaches
   // 1.01 m from the trunk (measured below 2.1 m in the environment sample).
@@ -863,6 +883,12 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
         if (pose) { closeup.position.copy(pose.position); closeup.lookAt(pose.target); }
       }
       const renderCamera = showcasing && guideCloseup ? guideCloseup.camera : camera;
+      if (desert && world.desertDecoration) {
+        const venues = world.desertDecoration.venueVisibility();
+        desert.setVenueVisibility(venues);
+        oasis?.setCourtVisibility(venues.music);
+        desert.present(renderCamera);
+      }
       shownGuideCloseup = renderCamera !== camera;
       if (revealComplete) finishGuideSurfaceReveal();
       else if (revealElapsed !== null) {
@@ -874,6 +900,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
       if (shownGuideCloseup && guide) guide.visible = true;
       guidePlayerOccluding = showcasing && !!guide && musicGuideBlockedByTraveler(renderCamera, traveler, guide);
       if (shownGuideCloseup || guidePlayerOccluding) traveler.visible = false;
+      oasis?.cullRidge(renderCamera);
       try { renderer.render(world.scene, renderCamera); }
       finally {
         traveler.visible = travelerWasVisible;
@@ -898,6 +925,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     failed = true; moving = false; stopCompanion(); galleryNarration?.cancel(); buddhaVoice?.setBlocked(true); blockEncounterVoices(true); voice?.setBlocked(true); audio?.setDucked(false); audio?.setBlocked(true); stop(); input.setEnabled(false);
     history?.dispose();
     disposeGamePortals();
+    disposeDesert();
     world.dispose(); renderer.renderLists.dispose();
     emit(); options.onError(message);
   }
@@ -979,12 +1007,12 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
       const delta = guidedDelta ?? guideWalk?.delta ?? { x: vector.x * desiredSpeed * movementDt, z: vector.z * desiredSpeed * movementDt };
       const upperNext = assisted?.walk ?? (upperNavigation ? moveUpperPlayer(walk, delta, exhibitGateBlocks(), hallAGateBlocks(), !!options.mogaoExhibit) : null);
       const musicNext = guideWalk?.walk ?? musicAssisted?.walk ?? (musicNavigation ? companionV2?.constrainPlayerMove(walk, delta) : null);
-      let next = musicNext?.position ?? (companionV1 ? companionV1.constrainPlayerMove(checkpoint.position,delta) : upperNext?.position ?? (terrain ? moveTerrainPlayer(checkpoint.position,delta,!!options.firstGallery,caissonOnly) : mogaoV8 ? mogaoV8Rules.moveMogaoPlayer(checkpoint.position,delta) : mogaoV7 ? mogaoV7Rules.moveMogaoPlayer(checkpoint.position,delta) : movePlayer(checkpoint.position,delta,colliders,bounds)));
+      let next = musicNext?.position ?? (companionV1 ? companionV1.constrainPlayerMove(checkpoint.position,delta) : upperNext?.position ?? (terrain ? moveTerrainPlayer(checkpoint.position,delta,!!options.firstGallery,desertObstacles,connected,composedCourtyard,caissonOnly) : mogaoV8 ? mogaoV8Rules.moveMogaoPlayer(checkpoint.position,delta) : mogaoV7 ? mogaoV7Rules.moveMogaoPlayer(checkpoint.position,delta) : movePlayer(checkpoint.position,delta,colliders,bounds)));
       if (caissonOnly && !isCaissonOnlyWalkable(next)) next = checkpoint.position;
       let nextSurface = (musicNext ?? upperNext)?.surfaceId ?? undefined;
       const attemptedMove = nextSurface !== previousSurface || Math.hypot(next.x - checkpoint.position.x, next.z - checkpoint.position.z) > .00001;
       const galleryBlock = galleryState && attemptedMove ? connected
-        ? connectedGalleryBlockedRegion(next, firstGalleryUnlocked(), musicGalleryUnlocked)
+        ? connectedGalleryBlockedRegion(next, canVisitMusic(), canVisitCliff())
         : galleryBlockedRegion(next, firstGalleryUnlocked()) ?? world.firstGalleryEntryStatus?.(next) : null;
       const entryStatus = attemptedMove && !galleryBlock ? previewEntryStatus(next, nextSurface) : null;
       if (galleryBlock) {
@@ -1023,6 +1051,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
       } else if (!onMusicUpperFloor(checkpoint.walkSurface)) manualUpperLanding = false;
       const beforePosition = checkpoint.position;
       const distance = Math.hypot(next.x - beforePosition.x, next.z - beforePosition.z);
+      if (desertEnabled && distance > .00001 && (control.x || control.y)) desertHasMoved = true;
       speed = movementDt ? distance / movementDt : 0;
       if (speed > .05) {
         const heading = Math.atan2(-vector.x, -vector.z);
@@ -1077,7 +1106,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     } else moving = false;
     const musicPoint = localPoint('music', checkpoint.position);
     audio?.update(musicPoint, checkpoint.cameraYaw - (terrain ? TERRAIN_REGIONS.music.yaw : 0),
-      (!galleryState || isFirstGalleryUnlocked(galleryState)) && (!previewResources || (terrain ? terrainMusicArmed || moving : earlyIntent)));
+      (!galleryState || canVisitMusic()) && (!previewResources || (terrain ? terrainMusicArmed || moving : earlyIntent)));
     if (terrain && moving && !terrainMusicArmed) {
       terrainMusicArmed = true;
       audio?.setEnabled(true);
@@ -1324,6 +1353,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
       audio?.setDucked(!!guideVisit?.speechLine||!!companion?.state.dialogue||!!voice?.inspect().playing||!!currentEncounterVoice()?.inspect().playing||buddhaVoice.inspect()?.playing||!!galleryNarration?.inspect()?.playing);
     }
     poseSettled = camera.position.distanceToSquared(desiredPose.position) < .00002 && cameraTarget.distanceToSquared(desiredPose.target) < .00002;
+    updateDesertDecoration(time);
     render(true);
     if (arrivalChanged || time - lastEmit > 100 || moving !== wasMoving) { lastEmit = time; emit(); }
     // Caisson is static once the observation camera arrives; avoid wasteful idle renders.
@@ -1347,6 +1377,27 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   function canControlCamera() {
     return loaded && guideSurfaceRevealElapsed === null && guideVisit?.speechLine !== 'intro' && !disposed && !failed && !paused && !galleryBlocked && !galleryCaissonView && !portalBusy() && !portalNotice && !galleryArtworkFeedbackActive() && !mural?.active && !exhibitArrival && !document.hidden && !overview && view==='follow' && !encounters?.state && hallArrival?.phase!=='waiting';
   }
+  function updateDesertDecoration(now: number) {
+    if (!desert || !world.desertDecoration) return;
+    const canStream = canControlCamera() && !galleryWindowBlurred;
+    if (!canStream && (!overview || paused || document.hidden || galleryWindowBlurred)) {
+      pauseDesert();
+      return;
+    }
+    const decoration = world.desertDecoration;
+    const activity = decoration.streamActivity();
+    const busy = !canStream || activity === 'venue'
+      || audio?.loading() === true
+      || galleryNarration?.inspect()?.status === 'loading'
+      || buddhaVoice?.inspect()?.status === 'loading'
+      || currentEncounterVoice()?.inspect().status === 'loading'
+      || !!guideVisit?.speechLine || !!companion?.state.dialogue;
+    desert.update({
+      now, busy: busy || !desertHasMoved || activity === 'scenery', position: checkpoint.position,
+      companionPosition: companion?.state.position,
+    });
+    oasis?.update(camera, checkpoint.position, busy, now, decoration.venueVisibility().music, activity === 'scenery', inMusicGallery());
+  }
   function tiltCamera(delta:number) {
     if (!canControlCamera() || !Number.isFinite(delta)) return;
     finishGuideApproach(false);
@@ -1366,6 +1417,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     setFlyingBlocked(blocked || !!history?.holdsVideo);
   }
   function visibility() {
+    if (document.hidden) pauseDesert();
     if(document.hidden){stopGuideShowcase();cancelStairAssists();stopCompanion();}
     galleryNarration?.setBlocked(document.hidden || paused || galleryWindowBlurred || view !== 'follow' || overview);
     syncFlyingPlayback();
@@ -1375,7 +1427,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     if (document.hidden) { skipCinematic(); stop(); emit(); } else schedule();
   }
   function contextLost(event: Event) { event.preventDefault(); fail('浏览器暂停了3D画面。请重新加载。'); }
-  const blur = () => { galleryWindowBlurred = true; galleryNarration?.setBlocked(true); history?.setBlocked(true); setFlyingBlocked(true); cancelStairAssists(); stopCompanion(); buddhaVoice?.setBlocked(true); blockEncounterVoices(true); skipCinematic(); input.clear(); travelCamera?.reset(); voice?.setBlocked(true); audio?.setDucked(false); audio?.setBlocked(true); };
+  const blur = () => { pauseDesert(); galleryWindowBlurred = true; galleryNarration?.setBlocked(true); history?.setBlocked(true); setFlyingBlocked(true); cancelStairAssists(); stopCompanion(); buddhaVoice?.setBlocked(true); blockEncounterVoices(true); skipCinematic(); input.clear(); travelCamera?.reset(); voice?.setBlocked(true); audio?.setDucked(false); audio?.setBlocked(true); };
   const focusGallery = () => { galleryWindowBlurred = false; galleryNarration?.setBlocked(document.hidden || paused || view !== 'follow' || overview); schedule(); };
   window.addEventListener('blur', blur);
   if (gallery) window.addEventListener('focus', focusGallery);
@@ -1385,6 +1437,20 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   document.addEventListener('visibilitychange', visibility);
   canvas.addEventListener('webglcontextlost', contextLost);
   updateTraveler(0); resize(); emit();
+  let openingScenery: Promise<unknown> | undefined;
+  if (composedCourtyard && world.desertDecoration) {
+    oasis = createDesertOasisStreaming({ scene: world.scene, mobile: coarsePointer || mobileTerrainStreaming, ...world.desertDecoration });
+    // The gate and downhill originals share the existing character/courtyard loading time.
+    // A restored summit presents its real meshes on the first playable frame.
+    if (!document.hidden) {
+      camera.updateMatrixWorld();
+      const nearGate = !checkpoint.walkSurface && Math.hypot(checkpoint.position.x - TERRAIN_SPAWN.x, checkpoint.position.z - TERRAIN_SPAWN.z) <= 12;
+      openingScenery = Promise.allSettled([
+        oasis.prepareRoute(checkpoint.position,camera),
+        nearGate ? oasis.prepareOpening(camera, checkpoint.position, world.desertDecoration.venueVisibility().music) : undefined,
+      ]);
+    }
+  }
   function prepareGalleryDisplay() {
     if (!gallery || galleryDisplay || world.firstGalleryCourtyardReady?.() === false) return;
     galleryDisplay = createFirstGalleryDisplay(world.scene, world.traveler);
@@ -1407,8 +1473,31 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   void world.ready.then(async () => {
     if (disposed || failed) return;
     prepareGalleryDisplay();
-    await world.prepareEnvironment?.(renderer,camera);
+    if (desertEnabled && world.desertDecoration) {
+      desert = createDesertDecorationStreaming({
+        scene: world.scene, mobile: coarsePointer, ...world.desertDecoration,
+        vegetation: CONNECTED_DESERT_VEGETATION,
+        ...(desertVariant === 'v004' ? { version: 'v004' as const } : {}),
+        setObstacles(obstacles) {
+          desertObstacles.splice(0, desertObstacles.length, ...obstacles);
+          if (cameraSpace) cameraSpace.cylinders = [...baseCameraCylinders, ...obstacles];
+        },
+      });
+      desert.setVenueVisibility(world.desertDecoration.venueVisibility());
+    }
+    await Promise.all([world.prepareEnvironment?.(renderer, camera), desert?.prepare()]);
     if (disposed || failed) return;
+    if (openingScenery) {
+      // A summit checkpoint has no approach time. On the entrance route give the
+      // concurrently loaded originals time to decode even on a cold connection.
+      // Network failures still recover through the ordinary streaming fallback.
+      let deadline: number | undefined;
+      const budget = inOasisRidgeApproach(checkpoint.position) ? 25_000 : 1800;
+      try {
+        await Promise.race([openingScenery, new Promise<void>(resolve => { deadline = window.setTimeout(resolve, budget); })]);
+      } finally { window.clearTimeout(deadline); }
+      if (disposed || failed) return;
+    }
     // A recovered award can pause the first frame. Start any authorized
     // viewing-room load before notifying the UI that it can show the award.
     if (options.mogaoExhibit) streamPreview(checkpoint.position, checkpoint.walkSurface);
@@ -1426,6 +1515,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
       if (pose) { camera.position.copy(pose.position); cameraTarget.copy(pose.target); camera.lookAt(cameraTarget); }
       else director?.skip();
     }
+    if (oasis) updateDesertDecoration(performance.now());
     render();
     if (failed) return;
     emit(); options.onReady?.(); schedule();
@@ -1534,7 +1624,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
       input.clear();
       travelCamera?.reset();
       const heading = Math.atan2(checkpoint.position.x - portalLookTarget.x, checkpoint.position.z - portalLookTarget.z);
-      portalPrelude = { time: 0, yaw: galleryPortalCameraYaw(heading), route: createGalleryPortalWalk(checkpoint.position) };
+      portalPrelude = { time: 0, yaw: galleryPortalCameraYaw(heading), route: createGalleryPortalWalk(checkpoint.position, connected, composedCourtyard) };
       lookIntent = 0;
       soundPlayer.play('gallery-unlock');
       schedule(); emit();
@@ -1636,6 +1726,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     setOverview(enabled) {
       if(!terrain||!loaded||view!=='follow'||paused)return;
       if (exhibitArrival) return;
+      if (enabled) pauseDesert();
       cancelStairAssists();overview=enabled;input.clear();input.setEnabled(!overview);moving=false;travelCamera?.reset();
       galleryNarration?.setBlocked(overview || document.hidden || galleryWindowBlurred);
       if(overview){lookIntent=0;lookPitch=0;const pose=options.environmentVersion?ENVIRONMENT_OVERVIEW:TERRAIN_OVERVIEW;camera.position.copy(pose.position);cameraTarget.copy(pose.target);camera.lookAt(cameraTarget);}
@@ -1664,7 +1755,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
       try { return canvas.toDataURL('image/jpeg', .75); } catch { return undefined; }
     },
     replayObservation() { if(view==='flying') { world.music?.replay(); voice?.enter(); audio?.setDucked(false); emit(); schedule(); } },
-    inspect: () => ({ musicGuideSurfaceReveal: guideSurfaceRevealElapsed === null ? null : {
+    inspect: () => ({ desertDecoration: desert?.inspect(), desertOasis: oasis?.inspect(), musicGuideSurfaceReveal: guideSurfaceRevealElapsed === null ? null : {
       progress: guideSurfaceRevealElapsed / guideSurfaceRevealSeconds, elapsed: guideSurfaceRevealElapsed, playerOccluding: guidePlayerOccluding,
       audioStarted: guideRevealAudioStarted, showcase: shownGuideCloseup && guideCloseup ? {
         position: guideCloseup.camera.position.toArray(), target: guideCloseup.target.toArray(), fov: guideCloseup.camera.fov,
@@ -1677,6 +1768,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
       // must not clear a key the player pressed during that handoff.
       if (disposed || paused === value) return;
       if (value) {
+        pauseDesert();
         stopGuideShowcase();
         if (portalPrelude && portalPrelude.time < GALLERY_PORTAL_PRELUDE.reveal) soundPlayer.stop();
         cancelStairAssists(); stopCompanion(); skipCinematic();
@@ -1690,6 +1782,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     },
     setView(next) {
       if (disposed || view === next) return;
+      if (next !== 'follow') pauseDesert();
       finishGuideApproach(false);
       if (next === 'story') exhibitGroundGuidance?.dismiss();
       if (guideSurfaceRevealElapsed !== null) {
@@ -1801,7 +1894,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
       if (guideVisit) window.removeEventListener('focus', syncFlyingPlayback);
       if(mogaoV10)window.removeEventListener('focus',visibility);
       document.removeEventListener('visibilitychange', visibility); canvas.removeEventListener('webglcontextlost', contextLost);
-      history?.dispose(); disposeGamePortals(); world.dispose(); renderer.renderLists.dispose(); renderer.dispose(); renderer.forceContextLoss();
+      history?.dispose(); disposeGamePortals(); disposeDesert(); world.dispose(); renderer.renderLists.dispose(); renderer.dispose(); renderer.forceContextLoss();
       canvas.remove();
     },
   };

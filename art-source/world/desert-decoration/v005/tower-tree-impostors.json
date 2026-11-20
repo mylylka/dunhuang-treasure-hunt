@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "runtimeSource": "src/content/world/desert-tower-tree-impostors-v001.ts",
+  "columns": 8,
+  "rows": 2,
+  "atlasWidth": 768,
+  "atlasHeight": 192,
+  "tileSize": 96,
+  "gutter": 4,
+  "elevationDegrees": 7,
+  "bytes": 29784,
+  "sha256": "92d4855b906f525e1f9fde6dd0b586c90b0f69ffe32ecdc249a9ce0a9feb475b",
+  "webpQuality": 93,
+  "sourceAtlas": {
+    "originalPath": "src/content/world/desert-tree-impostors-v001.ts",
+    "originalSha256": "cf898dc79d7d089de828d4493d032b5488b0e17f06d349103a6169e1a4ebde41",
+    "rows": {
+      "tower-tree-stylized": 3,
+      "tower-tree-broad": 4
+    }
+  },
+  "shapes": {
+    "tower-tree-stylized": {
+      "row": 0,
+      "width": 17.64661,
+      "height": 28.34194,
+      "centerY": 12.28845
+    },
+    "tower-tree-broad": {
+      "row": 1,
+      "width": 24.29149,
+      "height": 29.00697,
+      "centerY": 12.48006
+    }
+  },
+  "originals": {
+    "tower-tree-stylized": {
+      "originalPath": "public/assets/world/tower-trees/v001/stylized-tree.glb",
+      "originalSha256": "b77cf3eabe2abd4875c273e37a04965f1c68de70875c3071e5a47288ea87bdb8"
+    },
+    "tower-tree-broad": {
+      "originalPath": "public/assets/world/tower-trees/v001/broad-tree.glb",
+      "originalSha256": "e5acab2b961f644ec290e8cae391b38336531b71225e0818bcde8d8c09249fad"
+    }
+  }
+}

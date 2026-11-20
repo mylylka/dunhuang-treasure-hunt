@@ -1,12 +1,15 @@
 import { expect, test, type Page } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 import type { ProgressData, SpotDifferenceLevel } from '../../src/types';
+import { isMobileProject, mobileLandscapeViewport, mobilePortraitViewport } from './supported-viewports';
+import { unlockPatternsForTest } from './gallery-unlock-fixtures';
 
 const level = JSON.parse(readFileSync('src/content/levels/patterns-geometry.json', 'utf8')) as SpotDifferenceLevel;
 const progressKey = 'dunhuang:progress:v1';
 const oldCompletion = '2026-10-29T00:00:00.000Z';
 const imageLoadTimeout = 45_000;
 test.setTimeout(60_000);
+test.beforeEach(async ({ page }) => unlockPatternsForTest(page));
 
 interface Point { x: number; y: number }
 interface Rect extends Point { width: number; height: number }
@@ -44,7 +47,7 @@ async function expectGameFits(page: Page) {
 
 test('联珠与几何：四类边框差异可从重复单元发现，提示重来不伪通关，完成记录独立保存', async ({ page }, testInfo) => {
   const errors: string[] = [];
-  const touch = testInfo.project.name === 'mobile-chromium';
+  const touch = isMobileProject(testInfo);
   page.on('pageerror', error => errors.push(error.message));
   page.on('response', response => {
     if (response.status() >= 400 && new URL(response.url()).pathname.startsWith('/assets/')) {
@@ -58,14 +61,7 @@ test('联珠与几何：四类边框差异可从重复单元发现，提示重�
   }, { key: progressKey, timestamp: oldCompletion });
 
   await page.goto('/#/theme/patterns/games/spot-difference');
-  await expect(page.locator('.level-select-screen')).toHaveAttribute('data-page-size', touch ? '2' : '6');
   const card = page.locator('.level-choice-card[data-level-id="patterns-geometry"]');
-  for (let pageIndex = 0; pageIndex < 3 && !await card.count(); pageIndex++) {
-    const pager = page.locator('.selection-pagination > span');
-    const previous = await pager.textContent();
-    await page.getByRole('button', { name: '下一页', exact: true }).click();
-    await expect(pager).not.toHaveText(previous!);
-  }
   await expect(card).toHaveAttribute('data-status', 'available');
   await expect(card).toContainText('4处差异');
   await card.getByRole('link', { name: '联珠与几何', exact: true }).click();
@@ -92,11 +88,12 @@ test('联珠与几何：四类边框差异可从重复单元发现，提示重�
   await expect(page).toHaveURL(/#\/play\/patterns-geometry$/);
 
   if (touch) {
-    await page.setViewportSize({ width: 844, height: 390 });
+    await page.setViewportSize(mobilePortraitViewport);
+    await expect(page.getByTestId('mobile-landscape-gate')).toBeVisible();
+    await page.setViewportSize(mobileLandscapeViewport);
+    await expect(page.getByTestId('mobile-landscape-gate')).not.toBeVisible();
     await expectGameFits(page);
     await expect(progress).toHaveAttribute('aria-label', progressLabel(1));
-    await page.setViewportSize({ width: 390, height: 844 });
-    await expectGameFits(page);
   }
   await page.getByRole('button', { name: '重新开始', exact: true }).click();
   await expect(progress).toHaveAttribute('aria-label', progressLabel(0));
@@ -140,9 +137,10 @@ test('935×604紧凑窗口：与其他方图关卡同尺寸，重来图标和文
     expect(layout.reference.width).toBeGreaterThanOrEqual(300);
     imageWidths.push(layout.reference.width);
     const restart = page.getByRole('button', { name: '重新开始', exact: true });
-    const icon = (await restart.locator('img').boundingBox())!;
-    const label = (await restart.locator('.button-label').boundingBox())!;
-    expect(label.x - icon.x - icon.width).toBeGreaterThanOrEqual(5);
+    const label = restart.getByText('重来', { exact: true });
+    await expect(label).toBeVisible();
+    const icon = await restart.locator('img').boundingBox();
+    if (icon) expect((await label.boundingBox())!.x - icon.x - icon.width).toBeGreaterThanOrEqual(5);
     await expect(restart).toBeInViewport({ ratio: 0.999 });
   }
   expect(Math.max(...imageWidths) - Math.min(...imageWidths)).toBeLessThanOrEqual(1);

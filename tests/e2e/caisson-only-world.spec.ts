@@ -8,13 +8,20 @@ test('精简版保留三兔共耳互动并写入独立记录', async ({ page }) 
   const missingWorldAssets: string[] = [];
   page.on('request', request => {
     const path = new URL(request.url()).pathname;
-    if (path.includes('/assets/world/') && /music-|mogao|flying-history/.test(path)) otherGalleryAssets.push(path);
+    if (path.includes('/assets/world/') && /music-|mogao|flying-history|desert-decoration|pattern-interactives/.test(path)) otherGalleryAssets.push(path);
   });
   page.on('response', response => {
     if (response.status() >= 400 && new URL(response.url()).pathname.includes('/assets/world/')) missingWorldAssets.push(response.url());
   });
   await page.goto('/?view=caisson');
   await page.getByRole('button', { name: '开启敦煌之旅' }).click({ timeout: 30_000 });
+  await expect(page.getByTestId('world-host')).toHaveAttribute('data-ready', 'true', { timeout: 60_000 });
+  await expect(page.getByTestId('world-mini-map-toggle')).toHaveCount(0);
+  const desertActive = await page.evaluate(() => {
+    const state = Reflect.get(window, '__terrain').inspect();
+    return Boolean(state.desertDecoration || state.desertOasis);
+  });
+  expect(desertActive).toBe(false);
   await page.getByRole('button', { name: '抬头看看' }).click({ timeout: 90_000 });
   const magnify = page.getByRole('button', { name: '放大看看' });
   await expect.poll(async () => {
