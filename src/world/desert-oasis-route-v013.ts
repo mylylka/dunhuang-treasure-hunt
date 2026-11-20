@@ -79,12 +79,13 @@ function createRouteGeometry() {
   return geometry;
 }
 
-export function createOasisRouteView(scene: THREE.Scene) {
+export function createOasisRouteView(scene: THREE.Scene, firstGalleryVista = false) {
   let mesh: THREE.Mesh<THREE.BufferGeometry, THREE.MeshStandardMaterial> | null = null;
   let texture: THREE.Texture | undefined;
   let treeShadows: ReturnType<typeof createOasisGroundShadowsV013> | undefined;
   let ridgeOwned = 0;
-  let stage: Stage = 0, builtStage = -1;
+  // A courtyard-only traveler can see beyond the walking boundary from the start.
+  let stage: Stage = firstGalleryVista ? 1 : 0, builtStage = -1;
   let disposed = false, loading: Promise<void> | undefined, retryAt = 0, attempts = 0;
   let changed = false, lastDetailed = new Set<number>();
   let request: AbortController | undefined;
@@ -145,7 +146,7 @@ export function createOasisRouteView(scene: THREE.Scene) {
 
   function update(position: WorldPoint, inSecondCourt: boolean, _musicVisible?: boolean) {
     point.x = position.x; point.z = position.z;
-    const next = Math.max(stage,initialStage(position,inSecondCourt)) as Stage;
+    const next = firstGalleryVista ? stage : Math.max(stage,initialStage(position,inSecondCourt)) as Stage;
     const refresh = changed || stage !== next;
     changed = false; stage = next;
     start();

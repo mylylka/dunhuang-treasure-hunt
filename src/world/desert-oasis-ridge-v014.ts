@@ -9,6 +9,7 @@ type SourceMesh = THREE.Mesh<THREE.BufferGeometry, THREE.MeshStandardMaterial>;
 interface Prototype { mesh: SourceMesh; normalize: THREE.Matrix4 }
 interface RidgeWorld {
   scene: THREE.Scene;
+  firstGalleryVista?: boolean;
   load(path: string, signal: AbortSignal, priority?: RequestPriority): Promise<THREE.Object3D>;
   receiveShadows(root: THREE.Object3D): void;
   forgetMeshes(root: THREE.Object3D): void;
@@ -68,8 +69,9 @@ export function createOasisRidgeV014(world: RidgeWorld, bases: readonly number[]
   });
   const cohorts: Cohort[] = [...indices].map(([id,list])=>({id,indices:list,high:new Uint8Array(list.length)}));
   const owned = new Uint8Array(placements.length);
-  // Fetch each original once, giving the whole road priority over shore-only originals.
-  const modelIds = [...idsByZone,...species.filter(id => !idsByZone.has(id))];
+  // The vista uses the common volume models at a distance. Its nearby plants keep
+  // the ordinary streaming budget for the courtyard, with no road-wide preloading.
+  const modelIds = world.firstGalleryVista ? [] : [...idsByZone,...species.filter(id => !idsByZone.has(id))];
   const volumes = new Map<string,Prototype>();
   let volumeSource: THREE.Object3D | undefined, request: AbortController | undefined;
   let preparation: Promise<void> | undefined, retryAfter = 0, disposed = false;
@@ -77,14 +79,14 @@ export function createOasisRidgeV014(world: RidgeWorld, bases: readonly number[]
   const matrix = new THREE.Matrix4(), transform = new THREE.Object3D();
   const projection = new THREE.Matrix4(), previousProjection = new THREE.Matrix4(), frustum = new THREE.Frustum();
   let viewDirty=true;
-  let active = false, changed = false, suspended = false, roadOriginal = 0, shoreReal = 0;
+  let active = false, changed = false, suspended = false, roadOriginal = 0, roadVolume = 0, shoreReal = 0;
   let draws = 0, triangles = 0;
   async function loadVolume() {
     const controller = new AbortController();
     request = controller;
     const timeout = setTimeout(() => controller.abort(),18_000);
     try {
-      const source = await world.load(volumePath,controller.signal,'high');
+      const source = await world.load(volumePath,controller.signal,world.firstGalleryVista ? 'low' : 'high');
       if (disposed || controller.signal.aborted) { world.release(source); return; }
       const identity = new THREE.Matrix4();
       const shared = new Map<boolean,THREE.MeshStandardMaterial>();
@@ -166,9 +168,9 @@ export function createOasisRidgeV014(world: RidgeWorld, bases: readonly number[]
     if (!on && !active) return false;
     active=true; group.visible=true;
     let swap=false;
-    roadOriginal=0; shoreReal=0;
+    roadOriginal=0; roadVolume=0; shoreReal=0;
     for (const set of cohorts) {
-      const native=original(set.id), volume=volumes.get(set.id);
+      const native=world.firstGalleryVista ? undefined : original(set.id), volume=volumes.get(set.id);
       if (volume && !set.volume) instantiate(set,volume,'volume');
       if (native && !set.original) instantiate(set,native,'original');
       if (volume && !set.caster) instantiate(set,volume,'shadow');
@@ -176,11 +178,13 @@ export function createOasisRidgeV014(world: RidgeWorld, bases: readonly number[]
         const i=set.indices[n], p=placements[i];
         const road=zone[i]==='road', range=set.high[n]===2 ? 23 : 15;
         const close=(p.x-position.x)**2+(p.z-position.z)**2<range*range;
-        const tier=set.original && (road || close || !set.volume) ? 2 : set.volume ? 1 : 0;
+        const tier = world.firstGalleryVista ? Number(!!set.volume && !close)
+          : set.original && (road || close || !set.volume) ? 2 : set.volume ? 1 : 0;
         if (tier!==set.high[n]) {
           set.high[n]=tier; owned[i]=Number(tier>0); swap=true;
         }
         if (road && tier===2) roadOriginal++;
+        if (road && tier===1) roadVolume++;
         if (!road && tier) shoreReal++;
       }
     }
@@ -237,10 +241,10 @@ export function createOasisRidgeV014(world: RidgeWorld, bases: readonly number[]
     suspend() { suspended=true; request?.abort(); },
     resume() { suspended=false; },
     owns(i:number) {return !!owned[i];},
-    pinned(key:string) {return key.endsWith(':near') && species.includes(key.slice(0,-5));},
+    pinned(key:string) {return key.endsWith(':near') && modelIds.includes(key.slice(0,-5));},
     takeShadowChange() {const value=changed;changed=false;return value;},
     inspect() {
-      return {corridorPlacements:target.road,corridorOriginalInstances:roadOriginal,corridorReady:roadOriginal===target.road,
+      return {corridorPlacements:target.road,corridorOriginalInstances:roadOriginal,corridorVolumeInstances:roadVolume,corridorReady:roadOriginal===target.road,
         shorePlacements:target.shore,shoreVolumeInstances:shoreReal,shoreReady:shoreReal===target.shore,
         ridgeOriginalModels:modelIds.length,ridgeResidentModels:modelIds.filter(id=>original(id)).length,
         ridgeDraws:draws,ridgeTriangles:triangles};

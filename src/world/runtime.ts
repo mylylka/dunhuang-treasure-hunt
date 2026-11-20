@@ -106,8 +106,10 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   const connected = !caissonOnly && !!options.connectedGalleries;
   const previewAll = connected && !!options.previewAllGalleries;
   const desertVariant = new URLSearchParams(window.location.search).get('desertDecoration');
-  const desertEnabled = terrain && connected && !!options.environmentVersion && desertVariant !== '0';
-  const composedCourtyard = desertEnabled && desertVariant !== 'v004';
+  const desertEnabled = terrain && (connected || caissonOnly) && !!options.environmentVersion && desertVariant !== '0';
+  const compactDesertScenery = desertEnabled && caissonOnly;
+  const previousDesertLayout = connected && desertVariant === 'v004';
+  const composedCourtyard = connected && desertEnabled && !previousDesertLayout;
   let desert: ReturnType<typeof createDesertDecorationStreaming> | undefined;
   let oasis: ReturnType<typeof createDesertOasisStreaming> | undefined;
   const pauseDesert = () => { desert?.pause(); oasis?.pause(); };
@@ -181,7 +183,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   const interiorNavigation = musicInterior && (options.musicBalconyV2 || musicInstrumentDisplay) ? createMusicInteriorNavigation({
     compactBalcony: options.musicBalconyV2,
     additionalSolids: musicInstrumentDisplay ? MUSIC_INSTRUMENT_DISPLAY_SOLIDS : undefined,
-    outdoorObstacles: desertEnabled ? desertObstacles : undefined,
+    outdoorObstacles: desertEnabled && connected ? desertObstacles : undefined,
     connectedTerrain: connected,
     composedCourtyard,
   }) : legacyMusicInteriorNavigation;
@@ -349,7 +351,8 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     previewResources: previewResources ?? (mobileTerrainStreaming ? TERRAIN_RESOURCE_PROFILE : undefined),
     connectedGalleries: connected, previewStart: checkpoint.position, previewStartSurface: checkpoint.walkSurface,
     compactConnectedTerrain: (connected || caissonOnly) && coarsePointer,
-    connectedDesertOverlook: desertEnabled,
+    connectedDesertOverlook: desertEnabled && connected,
+    compactDesertScenery,
     composedDesertCourtyard: composedCourtyard,
     cliffUnlockedAtStart: connected && canVisitCliff(),
     ...(options.mogaoExhibit ? {
@@ -1396,7 +1399,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
       now, busy: busy || !desertHasMoved || activity === 'scenery', position: checkpoint.position,
       companionPosition: companion?.state.position,
     });
-    oasis?.update(camera, checkpoint.position, busy, now, decoration.venueVisibility().music, activity === 'scenery', inMusicGallery());
+    oasis?.update(camera, checkpoint.position, busy, now, decoration.venueVisibility().music, activity === 'scenery', connected && inMusicGallery());
   }
   function tiltCamera(delta:number) {
     if (!canControlCamera() || !Number.isFinite(delta)) return;
@@ -1438,17 +1441,18 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   canvas.addEventListener('webglcontextlost', contextLost);
   updateTraveler(0); resize(); emit();
   let openingScenery: Promise<unknown> | undefined;
-  if (composedCourtyard && world.desertDecoration) {
-    oasis = createDesertOasisStreaming({ scene: world.scene, mobile: coarsePointer || mobileTerrainStreaming, ...world.desertDecoration });
+  if ((composedCourtyard || compactDesertScenery) && world.desertDecoration) {
+    oasis = createDesertOasisStreaming({ scene: world.scene, mobile: coarsePointer || mobileTerrainStreaming,
+      ...world.desertDecoration, firstGalleryVista: compactDesertScenery });
     // The gate and downhill originals share the existing character/courtyard loading time.
     // A restored summit presents its real meshes on the first playable frame.
     if (!document.hidden) {
       camera.updateMatrixWorld();
       const nearGate = !checkpoint.walkSurface && Math.hypot(checkpoint.position.x - TERRAIN_SPAWN.x, checkpoint.position.z - TERRAIN_SPAWN.z) <= 12;
-      openingScenery = Promise.allSettled([
-        oasis.prepareRoute(checkpoint.position,camera),
-        nearGate ? oasis.prepareOpening(camera, checkpoint.position, world.desertDecoration.venueVisibility().music) : undefined,
-      ]);
+      const route = oasis.prepareRoute(checkpoint.position, camera);
+      const entrance = nearGate ? oasis.prepareOpening(camera, checkpoint.position, world.desertDecoration.venueVisibility().music) : undefined;
+      if (compactDesertScenery) void Promise.allSettled([route, entrance]);
+      else openingScenery = Promise.allSettled([route, entrance]);
     }
   }
   function prepareGalleryDisplay() {
@@ -1477,8 +1481,9 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
       desert = createDesertDecorationStreaming({
         scene: world.scene, mobile: coarsePointer, ...world.desertDecoration,
         vegetation: CONNECTED_DESERT_VEGETATION,
-        ...(desertVariant === 'v004' ? { version: 'v004' as const } : {}),
+        ...(previousDesertLayout ? { version: 'v004' as const } : {}),
         setObstacles(obstacles) {
+          if (!connected) return; // The compact edition uses its original movement and camera colliders.
           desertObstacles.splice(0, desertObstacles.length, ...obstacles);
           if (cameraSpace) cameraSpace.cylinders = [...baseCameraCylinders, ...obstacles];
         },

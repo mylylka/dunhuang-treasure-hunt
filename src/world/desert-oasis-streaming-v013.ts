@@ -11,6 +11,7 @@ import { installOasisMaterial, oasisBareBranches, oasisToneIndex } from './deser
 interface OasisWorld {
   scene: THREE.Scene;
   mobile: boolean;
+  firstGalleryVista?: boolean;
   load(path: string, signal: AbortSignal, priority?: RequestPriority): Promise<THREE.Object3D>;
   receiveShadows(root: THREE.Object3D): void;
   forgetMeshes(root: THREE.Object3D): void;
@@ -73,7 +74,7 @@ export function createDesertOasisStreaming(world: OasisWorld) {
   root.name = 'desert-oasis-v013';
   root.matrixAutoUpdate = false;
   world.scene.add(root);
-  const route = createOasisRouteView(world.scene);
+  const route = createOasisRouteView(world.scene, world.firstGalleryVista);
   const capacity = new Map<string, number>();
   const plants: Plant[] = DESERT_OASIS_PLACEMENTS.map((item, index) => {
     const model = oasisModelV013(item.id);
@@ -387,6 +388,7 @@ export function createDesertOasisStreaming(world: OasisWorld) {
   }
 
   function setCourtVisibility(visible: boolean) {
+    visible &&= !world.firstGalleryVista;
     if (disposed || courtVisible === visible) return;
     dirty = true;
     courtVisible = visible;
@@ -541,7 +543,7 @@ export function createDesertOasisStreaming(world: OasisWorld) {
         route:{...routeView,...ridgeView, courtWarmup, backgroundModels:courtModels, backgroundReady:courtModels.filter(key => models.has(key))},
         placements:plants.length,landmarks,visibleDraws:batches.length + routeView.visibleDraws + ridgeView.ridgeDraws,
         visibleTriangles:batches.reduce((n,b)=>n+b.triangles,routeView.visibleTriangles + ridgeView.ridgeTriangles),
-        visibleInstances:batches.reduce((n,b)=>n+b.count,routeView.visibleInstances + ridgeView.corridorOriginalInstances + ridgeView.shoreVolumeInstances),
+        visibleInstances:batches.reduce((n,b)=>n+b.count,routeView.visibleInstances + ridgeView.corridorOriginalInstances + ridgeView.corridorVolumeInstances + ridgeView.shoreVolumeInstances),
         models:batches,resident:[...models.keys()],pending:requests.keys().next().value??null,failed:[...retryAt.keys()],wanted};
     },
     dispose() {

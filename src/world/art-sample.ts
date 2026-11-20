@@ -102,6 +102,7 @@ export interface ArtSampleSceneOptions {
   firstGalleryStart?: WorldPoint;
   connectedDesertOverlook?: boolean;
   composedDesertCourtyard?: boolean;
+  compactDesertScenery?: boolean;
   connectedGalleries?: boolean;
   compactConnectedTerrain?: boolean;
   cliffUnlockedAtStart?: boolean;
@@ -263,6 +264,8 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
   const firstGallery = !!options.firstGalleryStart && enhancedEnvironment;
   const caissonOnly = firstGallery && isCaissonOnlyMode();
   const connectedGalleries = firstGallery && !caissonOnly && !!options.connectedGalleries;
+  const compactDesertScenery = caissonOnly && !!options.compactDesertScenery;
+  const sharedDesertScenery = connectedGalleries || compactDesertScenery;
   const currentFirstGalleryVisuals = connectedGalleries || caissonOnly;
   const includeVegetation = !connectedGalleries || CONNECTED_DESERT_VEGETATION;
   const compactConnectedTerrain = currentFirstGalleryVisuals && !!options.compactConnectedTerrain;
@@ -407,10 +410,10 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
   const loader = new GLTFLoader();
   const controller = new AbortController();
   type StreamStatus = 'idle' | 'loading' | 'ready' | 'failed';
-  type StreamGroup = PreviewResourceGroup | 'music-exterior' | 'cliff-rocks' | 'cliff-trees' | 'cliff-tower';
+  type StreamGroup = PreviewResourceGroup | 'music-exterior' | 'cliff-landscape' | 'cliff-rocks' | 'cliff-trees' | 'cliff-tower';
   const stream: Record<StreamGroup, StreamStatus> = {
     courtyard: 'idle', music: 'idle', cliff: 'idle', 'cliff-interior': 'idle', 'cliff-galleries': 'idle', scenery: 'idle',
-    'music-exterior': 'idle', 'cliff-rocks': 'idle', 'cliff-trees': 'idle', 'cliff-tower': 'idle',
+    'music-exterior': 'idle', 'cliff-landscape': 'idle', 'cliff-rocks': 'idle', 'cliff-trees': 'idle', 'cliff-tower': 'idle',
   };
   const sceneryRetryAt: Partial<Record<StreamGroup, number>> = {};
   const streamControllers = new Map<StreamGroup, AbortController>();
@@ -642,7 +645,7 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
     if (initialGroup === 'cliff') return index === 1 || index === 4 ? undefined : path;
     return undefined;
   });
-  const natureAtStart = !connectedGalleries && options.sampleNature && (!scoped || profile.mode === 'terrain' ||
+  const natureAtStart = !sharedDesertScenery && options.sampleNature && (!scoped || profile.mode === 'terrain' ||
     (initialGroup !== null && (!upper || initialGroup === 'cliff')));
   const natureIncludesDunes = !hasTerrain || (!firstGallery && !scoped);
   const caissonAtStart = caissonEnabled && courtyardAtStart;
@@ -692,24 +695,25 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
     caveLighting?.addCave(root, { colorsAtFullAdaptation: finish.materials, finishOnly: part === 'entry' });
   }
   function attachCliffModel(model: GLTF, kind: 'exterior' | 'interior' | 'tower' | 'entry' | 'buddha', detailed = true) {
+    const distantLandscape = compactDesertScenery && kind === 'exterior';
     if (kind === 'exterior' && enhancedEnvironment && detailed) rockFinish = applyTerrainSandstoneMaterial(model.scene);
     if (v10 && kind === 'buddha') buddhaSubject = model.scene;
     if (v10 && (kind === 'interior' || kind === 'entry')) buddhaOccluders.push(model.scene);
     model.scene.position.set(...MOGAO_LAYOUT.origin as [number, number, number]);
-    if (modern && kind !== 'interior' && kind !== 'buddha') model.scene.position.y = 0;
+    if ((modern || distantLandscape) && kind !== 'interior' && kind !== 'buddha') model.scene.position.y = 0;
     model.scene.traverse(object => {
       if (!(object instanceof THREE.Mesh)) return;
       object.castShadow = true; object.receiveShadow = true;
-      if (modern && kind === 'exterior') for (const material of Array.isArray(object.material) ? object.material : [object.material]) {
+      if ((modern || distantLandscape) && kind === 'exterior') for (const material of Array.isArray(object.material) ? object.material : [object.material]) {
         if (material instanceof THREE.MeshStandardMaterial) for (const map of [material.map, material.normalMap, material.roughnessMap, material.aoMap]) {
           if (map) map.anisotropy = 8;
         }
       }
     });
-    if (connectedGalleries && kind === 'exterior') hideConnectedCliffSandFoot(model.scene);
+    if ((connectedGalleries || distantLandscape) && kind === 'exterior') hideConnectedCliffSandFoot(model.scene);
     environment.scene.add(model.scene);
     terrain?.attachRegionObject('cliff', model.scene);
-    if (connectedGalleries && enhancedEnvironment && kind === 'exterior') groundConnectedCliffFlank(model.scene);
+    if ((connectedGalleries || distantLandscape) && enhancedEnvironment && kind === 'exterior') groundConnectedCliffFlank(model.scene);
     if (v8 && (kind === 'interior' || kind === 'entry')) registerCavePart(model.scene, kind);
     if (v8 && kind === 'buddha') caveLighting?.addCave(model.scene);
   }
@@ -967,7 +971,7 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
     avatar.scene.traverse(object => {
       if (object instanceof THREE.Mesh) { object.castShadow = true; object.receiveShadow = true; }
     });
-    if (options.sampleNature && (connectedGalleries || (tree && shrub && (dunes || terrain)))) {
+    if (options.sampleNature && (sharedDesertScenery || (tree && shrub && (dunes || terrain)))) {
       environment.scene.traverse(object => {
         const name = String(object.userData.semanticGroup ?? object.name);
         if (/^(tree-|shrub-|road-grass|dune-|cliff-|boundary-)/.test(name)) object.visible = false;
@@ -1110,7 +1114,8 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
     let incomingCaravans: ReturnType<typeof createBactrianCaravans> | null = null;
     let incomingCaissonTexture: THREE.Texture | null = null;
     const load = async (path: string) => {
-      const model = backgroundMountain ? await loadSelectedModel(path, abort.signal, undefined, 'low') : await loadModel(path, abort.signal);
+      const lowPriority = backgroundMountain || group === 'cliff-landscape' || (compactDesertScenery && group === 'cliff-rocks');
+      const model = lowPriority ? await loadSelectedModel(path, abort.signal, undefined, 'low') : await loadModel(path, abort.signal);
       incoming.push(model.scene);
       return model;
     };
@@ -1242,6 +1247,11 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
         ]);
         assertLive();
         attachUpperGalleries(model, exhibit, stream['cliff-interior'] === 'ready');
+      } else if (group === 'cliff-landscape') {
+        const mountain = await load(distantCliffPath);
+        assertLive();
+        attachCliffModel(mountain, 'exterior');
+        cliffMountainAsset = distantCliffPath;
       } else if (group === 'cliff-rocks') {
         const rocks = await load(landscapePaths[0]);
         assertLive();
@@ -1626,11 +1636,12 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
       firstGalleryCourtyardReady: () => stream.courtyard === 'ready', loadGroundDetail: terrain?.loadGroundDetail } : {}),
     ...(scoped ? { updatePreviewStreaming, previewEntryStatus } : {}),
     ...(scoped || connectedGalleries ? { retryPreviewStreaming } : {}),
-    ...(connectedGalleries ? {
-      musicCourtyardReady: () => stream['music-exterior'] === 'ready',
+    ...(connectedGalleries ? { musicCourtyardReady: () => stream['music-exterior'] === 'ready' } : {}),
+    ...(sharedDesertScenery ? {
       desertDecoration: {
         venueVisibility: decorationVenueVisibility,
         streamActivity: () => {
+          if (compactDesertScenery) return null;
           const pavilion = music ?? distantMusic?.pavilion ?? null;
           if (terrain?.groundDetailPending() === true
             || musicGroundFinishImporting || musicUpperReliefImporting || musicInstrumentsImporting
@@ -1765,6 +1776,10 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
       if ((firstGallery || scoped) && !disposed) {
         streamTimings.lightingReady = performance.now();
         lightingRenderer = renderer; streamReady = true;
+        if (compactDesertScenery && stream['cliff-landscape'] === 'idle') {
+          beginStream('cliff-landscape');
+          beginStream('cliff-rocks');
+        }
       }
     }:undefined,
     updateTerrain:dt=>{environmentLighting?.updateTraveler(traveler.position);musicInteriorLighting?.update(traveler.position,dt);},
