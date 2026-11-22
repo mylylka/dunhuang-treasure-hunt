@@ -100,6 +100,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   let loaded = false;
   let failed = false;
   let paused = false;
+  let musicContinuesWhilePaused = false;
   let view: WorldView = 'follow';
   const terrain = options.terrainVersion === 'v001';
   const caissonOnly = !!options.firstGallery && isCaissonOnlyMode();
@@ -513,7 +514,12 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   input.setEnabled(false);
   container.appendChild(canvas);
   const musicAudioInScope = previewResources?.mode !== 'cliff' && previewResources?.mode !== 'courtyard';
-  const audio=musicV2&&musicAudioInScope?createMusicArrivalAudio(options.sound??defaultSoundPreferences(),terrain?terrainMusicSpatial:musicV4?MUSIC_LAYOUT_V4.audio:undefined,!!previewResources):null;
+  const audio = musicV2 && musicAudioInScope ? createMusicArrivalAudio(
+    options.sound ?? defaultSoundPreferences(),
+    terrain ? terrainMusicSpatial : musicV4 ? MUSIC_LAYOUT_V4.audio : undefined,
+    !!previewResources,
+    connected ? 'music-pavilion-arrival/v001/dunhuang-sizhu.mp3' : undefined,
+  ) : null;
   const encounters = musicV5 && musicAudioInScope && (!companion || connected) ? createMusicEncounters(
     localPoint('music', checkpoint.position), musicV6, terrain ? terrainCanHearMusic : undefined,
     terrain ? { useAudiblePlayback: true, hearingDuration: 2.5, musicAvailable: world.musicCourtyardReady } : undefined,
@@ -550,8 +556,19 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     skipEncounter();return true;
   });
   function currentEncounterVoice(){const id=encounters?.state?.id;return id?encounterVoices?.[id]:undefined;}
+  function syncMusicDucking() {
+    audio?.setDucked(Boolean(
+      guideVisit?.speechLine || companion?.state.dialogue || history?.speaking ||
+      voice?.inspect().playing || currentEncounterVoice()?.inspect().playing ||
+      buddhaVoice?.inspect()?.playing || galleryNarration?.inspect()?.playing
+    ));
+  }
+  function syncMusicPlayback() {
+    audio?.setBlocked(failed || document.hidden || galleryWindowBlurred || view === 'story' || (paused && !musicContinuesWhilePaused));
+  }
   function skipEncounter(){
     currentEncounterVoice()?.exit();encounters?.skip();
+    syncMusicDucking();
     input.setEnabled(loaded&&!paused&&view==='follow');travelCamera?.reset();moving=false;emit();
   }
   function blockEncounterVoices(blocked:boolean){encounterVoices?.music.setBlocked(blocked);encounterVoices?.mural.setBlocked(blocked);}
@@ -1149,7 +1166,6 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     const flying = world.music?.inspect();
     history?.update(dt, reduced, !!flying?.complete, poseSettled);
     voice?.update(view==='flying'&&(musicV5?!!flying?.complete:(flying?.time??0)>=flyingDialogue.startAt));
-    audio?.setDucked(!!guideVisit?.speechLine||!!companion?.state.dialogue||!!history?.speaking||!!voice?.inspect().playing||!!currentEncounterVoice()?.inspect().playing||!!buddhaVoice?.inspect()?.playing||!!galleryNarration?.inspect()?.playing);
     if(flying?.awakened && !checkpoint.visitedEvents.includes('flying')) checkpoint.visitedEvents.push('flying');
     if (portalPrelude) {
       const previousTime = portalPrelude.time;
@@ -1353,8 +1369,9 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
       }
       if (!inside || !observationFloor) buddhaVoice.cancel();
       else buddhaVoice.update(frameSeconds);
-      audio?.setDucked(!!guideVisit?.speechLine||!!companion?.state.dialogue||!!voice?.inspect().playing||!!currentEncounterVoice()?.inspect().playing||buddhaVoice.inspect()?.playing||!!galleryNarration?.inspect()?.playing);
     }
+    // Resolve all speech channels together after their playback has advanced.
+    syncMusicDucking();
     poseSettled = camera.position.distanceToSquared(desiredPose.position) < .00002 && cameraTarget.distanceToSquared(desiredPose.target) < .00002;
     updateDesertDecoration(time);
     render(true);
@@ -1426,14 +1443,23 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     syncFlyingPlayback();
     buddhaVoice?.setBlocked(document.hidden||paused||view!=='follow');
     blockEncounterVoices(document.hidden||paused||view!=='follow');
-    input.clear(); travelCamera?.reset(); voice?.setBlocked(document.hidden||paused||view!=='flying'); audio?.setDucked(!!guideVisit?.speechLine||!!companion?.state.dialogue||!!voice?.inspect().playing||!!currentEncounterVoice()?.inspect().playing||!!buddhaVoice?.inspect()?.playing); audio?.setBlocked(document.hidden||paused||view==='story'); moving = false; previousTime = 0;
+    input.clear(); travelCamera?.reset();
+    voice?.setBlocked(document.hidden || paused || view !== 'flying');
+    syncMusicDucking();
+    syncMusicPlayback();
+    moving = false; previousTime = 0;
     if (document.hidden) { skipCinematic(); stop(); emit(); } else schedule();
   }
   function contextLost(event: Event) { event.preventDefault(); fail('浏览器暂停了3D画面。请重新加载。'); }
   const blur = () => { pauseDesert(); galleryWindowBlurred = true; galleryNarration?.setBlocked(true); history?.setBlocked(true); setFlyingBlocked(true); cancelStairAssists(); stopCompanion(); buddhaVoice?.setBlocked(true); blockEncounterVoices(true); skipCinematic(); input.clear(); travelCamera?.reset(); voice?.setBlocked(true); audio?.setDucked(false); audio?.setBlocked(true); };
-  const focusGallery = () => { galleryWindowBlurred = false; galleryNarration?.setBlocked(document.hidden || paused || view !== 'follow' || overview); schedule(); };
+  const focusWorld = () => {
+    galleryWindowBlurred = false;
+    galleryNarration?.setBlocked(document.hidden || paused || view !== 'follow' || overview);
+    syncMusicPlayback();
+    schedule();
+  };
   window.addEventListener('blur', blur);
-  if (gallery) window.addEventListener('focus', focusGallery);
+  if (gallery || audio) window.addEventListener('focus', focusWorld);
   if (guideVisit) window.addEventListener('focus', syncFlyingPlayback);
   if(mogaoV10)window.addEventListener('focus',visibility);
   const resizeObserver = new ResizeObserver(resize); resizeObserver.observe(container);
@@ -1738,7 +1764,17 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
       else restoreFollow();
       world.updateCameraVisibility(cameraTarget,camera.position,0,true);render();emit();schedule();
     },
-    setSound:preferences=>{galleryNarration?.setPreferences(preferences);history?.setSound(preferences);companionSpeech?.setPreferences(preferences);buddhaVoice?.setPreferences(preferences);encounterVoices?.music.setPreferences(preferences);encounterVoices?.mural.setPreferences(preferences);voice?.setPreferences(preferences);audio?.setPreferences(preferences);audio?.setDucked(!!guideVisit?.speechLine||!!companion?.state.dialogue||!!history?.speaking||!!voice?.inspect().playing||!!currentEncounterVoice()?.inspect().playing||!!buddhaVoice?.inspect()?.playing||!!galleryNarration?.inspect()?.playing);},
+    setSound(preferences) {
+      galleryNarration?.setPreferences(preferences);
+      history?.setSound(preferences);
+      companionSpeech?.setPreferences(preferences);
+      buddhaVoice?.setPreferences(preferences);
+      encounterVoices?.music.setPreferences(preferences);
+      encounterVoices?.mural.setPreferences(preferences);
+      voice?.setPreferences(preferences);
+      audio?.setPreferences(preferences);
+      syncMusicDucking();
+    },
     skipBuddhaVoice:()=>{buddhaVoice?.skip();emit();},
     skipVoice:()=>{voice?.skip();emit();},
     setFlyingHistoryCaptionPresented(phase, chapter, presented) { history?.setCaptionPresented(phase, chapter, presented); },
@@ -1746,6 +1782,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
       if (!history || disposed || failed) return;
       history.control(action);
       syncFlyingPlayback();
+      syncMusicDucking();
       emit();
       schedule();
     },
@@ -1759,7 +1796,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
       render();
       try { return canvas.toDataURL('image/jpeg', .75); } catch { return undefined; }
     },
-    replayObservation() { if(view==='flying') { world.music?.replay(); voice?.enter(); audio?.setDucked(false); emit(); schedule(); } },
+    replayObservation() { if(view==='flying') { world.music?.replay(); voice?.enter(); syncMusicDucking(); emit(); schedule(); } },
     inspect: () => ({ desertDecoration: desert?.inspect(), desertOasis: oasis?.inspect(), musicGuideSurfaceReveal: guideSurfaceRevealElapsed === null ? null : {
       progress: guideSurfaceRevealElapsed / guideSurfaceRevealSeconds, elapsed: guideSurfaceRevealElapsed, playerOccluding: guidePlayerOccluding,
       audioStarted: guideRevealAudioStarted, showcase: shownGuideCloseup && guideCloseup ? {
@@ -1768,10 +1805,17 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     }, galleryNarration: galleryNarration?.inspect(), mogaoGamePortal: mogaoGamePortal?.inspect(),
     musicGamePortal: musicGamePortal ? { ...musicGamePortal.inspect(), position: MUSIC_GAME_PORTAL_CENTER } : undefined, exhibit: world.mogaoExhibit?.inspect(), hallA: world.mogaoHallA?.inspect(), musicInstruments: world.musicInstruments?.inspect(), galleryGaze: galleryGaze?.inspect(), galleryDisplay: galleryDisplay?.inspect(), ...snapshot(), mogaoHallArrivalSeconds: exhibitArrival?.seconds, view, paused, loaded, camera: { position: camera.position.toArray(), target: (portalPrelude || lookPitch ? visualTarget : cameraTarget).toArray(), zoomOffset, fov: camera.fov },
       buddhaGaze:buddhaGaze?.inspect(), buddhaInView:mogaoV10?buddhaInView():undefined, landmarkSight: !terrain&&world.music&&'auditSight' in world.music?world.music.auditSight(camera):undefined, traveler: world.inspectTraveler(), companionAvatar: world.inspectCompanion?.(), interiorLighting: world.inspectInterior?.(), terrain:terrain?{logarithmicDepth:renderer.capabilities.logarithmicDepthBuffer,height:heightAt(checkpoint.position),region:terrainRegionAt(checkpoint.position),cameraClearance:camera.position.y-terrainSurfaceHeight(camera.position),overview,scene:world.inspectTerrain?.()}:undefined, seen: director?.seen, stats: { triangles: renderer.info.render.triangles, calls: renderer.info.render.calls } }),
-    setPaused(value) {
+    setPaused(value, { keepBackgroundMusic = false } = {}) {
+      if (disposed) return;
+      const allowMusic = value && keepBackgroundMusic;
+      const musicPolicyChanged = musicContinuesWhilePaused !== allowMusic;
+      musicContinuesWhilePaused = allowMusic;
       // React publishes readiness after model loading; an identical pause state
       // must not clear a key the player pressed during that handoff.
-      if (disposed || paused === value) return;
+      if (paused === value) {
+        if (musicPolicyChanged) { syncMusicPlayback(); emit(); }
+        return;
+      }
       if (value) {
         pauseDesert();
         stopGuideShowcase();
@@ -1780,9 +1824,16 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
       } else if (portalPrelude && portalPrelude.time >= GALLERY_PORTAL_PRELUDE.turn) {
         galleryGaze?.start(portalLookTarget);
       }
-      paused = value; buddhaVoice?.setBlocked(paused||document.hidden||view!=='follow'); blockEncounterVoices(paused||document.hidden||view!=='follow'); travelCamera?.reset(); voice?.setBlocked(paused||document.hidden||view!=='flying'); audio?.setDucked(!!guideVisit?.speechLine||!!companion?.state.dialogue||!!voice?.inspect().playing||!!currentEncounterVoice()?.inspect().playing||!!buddhaVoice?.inspect()?.playing); audio?.setBlocked(paused||document.hidden||view==='story'); input.setEnabled(loaded && !paused && !galleryBlocked && !overview && !exhibitArrival && view === 'follow' && !encounters?.state && hallArrival?.phase!=='waiting'); moving = false; previousTime = 0;
+      paused = value;
+      buddhaVoice?.setBlocked(paused || document.hidden || view !== 'follow');
+      blockEncounterVoices(paused || document.hidden || view !== 'follow');
+      travelCamera?.reset(); voice?.setBlocked(paused || document.hidden || view !== 'flying');
+      syncMusicPlayback();
+      input.setEnabled(loaded && !paused && !galleryBlocked && !overview && !exhibitArrival && view === 'follow' && !encounters?.state && hallArrival?.phase !== 'waiting');
+      moving = false; previousTime = 0;
       galleryNarration?.setBlocked(paused || document.hidden || galleryWindowBlurred || view !== 'follow' || overview);
       syncFlyingPlayback();
+      syncMusicDucking();
       if (paused) stop(); else schedule(); emit();
     },
     setView(next) {
@@ -1806,11 +1857,12 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
       if(encounters?.state)skipEncounter();
       skipCinematic(); if (next === 'caisson') director?.skipHall();
       const exitingFlying = view === 'flying';
-      if(exitingFlying) {history?.leave();world.music?.exit();voice?.exit();audio?.setDucked(false);}
+      if(exitingFlying) {history?.leave();world.music?.exit();voice?.exit();}
       if(next==='flying') { world.music?.update(0,reduced); world.music?.enter(); history?.enter(!!guideVisit?.following); voice?.enter(); const pose=flyingPose(camera.aspect);camera.position.copy(pose.position);cameraTarget.copy(pose.target);camera.lookAt(cameraTarget); }
-      view = next; overview=false; observationTime=0; buddhaVoice?.setBlocked(paused||document.hidden||view!=='follow'); blockEncounterVoices(paused||document.hidden||view!=='follow'); travelCamera?.reset(); voice?.setBlocked(paused||document.hidden||view!=='flying'); audio?.setBlocked(paused||document.hidden||view==='story'); if(next==='follow' && exitingFlying) restoreFollow(); input.setEnabled(loaded && !paused && !galleryBlocked && !overview && view === 'follow' && !encounters?.state && hallArrival?.phase!=='waiting'); moving = false; poseSettled = false; previousTime = 0;
+      view = next; overview=false; observationTime=0; buddhaVoice?.setBlocked(paused||document.hidden||view!=='follow'); blockEncounterVoices(paused||document.hidden||view!=='follow'); travelCamera?.reset(); voice?.setBlocked(paused||document.hidden||view!=='flying'); syncMusicPlayback(); if(next==='follow' && exitingFlying) restoreFollow(); input.setEnabled(loaded && !paused && !galleryBlocked && !overview && view === 'follow' && !encounters?.state && hallArrival?.phase!=='waiting'); moving = false; poseSettled = false; previousTime = 0;
       galleryNarration?.setBlocked(paused || document.hidden || galleryWindowBlurred || view !== 'follow');
       syncFlyingPlayback();
+      syncMusicDucking();
       if (view === 'story') { stop(); updateTraveler(0); render(); }
       else schedule();
       emit();
@@ -1875,7 +1927,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
       buddhaVoice?.cancel();buddhaGaze?.update(false,false,0);
       currentEncounterVoice()?.exit();encounters?.reset();terrainMusicArmed=false;audio?.setEnabled(!terrain&&!encounters);
       skipCinematic();
-      history?.leave(); world.music?.exit(); voice?.exit(); audio?.setDucked(false); travelCamera?.reset();
+      history?.leave(); world.music?.exit(); voice?.exit(); syncMusicDucking(); travelCamera?.reset();
       const spawn=terrain?TERRAIN_SPAWN:WORLD_SPAWN,yaw=terrain?TERRAIN_REGIONS.courtyard.yaw:0;
       if (currentGallery === 'first') checkpoint = connectedGalleryStartCheckpoint();
       else if (currentGallery === 'music') checkpoint = sanitizeMusicCompanionCheckpoint(musicGuidePreviewCheckpoint(), interiorNavigation, true);
@@ -1895,7 +1947,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
       galleryNarration?.cancel();
       disposed = true; unsubscribeGallery(); galleryGaze?.dispose(); galleryDisplay?.dispose(); companionSpeech?.dispose(); disposeCompanionMarker(); buddhaVoice?.cancel(); unregisterBuddhaSkip?.(); unregisterEncounterSkip();encounterVoices?.music.dispose();encounterVoices?.mural.dispose();voice?.dispose(); audio?.dispose(); stop(); input.dispose(); resizeObserver.disconnect();
       window.removeEventListener('blur', blur);
-      if (gallery) window.removeEventListener('focus', focusGallery);
+      if (gallery || audio) window.removeEventListener('focus', focusWorld);
       if (guideVisit) window.removeEventListener('focus', syncFlyingPlayback);
       if(mogaoV10)window.removeEventListener('focus',visibility);
       document.removeEventListener('visibilitychange', visibility); canvas.removeEventListener('webglcontextlost', contextLost);
