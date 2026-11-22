@@ -26,13 +26,14 @@ function group(label: string, items: GalleryTask[]): GalleryTaskGroup {
   return { label, complete: completed === items.length, progress: { completed, total: items.length }, items };
 }
 
-export function firstGalleryTasks(progress: FirstGalleryState): GalleryTaskGroup[] {
+export function firstGalleryTasks(progress: FirstGalleryState, includeEasel = true): GalleryTaskGroup[] {
   const mural = { completed: progress.muralParts.length, total: 3 };
-  return [
+  const tasks: GalleryTaskGroup[] = [
     { label: GALLERY_LABELS.mural, complete: mural.completed === mural.total, progress: mural },
     { label: '三兔共耳', complete: progress.caissonCompleted },
-    { label: '画架设色', complete: progress.coloringCompleted },
   ];
+  if (includeEasel) tasks.push({ label: '画架设色', complete: progress.coloringCompleted });
+  return tasks;
 }
 
 export function musicGalleryTasks(progress: MusicGalleryProgress): GalleryTaskGroup[] {

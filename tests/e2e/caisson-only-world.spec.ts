@@ -1,5 +1,14 @@
 import { expect, test } from '@playwright/test';
+import { PerspectiveCamera, Vector3 } from 'three';
 import { fromTerrainPoint, LAKE_ORIGIN, toTerrainPoint } from '../../src/content/world/terrain-layout-v001';
+
+const muralModel = '/pattern-interactives/v003/mural-station.glb';
+
+function isUnavailableWorldAsset(url: string) {
+  const path = new URL(url).pathname;
+  return path.includes('/assets/world/') && /music-|mogao|flying-history|pattern-interactives/.test(path)
+    && !path.endsWith('/mogao-upper/v003/mountain-distant-v001.glb') && !path.endsWith(muralModel);
+}
 
 test('精简首页在原有活动范围内显示新版近景和远景', async ({ page }) => {
   test.setTimeout(90_000);
@@ -42,9 +51,7 @@ test('精简版保留三兔共耳互动并写入独立记录', async ({ page }) 
   const otherGalleryAssets: string[] = [];
   const missingWorldAssets: string[] = [];
   page.on('request', request => {
-    const path = new URL(request.url()).pathname;
-    if (path.endsWith('/mogao-upper/v003/mountain-distant-v001.glb')) return;
-    if (path.includes('/assets/world/') && /music-|mogao|flying-history|pattern-interactives/.test(path)) otherGalleryAssets.push(path);
+    if (isUnavailableWorldAsset(request.url())) otherGalleryAssets.push(request.url());
   });
   page.on('response', response => {
     if (response.status() >= 400 && new URL(response.url()).pathname.includes('/assets/world/')) missingWorldAssets.push(response.url());
@@ -88,4 +95,87 @@ test('精简版保留三兔共耳互动并写入独立记录', async ({ page }) 
   await expect(dialog).toBeHidden({ timeout: 15_000 });
   expect(otherGalleryAssets).toEqual([]);
   expect(missingWorldAssets).toEqual([]);
+});
+
+test('精简版从院门走到壁画，补齐三件实物后返回漫游', async ({ page, isMobile }) => {
+  test.setTimeout(120_000);
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  const originalRecord = {
+    version: 1, muralParts: ['bird'], caissonCompleted: false, coloringCompleted: false,
+    ceremonySeen: false, introductionsSeen: [], firstSuccessSeen: false, artworks: {}, displayedArtworkId: null,
+  };
+  await page.addInitScript(record => {
+    localStorage.setItem('dunhuang:first-gallery:v1', JSON.stringify(record));
+    localStorage.setItem('dunhuang:first-gallery-caisson:v1', JSON.stringify({ ...record, muralParts: [], caissonCompleted: true }));
+  }, originalRecord);
+  const unavailableAssets: string[] = [];
+  page.on('request', request => {
+    if (isUnavailableWorldAsset(request.url())) unavailableAssets.push(request.url());
+  });
+  const stationReady = page.waitForResponse(response => new URL(response.url()).pathname.endsWith(muralModel), { timeout: 60_000 });
+  await page.goto('/');
+  await page.getByRole('button', { name: '开启敦煌之旅' }).click();
+  await expect(page.getByTestId('world-host')).toHaveAttribute('data-ready', 'true', { timeout: 60_000 });
+  expect((await stationReady).ok()).toBe(true);
+
+  const invitation = page.getByTestId('gallery-mural-invite');
+  await page.keyboard.down('Shift');
+  await page.keyboard.down('ArrowUp');
+  try {
+    await expect(invitation).toBeVisible({ timeout: 20_000 });
+  } finally {
+    await page.keyboard.up('ArrowUp');
+    await page.keyboard.up('Shift');
+  }
+  await invitation.getByRole('button', { name: '玩壁画' }).click();
+
+  const guide = page.getByTestId('gallery-mural-guide');
+  async function skipLine(phase: string) {
+    await expect(guide).toHaveAttribute('data-phase', phase, { timeout: 20_000 });
+    await guide.locator('.gallery-skippable').click({ timeout: 20_000 });
+  }
+  for (const phase of ['wall', 'table', 'bird', 'return-line']) await skipLine(phase);
+
+  const canvas = page.locator('canvas[data-world-canvas]');
+  const targets = await page.evaluate(async () => {
+    const modulePath = '/src/content/world/first-gallery-v001.ts';
+    const { GALLERY_TARGETS: { lotus, bird, grapes } } = await import(modulePath) as typeof import('../../src/content/world/first-gallery-v001');
+    return { lotus, bird, grapes };
+  });
+  for (const part of ['lotus', 'grapes', 'bird'] as const) {
+    await expect(guide).toHaveAttribute('data-phase', 'pick', { timeout: 20_000 });
+    await expect(guide.locator('.gallery-skippable')).toHaveCount(0, { timeout: 20_000 });
+    const bounds = (await canvas.boundingBox())!;
+    const { position, target, fov } = await page.evaluate(() => Reflect.get(window, '__terrain').inspect().camera as {
+      position: [number, number, number]; target: [number, number, number]; fov: number;
+    });
+    const camera = new PerspectiveCamera(fov, bounds.width / bounds.height, .1, 1000);
+    camera.position.set(...position);
+    camera.lookAt(...target);
+    camera.updateMatrixWorld();
+    const point = new Vector3(targets[part].x, targets[part].y, targets[part].z).project(camera);
+    const tap = { x: (point.x + 1) / 2 * bounds.width, y: (1 - point.y) / 2 * bounds.height };
+    if (isMobile) await canvas.tap({ position: tap });
+    else await canvas.click({ position: tap });
+    await skipLine('education');
+  }
+  await skipLine('summary');
+  await expect(guide).toHaveCount(0, { timeout: 15_000 });
+  await expect(page.getByRole('button', { name: '重看壁画' })).toBeVisible();
+  await expect(page.getByTestId('gallery-portal-notice')).toHaveCount(0);
+  await page.getByTestId('world-task-toggle').click();
+  const tasks = page.getByTestId('world-task-panel');
+  await expect(tasks.getByRole('listitem').filter({ hasText: '借物补画' })).toHaveText(/借物补画\s*3 \/ 3/);
+  await expect(tasks.getByText('三兔共耳')).toBeVisible();
+  await expect(tasks.getByText('画架设色')).toHaveCount(0);
+  const records = await page.evaluate(() => ({
+    compact: JSON.parse(localStorage.getItem('dunhuang:first-gallery-caisson:v1')!),
+    full: JSON.parse(localStorage.getItem('dunhuang:first-gallery:v1')!),
+    scene: Reflect.get(window, '__terrain').inspect().terrain.scene.streaming,
+  }));
+  expect(records.compact).toMatchObject({ muralParts: ['lotus', 'grapes', 'bird'], caissonCompleted: true,
+    coloringCompleted: false, ceremonySeen: false });
+  expect(records.full).toEqual(originalRecord);
+  expect(records.scene).toMatchObject({ music: 'idle', musicBuildingVisible: false, cliffTowerVisible: false });
+  expect(unavailableAssets).toEqual([]);
 });

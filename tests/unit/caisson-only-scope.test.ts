@@ -5,26 +5,28 @@ import { galleryNearby } from '../../src/world/first-gallery-events';
 import { isCaissonOnlyWalkable } from '../../src/world/caisson-only-scope';
 import { sanitizeTerrainPosition, TERRAIN_CAISSON_ONLY_PLAYER_COLLIDERS, TERRAIN_FIRST_GALLERY_PLAYER_COLLIDERS } from '../../src/world/terrain-rules-v001';
 import { terrainCameraSpace } from '../../src/world/terrain-camera-v001';
-import { PATTERN_STATIONS } from '../../src/world/pattern-interactives';
+import { PATTERN_STATIONS, patternStationsForScope } from '../../src/world/pattern-interactives';
 
 afterEach(() => vi.unstubAllGlobals());
 
 describe('精简版第一馆', () => {
-  it('仅精简版移除两件装置的玩家和镜头碰撞', () => {
-    const ids = ['terrain-courtyard-mural-station', 'terrain-courtyard-coloring-station',
+  it('精简版保留借物桌的模型和碰撞，移除画架与旧工作坊的碰撞', () => {
+    const ids = ['terrain-courtyard-coloring-station',
       'terrain-courtyard-hall-v003-workbench', 'terrain-courtyard-hall-v003-pattern-display', 'terrain-courtyard-hall-v003-pigment-rack'];
+    expect(patternStationsForScope(true).map(station => station.id)).toEqual(['mural-station']);
+    expect(TERRAIN_CAISSON_ONLY_PLAYER_COLLIDERS.some(solid => solid.id === 'terrain-courtyard-mural-station')).toBe(true);
     for (const id of ids) {
       expect(TERRAIN_FIRST_GALLERY_PLAYER_COLLIDERS.some(solid => solid.id === id)).toBe(true);
       expect(TERRAIN_CAISSON_ONLY_PLAYER_COLLIDERS.some(solid => solid.id === id)).toBe(false);
     }
     const full = terrainCameraSpace(true, true);
     const compact = terrainCameraSpace(true, true, false, false, false, true);
-    // Two station boxes plus three furnishings' player and camera proxies.
-    expect(full.orientedBoxes!.length - compact.orientedBoxes!.length).toBe(8);
+    // The easel and three furnishings' player and camera proxies stay hidden.
+    expect(full.orientedBoxes!.length - compact.orientedBoxes!.length).toBe(7);
     for (const station of PATTERN_STATIONS) {
       const { x, z } = toTerrainPoint('courtyard', station.position);
       const point = { x, z };
-      expect(sanitizeTerrainPosition(point, true, false, false, true)).toEqual(point);
+      expect(sanitizeTerrainPosition(point, true, false, false, true)).toEqual(station.id === 'mural-station' ? TERRAIN_SPAWN : point);
       expect(sanitizeTerrainPosition(point, true)).toEqual(TERRAIN_SPAWN);
     }
   });

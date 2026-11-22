@@ -220,7 +220,7 @@ export default function WorldScreen(props: Props) {
   }, []);
 
   const requestGallery = useCallback((id: GalleryInteraction, object?: 'lotus' | 'bird' | 'grapes') => {
-    if (caissonOnly && id !== 'caisson') return;
+    if (caissonOnly && id !== 'caisson' && id !== 'mural') return;
     if (flags.current.locked || flags.current.galleryOccupied || flags.current.exhibitOccupied) return;
     setGalleryRequest({ id, object, serial: ++galleryCounter.current });
   }, [caissonOnly]);
@@ -235,7 +235,7 @@ export default function WorldScreen(props: Props) {
       if (nearby === 'flying') runtime.current?.controlFlyingHistory?.({ type: 'unlock' });
       dispatch({ type: 'start', id: nearby, nearby });
     }
-  }, [exhibitPreview]);
+  }, [exhibitPreview, requestGallery]);
   const currentCheckpoint = useCallback(() => {
     if (leavingToTheme.current) return checkpoint.current;
     const latest = runtime.current?.snapshot().checkpoint ?? checkpoint.current;
@@ -506,7 +506,7 @@ export default function WorldScreen(props: Props) {
   function openGuide() {
     if (locked || !ready || view !== 'follow' || galleryOccupied || exhibitOccupied || arrivalActive) return;
     const earned: WorldRewardId[] = [];
-    if (isFirstGalleryUnlocked(loadFirstGallery().data)) earned.push('first-gallery');
+    if (!caissonOnly && isFirstGalleryUnlocked(loadFirstGallery().data)) earned.push('first-gallery');
     if (exhibitPreview ? exhibit.earnedA : finishedMogaoHallA(loadMogaoHallAProgress().data)) earned.push('hall-a');
     if (exhibitPreview ? exhibit.earnedB : finishedMogaoExhibit(loadMogaoExhibitProgress().data)) earned.push('hall-b');
     if (musicGallery?.unlocked || finishedMusicGallery(loadMusicGalleryProgress())) earned.push('music-gallery');

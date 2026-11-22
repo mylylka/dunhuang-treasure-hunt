@@ -3,6 +3,7 @@ import { createFirstGalleryDisplay } from './first-gallery-display';
 import { createFirstGalleryEvents, galleryBlockedRegion, galleryNearby } from './first-gallery-events';
 import { connectedGalleryAt, connectedGalleryBlockedRegion, connectedGalleryStartCheckpoint, isMogaoWalkSurface, isMusicWalkSurface, sanitizeConnectedGalleryCheckpoint } from './connected-gallery-session';
 import { createFirstGalleryMural, FIRST_GALLERY_MURAL_MARKER_KEY, MURAL_RENEW_SECONDS, muralObserver } from './first-gallery-mural';
+import { CAISSON_ONLY_MURAL_MARKER_KEY } from '../services/first-gallery-entry';
 import { firstGalleryCaissonCameraPose, GALLERY_CAISSON_CAMERA_SECONDS, galleryCaissonCoreVisible, projectGalleryCaissonQuad } from './first-gallery-caisson-camera';
 import { firstGalleryMuralCameraTransition, type FirstGalleryMuralCameraPose } from './first-gallery-mural-camera';
 import { createGalleryPortalWalk, GALLERY_PORTAL_PRELUDE, galleryPortalPreludePhase } from './first-gallery-portal';
@@ -134,7 +135,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   let previewEntry: WorldSnapshot['previewEntry'];
   let previewAttempt: { position: WorldCheckpoint['position']; surface?: string } | undefined;
   let galleryState = options.firstGallery ? loadFirstGallery().data : null;
-  const firstGalleryUnlocked = () => !!galleryState && isFirstGalleryUnlocked(galleryState);
+  const firstGalleryUnlocked = () => !caissonOnly && !!galleryState && isFirstGalleryUnlocked(galleryState);
   const canVisitMusic = () => previewAll || firstGalleryUnlocked();
   const canVisitCliff = () => previewAll || (firstGalleryUnlocked() && musicGalleryUnlocked);
   const gallery = options.firstGallery ? createFirstGalleryEvents(galleryState?.introductionsSeen, caissonOnly) : null;
@@ -159,20 +160,21 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   const portalLookTarget = new THREE.Vector3(GALLERY_TARGETS.scroll.x, GALLERY_TARGETS.scroll.y + .85, GALLERY_TARGETS.scroll.z);
   let portalStarted = false;
   let galleryStepped = false;
+  const muralMarkerKey = caissonOnly ? CAISSON_ONLY_MURAL_MARKER_KEY : FIRST_GALLERY_MURAL_MARKER_KEY;
   let savedMuralMarker = false;
-  if (gallery && !caissonOnly) {
-    try { savedMuralMarker = sessionStorage.getItem(FIRST_GALLERY_MURAL_MARKER_KEY) === '1'; }
+  if (gallery) {
+    try { savedMuralMarker = sessionStorage.getItem(muralMarkerKey) === '1'; }
     catch { /* The invitation can still be remembered in this runtime. */ }
   }
-  const mural = gallery && !caissonOnly ? createFirstGalleryMural((part, replayParts) => {
+  const mural = gallery ? createFirstGalleryMural((part, replayParts) => {
     if (replayParts) { galleryDisplay?.setParts(replayParts); return true; }
     return completeGalleryMuralPart(part).ok;
-  }, savedMuralMarker, connected) : null;
+  }, savedMuralMarker, connected, caissonOnly) : null;
   let galleryCaissonView: { entry: FirstGalleryMuralCameraPose; time: number; returning: boolean } | null = null;
   const unsubscribeGallery = options.firstGallery ? subscribeFirstGallery(local => {
-    const previouslyUnlocked = !!galleryState && isFirstGalleryUnlocked(galleryState);
+    const previouslyUnlocked = firstGalleryUnlocked();
     galleryState = loadFirstGallery().data;
-    const unlocked = isFirstGalleryUnlocked(galleryState);
+    const unlocked = firstGalleryUnlocked();
     if (local && unlocked && !previouslyUnlocked && !galleryState.ceremonySeen) portalLightPending = true;
     if (!unlocked || galleryState.ceremonySeen) portalLightPending = false;
     if (!mural?.replay) galleryDisplay?.setParts(galleryState.muralParts);
@@ -719,7 +721,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     schedule();
   }
   function canStartGalleryPortal() {
-    return !!(terrain && galleryState && inFirstGallery() && galleryDisplay && galleryStepped && !portalStarted && !moving && isFirstGalleryUnlocked(galleryState)
+    return !!(terrain && galleryState && inFirstGallery() && galleryDisplay && galleryStepped && !portalStarted && !moving && firstGalleryUnlocked()
       && !galleryState.ceremonySeen && !gallery?.snapshot().cue && canControlCamera());
   }
   function finishGalleryPortal(phase: 'arrived' | 'skipped') {
@@ -755,7 +757,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     galleryDisplay?.setMuralMarker(mural.marker);
     if (mural.marker === savedMuralMarker) return;
     savedMuralMarker = mural.marker;
-    try { sessionStorage.setItem(FIRST_GALLERY_MURAL_MARKER_KEY, mural.marker ? '1' : '0'); }
+    try { sessionStorage.setItem(muralMarkerKey, mural.marker ? '1' : '0'); }
     catch { /* Session storage is optional for this visual cue. */ }
   }
   function restoreMuralControls() {
@@ -1243,9 +1245,9 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
       syncMuralMarker();
     }
     if (gallery && galleryState) {
-      if (!connected) world.updateFirstGalleryStreaming?.(checkpoint.position, isFirstGalleryUnlocked(galleryState));
+      if (!connected) world.updateFirstGalleryStreaming?.(checkpoint.position, firstGalleryUnlocked());
       prepareGalleryDisplay();
-      gallery.update(checkpoint.position, moving, dt, { mural: galleryState.muralParts.length === 3, caisson: galleryState.caissonCompleted, easel: galleryState.coloringCompleted, unlocked: isFirstGalleryUnlocked(galleryState) },
+      gallery.update(checkpoint.position, moving, dt, { mural: galleryState.muralParts.length === 3, caisson: galleryState.caissonCompleted, easel: galleryState.coloringCompleted, unlocked: firstGalleryUnlocked() },
         !galleryBlocked && !galleryCaissonView && !portalBusy() && !portalNotice && !mural?.active && mural?.phase !== 'invite' && view === 'follow' && !overview && !encounters?.state,
         true, galleryWindowBlurred ? 0 : frameSeconds);
       galleryStepped = true;
@@ -1487,7 +1489,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     galleryDisplay.setMuralMarker(false, { x: muralObserver.x, y: heightAt(muralObserver), z: muralObserver.z });
     if (galleryState) {
       galleryDisplay.setParts(galleryState.muralParts, true);
-      galleryDisplay.setPortalReveal(Number(!portalLightPending && isFirstGalleryUnlocked(galleryState)));
+      galleryDisplay.setPortalReveal(Number(!portalLightPending && firstGalleryUnlocked()));
     }
     if (galleryArtwork) galleryDisplay.setArtwork(galleryArtwork);
     void galleryDisplay.ready.then(() => {

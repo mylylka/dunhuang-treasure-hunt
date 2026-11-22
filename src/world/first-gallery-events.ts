@@ -18,7 +18,7 @@ export function galleryNearby(point: WorldPoint, caissonOnly = false): GalleryIn
   const p = fromTerrainPoint('courtyard', point);
   const distance = (target: keyof typeof GALLERY_TARGETS) => Math.hypot(point.x - GALLERY_TARGETS[target].x, point.z - GALLERY_TARGETS[target].z);
   if (!caissonOnly && distance('easel') < 4.0) return 'easel';
-  if (!caissonOnly && Math.hypot(point.x - muralObserver.x, point.z - muralObserver.z) <= .9) return 'mural';
+  if (Math.hypot(point.x - muralObserver.x, point.z - muralObserver.z) <= .9) return 'mural';
   const caissonDepth = p.z + 15;
   // Extend only the entrance-facing edge, by two of the hall's 17/13 m tiles.
   const approachReach = caissonDepth > 0 ? 3.9 + 2 * (17 / 13) : 3.9;

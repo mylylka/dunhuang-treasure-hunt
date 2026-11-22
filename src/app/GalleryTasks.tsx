@@ -1,5 +1,5 @@
 import { memo, useEffect, useId, useRef, useState } from 'react';
-import { loadFirstGallery, subscribeFirstGallery } from '../services/first-gallery';
+import { isCaissonOnlyMode, loadFirstGallery, subscribeFirstGallery } from '../services/first-gallery';
 import { firstGalleryTasks, mogaoGalleryTasks, musicGalleryTasks, type GalleryTask, type GalleryTaskArea, type GalleryTaskGroup } from '../services/gallery-tasks';
 import { loadMogaoExhibitProgress, type MogaoExhibitProgress } from '../services/mogao-exhibit-progress';
 import { loadMogaoHallAProgress, type MogaoHallAProgress } from '../services/mogao-hall-a-progress';
@@ -57,9 +57,7 @@ function TaskGroups({ groups, discloseItems = false }: { groups: GalleryTaskGrou
 function FirstGalleryTaskGroups() {
   const [progress, setProgress] = useState(() => loadFirstGallery().data);
   useEffect(() => subscribeFirstGallery(() => setProgress(loadFirstGallery().data)), []);
-  const caissonOnly = document.getElementById('root')?.dataset.caissonOnly === 'v001';
-  const tasks = firstGalleryTasks(progress);
-  return <TaskGroups groups={caissonOnly ? tasks.filter(task => task.label === '三兔共耳') : tasks} />;
+  return <TaskGroups groups={firstGalleryTasks(progress, !isCaissonOnlyMode())} />;
 }
 
 function CurrentGalleryTasks({ gallery, musicProgress, muralProgress, exhibitProgress }: ProgressProps & { gallery: GalleryTaskArea | null }) {

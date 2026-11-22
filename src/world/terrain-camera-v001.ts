@@ -12,7 +12,7 @@ import { CONNECTED_DESERT_VEGETATION } from '../content/world/desert-vegetation'
 import { MUSIC_COURTYARD_TREE } from '../content/world/music-courtyard-tree-v001';
 import {retiredCourtyardHallCameraBox,TERRAIN_FIRST_GALLERY_HALL_CAMERA_BOXES,TERRAIN_HALL_CAMERA_BOXES,TERRAIN_HALL_GEOMETRY} from './terrain-hall-v003';
 import {TERRAIN_CAISSON_CAMERA_BOXES} from './terrain-caisson-v001';
-import { PATTERN_STATIONS } from './pattern-interactives';
+import { patternStationsForScope } from './pattern-interactives';
 import { CAISSON_ONLY_HIDDEN_COURTYARD_OBJECTS } from './caisson-only-props';
 import {
   toTerrainPoint, fromTerrainPoint, terrainRegionAt, terrainSurfaceHeight, isRetiredConnectedVegetation,
@@ -109,7 +109,7 @@ export function terrainCameraSpace(includeCaisson=false, firstGallery=false, ope
     const inverse=new THREE.Matrix4().makeRotationY(TERRAIN_REGIONS[region].yaw).setPosition(zero.x,zero.y,zero.z).invert();
     for(const bounds of source.boxes)orientedBoxes.push({bounds,inverse});
   }
-  for (const { position, yaw, halfWidth, halfDepth, height } of caissonOnly ? [] : PATTERN_STATIONS) {
+  for (const { position, yaw, halfWidth, halfDepth, height } of patternStationsForScope(caissonOnly)) {
     const origin = toTerrainPoint('courtyard', position);
     const inverse = new THREE.Matrix4().makeRotationY(TERRAIN_REGIONS.courtyard.yaw + yaw)
       .setPosition(origin.x, origin.y, origin.z).invert();

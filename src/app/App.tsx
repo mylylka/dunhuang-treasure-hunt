@@ -253,7 +253,7 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
     const refresh = (local: boolean) => {
       const previous = lastGallery.current;
       const next = loadFirstGallery();
-      if (local && previous && !previous.warning && !next.warning &&
+      if (!caissonOnly && local && previous && !previous.warning && !next.warning &&
         !isFirstGalleryUnlocked(previous.data) && isFirstGalleryUnlocked(next.data) && !next.data.ceremonySeen) {
         setGalleryPortalPending(true);
       } else if (next.data.ceremonySeen || !isFirstGalleryUnlocked(next.data)) {
@@ -402,7 +402,7 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
   }
 
   function enterGalleryEasel(checkpoint: WorldCheckpoint, artworkId?: string): boolean {
-    if (!firstGallery) return false;
+    if (!firstGallery || caissonOnly) return false;
     const level = catalog.levels.find(item => item.id === FIRST_GALLERY_EASEL_LEVEL);
     if (level?.gameType !== 'coloring') {
       setWorldWarning('画架线稿暂未加载，请重试。');
@@ -671,7 +671,7 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
       if (!result.ok) setWorldWarning(result.message);
     }}
     onGalleryPortalEnter={at => {
-      if (!getFirstGalleryAccess(loadFirstGallery().data, 'patterns')) return;
+      if (caissonOnly || !getFirstGalleryAccess(loadFirstGallery().data, 'patterns')) return;
       persistWorld(at);
       enteredFromWorld.current = true;
       goTo(gamesPath('patterns'));

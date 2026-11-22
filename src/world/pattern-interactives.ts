@@ -11,6 +11,12 @@ export const PATTERN_STATIONS = placements.map(({ yawDegrees, bounds, scale, ...
   halfDepth: bounds.halfDepth * scale,
 }));
 
+const compactPatternStations = PATTERN_STATIONS.filter(station => station.id === 'mural-station');
+
+export function patternStationsForScope(compact: boolean) {
+  return compact ? compactPatternStations : PATTERN_STATIONS;
+}
+
 export const PATTERN_STATION_SOLIDS: WorldCollider[] = PATTERN_STATIONS.map(station => {
   const { id, position, yaw, halfWidth, halfDepth, height } = station;
   const cos = Math.cos(yaw), sin = Math.sin(yaw);
