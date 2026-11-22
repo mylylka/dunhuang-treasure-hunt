@@ -192,10 +192,14 @@ export default function WorldScreen(props: Props) {
   exhibitRef.current = exhibit;
   const portal = snapshot.gallery?.portal;
   const portalPlaying = portal === 'turning' || portal === 'revealing' || portal === 'question' || portal === 'walking';
-  const exhibitOccupied = exhibit.occupied || hallStory !== null || rewardOverlay !== null || musicUnlockNotice || instrument.instrument !== null || wardrobeOpen;
-  const flags = useRef({ locked, event, paused, galleryOccupied, exhibitOccupied, arrivalActive });
-  flags.current = { locked, event, paused, galleryOccupied, exhibitOccupied, arrivalActive };
   const choosing=event.mode==='choosing';
+  const otherExhibitOccupied = exhibit.occupied || hallStory !== null || rewardOverlay !== null || musicUnlockNotice || instrument.instrument !== null;
+  const exhibitOccupied = otherExhibitOccupied || wardrobeOpen;
+  const pausedOutsideWardrobe = locked || choosing || otherExhibitOccupied || !!directFirstIntro || view === 'story' || (event.mode === 'observing' && event.paused);
+  const worldPaused = pausedOutsideWardrobe || wardrobeOpen;
+  const keepBackgroundMusic = wardrobeOpen && !pausedOutsideWardrobe;
+  const flags = useRef({ locked, event, paused, galleryOccupied, exhibitOccupied, arrivalActive, worldPaused, keepBackgroundMusic });
+  flags.current = { locked, event, paused, galleryOccupied, exhibitOccupied, arrivalActive, worldPaused, keepBackgroundMusic };
   const introReady = useMogaoHallNarration(exhibitOccupied ? null : arrivalIntro ?? revisitIntro,
     locked || choosing || view !== 'follow' || !ready, props.sound);
   const dismissHallIntro = exhibit.dismissIntro;
@@ -298,7 +302,7 @@ export default function WorldScreen(props: Props) {
         ...(musicGuidePreview ? { musicGuide: true, onMusicGuideWardrobe: () => {
           if (flags.current.locked || flags.current.exhibitOccupied || flags.current.event.mode !== 'exploring') return;
           stopGuideVoice();
-          runtime.current?.setPaused(true);
+          runtime.current?.setPaused(true, { keepBackgroundMusic: true });
           setWardrobeOpen(true);
         } } : {}),
         ...(musicInstrumentPreview ? { onMusicInstrument: (id: Parameters<typeof instrument.startInstrument>[0]) => {
@@ -352,7 +356,7 @@ export default function WorldScreen(props: Props) {
       if (mogao) Object.assign(window, { __mogao: { inspect: () => instance?.inspect() } });
       if (musicPreview) Object.assign(window, { __musicPavilion: { inspect: () => instance?.inspect(), recordingAudio: () => instance?.recordingAudio?.()??null } });
       if (cinematicPreview) Object.assign(window, { __characterCinematics: { inspect: () => instance?.inspect(), skip: () => instance?.skipCinematic() } });
-      instance.setPaused(flags.current.locked || flags.current.exhibitOccupied);
+      instance.setPaused(flags.current.worldPaused, { keepBackgroundMusic: flags.current.keepBackgroundMusic });
 
     }).catch(() => { if (!disposed) setError('3D画面暂时无法启动。请重新加载。'); });
     return () => {
@@ -377,9 +381,9 @@ export default function WorldScreen(props: Props) {
     runtime.current?.setView(view);
     runtime.current?.setMogaoExhibitGateLocked?.(exhibit.gateLocked);
     runtime.current?.setMogaoHallAGateLocked?.(exhibit.hallAGateLocked);
-    runtime.current?.setPaused(locked || choosing || exhibitOccupied || !!directFirstIntro || view === 'story' || (event.mode === 'observing' && event.paused));
+    runtime.current?.setPaused(worldPaused, { keepBackgroundMusic });
     runtime.current?.setJoystick(0, 0); setStick({ x: 0, y: 0 }); pointer.current = null;
-  }, [suspended, locked, view, event, ready, exhibitOccupied, arrivalActive, directFirstIntro, exhibit.gateLocked, exhibit.hallAGateLocked]);
+  }, [suspended, locked, view, event, ready, exhibitOccupied, arrivalActive, directFirstIntro, exhibit.gateLocked, exhibit.hallAGateLocked, worldPaused, keepBackgroundMusic]);
   useEffect(() => {
     if (!exhibitPreview) return;
     const refresh = () => setStoredMogaoGameAccess(hasMogaoGameAccess());

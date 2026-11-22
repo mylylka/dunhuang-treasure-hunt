@@ -69,7 +69,7 @@ export interface WorldRuntime {
   startGalleryPortal?(): void;
   skipGalleryPortal?(): void;
   dismissGalleryPortal?(): void;
-  setPaused(paused: boolean): void;
+  setPaused(paused: boolean, options?: { keepBackgroundMusic?: boolean }): void;
   setOverview?(enabled: boolean): void;
   setView(view: WorldView): void;
   setJoystick(x: number, y: number): void;

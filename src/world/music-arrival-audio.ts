@@ -35,7 +35,8 @@ export function musicSpatialGain(p:WorldPoint,spatial:MusicSpatialAudio){
 }
 
 /** Region-owned long audio. It never uses or crowds the shared UI effects pool. */
-export function createMusicArrivalAudio(initial: SoundPreferences, spatial:MusicSpatialAudio = MUSIC_LAYOUT_V2.audio, deferUntilNear = false) {
+export function createMusicArrivalAudio(initial: SoundPreferences, spatial:MusicSpatialAudio = MUSIC_LAYOUT_V2.audio,
+    deferUntilNear = false, assetPath = 'music-pavilion/v002/arrival-plucks.wav') {
   let disposed=false,unlocked=false,blocked=false,status:'loading'|'ready'|'error'='loading';
   let preferences=initial,point:WorldPoint|null=null,yaw=0,gainValue=0,ducked=false,enabled=true;
   let context:AudioContext|null=null,buffer:AudioBuffer|null=null,source:AudioBufferSourceNode|null=null;
@@ -51,7 +52,7 @@ export function createMusicArrivalAudio(initial: SoundPreferences, spatial:Music
     requested = true;
     status='loading';
     try{
-      const response=await fetch(worldAssetUrl('music-pavilion/v002/arrival-plucks.wav'),{signal:abort.signal});
+      const response=await fetch(worldAssetUrl(assetPath),{signal:abort.signal});
       if(!response.ok)throw new Error('music-unavailable');
       const data=await response.arrayBuffer();if(disposed)return;bytes=data;status='ready';
       if(unlocked)await start();

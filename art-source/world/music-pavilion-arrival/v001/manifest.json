@@ -1,0 +1,45 @@
+{
+  "title": "敦煌丝竹",
+  "usage": "三馆联通版第二馆空间背景乐",
+  "original": {
+    "name": "dunhuang_sizhu_loop.mp3",
+    "originalPath": "vault:sha256:cd2d7c30affd149cf17ff9270212ee805c71121c4f88731eaf6671b39ac1a09e",
+    "codec": "mp3",
+    "sampleRateHz": 44100,
+    "channels": 2,
+    "bitRate": 192000,
+    "durationSeconds": 70.556735,
+    "bytes": 1694031,
+    "sha256": "cd2d7c30affd149cf17ff9270212ee805c71121c4f88731eaf6671b39ac1a09e"
+  },
+  "conversion": {
+    "tool": "ffmpeg version 7.1.1 Copyright (c) 2000-2025 the FFmpeg developers",
+    "arguments": [
+      "-map",
+      "0:a:0",
+      "-map_metadata",
+      "-1",
+      "-af",
+      "volume=-3.8dB",
+      "-c:a",
+      "libmp3lame",
+      "-b:a",
+      "112k",
+      "-write_xing",
+      "1",
+      "-f",
+      "mp3"
+    ],
+    "note": "沿用原曲循环点和双声道，整体降低 3.8 dB，以接近旧背景乐响度。"
+  },
+  "runtime": {
+    "path": "public/assets/world/music-pavilion-arrival/v001/dunhuang-sizhu.mp3",
+    "codec": "mp3",
+    "sampleRateHz": 44100,
+    "channels": 2,
+    "bitRate": 112000,
+    "durationSeconds": 70.556735,
+    "bytes": 988203,
+    "sha256": "ab4b0bc345cf93f426c6c33169ccbe9a3cffd0471d89e6a5c50159dfa7f730a1"
+  }
+}
