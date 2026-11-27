@@ -1,3 +1,4 @@
+import { isCaissonOnlyWalkable } from './caisson-only-scope';
 import { fromTerrainPoint, isTerrainWalkable, moveTerrainPlayer, toTerrainPoint } from './terrain-rules-v001';
 import type { WorldPoint } from './types';
 
@@ -18,13 +19,18 @@ const corridor: readonly WorldPoint[] = [
 
 const distance = (a: WorldPoint, b: WorldPoint) => Math.hypot(a.x - b.x, a.z - b.z);
 
-function clearSegment(from: WorldPoint, to: WorldPoint, connected: boolean, composedCourtyard: boolean): boolean {
+function movePortalPlayer(position: WorldPoint, delta: WorldPoint, connected: boolean, composedCourtyard: boolean, compact: boolean): WorldPoint {
+  const next = moveTerrainPlayer(position, delta, true, undefined, connected, composedCourtyard, compact);
+  return compact && !isCaissonOnlyWalkable(next) ? position : next;
+}
+
+function clearSegment(from: WorldPoint, to: WorldPoint, connected: boolean, composedCourtyard: boolean, compact: boolean): boolean {
   const count = Math.max(1, Math.ceil(distance(from, to) / .15));
   let position = from;
   for (let i = 1; i <= count; i++) {
     const t = i / count;
     const point = { x: from.x + (to.x - from.x) * t, z: from.z + (to.z - from.z) * t };
-    position = moveTerrainPlayer(position, { x: point.x - position.x, z: point.z - position.z }, true, undefined, connected, composedCourtyard);
+    position = movePortalPlayer(position, { x: point.x - position.x, z: point.z - position.z }, connected, composedCourtyard, compact);
     if (distance(position, point) > .001) return false;
   }
   return true;
@@ -32,12 +38,13 @@ function clearSegment(from: WorldPoint, to: WorldPoint, connected: boolean, comp
 
 /** Route only within the courtyard. Every proposed chord uses the same
  * First Gallery collision and grade checks as actual player movement. */
-export function planGalleryPortalRoute(from: WorldPoint, connected = false, composedCourtyard = false): readonly WorldPoint[] | null {
+export function planGalleryPortalRoute(from: WorldPoint, connected = false, composedCourtyard = false, compact = false): readonly WorldPoint[] | null {
   const local = fromTerrainPoint('courtyard', from);
-  const walkable = (point: WorldPoint) => isTerrainWalkable(point, true, undefined, connected, composedCourtyard);
+  const walkable = (point: WorldPoint) => (!compact || isCaissonOnlyWalkable(point))
+    && isTerrainWalkable(point, true, undefined, connected, composedCourtyard, compact);
   if (local.x < -25 || local.x > 3 || local.z < -25 || local.z > 9 || !walkable(from)) return null;
   if (!walkable(GALLERY_PORTAL_STOP)) return null;
-  if (clearSegment(from, GALLERY_PORTAL_STOP, connected, composedCourtyard)) return [GALLERY_PORTAL_STOP];
+  if (clearSegment(from, GALLERY_PORTAL_STOP, connected, composedCourtyard, compact)) return [GALLERY_PORTAL_STOP];
 
   const nodes = [from, GALLERY_PORTAL_STOP, ...corridor.filter(walkable)];
   const costs = nodes.map((_, i) => i === 0 ? 0 : Infinity);
@@ -54,7 +61,7 @@ export function planGalleryPortalRoute(from: WorldPoint, connected = false, comp
     open.delete(i);
     for (const j of open) {
       const cost = costs[i] + distance(nodes[i], nodes[j]);
-      if (cost >= costs[j] || !clearSegment(nodes[i], nodes[j], connected, composedCourtyard)) continue;
+      if (cost >= costs[j] || !clearSegment(nodes[i], nodes[j], connected, composedCourtyard, compact)) continue;
       costs[j] = cost;
       previous[j] = i;
     }
@@ -62,8 +69,8 @@ export function planGalleryPortalRoute(from: WorldPoint, connected = false, comp
   return null;
 }
 
-export function createGalleryPortalWalk(from: WorldPoint, connected = false, composedCourtyard = false) {
-  const route = planGalleryPortalRoute(from, connected, composedCourtyard);
+export function createGalleryPortalWalk(from: WorldPoint, connected = false, composedCourtyard = false, compact = false) {
+  const route = planGalleryPortalRoute(from, connected, composedCourtyard, compact);
   if (!route) return null;
   let index = 0, age = 0, stalled = 0;
   return {
@@ -76,7 +83,7 @@ export function createGalleryPortalWalk(from: WorldPoint, connected = false, com
       const remaining = distance(position, waypoint);
       const slowing = index === route.length - 1 ? Math.max(.35, remaining * 4) : Infinity;
       const step = Math.min(remaining, dt * Math.min(2.05, .45 + age * 3, slowing));
-      const next = moveTerrainPlayer(position, { x: (waypoint.x - position.x) / remaining * step, z: (waypoint.z - position.z) / remaining * step }, true, undefined, connected, composedCourtyard);
+      const next = movePortalPlayer(position, { x: (waypoint.x - position.x) / remaining * step, z: (waypoint.z - position.z) / remaining * step }, connected, composedCourtyard, compact);
       stalled = remaining - distance(next, waypoint) < Math.min(.001, step / 3) ? stalled + dt : 0;
       return { position: next, phase: stalled > .55 ? 'skipped' : 'walking' };
     },

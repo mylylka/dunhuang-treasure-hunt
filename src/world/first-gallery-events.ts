@@ -14,7 +14,7 @@ export interface FirstGallerySnapshot {
   mural?: FirstGalleryMuralSnapshot;
   muralPreparation?: 'loading' | 'failed';
 }
-export function galleryNearby(point: WorldPoint, caissonOnly = false): GalleryInteraction | null {
+export function galleryNearby(point: WorldPoint, caissonOnly = false, portalOpen = false): GalleryInteraction | null {
   const p = fromTerrainPoint('courtyard', point);
   const distance = (target: keyof typeof GALLERY_TARGETS) => Math.hypot(point.x - GALLERY_TARGETS[target].x, point.z - GALLERY_TARGETS[target].z);
   if (!caissonOnly && distance('easel') < 4.0) return 'easel';
@@ -23,7 +23,7 @@ export function galleryNearby(point: WorldPoint, caissonOnly = false): GalleryIn
   // Extend only the entrance-facing edge, by two of the hall's 17/13 m tiles.
   const approachReach = caissonDepth > 0 ? 3.9 + 2 * (17 / 13) : 3.9;
   if (Math.hypot((p.x + 12) / 3.9, caissonDepth / approachReach) < 1) return 'caisson';
-  if (!caissonOnly && distance('scroll') < 3.0) return 'scroll';
+  if ((!caissonOnly || portalOpen) && distance('scroll') < 3.0) return 'scroll';
   return null;
 }
 /** Whole building footprints, including side/rear approaches, share the same
@@ -83,7 +83,7 @@ export function createFirstGalleryEvents(initialSeen: readonly GalleryInteractio
     },
     update(point: WorldPoint, moving: boolean, dt: number, completed: { mural: boolean; caisson: boolean; easel: boolean; unlocked: boolean }, allowIntroduction = true, audioManaged = false, elapsedSeconds = dt) {
       easelCompleted = completed.easel;
-      const next = galleryNearby(point, caissonOnly);
+      const next = galleryNearby(point, caissonOnly, completed.unlocked);
       if (next !== nearby) { cancel(); nearby = next; }
       gateTime -= dt; if (gateTime <= 0) gate = null;
       if (moving) {

@@ -10,7 +10,7 @@ import { createGalleryPortalWalk, GALLERY_PORTAL_PRELUDE, galleryPortalPreludePh
 import { GALLERY_INTRO, GALLERY_TARGETS, type GalleryTarget } from '../content/world/first-gallery-v001';
 import { createFirstGalleryNarration } from './first-gallery-narration';
 import type { FirstGalleryNarrationId } from '../content/world/first-gallery-narration';
-import { completeGalleryMuralPart, loadFirstGallery, subscribeFirstGallery, isFirstGalleryUnlocked, isCaissonOnlyMode, markGalleryIntroductionSeen } from '../services/first-gallery';
+import { completeGalleryMuralPart, loadFirstGallery, subscribeFirstGallery, isFirstGalleryUnlocked, isFirstGalleryCeremonyReady, isCaissonOnlyMode, markGalleryIntroductionSeen } from '../services/first-gallery';
 import { isCaissonOnlyWalkable } from './caisson-only-scope';
 import { createMusicCompanionV2 } from './companion-follow-v002';
 import { companionPreviewCheckpointV2, musicGuidePreviewCheckpoint, sanitizeMusicCompanionCheckpoint } from './music-companion-session-v002';
@@ -136,6 +136,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   let previewAttempt: { position: WorldCheckpoint['position']; surface?: string } | undefined;
   let galleryState = options.firstGallery ? loadFirstGallery().data : null;
   const firstGalleryUnlocked = () => !caissonOnly && !!galleryState && isFirstGalleryUnlocked(galleryState);
+  const galleryPortalUnlocked = () => !!galleryState && isFirstGalleryCeremonyReady(galleryState, caissonOnly);
   const canVisitMusic = () => previewAll || firstGalleryUnlocked();
   const canVisitCliff = () => previewAll || (firstGalleryUnlocked() && musicGalleryUnlocked);
   const gallery = options.firstGallery ? createFirstGalleryEvents(galleryState?.introductionsSeen, caissonOnly) : null;
@@ -155,7 +156,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   let portalWalk: ReturnType<typeof createGalleryPortalWalk> = null;
   let portalPrelude: { time: number; yaw: number; route: ReturnType<typeof createGalleryPortalWalk> } | null = null;
   let portalNotice: 'arrived' | 'skipped' | undefined;
-  let portalLightPending = false;
+  let portalLightPending = caissonOnly && galleryPortalUnlocked() && !galleryState?.ceremonySeen;
   const portalBusy = () => !!(portalPrelude || portalWalk);
   const portalLookTarget = new THREE.Vector3(GALLERY_TARGETS.scroll.x, GALLERY_TARGETS.scroll.y + .85, GALLERY_TARGETS.scroll.z);
   let portalStarted = false;
@@ -172,11 +173,11 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   }, savedMuralMarker, connected, caissonOnly) : null;
   let galleryCaissonView: { entry: FirstGalleryMuralCameraPose; time: number; returning: boolean } | null = null;
   const unsubscribeGallery = options.firstGallery ? subscribeFirstGallery(local => {
-    const previouslyUnlocked = firstGalleryUnlocked();
+    const previouslyUnlocked = galleryPortalUnlocked();
     galleryState = loadFirstGallery().data;
-    const unlocked = firstGalleryUnlocked();
-    if (local && unlocked && !previouslyUnlocked && !galleryState.ceremonySeen) portalLightPending = true;
+    const unlocked = galleryPortalUnlocked();
     if (!unlocked || galleryState.ceremonySeen) portalLightPending = false;
+    else if (!portalStarted && (caissonOnly || (local && !previouslyUnlocked))) portalLightPending = true;
     if (!mural?.replay) galleryDisplay?.setParts(galleryState.muralParts);
     if (!portalLightPending) galleryDisplay?.setPortalReveal(Number(unlocked));
   }) : () => {};
@@ -721,7 +722,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     schedule();
   }
   function canStartGalleryPortal() {
-    return !!(terrain && galleryState && inFirstGallery() && galleryDisplay && galleryStepped && !portalStarted && !moving && firstGalleryUnlocked()
+    return !!(terrain && galleryState && inFirstGallery() && galleryDisplay && galleryStepped && !portalStarted && !moving && galleryPortalUnlocked()
       && !galleryState.ceremonySeen && !gallery?.snapshot().cue && canControlCamera());
   }
   function finishGalleryPortal(phase: 'arrived' | 'skipped') {
@@ -1247,7 +1248,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     if (gallery && galleryState) {
       if (!connected) world.updateFirstGalleryStreaming?.(checkpoint.position, firstGalleryUnlocked());
       prepareGalleryDisplay();
-      gallery.update(checkpoint.position, moving, dt, { mural: galleryState.muralParts.length === 3, caisson: galleryState.caissonCompleted, easel: galleryState.coloringCompleted, unlocked: firstGalleryUnlocked() },
+      gallery.update(checkpoint.position, moving, dt, { mural: galleryState.muralParts.length === 3, caisson: galleryState.caissonCompleted, easel: galleryState.coloringCompleted, unlocked: galleryPortalUnlocked() && !portalLightPending },
         !galleryBlocked && !galleryCaissonView && !portalBusy() && !portalNotice && !mural?.active && mural?.phase !== 'invite' && view === 'follow' && !overview && !encounters?.state,
         true, galleryWindowBlurred ? 0 : frameSeconds);
       galleryStepped = true;
@@ -1489,7 +1490,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     galleryDisplay.setMuralMarker(false, { x: muralObserver.x, y: heightAt(muralObserver), z: muralObserver.z });
     if (galleryState) {
       galleryDisplay.setParts(galleryState.muralParts, true);
-      galleryDisplay.setPortalReveal(Number(!portalLightPending && firstGalleryUnlocked()));
+      galleryDisplay.setPortalReveal(Number(!portalLightPending && galleryPortalUnlocked()));
     }
     if (galleryArtwork) galleryDisplay.setArtwork(galleryArtwork);
     void galleryDisplay.ready.then(() => {
@@ -1657,7 +1658,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
       input.clear();
       travelCamera?.reset();
       const heading = Math.atan2(checkpoint.position.x - portalLookTarget.x, checkpoint.position.z - portalLookTarget.z);
-      portalPrelude = { time: 0, yaw: galleryPortalCameraYaw(heading), route: createGalleryPortalWalk(checkpoint.position, connected, composedCourtyard) };
+      portalPrelude = { time: 0, yaw: galleryPortalCameraYaw(heading), route: createGalleryPortalWalk(checkpoint.position, connected, composedCourtyard, caissonOnly) };
       lookIntent = 0;
       soundPlayer.play('gallery-unlock');
       schedule(); emit();

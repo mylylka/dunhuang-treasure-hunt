@@ -10,19 +10,20 @@ import { PATTERN_STATIONS, patternStationsForScope } from '../../src/world/patte
 afterEach(() => vi.unstubAllGlobals());
 
 describe('精简版第一馆', () => {
-  it('精简版保留借物桌的模型和碰撞，移除画架与旧工作坊的碰撞', () => {
+  it('精简版保留借物桌和画卷台的碰撞，隐藏画架、画板与颜料架', () => {
     const ids = ['terrain-courtyard-coloring-station',
-      'terrain-courtyard-hall-v003-workbench', 'terrain-courtyard-hall-v003-pattern-display', 'terrain-courtyard-hall-v003-pigment-rack'];
+      'terrain-courtyard-hall-v003-pattern-display', 'terrain-courtyard-hall-v003-pigment-rack'];
     expect(patternStationsForScope(true).map(station => station.id)).toEqual(['mural-station']);
     expect(TERRAIN_CAISSON_ONLY_PLAYER_COLLIDERS.some(solid => solid.id === 'terrain-courtyard-mural-station')).toBe(true);
+    expect(TERRAIN_CAISSON_ONLY_PLAYER_COLLIDERS.some(solid => solid.id === 'terrain-courtyard-hall-v003-workbench')).toBe(true);
     for (const id of ids) {
       expect(TERRAIN_FIRST_GALLERY_PLAYER_COLLIDERS.some(solid => solid.id === id)).toBe(true);
       expect(TERRAIN_CAISSON_ONLY_PLAYER_COLLIDERS.some(solid => solid.id === id)).toBe(false);
     }
     const full = terrainCameraSpace(true, true);
     const compact = terrainCameraSpace(true, true, false, false, false, true);
-    // The easel and three furnishings' player and camera proxies stay hidden.
-    expect(full.orientedBoxes!.length - compact.orientedBoxes!.length).toBe(7);
+    // The easel, display and pigment rack proxies stay hidden.
+    expect(full.orientedBoxes!.length - compact.orientedBoxes!.length).toBe(5);
     for (const station of PATTERN_STATIONS) {
       const { x, z } = toTerrainPoint('courtyard', station.position);
       const point = { x, z };
@@ -44,10 +45,11 @@ describe('精简版第一馆', () => {
     expect(records.get(FIRST_GALLERY_STORAGE_KEY)).toBe(original);
   });
 
-  it('仅藻井可互动，漫游范围包含第一馆和起点，不延伸到其他馆', () => {
+  it('画卷按完成状态开放，精简漫游限定在第一馆', () => {
     expect(galleryNearby(toTerrainPoint('courtyard', { x: -12, z: -15 }), true)).toBe('caisson');
     expect(galleryNearby(toTerrainPoint('courtyard', { x: -6.5, z: -3.9 }), true)).toBeNull();
     expect(galleryNearby(toTerrainPoint('courtyard', { x: -19, z: -1.7 }), true)).toBeNull();
+    expect(galleryNearby(toTerrainPoint('courtyard', { x: -19, z: -1.7 }), true, true)).toBe('scroll');
     expect(isCaissonOnlyWalkable(TERRAIN_SPAWN)).toBe(true);
     expect(isCaissonOnlyWalkable(toTerrainPoint('courtyard', { x: -12, z: -15 }))).toBe(true);
     expect(isCaissonOnlyWalkable(toTerrainPoint('music', { x: 46, z: -9 }))).toBe(false);

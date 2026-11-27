@@ -44,7 +44,11 @@ const schema = z.object({
   Object.entries(state.artworks).every(([id, item]) => id === item.artworkId) &&
   (state.displayedArtworkId === null || Object.hasOwn(state.artworks, state.displayedArtworkId)) &&
   (!state.coloringCompleted || state.displayedArtworkId !== null) &&
-  (!state.ceremonySeen || isFirstGalleryUnlocked(state)) && (!state.firstSuccessSeen || state.coloringCompleted));
+  (!state.firstSuccessSeen || state.coloringCompleted));
+
+const fullGallerySchema = schema.refine(state => !state.ceremonySeen || isFirstGalleryCeremonyReady(state));
+const compactGallerySchema = schema.refine(state => !state.ceremonySeen || isFirstGalleryCeremonyReady(state, true));
+const gallerySchemaForKey = (key: string) => key === CAISSON_ONLY_GALLERY_STORAGE_KEY ? compactGallerySchema : fullGallerySchema;
 
 export type FirstGalleryArtwork = z.infer<typeof artwork>;
 export type FirstGalleryState = z.infer<typeof schema>;
@@ -62,12 +66,16 @@ export function firstGalleryRecordWithoutProgress(raw: string): string {
   if (!saved || typeof saved !== 'object') throw new Error('Unreadable first gallery record');
   const { version: _version, artworks: _artworks, ...reset } = emptyFirstGallery();
   const next = { ...saved, ...reset };
-  schema.parse(next);
+  fullGallerySchema.parse(next);
   return JSON.stringify(next);
 }
 
 export function isFirstGalleryUnlocked(state: GalleryCompletion): boolean {
   return state.muralParts.length === 3 && state.caissonCompleted && state.coloringCompleted;
+}
+
+export function isFirstGalleryCeremonyReady(state: GalleryCompletion, compact = false): boolean {
+  return compact ? state.muralParts.length === 3 && state.caissonCompleted : isFirstGalleryUnlocked(state);
 }
 
 export function getFirstGalleryAccess(state: FirstGalleryState, destination: string): boolean {
@@ -91,8 +99,9 @@ export function canOpenFirstGalleryRoute(state: FirstGalleryState, route: Route,
 
 export function loadFirstGallery(storage?: StorageLike): { data: FirstGalleryState; warning: string | null } {
   try {
-    const raw = (storage ?? window.localStorage).getItem(activeStorageKey());
-    return { data: raw === null ? emptyFirstGallery() : schema.parse(JSON.parse(raw)), warning: null };
+    const storageKey = activeStorageKey();
+    const raw = (storage ?? window.localStorage).getItem(storageKey);
+    return { data: raw === null ? emptyFirstGallery() : gallerySchemaForKey(storageKey).parse(JSON.parse(raw)), warning: null };
   } catch {
     return { data: emptyFirstGallery(), warning: '第一馆记录暂时无法读取。原记录已保留。' };
   }
@@ -117,18 +126,19 @@ function updateFirstGallery(update: (previous: FirstGalleryState, storage: Stora
   try {
     const target = storage ?? window.localStorage;
     const storageKey = activeStorageKey();
+    const recordSchema = gallerySchemaForKey(storageKey);
     // Re-read immediately before each synchronous write so updates from a
     // different tab and edits to unrelated gallery fields are preserved.
     const raw = target.getItem(storageKey);
     let damaged = false;
     let previous = emptyFirstGallery();
     if (raw !== null) {
-      try { previous = schema.parse(JSON.parse(raw)); }
+      try { previous = recordSchema.parse(JSON.parse(raw)); }
       catch { damaged = true; }
     }
     const updated = update(previous, target);
     if (updated === previous) return { ok: true, data: previous };
-    const data = schema.parse(updated);
+    const data = recordSchema.parse(updated);
     if (raw !== target.getItem(storageKey)) throw new Error('Concurrent gallery edit');
     if (damaged && raw !== null) {
       let suffix = Date.now();
@@ -157,7 +167,7 @@ export function completeGalleryCaisson(storage?: StorageLike): FirstGallerySave 
 
 export function markGalleryCeremonySeen(storage?: StorageLike): FirstGallerySave {
   return updateFirstGallery(previous => {
-    if (!isFirstGalleryUnlocked(previous)) throw new Error('Gallery is locked');
+    if (!isFirstGalleryCeremonyReady(previous, isCaissonOnlyMode())) throw new Error('Gallery ceremony is locked');
     return previous.ceremonySeen ? previous : { ...previous, ceremonySeen: true };
   }, storage);
 }
