@@ -649,13 +649,13 @@
   },
   {
     "id": "coloring-floral-scroll-reference",
-    "path": "/assets/levels/coloring-floral-scroll/coloring-floral-scroll-reference-v001.png",
+    "path": "/assets/levels/coloring-floral-scroll/coloring-floral-scroll-reference-v002.png",
     "width": 449,
     "height": 913,
     "kind": "level",
     "placeholder": false,
-    "version": "v001-796eded2173f",
-    "sourceNote": "开发者提供的彩色参考图，保留原文件。"
+    "version": "v002-dda40908765a",
+    "sourceNote": "开发者提供的彩色参考图。v001 原稿逐字节归档未改动；v002 仅在左上、左中、右上三处水印笔画范围内做局部中值压平去水印，水印区外 0 像素变化，不重绘、不裁切，归档见 art-source/levels/coloring-floral-scroll/v002。"
   },
   {
     "id": "coloring-floral-scroll-line",
@@ -679,13 +679,13 @@
   },
   {
     "id": "coloring-lotus-rosette-reference",
-    "path": "/assets/levels/coloring-lotus-rosette/coloring-lotus-rosette-reference-v001.png",
+    "path": "/assets/levels/coloring-lotus-rosette/coloring-lotus-rosette-reference-v002.png",
     "width": 394,
     "height": 391,
     "kind": "level",
     "placeholder": false,
-    "version": "v001-a7d6d4715e09",
-    "sourceNote": "开发者提供的彩色参考图，保留原文件。"
+    "version": "v002-73aae0ddf72f",
+    "sourceNote": "开发者提供的彩色参考图。v001 原稿逐字节归档未改动；v002 仅在左侧花瓣与右侧水印笔画范围内做局部中值压平去水印，水印区外 0 像素变化，不重绘、不裁切，归档见 art-source/levels/coloring-lotus-rosette/v002。"
   },
   {
     "id": "coloring-lotus-rosette-line",

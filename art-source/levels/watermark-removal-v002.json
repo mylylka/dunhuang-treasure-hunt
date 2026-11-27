@@ -1,0 +1,28 @@
+{
+  "results": [
+    {
+      "levelId": "coloring-floral-scroll",
+      "source": "public/assets/levels/coloring-floral-scroll/coloring-floral-scroll-reference-v001.png",
+      "output": "public/assets/levels/coloring-floral-scroll/coloring-floral-scroll-reference-v002.png",
+      "imageSize": [
+        449,
+        913
+      ],
+      "scopePixels": 4685,
+      "changedPixelsOutsideScope": 0,
+      "changedPixels": 2899
+    },
+    {
+      "levelId": "coloring-lotus-rosette",
+      "source": "public/assets/levels/coloring-lotus-rosette/coloring-lotus-rosette-reference-v001.png",
+      "output": "public/assets/levels/coloring-lotus-rosette/coloring-lotus-rosette-reference-v002.png",
+      "imageSize": [
+        394,
+        391
+      ],
+      "scopePixels": 570,
+      "changedPixelsOutsideScope": 0,
+      "changedPixels": 433
+    }
+  ]
+}

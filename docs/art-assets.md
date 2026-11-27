@@ -95,6 +95,14 @@
 
 每个目录同时保留 `repair-scope-mask.png`、`source-notes.json` 和 `processing.json`；来源记录包含完整提示词、工具、修补范围、校验值和区域探针。`scripts/import-coloring-repairs.py` 可从上述正式归档重建补线运行图与区域图，不依赖work中的临时生成文件。v001原稿、旧线稿、旧区域图与旧作品版本不覆盖、不删除。
 
+### 2026-11-27卷草花纹与莲瓣团花参考去水印
+
+首关卷草花纹与第二关莲瓣团花的配色参考原稿带有平台水印：卷草花纹为三处淡青白“知美学”字样（左上、左中、右上），莲瓣团花为两处红粉“汤圆”字样及一段竖向点划参考线。用户明确要求去除这两关填色界面与关卡封面上的水印，因此另出运行版 `*-reference-v002.png`，稳定 ID `coloring-floral-scroll-reference`、`coloring-lotus-rosette-reference` 指向新图，同屏参考与关卡封面（`thumbnailAssetId`）同步生效。
+
+处理只在水印笔画覆盖区做局部中值压平：以中值估背景，按灰度偏差窗口挑选笔画像素，重复三遍收敛；不整图重绘、不裁切、不调色，也不据补绘推断纹样细节。卷草花纹处理范围 4685 像素、实际变更 2899 像素；莲瓣团花范围 570 像素、变更 433 像素；两关水印区外均为 0 像素变化。v001 原稿逐字节保留在 `art-source/levels/<level-id>/v001/`，本次处理归档在 `art-source/levels/<level-id>/v002/`（`watermark-scope-mask.png`、`reference-before.png`、`reference-after.png`、`reviewed-composite.png`），范围与变更计数登记在 `art-source/levels/watermark-removal-v002.json`。
+
+`python3 scripts/remove-coloring-watermarks-v001.py` 可从 v001 重建 v002 并复算范围外变更数。卷草花纹原稿另有数条极淡的斜向细线（非文字，扫描叠层痕迹），1:1 显示下不易辨识，本轮未处理；如需一并清除，需单独扩范围并重新核对纹样勾线。
+
 三兔补线版为345区：三只兔身沿真实共耳结构连通，同属区域ID132；圆内背景单独为ID125。着色保留兔身联动，没有为制造三个独立区域而加画不存在的分隔线。葡萄莲花补线版为510区：闭合外方框以隔离纸外；部分带状区域真实相通，仍会联动，不将每根细带说成独立区域。莲花茶花511区、葡萄石榴611区沿用v001，未发现同等级大断口。区域数量不作为完成比例或填满要求。
 
 线稿、区域图和 `artworkVersion` 已一同更新。以上记录的是实际素材处理与区域隔离结果；最终浏览器、真实点击及生产构建验证结论另见验收记录，不由本文预先代替。
