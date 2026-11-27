@@ -13,7 +13,7 @@ import { MOGAO_SESSION_OPTIONS, mogaoSurfaceHeight, inMogaoRoom } from './mogao-
 import type { WorldPoint } from './types';
 import { CONNECTED_DESERT_VEGETATION } from '../content/world/desert-vegetation';
 import { TERRAIN_TOWER_TREES } from '../content/world/terrain-trees-v001';
-import { PATTERN_STATIONS, PATTERN_STATION_SOLIDS, patternStationsForScope } from './pattern-interactives';
+import { PATTERN_STATION_SOLIDS } from './pattern-interactives';
 import { CAISSON_ONLY_HIDDEN_COURTYARD_OBJECTS } from './caisson-only-props';
 import { COURTYARD_ROCK_SCALE, ENLARGED_COURTYARD_ROCKS, isReplacedCourtyardRock } from '../content/world/courtyard-rock-refinement-v001';
 
@@ -120,12 +120,8 @@ const firstGalleryRocks = TERRAIN_FIRST_GALLERY_COURTYARD_LOCAL_COLLIDERS
 const firstGalleryById = new Map([...firstGalleryFurniture, ...firstGalleryRocks].map(solid => [solid.id, solid]));
 export const TERRAIN_FIRST_GALLERY_PLAYER_COLLIDERS: readonly WorldCollider[] = TERRAIN_PLAYER_COLLIDERS
   .map(solid => firstGalleryById.get(solid.id ?? '') ?? solid);
-const compactPatternStations = patternStationsForScope(true);
-const hiddenCompactStationIds = new Set(PATTERN_STATIONS.filter(station => !compactPatternStations.includes(station))
-  .map(station => `terrain-courtyard-${station.id}`));
 export const TERRAIN_CAISSON_ONLY_PLAYER_COLLIDERS = TERRAIN_FIRST_GALLERY_PLAYER_COLLIDERS.filter(
-  solid => !hiddenCompactStationIds.has(solid.id ?? '')
-    && !CAISSON_ONLY_HIDDEN_COURTYARD_OBJECTS.has((solid.id ?? '').replace(/^terrain-courtyard-/, '')),
+  solid => !CAISSON_ONLY_HIDDEN_COURTYARD_OBJECTS.has((solid.id ?? '').replace(/^terrain-courtyard-/, '')),
 );
 
 export function isRetiredConnectedVegetation(id = '') {

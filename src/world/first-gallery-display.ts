@@ -50,6 +50,13 @@ export function createFirstGalleryDisplay(scene: THREE.Scene, traveler: THREE.Ob
   const paperMaterial = new THREE.MeshStandardMaterial({ color: 0xfff5e5, roughness: 1, emissive: 0xffffff, emissiveIntensity: .2, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
   const paperMesh = new THREE.Mesh(paper, paperMaterial); paperMesh.name = 'first-gallery-easel-picture'; paperMesh.visible = false;
   easelRoot?.add(paperMesh); resources.push(paper, paperMaterial);
+  const rimMaterial = new THREE.LineBasicMaterial({ color: 0xffdb8e, transparent: true, opacity: 0, depthWrite: false });
+  const rim = new THREE.LineSegments(new THREE.EdgesGeometry(paper, 80), rimMaterial);
+  rim.visible = false;
+  rim.position.z = .008;
+  easelRoot?.add(rim);
+  resources.push(rim.geometry, rimMaterial);
+  let easelPulse = 0, easelFocused = false;
   let paperMap: THREE.CanvasTexture | null = null;
 
   const light = createMuralLight(root);
@@ -155,6 +162,18 @@ export function createFirstGalleryDisplay(scene: THREE.Scene, traveler: THREE.Ob
     const face = hit.faceIndex;
     return (['lotus', 'bird', 'grapes'] as const).find(part => measured.muralObjects[part].faces.some(([start, end]) => face >= start && face <= end));
   }
+  const easelProjection = new THREE.Vector3(), easelFront = new THREE.Vector3(), easelRotation = new THREE.Quaternion();
+  function projectEasel(camera: THREE.Camera) {
+    if (!easelRoot || !paperMesh.visible) return undefined;
+    const { x, y, z } = GALLERY_TARGETS.easel;
+    easelRoot.getWorldQuaternion(easelRotation);
+    easelFront.set(0, 0, 1).applyQuaternion(easelRotation);
+    easelProjection.copy(camera.position).sub(GALLERY_TARGETS.easel);
+    if (easelProjection.dot(easelFront) <= 0) return undefined;
+    easelProjection.set(x, y, z).project(camera);
+    if (Math.abs(easelProjection.x) > .9 || Math.abs(easelProjection.y) > .86 || Math.abs(easelProjection.z) > 1) return undefined;
+    return { x: (easelProjection.x + 1) * 50, y: (1 - easelProjection.y) * 50 };
+  }
   return {
     ready: muralWall.ready,
     setMuralMarker(visible: boolean, position?: { x: number; y: number; z: number }) {
@@ -189,6 +208,20 @@ export function createFirstGalleryDisplay(scene: THREE.Scene, traveler: THREE.Ob
       const next = new THREE.CanvasTexture(copy); next.colorSpace = THREE.SRGBColorSpace; next.anisotropy = 4;
       paperMap?.dispose(); paperMap = next; paperMaterial.map = next; paperMaterial.emissiveMap = next; paperMaterial.needsUpdate = true; paperMesh.visible = true;
     },
+    projectEasel,
+    setEaselFocused(value: boolean) { easelFocused = value; },
+    pulseEasel() { easelPulse = 1.35; },
+    easelPose(aspect: number, overview: boolean) {
+      if (!easelRoot || !paperMesh.visible) return null;
+      const sphere = new THREE.Box3().setFromObject(overview ? easelRoot : paperMesh).getBoundingSphere(new THREE.Sphere());
+      const fov = overview ? 49 : 43;
+      const vertical = THREE.MathUtils.degToRad(fov / 2);
+      const horizontal = Math.atan(Math.tan(vertical) * aspect);
+      const distance = sphere.radius * 1.12 / Math.sin(Math.min(vertical, horizontal));
+      const direction = new THREE.Vector3(overview ? .45 : -.04, overview ? .19 : .07, 1)
+        .normalize().applyQuaternion(easelRoot.getWorldQuaternion(easelRotation));
+      return { position: sphere.center.clone().addScaledVector(direction, distance), target: sphere.center, fov };
+    },
     playTrail(part: FirstGalleryMuralPart) {
       previewPart = part;
       previewElapsed = 0;
@@ -200,6 +233,10 @@ export function createFirstGalleryDisplay(scene: THREE.Scene, traveler: THREE.Ob
     update(dt: number, reduced: boolean) {
       portal?.update(dt, reduced);
       light.update(dt, reduced);
+      easelPulse = Math.max(0, easelPulse - dt);
+      const glow = reduced ? 0 : Math.sin(Math.PI * easelPulse / 1.35) * .72;
+      rimMaterial.opacity = Math.max(easelFocused ? .42 : 0, glow);
+      rim.visible = paperMesh.visible && rimMaterial.opacity > .03;
       if (!previewPart) return;
       previewElapsed += dt;
       muralWall.preview(previewElapsed, reduced);
@@ -243,6 +280,6 @@ export function createFirstGalleryDisplay(scene: THREE.Scene, traveler: THREE.Ob
       return null;
     },
     inspect: () => ({ muralVisible: wall.visible, ...muralWall.inspect(), muralMarker: muralMarker.visible, easelVisible: paperMesh.visible, easelVertices: paper.attributes.position.count, trail: light.inspect().active, muralLight: light.inspect(), scrollUnlocked: unlocked, scrollFaces: scrollMaterials.length, portalLight: portal?.inspect() }),
-    dispose() { muralWall.dispose(); light.dispose(); portal?.dispose(); sourceGlow?.removeFromParent(); sourceGlow?.geometry.dispose(); sourceGlow?.material.dispose(); root.removeFromParent(); paperMesh.removeFromParent(); paperMap?.dispose(); scrollOriginals.forEach(({ mesh, material }) => { mesh.material = material; }); scrollMaterials.forEach(material => material.dispose()); resources.forEach(item => item.dispose()); },
+    dispose() { muralWall.dispose(); light.dispose(); portal?.dispose(); sourceGlow?.removeFromParent(); sourceGlow?.geometry.dispose(); sourceGlow?.material.dispose(); root.removeFromParent(); paperMesh.removeFromParent(); rim.removeFromParent(); paperMap?.dispose(); scrollOriginals.forEach(({ mesh, material }) => { mesh.material = material; }); scrollMaterials.forEach(material => material.dispose()); resources.forEach(item => item.dispose()); },
   };
 }

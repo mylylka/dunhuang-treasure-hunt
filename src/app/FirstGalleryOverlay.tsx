@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { GALLERY_LABELS, type GalleryInteraction } from '../content/world/first-gallery-v001';
 import { galleryNarratedLine, type FirstGalleryNarrationId } from '../content/world/first-gallery-narration';
-import { completeGalleryCaisson, isFirstGalleryUnlocked, loadFirstGallery, markGalleryColoringFeedbackSeen, selectGalleryArtwork, subscribeFirstGallery, type FirstGalleryArtwork, type FirstGalleryMuralPart } from '../services/first-gallery';
+import { completeGalleryCaisson, isCaissonOnlyMode, isFirstGalleryUnlocked, loadFirstGallery, markGalleryColoringFeedbackSeen, markGalleryIntroductionSeen, selectGalleryArtwork, subscribeFirstGallery, type FirstGalleryArtwork, type FirstGalleryMuralPart } from '../services/first-gallery';
+import { FIRST_GALLERY_EASEL_LEVEL } from '../services/first-gallery-entry';
 import { getAssetUrl } from '../content';
 import { renderColoringArtwork } from '../games/coloring/render';
 import { ColoringResult } from './ColoringResult';
@@ -17,6 +18,8 @@ interface Props {
   onInteract(id: GalleryInteraction): void;
   onColor(checkpoint: WorldCheckpoint, artworkId?: string): boolean;
   onOccupied(value: boolean): void;
+  exhibitId?: string | null;
+  onExhibitReady?(id: string): void;
   portalPending?: boolean;
   onPortalPresented?(): void;
   onPortalEnter(): void;
@@ -67,6 +70,7 @@ function ArtworkThumb({ record, catalog, onChoose }: { record: FirstGalleryArtwo
 
 export function FirstGalleryOverlay(props: Props) {
   const { runtime, snapshot, catalog, ready, blocked, reducedMotion } = props;
+  const compact = isCaissonOnlyMode();
   const [loaded, setLoaded] = useState(loadFirstGallery);
   const data = loaded.data, unlocked = isFirstGalleryUnlocked(data);
   const [panel, setPanel] = useState<'easel' | 'library' | 'artwork' | 'caisson' | 'scroll' | null>(null);
@@ -74,11 +78,15 @@ export function FirstGalleryOverlay(props: Props) {
   const [selected, setSelected] = useState<FirstGalleryArtwork | null>(null);
   const [notice, setNotice] = useState('');
   const [libraryLimit, setLibraryLimit] = useState(6);
-  const [displayReady, setDisplayReady] = useState(false);
+  const [displayResult, setDisplayResult] = useState<{ id: string | null; ready: boolean } | null>(null);
   const lastRequest = useRef(-1), feedbackSeen = useRef(false), portalPresented = useRef(false);
   const portalNavigation = useRef(0);
   const nearby = snapshot.gallery?.nearby;
   const easelReady = nearby === 'easel' && snapshot.gallery?.easelReady;
+  const easelHint = snapshot.gallery?.easelHint;
+  const easelShowcase = snapshot.gallery?.easelShowcase;
+  const displayedArtwork = data.displayedArtworkId ? data.artworks[data.displayedArtworkId] : null;
+  const displayReady = displayResult?.id === data.displayedArtworkId && displayResult.ready;
   const mural = snapshot.gallery?.mural;
   const muralActive = mural?.active === true;
   const muralInvited = mural?.phase === 'invite';
@@ -92,7 +100,7 @@ export function FirstGalleryOverlay(props: Props) {
   const portalPlaying = portalWalking || portal === 'turning' || portal === 'revealing' || portal === 'question';
   const portalArrived = portal === 'arrived';
   const portalNotice = portalArrived || portal === 'skipped';
-  const occupied = panel !== null || portalNotice;
+  const occupied = panel !== null || portalNotice || !!props.exhibitId;
   const caissonAssist = snapshot.gallery?.caissonAssist;
   const caissonView = panel === 'caisson' || caissonAssist;
   const caissonReady = nearby === 'caisson' && snapshot.gallery?.caissonOffer;
@@ -103,27 +111,43 @@ export function FirstGalleryOverlay(props: Props) {
   useEffect(() => { runtime?.setGalleryInteractionBlocked?.(occupied); }, [occupied, runtime]);
   useEffect(() => () => { runtime?.setGalleryInteractionBlocked?.(false); }, [runtime]);
   useEffect(() => {
-    if (!runtime || !ready || document.getElementById('root')?.dataset.caissonOnly === 'v001') return;
-    setDisplayReady(false);
-    const record = data.displayedArtworkId ? data.artworks[data.displayedArtworkId] : null;
-    const level = catalog.levels.find(item => item.id === (record?.levelId ?? 'coloring-feitian-lotus'));
-    if (level?.gameType !== 'coloring' || (record && record.artworkVersion !== level.artworkVersion)) { setNotice('这幅收藏的线稿版本已更新，原画仍保留在作品库。'); return; }
+    if (!runtime || !ready) return;
+    setDisplayResult(null);
+    const record = displayedArtwork;
+    const level = catalog.levels.find(item => item.id === (record?.levelId ?? FIRST_GALLERY_EASEL_LEVEL));
+    if (level?.gameType !== 'coloring' || (record && record.artworkVersion !== level.artworkVersion)) {
+      setDisplayResult({ id: record?.artworkId ?? null, ready: false });
+      setNotice('这幅收藏的线稿版本已更新，原画仍保留在作品库。');
+      return;
+    }
     const abort = new AbortController();
     renderColoringArtwork({ lineImageUrl: getAssetUrl(catalog, level.lineAssetId), regionMapImageUrl: getAssetUrl(catalog, level.regionMapAssetId), colors: record?.colors ?? {}, materials: record?.materials ?? {}, signal: abort.signal }).then(canvas => {
       if (abort.signal.aborted) return;
       runtime.setGalleryArtwork?.(canvas);
-      setDisplayReady(true);
-    }).catch(() => { if (!abort.signal.aborted) setNotice('画架图像暂未加载。收藏仍在，请重新进入此画架重试。'); });
+      setDisplayResult({ id: record?.artworkId ?? null, ready: true });
+    }).catch(() => {
+      if (abort.signal.aborted) return;
+      setDisplayResult({ id: record?.artworkId ?? null, ready: false });
+      setNotice('画架图像暂未加载。作品已保存，重新进入第一馆可重试。');
+    });
     return () => abort.abort();
+    // Artwork IDs identify immutable submissions. Other task saves can reload
+    // the same record without requiring a new texture.
   }, [ready, runtime, data.displayedArtworkId, catalog]);
   useEffect(() => {
-    if (!displayReady || blocked || occupied || muralVisible || portalPlaying || nearby !== 'easel' || snapshot.moving || !data.coloringCompleted || data.firstSuccessSeen || feedbackSeen.current) return;
+    const id = props.exhibitId;
+    if (!id || !runtime || blocked || displayResult?.id !== id) return;
+    if (displayResult.ready) runtime.presentGalleryEasel?.();
+    props.onExhibitReady?.(id);
+  }, [runtime, blocked, displayResult, props.exhibitId, props.onExhibitReady]);
+  useEffect(() => {
+    if (compact || !displayReady || blocked || occupied || muralVisible || portalPlaying || nearby !== 'easel' || snapshot.moving || !data.coloringCompleted || data.firstSuccessSeen || feedbackSeen.current) return;
     feedbackSeen.current = true;
     runtime?.showGalleryCue?.([
       galleryNarratedLine('easel-hung', 'easel'), galleryNarratedLine('easel-color-note', 'easel'),
     ], true);
     const result = markGalleryColoringFeedbackSeen(); if (!result.ok) setNotice(result.message);
-  }, [displayReady, blocked, occupied, muralVisible, portalPlaying, nearby, snapshot.moving, data.coloringCompleted, data.firstSuccessSeen, runtime]);
+  }, [compact, displayReady, blocked, occupied, muralVisible, portalPlaying, nearby, snapshot.moving, data.coloringCompleted, data.firstSuccessSeen, runtime]);
   useEffect(() => {
     if (!props.portalPending || !ready || blocked || occupied || muralVisible || !snapshot.gallery?.portalReady) return;
     const awaitingArtwork = nearby === 'easel' && !data.firstSuccessSeen && !feedbackSeen.current && !notice;
@@ -141,7 +165,14 @@ export function FirstGalleryOverlay(props: Props) {
     if (caissonView || caissonReady) runtime?.observeGalleryCaisson?.(false);
   }
   function beginColoring(artworkId?: string) {
-    if (props.onColor(runtime?.snapshot().checkpoint ?? snapshot.checkpoint, artworkId)) close();
+    const at = runtime?.snapshot().checkpoint ?? snapshot.checkpoint;
+    const open = () => {
+      if (!props.onColor(at, artworkId)) return;
+      if (compact && !data.introductionsSeen.includes('easel')) markGalleryIntroductionSeen('easel');
+      close();
+    };
+    if (compact && runtime?.previewGalleryEasel?.(open)) close();
+    else open();
   }
   function magnifyCaisson() {
     const quad = runtime?.galleryCaissonQuad?.();
@@ -160,7 +191,11 @@ export function FirstGalleryOverlay(props: Props) {
     lastRequest.current = request.serial;
     if (muralVisible || portalPlaying || portalNotice || (request.id === 'easel' && !easelReady)) return;
     setNotice('');
-    if (request.id === 'easel') setPanel('easel');
+    if (request.id === 'easel') {
+      if (compact && !easelHint) return;
+      if (compact && !displayedArtwork) beginColoring();
+      else setPanel('easel');
+    }
     else if (request.id === 'mural') { if (muralRestored) runtime?.requestGalleryMural?.(); }
     else if (request.id === 'caisson') {
       if (caissonReady) magnifyCaisson();
@@ -187,13 +222,17 @@ export function FirstGalleryOverlay(props: Props) {
   }, [caissonView, blocked, runtime]);
   const muralText = mural?.text;
   const chooseArtwork = selected && catalog.levels.find(item => item.id === selected.levelId);
+  const showEaselHint = compact && easelHint && ready && !blocked && !occupied && !muralVisible && !easelShowcase;
   return <div className="first-gallery-overlay" data-testid="first-gallery-overlay" data-caisson-view={caissonView || undefined}>
+    {showEaselHint && nearby !== 'easel' && <span className="gallery-easel-marker" style={{ left: `${easelHint.x}%`, top: `${easelHint.y}%` }}>涂色画架</span>}
+    {showEaselHint && easelReady && !displayedArtwork && !data.introductionsSeen.includes('easel') &&
+      <p className="gallery-easel-invitation">涂好的画，会挂在这里。</p>}
     {!muralVisible && !portalPlaying && !occupied && !blocked && cue && <aside className={`gallery-subtitle${cue.narration === 'easel-color-note' ? ' gallery-subtitle-wide' : ''}${cue.narration ? '' : ' gallery-text-cue'}`} role="status" onClick={skipCue}><p>{cue.text}</p></aside>}
     {!muralVisible && !occupied && !blocked && snapshot.gallery?.gate && <p className="gallery-gate gallery-text-cue" role="status">{snapshot.gallery.gate}</p>}
-    {!muralVisible && !portalPlaying && !occupied && ready && !blocked && !snapshot.gallery?.cue && nearby && !muralPreparation && (nearby !== 'mural' || muralRestored) &&
-      (nearby !== 'easel' || easelReady) &&
+    {!muralVisible && !portalPlaying && !easelShowcase && !occupied && ready && !blocked && !snapshot.gallery?.cue && nearby && !muralPreparation && (nearby !== 'mural' || muralRestored) &&
+      (nearby !== 'easel' || (easelReady && (!compact || !!easelHint))) &&
       (nearby !== 'caisson' || (!caissonAssist && !caissonReady)) &&
-      <button className="gallery-interact gallery-text-cue" data-testid="gallery-interact" onClick={() => props.onInteract(nearby)}>{nearby === 'caisson' ? '抬头看看' : nearby === 'easel' && data.displayedArtworkId ? '欣赏或更换画作' : nearby === 'mural' ? '重看壁画' : nearby === 'scroll' && unlocked ? '进入游戏世界' : GALLERY_LABELS[nearby]}</button>}
+      <button className="gallery-interact gallery-text-cue" data-testid="gallery-interact" onClick={() => props.onInteract(nearby)}>{nearby === 'caisson' ? '抬头看看' : nearby === 'easel' && compact ? displayedArtwork ? '欣赏作品' : '开始涂色' : nearby === 'easel' && data.displayedArtworkId ? '欣赏或更换画作' : nearby === 'mural' ? '重看壁画' : nearby === 'scroll' && unlocked ? '进入游戏世界' : GALLERY_LABELS[nearby]}</button>}
     {!blocked && !occupied && muralPreparation && <p className="gallery-gate gallery-text-cue" role="status">{muralPreparation === 'loading' ? '壁画正在准备…' : '壁画暂时未能载入，可以继续探索。'}</p>}
     {portal === 'question' && !blocked && <aside className="gallery-mural-hud gallery-portal-question" data-testid="gallery-portal-question"><p className="gallery-skippable gallery-text-cue" role="status" onClick={skipCue}>发生了什么？</p></aside>}
     {portalWalking && !blocked && <aside className="gallery-mural-hud" data-testid="gallery-portal-guide">
@@ -222,13 +261,13 @@ export function FirstGalleryOverlay(props: Props) {
       <button onClick={close}>继续漫游</button>
     </section>}
     {panel && panel !== 'caisson' && <GalleryDialog title={panel === 'scroll' ? '纹样游戏画卷' : panel === 'library' ? '我的填色作品库' : panel === 'artwork' ? '欣赏画作' : '画架设色'} blocked={blocked} onClose={close}>
-      {panel === 'easel' && <><p className="gallery-text-cue">{data.displayedArtworkId ? '这幅画是你的创作。可以静静欣赏，也可以换一幅。' : '画稿和颜料都准备好了，试着给它添上颜色吧。'}</p><div className="gallery-actions">
+      {panel === 'easel' && <>{!compact && <p className="gallery-text-cue">{data.displayedArtworkId ? '这幅画是你的创作。可以静静欣赏，也可以换一幅。' : '画稿和颜料都准备好了，试着给它添上颜色吧。'}</p>}<div className="gallery-actions">
         {data.displayedArtworkId && <button onClick={() => { setSelected(data.artworks[data.displayedArtworkId!]); setPanel('artwork'); }}>欣赏当前作品</button>}
-        <button onClick={() => setPanel('library')}>从作品库更换画作</button>
+        {!compact && <button onClick={() => setPanel('library')}>从作品库更换画作</button>}
         <button onClick={() => beginColoring()}> {data.displayedArtworkId ? '再画一幅' : '开始设色'} </button>
       </div></>}
       {panel === 'library' && <>{Object.keys(data.artworks).length ? <div className="gallery-artworks">{Object.values(data.artworks).sort((a, b) => b.submittedAt.localeCompare(a.submittedAt)).slice(0, libraryLimit).map(record => <ArtworkThumb key={record.artworkId} record={record} catalog={catalog} onChoose={() => { setSelected(record); setPanel('artwork'); }} />)}</div> : <p>还没有收藏。完成一幅填色作品后，它就会出现在这里。</p>}{Object.keys(data.artworks).length > libraryLimit && <button onClick={() => setLibraryLimit(limit => limit + 6)}>查看更多作品</button>}</>}
-      {panel === 'artwork' && selected && chooseArtwork?.gameType === 'coloring' && <><ColoringResult catalog={catalog} level={chooseArtwork} colors={selected.colors} materials={selected.materials} /><button className="gallery-primary" onClick={() => { const result = selectGalleryArtwork(selected.artworkId); if (!result.ok) setNotice(result.message); else { close(); runtime?.showGalleryCue?.([{ text: '这幅画挂好了。', target: 'easel' }]); } }}>挂到画架上</button>{selected.levelId === 'coloring-feitian-lotus' && <button onClick={() => beginColoring(selected.artworkId)}>再配一版</button>}</>}
+      {panel === 'artwork' && selected && chooseArtwork?.gameType === 'coloring' && <><ColoringResult catalog={catalog} level={chooseArtwork} colors={selected.colors} materials={selected.materials} />{!compact && <button className="gallery-primary" onClick={() => { const result = selectGalleryArtwork(selected.artworkId); if (!result.ok) setNotice(result.message); else { close(); runtime?.showGalleryCue?.([{ text: '这幅画挂好了。', target: 'easel' }]); } }}>挂到画架上</button>}{selected.levelId === FIRST_GALLERY_EASEL_LEVEL && <button onClick={() => beginColoring(selected.artworkId)}>再配一版</button>}</>}
       {panel === 'scroll' && <p className="gallery-text-cue">完成馆内任务，会有惊喜发生！</p>}
       {notice && <p role="alert" className="gallery-notice gallery-text-cue">{notice}</p>}
     </GalleryDialog>}

@@ -1,13 +1,17 @@
 import { expect, test } from '@playwright/test';
+import { readFileSync } from 'node:fs';
 import { PerspectiveCamera, Vector3 } from 'three';
-import { fromTerrainPoint, LAKE_ORIGIN, toTerrainPoint } from '../../src/content/world/terrain-layout-v001';
+import { fromTerrainPoint, LAKE_ORIGIN, TERRAIN_REGIONS, toTerrainPoint } from '../../src/content/world/terrain-layout-v001';
+import type { ColoringLevel } from '../../src/types';
 
 const muralModel = '/pattern-interactives/v003/mural-station.glb';
+const easelModel = '/pattern-interactives/v002/coloring-station.glb';
+const coloringLevel = JSON.parse(readFileSync('src/content/levels/coloring-feitian-lotus.json', 'utf8')) as ColoringLevel;
 
 function isUnavailableWorldAsset(url: string) {
   const path = new URL(url).pathname;
   return path.includes('/assets/world/') && /music-|mogao|flying-history|pattern-interactives/.test(path)
-    && !path.endsWith('/mogao-upper/v003/mountain-distant-v001.glb') && !path.endsWith(muralModel);
+    && !path.endsWith('/mogao-upper/v003/mountain-distant-v001.glb') && !path.endsWith(muralModel) && !path.endsWith(easelModel);
 }
 
 test('精简首页在原有活动范围内显示新版近景和远景', async ({ page }) => {
@@ -167,7 +171,7 @@ test('精简版从院门走到壁画，补齐三件实物后返回漫游', async
   const tasks = page.getByTestId('world-task-panel');
   await expect(tasks.getByRole('listitem').filter({ hasText: '借物补画' })).toHaveText(/借物补画\s*3 \/ 3/);
   await expect(tasks.getByText('三兔共耳')).toBeVisible();
-  await expect(tasks.getByText('画架设色')).toHaveCount(0);
+  await expect(tasks.getByText('画架设色')).toBeVisible();
   const records = await page.evaluate(() => ({
     compact: JSON.parse(localStorage.getItem('dunhuang:first-gallery-caisson:v1')!),
     full: JSON.parse(localStorage.getItem('dunhuang:first-gallery:v1')!),
@@ -178,4 +182,75 @@ test('精简版从院门走到壁画，补齐三件实物后返回漫游', async
   expect(records.full).toEqual(originalRecord);
   expect(records.scene).toMatchObject({ music: 'idle', musicBuildingVisible: false, cliffTowerVisible: false });
   expect(unavailableAssets).toEqual([]);
+});
+
+test('精简版同一线稿从游戏世界保存，从画架完成后直接返回并挂画', async ({ page, isMobile }) => {
+  test.setTimeout(150_000);
+  const galleryKey = 'dunhuang:first-gallery-caisson:v1';
+  const worldKey = 'dunhuang:first-gallery-caisson-world:v1';
+  const position = toTerrainPoint('courtyard', { x: -6.5, z: -3.9 });
+  const yaw = TERRAIN_REGIONS.courtyard.yaw;
+  await page.emulateMedia({ reducedMotion: isMobile ? 'reduce' : 'no-preference' });
+  await page.addInitScript(({ worldKey, position, yaw }) => {
+    if (!sessionStorage.getItem(worldKey)) sessionStorage.setItem(worldKey, JSON.stringify({
+      version: 1, position, heading: yaw, cameraYaw: yaw, visitedEvents: [],
+    }));
+  }, { worldKey, position, yaw });
+  const texture = () => page.waitForFunction(() => Reflect.get(window, '__terrain')?.inspect().galleryDisplay?.easelVisible);
+  const finish = page.getByRole('button', { name: '完成作品', exact: true });
+  async function colorArea(name: string) {
+    const swatch = page.getByRole('button', { name: `选择${name}`, exact: true });
+    await expect(swatch).toBeEnabled({ timeout: 45_000 });
+    await swatch.click();
+    const host = page.getByTestId('phaser-player');
+    const { image } = JSON.parse((await host.getAttribute('data-layout'))!);
+    const { point } = coloringLevel.regions.find(region => region.id === 36)!;
+    const at = { x: image.x + point.x * image.width, y: image.y + point.y * image.height };
+    if (isMobile) await host.locator('canvas').tap({ position: at });
+    else await host.locator('canvas').click({ position: at });
+    await expect(finish).toBeEnabled();
+  }
+
+  await page.goto('/#/play/coloring-feitian-lotus');
+  await colorArea('赭红');
+  await finish.click();
+  await expect(page).toHaveURL(/#\/result\/coloring-feitian-lotus$/);
+  await expect(page.getByTestId('coloring-result-canvas')).toBeVisible();
+  expect(await page.evaluate(key => localStorage.getItem(key), galleryKey)).toBeNull();
+
+  await page.goto('/#/');
+  await page.getByRole('button', { name: '开启敦煌之旅' }).click();
+  const world = page.getByTestId('world-host');
+  await expect(world).toHaveAttribute('data-ready', 'true', { timeout: 60_000 });
+  await texture();
+  await page.getByTestId('world-task-toggle').click();
+  await page.getByRole('button', { name: '去看看' }).click();
+  const enter = page.getByRole('button', { name: '开始涂色', exact: true });
+  await expect(enter).toBeVisible();
+  await expect(page.getByText('涂好的画，会挂在这里。')).toBeVisible();
+  const checkpoint = await page.evaluate(() => Reflect.get(window, '__terrain').inspect().checkpoint);
+  await enter.click();
+  await expect(page).toHaveURL(/#\/play\/coloring-feitian-lotus$/, { timeout: 20_000 });
+  await expect(world).toBeHidden();
+  expect(await page.evaluate(() => history.state?.dunhuangFirstGalleryEasel)).toMatch(/^[a-f0-9]{32}$/);
+  await colorArea('灰蓝');
+  await finish.click();
+
+  await expect(page).toHaveURL(/#\/$/);
+  await expect(page.getByText('作品已保存，正在返回院内画架…')).toHaveCount(0, { timeout: 45_000 });
+  const saved = await page.evaluate(key => {
+    const progress = JSON.parse(localStorage.getItem(key)!);
+    const world = Reflect.get(window, '__terrain').inspect();
+    return { artwork: progress.artworks[progress.displayedArtworkId], completed: progress.coloringCompleted,
+      checkpoint: world.checkpoint, mounted: world.galleryDisplay?.easelVisible,
+      claim: history.state?.dunhuangFirstGalleryEasel, session: sessionStorage.getItem('dunhuang:first-gallery-easel:v1') };
+  }, galleryKey);
+  expect(saved).toMatchObject({ artwork: { colors: { 36: '#5a7783' } }, completed: true, mounted: true, session: '' });
+  expect(saved.checkpoint).toEqual(checkpoint);
+  expect(saved.claim).toBeUndefined();
+  await expect(page.getByRole('button', { name: '欣赏作品', exact: true })).toBeVisible({ timeout: 20_000 });
+  await page.reload();
+  await page.getByRole('button', { name: '开启敦煌之旅' }).click();
+  await texture();
+  await expect(page.getByRole('button', { name: '欣赏作品', exact: true })).toBeVisible();
 });

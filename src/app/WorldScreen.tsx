@@ -64,6 +64,8 @@ interface Props {
   onGalleryColoring?(checkpoint: WorldCheckpoint, artworkId?: string): boolean;
   onGalleryFallback?(): void;
   galleryReturningFromColoring?: boolean;
+  galleryExhibitId?: string | null;
+  onGalleryExhibitReady?(id: string): void;
   galleryPortalPending?: boolean;
   onGalleryPortalPresented?(): void;
   onGalleryPortalEnter?(checkpoint: WorldCheckpoint): void;
@@ -220,10 +222,11 @@ export default function WorldScreen(props: Props) {
   }, []);
 
   const requestGallery = useCallback((id: GalleryInteraction, object?: 'lotus' | 'bird' | 'grapes') => {
-    if (caissonOnly && id !== 'caisson' && id !== 'mural') return;
+    if (caissonOnly && id === 'scroll') return;
     if (flags.current.locked || flags.current.galleryOccupied || flags.current.exhibitOccupied) return;
     setGalleryRequest({ id, object, serial: ++galleryCounter.current });
   }, [caissonOnly]);
+  const locateGalleryEasel = useCallback(() => runtime.current?.locateGalleryEasel?.() ?? false, []);
   const startInteraction = useCallback(() => {
     if (flags.current.galleryOccupied || flags.current.exhibitOccupied || flags.current.arrivalActive) return;
     const gallery = runtime.current?.snapshot().gallery?.nearby;
@@ -585,9 +588,9 @@ export default function WorldScreen(props: Props) {
     onPointerMoveCapture={revisitIntro && !locked ? trackIntroTap : undefined}
     onPointerUpCapture={revisitIntro && !locked ? finishIntroTap : undefined}
     onPointerCancelCapture={revisitIntro ? () => { introTap.current = null; } : undefined}>
-    <div className="world-host" ref={host} data-testid="world-host" data-ready={ready} aria-label="3D探索世界" inert={locked || choosing || exhibitOccupied || arrivalActive || view === 'story' ? true : undefined} />
+    <div className="world-host" ref={host} data-testid="world-host" data-ready={ready} aria-label="3D探索世界" inert={locked || choosing || exhibitOccupied || arrivalActive || !!props.galleryExhibitId || view === 'story' ? true : undefined} />
     <output hidden data-testid="world-position" data-x={snapshot.checkpoint.position.x.toFixed(3)} data-z={snapshot.checkpoint.position.z.toFixed(3)} data-walk-surface={snapshot.checkpoint.walkSurface} data-upper-height={snapshot.upper?.height.toFixed(3)} />
-    <div className="world-hud" inert={view === 'story' || flyingHistoryActive || locked || choosing || exhibitOccupied ? true : undefined}>
+    <div className="world-hud" inert={view === 'story' || flyingHistoryActive || locked || choosing || exhibitOccupied || !!props.galleryExhibitId ? true : undefined}>
       {terrain && ready && !caissonOnly && <WorldMiniMap
         imageUrl={`${import.meta.env.BASE_URL}assets/world/world-map/v001/world-map.png`}
         marker={mapAvailable ? worldMinimapPosition(snapshot.checkpoint.position) : null}
@@ -602,7 +605,7 @@ export default function WorldScreen(props: Props) {
           {gameWorldAvailable && <a href="#/themes" inert={portalPlaying || arrivalActive} onClick={persist}>游戏世界</a>}
           <button type="button" className="world-compact-button" ref={guideButton} inert={portalPlaying || arrivalActive} onClick={openGuide} data-testid="mogao-reward-guide-button">图鉴</button>
           {(connectedGalleries || currentGallery) && <GalleryTasks gallery={currentGallery} disabled={portalPlaying || arrivalActive || galleryOccupied || exhibitOccupied}
-            musicProgress={musicGallery?.progress} muralProgress={exhibit.muralProgress} exhibitProgress={exhibit.exhibitProgress} />}
+            onLocateEasel={caissonOnly ? locateGalleryEasel : undefined} musicProgress={musicGallery?.progress} muralProgress={exhibit.muralProgress} exhibitProgress={exhibit.exhibitProgress} />}
           <a href="#/settings" inert={portalPlaying || arrivalActive} onClick={persist}>设置</a>
         </nav>
       </header>
@@ -702,7 +705,7 @@ export default function WorldScreen(props: Props) {
     </aside>}
     {ready && !locked && !exhibitOccupied && !inFirstGallery && snapshot.galleryGate && <aside className="world-preview-resource-notice" role="status">{snapshot.galleryGate}</aside>}
     {inFirstGallery && props.catalog && <FirstGalleryOverlay runtime={runtime.current} snapshot={snapshot} catalog={props.catalog} ready={ready} blocked={locked} reducedMotion={props.reducedMotion || systemReduced} request={galleryRequest}
-      onInteract={requestGallery} onOccupied={setGalleryOccupied}
+      onInteract={requestGallery} onOccupied={setGalleryOccupied} exhibitId={props.galleryExhibitId} onExhibitReady={props.onGalleryExhibitReady}
       onColor={(at, artworkId) => {
         if (!callbacks.current.onGalleryColoring?.(at, artworkId)) return false;
         checkpoint.current = at;
@@ -722,7 +725,7 @@ export default function WorldScreen(props: Props) {
       <p>{props.saveWarning || '乐舞馆的探索记录暂未保存。'}</p>
       <button type="button" onClick={() => { if (props.saveWarning) persist(); if (musicGallery?.saveFailed) musicGallery.retry(); }}>重试保存</button>
     </div>}
-    {!ready && !error && <div className="world-cover" onKeyDown={trapCoverFocus} tabIndex={-1}><h2>{props.galleryReturningFromColoring ? '作品已保存，正在返回院内画架…' : '正在准备探索世界…'}</h2>{inFirstGallery && <span>第一馆探索正在准备</span>}{directGameWorld}</div>}
+    {(!ready || props.galleryExhibitId) && !error && <div className="world-cover" role="status" onKeyDown={trapCoverFocus} tabIndex={-1}><h2>{props.galleryReturningFromColoring || props.galleryExhibitId ? '作品已保存，正在返回院内画架…' : '正在准备探索世界…'}</h2>{!ready && inFirstGallery && <span>第一馆探索正在准备</span>}{!props.galleryExhibitId && directGameWorld}</div>}
     {error && <div className="world-cover" role="alertdialog" aria-modal="true" aria-labelledby="world-error-title" onKeyDown={trapCoverFocus} tabIndex={-1} data-testid="world-error"><h2 id="world-error-title">3D画面暂未打开</h2><p>{error}</p><div><button type="button" className="world-primary" onClick={() => { dispatch({ type: 'exit' }); setAttempt(value => value + 1); }} data-testid="world-retry">重新加载</button>{props.onChooseTraveler && <button type="button" onClick={props.onChooseTraveler}>重新选人</button>}{directGameWorld}{!gameWorldAvailable && props.onGalleryFallback && <button type="button" onClick={props.onGalleryFallback}>兼容游玩 · 纹样小游戏</button>}</div></div>}
     {view === 'story' && !error && <WorldStoryPlayer key={`${event.mode!=='exploring'?event.id:''}-${storyReplay}`} story={event.mode!=='exploring'&&event.id==='novice-story'?noviceStory:caveKeys?deerStoryV009:undefined} backdrop={storyBackdrop} reducedMotion={props.reducedMotion || systemReduced} omitEnding={exhibitGroundStory} exhibitNarration={exhibitGroundStory} blocked={locked||choosing} paused={locked || choosing || (event.mode === 'observing' && event.paused)} sound={props.sound} onComplete={finishStoryPlayback} onClose={finishEvent} />}
     {hallStory && !error && <div style={{ display: 'contents' }}

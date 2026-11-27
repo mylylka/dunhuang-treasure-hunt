@@ -2,6 +2,32 @@
 .first-gallery-overlay button,.first-gallery-overlay dialog{pointer-events:auto;font:inherit;cursor:pointer}
 .gallery-interact{position:absolute;bottom:95px;left:50%;transform:translateX(-50%);border:1px solid #a47b4d;background:#fff6dfed;padding:12px 22px;min-height:44px;border-radius:5px;box-shadow:0 4px 25px #261b1526;white-space:nowrap}
 .gallery-interact kbd{margin-left:10px;font-size:12px;opacity:.7}
+.gallery-easel-marker {
+  position: absolute;
+  transform: translate(-50%, calc(-100% - 14px));
+  background: #3e2b1de8;
+  border: 1px solid #d5aa69;
+  border-radius: 4px;
+  padding: 4px 9px;
+  color: #ffe2a3;
+  font-size: 13px;
+  white-space: nowrap;
+}
+.gallery-easel-invitation {
+  position: absolute;
+  bottom: 145px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 4px;
+  background: #3e2b1de8;
+  padding: 5px 10px;
+  color: #ffe2a3;
+  white-space: nowrap;
+  font-size: 14px;
+}
+@media (max-height: 540px) {
+  .gallery-easel-invitation { bottom: 108px; }
+}
 .gallery-subtitle{position:absolute;bottom:154px;left:50%;transform:translateX(-50%);width:min(620px,68vw);display:flex;align-items:center;gap:12px;background:#30231ae6;color:#fff7e6;border-left:3px solid #bb995c;padding:10px 18px;border-radius:3px;font-size:16px;line-height:1.6}
 .gallery-subtitle p{margin:0;flex:1}
 .gallery-subtitle,.gallery-mural-hud p.gallery-skippable{pointer-events:auto;cursor:pointer;-webkit-tap-highlight-color:transparent}
