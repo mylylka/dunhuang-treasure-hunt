@@ -29,7 +29,7 @@ python3 scripts/build-flying-history-audio-v001.py --check
 
 ## 仓外素材归档
 
-三馆版首批归档涵盖 Blender 工程、三张未采用的拼图候选、石窟原始下载包、找物 v001 图片，以及飞天上色 v008、v009 的视频和海报。原路径、来源提交、字节数和 SHA-256 记录在 [归档清单](../art-source/archives/3d-world-v001.json)。新增 Blender 工程按素材导入流程入库，仓内登记来源及导出方法。
+三馆版首批归档涵盖 Blender 工程、三张未采用的拼图候选、石窟原始下载包、找物 v001 图片，以及飞天上色 v008、v009 的视频和海报。原路径、来源提交、字节数和 SHA-256 记录在 [归档清单](../art-source/archives/3d-world-v001.json)。三馆版和 Co-Work 的 Git 均不跟踪清单中的素材；已有本地文件保留，需要时可从仓外素材库恢复。新增 Blender 工程按素材导入流程入库，仓内登记来源及导出方法。
 
 旧 Blender 脚本和留档工具需要这些文件时，在已装 Pillow 的项目 Python 环境里把所需素材恢复到清单登记的原路径。命令可接一个或多个仓库相对路径。
 
