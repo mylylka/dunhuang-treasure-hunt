@@ -233,7 +233,7 @@ test('精简版同一线稿从游戏世界保存，从画架完成后直接返�
   await expect(page).toHaveURL(/#\/play\/coloring-feitian-lotus$/, { timeout: 20_000 });
   await expect(world).toBeHidden();
   expect(await page.evaluate(() => history.state?.dunhuangFirstGalleryEasel)).toMatch(/^[a-f0-9]{32}$/);
-  await colorArea('灰蓝');
+  await colorArea('翠绿');
   await finish.click();
 
   await expect(page).toHaveURL(/#\/$/);
@@ -245,7 +245,7 @@ test('精简版同一线稿从游戏世界保存，从画架完成后直接返�
       checkpoint: world.checkpoint, mounted: world.galleryDisplay?.easelVisible,
       claim: history.state?.dunhuangFirstGalleryEasel, session: sessionStorage.getItem('dunhuang:first-gallery-easel:v1') };
   }, galleryKey);
-  expect(saved).toMatchObject({ artwork: { colors: { 36: '#5a7783' } }, completed: true, mounted: true, session: '' });
+  expect(saved).toMatchObject({ artwork: { colors: { 36: '#4c775e' } }, completed: true, mounted: true, session: '' });
   expect(saved.checkpoint).toEqual(checkpoint);
   expect(saved.claim).toBeUndefined();
   await expect(page.getByRole('button', { name: '欣赏作品', exact: true })).toBeVisible({ timeout: 20_000 });
