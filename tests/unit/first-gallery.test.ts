@@ -5,7 +5,7 @@ import type { ColoringLevel } from '../../src/types';
 import { defaultWorldCheckpoint } from '../../src/world/session';
 import { ARTWORKS_KEY, emptyArtworks, saveArtworks, withArtwork } from '../../src/services/artworks';
 import { canOpenFirstGalleryRoute, completeGalleryCaisson, completeGalleryMuralPart, emptyFirstGallery,
-  FIRST_GALLERY_STORAGE_KEY, getFirstGalleryAccess, importGalleryArtworks, isFirstGalleryUnlocked, loadFirstGallery,
+  FIRST_GALLERY_STORAGE_KEY, getFirstGalleryAccess, getGalleryEaselArtwork, importGalleryArtworks, isFirstGalleryUnlocked, loadFirstGallery,
   markGalleryCeremonySeen, markGalleryColoringFeedbackSeen, markGalleryIntroductionSeen, selectGalleryArtwork, submitGalleryArtwork } from '../../src/services/first-gallery';
 import { clearGalleryColoringEntry, readGalleryColoringEntry, saveGalleryColoringDraft, startGalleryColoring } from '../../src/services/first-gallery-entry';
 import type { StorageLike } from '../../src/services/progress';
@@ -100,6 +100,24 @@ describe('第一馆进度、画架和作品库', () => {
     expect(state.artworks[requestId].colors).toEqual(red);
     expect(state.artworks[token].colors).toEqual(blue);
     expect(state.displayedArtworkId).toBe(token);
+  });
+
+  it('旧档的展品编号不会在未完成的画架上显色，收藏仍可用于再次设色', () => {
+    const store = memory(), session = memory();
+    expect(submitGalleryArtwork({ level, requestId, colors: red, materials: {} }, store).ok).toBe(true);
+    const stale = { ...loadFirstGallery(store).data, displayedArtworkId: requestId };
+    store.setItem(FIRST_GALLERY_STORAGE_KEY, JSON.stringify(stale));
+    const loaded = loadFirstGallery(store);
+    expect(loaded.warning).toBeNull();
+    expect(getGalleryEaselArtwork(loaded.data)).toBeUndefined();
+    expect(selectGalleryArtwork(requestId, store).ok).toBe(false);
+    expect(store.getItem(FIRST_GALLERY_STORAGE_KEY)).toBe(JSON.stringify(stale));
+
+    const entry = begin(session);
+    expect(submitGalleryArtwork({ level, requestId: entry.token, easelClaim: entry.token, colors: blue, materials: {} }, store, session).ok).toBe(true);
+    expect(getGalleryEaselArtwork(loadFirstGallery(store).data)?.colors).toEqual(blue);
+    expect(selectGalleryArtwork(requestId, store).ok).toBe(true);
+    expect(getGalleryEaselArtwork(loadFirstGallery(store).data)?.colors).toEqual(red);
   });
 
   it('已提交作品后续自动保存的草稿和旧线稿版本不会当成新快照', () => {

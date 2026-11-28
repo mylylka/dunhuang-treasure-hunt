@@ -10,22 +10,23 @@ const dt = .05;
 const gap = (a: WorldPoint, b: WorldPoint) => Math.hypot(a.x - b.x, a.z - b.z);
 const camera = { position: new Vector3(), target: new Vector3(0, 0, -1), fov: 45 };
 
-function startGuide({ audioManaged = false, initialParts = [] as FirstGalleryMuralPart[], failFirstSave = false } = {}) {
+function startGuide({ audioManaged = false, initialParts = [] as FirstGalleryMuralPart[], failFirstSave = false, connected = false,
+  initialPosition = toTerrainPoint('courtyard', { x: -11.6, z: -17.1 }) } = {}) {
   const saved = [...initialParts];
   const attempts: FirstGalleryMuralPart[] = [];
-  let position: WorldPoint = toTerrainPoint('courtyard', { x: -11.6, z: -17.1 });
+  let position: WorldPoint = initialPosition;
   const guide = createFirstGalleryMural((part, replayParts) => {
     attempts.push(part);
     if (failFirstSave && attempts.length === 1) return false;
     if (!replayParts) saved.push(part);
     return true;
-  });
+  }, false, connected);
   guide.update(position, 0, true, saved);
   expect(guide.start(position, saved, camera)).toBe(true);
   function tick({ facingWall = true, elapsedRealSeconds = dt } = {}) {
     const next = guide.update(position, dt, false, saved, audioManaged, facingWall, elapsedRealSeconds);
     expect(gap(next, position)).toBeLessThanOrEqual(1.65 * dt + .00001);
-    expect(isTerrainWalkable(next, true)).toBe(true);
+    expect(isTerrainWalkable(next, true, undefined, connected)).toBe(true);
     position = next;
   }
   function waitFor(condition: () => boolean) {
@@ -147,7 +148,7 @@ describe('First Gallery mural narration', () => {
 
   it('allows a declined first visit and a finished replay without rewriting saved parts', () => {
     const guide = createFirstGalleryMural(() => true);
-    const outside = { ...muralObserver, x: muralObserver.x + 2 };
+    const outside = toTerrainPoint('courtyard', { x: -14.7, z: -17.1 });
     guide.update(muralObserver, 0, true, []);
     expect(guide.snapshot()).toMatchObject({ phase: 'invite', marker: false });
     guide.decline();
@@ -170,5 +171,33 @@ describe('First Gallery mural narration', () => {
     for (let i = 0; i < 300 && replay.phase === 'repair'; i++) replay.update(position, dt, false, saved);
     expect(replay.snapshot().narration).toBe('mural-lotus-note');
     expect(saved).toEqual(['lotus', 'bird', 'grapes']);
+  });
+
+  it('retains the mural invite through a small overshoot and leaves the caisson center unclaimed', () => {
+    const guide = createFirstGalleryMural(() => true);
+    const approach = toTerrainPoint('courtyard', { x: -13.9, z: -17.1 });
+    const overshoot = toTerrainPoint('courtyard', { x: -14.4, z: -17.1 });
+    const caisson = toTerrainPoint('courtyard', { x: -12, z: -15 });
+    guide.update(approach, dt, false, []);
+    expect(guide.phase).toBe('idle');
+    guide.update(approach, dt, true, []);
+    expect(guide.phase).toBe('invite');
+    guide.update(overshoot, dt, true, []);
+    expect(guide.phase).toBe('invite');
+    guide.update(caisson, dt, true, []);
+    expect(guide.phase).toBe('idle');
+    const saved = ['lotus', 'bird', 'grapes'] as const;
+    guide.request(overshoot, saved);
+    expect(guide.phase).toBe('idle');
+    guide.request(approach, saved);
+    expect(guide.snapshot()).toMatchObject({ phase: 'invite', replay: true });
+    expect(guide.start(overshoot, saved, camera)).toBe(true);
+  });
+
+  it.each([false, true])('can complete the guided walk from the new lateral approach (connected=%s)', connected => {
+    const initialPosition = toTerrainPoint('courtyard', { x: -14, z: -17.1 });
+    const { guide, waitFor, position } = startGuide({ initialPosition, connected });
+    waitFor(() => guide.phase === 'pick');
+    expect(gap(position(), muralObserver)).toBeLessThan(.025);
   });
 });

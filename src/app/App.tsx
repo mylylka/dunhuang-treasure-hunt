@@ -52,8 +52,8 @@ import { clearGalleryColoringEntry, FIRST_GALLERY_EASEL_LEVEL, FIRST_GALLERY_ENT
 import { SpotDifferenceScreen } from './SpotDifferenceScreen';
 import { loadProgress, saveProgress, withCompletedLevel } from '../services/progress';
 import { unlockedGameThemes } from '../services/game-world-access';
-import { clearGallerySessionProgress, galleryForProgressResetKey, resetGalleryProgress } from '../services/gallery-progress-reset';
-import type { GalleryTaskArea } from '../services/gallery-tasks';
+import { checkpointAfterGalleryReset, clearGallerySessionProgress, galleryResetScopeForKey, resetGalleryProgress } from '../services/gallery-progress-reset';
+import type { GalleryTaskArea, GalleryTaskId } from '../services/gallery-tasks';
 import { useMusicGalleryProgress } from './use-music-gallery-progress';
 import type { ContentCatalog, GameEvent, Level, LevelMetadata, ProgressData, RegionColors, RegionMaterials, ThemeDefinition } from '../types';
 
@@ -154,12 +154,13 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
   }
 
   const reloadMusicGallery = musicGallery.reload;
-  const applyGalleryReset = useCallback((area: GalleryTaskArea) => {
+  const applyGalleryReset = useCallback((area: GalleryTaskArea, task?: GalleryTaskId) => {
     // Discard writes from the old runtime when its effect cleans up.
     setWorldRevision(++currentWorldRevision.current);
     setKeepGalleryWorld(false);
     const resumed = loadWorldSession(undefined, worldSessionOptions);
     worldCheckpoint.current = resumed.data;
+    if (previewCheckpoint.current) previewCheckpoint.current = checkpointAfterGalleryReset(previewCheckpoint.current, area, task);
     setWorldWarning(resumed.warning);
     if (easelEntry.current) {
       const refreshed = readGalleryColoringEntry(easelEntry.current.token);
@@ -180,19 +181,20 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
   useEffect(() => {
     if (!galleryResetAvailable) return;
     function syncGalleryReset(event: StorageEvent) {
-      const area = galleryForProgressResetKey(event.key);
-      if (!area || !event.newValue) return;
-      const cleared = clearGallerySessionProgress(area, undefined, worldSessionOptions.key);
-      applyGalleryReset(area);
+      if (!event.newValue) return;
+      const scope = galleryResetScopeForKey(event.key);
+      if (!scope) return;
+      const cleared = clearGallerySessionProgress(scope.gallery, undefined, worldSessionOptions.key, scope.task);
+      applyGalleryReset(scope.gallery, scope.task);
       if (!cleared.ok) setWorldWarning(cleared.message);
     }
     window.addEventListener('storage', syncGalleryReset);
     return () => window.removeEventListener('storage', syncGalleryReset);
   }, [applyGalleryReset, galleryResetAvailable, worldSessionOptions]);
 
-  function handleGalleryReset(area: GalleryTaskArea) {
-    const result = resetGalleryProgress(area, undefined, worldSessionOptions.key);
-    if (result.ok) applyGalleryReset(area);
+  function handleGalleryReset(area: GalleryTaskArea, task?: GalleryTaskId) {
+    const result = resetGalleryProgress(area, undefined, worldSessionOptions.key, task);
+    if (result.ok) applyGalleryReset(area, task);
     return result;
   }
 

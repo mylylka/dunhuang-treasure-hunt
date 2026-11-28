@@ -1,8 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { createFirstGalleryEvents, galleryBlockedRegion, galleryNearby } from '../../src/world/first-gallery-events';
 import { GALLERY_TARGETS } from '../../src/content/world/first-gallery-v001';
-import { toTerrainPoint } from '../../src/world/terrain-rules-v001';
+import { readGalleryColoringEntry, startGalleryColoring } from '../../src/services/first-gallery-entry';
+import { defaultWorldCheckpoint } from '../../src/world/session';
+import { isTerrainWalkable, TERRAIN_SPAWN, toTerrainPoint } from '../../src/world/terrain-rules-v001';
 const state = { mural: false, caisson: false, easel: false, unlocked: false };
+const courtyard = (x: number, z: number) => toTerrainPoint('courtyard', { x, z });
 describe('first gallery exploration cues and access', () => {
   it('walking towards the easel does not consume the cue before stopping', () => {
     const events = createFirstGalleryEvents(), position = GALLERY_TARGETS.easel;
@@ -18,6 +21,40 @@ describe('first gallery exploration cues and access', () => {
     expect(events.snapshot()).toMatchObject({ line: null, easelReady: false });
     events.update(position, false, .8, state, true, true);
     expect(events.snapshot().line?.narration).toBe('easel-discover');
+  });
+  it('keeps the enlarged easel approach available during small overshoots inside the courtyard', () => {
+    const events = createFirstGalleryEvents();
+    const approach = courtyard(-8.2, -2.1), overshoot = courtyard(-8.9, -2.1), outside = courtyard(-9.35, -2.1);
+    expect(isTerrainWalkable(approach, true)).toBe(true);
+    expect(isTerrainWalkable(overshoot, true)).toBe(true);
+    expect(galleryNearby(overshoot)).toBeNull();
+    events.update(approach, true, 1, state, true, true);
+    expect(events.snapshot()).toMatchObject({ nearby: 'easel', cue: null, easelReady: false });
+    events.update(overshoot, false, .8, state, true, true);
+    expect(events.snapshot()).toMatchObject({ nearby: 'easel', line: { narration: 'easel-discover' } });
+    events.update(outside, true, .05, state, true, true);
+    expect(events.snapshot()).toMatchObject({ nearby: null, cue: null });
+    events.update(overshoot, false, .8, state, true, true);
+    expect(events.snapshot()).toMatchObject({ nearby: null, cue: null });
+
+    expect(galleryNearby(TERRAIN_SPAWN)).toBeNull();
+    expect(galleryNearby(courtyard(-3.3, 3.3), 'easel')).toBeNull();
+    expect(galleryNearby(courtyard(.8, -1.8), 'easel')).toBeNull();
+
+    const entries = new Map<string, string>();
+    const storage = { getItem: (key: string) => entries.get(key) ?? null, setItem: (key: string, value: string) => { entries.set(key, value); } };
+    const checkpoint = defaultWorldCheckpoint(overshoot);
+    const result = startGalleryColoring(checkpoint, 'test-artwork', storage);
+    expect(result.ok).toBe(true);
+    if (result.ok) expect(readGalleryColoringEntry(result.entry.token, storage)?.checkpoint).toEqual(checkpoint);
+  });
+  it('offers the mural across a wider strip without masking the caisson center or the scroll', () => {
+    expect(galleryNearby(courtyard(-13.9, -17.1))).toBe('mural');
+    expect(galleryNearby(courtyard(-12, -18.9))).toBe('mural');
+    expect(galleryNearby(courtyard(-12, -15.8))).toBe('mural');
+    expect(galleryNearby(courtyard(-12, -15.2))).toBe('caisson');
+    expect(galleryNearby(courtyard(-12, -14))).toBe('caisson');
+    expect(galleryNearby(GALLERY_TARGETS.scroll)).toBe('scroll');
   });
   it('does not repeat completed or persisted introductions', () => {
     const seen = createFirstGalleryEvents(['easel']);

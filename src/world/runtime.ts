@@ -154,6 +154,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   const portalBusy = () => !!(portalPrelude || portalWalk);
   const portalLookTarget = new THREE.Vector3(GALLERY_TARGETS.scroll.x, GALLERY_TARGETS.scroll.y + .85, GALLERY_TARGETS.scroll.z);
   let portalStarted = false;
+  let galleryClearSoundPlayed = false;
   let galleryStepped = false;
   let savedMuralMarker = false;
   if (gallery) {
@@ -548,11 +549,13 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   });
   function currentEncounterVoice(){const id=encounters?.state?.id;return id?encounterVoices?.[id]:undefined;}
   function syncMusicDucking() {
-    audio?.setDucked(Boolean(
+    const speaking = Boolean(
       guideVisit?.speechLine || companion?.state.dialogue || history?.speaking ||
       voice?.inspect().playing || currentEncounterVoice()?.inspect().playing ||
       buddhaVoice?.inspect()?.playing || galleryNarration?.inspect()?.playing
-    ));
+    );
+    audio?.setDucked(speaking);
+    soundPlayer.setGalleryCuesDucked(speaking);
   }
   function syncMusicPlayback() {
     audio?.setBlocked(failed || document.hidden || galleryWindowBlurred || view === 'story' || (paused && !musicContinuesWhilePaused));
@@ -597,7 +600,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   function interact(point?:WorldInputPoint) {
     if ((mural?.active || inFirstGallery()) && skipGalleryNarration()) { schedule(); emit(); return; }
     if (mural?.active) {
-      if (paused || document.hidden || galleryBlocked) return;
+      if (paused || document.hidden || galleryWindowBlurred || galleryBlocked) return;
       if (!point || mural.phase !== 'pick' || !galleryDisplay) return;
       const rect = canvas.getBoundingClientRect();
       if (!rect.width || !rect.height) return;
@@ -605,7 +608,10 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
       camera.updateMatrixWorld(true);
       const ndc = { x: (point.clientX - rect.left) / rect.width * 2 - 1, y: 1 - (point.clientY - rect.top) / rect.height * 2 };
       const part = galleryDisplay.pickMuralObject(camera, ndc, matchMedia('(pointer: coarse)').matches ? rect : undefined);
-      if (part && mural.pick(part)) galleryDisplay.playTrail(part);
+      if (part && mural.pick(part)) {
+        galleryDisplay.playTrail(part);
+        soundPlayer.play('mural-part');
+      }
       if (part) emit();
       return;
     }
@@ -713,6 +719,11 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     return !!(terrain && galleryState && inFirstGallery() && galleryDisplay && galleryStepped && !portalStarted && !moving && isFirstGalleryUnlocked(galleryState)
       && !galleryState.ceremonySeen && !gallery?.snapshot().cue && canControlCamera());
   }
+  function stopGalleryClearSound() {
+    if (!galleryClearSoundPlayed) return;
+    galleryClearSoundPlayed = false;
+    soundPlayer.stopCue('first-gallery-clear');
+  }
   function finishGalleryPortal(phase: 'arrived' | 'skipped') {
     portalPrelude = null;
     portalWalk = null;
@@ -749,11 +760,20 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     try { sessionStorage.setItem(FIRST_GALLERY_MURAL_MARKER_KEY, mural.marker ? '1' : '0'); }
     catch { /* Session storage is optional for this visual cue. */ }
   }
+  function stopMuralSounds() {
+    soundPlayer.stopCue('mural-part');
+    soundPlayer.stopCue('mural-renew');
+  }
+  function stopFirstGallerySounds() {
+    stopGalleryClearSound();
+    if (mural?.active) stopMuralSounds();
+  }
   function restoreMuralControls() {
     input.clear();
     travelCamera?.reset();
     moving = false;
     cancelGalleryCue();
+    stopMuralSounds();
     galleryDisplay?.stopMuralLight();
     if (galleryState) galleryDisplay?.setParts(galleryState.muralParts, true);
   }
@@ -932,6 +952,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   function fail(message: string) {
     if (disposed || failed) return;
     if (portalPrelude) soundPlayer.stop();
+    stopFirstGallerySounds();
     stopGuideShowcase();
     failed = true; moving = false; stopCompanion(); galleryNarration?.cancel(); buddhaVoice?.setBlocked(true); blockEncounterVoices(true); voice?.setBlocked(true); audio?.setDucked(false); audio?.setBlocked(true); stop(); input.setEnabled(false);
     history?.dispose();
@@ -1184,6 +1205,11 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
         if (moving) turnTravelerAndCamera(Math.atan2(-dx, -dz), dt);
       } else {
         finishGalleryPortal(phase);
+        arrivalChanged = true;
+        if (phase === 'arrived' && !previewAll && !galleryWindowBlurred && inFirstGallery()) {
+          galleryClearSoundPlayed = true;
+          soundPlayer.play('first-gallery-clear');
+        }
         speed = 0;
       }
     }
@@ -1204,8 +1230,10 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
       const next = mural.update(checkpoint.position, dt, !galleryMuralPreparation && !galleryBlocked && !galleryCaissonView && !portalBusy() && !portalNotice && view === 'follow' && !overview,
         galleryState.muralParts, true, facingWall, galleryWindowBlurred ? 0 : frameSeconds);
       if (previousPhase === 'repair' && mural.phase !== 'repair') galleryDisplay?.stopMuralLight();
-      if (mural.phase === 'renew') galleryDisplay?.renewMural(mural.elapsed / MURAL_RENEW_SECONDS);
-      else if (previousPhase === 'renew') galleryDisplay?.renewMural(1);
+      if (mural.phase === 'renew') {
+        if (previousPhase !== 'renew' && !galleryWindowBlurred && !overview) soundPlayer.play('mural-renew');
+        galleryDisplay?.renewMural(mural.elapsed / MURAL_RENEW_SECONDS);
+      } else if (previousPhase === 'renew') galleryDisplay?.renewMural(1);
       if (wasActive) {
         if (previousPhase !== mural.phase && (mural.phase === 'outbound' || mural.phase === 'returning')) {
           // Start the walk from the visible performance heading.
@@ -1361,6 +1389,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
       else buddhaVoice.update(frameSeconds);
     }
     // Resolve all speech channels together after their playback has advanced.
+    if (galleryClearSoundPlayed && !inFirstGallery()) stopGalleryClearSound();
     syncMusicDucking();
     poseSettled = camera.position.distanceToSquared(desiredPose.position) < .00002 && cameraTarget.distanceToSquared(desiredPose.target) < .00002;
     updateDesertDecoration(time);
@@ -1427,8 +1456,13 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     setFlyingBlocked(blocked || !!history?.holdsVideo);
   }
   function visibility() {
-    if (document.hidden) pauseDesert();
-    if(document.hidden){stopGuideShowcase();cancelStairAssists();stopCompanion();}
+    if (document.hidden) {
+      pauseDesert();
+      stopFirstGallerySounds();
+      stopGuideShowcase();
+      cancelStairAssists();
+      stopCompanion();
+    }
     galleryNarration?.setBlocked(document.hidden || paused || galleryWindowBlurred || view !== 'follow' || overview);
     syncFlyingPlayback();
     buddhaVoice?.setBlocked(document.hidden||paused||view!=='follow');
@@ -1441,7 +1475,10 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     if (document.hidden) { skipCinematic(); stop(); emit(); } else schedule();
   }
   function contextLost(event: Event) { event.preventDefault(); fail('浏览器暂停了3D画面。请重新加载。'); }
-  const blur = () => { pauseDesert(); galleryWindowBlurred = true; galleryNarration?.setBlocked(true); history?.setBlocked(true); setFlyingBlocked(true); cancelStairAssists(); stopCompanion(); buddhaVoice?.setBlocked(true); blockEncounterVoices(true); skipCinematic(); input.clear(); travelCamera?.reset(); voice?.setBlocked(true); audio?.setDucked(false); audio?.setBlocked(true); };
+  const blur = () => {
+    stopFirstGallerySounds();
+    pauseDesert(); galleryWindowBlurred = true; galleryNarration?.setBlocked(true); history?.setBlocked(true); setFlyingBlocked(true); cancelStairAssists(); stopCompanion(); buddhaVoice?.setBlocked(true); blockEncounterVoices(true); skipCinematic(); input.clear(); travelCamera?.reset(); voice?.setBlocked(true); audio?.setDucked(false); audio?.setBlocked(true);
+  };
   const focusWorld = () => {
     galleryWindowBlurred = false;
     galleryNarration?.setBlocked(document.hidden || paused || view !== 'follow' || overview);
@@ -1619,6 +1656,8 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     startGalleryMural() {
       if (!mural || !galleryState || !canControlCamera() || galleryMuralPreparation) return;
       if (!mural.start(checkpoint.position, galleryState.muralParts, { position: camera.position.clone(), target: visualTarget.clone(), fov: camera.fov })) return;
+      void soundPlayer.prepare('mural-part');
+      void soundPlayer.prepare('mural-renew');
       cancelGalleryCue();
       input.clear();
       travelCamera?.reset();
@@ -1646,6 +1685,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
       portalPrelude = { time: 0, yaw: galleryPortalCameraYaw(heading), route: createGalleryPortalWalk(checkpoint.position, connected, composedCourtyard) };
       lookIntent = 0;
       soundPlayer.play('gallery-unlock');
+      if (portalPrelude.route && !previewAll) void soundPlayer.prepare('first-gallery-clear');
       schedule(); emit();
     },
     skipGalleryPortal() {
@@ -1745,7 +1785,10 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     setOverview(enabled) {
       if(!terrain||!loaded||view!=='follow'||paused)return;
       if (exhibitArrival) return;
-      if (enabled) pauseDesert();
+      if (enabled) {
+        pauseDesert();
+        stopFirstGallerySounds();
+      }
       cancelStairAssists();overview=enabled;input.clear();input.setEnabled(!overview);moving=false;travelCamera?.reset();
       galleryNarration?.setBlocked(overview || document.hidden || galleryWindowBlurred);
       if(overview){lookIntent=0;lookPitch=0;const pose=options.environmentVersion?ENVIRONMENT_OVERVIEW:TERRAIN_OVERVIEW;camera.position.copy(pose.position);cameraTarget.copy(pose.target);camera.lookAt(cameraTarget);}
@@ -1808,6 +1851,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
         pauseDesert();
         stopGuideShowcase();
         if (portalPrelude && portalPrelude.time < GALLERY_PORTAL_PRELUDE.reveal) soundPlayer.stop();
+        stopFirstGallerySounds();
         cancelStairAssists(); stopCompanion(); skipCinematic();
       } else if (portalPrelude && portalPrelude.time >= GALLERY_PORTAL_PRELUDE.turn) {
         galleryGaze?.start(portalLookTarget);
@@ -1827,6 +1871,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     setView(next) {
       if (disposed || view === next) return;
       if (next !== 'follow') pauseDesert();
+      stopGalleryClearSound();
       finishGuideApproach(false);
       if (next === 'story') exhibitGroundGuidance?.dismiss();
       if (guideSurfaceRevealElapsed !== null) {
@@ -1899,6 +1944,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     resetToStart() {
       const currentGallery = connected ? connectedGalleryAt(checkpoint) : undefined;
       if (connected && !currentGallery) return;
+      stopGalleryClearSound();
       exhibitArrival = null; blockedArrival = null;
       exhibitGroundGuidance?.dismiss();
       galleryCaissonView = null;
@@ -1931,6 +1977,8 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
       if (disposed) return;
       guideRequest?.abort(); guideRequest = null;
       if (portalPrelude) soundPlayer.stop();
+      stopFirstGallerySounds();
+      soundPlayer.setGalleryCuesDucked(false);
       stopGuideShowcase();
       galleryNarration?.cancel();
       disposed = true; unsubscribeGallery(); galleryGaze?.dispose(); galleryDisplay?.dispose(); companionSpeech?.dispose(); disposeCompanionMarker(); buddhaVoice?.cancel(); unregisterBuddhaSkip?.(); unregisterEncounterSkip();encounterVoices?.music.dispose();encounterVoices?.mural.dispose();voice?.dispose(); audio?.dispose(); stop(); input.dispose(); resizeObserver.disconnect();

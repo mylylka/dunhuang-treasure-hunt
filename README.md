@@ -1,5 +1,11 @@
 # 敦煌寻宝记
 
+## 正式入口与试玩入口
+
+- **正式游戏**从 `index.html` 启动。运行 `npm run dev` 后打开 [本地首页](http://localhost:5173/)，进入三馆漫游。2D 游戏世界从首页按进度解锁，主题目录地址为 `/#/themes`。
+- **日常验收**在同一个开发服务打开 `/first-gallery-v001.html`（三馆漫游及第一馆定点）、`/music-companion-v002.html`（第二馆）或 `/mogao-exhibit-v001.html`（第三馆）。
+- **历史与专项样片**包括历版地形、石窟和乐舞坊，以及材质、环境和人物预览。部分样片仍供对照构建和测试使用。
+
 2026-11-03手机横屏改版：找不同两图支持任意侧双指同步缩放与平移；填色保留1×/2×/3×并支持连续双指缩放；三类纹样玩法扩大主画面并采用紧凑操作栏，画布DPR上限2。选关缩小封面，改为多列纵向滑动列表，取消翻页按钮。实现与定向验证见[手机改版记录](docs/mobile-play-redesign-v001.md)。
 
 2D手机仅横屏的当前实现、状态保留与本轮定向验收见 [方向支持记录](docs/2d-mobile-landscape.md)。
@@ -38,7 +44,7 @@
 
 ## 直接试玩
 
-日常手机和电脑试玩运行 `npm run dev`，电脑打开 http://localhost:5173 ，同一 Wi-Fi 的手机使用电脑的局域网 IP 和 5173 端口。2D 使用首页，3D 可打开下方列出的展馆入口，共用 `public/` 素材。需要测正式压缩、缓存和手机加载性能时，运行 `npm run build` 与 `npm run play`。加载与二维空洞修复记录见[性能修复记录](docs/hidden-object-loading-v001.md)。
+电脑和同一 Wi-Fi 的手机共用开发服务及 `public/` 素材。手机使用电脑的局域网 IP 和 5173 端口。需要测正式压缩、缓存和手机加载性能时，运行 `npm run build` 与 `npm run play`。加载与二维空洞修复记录见[性能修复记录](docs/hidden-object-loading-v001.md)。
 
 双击 `outputs/启动敦煌寻宝记.command`，打开 http://localhost:4186 。这个脚本使用已有 Node.js 服务 `outputs/web/`，无需再次安装依赖。关闭启动终端可结束该预览。
 
@@ -60,8 +66,6 @@ npm run test:production
 ```
 
 E2E与生产浏览器检查串行执行，避免重图像任务争抢本地资源。浏览器运行时放在项目 `work/browsers/`。当前 macOS 如已安装 Chrome，测试直接使用它；其他环境可先运行 `npm run test:browsers` 安装项目内浏览器运行时。WebKit 也由该命令准备。不安装全局包或修改系统设置。
-
-日常 3D 试玩运行 `npm run dev`，在同一个 5173 端口打开 `/first-gallery-v001.html`、`/music-companion-v002.html` 或 `/mogao-exhibit-v001.html`。开发预览直接使用当前源码和 `public/` 共享素材，不生成试玩构建目录。
 
 试玩期间关闭自动热更新，修改后手动刷新页面。需要在开发时开启热更新，可用 `DUNHUANG_DEV_HMR=1 npm run dev`。
 

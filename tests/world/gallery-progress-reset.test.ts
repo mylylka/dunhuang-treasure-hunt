@@ -5,7 +5,8 @@ import { ARTWORKS_KEY, LEGACY_ARTWORKS_KEY } from '../../src/services/artworks';
 import { FIRST_GALLERY_ENTRY_KEY, FIRST_GALLERY_MURAL_MARKER_KEY, FIRST_GALLERY_WORLD_SESSION_KEY } from '../../src/services/first-gallery-entry';
 import { emptyFirstGallery, FIRST_GALLERY_STORAGE_KEY, loadFirstGallery } from '../../src/services/first-gallery';
 import { unlockedGameThemes } from '../../src/services/game-world-access';
-import { clearGallerySessionProgress, galleryForProgressResetKey, galleryProgressResetKey, resetGalleryProgress, type ResettableStorage } from '../../src/services/gallery-progress-reset';
+import { clearGallerySessionProgress, galleryForProgressResetKey, galleryProgressResetKey, galleryResetScopeForKey,
+  galleryTaskProgressResetKey, resetGalleryProgress, type ResettableStorage } from '../../src/services/gallery-progress-reset';
 import { emptyMogaoExhibitProgress, loadMogaoExhibitProgress, saveMogaoExhibitProgress } from '../../src/services/mogao-exhibit-progress';
 import { claimMogaoGameNotice } from '../../src/services/mogao-game-access';
 import { emptyMogaoHallAProgress, loadMogaoHallAProgress, saveMogaoHallAProgress } from '../../src/services/mogao-hall-a-progress';
@@ -36,7 +37,7 @@ function seed() {
   const session = memoryStorage();
   local.storage.setItem(FIRST_GALLERY_STORAGE_KEY, JSON.stringify({ ...emptyFirstGallery(),
     muralParts: ['lotus', 'bird', 'grapes'], caissonCompleted: true, coloringCompleted: true,
-    ceremonySeen: true, introductionsSeen: ['easel'], firstSuccessSeen: true, artworks, displayedArtworkId: 'painting',
+    ceremonySeen: true, introductionsSeen: ['mural', 'caisson', 'easel'], firstSuccessSeen: true, artworks, displayedArtworkId: 'painting',
   }));
   saveMusicGalleryProgress({ chapters: Array.from({ length: MUSIC_GALLERY_CHAPTERS }, (_, index) => index),
     instruments: MUSIC_INSTRUMENTS.map(item => item.id), dressed: true, awardReceived: true }, local.storage);
@@ -127,16 +128,17 @@ describe('按馆清除进度', () => {
     expect(local.values).toEqual(before);
   });
 
-  it('restores earlier writes if the reset signal fails to persist', () => {
+  it.each([undefined, 'chapters'] as const)('restores earlier writes if the reset signal fails to persist (%s)', task => {
     const { local, session, stores } = seed();
     const previousLocal = new Map(local.values);
     const previousSession = new Map(session.values);
     const write = stores.local.setItem;
+    const signal = task ? galleryTaskProgressResetKey('music', task) : galleryProgressResetKey('music');
     stores.local.setItem = (key, value) => {
-      if (key === galleryProgressResetKey('music')) throw new Error('storage full');
+      if (key === signal) throw new Error('storage full');
       write(key, value);
     };
-    expect(resetGalleryProgress('music', stores)).toMatchObject({ ok: false });
+    expect(resetGalleryProgress('music', stores, undefined, task)).toMatchObject({ ok: false });
     expect(local.values).toEqual(previousLocal);
     expect(session.values).toEqual(previousSession);
   });
@@ -148,5 +150,77 @@ describe('按馆清除进度', () => {
     expect(local.values.get(FIRST_GALLERY_STORAGE_KEY)).toBe('{unreadable artwork');
     expect(local.values.has(galleryProgressResetKey('first'))).toBe(false);
     expect(session.values.get(FIRST_GALLERY_MURAL_MARKER_KEY)).toBe('1');
+  });
+});
+
+describe('按任务清除进度', () => {
+  it.each(['mural', 'caisson', 'easel'] as const)('clears only the first-gallery %s task and its shared unlock', task => {
+    const { stores, session } = seed();
+    const before = loadFirstGallery(stores.local).data;
+    expect(resetGalleryProgress('first', stores, undefined, task)).toEqual({ ok: true });
+    expect(loadFirstGallery(stores.local).data).toEqual({
+      ...before, ceremonySeen: false, introductionsSeen: before.introductionsSeen.filter(id => id !== task),
+      ...(task === 'mural' && { muralParts: [] }),
+      ...(task === 'caisson' && { caissonCompleted: false }),
+      ...(task === 'easel' && { coloringCompleted: false, firstSuccessSeen: false, displayedArtworkId: null }),
+    });
+    const next = { ...checkpoint, visitedEvents: checkpoint.visitedEvents.filter(id => task !== 'caisson' || id !== 'caisson') };
+    expect(session.values.get(FIRST_GALLERY_ENTRY_KEY)).toBe(JSON.stringify({ ...draft, checkpoint: next }));
+    expect(session.values.get(FIRST_GALLERY_MURAL_MARKER_KEY)).toBe(task === 'mural' ? undefined : '1');
+    expect(unlockedGameThemes(stores.local)).toEqual(['music', 'stories']);
+    expect(stores.local.getItem(ARTWORKS_KEY)).toBe('current ordinary artwork');
+    expect(stores.local.getItem(PROGRESS_KEY)).toContain('music-hidden-objects-intro');
+  });
+
+  it.each(['chapters', 'instruments', 'outfit'] as const)('clears only the music %s task and its shared unlock', task => {
+    const { stores, session } = seed();
+    rememberMusicGalleryGuideApproach(stores.local);
+    const before = loadMusicGalleryProgress(stores.local);
+    expect(resetGalleryProgress('music', stores, undefined, task)).toEqual({ ok: true });
+    expect(loadMusicGalleryProgress(stores.local)).toEqual({
+      chapters: task === 'chapters' ? [] : before.chapters,
+      instruments: task === 'instruments' ? [] : before.instruments,
+      dressed: task === 'outfit' ? false : before.dressed,
+      awardReceived: false,
+    });
+    expect(hasApproachedMusicGalleryGuide(stores.local)).toBe(true);
+    expect(claimMusicGalleryUnlockNotice(stores.local)).toBe(true);
+    expect(unlockedGameThemes(stores.local)).toEqual(['patterns', 'stories']);
+    expect(session.values.get(MUSIC_COMPANION_SESSION_KEY_V2)).toBe(JSON.stringify({
+      ...checkpoint, visitedEvents: checkpoint.visitedEvents.filter(id => task !== 'chapters' || id !== 'flying'),
+    }));
+  });
+
+  it.each(['murals', 'exhibits'] as const)('clears only Mogao %s, including older mural data when selected', task => {
+    const { stores, session } = seed();
+    const legacyIntro = 'dunhuang:mogao-hall-a:intro:v1';
+    const murals = loadMogaoHallAProgress(stores.local).data;
+    const exhibits = loadMogaoExhibitProgress(stores.local).data;
+    expect(resetGalleryProgress('mogao', stores, undefined, task)).toEqual({ ok: true });
+    expect(loadMogaoHallAProgress(stores.local).data).toEqual(task === 'murals' ? emptyMogaoHallAProgress() : murals);
+    expect(loadMogaoExhibitProgress(stores.local).data).toEqual(task === 'exhibits' ? emptyMogaoExhibitProgress() : exhibits);
+    expect(stores.local.getItem(legacyIntro)).toBe(task === 'murals' ? null : 'seen');
+    expect(claimMogaoGameNotice(stores.local)).toBe(true);
+    expect(unlockedGameThemes(stores.local)).toEqual(['patterns', 'music']);
+    expect(session.values.get(MOGAO_EXHIBIT_SESSION_KEY)).toBe(JSON.stringify(task === 'murals'
+      ? { ...checkpoint, visitedEvents: ['caisson', 'flying'] } : checkpoint));
+  });
+
+  it('uses a task-specific signal so another tab clears only the matching session visits', () => {
+    const { stores, session } = seed();
+    const otherTab = memoryStorage();
+    const active = 'active-checkpoint';
+    otherTab.storage.setItem(active, JSON.stringify(checkpoint));
+    expect(resetGalleryProgress('music', stores, undefined, 'chapters')).toEqual({ ok: true });
+    const key = galleryTaskProgressResetKey('music', 'chapters');
+    expect(stores.local.getItem(key)).toEqual(expect.any(String));
+    expect(stores.local.getItem(galleryProgressResetKey('music'))).toBeNull();
+    expect(galleryForProgressResetKey(key)).toBeUndefined();
+    expect(galleryResetScopeForKey(galleryTaskProgressResetKey('first', 'chapters'))).toBeUndefined();
+    expect(galleryResetScopeForKey(galleryProgressResetKey('music'))).toEqual({ gallery: 'music' });
+    const scope = galleryResetScopeForKey(key);
+    expect(scope).toEqual({ gallery: 'music', task: 'chapters' });
+    expect(clearGallerySessionProgress(scope!.gallery, otherTab.storage, active, scope!.task)).toEqual({ ok: true });
+    expect(otherTab.values.get(active)).toBe(session.values.get(FIRST_GALLERY_WORLD_SESSION_KEY));
   });
 });

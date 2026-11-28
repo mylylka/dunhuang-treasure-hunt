@@ -2,13 +2,25 @@ import type { SoundCue } from '../types';
 import { worldAssetUrl } from '../content/world/assets';
 import { defaultSoundPreferences } from './sound-settings';
 
-const intervals: Record<SoundCue, number> = { button: 80, rotate: 70, success: 75, error: 180, fill: 75, hint: 160, complete: 1000, 'gallery-unlock': 1000, 'guide-stardust': 0 };
-const priorities: Record<SoundCue, number> = { button: 0, rotate: 1, success: 2, error: 1, fill: 1, hint: 2, complete: 3, 'gallery-unlock': 4, 'guide-stardust': 4 };
+const intervals: Record<SoundCue, number> = {
+  button: 80, rotate: 70, success: 75, error: 180, fill: 75, hint: 160, complete: 1000,
+  'gallery-unlock': 1000, 'first-gallery-clear': 1000, 'mural-part': 0, 'mural-renew': 0, 'guide-stardust': 0,
+};
+const priorities: Record<SoundCue, number> = {
+  button: 0, rotate: 1, success: 2, error: 1, fill: 1, hint: 2, complete: 3,
+  'gallery-unlock': 4, 'first-gallery-clear': 4, 'mural-part': 4, 'mural-renew': 4, 'guide-stardust': 4,
+};
+const galleryCueFiles = new Map<SoundCue, string>([
+  ['first-gallery-clear', 'gallery-unlock'], ['mural-part', 'mural-part'], ['mural-renew', 'mural-renew'],
+]);
+const narrationDuckGain = .22;
 const fadeSeconds = .012;
 const maxRequestAge = 650;
 
 export function soundUrl(cue: SoundCue): string {
   if (cue === 'gallery-unlock') return new URL(worldAssetUrl('first-gallery/v001/portal-unlock.wav'), document.baseURI).href;
+  const galleryCueFile = galleryCueFiles.get(cue);
+  if (galleryCueFile) return new URL(worldAssetUrl(`gallery-sfx/v001/${galleryCueFile}.mp3`), document.baseURI).href;
   if (cue === 'guide-stardust') return new URL(worldAssetUrl('music-guide/v001/stardust.mp3'), document.baseURI).href;
   return new URL(`${import.meta.env.BASE_URL}assets/shared/audio/warm-v001/warm-${cue}.wav`, document.baseURI).href;
 }
@@ -19,6 +31,7 @@ export interface SoundPlayer {
   play(cue: SoundCue): void;
   playPrepared(cue: SoundCue): boolean;
   stopCue(cue: SoundCue): void;
+  setGalleryCuesDucked(value: boolean): void;
   setPreferences(preferences: { enabled: boolean; volume: number }): void;
   stop(): void;
   dispose(): void;
@@ -50,6 +63,7 @@ export function createSoundPlayer(dependencies: SoundDependencies = {}): SoundPl
   const now = dependencies.now ?? (() => performance.now());
   const defaults = defaultSoundPreferences();
   let preferences = { enabled: defaults.enabled, volume: defaults.volume };
+  let galleryCuesDucked = false;
   let context: AudioContext | null = null;
   let unlocked = false;
   let disposed = false;
@@ -63,6 +77,10 @@ export function createSoundPlayer(dependencies: SoundDependencies = {}): SoundPl
   const prepared = new Map<SoundCue, AudioBuffer>();
   const recent = new Map<SoundCue, number>();
   const voices = new Set<Voice>();
+
+  function cueGain(cue: SoundCue): number {
+    return preferences.volume * (galleryCuesDucked && galleryCueFiles.has(cue) ? narrationDuckGain : 1);
+  }
 
   function stopVoice(voice: Voice): number {
     if (!context) return 0;
@@ -108,7 +126,7 @@ export function createSoundPlayer(dependencies: SoundDependencies = {}): SoundPl
       gain.connect(audioContext.destination);
       gain.gain.setValueAtTime(0, audioContext.currentTime);
       gain.gain.setValueAtTime(0, startsAt);
-      gain.gain.linearRampToValueAtTime(preferences.volume, startsAt + .003);
+      gain.gain.linearRampToValueAtTime(cueGain(cue), startsAt + .003);
       const voice = { cue, source, gain, startsAt, endsAt: startsAt + buffer.duration };
       voices.add(voice);
       source.onended = () => {
@@ -207,17 +225,27 @@ export function createSoundPlayer(dependencies: SoundDependencies = {}): SoundPl
     if (active?.cue === cue) active = null;
   }
 
-  function setPreferences(next: { enabled: boolean; volume: number }) {
-    preferences = { enabled: next.enabled, volume: Number.isFinite(next.volume) ? Math.max(0, Math.min(1, next.volume)) : .4 };
-    if (!preferences.enabled || preferences.volume === 0) { stop(); return; }
+  function updateActiveGain() {
     if (active && context) {
       try {
         const at = Math.max(context.currentTime, active.startsAt);
         active.gain.gain.cancelScheduledValues(at);
         active.gain.gain.setValueAtTime(active.gain.gain.value, at);
-        active.gain.gain.linearRampToValueAtTime(preferences.volume, at + fadeSeconds);
+        active.gain.gain.linearRampToValueAtTime(cueGain(active.cue), at + fadeSeconds);
       } catch { /* Ignore a source that ended while adjusting volume. */ }
     }
+  }
+
+  function setGalleryCuesDucked(value: boolean) {
+    if (galleryCuesDucked === value) return;
+    galleryCuesDucked = value;
+    if (active && galleryCueFiles.has(active.cue)) updateActiveGain();
+  }
+
+  function setPreferences(next: { enabled: boolean; volume: number }) {
+    preferences = { enabled: next.enabled, volume: Number.isFinite(next.volume) ? Math.max(0, Math.min(1, next.volume)) : .4 };
+    if (!preferences.enabled || preferences.volume === 0) { stop(); return; }
+    updateActiveGain();
   }
 
   function dispose() {
@@ -226,7 +254,7 @@ export function createSoundPlayer(dependencies: SoundDependencies = {}): SoundPl
   }
 
   return { unlock, prepare, play: cue => { queue(cue, false); }, playPrepared: cue => queue(cue, true),
-    stopCue, setPreferences, stop, dispose,
+    stopCue, setGalleryCuesDucked, setPreferences, stop, dispose,
     // Long narration uses its own gain and source on the gesture-authorized context.
     playbackContext: () => unlocked && context?.state !== 'closed' ? context : null };
 }

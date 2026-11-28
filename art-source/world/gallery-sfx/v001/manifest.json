@@ -1,0 +1,91 @@
+{
+  "provenance": "婧婧提供的 5 段 MP3。v001 使用场馆解锁及两条 1 号壁画音效，另两条原件供试听备选。",
+  "processing": "按解码波形裁去两端静音和极低底噪，保留原速度、立体声及自然衰减。",
+  "encoding": {
+    "tool": "ffmpeg version 7.1.1",
+    "sampleRateHz": 44100,
+    "channels": 2,
+    "filter": "atrim=start={startSeconds}:end={endSeconds},asetpts=PTS-STARTPTS",
+    "arguments": [
+      "-map_metadata",
+      "-1",
+      "-c:a",
+      "libmp3lame",
+      "-b:a",
+      "192k",
+      "-f",
+      "mp3"
+    ]
+  },
+  "sources": [
+    {
+      "name": "场馆游戏世界解锁.mp3",
+      "originalPath": "vault:sha256:c916f661b9fd19719d99f3b76b79402958a4a3b367bc94e8d3d112737e9ba069",
+      "sha256": "c916f661b9fd19719d99f3b76b79402958a4a3b367bc94e8d3d112737e9ba069",
+      "bytes": 227001,
+      "decodedSeconds": 9.456327,
+      "use": "试听 v001"
+    },
+    {
+      "name": "壁画补物1.mp3",
+      "originalPath": "vault:sha256:3ff6edf32070e8e9769cf5893bcbd6c3d7c114ebfebc6c5f1fea5e557b4f2609",
+      "sha256": "3ff6edf32070e8e9769cf5893bcbd6c3d7c114ebfebc6c5f1fea5e557b4f2609",
+      "bytes": 119168,
+      "decodedSeconds": 4.963265,
+      "use": "试听 v001"
+    },
+    {
+      "name": "壁画全现1.mp3",
+      "originalPath": "vault:sha256:9bd80ae93c41b65a8fd24da1ce8386961a998255c4b9bbdf4fa0dc3b288639fc",
+      "sha256": "9bd80ae93c41b65a8fd24da1ce8386961a998255c4b9bbdf4fa0dc3b288639fc",
+      "bytes": 95344,
+      "decodedSeconds": 3.970612,
+      "use": "试听 v001"
+    },
+    {
+      "name": "壁画补物二.mp3",
+      "originalPath": "vault:sha256:e0ceae40ff408843e501be761e7d162ba614a316b3c0b6e47c60f1ab306b2263",
+      "sha256": "e0ceae40ff408843e501be761e7d162ba614a316b3c0b6e47c60f1ab306b2263",
+      "bytes": 106002,
+      "decodedSeconds": 4.414694,
+      "use": "备选"
+    },
+    {
+      "name": "壁画全现2.mp3",
+      "originalPath": "vault:sha256:d0064342d94a21c57d874dd73aef3f922f61aa3d958dbee2ad1255aa40b46b33",
+      "sha256": "d0064342d94a21c57d874dd73aef3f922f61aa3d958dbee2ad1255aa40b46b33",
+      "bytes": 63997,
+      "decodedSeconds": 2.66449,
+      "use": "备选"
+    }
+  ],
+  "clips": {
+    "gallery-unlock": {
+      "path": "assets/world/gallery-sfx/v001/gallery-unlock.mp3",
+      "sourceSha256": "c916f661b9fd19719d99f3b76b79402958a4a3b367bc94e8d3d112737e9ba069",
+      "startSeconds": 0.04,
+      "endSeconds": 8.95,
+      "decodedSeconds": 8.91,
+      "sha256": "733f5924162fdf48ad002b329998f0b75cbd5b4036b542c0df67beed7bf01c14",
+      "bytes": 215710
+    },
+    "mural-part": {
+      "path": "assets/world/gallery-sfx/v001/mural-part.mp3",
+      "sourceSha256": "3ff6edf32070e8e9769cf5893bcbd6c3d7c114ebfebc6c5f1fea5e557b4f2609",
+      "startSeconds": 0.035,
+      "endSeconds": 4.945,
+      "decodedSeconds": 4.91,
+      "sha256": "a4d1a52038ec938d3f0e91e668f853ee6007485578fcdcee5cb223ad8d3a5011",
+      "bytes": 119161
+    },
+    "mural-renew": {
+      "path": "assets/world/gallery-sfx/v001/mural-renew.mp3",
+      "sourceSha256": "9bd80ae93c41b65a8fd24da1ce8386961a998255c4b9bbdf4fa0dc3b288639fc",
+      "startSeconds": 0.035,
+      "endSeconds": 3.955,
+      "decodedSeconds": 3.92,
+      "sha256": "028713e6248163765d61328a643d1e29e9636678cd35727f60b87a10f13f7c7d",
+      "bytes": 95964
+    }
+  }
+}

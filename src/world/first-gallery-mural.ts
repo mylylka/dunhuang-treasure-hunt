@@ -7,7 +7,7 @@ import {
   type FirstGalleryMuralCameraPose,
 } from './first-gallery-mural-camera';
 import { muralLightTiming } from './first-gallery-mural-light';
-import { moveTerrainPlayer, toTerrainPoint } from './terrain-rules-v001';
+import { fromTerrainPoint, moveTerrainPlayer, toTerrainPoint } from './terrain-rules-v001';
 import type { WorldPoint } from './types';
 
 export { FIRST_GALLERY_MURAL_MARKER_KEY } from '../services/first-gallery-entry';
@@ -25,7 +25,17 @@ export interface FirstGalleryMuralSnapshot {
 
 export const muralObserver = toTerrainPoint('courtyard', FIRST_GALLERY_MURAL_OBSERVER);
 const tableObserver = toTerrainPoint('courtyard', FIRST_GALLERY_MURAL_TABLE_OBSERVER);
-const enterRadius = .9, leaveRadius = 1.25;
+const muralEnterReach = { side: 2.1, approach: 1.4, wall: 2.05 };
+const muralLeaveReach = { side: 2.55, approach: 1.75, wall: 2.55 };
+
+/** Widen across the wall and toward it, leaving the center under the caisson free. */
+export function inMuralReach(courtyardPoint: WorldPoint, retained = false): boolean {
+  const reach = retained ? muralLeaveReach : muralEnterReach;
+  const dx = courtyardPoint.x - FIRST_GALLERY_MURAL_OBSERVER.x;
+  const dz = courtyardPoint.z - FIRST_GALLERY_MURAL_OBSERVER.z;
+  return Math.hypot(dx / reach.side, dz / (dz > 0 ? reach.approach : reach.wall)) <= 1;
+}
+
 const muralPartCount = 3;
 const education: Record<FirstGalleryMuralPart, FirstGalleryNarrationId> = {
   lotus: 'mural-lotus-note',
@@ -129,13 +139,13 @@ export function createFirstGalleryMural(
       return true;
     },
     request(position: WorldPoint, saved: readonly FirstGalleryMuralPart[]) {
-      if (phase !== 'idle' || saved.length !== muralPartCount || distance(position, muralObserver) > enterRadius) return;
+      if (phase !== 'idle' || saved.length !== muralPartCount || !inMuralReach(fromTerrainPoint('courtyard', position))) return;
       replay = true;
       enter('invite');
     },
     decline, exit,
     start(position: WorldPoint, saved: readonly FirstGalleryMuralPart[], pose: FirstGalleryMuralCameraPose) {
-      if (phase !== 'invite' || distance(position, muralObserver) > leaveRadius) return false;
+      if (phase !== 'invite' || !inMuralReach(fromTerrainPoint('courtyard', position), true)) return false;
       replay = saved.length === muralPartCount;
       parts = replay ? [] : saved;
       marker = declined = waitingForLeave = false;
@@ -154,14 +164,14 @@ export function createFirstGalleryMural(
       time += dt;
       realTime += elapsedRealSeconds;
       if (!active()) {
-        const fromObserver = distance(position, muralObserver);
-        if (fromObserver > leaveRadius) {
+        const courtyardPoint = fromTerrainPoint('courtyard', position);
+        if (!inMuralReach(courtyardPoint, true)) {
           if (phase === 'invite') enter('idle');
           waitingForLeave = false;
           if (declined && saved.length < muralPartCount) marker = true;
         }
         if (saved.length === muralPartCount) marker = false;
-        if (phase === 'idle' && canInvite && !waitingForLeave && saved.length < muralPartCount && fromObserver <= enterRadius) {
+        if (phase === 'idle' && canInvite && !waitingForLeave && saved.length < muralPartCount && inMuralReach(courtyardPoint)) {
           replay = false;
           enter('invite');
         }

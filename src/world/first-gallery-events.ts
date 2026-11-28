@@ -1,6 +1,7 @@
-import { GALLERY_INTRO, GALLERY_TARGETS, type GalleryInteraction, type GalleryLine } from '../content/world/first-gallery-v001';
+import { GALLERY_EASEL_YARD_FRONT, GALLERY_INTRO, GALLERY_TARGETS, type GalleryInteraction, type GalleryLine } from '../content/world/first-gallery-v001';
+import { TERRAIN_COURTYARD_EXPANSION } from '../content/world/terrain-layout-v001';
 import { fromTerrainPoint } from './terrain-rules-v001';
-import { muralObserver, type FirstGalleryMuralSnapshot } from './first-gallery-mural';
+import { inMuralReach, type FirstGalleryMuralSnapshot } from './first-gallery-mural';
 import type { WorldPoint } from './types';
 
 export interface FirstGallerySnapshot {
@@ -14,11 +15,15 @@ export interface FirstGallerySnapshot {
   mural?: FirstGalleryMuralSnapshot;
   muralPreparation?: 'loading' | 'failed';
 }
-export function galleryNearby(point: WorldPoint): GalleryInteraction | null {
+const easelEnterRadius = 5.2, easelLeaveRadius = 5.9;
+
+export function galleryNearby(point: WorldPoint, previous: GalleryInteraction | null = null): GalleryInteraction | null {
   const p = fromTerrainPoint('courtyard', point);
   const distance = (target: keyof typeof GALLERY_TARGETS) => Math.hypot(point.x - GALLERY_TARGETS[target].x, point.z - GALLERY_TARGETS[target].z);
-  if (distance('easel') < 4.0) return 'easel';
-  if (Math.hypot(point.x - muralObserver.x, point.z - muralObserver.z) <= .9) return 'mural';
+  // Keep the wider reach on the courtyard side of both perimeter walls.
+  if (p.z < GALLERY_EASEL_YARD_FRONT && p.x <= TERRAIN_COURTYARD_EXPANSION.floor.maxX &&
+    distance('easel') <= (previous === 'easel' ? easelLeaveRadius : easelEnterRadius)) return 'easel';
+  if (inMuralReach(p)) return 'mural';
   const caissonDepth = p.z + 15;
   // Extend only the entrance-facing edge, by two of the hall's 17/13 m tiles.
   const approachReach = caissonDepth > 0 ? 3.9 + 2 * (17 / 13) : 3.9;
@@ -83,7 +88,7 @@ export function createFirstGalleryEvents(initialSeen: readonly GalleryInteractio
     },
     update(point: WorldPoint, moving: boolean, dt: number, completed: { mural: boolean; caisson: boolean; easel: boolean; unlocked: boolean }, allowIntroduction = true, audioManaged = false, elapsedSeconds = dt) {
       easelCompleted = completed.easel;
-      const next = galleryNearby(point);
+      const next = galleryNearby(point, nearby);
       if (next !== nearby) { cancel(); nearby = next; }
       gateTime -= dt; if (gateTime <= 0) gate = null;
       if (moving) {

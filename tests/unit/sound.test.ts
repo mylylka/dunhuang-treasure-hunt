@@ -2,7 +2,10 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { createSoundPlayer, soundUrl } from '../../src/services/sound';
 import type { SoundCue } from '../../src/types';
 
-const durations: Record<SoundCue, number> = { button: .165, rotate: .245, success: .445, error: .285, fill: .295, hint: .485, complete: 1.135, 'gallery-unlock': 1.75, 'guide-stardust': 2 };
+const durations: Record<SoundCue, number> = {
+  button: .165, rotate: .245, success: .445, error: .285, fill: .295, hint: .485, complete: 1.135,
+  'gallery-unlock': 1.75, 'first-gallery-clear': 8.91, 'mural-part': 4.91, 'mural-renew': 3.92, 'guide-stardust': 2,
+};
 const buffer = (cue: SoundCue) => ({ duration: durations[cue] }) as AudioBuffer;
 async function settle() { for (let i = 0; i < 8; i++) await Promise.resolve(); }
 
@@ -64,6 +67,51 @@ describe('共用温润木石音效播放器', () => {
     expect(h.sources.map(source => source.buffer?.duration)).toEqual([.445, 1.135]);
     h.player.stop();
     expect(h.sources[1].stop).toHaveBeenCalled();
+  });
+  it('壁画音效保持尾音，新一段演出可接替，普通按钮不会打断', async () => {
+    const h = harness(); await h.player.unlock();
+    h.player.play('mural-part'); await settle();
+    h.advance(3_500); h.player.play('button'); await settle();
+    expect(h.sources).toHaveLength(1);
+    expect(h.sources[0].stop).not.toHaveBeenCalled();
+    h.player.play('mural-renew'); await settle();
+    expect(h.sources.map(source => source.buffer?.duration)).toEqual([4.91, 3.92]);
+    expect(h.sources[1].start.mock.calls[0][0]).toBe(h.sources[0].stop.mock.calls[0][0]);
+  });
+  it('场馆音效随讲解压低并恢复音量，压低期间仍响应音量设置', async () => {
+    const h = harness(); await h.player.unlock();
+    h.player.setGalleryCuesDucked(true);
+    h.player.play('mural-renew'); await settle();
+    const ramp = h.gains[0].linearRampToValueAtTime;
+    expect(ramp.mock.lastCall?.[0]).toBeCloseTo(.4 * .22);
+    h.player.setPreferences({ enabled: true, volume: .7 });
+    expect(ramp.mock.lastCall?.[0]).toBeCloseTo(.7 * .22);
+    h.player.setGalleryCuesDucked(false);
+    expect(ramp.mock.lastCall?.[0]).toBeCloseTo(.7);
+    h.player.setGalleryCuesDucked(true);
+    expect(ramp.mock.lastCall?.[0]).toBeCloseTo(.7 * .22);
+    expect(h.sources[0].start).toHaveBeenCalledTimes(1);
+    expect(h.sources[0].stop).not.toHaveBeenCalled();
+  });
+  it('原开场音效保持原音量，预载到达音效不播放，点播时才随讲解压低', async () => {
+    const h = harness(); await h.player.unlock();
+    h.player.setGalleryCuesDucked(true);
+    h.player.play('gallery-unlock'); await settle();
+    expect(h.gains[0].linearRampToValueAtTime.mock.lastCall?.[0]).toBeCloseTo(.4);
+    await h.player.prepare('first-gallery-clear');
+    expect(h.sources.map(source => source.buffer?.duration)).toEqual([1.75]);
+    h.advance(8_000); h.sources[0].onended?.();
+    h.player.play('first-gallery-clear'); await settle();
+    expect(h.sources.map(source => source.buffer?.duration)).toEqual([1.75, 8.91]);
+    expect(h.gains[1].linearRampToValueAtTime.mock.lastCall?.[0]).toBeCloseTo(.4 * .22);
+  });
+  it('离开场馆会取消在加载的音效，解码较晚也不会补播', async () => {
+    let resolve!: (value: AudioBuffer) => void;
+    const h = harness(() => new Promise<AudioBuffer>(done => { resolve = done; }));
+    await h.player.unlock(); h.player.play('first-gallery-clear'); await settle();
+    h.player.stopCue('first-gallery-clear');
+    resolve(buffer('first-gallery-clear')); await settle();
+    expect(h.sources).toHaveLength(0);
   });
   it('停止后立刻播放仍等待旧音淡出，不跨停止动作叠音', async () => {
     const h = harness(); await h.player.unlock();
@@ -176,5 +224,8 @@ describe('共用温润木石音效播放器', () => {
     vi.stubGlobal('document', { baseURI: 'https://example.test/games/dunhuang/index.html?review=audio' });
     expect(soundUrl('complete')).toBe('https://example.test/games/dunhuang/assets/shared/audio/warm-v001/warm-complete.wav');
     expect(soundUrl('gallery-unlock')).toBe('https://example.test/games/dunhuang/assets/world/first-gallery/v001/portal-unlock.wav');
+    expect(soundUrl('first-gallery-clear')).toBe('https://example.test/games/dunhuang/assets/world/gallery-sfx/v001/gallery-unlock.mp3');
+    expect(soundUrl('mural-part')).toBe('https://example.test/games/dunhuang/assets/world/gallery-sfx/v001/mural-part.mp3');
+    expect(soundUrl('mural-renew')).toBe('https://example.test/games/dunhuang/assets/world/gallery-sfx/v001/mural-renew.mp3');
   });
 });

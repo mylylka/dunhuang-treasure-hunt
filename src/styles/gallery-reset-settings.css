@@ -1,6 +1,6 @@
 .setting-row.gallery-reset-settings {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: minmax(140px, 1fr) minmax(0, max-content);
   gap: 10px 20px;
   border-top: 0;
 }
@@ -26,7 +26,12 @@
 }
 
 .gallery-reset-controls select {
+  min-width: 0;
   max-width: 100%;
+}
+
+.gallery-reset-controls {
+  justify-content: flex-end;
 }
 
 .gallery-reset-controls select:focus-visible {
@@ -95,5 +100,9 @@
 @media (max-width: 680px) {
   .setting-row.gallery-reset-settings {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .gallery-reset-controls {
+    justify-content: flex-start;
   }
 }

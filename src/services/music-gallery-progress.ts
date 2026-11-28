@@ -19,11 +19,19 @@ export type MusicGalleryDiscovery = { type: 'chapter'; index: number } | { type:
 const empty = (): MusicGalleryProgress => ({ chapters: [], instruments: [], dressed: false, awardReceived: false });
 const key = (part: string) => `${MUSIC_GALLERY_PROGRESS_KEY}:${part}`;
 const guideApproachKey = key('guide-approach');
+const taskKeys = {
+  chapters: chapters.map(index => key(`chapter:${index + 1}`)),
+  instruments: MUSIC_INSTRUMENTS.map(instrument => key(`instrument:${instrument.id}`)),
+  outfit: [key('outfit')],
+};
+const completionKeys = [key('award'), key('unlock-notice')];
 export const MUSIC_GALLERY_PROGRESS_KEYS = [
-  ...chapters.map(index => key(`chapter:${index + 1}`)),
-  ...MUSIC_INSTRUMENTS.map(instrument => key(`instrument:${instrument.id}`)),
-  key('outfit'), key('award'), key('unlock-notice'), guideApproachKey,
+  ...taskKeys.chapters, ...taskKeys.instruments, ...taskKeys.outfit, ...completionKeys, guideApproachKey,
 ] as const;
+
+export function musicTaskProgressKeys(task: keyof typeof taskKeys): readonly string[] {
+  return [...taskKeys[task], ...completionKeys];
+}
 
 export function completedMusicGalleryChallenges(progress: MusicGalleryProgress) {
   const allChapters = chapters.every(index => progress.chapters.includes(index));
