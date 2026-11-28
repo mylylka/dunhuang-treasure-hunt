@@ -93,7 +93,7 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
   const [connectedGalleries] = useState(() => document.getElementById('root')?.dataset.connectedGalleries === 'v001');
   const [previewAllGalleries, setPreviewAllGalleries] = useState(false);
   const [travelerId, setTravelerId] = useState(() => connectedGalleries ? readTravelerSelection() : null);
-  const [choosingTraveler, setChoosingTraveler] = useState(false);
+  const [choosingTraveler, setChoosingTraveler] = useState(() => connectedGalleries && readRoute().page === 'home');
   const [musicGalleryEnabled] = useState(() => connectedGalleries || document.getElementById('root')?.dataset.musicGallery === 'v001');
   const galleryResetAvailable = firstGallery || musicGalleryEnabled || document.getElementById('root')?.dataset.mogaoExhibit === 'v001';
   const musicGallery = useMusicGalleryProgress(musicGalleryEnabled);

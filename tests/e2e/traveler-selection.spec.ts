@@ -75,23 +75,31 @@ test('开场默认选中鸣沙，切换只改变插画状态，确认后才加�
   expect(await pickedTraveler(page)).toBe('classic');
 });
 
-test('设置可更换旅人，重载沿用林澈、馆内位置及任务记录', async ({ page, isMobile }) => {
+test('已有旅人仍须在新访问确认，刷新预选林澈并保留馆内位置、任务及作品', async ({ page, isMobile }) => {
   test.setTimeout(150_000);
   await page.addInitScript(({ galleryKey, selectionKey }) => {
     if (!localStorage.getItem(selectionKey)) localStorage.setItem(selectionKey, 'classic');
     if (!localStorage.getItem(galleryKey)) localStorage.setItem(galleryKey, JSON.stringify({
       version: 1, muralParts: [], caissonCompleted: true, coloringCompleted: false,
-      ceremonySeen: false, artworks: {}, displayedArtworkId: null,
+      ceremonySeen: false, displayedArtworkId: null, artworks: {
+        previous: { artworkId: 'previous', levelId: 'coloring-feitian-lotus', artworkVersion: 'fixture-v001',
+          colors: { 1: '#886644' }, materials: {}, submittedAt: '2026-11-03T00:00:00.000Z' },
+      },
     }));
   }, { galleryKey, selectionKey });
   const { models, previews } = watchAssetRequests(page);
   await page.goto('/?view=mural');
   const world = page.getByTestId('world-host');
+  const enter = enterButton(page);
+  await expect(classicRadio(page)).toBeChecked();
+  await expect(world).toHaveCount(0);
+  expect([...models]).toEqual([]);
+  if (isMobile) await enter.tap();
+  else await enter.click();
   await expect(world).toHaveAttribute('data-ready', 'true', { timeout: 60_000 });
   const position = () => page.getByTestId('world-position').evaluate(el => [el.getAttribute('data-x'), el.getAttribute('data-z')]);
   const originalPosition = await position();
   const originalProgress = await page.evaluate(key => localStorage.getItem(key), galleryKey);
-  expect([...previews]).toEqual([]);
   const settings = page.getByRole('navigation', { name: '世界导航' }).getByRole('link', { name: '设置' });
   if (isMobile) await settings.tap();
   else await settings.click();
@@ -106,7 +114,6 @@ test('设置可更换旅人，重载沿用林澈、馆内位置及任务记录',
   await expect(figure(page, 'tripo')).toBeInViewport();
   expect([...models]).toEqual([]);
   expect(await pickedTraveler(page)).toBe('classic');
-  const enter = enterButton(page);
   if (isMobile) await enter.tap();
   else await enter.click();
   await expect(world).toHaveAttribute('data-ready', 'true', { timeout: 60_000 });
@@ -115,9 +122,15 @@ test('设置可更换旅人，重载沿用林澈、馆内位置及任务记录',
   models.clear();
   previews.clear();
   await page.reload();
-  await expect(world).toHaveAttribute('data-ready', 'true', { timeout: 60_000 });
+  await expect(modernRadio(page)).toBeChecked();
+  await expect(world).toHaveCount(0);
+  expect([...models]).toEqual([]);
   expect(await pickedTraveler(page)).toBe('tripo');
-  expect([...previews]).toEqual([]);
+  await expect.poll(() => previews.size).toBeGreaterThan(0);
+  expect(await page.evaluate(key => localStorage.getItem(key), galleryKey)).toBe(originalProgress);
+  if (isMobile) await enter.tap();
+  else await enter.click();
+  await expect(world).toHaveAttribute('data-ready', 'true', { timeout: 60_000 });
   expect(travelerRequests(models)).toEqual([assetPath(travelerModelPath('tripo', isMobile))]);
   expect(await position()).toEqual(originalPosition);
   expect(await page.evaluate(key => localStorage.getItem(key), galleryKey)).toBe(originalProgress);
