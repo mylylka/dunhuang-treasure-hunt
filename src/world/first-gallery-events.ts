@@ -17,7 +17,7 @@ export interface FirstGallerySnapshot {
 export function galleryNearby(point: WorldPoint, caissonOnly = false): GalleryInteraction | null {
   const p = fromTerrainPoint('courtyard', point);
   const distance = (target: keyof typeof GALLERY_TARGETS) => Math.hypot(point.x - GALLERY_TARGETS[target].x, point.z - GALLERY_TARGETS[target].z);
-  if (!caissonOnly && distance('easel') < 4.0) return 'easel';
+  if (distance('easel') < 4.0) return 'easel';
   if (Math.hypot(point.x - muralObserver.x, point.z - muralObserver.z) <= .9) return 'mural';
   const caissonDepth = p.z + 15;
   // Extend only the entrance-facing edge, by two of the hall's 17/13 m tiles.
@@ -90,7 +90,7 @@ export function createFirstGalleryEvents(initialSeen: readonly GalleryInteractio
         still = 0;
         if (!retainWhileMoving) { if (current()) cancel(); return; }
       } else still += dt;
-      if (allowIntroduction && !current() && nearby === 'easel' && still > .7 && !easelCompleted && !seen.has('easel')) {
+      if (!caissonOnly && allowIntroduction && !current() && nearby === 'easel' && still > .7 && !easelCompleted && !seen.has('easel')) {
         say(GALLERY_INTRO.easel);
         introduction = 'easel';
       }
@@ -108,7 +108,7 @@ export function createFirstGalleryEvents(initialSeen: readonly GalleryInteractio
     snapshot(): FirstGallerySnapshot {
       const cue = current();
       const betweenLines = pauseRemaining > 0;
-      return { nearby, easelReady: easelCompleted || seen.has('easel'),
+      return { nearby, easelReady: caissonOnly || easelCompleted || seen.has('easel'),
         line: !betweenLines && (cue?.narration || time >= .55) ? cue : null, cue, cueId, gate, betweenLines };
     },
   };

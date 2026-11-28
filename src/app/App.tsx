@@ -106,6 +106,7 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
   const lastGallery = useRef(gallery);
   const [galleryPortalPending, setGalleryPortalPending] = useState(false);
   const [galleryReturningFromColoring, setGalleryReturningFromColoring] = useState(false);
+  const [galleryExhibitId, setGalleryExhibitId] = useState<string | null>(null);
   const [keepGalleryWorld, setKeepGalleryWorld] = useState(false);
   const [gallerySaveError, setGallerySaveError] = useState<string | null>(null);
   const [galleryCompatibility, setGalleryCompatibility] = useState(false);
@@ -113,7 +114,7 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
   const artworkRetry = useRef<(() => void) | null>(null);
   const ordinaryRequest = useRef<string | null>(null);
   const easelEntry = useRef<FirstGalleryColoringEntry | null>(
-    firstGallery && !caissonOnly ? readGalleryColoringEntry(window.history.state?.[FIRST_GALLERY_ENTRY_CLAIM]) : null,
+    firstGallery ? readGalleryColoringEntry(window.history.state?.[FIRST_GALLERY_ENTRY_CLAIM]) : null,
   );
   const [initialLoad] = useState(() => loadProgress());
   const [initialArtworks] = useState(() => loadArtworks());
@@ -177,6 +178,7 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
       setGallery(next);
       setGalleryPortalPending(false);
       setGalleryReturningFromColoring(false);
+      setGalleryExhibitId(null);
       setGalleryCompatibility(false);
     }
     if (area === 'music') reloadMusicGallery();
@@ -219,10 +221,17 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
     setGalleryCompatibility(false);
     setKeepGalleryWorld(false);
     setGalleryReturningFromColoring(submitted && !keepGalleryWorld);
+    setGalleryExhibitId(submitted && caissonOnly ? entry.token : null);
+    if (caissonOnly) setChoosingTraveler(false);
     try { window.history.replaceState(null, '', '#/'); }
     catch { goTo('/'); }
     setRoute({ page: 'home' });
-  }, [keepGalleryWorld, persistWorld]);
+  }, [caissonOnly, keepGalleryWorld, persistWorld]);
+
+  const finishGalleryExhibit = useCallback((id: string) => {
+    setGalleryExhibitId(current => current === id ? null : current);
+    setGalleryReturningFromColoring(false);
+  }, []);
 
   const leaveGalleryEasel = useCallback(() => {
     if (easelEntry.current) returnToGalleryEasel(easelEntry.current, false);
@@ -402,7 +411,7 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
   }
 
   function enterGalleryEasel(checkpoint: WorldCheckpoint, artworkId?: string): boolean {
-    if (!firstGallery || caissonOnly) return false;
+    if (!firstGallery) return false;
     const level = catalog.levels.find(item => item.id === FIRST_GALLERY_EASEL_LEVEL);
     if (level?.gameType !== 'coloring') {
       setWorldWarning('画架线稿暂未加载，请重试。');
@@ -478,7 +487,7 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
       const source = entry?.draft ?? (savedSource?.levelId === level.id && savedSource.artworkVersion === level.artworkVersion ? savedSource : undefined);
       const save = (colors: RegionColors, materials: RegionMaterials) => {
         artworkRetry.current = null;
-        persistArtworks(withArtwork(artworksRef.current, level, colors, false, undefined, materials));
+        if (!entry || !caissonOnly) persistArtworks(withArtwork(artworksRef.current, level, colors, false, undefined, materials));
         if (entry) easelEntry.current = saveGalleryColoringDraft(entry.token, colors, materials) ?? easelEntry.current;
         // Undoing a failed submission opens a new edit. Do not let its retry
         // button publish the previous version of what is now on the canvas.
@@ -527,8 +536,11 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
         };
         capture();
       };
-      return <ColoringScreen key={entry?.token ?? level.id} level={level} catalog={catalog} initialColors={source?.colors ?? artworkColors(artworks, level)}
-        initialMaterials={source?.materials ?? artworkMaterials(artworks, level)} reducedMotion={progress.settings.reducedMotion} onChange={save}
+      const independentDraft = !caissonOnly || !entry;
+      return <ColoringScreen key={entry?.token ?? level.id} level={level} catalog={catalog}
+        initialColors={source?.colors ?? (independentDraft ? artworkColors(artworks, level) : {})}
+        initialMaterials={source?.materials ?? (independentDraft ? artworkMaterials(artworks, level) : {})}
+        reducedMotion={progress.settings.reducedMotion} onChange={save}
         galleryEntry={!!entry} backLabel={entry ? '返回院内画架' : undefined} onBack={entry ? leaveGalleryEasel : () => goTo(levelsPath(theme.id, 'coloring'))}
         onComplete={complete}
         saveNotice={<>{hasOlderArtwork(artworks, level) && <p className="notice" role="status">线稿版本已更新，旧作品已保留。本页使用新线稿。</p>}
@@ -665,6 +677,7 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
     firstGallery={firstGallery} connectedGalleries={connectedGalleries} suspended={suspended} catalog={catalog} onGalleryColoring={enterGalleryEasel} onGalleryFallback={firstGallery ? enterGalleryCompatibility : undefined}
     travelerId={travelerId ?? undefined} onChooseTraveler={travelerSelectionEnabled ? () => setChoosingTraveler(true) : undefined}
     galleryReturningFromColoring={galleryReturningFromColoring} galleryPortalPending={galleryPortalPending}
+    galleryExhibitId={galleryExhibitId} onGalleryExhibitReady={finishGalleryExhibit}
     onGalleryPortalPresented={() => {
       setGalleryPortalPending(false);
       const result = markGalleryCeremonySeen();

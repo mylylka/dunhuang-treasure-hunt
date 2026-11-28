@@ -43,6 +43,94 @@ function key(code: string, target?: EventTarget) {
   window.dispatchEvent(event);
 }
 
+function mouseLookFixture() {
+  const canvas = new Canvas();
+  const surface = new EventTarget();
+  const requested = vi.fn();
+  const interact = vi.fn(), yaw = vi.fn(), tilt = vi.fn();
+  const canCapture = vi.fn(() => true);
+  const target = Object.assign(canvas, { requestPointerLock: requested });
+  function changeLock(element: Canvas | null) {
+    Object.assign(document, { pointerLockElement: element });
+    document.dispatchEvent(new Event('pointerlockchange'));
+  }
+  const exit = vi.fn(() => changeLock(null));
+  Object.assign(document, { pointerLockElement: null, exitPointerLock: exit });
+  Object.assign(window, { matchMedia: () => ({ matches: true }) });
+  const input = createWorldInput(target as unknown as HTMLCanvasElement, interact, yaw, undefined, {
+    onTilt: tilt, mouseLook: { surface: surface as HTMLElement, canCapture },
+  });
+  function mouse(target: EventTarget, type: string, properties: Partial<MouseEvent>) {
+    const event = Object.assign(new Event(type, { cancelable: true }), properties);
+    target.dispatchEvent(event);
+    return event;
+  }
+  return { canvas, interact, yaw, tilt, input, requested, canCapture, changeLock, exit,
+    rightClick: () => mouse(surface, 'mousedown', { button: 2 }),
+    contextMenu: () => mouse(surface, 'contextmenu', {}),
+    move: () => mouse(canvas, 'mousemove', { movementX: 100, movementY: -25, buttons: 0 }),
+  };
+}
+
+describe('desktop world mouse look', () => {
+  it('captures on movement, turns with no buttons held, and toggles back to clickable UI', () => {
+    const { canvas, interact, yaw, tilt, input, requested, changeLock, rightClick, contextMenu, move } = mouseLookFixture();
+    move(); expect(yaw).not.toHaveBeenCalled();
+    key('ShiftLeft'); expect(requested).not.toHaveBeenCalled();
+    key('KeyW'); expect(requested).toHaveBeenCalledTimes(1);
+    expect(input.mouseLookActive).toBe(false);
+    changeLock(canvas);
+    expect(input.mouseLookActive).toBe(true);
+    expect(input.read()).toMatchObject({ y: -1, run: true });
+    move(); expect(yaw).toHaveBeenLastCalledWith(-.6); expect(tilt).toHaveBeenLastCalledWith(.1);
+    canvas.pointer('pointerdown', 400, 200); canvas.pointer('pointerup', 400, 200);
+    expect(interact).not.toHaveBeenCalled();
+
+    expect(rightClick().defaultPrevented).toBe(true);
+    expect(contextMenu().defaultPrevented).toBe(true);
+    expect(input.mouseLookActive).toBe(false);
+    expect(input.read().y).toBe(0);
+    move(); expect(yaw).toHaveBeenCalledTimes(1);
+    canvas.pointer('pointerdown', 400, 200); canvas.pointer('pointerup', 400, 200);
+    expect(interact).toHaveBeenCalledWith({ clientX: 400, clientY: 200 });
+    key('KeyW'); expect(requested).toHaveBeenCalledTimes(1);
+    rightClick(); expect(requested).toHaveBeenCalledTimes(2);
+    changeLock(canvas); expect(input.mouseLookActive).toBe(true);
+    key('Tab'); expect(input.mouseLookActive).toBe(false);
+    input.dispose();
+  });
+
+  it('releases for blocked scenes and blur, and cancels a lock arriving after disposal', () => {
+    const { canvas, input, requested, canCapture, changeLock, exit, rightClick, move, yaw } = mouseLookFixture();
+    rightClick(); changeLock(canvas);
+    canCapture.mockReturnValue(false);
+    move(); expect(yaw).not.toHaveBeenCalled();
+    input.updateMouseLook(); expect(exit).toHaveBeenCalledTimes(1);
+    expect(rightClick().defaultPrevented).toBe(false);
+    canCapture.mockReturnValue(true);
+    key('KeyW'); changeLock(canvas);
+    window.dispatchEvent(new Event('blur'));
+    expect(exit).toHaveBeenCalledTimes(2);
+    expect(input.read().y).toBe(0);
+    key('ArrowUp'); expect(requested).toHaveBeenCalledTimes(3);
+    input.dispose();
+    changeLock(canvas); expect(exit).toHaveBeenCalledTimes(3);
+    rightClick(); expect(requested).toHaveBeenCalledTimes(3);
+  });
+
+  it('keeps the cursor and drag controls usable when the browser rejects capture', () => {
+    const { canvas, input, requested, rightClick, yaw, move } = mouseLookFixture();
+    key('KeyW'); document.dispatchEvent(new Event('pointerlockerror'));
+    expect(input.mouseLookActive).toBe(false);
+    move(); expect(yaw).not.toHaveBeenCalled();
+    canvas.pointer('pointerdown', 400, 200); canvas.pointer('pointermove', 450, 200); canvas.pointer('pointerup', 450, 200);
+    expect(yaw).toHaveBeenLastCalledWith(-.2);
+    rightClick(); expect(requested).toHaveBeenCalledTimes(2);
+    document.dispatchEvent(new Event('pointerlockerror'));
+    input.dispose();
+  });
+});
+
 describe('world mouse and touch input', () => {
   it('looks with either mouse button while preserving clicks and ignoring hovering', () => {
     const { canvas, yaw, tilt, intent, interact, input } = fixture();

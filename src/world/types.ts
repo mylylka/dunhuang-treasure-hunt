@@ -20,6 +20,8 @@ export interface WorldSnapshot {
     portalReady?: boolean;
     caissonOffer?: boolean;
     caissonAssist?: boolean;
+    easelHint?: { x: number; y: number };
+    easelShowcase?: boolean;
   };
   checkpoint: WorldCheckpoint;
   nearby: DiscoveryId | null;
@@ -62,6 +64,9 @@ export interface WorldRuntime {
   /** Original image UV corners TL, TR, BR, BL in viewport CSS pixels. */
   galleryCaissonQuad?(): readonly { x: number; y: number }[] | null;
   setGalleryArtwork?(canvas: HTMLCanvasElement): void;
+  locateGalleryEasel?(): boolean;
+  previewGalleryEasel?(onOpen: () => void): boolean;
+  presentGalleryEasel?(): void;
   requestGalleryMural?(): void;
   startGalleryMural?(): void;
   declineGalleryMural?(): void;

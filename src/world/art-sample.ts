@@ -17,7 +17,7 @@ import type { createMusicGroundFloorStone } from './music-ground-floor-stone-v00
 import type { createMusicGroundFloorStairFinish } from './music-ground-floor-stair-finish-v001';
 import { isMusicInstrumentDisplayApproach } from '../content/world/music-instrument-display-layout-v001';
 import musicInteriorLayout from '../content/world/music-interior-v005.json';
-import { patternStationsForScope } from './pattern-interactives';
+import { PATTERN_STATIONS } from './pattern-interactives';
 import { addMuralStationShadow } from './mural-station-shadow';
 import * as mogaoV8Rules from './mogao-rules-v008';
 import {createCaveLighting} from './cave-lighting-v008';
@@ -877,8 +877,7 @@ export function createArtSampleScene(options: ArtSampleSceneOptions = {}): ArtSa
     models.push(group); musicSilhouette = group;
   }
   function loadPatterns(load: (path: string) => Promise<GLTF>) {
-    const stations = patternStationsForScope(caissonOnly);
-    return Promise.all(stations.map(async station => ({ station, model: (await load(station.asset)).scene })));
+    return Promise.all(PATTERN_STATIONS.map(async station => ({ station, model: (await load(station.asset)).scene })));
   }
   function attachCourtyard(courtyard: GLTF, patternModels: Awaited<ReturnType<typeof loadPatterns>>, caissonModel?: GLTF) {
     if (currentFirstGalleryVisuals) refineCourtyardRocks(courtyard.scene);

@@ -1,8 +1,11 @@
+import { createMouseLook } from './mouse-look';
+
 export interface WorldInputPoint { clientX: number; clientY: number }
 export interface WorldInputOptions {
   onTilt?(delta: number): void;
   /** Positive distances pull the camera away from the traveler, in metres. */
   onZoom?(delta: number): void;
+  mouseLook?: { surface: HTMLElement; canCapture(): boolean };
 }
 
 interface PointerGesture {
@@ -25,7 +28,14 @@ export function createWorldInput(canvas: HTMLCanvasElement, onInteract: (point?:
   const previousTouchAction = canvas.style.touchAction;
   canvas.style.touchAction = 'none';
   let joystick = { x: 0, y: 0 };
-  const relevant = new Set(['KeyW', 'KeyA', 'KeyS', 'KeyD', 'ArrowUp', 'ArrowLeft', 'ArrowDown', 'ArrowRight', 'ShiftLeft', 'ShiftRight', 'KeyQ', 'KeyE']);
+  const movementKeys = new Set(['KeyW', 'KeyA', 'KeyS', 'KeyD', 'ArrowUp', 'ArrowLeft', 'ArrowDown', 'ArrowRight']);
+  const relevant = new Set([...movementKeys, 'ShiftLeft', 'ShiftRight', 'KeyQ', 'KeyE']);
+  const canCapture = () => enabled && options.mouseLook?.canCapture() === true;
+  const mouseLook = options.mouseLook && createMouseLook(canvas, options.mouseLook.surface, canCapture, (yaw, pitch) => {
+    onIntent?.();
+    if (yaw) onCamera(yaw);
+    if (pitch) options.onTilt?.(pitch);
+  }, active => { if (active) clearPointers(); else clear(); });
   const isTyping = (target: EventTarget | null) => target instanceof Element && !!target.closest('input, textarea, select, [contenteditable=true], dialog, [role=dialog]');
   const point = (event: PointerEvent): WorldInputPoint => ({ clientX: event.clientX, clientY: event.clientY });
   function release(id: number) {
@@ -38,8 +48,10 @@ export function createWorldInput(canvas: HTMLCanvasElement, onInteract: (point?:
     for (const id of ids) release(id);
   }
   function clear() { keys.clear(); clearPointers(); joystick = { x: 0, y: 0 }; }
-  function visibility() { if (document.hidden) clear(); }
+  function suspend() { clear(); mouseLook?.suspend(); }
+  function visibility() { if (document.hidden) suspend(); }
   function down(event: KeyboardEvent) {
+    if (event.code === 'Tab' && mouseLook?.active) mouseLook.release();
     if (isTyping(event.target)) return;
     if (relevant.has(event.code)) onIntent?.();
     if (!enabled) return;
@@ -48,14 +60,16 @@ export function createWorldInput(canvas: HTMLCanvasElement, onInteract: (point?:
     if (relevant.has(event.code)) {
       event.preventDefault();
       keys.add(event.code);
+      if (!event.repeat && !event.altKey && !event.ctrlKey && !event.metaKey && movementKeys.has(event.code)) mouseLook?.captureFromKeyboard();
     }
   }
   function up(event: KeyboardEvent) { keys.delete(event.code); }
   function pointerDown(event: PointerEvent) {
     const mouse = event.pointerType === 'mouse' || !event.pointerType;
     if (event.button !== 0 && !(mouse && event.button === 2)) return;
+    if (mouse && mouseLook?.ownsLock()) return;
     onIntent?.();
-    if (!enabled) return;
+    if (!enabled || (mouse && mouseLook && event.button === 2)) return;
     const start = point(event);
     const bounds = canvas.getBoundingClientRect();
     const gesture: PointerGesture = {
@@ -122,8 +136,8 @@ export function createWorldInput(canvas: HTMLCanvasElement, onInteract: (point?:
   function context(event: Event) { event.preventDefault(); }
   window.addEventListener('keydown', down);
   window.addEventListener('keyup', up);
-  window.addEventListener('blur', clear);
-  window.addEventListener('pagehide', clear);
+  window.addEventListener('blur', suspend);
+  window.addEventListener('pagehide', suspend);
   document.addEventListener('visibilitychange', visibility);
   canvas.addEventListener('pointerdown', pointerDown);
   canvas.addEventListener('pointermove', pointerMove);
@@ -134,7 +148,9 @@ export function createWorldInput(canvas: HTMLCanvasElement, onInteract: (point?:
   canvas.addEventListener('contextmenu', context);
   return {
     clear,
-    setEnabled(value: boolean) { enabled = value; clear(); },
+    setEnabled(value: boolean) { enabled = value; if (value) clear(); else suspend(); },
+    get mouseLookActive() { return mouseLook?.active === true; },
+    updateMouseLook() { if (mouseLook && !canCapture()) mouseLook.suspend(); },
     setJoystick(x: number, y: number) { if (Math.hypot(x, y) > .08) onIntent?.(); if (enabled) joystick = { x: Math.max(-1, Math.min(1, x)), y: Math.max(-1, Math.min(1, y)) }; },
     read() {
       const keyX = Number(keys.has('KeyD') || keys.has('ArrowRight')) - Number(keys.has('KeyA') || keys.has('ArrowLeft'));
@@ -144,8 +160,9 @@ export function createWorldInput(canvas: HTMLCanvasElement, onInteract: (point?:
         camera: Number(keys.has('KeyQ')) - Number(keys.has('KeyE')) };
     },
     dispose() {
+      mouseLook?.dispose();
       clear();
-      window.removeEventListener('keydown', down); window.removeEventListener('keyup', up); window.removeEventListener('blur', clear); window.removeEventListener('pagehide', clear);
+      window.removeEventListener('keydown', down); window.removeEventListener('keyup', up); window.removeEventListener('blur', suspend); window.removeEventListener('pagehide', suspend);
       document.removeEventListener('visibilitychange', visibility);
       canvas.removeEventListener('pointerdown', pointerDown); canvas.removeEventListener('pointermove', pointerMove); canvas.removeEventListener('pointerup', pointerUp); canvas.removeEventListener('pointercancel', cancelPointer); canvas.removeEventListener('lostpointercapture', cancelPointer); canvas.removeEventListener('wheel', wheel); canvas.removeEventListener('contextmenu', context);
       canvas.style.touchAction = previousTouchAction;

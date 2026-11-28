@@ -50,6 +50,11 @@ test('试玩解锁只开放本次地图和路线，并可恢复原门禁和站�
   } finally {
     await page.keyboard.up('ArrowUp');
   }
+  if (await page.evaluate(() => document.pointerLockElement !== null)) {
+    await page.mouse.down({ button: 'right' });
+    await page.mouse.up({ button: 'right' });
+    await page.waitForFunction(() => document.pointerLockElement === null);
+  }
   await page.getByRole('navigation', { name: '世界导航' }).getByRole('link', { name: '设置' }).click();
   const stored = await page.evaluate(key => ({
     checkpoint: JSON.parse(sessionStorage.getItem(key) ?? 'null'),
