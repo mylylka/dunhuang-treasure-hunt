@@ -70,12 +70,30 @@ export function firstGalleryRecordWithoutProgress(raw: string): string {
   return JSON.stringify(next);
 }
 
+export function firstGalleryRecordWithoutTask(raw: string, task: FirstGalleryIntroduction): string {
+  const saved = JSON.parse(raw);
+  const previous = schema.parse(saved);
+  const introductionsSeen = previous.introductionsSeen.filter(id => id !== task);
+  const next = {
+    ...saved, ceremonySeen: false, introductionsSeen,
+    ...(task === 'mural' && { muralParts: [] }),
+    ...(task === 'caisson' && { caissonCompleted: false }),
+    ...(task === 'easel' && { coloringCompleted: false, firstSuccessSeen: false, displayedArtworkId: null }),
+  };
+  schema.parse(next);
+  return JSON.stringify(next);
+}
+
 export function isFirstGalleryUnlocked(state: GalleryCompletion): boolean {
   return state.muralParts.length === 3 && state.caissonCompleted && state.coloringCompleted;
 }
 
 export function isFirstGalleryCeremonyReady(state: GalleryCompletion, compact = false): boolean {
   return compact ? state.muralParts.length === 3 && state.caissonCompleted : isFirstGalleryUnlocked(state);
+}
+
+export function getGalleryEaselArtwork(state: FirstGalleryState): FirstGalleryArtwork | undefined {
+  if (state.coloringCompleted && state.displayedArtworkId) return state.artworks[state.displayedArtworkId];
 }
 
 export function getFirstGalleryAccess(state: FirstGalleryState, destination: string): boolean {
@@ -187,6 +205,7 @@ export function markGalleryColoringFeedbackSeen(storage?: StorageLike): FirstGal
 
 export function selectGalleryArtwork(artworkId: string, storage?: StorageLike): FirstGallerySave {
   return updateFirstGallery(previous => {
+    if (!previous.coloringCompleted) throw new Error('Easel task is not completed');
     if (!Object.hasOwn(previous.artworks, artworkId)) throw new Error('Unknown artwork');
     return previous.displayedArtworkId === artworkId ? previous : { ...previous, displayedArtworkId: artworkId };
   }, storage);

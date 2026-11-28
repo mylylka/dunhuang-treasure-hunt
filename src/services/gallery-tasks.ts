@@ -11,6 +11,17 @@ import { MUSIC_GALLERY_CHAPTERS, type MusicGalleryProgress } from './music-galle
 
 export type GalleryTaskArea = 'first' | 'music' | 'mogao';
 
+const firstLabels = { mural: GALLERY_LABELS.mural, caisson: '三兔共耳', easel: '画架设色' };
+const musicLabels = { chapters: '飞天年代', instruments: '乐器试听', outfit: '服饰' };
+const mogaoLabels = { murals: '壁画故事', exhibits: '佛法厅展品' };
+const taskLabels = { first: firstLabels, music: musicLabels, mogao: mogaoLabels };
+
+export type GalleryTaskId = keyof typeof firstLabels | keyof typeof musicLabels | keyof typeof mogaoLabels;
+
+export function galleryTaskResetOptions(gallery: GalleryTaskArea): { id: GalleryTaskId; label: string }[] {
+  return Object.entries(taskLabels[gallery]).map(([id, label]) => ({ id: id as GalleryTaskId, label }));
+}
+
 export interface GalleryTask {
   label: string;
   complete: boolean;
@@ -29,30 +40,30 @@ function group(label: string, items: GalleryTask[]): GalleryTaskGroup {
 export function firstGalleryTasks(progress: FirstGalleryState, includeEasel = true): GalleryTaskGroup[] {
   const mural = { completed: progress.muralParts.length, total: 3 };
   const tasks: GalleryTaskGroup[] = [
-    { label: GALLERY_LABELS.mural, complete: mural.completed === mural.total, progress: mural },
-    { label: '三兔共耳', complete: progress.caissonCompleted },
+    { label: firstLabels.mural, complete: mural.completed === mural.total, progress: mural },
+    { label: firstLabels.caisson, complete: progress.caissonCompleted },
   ];
-  if (includeEasel) tasks.push({ label: '画架设色', complete: progress.coloringCompleted });
+  if (includeEasel) tasks.push({ label: firstLabels.easel, complete: progress.coloringCompleted });
   return tasks;
 }
 
 export function musicGalleryTasks(progress: MusicGalleryProgress): GalleryTaskGroup[] {
   const chapters = { completed: progress.chapters.length, total: MUSIC_GALLERY_CHAPTERS };
   return [
-    { label: '飞天年代', complete: chapters.completed === chapters.total, progress: chapters },
-    group('乐器试听', MUSIC_INSTRUMENTS.map(({ id, name }) => ({ label: name, complete: progress.instruments.includes(id) }))),
-    { label: '服饰', complete: progress.dressed },
+    { label: musicLabels.chapters, complete: chapters.completed === chapters.total, progress: chapters },
+    group(musicLabels.instruments, MUSIC_INSTRUMENTS.map(({ id, name }) => ({ label: name, complete: progress.instruments.includes(id) }))),
+    { label: musicLabels.outfit, complete: progress.dressed },
   ];
 }
 
 export function mogaoGalleryTasks(murals: MogaoHallAProgress, exhibit: MogaoExhibitProgress): GalleryTaskGroup[] {
   const viewed = new Set<string>(murals.completed);
   return [
-    group('壁画故事', [
+    group(mogaoLabels.murals, [
       { label: worldStoryPreview.title, complete: viewed.has('story-demo') },
       { label: noviceStory.title, complete: viewed.has('novice-story') },
       ...muralStories.stories.map(({ id, title }) => ({ label: title, complete: viewed.has(id) })),
     ]),
-    group('佛法厅展品', MOGAO_EXHIBIT.items.map(({ id, title }) => ({ label: title, complete: exhibit.viewed.includes(id) }))),
+    group(mogaoLabels.exhibits, MOGAO_EXHIBIT.items.map(({ id, title }) => ({ label: title, complete: exhibit.viewed.includes(id) }))),
   ];
 }

@@ -53,6 +53,79 @@
 .gallery-portal-dialog .gallery-actions { margin: 6px 0 0; gap: 8px; }
 .gallery-portal-dialog button { padding: 5px 12px; }
 .gallery-tap-dismiss { cursor: pointer; }
+
+.first-gallery-dialog.gallery-scroll-reward-dialog {
+  inset: 0;
+  width: min(490px, calc(100% - 32px));
+  max-height: calc(100dvh - 24px);
+  height: fit-content;
+  margin: auto;
+  padding: clamp(14px, 4dvh, 34px) clamp(16px, 5vw, 36px);
+  border-color: #b99055;
+  background: radial-gradient(ellipse at 50% 40%, #fff9ed 25%, #f3e0b8 100%);
+  box-shadow: 0 24px 76px #20110880, inset 0 0 0 4px #fff7da95;
+  text-align: center;
+  cursor: default;
+}
+
+.gallery-scroll-reward-dialog[open] {
+  display: grid;
+  justify-items: center;
+  gap: clamp(6px, 1.8dvh, 15px);
+}
+
+.gallery-scroll-reward-dialog::backdrop {
+  background: radial-gradient(ellipse at center, #2a170d55, #1f120bd4 100%);
+}
+
+.gallery-scroll-reward-dialog header {
+  display: block;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.gallery-scroll-reward-dialog h2 {
+  color: #6c401e;
+  font: 600 clamp(20px, 4.8dvh, 32px)/1.3 var(--serif, serif);
+  letter-spacing: .04em;
+}
+
+.gallery-scroll-reward-dialog p {
+  margin: 0;
+  color: #714c27;
+  font-size: clamp(14px, 3.6dvh, 18px);
+  line-height: 1.5;
+}
+
+.gallery-scroll-reward-dialog button { min-width: 132px; }
+
+.gallery-scroll-reward-art {
+  display: grid;
+  place-items: center;
+  width: min(100%, clamp(176px, 59dvh, 300px));
+  height: clamp(95px, 34dvh, 194px);
+  background: radial-gradient(ellipse, #edb95380, #ffd88424 48%, transparent 72%);
+}
+
+.gallery-scroll-reward-art img {
+  display: block;
+  width: clamp(90px, 32dvh, 174px);
+  height: auto;
+  filter: drop-shadow(0 7px 9px #79502048);
+  animation: gallery-scroll-reward-appear .42s ease-out both;
+}
+
+@keyframes gallery-scroll-reward-appear {
+  from { opacity: 0; transform: translateY(8px) scale(.94); }
+  to { opacity: 1; transform: none; }
+}
+
+.gallery-scroll-reward-dialog[data-reduced-motion] img { animation: none; }
+@media (prefers-reduced-motion: reduce) {
+  .gallery-scroll-reward-art img { animation: none; }
+}
+
 .world-screen[data-mural-tour="true"] .world-controls-pointer,
 .world-screen[data-mural-tour="true"] .world-joystick{display:none}
 @media(max-height:540px){.gallery-link-actions{bottom:58px}.gallery-subtitle{bottom:114px}.gallery-link-actions button{padding:7px 16px}}

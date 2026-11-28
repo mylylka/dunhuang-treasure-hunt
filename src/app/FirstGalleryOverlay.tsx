@@ -1,7 +1,10 @@
-import { useEffect, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useId, useRef, useState, type ReactNode } from 'react';
+import { worldAssetUrl } from '../content/world/assets';
 import { GALLERY_LABELS, type GalleryInteraction } from '../content/world/first-gallery-v001';
 import { galleryNarratedLine, type FirstGalleryNarrationId } from '../content/world/first-gallery-narration';
-import { completeGalleryCaisson, isCaissonOnlyMode, isFirstGalleryCeremonyReady, loadFirstGallery, markGalleryColoringFeedbackSeen, markGalleryIntroductionSeen, selectGalleryArtwork, subscribeFirstGallery, type FirstGalleryArtwork, type FirstGalleryMuralPart } from '../services/first-gallery';
+import { MOGAO_EXHIBIT_SCROLL } from '../content/world/mogao-exhibit-v001';
+import { WORLD_REWARDS } from '../content/world/mogao-rewards-v001';
+import { completeGalleryCaisson, getGalleryEaselArtwork, isCaissonOnlyMode, isFirstGalleryCeremonyReady, loadFirstGallery, markGalleryColoringFeedbackSeen, markGalleryIntroductionSeen, selectGalleryArtwork, subscribeFirstGallery, type FirstGalleryArtwork, type FirstGalleryMuralPart } from '../services/first-gallery';
 import { FIRST_GALLERY_EASEL_LEVEL } from '../services/first-gallery-entry';
 import { getAssetUrl } from '../content';
 import { renderColoringArtwork } from '../games/coloring/render';
@@ -10,6 +13,8 @@ import { FirstGalleryCaisson } from './FirstGalleryCaisson';
 import type { ContentCatalog } from '../types';
 import type { WorldCheckpoint, WorldRuntime, WorldSnapshot } from '../world/types';
 import '../styles/first-gallery.css';
+
+const FIRST_GALLERY_CLEAR_MESSAGE = '第一馆通关！游戏世界已开启。';
 
 export interface GalleryRequest { id: GalleryInteraction; object?: FirstGalleryMuralPart; serial: number }
 interface Props {
@@ -24,28 +29,51 @@ interface Props {
   onPortalPresented?(): void;
   onPortalEnter(): void;
 }
-function GalleryDialog({ title, children, blocked, onClose, atPortal = false, dismissOnTap = false, testId }: {
-  title: string; children: ReactNode; blocked: boolean; onClose(): void; atPortal?: boolean; dismissOnTap?: boolean; testId?: string;
+function GalleryDialog({ title, children, blocked, onClose, variant, dismissOnTap = false, testId,
+  descriptionId, actionLabel, reducedMotion }: {
+  title: string; children: ReactNode; blocked: boolean; onClose(): void; variant?: 'portal' | 'scroll-reward';
+  dismissOnTap?: boolean; testId?: string; descriptionId?: string; actionLabel?: string; reducedMotion?: boolean;
 }) {
   const ref = useRef<HTMLDialogElement>(null);
   useEffect(() => { if (blocked) ref.current?.close(); else if (!ref.current?.open) ref.current?.showModal(); }, [blocked]);
-  return <dialog ref={ref} className={`first-gallery-dialog${atPortal ? ' gallery-portal-dialog' : ''}${dismissOnTap ? ' gallery-tap-dismiss' : ''}`}
-    aria-label={title} data-testid={testId} onCancel={event => { event.preventDefault(); onClose(); }}
+  function dismiss() {
+    ref.current?.close();
+    onClose();
+  }
+  return <dialog ref={ref} className={`first-gallery-dialog${variant ? ` gallery-${variant}-dialog` : ''}${dismissOnTap ? ' gallery-tap-dismiss' : ''}`}
+    aria-label={title} aria-describedby={descriptionId} data-testid={testId} data-reduced-motion={reducedMotion || undefined}
+    onCancel={event => { event.preventDefault(); if (actionLabel) dismiss(); else onClose(); }}
     onClick={dismissOnTap ? onClose : undefined} onKeyDown={dismissOnTap ? event => {
       if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); onClose(); }
     } : undefined}>
-    <header><h2 className={dismissOnTap ? 'gallery-text-cue' : undefined}>{title}</h2>{!atPortal && <button aria-label="关闭，继续探索" onClick={onClose}>×</button>}</header>{children}
+    <header><h2 className={dismissOnTap ? 'gallery-text-cue' : undefined}>{title}</h2>{!variant && <button aria-label="关闭，继续探索" onClick={onClose}>×</button>}</header>
+    {children}
+    {actionLabel && <button type="button" className="gallery-primary" onClick={dismiss}>{actionLabel}</button>}
   </dialog>;
 }
 
 export function GalleryUnlockNotice({ title, children, blocked, onClose, testId, dismissOnTap = false }: {
   title: string; children?: ReactNode; blocked: boolean; onClose(): void; testId?: string; dismissOnTap?: boolean;
 }) {
-  return <GalleryDialog title={title} blocked={blocked} atPortal dismissOnTap={dismissOnTap} onClose={onClose} testId={testId}>
+  return <GalleryDialog title={title} blocked={blocked} variant="portal" dismissOnTap={dismissOnTap} onClose={onClose} testId={testId}>
     {children}
     {!dismissOnTap && <div className="gallery-actions">
       <button type="button" className="gallery-primary" onClick={onClose}>继续探索</button>
     </div>}
+  </GalleryDialog>;
+}
+
+function FirstGalleryScrollReward({ blocked, reducedMotion, onClose }: {
+  blocked: boolean; reducedMotion: boolean; onClose(): void;
+}) {
+  const descriptionId = useId();
+  return <GalleryDialog title={`获得《${WORLD_REWARDS['first-gallery'].title}》`} descriptionId={descriptionId}
+    variant="scroll-reward" blocked={blocked} reducedMotion={reducedMotion} onClose={onClose}
+    actionLabel="收下画卷" testId="gallery-portal-notice">
+    <div className="gallery-scroll-reward-art" aria-hidden="true">
+      <img src={worldAssetUrl(MOGAO_EXHIBIT_SCROLL)} alt="" width={256} height={253} draggable={false} />
+    </div>
+    <p id={descriptionId}>{FIRST_GALLERY_CLEAR_MESSAGE}</p>
   </GalleryDialog>;
 }
 
@@ -85,8 +113,9 @@ export function FirstGalleryOverlay(props: Props) {
   const easelReady = nearby === 'easel' && snapshot.gallery?.easelReady;
   const easelHint = snapshot.gallery?.easelHint;
   const easelShowcase = snapshot.gallery?.easelShowcase;
-  const displayedArtwork = data.displayedArtworkId ? data.artworks[data.displayedArtworkId] : null;
-  const displayReady = displayResult?.id === data.displayedArtworkId && displayResult.ready;
+  const displayedArtwork = getGalleryEaselArtwork(data);
+  const artworkId = displayedArtwork?.artworkId ?? null;
+  const displayReady = displayResult?.id === artworkId && displayResult.ready;
   const mural = snapshot.gallery?.mural;
   const muralActive = mural?.active === true;
   const muralInvited = mural?.phase === 'invite';
@@ -133,7 +162,7 @@ export function FirstGalleryOverlay(props: Props) {
     return () => abort.abort();
     // Artwork IDs identify immutable submissions. Other task saves can reload
     // the same record without requiring a new texture.
-  }, [ready, runtime, data.displayedArtworkId, catalog]);
+  }, [ready, runtime, artworkId, catalog]);
   useEffect(() => {
     const id = props.exhibitId;
     if (!id || !runtime || blocked || displayResult?.id !== id) return;
@@ -232,13 +261,14 @@ export function FirstGalleryOverlay(props: Props) {
     {!muralVisible && !portalPlaying && !easelShowcase && !occupied && ready && !blocked && !snapshot.gallery?.cue && nearby && !muralPreparation && (nearby !== 'mural' || muralRestored) &&
       (nearby !== 'easel' || (easelReady && (!compact || !!easelHint))) &&
       (nearby !== 'caisson' || (!caissonAssist && !caissonReady)) &&
-      <button className="gallery-interact gallery-text-cue" data-testid="gallery-interact" onClick={() => props.onInteract(nearby)}>{nearby === 'caisson' ? '抬头看看' : nearby === 'easel' && compact ? displayedArtwork ? '欣赏作品' : '开始涂色' : nearby === 'easel' && data.displayedArtworkId ? '欣赏或更换画作' : nearby === 'mural' ? '重看壁画' : nearby === 'scroll' && unlocked ? '进入游戏世界' : GALLERY_LABELS[nearby]}</button>}
+      <button className="gallery-interact gallery-text-cue" data-testid="gallery-interact" onClick={() => props.onInteract(nearby)}>{nearby === 'caisson' ? '抬头看看' : nearby === 'easel' && compact ? displayedArtwork ? '欣赏作品' : '开始涂色' : nearby === 'easel' && displayedArtwork ? '欣赏或更换画作' : nearby === 'mural' ? '重看壁画' : nearby === 'scroll' && unlocked ? '进入游戏世界' : GALLERY_LABELS[nearby]}</button>}
     {!blocked && !occupied && muralPreparation && <p className="gallery-gate gallery-text-cue" role="status">{muralPreparation === 'loading' ? '壁画正在准备…' : '壁画暂时未能载入，可以继续探索。'}</p>}
     {portal === 'question' && !blocked && <aside className="gallery-mural-hud gallery-portal-question" data-testid="gallery-portal-question"><p className="gallery-skippable gallery-text-cue" role="status" onClick={skipCue}>发生了什么？</p></aside>}
     {portalWalking && !blocked && <aside className="gallery-mural-hud" data-testid="gallery-portal-guide">
       <button onClick={() => runtime?.skipGalleryPortal?.()}>跳过带路</button>
     </aside>}
-    {portalNotice && <GalleryUnlockNotice title="第一馆通关！游戏世界已开启。" blocked={blocked} dismissOnTap testId="gallery-portal-notice" onClose={() => runtime?.dismissGalleryPortal?.()}>
+    {portalArrived && !compact && <FirstGalleryScrollReward blocked={blocked} reducedMotion={reducedMotion} onClose={() => runtime?.dismissGalleryPortal?.()} />}
+    {(portal === 'skipped' || (portalArrived && compact)) && <GalleryUnlockNotice title={FIRST_GALLERY_CLEAR_MESSAGE} blocked={blocked} dismissOnTap testId="gallery-portal-notice" onClose={() => runtime?.dismissGalleryPortal?.()}>
       {portal === 'skipped' && <p className="gallery-text-cue">院子西侧的画卷已亮起，走到桌前点击画卷即可进入游戏世界。</p>}
     </GalleryUnlockNotice>}
     {muralInvited && !blocked && !occupied && <section className="gallery-mural-hud gallery-mural-invite" data-testid="gallery-mural-invite" aria-label="壁画邀请">
@@ -261,13 +291,21 @@ export function FirstGalleryOverlay(props: Props) {
       <button onClick={close}>继续漫游</button>
     </section>}
     {panel && panel !== 'caisson' && <GalleryDialog title={panel === 'scroll' ? '纹样游戏画卷' : panel === 'library' ? '我的填色作品库' : panel === 'artwork' ? '欣赏画作' : '画架设色'} blocked={blocked} onClose={close}>
-      {panel === 'easel' && <>{!compact && <p className="gallery-text-cue">{data.displayedArtworkId ? '这幅画是你的创作。可以静静欣赏，也可以换一幅。' : '画稿和颜料都准备好了，试着给它添上颜色吧。'}</p>}<div className="gallery-actions">
-        {data.displayedArtworkId && <button onClick={() => { setSelected(data.artworks[data.displayedArtworkId!]); setPanel('artwork'); }}>欣赏当前作品</button>}
-        {!compact && <button onClick={() => setPanel('library')}>从作品库更换画作</button>}
-        <button onClick={() => beginColoring()}> {data.displayedArtworkId ? '再画一幅' : '开始设色'} </button>
+      {panel === 'easel' && <>{!compact && <p className="gallery-text-cue">{displayedArtwork ? '这幅画是你的创作。可以静静欣赏，也可以换一幅。' : '画稿和颜料都准备好了，试着给它添上颜色吧。'}</p>}<div className="gallery-actions">
+        {displayedArtwork && <button onClick={() => { setSelected(displayedArtwork); setPanel('artwork'); }}>欣赏当前作品</button>}
+        {!compact && <button onClick={() => setPanel('library')}>{displayedArtwork ? '从作品库更换画作' : '查看作品库'}</button>}
+        <button onClick={() => beginColoring()}>{displayedArtwork ? '再画一幅' : '开始设色'}</button>
       </div></>}
       {panel === 'library' && <>{Object.keys(data.artworks).length ? <div className="gallery-artworks">{Object.values(data.artworks).sort((a, b) => b.submittedAt.localeCompare(a.submittedAt)).slice(0, libraryLimit).map(record => <ArtworkThumb key={record.artworkId} record={record} catalog={catalog} onChoose={() => { setSelected(record); setPanel('artwork'); }} />)}</div> : <p>还没有收藏。完成一幅填色作品后，它就会出现在这里。</p>}{Object.keys(data.artworks).length > libraryLimit && <button onClick={() => setLibraryLimit(limit => limit + 6)}>查看更多作品</button>}</>}
-      {panel === 'artwork' && selected && chooseArtwork?.gameType === 'coloring' && <><ColoringResult catalog={catalog} level={chooseArtwork} colors={selected.colors} materials={selected.materials} />{!compact && <button className="gallery-primary" onClick={() => { const result = selectGalleryArtwork(selected.artworkId); if (!result.ok) setNotice(result.message); else { close(); runtime?.showGalleryCue?.([{ text: '这幅画挂好了。', target: 'easel' }]); } }}>挂到画架上</button>}{selected.levelId === FIRST_GALLERY_EASEL_LEVEL && <button onClick={() => beginColoring(selected.artworkId)}>再配一版</button>}</>}
+      {panel === 'artwork' && selected && chooseArtwork?.gameType === 'coloring' && <>
+        <ColoringResult catalog={catalog} level={chooseArtwork} colors={selected.colors} materials={selected.materials} />
+        {!compact && data.coloringCompleted && <button className="gallery-primary" onClick={() => {
+          const result = selectGalleryArtwork(selected.artworkId);
+          if (!result.ok) setNotice(result.message);
+          else { close(); runtime?.showGalleryCue?.([{ text: '这幅画挂好了。', target: 'easel' }]); }
+        }}>挂到画架上</button>}
+        {selected.levelId === FIRST_GALLERY_EASEL_LEVEL && <button onClick={() => beginColoring(selected.artworkId)}>再配一版</button>}
+      </>}
       {panel === 'scroll' && <p className="gallery-text-cue">完成馆内任务，会有惊喜发生！</p>}
       {notice && <p role="alert" className="gallery-notice gallery-text-cue">{notice}</p>}
     </GalleryDialog>}

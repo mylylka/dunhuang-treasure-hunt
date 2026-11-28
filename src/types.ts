@@ -103,7 +103,8 @@ export type Level = SpotDifferenceLevel | ColoringLevel | PuzzleLevel | HiddenOb
 export type RegionColors = Record<string, string>;
 export type ColoringMaterialId = 'sparkle-gold-v001' | 'sparkle-silver-v001';
 export type RegionMaterials = Record<string, ColoringMaterialId>;
-export type SoundCue = 'button' | 'rotate' | 'success' | 'error' | 'fill' | 'hint' | 'complete' | 'gallery-unlock' | 'guide-stardust';
+export type SoundCue = 'button' | 'rotate' | 'success' | 'error' | 'fill' | 'hint' | 'complete'
+  | 'gallery-unlock' | 'first-gallery-clear' | 'mural-part' | 'mural-renew' | 'guide-stardust';
 export interface ContentCatalog {
   schemaVersion: 1;
   themes: ThemeDefinition[];

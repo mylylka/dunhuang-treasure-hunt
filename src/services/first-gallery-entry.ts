@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { GALLERY_EASEL_YARD_FRONT } from '../content/world/first-gallery-v001';
 import { fromTerrainPoint } from '../content/world/terrain-layout-v001';
 import { PATTERN_STATIONS } from '../world/pattern-interactives';
 import { isTerrainWalkable } from '../world/terrain-rules-v001';
@@ -45,7 +46,7 @@ function isEaselReturnPoint(checkpoint: WorldCheckpoint): boolean {
   const point = fromTerrainPoint('courtyard', checkpoint.position);
   // The actual object interaction is decided in the world. This also keeps an
   // invalid or outdated saved return point from restoring outside the yard.
-  return point.z < 1.3 && point.z >= -8 && point.x > -12 &&
+  return point.z < GALLERY_EASEL_YARD_FRONT && point.z >= -8 && point.x > -12 &&
     Math.hypot(point.x - easel.position.x, point.z - easel.position.z) <= 7;
 }
 

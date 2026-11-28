@@ -9,6 +9,7 @@ export interface GalleryLine { text: string; target: GalleryTarget; duration?: n
 export const GALLERY_LABELS: Record<GalleryInteraction, string> = {
   mural: '借物补画', caisson: '藻井寻秘', easel: '给画添点颜色', scroll: '纹样游戏画卷',
 };
+export const GALLERY_EASEL_YARD_FRONT = 1.3;
 /** Device anchors use the same normalized model frame as its GLB, then follow
  * both the installation transform and the courtyard's terrain transform. */
 export function galleryStationPoint(id: string, p: readonly number[]) {

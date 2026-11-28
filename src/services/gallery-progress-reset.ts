@@ -1,13 +1,13 @@
 import { MOGAO_EXHIBIT_SESSION_KEY } from '../world/mogao-exhibit-session';
 import { MUSIC_COMPANION_SESSION_KEY_V2 } from '../world/music-companion-session-v002';
-import type { DiscoveryId } from '../world/types';
+import type { DiscoveryId, WorldCheckpoint } from '../world/types';
 import { FIRST_GALLERY_ENTRY_KEY, FIRST_GALLERY_MURAL_MARKER_KEY, FIRST_GALLERY_WORLD_SESSION_KEY } from './first-gallery-entry';
-import { FIRST_GALLERY_STORAGE_KEY, firstGalleryRecordWithoutProgress } from './first-gallery';
-import type { GalleryTaskArea } from './gallery-tasks';
+import { FIRST_GALLERY_STORAGE_KEY, firstGalleryRecordWithoutProgress, firstGalleryRecordWithoutTask } from './first-gallery';
+import { galleryTaskResetOptions, type GalleryTaskArea, type GalleryTaskId } from './gallery-tasks';
 import { MOGAO_EXHIBIT_PROGRESS_KEY } from './mogao-exhibit-progress';
-import { MOGAO_GAME_NOTICE_KEY } from './mogao-game-access';
+import { MOGAO_GAME_NOTICE_KEY, mogaoTaskProgressKeys } from './mogao-game-access';
 import { MOGAO_HALL_A_PROGRESS_KEYS } from './mogao-hall-a-progress';
-import { MUSIC_GALLERY_PROGRESS_KEYS } from './music-gallery-progress';
+import { MUSIC_GALLERY_PROGRESS_KEYS, musicTaskProgressKeys } from './music-gallery-progress';
 import type { StorageLike } from './progress';
 
 export interface ResettableStorage extends StorageLike {
@@ -20,19 +20,36 @@ type StorageChange = { store: ResettableStorage; key: string; before: string | n
 const DISCOVERIES: Record<GalleryTaskArea, readonly DiscoveryId[]> = {
   first: ['caisson'], music: ['flying'], mogao: ['story-demo', 'novice-story'],
 };
+const TASK_DISCOVERIES: Partial<Record<GalleryTaskId, readonly DiscoveryId[]>> = {
+  caisson: DISCOVERIES.first, chapters: DISCOVERIES.music, murals: DISCOVERIES.mogao,
+};
 const STANDALONE_CHECKPOINT: Partial<Record<GalleryTaskArea, string>> = {
   music: MUSIC_COMPANION_SESSION_KEY_V2,
   mogao: MOGAO_EXHIBIT_SESSION_KEY,
 };
-const STORAGE_ERROR = '暂时无法清除该馆进度，请重试。';
+const STORAGE_ERROR = '暂时无法清除所选进度，请重试。';
+const GALLERIES: readonly GalleryTaskArea[] = ['first', 'music', 'mogao'];
 
 export function galleryProgressResetKey(gallery: GalleryTaskArea): string {
   return `dunhuang:gallery-reset:v1:${gallery}`;
 }
 
 export function galleryForProgressResetKey(key: string | null): GalleryTaskArea | undefined {
-  const galleries: GalleryTaskArea[] = ['first', 'music', 'mogao'];
-  return galleries.find(gallery => key === galleryProgressResetKey(gallery));
+  return GALLERIES.find(gallery => key === galleryProgressResetKey(gallery));
+}
+
+export function galleryTaskProgressResetKey(gallery: GalleryTaskArea, task: GalleryTaskId): string {
+  return `dunhuang:gallery-task-reset:v1:${gallery}:${task}`;
+}
+
+export function galleryResetScopeForKey(key: string | null): { gallery: GalleryTaskArea; task?: GalleryTaskId } | undefined {
+  if (key === null) return;
+  const gallery = galleryForProgressResetKey(key);
+  if (gallery) return { gallery };
+  for (const area of GALLERIES) {
+    const task = galleryTaskResetOptions(area).find(({ id }) => key === galleryTaskProgressResetKey(area, id));
+    if (task) return { gallery: area, task: task.id };
+  }
 }
 
 function stage(changes: StorageChange[], store: ResettableStorage, key: string, transform: (raw: string | null) => string | null) {
@@ -65,7 +82,7 @@ function commit(changes: StorageChange[], signal?: StorageChange): ResetResult {
         }
       }
     } catch {
-      return { ok: false, message: '该馆进度可能只清除了一部分，请重试。' };
+      return { ok: false, message: '所选进度可能只清除了一部分，请重试。' };
     }
     return { ok: false, message: STORAGE_ERROR };
   }
@@ -75,58 +92,94 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
-function withoutVisits(checkpoint: unknown, gallery: GalleryTaskArea): unknown {
+function withoutVisits<T>(checkpoint: T, discoveries: readonly DiscoveryId[]): T {
   if (!isRecord(checkpoint) || !Array.isArray(checkpoint.visitedEvents)) return checkpoint;
-  const visits = checkpoint.visitedEvents.filter((visit: unknown) => !DISCOVERIES[gallery].some(id => visit === id));
+  const visits = checkpoint.visitedEvents.filter((visit: unknown) => !discoveries.some(id => visit === id));
   return visits.length === checkpoint.visitedEvents.length ? checkpoint : { ...checkpoint, visitedEvents: visits };
 }
 
-function withoutStoredVisits(raw: string | null, gallery: GalleryTaskArea, draft = false): string | null {
+function discoveriesForReset(gallery: GalleryTaskArea, task?: GalleryTaskId) {
+  return task ? TASK_DISCOVERIES[task] : DISCOVERIES[gallery];
+}
+
+export function checkpointAfterGalleryReset(checkpoint: WorldCheckpoint, gallery: GalleryTaskArea, task?: GalleryTaskId): WorldCheckpoint {
+  const discoveries = discoveriesForReset(gallery, task);
+  return discoveries ? withoutVisits(checkpoint, discoveries) : checkpoint;
+}
+
+function withoutStoredVisits(raw: string | null, discoveries: readonly DiscoveryId[], draft = false): string | null {
   if (raw === null) return null;
   let saved: unknown;
   try { saved = JSON.parse(raw); }
   catch { return raw; }
   if (!isRecord(saved)) return raw;
   const checkpoint = draft ? saved.checkpoint : saved;
-  const next = withoutVisits(checkpoint, gallery);
+  const next = withoutVisits(checkpoint, discoveries);
   if (next === checkpoint) return raw;
   return JSON.stringify(draft ? { ...saved, checkpoint: next } : next);
 }
 
-function stageSessionChanges(changes: StorageChange[], gallery: GalleryTaskArea, store: ResettableStorage, extraCheckpointKey?: string) {
-  const checkpointKeys = new Set([FIRST_GALLERY_WORLD_SESSION_KEY, STANDALONE_CHECKPOINT[gallery], extraCheckpointKey]);
-  for (const key of checkpointKeys) {
-    if (key) stage(changes, store, key, raw => withoutStoredVisits(raw, gallery));
+function stageSessionChanges(changes: StorageChange[], gallery: GalleryTaskArea, store: ResettableStorage,
+  extraCheckpointKey?: string, task?: GalleryTaskId) {
+  const discoveries = discoveriesForReset(gallery, task);
+  if (discoveries) {
+    const checkpointKeys = new Set([FIRST_GALLERY_WORLD_SESSION_KEY, STANDALONE_CHECKPOINT[gallery], extraCheckpointKey]);
+    for (const key of checkpointKeys) {
+      if (key) stage(changes, store, key, raw => withoutStoredVisits(raw, discoveries));
+    }
+    stage(changes, store, FIRST_GALLERY_ENTRY_KEY, raw => withoutStoredVisits(raw, discoveries, true));
   }
-  stage(changes, store, FIRST_GALLERY_ENTRY_KEY, raw => withoutStoredVisits(raw, gallery, true));
-  if (gallery === 'first') stage(changes, store, FIRST_GALLERY_MURAL_MARKER_KEY, () => null);
+  if (gallery === 'first' && (!task || task === 'mural')) stage(changes, store, FIRST_GALLERY_MURAL_MARKER_KEY, () => null);
 }
 
 /** Local storage changes are shared between tabs, but walk checkpoints are per tab. */
-export function clearGallerySessionProgress(gallery: GalleryTaskArea, session?: ResettableStorage, extraCheckpointKey?: string): ResetResult {
+export function clearGallerySessionProgress(gallery: GalleryTaskArea, session?: ResettableStorage,
+  extraCheckpointKey?: string, task?: GalleryTaskId): ResetResult {
   try {
     const changes: StorageChange[] = [];
-    stageSessionChanges(changes, gallery, session ?? window.sessionStorage, extraCheckpointKey);
+    stageSessionChanges(changes, gallery, session ?? window.sessionStorage, extraCheckpointKey, task);
     return commit(changes);
   } catch {
     return { ok: false, message: STORAGE_ERROR };
   }
 }
 
+function stageTaskChanges(changes: StorageChange[], store: ResettableStorage, task: GalleryTaskId) {
+  switch (task) {
+    case 'mural':
+    case 'caisson':
+    case 'easel':
+      stage(changes, store, FIRST_GALLERY_STORAGE_KEY, raw => raw === null ? null : firstGalleryRecordWithoutTask(raw, task));
+      break;
+    case 'chapters':
+    case 'instruments':
+    case 'outfit':
+      for (const key of musicTaskProgressKeys(task)) stage(changes, store, key, () => null);
+      break;
+    case 'murals':
+    case 'exhibits':
+      for (const key of mogaoTaskProgressKeys(task)) stage(changes, store, key, () => null);
+      break;
+  }
+}
+
 export function resetGalleryProgress(gallery: GalleryTaskArea,
-  stores?: { local: ResettableStorage; session: ResettableStorage }, extraCheckpointKey?: string): ResetResult {
+  stores?: { local: ResettableStorage; session: ResettableStorage }, extraCheckpointKey?: string, task?: GalleryTaskId): ResetResult {
   try {
+    if (task && !galleryTaskResetOptions(gallery).some(option => option.id === task)) return { ok: false, message: STORAGE_ERROR };
     const { local, session } = stores ?? { local: window.localStorage, session: window.sessionStorage };
     const changes: StorageChange[] = [];
-    stageSessionChanges(changes, gallery, session, extraCheckpointKey);
-    if (gallery === 'first') {
+    stageSessionChanges(changes, gallery, session, extraCheckpointKey, task);
+    if (task) {
+      stageTaskChanges(changes, local, task);
+    } else if (gallery === 'first') {
       stage(changes, local, FIRST_GALLERY_STORAGE_KEY, raw => raw === null ? null : firstGalleryRecordWithoutProgress(raw));
     } else {
       const keys = gallery === 'music' ? MUSIC_GALLERY_PROGRESS_KEYS
         : [MOGAO_EXHIBIT_PROGRESS_KEY, ...MOGAO_HALL_A_PROGRESS_KEYS, MOGAO_GAME_NOTICE_KEY];
       for (const key of keys) stage(changes, local, key, () => null);
     }
-    const key = galleryProgressResetKey(gallery);
+    const key = task ? galleryTaskProgressResetKey(gallery, task) : galleryProgressResetKey(gallery);
     const signal = { store: local, key, before: local.getItem(key), after: crypto.getRandomValues(new Uint32Array(4)).join('-') };
     changes.push(signal);
     return commit(changes, signal);
