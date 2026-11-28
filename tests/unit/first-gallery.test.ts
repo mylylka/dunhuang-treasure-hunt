@@ -1,11 +1,11 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import rawLevel from '../../src/content/levels/coloring-feitian-lotus.json';
 import { toTerrainPoint } from '../../src/content/world/terrain-layout-v001';
 import type { ColoringLevel } from '../../src/types';
 import { defaultWorldCheckpoint } from '../../src/world/session';
 import { ARTWORKS_KEY, emptyArtworks, saveArtworks, withArtwork } from '../../src/services/artworks';
-import { canOpenFirstGalleryRoute, completeGalleryCaisson, completeGalleryMuralPart, emptyFirstGallery,
-  FIRST_GALLERY_STORAGE_KEY, getFirstGalleryAccess, importGalleryArtworks, isFirstGalleryUnlocked, loadFirstGallery,
+import { CAISSON_ONLY_GALLERY_STORAGE_KEY, canOpenFirstGalleryRoute, completeGalleryCaisson, completeGalleryMuralPart, emptyFirstGallery,
+  FIRST_GALLERY_STORAGE_KEY, getFirstGalleryAccess, importGalleryArtworks, isFirstGalleryCeremonyReady, isFirstGalleryUnlocked, loadFirstGallery,
   markGalleryCeremonySeen, markGalleryColoringFeedbackSeen, markGalleryIntroductionSeen, selectGalleryArtwork, submitGalleryArtwork } from '../../src/services/first-gallery';
 import { clearGalleryColoringEntry, readGalleryColoringEntry, saveGalleryColoringDraft, startGalleryColoring } from '../../src/services/first-gallery-entry';
 import type { StorageLike } from '../../src/services/progress';
@@ -138,6 +138,30 @@ describe('第一馆进度、画架和作品库', () => {
     expect(markGalleryCeremonySeen(store).ok).toBe(true);
     expect(markGalleryColoringFeedbackSeen(store).ok).toBe(true);
     expect(loadFirstGallery(store).data).toMatchObject({ ceremonySeen: true, firstSuccessSeen: true });
+  });
+
+  it('精简版用两项进度保存仪式，完整三馆的存档规则独立', () => {
+    const store = memory();
+    const twoTasks = { ...emptyFirstGallery(), muralParts: ['lotus', 'bird', 'grapes'] as const, caissonCompleted: true };
+    const fullRaw = JSON.stringify(twoTasks);
+    store.setItem(FIRST_GALLERY_STORAGE_KEY, fullRaw);
+    vi.stubGlobal('document', { getElementById: () => ({ dataset: { caissonOnly: 'v001' } }) });
+    try {
+      store.setItem(CAISSON_ONLY_GALLERY_STORAGE_KEY, JSON.stringify({ ...twoTasks, caissonCompleted: false }));
+      expect(markGalleryCeremonySeen(store).ok).toBe(false);
+      expect(completeGalleryCaisson(store).ok).toBe(true);
+      expect(isFirstGalleryCeremonyReady(loadFirstGallery(store).data, true)).toBe(true);
+      expect(markGalleryCeremonySeen(store).ok).toBe(true);
+      const reloaded = loadFirstGallery(store);
+      expect(reloaded.warning).toBeNull();
+      expect(reloaded.data).toEqual({ ...twoTasks, ceremonySeen: true });
+      expect(getFirstGalleryAccess(reloaded.data, 'music')).toBe(false);
+      expect(store.getItem(FIRST_GALLERY_STORAGE_KEY)).toBe(fullRaw);
+    } finally {
+      vi.unstubAllGlobals();
+    }
+    expect(markGalleryCeremonySeen(store).ok).toBe(false);
+    expect(loadFirstGallery(store).data.ceremonySeen).toBe(false);
   });
 
   it('不可读原存档先备份，备份写入受拒时保留原记录', () => {

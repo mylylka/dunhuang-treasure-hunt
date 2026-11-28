@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test';
+import { expect, test, type Page } from '@playwright/test';
 import { readFileSync } from 'node:fs';
 import { PerspectiveCamera, Vector3 } from 'three';
 import { fromTerrainPoint, LAKE_ORIGIN, TERRAIN_REGIONS, toTerrainPoint } from '../../src/content/world/terrain-layout-v001';
@@ -7,11 +7,34 @@ import type { ColoringLevel } from '../../src/types';
 const muralModel = '/pattern-interactives/v003/mural-station.glb';
 const easelModel = '/pattern-interactives/v002/coloring-station.glb';
 const coloringLevel = JSON.parse(readFileSync('src/content/levels/coloring-feitian-lotus.json', 'utf8')) as ColoringLevel;
+const compactSaveKey = 'dunhuang:first-gallery-caisson:v1';
+const emptyFirstGallery = {
+  version: 1, muralParts: [], caissonCompleted: false, coloringCompleted: false,
+  ceremonySeen: false, introductionsSeen: [], firstSuccessSeen: false, artworks: {}, displayedArtworkId: null,
+};
+const restoredMuralParts = ['lotus', 'grapes', 'bird'];
 
 function isUnavailableWorldAsset(url: string) {
   const path = new URL(url).pathname;
   return path.includes('/assets/world/') && /music-|mogao|flying-history|pattern-interactives/.test(path)
     && !path.endsWith('/mogao-upper/v003/mountain-distant-v001.glb') && !path.endsWith(muralModel) && !path.endsWith(easelModel);
+}
+
+async function finishCeremony(page: Page, skipWalk: boolean) {
+  const question = page.getByTestId('gallery-portal-question');
+  const guide = page.getByTestId('gallery-portal-guide');
+  const notice = page.getByTestId('gallery-portal-notice');
+  await expect(question).toBeVisible({ timeout: 20_000 });
+  await question.getByText('发生了什么？').click();
+  await expect(guide).toBeVisible({ timeout: 15_000 });
+  if (skipWalk) await guide.getByRole('button', { name: '跳过带路' }).click();
+  await expect(notice.getByRole('heading', { name: '第一馆通关！游戏世界已开启。' })).toBeVisible({ timeout: 35_000 });
+  await expect(notice.getByText(/院子西侧的画卷已亮起/)).toHaveCount(skipWalk ? 1 : 0);
+  expect(await page.evaluate(() => Reflect.get(window, '__terrain').inspect().galleryDisplay.portalLight))
+    .toMatchObject({ visible: true, reveal: 1 });
+  await expect.poll(() => page.evaluate(key => JSON.parse(localStorage.getItem(key)!).ceremonySeen, compactSaveKey)).toBe(true);
+  await notice.getByRole('heading').click();
+  await expect(notice).toHaveCount(0);
 }
 
 test('精简首页在原有活动范围内显示新版近景和远景', async ({ page }) => {
@@ -48,10 +71,13 @@ test('精简首页在原有活动范围内显示新版近景和远景', async ({
   expect(fromTerrainPoint('courtyard', checkpoint).x).toBeLessThanOrEqual(1);
 });
 
-test('精简版保留三兔共耳互动并写入独立记录', async ({ page }) => {
+test('精简版已补画后，完成三兔共耳并在讲解结束后触发仪式', async ({ page }) => {
   // Software-rendered 3D can take longer to accumulate the required gaze dwell.
   test.setTimeout(180_000);
   await page.emulateMedia({ reducedMotion: 'reduce' });
+  await page.addInitScript(({ key, record }) => localStorage.setItem(key, JSON.stringify(record)), {
+    key: compactSaveKey, record: { ...emptyFirstGallery, muralParts: restoredMuralParts },
+  });
   const otherGalleryAssets: string[] = [];
   const missingWorldAssets: string[] = [];
   page.on('request', request => {
@@ -95,23 +121,30 @@ test('精简版保留三兔共耳互动并写入独立记录', async ({ page }) 
   }));
   expect(records.isolated.caissonCompleted).toBe(true);
   expect(records.original).toBeNull();
+  await expect(page.getByTestId('world-screen')).not.toHaveAttribute('data-portal-tour', 'true');
+  await expect(page.getByTestId('gallery-portal-notice')).toHaveCount(0);
   await dialog.click({ position: { x: 10, y: 10 } });
   await expect(dialog).toBeHidden({ timeout: 15_000 });
+  await finishCeremony(page, true);
   expect(otherGalleryAssets).toEqual([]);
   expect(missingWorldAssets).toEqual([]);
 });
 
-test('精简版从院门走到壁画，补齐三件实物后返回漫游', async ({ page, isMobile }) => {
-  test.setTimeout(120_000);
+test('精简版已完成三兔共耳，补齐壁画后由画卷进入纹样小游戏', async ({ page, isMobile }) => {
+  test.setTimeout(180_000);
   await page.emulateMedia({ reducedMotion: 'reduce' });
   const originalRecord = {
-    version: 1, muralParts: ['bird'], caissonCompleted: false, coloringCompleted: false,
-    ceremonySeen: false, introductionsSeen: [], firstSuccessSeen: false, artworks: {}, displayedArtworkId: null,
+    ...emptyFirstGallery, muralParts: ['bird'],
   };
-  await page.addInitScript(record => {
+  const position = toTerrainPoint('courtyard', { x: -12, z: -17.1 });
+  const heading = TERRAIN_REGIONS.courtyard.yaw;
+  await page.addInitScript(({ record, position, heading }) => {
     localStorage.setItem('dunhuang:first-gallery:v1', JSON.stringify(record));
     localStorage.setItem('dunhuang:first-gallery-caisson:v1', JSON.stringify({ ...record, muralParts: [], caissonCompleted: true }));
-  }, originalRecord);
+    sessionStorage.setItem('dunhuang:first-gallery-caisson-world:v1', JSON.stringify({
+      version: 1, position, heading, cameraYaw: heading, visitedEvents: [],
+    }));
+  }, { record: originalRecord, position, heading });
   const unavailableAssets: string[] = [];
   page.on('request', request => {
     if (isUnavailableWorldAsset(request.url())) unavailableAssets.push(request.url());
@@ -123,19 +156,6 @@ test('精简版从院门走到壁画，补齐三件实物后返回漫游', async
   expect((await stationReady).ok()).toBe(true);
 
   const invitation = page.getByTestId('gallery-mural-invite');
-  await page.keyboard.down('Shift');
-  await page.keyboard.down('ArrowUp');
-  try {
-    await expect(invitation).toBeVisible({ timeout: 20_000 });
-  } finally {
-    await page.keyboard.up('ArrowUp');
-    await page.keyboard.up('Shift');
-  }
-  if (await page.evaluate(() => document.pointerLockElement !== null)) {
-    await page.mouse.down({ button: 'right' });
-    await page.mouse.up({ button: 'right' });
-    await page.waitForFunction(() => document.pointerLockElement === null);
-  }
   await invitation.getByRole('button', { name: '玩壁画' }).click();
 
   const guide = page.getByTestId('gallery-mural-guide');
@@ -168,10 +188,12 @@ test('精简版从院门走到壁画，补齐三件实物后返回漫游', async
     else await canvas.click({ position: tap });
     await skipLine('education');
   }
+  await expect(guide).toHaveAttribute('data-phase', 'summary', { timeout: 20_000 });
+  await expect(page.getByTestId('world-screen')).not.toHaveAttribute('data-portal-tour', 'true');
+  await expect(page.getByTestId('gallery-portal-notice')).toHaveCount(0);
   await skipLine('summary');
   await expect(guide).toHaveCount(0, { timeout: 15_000 });
-  await expect(page.getByRole('button', { name: '重看壁画' })).toBeVisible();
-  await expect(page.getByTestId('gallery-portal-notice')).toHaveCount(0);
+  await finishCeremony(page, false);
   await page.getByTestId('world-task-toggle').click();
   const tasks = page.getByTestId('world-task-panel');
   await expect(tasks.getByRole('listitem').filter({ hasText: '借物补画' })).toHaveText(/借物补画\s*3 \/ 3/);
@@ -183,10 +205,38 @@ test('精简版从院门走到壁画，补齐三件实物后返回漫游', async
     scene: Reflect.get(window, '__terrain').inspect().terrain.scene.streaming,
   }));
   expect(records.compact).toMatchObject({ muralParts: ['lotus', 'grapes', 'bird'], caissonCompleted: true,
-    coloringCompleted: false, ceremonySeen: false });
+    coloringCompleted: false, ceremonySeen: true });
   expect(records.full).toEqual(originalRecord);
   expect(records.scene).toMatchObject({ music: 'idle', musicBuildingVisible: false, cliffTowerVisible: false });
   expect(unavailableAssets).toEqual([]);
+  await page.getByTestId('world-task-toggle').click();
+  const enter = page.getByTestId('gallery-interact');
+  await expect(enter).toHaveText('进入游戏世界');
+  await enter.click();
+  await expect(page).toHaveURL(/#\/theme\/patterns\/games$/);
+});
+
+test('精简旧档补播一次解锁仪式，刷新后仍可使用画卷', async ({ page }) => {
+  test.setTimeout(90_000);
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  const position = toTerrainPoint('courtyard', { x: -16.8, z: -1.2 });
+  await page.addInitScript(({ key, record, position }) => {
+    if (!localStorage.getItem(key)) localStorage.setItem(key, JSON.stringify(record));
+    sessionStorage.setItem('dunhuang:first-gallery-caisson-world:v1', JSON.stringify({
+      version: 1, position, heading: 0, cameraYaw: 0, visitedEvents: [],
+    }));
+  }, { key: compactSaveKey, record: { ...emptyFirstGallery, muralParts: restoredMuralParts, caissonCompleted: true }, position });
+  await page.goto('/');
+  await page.getByRole('button', { name: '开启敦煌之旅' }).click();
+  await expect(page.getByTestId('world-host')).toHaveAttribute('data-ready', 'true', { timeout: 60_000 });
+  await finishCeremony(page, true);
+
+  await page.reload();
+  await page.getByRole('button', { name: '开启敦煌之旅' }).click();
+  await expect(page.getByTestId('world-host')).toHaveAttribute('data-ready', 'true', { timeout: 60_000 });
+  await expect(page.getByTestId('gallery-interact')).toHaveText('进入游戏世界');
+  await expect(page.getByTestId('world-screen')).not.toHaveAttribute('data-portal-tour', 'true');
+  await expect(page.getByTestId('gallery-portal-notice')).toHaveCount(0);
 });
 
 test('精简版同一线稿从游戏世界保存，从画架完成后直接返回并挂画', async ({ page, isMobile, browserName }) => {

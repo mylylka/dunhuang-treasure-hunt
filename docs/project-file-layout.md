@@ -27,4 +27,17 @@ python3 scripts/build-flying-history-audio-v001.py --check
 
 已盘点的 32 处历史试玩 `assets/` 构建目录列入 `.gitignore`，同目录的入口、交接说明和审阅文稿仍可按原路径查阅。历史目录中其他文件按具体用途认定，避免将设计源或交接资料归入生成物。
 
+## 仓外素材归档
+
+三馆版首批归档涵盖 Blender 工程、三张未采用的拼图候选、石窟原始下载包、找物 v001 图片，以及飞天上色 v008、v009 的视频和海报。原路径、来源提交、字节数和 SHA-256 记录在 [归档清单](../art-source/archives/3d-world-v001.json)。三馆版和 Co-Work 的 Git 均不跟踪清单中的素材；已有本地文件保留，需要时可从仓外素材库恢复。新增 Blender 工程按素材导入流程入库，仓内登记来源及导出方法。
+
+旧 Blender 脚本和留档工具需要这些文件时，在已装 Pillow 的项目 Python 环境里把所需素材恢复到清单登记的原路径。命令可接一个或多个仓库相对路径。
+
+```sh
+python3 scripts/restore-archived-assets.py --check
+python3 scripts/restore-archived-assets.py --restore art-source/world/models/mogao/v009/
+```
+
+若需从原始 Git 提交重新补齐素材库，在该提交的对象可用时运行 `python3 scripts/restore-archived-assets.py --import-from-git`，再按需恢复。常规游戏构建直接使用当前运行素材。
+
 临时包、测试回放与项目历史分别管理。内部试用的服务验证完关闭，交付用户的端口在验收结束或新版接替时关闭。早期 2D 版本的历史索引位于 `docs/history/early-2d/`，用于查阅当时的文稿、代码记录和验收图。

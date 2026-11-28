@@ -47,7 +47,7 @@ import { readTravelerSelection, saveTravelerSelection, travelerProfiles } from '
 import type { TravelerId } from '../content/world/assets';
 import { useSound } from './useSound';
 import { artworkColors, artworkMaterials, hasOlderArtwork, loadArtworks, saveArtworks, withArtwork, type ArtworksData } from '../services/artworks';
-import { canOpenFirstGalleryRoute, getFirstGalleryAccess, importGalleryArtworks, isFirstGalleryUnlocked, loadFirstGallery, markGalleryCeremonySeen, submitGalleryArtwork, subscribeFirstGallery } from '../services/first-gallery';
+import { canOpenFirstGalleryRoute, getFirstGalleryAccess, importGalleryArtworks, isFirstGalleryCeremonyReady, isFirstGalleryUnlocked, loadFirstGallery, markGalleryCeremonySeen, submitGalleryArtwork, subscribeFirstGallery } from '../services/first-gallery';
 import { CAISSON_ONLY_WORLD_SESSION_KEY, clearGalleryColoringEntry, FIRST_GALLERY_EASEL_LEVEL, FIRST_GALLERY_ENTRY_CLAIM, FIRST_GALLERY_WORLD_SESSION_KEY, newGallerySubmissionId, readGalleryColoringEntry, saveGalleryColoringDraft, startGalleryColoring, type FirstGalleryColoringEntry } from '../services/first-gallery-entry';
 import { SpotDifferenceScreen } from './SpotDifferenceScreen';
 import { loadProgress, saveProgress, withCompletedLevel } from '../services/progress';
@@ -262,7 +262,9 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
     const refresh = (local: boolean) => {
       const previous = lastGallery.current;
       const next = loadFirstGallery();
-      if (!caissonOnly && local && previous && !previous.warning && !next.warning &&
+      if (caissonOnly) {
+        setGalleryPortalPending(!next.warning && isFirstGalleryCeremonyReady(next.data, true) && !next.data.ceremonySeen);
+      } else if (local && previous && !previous.warning && !next.warning &&
         !isFirstGalleryUnlocked(previous.data) && isFirstGalleryUnlocked(next.data) && !next.data.ceremonySeen) {
         setGalleryPortalPending(true);
       } else if (next.data.ceremonySeen || !isFirstGalleryUnlocked(next.data)) {
@@ -684,7 +686,9 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
       if (!result.ok) setWorldWarning(result.message);
     }}
     onGalleryPortalEnter={at => {
-      if (caissonOnly || !getFirstGalleryAccess(loadFirstGallery().data, 'patterns')) return;
+      const { data } = loadFirstGallery();
+      const canEnter = caissonOnly ? isFirstGalleryCeremonyReady(data, true) : getFirstGalleryAccess(data, 'patterns');
+      if (!canEnter) return;
       persistWorld(at);
       enteredFromWorld.current = true;
       goTo(gamesPath('patterns'));

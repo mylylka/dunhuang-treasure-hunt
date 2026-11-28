@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { GALLERY_LABELS, type GalleryInteraction } from '../content/world/first-gallery-v001';
 import { galleryNarratedLine, type FirstGalleryNarrationId } from '../content/world/first-gallery-narration';
-import { completeGalleryCaisson, isCaissonOnlyMode, isFirstGalleryUnlocked, loadFirstGallery, markGalleryColoringFeedbackSeen, markGalleryIntroductionSeen, selectGalleryArtwork, subscribeFirstGallery, type FirstGalleryArtwork, type FirstGalleryMuralPart } from '../services/first-gallery';
+import { completeGalleryCaisson, isCaissonOnlyMode, isFirstGalleryCeremonyReady, loadFirstGallery, markGalleryColoringFeedbackSeen, markGalleryIntroductionSeen, selectGalleryArtwork, subscribeFirstGallery, type FirstGalleryArtwork, type FirstGalleryMuralPart } from '../services/first-gallery';
 import { FIRST_GALLERY_EASEL_LEVEL } from '../services/first-gallery-entry';
 import { getAssetUrl } from '../content';
 import { renderColoringArtwork } from '../games/coloring/render';
@@ -72,7 +72,7 @@ export function FirstGalleryOverlay(props: Props) {
   const { runtime, snapshot, catalog, ready, blocked, reducedMotion } = props;
   const compact = isCaissonOnlyMode();
   const [loaded, setLoaded] = useState(loadFirstGallery);
-  const data = loaded.data, unlocked = isFirstGalleryUnlocked(data);
+  const data = loaded.data, unlocked = isFirstGalleryCeremonyReady(data, compact);
   const [panel, setPanel] = useState<'easel' | 'library' | 'artwork' | 'caisson' | 'scroll' | null>(null);
   const [caissonOrigin, setCaissonOrigin] = useState<readonly { x: number; y: number }[] | null>(null);
   const [selected, setSelected] = useState<FirstGalleryArtwork | null>(null);
@@ -149,10 +149,10 @@ export function FirstGalleryOverlay(props: Props) {
     const result = markGalleryColoringFeedbackSeen(); if (!result.ok) setNotice(result.message);
   }, [compact, displayReady, blocked, occupied, muralVisible, portalPlaying, nearby, snapshot.moving, data.coloringCompleted, data.firstSuccessSeen, runtime]);
   useEffect(() => {
-    if (!props.portalPending || !ready || blocked || occupied || muralVisible || !snapshot.gallery?.portalReady) return;
-    const awaitingArtwork = nearby === 'easel' && !data.firstSuccessSeen && !feedbackSeen.current && !notice;
+    if (!props.portalPending || !ready || blocked || occupied || muralVisible || caissonView || !snapshot.gallery?.portalReady) return;
+    const awaitingArtwork = !compact && nearby === 'easel' && !data.firstSuccessSeen && !feedbackSeen.current && !notice;
     if (!awaitingArtwork) runtime?.startGalleryPortal?.();
-  }, [props.portalPending, ready, blocked, occupied, muralVisible, snapshot.gallery?.portalReady, nearby, data.firstSuccessSeen, displayReady, notice, runtime]);
+  }, [props.portalPending, ready, blocked, occupied, muralVisible, caissonView, snapshot.gallery?.portalReady, compact, nearby, data.firstSuccessSeen, displayReady, notice, runtime]);
   useEffect(() => {
     if (!ready || blocked || (portal !== 'arrived' && portal !== 'skipped') || portalPresented.current) return;
     portalPresented.current = true;

@@ -10,15 +10,16 @@ import { PATTERN_STATIONS } from '../../src/world/pattern-interactives';
 afterEach(() => vi.unstubAllGlobals());
 
 describe('精简版第一馆', () => {
-  it('精简版保留借物桌和画架的碰撞，移除旧工作坊的碰撞', () => {
-    const ids = ['terrain-courtyard-hall-v003-workbench', 'terrain-courtyard-hall-v003-pattern-display', 'terrain-courtyard-hall-v003-pigment-rack'];
+  it('精简版保留借物桌、画架和画卷台的碰撞，隐藏旧画板与颜料架', () => {
+    const ids = ['terrain-courtyard-hall-v003-pattern-display', 'terrain-courtyard-hall-v003-pigment-rack'];
+    expect(TERRAIN_CAISSON_ONLY_PLAYER_COLLIDERS.some(solid => solid.id === 'terrain-courtyard-hall-v003-workbench')).toBe(true);
     for (const id of ids) {
       expect(TERRAIN_FIRST_GALLERY_PLAYER_COLLIDERS.some(solid => solid.id === id)).toBe(true);
       expect(TERRAIN_CAISSON_ONLY_PLAYER_COLLIDERS.some(solid => solid.id === id)).toBe(false);
     }
     const full = terrainCameraSpace(true, true);
     const compact = terrainCameraSpace(true, true, false, false, false, true);
-    expect(full.orientedBoxes!.length - compact.orientedBoxes!.length).toBe(6);
+    expect(full.orientedBoxes!.length - compact.orientedBoxes!.length).toBe(4);
     for (const station of PATTERN_STATIONS) {
       expect(TERRAIN_CAISSON_ONLY_PLAYER_COLLIDERS.some(solid => solid.id === `terrain-courtyard-${station.id}`)).toBe(true);
       const { x, z } = toTerrainPoint('courtyard', station.position);
@@ -41,10 +42,11 @@ describe('精简版第一馆', () => {
     expect(records.get(FIRST_GALLERY_STORAGE_KEY)).toBe(original);
   });
 
-  it('画架与藻井可互动，漫游范围仍限于第一馆和起点', () => {
+  it('画架与藻井可互动，画卷按完成状态开放，漫游限定在第一馆', () => {
     expect(galleryNearby(toTerrainPoint('courtyard', { x: -12, z: -15 }), true)).toBe('caisson');
     expect(galleryNearby(toTerrainPoint('courtyard', { x: -6.5, z: -3.9 }), true)).toBe('easel');
     expect(galleryNearby(toTerrainPoint('courtyard', { x: -19, z: -1.7 }), true)).toBeNull();
+    expect(galleryNearby(toTerrainPoint('courtyard', { x: -19, z: -1.7 }), true, true)).toBe('scroll');
     expect(isCaissonOnlyWalkable(TERRAIN_SPAWN)).toBe(true);
     expect(isCaissonOnlyWalkable(toTerrainPoint('courtyard', { x: -12, z: -15 }))).toBe(true);
     expect(isCaissonOnlyWalkable(toTerrainPoint('music', { x: 46, z: -9 }))).toBe(false);

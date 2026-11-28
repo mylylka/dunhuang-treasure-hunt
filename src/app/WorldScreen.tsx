@@ -5,6 +5,7 @@ import type { GalleryInteraction } from '../content/world/first-gallery-v001';
 import type { MusicGuideLineId } from '../content/world/music-guide-v001';
 import { WorldMiniMap, type MapUnlockedGalleries } from './WorldMiniMap';
 import { worldMinimapPosition } from '../world/world-minimap';
+import { connectedGalleryAt } from '../world/connected-gallery-session';
 import { fromTerrainPoint } from '../world/terrain-rules-v001';
 import { buddhaSubtitleAt } from '../content/world/buddha-narration';
 import {deerStoryV009} from '../content/world/deer-introduction-v009';
@@ -222,10 +223,9 @@ export default function WorldScreen(props: Props) {
   }, []);
 
   const requestGallery = useCallback((id: GalleryInteraction, object?: 'lotus' | 'bird' | 'grapes') => {
-    if (caissonOnly && id === 'scroll') return;
     if (flags.current.locked || flags.current.galleryOccupied || flags.current.exhibitOccupied) return;
     setGalleryRequest({ id, object, serial: ++galleryCounter.current });
-  }, [caissonOnly]);
+  }, []);
   const locateGalleryEasel = useCallback(() => runtime.current?.locateGalleryEasel?.() ?? false, []);
   const startInteraction = useCallback(() => {
     if (flags.current.galleryOccupied || flags.current.exhibitOccupied || flags.current.arrivalActive) return;
@@ -583,6 +583,8 @@ export default function WorldScreen(props: Props) {
   const hideHeading = connectedGalleries || !!props.firstGallery || musicGuidePreview || exhibitPreview;
   const thirdRouteOpen = musicUnlockNotice && (connectedGalleries || isFirstGalleryUnlocked(loadFirstGallery().data));
   const mapAvailable = view === 'follow' && !snapshot.overview && !snapshot.gallery?.mural?.active && !portalPlaying;
+  const showDirection = !(globalLook || (mogaoV10 && inCurrentMogaoRoom(snapshot.checkpoint.position)))
+    && (!caissonOnly || (!portal && connectedGalleryAt(snapshot.checkpoint) !== 'first'));
   return <div ref={screen} className={`world-screen${inMogaoGallery?' has-mogao-exhibit':''}${inMusicGallery?' has-music-interior':''}${globalLook||mogao&&inCurrentMogaoRoom(snapshot.checkpoint.position)?' has-cave-look':''}${choosing?' has-culture-choice':''}${view === 'story' || hallStory ? ' is-story' : view === 'flying' ? ' is-flying' : ''}${flyingHistoryActive?' is-flying-history':''}`} data-testid="world-screen" data-view={view} data-current-gallery={currentGallery ?? undefined} data-mural-tour={snapshot.gallery?.mural?.active || undefined} data-portal-tour={portalPlaying || undefined} data-mogao-arrival={arrival?.phase}
     onPointerDownCapture={revisitIntro && !locked ? startIntroTap : undefined}
     onPointerMoveCapture={revisitIntro && !locked ? trackIntroTap : undefined}
@@ -645,7 +647,7 @@ export default function WorldScreen(props: Props) {
         {snapshot.encounter && snapshot.encounterVoice?.active && !snapshot.encounterVoice.ended && snapshot.encounter.time>=(snapshot.encounter.id==='music'?.35:.1) && <WorldSubtitle text={snapshot.encounter.text} onSkip={()=>runtime.current?.skipEncounter?.()} testId="world-encounter"/>}
         {snapshot.buddhaVoice?.active&&!snapshot.buddhaVoice.ended&&<WorldSubtitle text={buddhaSubtitleAt(exhibitPreview, snapshot.buddhaVoice.currentTime)} onSkip={()=>runtime.current?.skipBuddhaVoice?.()} testId="buddha-subtitle"/>}
         {snapshot.cinematic && <button type="button" className="world-cinematic-skip" data-testid="world-cinematic-skip" onClick={() => runtime.current?.skipCinematic()}>跳过 <kbd>Esc</kbd></button>}
-        {!(globalLook||mogaoV10&&inCurrentMogaoRoom(snapshot.checkpoint.position))&&<div className="world-direction">{mogao?(inCurrentMogaoRoom(snapshot.checkpoint.position)?(modernCave?(snapshot.nearby==='novice-story'?'沙弥守戒壁画':snapshot.nearby==='story-demo'?'九色鹿壁画':'大佛殿'):'九色鹿壁画'):'莫高窟'):musicV2?(inCurrentMusicCourt(snapshot.checkpoint.position)?'飞天壁画':snapshot.musicAudio?.playing&&snapshot.musicAudio.gain>.015?'乐声来处':'乐舞馆'):musicPreview?(snapshot.checkpoint.position.x>8?'飞天壁画':'乐舞馆'):'纹彩院'} <span aria-hidden="true">{musicV2?(snapshot.musicAudio?.playing&&snapshot.musicAudio.gain>.015?'♪':''):musicPreview?'↗':'↖'}</span><small>{mogao?(inCurrentMogaoRoom(snapshot.checkpoint.position)?((mogaoVersion==='v003'||mogaoVersion==='v006'||mogaoVersion==='v007'||modernCave)?(modernCave?(mogaoVersion==='v009'?'按 R 抬头仰望，沿两侧观赏壁画':'抬头仰望大佛，沿两侧观赏壁画'):'四面通高壁画，可抬头观赏'):'三面通高壁画，可抬头观赏'):'沿石板曲径，前往崖下窟口'):musicV2?(inCurrentMusicCourt(snapshot.checkpoint.position)?'前庭右侧，走近后点击壁画':'沿石板曲径前行'):musicPreview?(snapshot.checkpoint.position.x>8?'前庭右侧，走近后点击壁画':snapshot.checkpoint.position.x< -2&&snapshot.checkpoint.position.z<3?'从院门返回岔路，沿石板支路前行':'沿石板支路，前往右侧馆舍'):'沿路前行，左转入院'}</small></div>}
+        {showDirection && <div className="world-direction">{mogao?(inCurrentMogaoRoom(snapshot.checkpoint.position)?(modernCave?(snapshot.nearby==='novice-story'?'沙弥守戒壁画':snapshot.nearby==='story-demo'?'九色鹿壁画':'大佛殿'):'九色鹿壁画'):'莫高窟'):musicV2?(inCurrentMusicCourt(snapshot.checkpoint.position)?'飞天壁画':snapshot.musicAudio?.playing&&snapshot.musicAudio.gain>.015?'乐声来处':'乐舞馆'):musicPreview?(snapshot.checkpoint.position.x>8?'飞天壁画':'乐舞馆'):'纹彩院'} <span aria-hidden="true">{musicV2?(snapshot.musicAudio?.playing&&snapshot.musicAudio.gain>.015?'♪':''):musicPreview?'↗':'↖'}</span><small>{mogao?(inCurrentMogaoRoom(snapshot.checkpoint.position)?((mogaoVersion==='v003'||mogaoVersion==='v006'||mogaoVersion==='v007'||modernCave)?(modernCave?(mogaoVersion==='v009'?'按 R 抬头仰望，沿两侧观赏壁画':'抬头仰望大佛，沿两侧观赏壁画'):'四面通高壁画，可抬头观赏'):'三面通高壁画，可抬头观赏'):'沿石板曲径，前往崖下窟口'):musicV2?(inCurrentMusicCourt(snapshot.checkpoint.position)?'前庭右侧，走近后点击壁画':'沿石板曲径前行'):musicPreview?(snapshot.checkpoint.position.x>8?'前庭右侧，走近后点击壁画':snapshot.checkpoint.position.x< -2&&snapshot.checkpoint.position.z<3?'从院门返回岔路，沿石板支路前行':'沿石板支路，前往右侧馆舍'):'沿路前行，左转入院'}</small></div>}
         {ready && !locked && !exhibitOccupied && mogaoGameNotice && <aside className="world-preview-resource-notice world-mogao-game-notice" role="status" data-testid="mogao-game-unlocked">
           游戏入口已开启。它就在一楼，自己去找找吧～
           <button type="button" onClick={() => setMogaoGameNotice(false)}>知道了</button>

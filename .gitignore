@@ -3,6 +3,17 @@ work/
 outputs/web/
 /outputs/terrain/
 /outputs/*.zip
+# Archived assets are registered under art-source/archives/.
+/art-source/world/models/**/*.blend
+/art-source/levels/puzzle-lotus-ceiling/v002/retouch-candidate.png
+/art-source/levels/puzzle-three-rabbits/v002/retouch-candidate.png
+/art-source/levels/puzzle-twin-dragons/v002/retouch-candidate.png
+/art-source/world/mogao/v003/石窟3D模型.zip
+/public/assets/shared/hidden-object/v001/*.png
+/public/assets/world/music-pavilion/v008/mural-color-loop.mp4
+/public/assets/world/music-pavilion/v008/mural-color-poster.webp
+/public/assets/world/music-pavilion/v009/mural-color-loop.mp4
+/public/assets/world/music-pavilion/v009/mural-color-poster.webp
 # Compiled assets in inventoried historical previews. Keep sibling handoff files visible.
 /outputs/mogao/story-v002/assets/
 /outputs/mogao/v001/assets/
