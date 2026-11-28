@@ -9,9 +9,8 @@ const musicKeys = [
   'outfit',
 ];
 
-export async function unlockPatternsForTest(page: Page) {
-  await page.addInitScript(({ artworkId, finishedAt }) => {
-    const key = 'dunhuang:first-gallery:v1';
+export async function unlockPatternsForTest(page: Page, key = 'dunhuang:first-gallery:v1') {
+  await page.addInitScript(({ artworkId, finishedAt, key }) => {
     if (localStorage.getItem(key)) return;
     localStorage.setItem(key, JSON.stringify({
       version: 1, muralParts: ['lotus', 'bird', 'grapes'], caissonCompleted: true,
@@ -24,7 +23,7 @@ export async function unlockPatternsForTest(page: Page) {
         },
       },
     }));
-  }, { artworkId, finishedAt });
+  }, { artworkId, finishedAt, key });
 }
 
 export async function unlockMusicForTest(page: Page) {

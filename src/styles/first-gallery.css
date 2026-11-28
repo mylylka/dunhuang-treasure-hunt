@@ -98,7 +98,15 @@
   line-height: 1.5;
 }
 
-.gallery-scroll-reward-dialog button { min-width: 132px; }
+.gallery-scroll-reward-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 12px;
+  max-width: 100%;
+}
+
+.gallery-scroll-reward-actions button { min-width: 132px; }
 
 .gallery-scroll-reward-art {
   display: grid;

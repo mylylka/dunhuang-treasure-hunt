@@ -13,6 +13,11 @@ async function selectClassicTraveler(page: Page) {
   await page.addInitScript(() => localStorage.setItem('dunhuang:traveler-selection:v1', 'classic'));
 }
 
+async function confirmClassicTraveler(page: Page) {
+  await expect(page.getByRole('radio', { name: '鸣沙' })).toBeChecked();
+  await page.getByRole('button', { name: '开启敦煌之旅' }).click();
+}
+
 async function denySaveTo(page: Page, key: string) {
   await page.evaluate(key => {
     const original = Storage.prototype.setItem;
@@ -62,6 +67,7 @@ test('3D仍在加载时可直接进入游戏世界，飞天只显示可玩的两
   });
   try {
     await page.goto(galleryPath, { waitUntil: 'domcontentloaded' });
+    await confirmClassicTraveler(page);
     await expect(page.getByTestId('world-host')).toHaveAttribute('data-ready', 'false');
     // The button should commit the menu without waiting for the browser's hash event.
     await page.evaluate(() => window.addEventListener('hashchange', event => {
@@ -133,6 +139,7 @@ test('现场画架正常完成后自动回到同一站位并挂画', async ({ pa
   test.setTimeout(120000);
   await selectClassicTraveler(page);
   await page.goto(`${galleryPath}?view=easel`);
+  await confirmClassicTraveler(page);
   const interact = page.getByTestId('gallery-interact');
   const world = page.getByTestId('world-host');
   await expect(world).toHaveAttribute('data-ready', 'true', { timeout: 45000 });
@@ -168,6 +175,7 @@ test('现场画架正常完成后自动回到同一站位并挂画', async ({ pa
   if (isMobile) await finish.tap();
   else await finish.click();
   await expect(page).toHaveURL(/#\/$/);
+  await expect(page.locator('.traveler-selection')).toHaveCount(0);
   await expect(world).toHaveAttribute('data-ready', 'true', { timeout: 45000 });
   await expect(world).toBeVisible();
   expect(await worldCanvas!.evaluate(canvas => document.querySelector('[data-testid="world-host"] canvas') === canvas)).toBe(true);
@@ -190,10 +198,11 @@ test('3D 素材确实加载失败才提供兼容游玩，回世界重新遵守�
   await selectClassicTraveler(page);
   await page.route('**/*.glb', route => route.abort());
   await page.goto(galleryPath);
+  await confirmClassicTraveler(page);
   const failure = page.getByTestId('world-error');
   await expect(failure).toBeVisible({ timeout: 45000 });
   await failure.getByRole('button', { name: '兼容游玩 · 纹样小游戏' }).click();
-  await expect(page).toHaveURL(/#\/theme\/patterns$/);
+  await expect(page).toHaveURL(/#\/theme\/patterns\/games$/);
   await page.evaluate(() => { location.hash = '/play/coloring-feitian-lotus'; });
   await expect(page.getByRole('button', { name: '1×', exact: true })).toBeEnabled({ timeout: 45000 });
   await page.evaluate(() => { location.hash = '/'; });
@@ -206,6 +215,7 @@ test('画架限制相邻关，刷新、后退和保存失败都保护来源与�
   test.setTimeout(120000);
   await selectClassicTraveler(page);
   await page.goto(`${galleryPath}?view=easel`);
+  await confirmClassicTraveler(page);
   const interact = page.getByTestId('gallery-interact');
   const enter = async () => {
     await expect(interact).toBeVisible({ timeout: 45000 });

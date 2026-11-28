@@ -706,7 +706,9 @@ export default function WorldScreen(props: Props) {
       {snapshot.previewEntry === 'failed' ? <>前方场景暂未就绪。<button onClick={() => runtime.current?.retryPreviewStreaming?.()}>重试</button></> : '正在准备前方场景…'}
     </aside>}
     {ready && !locked && !exhibitOccupied && !inFirstGallery && snapshot.galleryGate && <aside className="world-preview-resource-notice" role="status">{snapshot.galleryGate}</aside>}
-    {inFirstGallery && props.catalog && <FirstGalleryOverlay runtime={runtime.current} snapshot={snapshot} catalog={props.catalog} ready={ready} blocked={locked} reducedMotion={props.reducedMotion || systemReduced} request={galleryRequest}
+    {inFirstGallery && props.catalog && <FirstGalleryOverlay runtime={runtime.current} snapshot={snapshot} catalog={props.catalog} ready={ready}
+      blocked={locked || (rewardOverlay?.kind === 'paper' && rewardOverlay.id === 'first-gallery')}
+      reducedMotion={props.reducedMotion || systemReduced} request={galleryRequest}
       onInteract={requestGallery} onOccupied={setGalleryOccupied} exhibitId={props.galleryExhibitId} onExhibitReady={props.onGalleryExhibitReady}
       onColor={(at, artworkId) => {
         if (!callbacks.current.onGalleryColoring?.(at, artworkId)) return false;
@@ -715,6 +717,7 @@ export default function WorldScreen(props: Props) {
         return true;
       }}
       portalPending={props.galleryPortalPending} onPortalPresented={props.onGalleryPortalPresented}
+      onPortalRead={() => setRewardOverlay({ kind: 'paper', id: 'first-gallery', fromGuide: false })}
       onPortalEnter={() => {
         const enter = callbacks.current.onGalleryPortalEnter;
         if (!enter || flags.current.locked || runtime.current?.snapshot().gallery?.nearby !== 'scroll') return;

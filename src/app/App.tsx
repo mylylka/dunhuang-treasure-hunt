@@ -97,7 +97,7 @@ export default function App({ catalog }: { catalog: ContentCatalog }) {
   const [previewAllGalleries, setPreviewAllGalleries] = useState(false);
   const travelerSelectionEnabled = connectedGalleries || caissonOnly;
   const [travelerId, setTravelerId] = useState(() => travelerSelectionEnabled ? readTravelerSelection() : null);
-  const [choosingTraveler, setChoosingTraveler] = useState(caissonOnly);
+  const [choosingTraveler, setChoosingTraveler] = useState(() => caissonOnly || (connectedGalleries && readRoute().page === 'home'));
   const [musicGalleryEnabled] = useState(() => connectedGalleries || document.getElementById('root')?.dataset.musicGallery === 'v001');
   const galleryResetAvailable = !caissonOnly && (firstGallery || musicGalleryEnabled || document.getElementById('root')?.dataset.mogaoExhibit === 'v001');
   const musicGallery = useMusicGalleryProgress(musicGalleryEnabled);

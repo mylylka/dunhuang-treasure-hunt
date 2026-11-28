@@ -81,23 +81,27 @@ for (const edition of ['compact', 'connected'] as const) {
       expect(await pickedTraveler(page)).toBe('classic');
     });
 
-    test('设置可更换旅人，刷新按版本规则进入并沿用上次选择、站位和任务记录', async ({ page, isMobile }) => {
+    test('已有旅人仍须确认，刷新预选林澈并保留馆内位置、任务和作品', async ({ page, isMobile }) => {
       test.setTimeout(150_000);
       await page.addInitScript(({ galleryKey, selectionKey }) => {
         if (!localStorage.getItem(selectionKey)) localStorage.setItem(selectionKey, 'classic');
         if (!localStorage.getItem(galleryKey)) localStorage.setItem(galleryKey, JSON.stringify({
           version: 1, muralParts: [], caissonCompleted: true, coloringCompleted: false,
-          ceremonySeen: false, artworks: {}, displayedArtworkId: null,
+          ceremonySeen: false, displayedArtworkId: null, artworks: {
+            previous: { artworkId: 'previous', levelId: 'coloring-feitian-lotus', artworkVersion: 'fixture-v001',
+              colors: { 1: '#886644' }, materials: {}, submittedAt: '2026-11-03T00:00:00.000Z' },
+          },
         }));
       }, { galleryKey, selectionKey });
-      const { models } = watchAssetRequests(page);
+      const { models, previews } = watchAssetRequests(page);
       await page.goto(`${entry}?view=${compact ? 'caisson' : 'mural'}`);
       const world = page.getByTestId('world-host');
-      if (compact) {
-        await expect(classicRadio(page)).toBeChecked({ timeout: 30_000 });
-        expect([...models]).toEqual([]);
-        await enterButton(page).click();
-      }
+      const enter = enterButton(page);
+      await expect(classicRadio(page)).toBeChecked({ timeout: 30_000 });
+      await expect(world).toHaveCount(0);
+      expect([...models]).toEqual([]);
+      if (isMobile) await enter.tap();
+      else await enter.click();
       await expect(world).toHaveAttribute('data-ready', 'true', { timeout: 60_000 });
       const position = () => page.getByTestId('world-position').evaluate(el => [el.getAttribute('data-x'), el.getAttribute('data-z')]);
       const originalPosition = await position();
@@ -116,21 +120,22 @@ for (const edition of ['compact', 'connected'] as const) {
       await expect(figure(page, 'tripo')).toBeInViewport();
       expect([...models]).toEqual([]);
       expect(await pickedTraveler(page)).toBe('classic');
-      const enter = enterButton(page);
       if (isMobile) await enter.tap();
       else await enter.click();
       await expect(world).toHaveAttribute('data-ready', 'true', { timeout: 60_000 });
       expect(travelerRequests(models)).toEqual([assetPath(travelerModelPath('tripo', isMobile))]);
       expect(await position()).toEqual(originalPosition);
       models.clear();
+      previews.clear();
       await page.reload();
-      if (compact) {
-        await expect(modernRadio(page)).toBeChecked({ timeout: 30_000 });
-        await expect(world).toHaveCount(0);
-        expect([...models]).toEqual([]);
-        await enterButton(page).click();
-      }
+      await expect(modernRadio(page)).toBeChecked({ timeout: 30_000 });
+      await expect(world).toHaveCount(0);
+      expect([...models]).toEqual([]);
       expect(await pickedTraveler(page)).toBe('tripo');
+      await expect.poll(() => previews.size).toBeGreaterThan(0);
+      expect(await page.evaluate(key => localStorage.getItem(key), galleryKey)).toBe(originalProgress);
+      if (isMobile) await enter.tap();
+      else await enter.click();
       await expect(world).toHaveAttribute('data-ready', 'true', { timeout: 60_000 });
       expect(travelerRequests(models)).toEqual([assetPath(travelerModelPath('tripo', isMobile))]);
       expect(await position()).toEqual(originalPosition);
@@ -163,12 +168,14 @@ for (const edition of ['compact', 'connected'] as const) {
       expect([...models]).toEqual([]);
       expect([...previews]).toEqual([]);
       expect(await pickedTraveler(page)).toBeNull();
-      await page.goto(entry);
-      await page.getByRole('link', { name: '直接体验小游戏' }).click();
-      await expect(page).toHaveURL(/#\/themes$/);
-      await expect(page.locator('.traveler-selection')).toHaveCount(0);
-      expect([...models]).toEqual([]);
-      expect(await pickedTraveler(page)).toBeNull();
+      if (compact) {
+        await page.goto(entry);
+        await page.getByRole('link', { name: '直接体验小游戏' }).click();
+        await expect(page).toHaveURL(/#\/themes$/);
+        await expect(page.locator('.traveler-selection')).toHaveCount(0);
+        expect([...models]).toEqual([]);
+        expect(await pickedTraveler(page)).toBeNull();
+      }
     });
 
   });

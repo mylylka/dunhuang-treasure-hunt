@@ -4,9 +4,7 @@ import { isCaissonOnlyMode } from '../services/first-gallery';
 import { TERRAIN_REGIONS, TERRAIN_SPAWN, terrainRegionAt, toTerrainPoint } from './terrain-rules-v001';
 import { defaultWorldCheckpoint } from './session';
 import { FIRST_GALLERY_MURAL_OBSERVER } from './first-gallery-mural-camera';
-import { TERRAIN_FIRST_GALLERY_COURTYARD_MODEL, travelerModelPath, worldAssetUrl } from '../content/world/assets';
-import { isMobilePhone } from '../services/mobile-landscape';
-import { readTravelerSelection } from '../services/traveler-selection';
+import { TERRAIN_FIRST_GALLERY_COURTYARD_MODEL, TERRAIN_TRAVELER_MODEL, worldAssetUrl } from '../content/world/assets';
 
 // Only curated first-hall inspection stations; the story entry cannot use the
 // terrain preview's second/third-gallery stations to bypass progression.
@@ -24,9 +22,8 @@ if (station && positions[station] && (!caissonOnly || station === 'caisson')) {
   query.delete('view'); history.replaceState(null, '', `${location.pathname}${query.size ? `?${query}` : ''}${location.hash}`);
 }
 const connected = document.getElementById('root')?.dataset.connectedGalleries === 'v001';
-// The short preview waits for a new confirmation on every page load.
-const travelerId = caissonOnly ? null : connected ? readTravelerSelection() : 'classic';
-if (travelerId && (!location.hash || location.hash === '#' || location.hash === '#/')) {
+// The two entries with traveler selection request their models after confirmation.
+if (!caissonOnly && !connected && (!location.hash || location.hash === '#' || location.hash === '#/')) {
   let preloadCourtyard = true;
   try {
     const saved = sessionStorage.getItem(sessionKey);
@@ -35,8 +32,7 @@ if (travelerId && (!location.hash || location.hash === '#' || location.hash === 
       preloadCourtyard = terrainRegionAt(checkpoint.position) === 'courtyard';
     }
   } catch { /* Invalid sessions fall back to the first courtyard. */ }
-  const traveler = travelerModelPath(travelerId, connected && isMobilePhone());
-  const paths = preloadCourtyard ? [TERRAIN_FIRST_GALLERY_COURTYARD_MODEL, traveler] : [traveler];
+  const paths = preloadCourtyard ? [TERRAIN_FIRST_GALLERY_COURTYARD_MODEL, TERRAIN_TRAVELER_MODEL] : [TERRAIN_TRAVELER_MODEL];
   for (const path of paths) {
     const preload = document.createElement('link');
     preload.rel = 'preload';

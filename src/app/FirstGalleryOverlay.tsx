@@ -27,12 +27,14 @@ interface Props {
   onExhibitReady?(id: string): void;
   portalPending?: boolean;
   onPortalPresented?(): void;
+  onPortalRead(): void;
   onPortalEnter(): void;
 }
 function GalleryDialog({ title, children, blocked, onClose, variant, dismissOnTap = false, testId,
-  descriptionId, actionLabel, reducedMotion }: {
+  descriptionId, actionLabel, secondaryAction, reducedMotion }: {
   title: string; children: ReactNode; blocked: boolean; onClose(): void; variant?: 'portal' | 'scroll-reward';
-  dismissOnTap?: boolean; testId?: string; descriptionId?: string; actionLabel?: string; reducedMotion?: boolean;
+  dismissOnTap?: boolean; testId?: string; descriptionId?: string; actionLabel?: string;
+  secondaryAction?: { label: string; onSelect(): void }; reducedMotion?: boolean;
 }) {
   const ref = useRef<HTMLDialogElement>(null);
   useEffect(() => { if (blocked) ref.current?.close(); else if (!ref.current?.open) ref.current?.showModal(); }, [blocked]);
@@ -48,7 +50,13 @@ function GalleryDialog({ title, children, blocked, onClose, variant, dismissOnTa
     } : undefined}>
     <header><h2 className={dismissOnTap ? 'gallery-text-cue' : undefined}>{title}</h2>{!variant && <button aria-label="关闭，继续探索" onClick={onClose}>×</button>}</header>
     {children}
-    {actionLabel && <button type="button" className="gallery-primary" onClick={dismiss}>{actionLabel}</button>}
+    {actionLabel && <div className="gallery-scroll-reward-actions">
+      <button type="button" className="gallery-primary" onClick={dismiss}>{actionLabel}</button>
+      {secondaryAction && <button type="button" onClick={() => {
+        dismiss();
+        secondaryAction.onSelect();
+      }}>{secondaryAction.label}</button>}
+    </div>}
   </dialog>;
 }
 
@@ -63,13 +71,13 @@ export function GalleryUnlockNotice({ title, children, blocked, onClose, testId,
   </GalleryDialog>;
 }
 
-function FirstGalleryScrollReward({ blocked, reducedMotion, onClose }: {
-  blocked: boolean; reducedMotion: boolean; onClose(): void;
+function FirstGalleryScrollReward({ blocked, reducedMotion, onClose, onOpen }: {
+  blocked: boolean; reducedMotion: boolean; onClose(): void; onOpen(): void;
 }) {
   const descriptionId = useId();
   return <GalleryDialog title={`获得《${WORLD_REWARDS['first-gallery'].title}》`} descriptionId={descriptionId}
     variant="scroll-reward" blocked={blocked} reducedMotion={reducedMotion} onClose={onClose}
-    actionLabel="收下画卷" testId="gallery-portal-notice">
+    actionLabel="收下画卷" secondaryAction={{ label: '打开画卷', onSelect: onOpen }} testId="gallery-portal-notice">
     <div className="gallery-scroll-reward-art" aria-hidden="true">
       <img src={worldAssetUrl(MOGAO_EXHIBIT_SCROLL)} alt="" width={256} height={253} draggable={false} />
     </div>
@@ -267,9 +275,10 @@ export function FirstGalleryOverlay(props: Props) {
     {portalWalking && !blocked && <aside className="gallery-mural-hud" data-testid="gallery-portal-guide">
       <button onClick={() => runtime?.skipGalleryPortal?.()}>跳过带路</button>
     </aside>}
-    {portalArrived && !compact && <FirstGalleryScrollReward blocked={blocked} reducedMotion={reducedMotion} onClose={() => runtime?.dismissGalleryPortal?.()} />}
-    {(portal === 'skipped' || (portalArrived && compact)) && <GalleryUnlockNotice title={FIRST_GALLERY_CLEAR_MESSAGE} blocked={blocked} dismissOnTap testId="gallery-portal-notice" onClose={() => runtime?.dismissGalleryPortal?.()}>
-      {portal === 'skipped' && <p className="gallery-text-cue">院子西侧的画卷已亮起，走到桌前点击画卷即可进入游戏世界。</p>}
+    {portalArrived && <FirstGalleryScrollReward blocked={blocked} reducedMotion={reducedMotion}
+      onClose={() => runtime?.dismissGalleryPortal?.()} onOpen={props.onPortalRead} />}
+    {portal === 'skipped' && <GalleryUnlockNotice title={FIRST_GALLERY_CLEAR_MESSAGE} blocked={blocked} dismissOnTap testId="gallery-portal-notice" onClose={() => runtime?.dismissGalleryPortal?.()}>
+      <p className="gallery-text-cue">院子西侧的画卷已亮起，走到桌前点击画卷即可进入游戏世界。</p>
     </GalleryUnlockNotice>}
     {muralInvited && !blocked && !occupied && <section className="gallery-mural-hud gallery-mural-invite" data-testid="gallery-mural-invite" aria-label="壁画邀请">
       <p className="gallery-text-cue" role="status">{muralText ?? (muralRestored ? '要再看看这面壁画吗？' : '前面有一面壁画，要过去看看吗？')}</p>
