@@ -1,7 +1,5 @@
 import { expect, test } from '@playwright/test';
 import { TERRAIN_REGIONS, toTerrainPoint } from '../../src/content/world/terrain-layout-v001';
-import { CAISSON_ONLY_GALLERY_STORAGE_KEY } from '../../src/services/first-gallery';
-import { CAISSON_ONLY_WORLD_SESSION_KEY } from '../../src/services/first-gallery-entry';
 import { unlockPatternsForTest } from './gallery-unlock-fixtures';
 
 test.beforeEach(async ({ page }) => {
@@ -23,7 +21,7 @@ for (const edition of ['精简首页', '独立三馆入口'] as const) {
   test(`${edition}同次确认旅人后，从游戏关卡返回画卷台继续漫游`, async ({ page }) => {
     test.setTimeout(120_000);
     const compact = edition === '精简首页';
-    await unlockPatternsForTest(page, compact ? CAISSON_ONLY_GALLERY_STORAGE_KEY : undefined);
+    await unlockPatternsForTest(page, compact ? 'dunhuang:first-gallery-caisson:v1' : undefined);
     if (compact) {
       const { x, z } = toTerrainPoint('courtyard', { x: -19, z: -1.7 });
       const yaw = 2.45 + TERRAIN_REGIONS.courtyard.yaw;
@@ -31,7 +29,7 @@ for (const edition of ['精简首页', '独立三馆入口'] as const) {
         sessionStorage.setItem(key, JSON.stringify({
           version: 1, position: { x, z }, heading: yaw, cameraYaw: yaw, visitedEvents: [],
         }));
-      }, { key: CAISSON_ONLY_WORLD_SESSION_KEY, x, z, yaw });
+      }, { key: 'dunhuang:first-gallery-caisson-world:v1', x, z, yaw });
     }
     await page.goto(compact ? '/' : '/first-gallery-v001.html?view=scroll');
     const world = page.getByTestId('world-host');
