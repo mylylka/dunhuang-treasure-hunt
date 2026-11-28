@@ -152,12 +152,6 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
   let galleryDisplay: ReturnType<typeof createFirstGalleryDisplay> | null = null;
   let galleryMuralPreparation: 'loading' | 'failed' | undefined = 'loading';
   let galleryArtwork: HTMLCanvasElement | null = null;
-  let easelShowcase: (
-    { mode: 'preview'; from: FirstGalleryMuralCameraPose; open: () => void }
-    | { mode: 'display'; wide: FirstGalleryMuralCameraPose }
-  ) & { close: FirstGalleryMuralCameraPose; time: number } | null = null;
-  let easelDiscovered = false;
-  let easelHint: { x: number; y: number } | undefined;
   let muralGazeTarget: GalleryTarget | null = null;
   let portalWalk: ReturnType<typeof createGalleryPortalWalk> = null;
   let portalPrelude: { time: number; yaw: number; route: ReturnType<typeof createGalleryPortalWalk> } | null = null;
@@ -683,7 +677,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     if (gallery && inFirstGallery()) {
       const { nearby, easelReady } = gallery.snapshot();
       if (nearby) {
-        if (nearby === 'easel' && (!easelReady || (caissonOnly && !easelHint))) return;
+        if (nearby === 'easel' && !easelReady) return;
         let picked: ReturnType<NonNullable<typeof galleryDisplay>['pick']> = null;
         if (point) {
           const rect = canvas.getBoundingClientRect();
@@ -722,7 +716,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     const portal = portalPrelude ? galleryPortalPreludePhase(portalPrelude.time) : portalWalk ? 'walking' as const : portalNotice;
     const gallerySnapshot = discovery && { ...discovery, mural: mural?.snapshot(), muralPreparation: galleryMuralPreparation, portal,
       portalReady: canStartGalleryPortal(), caissonOffer: galleryCaissonStage === 'offered' && !!galleryCaissonQuad,
-      caissonAssist: !!galleryCaissonView && !galleryCaissonView.returning, easelHint, easelShowcase: !!easelShowcase };
+      caissonAssist: !!galleryCaissonView && !galleryCaissonView.returning };
     const musicGuide = guideVisit && inMusicGallery() ? { ...guideVisit.inspect(), showcasing: guideSurfaceRevealElapsed !== null } : undefined;
     const hallArrivalPhase = exhibitGroundGuidance?.visible(checkpoint) ? 'guidance' as const : hallArrival?.phase;
     return { currentGallery: connected ? connectedGalleryAt(checkpoint) : undefined,
@@ -1021,7 +1015,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     }
     const wasMoving = moving;
     let speed = 0, playerRunning = false, assistArrived = false, arrivalChanged = false;
-    if (view === 'follow' && guideSurfaceRevealElapsed === null && guideVisit?.speechLine !== 'intro' && !overview && !galleryBlocked && !galleryCaissonView && !easelShowcase && !portalBusy() && !portalNotice && !galleryArtworkFeedbackActive() && !mural?.active && !encounters?.state && hallArrival?.phase!=='waiting') {
+    if (view === 'follow' && guideSurfaceRevealElapsed === null && guideVisit?.speechLine !== 'intro' && !overview && !galleryBlocked && !galleryCaissonView && !portalBusy() && !portalNotice && !galleryArtworkFeedbackActive() && !mural?.active && !encounters?.state && hallArrival?.phase!=='waiting') {
       const guided = exhibitArrival;
       const previousSurface = checkpoint.walkSurface;
       const walk = { position: checkpoint.position, surfaceId: previousSurface ?? null };
@@ -1299,6 +1293,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
       const readIntroduction = gallery.consumeIntroduction();
       if (readIntroduction && readIntroduction !== 'scroll') markGalleryIntroductionSeen(readIntroduction);
       const cue = gallery.snapshot();
+      if (cue.easelInvitation && wasMoving && !moving) input.releaseMouseLook();
       if (mural?.active) {
         const targetId = mural.gaze();
         if (targetId !== muralGazeTarget) {
@@ -1369,28 +1364,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
         input.clear();
       }
     }
-    let easelPose: FirstGalleryMuralCameraPose | null = null;
-    if (easelShowcase) {
-      const shot = easelShowcase;
-      shot.time += frameSeconds;
-      if (shot.mode === 'preview') {
-        easelPose = firstGalleryMuralCameraTransition(shot.from, shot.close, Math.min(1, shot.time / .45), { slerpView: true });
-        if (shot.time >= .45) {
-          easelShowcase = null;
-          queueMicrotask(() => { if (!disposed && !failed) shot.open(); });
-        }
-      } else if (reduced) {
-        if (shot.time < 1) easelPose = shot.wide;
-      } else if (shot.time < 2.15) {
-        easelPose = firstGalleryMuralCameraTransition(shot.close, shot.wide, THREE.MathUtils.clamp((shot.time - .45) / 1.1, 0, 1));
-      } else if (shot.time < 2.8) {
-        easelPose = firstGalleryMuralCameraTransition(shot.wide, {
-          ...desiredPose, target: explorationLookTarget(desiredPose.position, desiredPose.target, lookIntent), fov: 49,
-        }, (shot.time - 2.15) / .65, { slerpView: true });
-      }
-      if (!easelPose) { easelShowcase = null; input.clear(); }
-    }
-    const galleryPose = caissonPose ?? muralPose ?? easelPose;
+    const galleryPose = caissonPose ?? muralPose;
     if (galleryPose) {
       const anchor = new THREE.Vector3(checkpoint.position.x, heightAt(checkpoint.position) + 1.4, checkpoint.position.z);
       camera.position.copy(cameraSpace && (galleryCaissonView || muralPose)
@@ -1417,17 +1391,6 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
       visualTarget.lerp(portalLookTarget, weight);
     }
     camera.lookAt(visualTarget);
-    if (caissonOnly && galleryDisplay) {
-      const target = GALLERY_TARGETS.easel;
-      const withinView = Math.hypot(checkpoint.position.x - target.x, checkpoint.position.z - target.z) < 12;
-      camera.updateMatrixWorld();
-      easelHint = withinView && !mural?.active && canControlCamera() ? galleryDisplay.projectEasel(camera) : undefined;
-      if (easelHint && !easelDiscovered) {
-        easelDiscovered = true;
-        if (!galleryState?.introductionsSeen.includes('easel')) galleryDisplay.pulseEasel();
-      }
-      galleryDisplay.setEaselFocused(!!easelHint && gallery?.snapshot().nearby === 'easel');
-    }
     updateGalleryCaissonObservation(dt);
     syncGalleryNarration();
     galleryNarration?.update(frameSeconds);
@@ -1476,7 +1439,7 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
     skipCinematic(); travelCamera?.manual(); checkpoint.cameraYaw = yawLimit(checkpoint.cameraYaw + delta); schedule();
   }
   function canControlCamera() {
-    return loaded && guideSurfaceRevealElapsed === null && guideVisit?.speechLine !== 'intro' && !disposed && !failed && !paused && !galleryBlocked && !galleryCaissonView && !easelShowcase && !portalBusy() && !portalNotice && !galleryArtworkFeedbackActive() && !mural?.active && !exhibitArrival && !document.hidden && !overview && view==='follow' && !encounters?.state && hallArrival?.phase!=='waiting';
+    return loaded && guideSurfaceRevealElapsed === null && guideVisit?.speechLine !== 'intro' && !disposed && !failed && !paused && !galleryBlocked && !galleryCaissonView && !portalBusy() && !portalNotice && !galleryArtworkFeedbackActive() && !mural?.active && !exhibitArrival && !document.hidden && !overview && view==='follow' && !encounters?.state && hallArrival?.phase!=='waiting';
   }
   function updateDesertDecoration(now: number) {
     if (!desert || !world.desertDecoration) return;
@@ -1712,39 +1675,15 @@ export function createWorldRuntime(container: HTMLElement, options: WorldRuntime
       return true;
     },
     setGalleryArtwork(artwork) { galleryArtwork = artwork; galleryDisplay?.setArtwork(artwork); schedule(); },
-    locateGalleryEasel() {
-      if (!caissonOnly || !inFirstGallery() || !canControlCamera()) return false;
-      const { x, z } = GALLERY_TARGETS.easel;
-      cancelGalleryCue();
-      travelCamera?.manual();
-      lookIntent = 0;
-      checkpoint.cameraYaw = yawLimit(Math.atan2(checkpoint.position.x - x, checkpoint.position.z - z));
-      galleryDisplay?.pulseEasel();
+    respondToGalleryEasel(response) {
+      if (!canControlCamera() || !inFirstGallery() || !gallery?.respondToEaselInvitation(response)) return;
+      if (response === 'look') {
+        input.clear();
+        moving = false;
+        syncGalleryNarration();
+      }
+      canvas.focus({ preventScroll: true });
       schedule(); emit();
-      return true;
-    },
-    previewGalleryEasel(open) {
-      const close = galleryDisplay?.easelPose(camera.aspect, false);
-      if (!close || reduced || easelShowcase || !inFirstGallery() || gallery?.snapshot().nearby !== 'easel') return false;
-      easelShowcase = { mode: 'preview', close, time: 0, open,
-        from: { position: camera.position.clone(), target: visualTarget.clone(), fov: camera.fov } };
-      cancelGalleryCue();
-      input.clear(); moving = false; travelCamera?.reset();
-      schedule(); emit();
-      return true;
-    },
-    presentGalleryEasel() {
-      const close = galleryDisplay?.easelPose(camera.aspect, false);
-      const wide = galleryDisplay?.easelPose(camera.aspect, true);
-      if (!close || !wide || !inFirstGallery()) return;
-      easelShowcase = { mode: 'display', close, wide, time: 0 };
-      cancelGalleryCue();
-      input.clear(); moving = false; travelCamera?.reset();
-      galleryDisplay?.pulseEasel();
-      const pose = reduced ? wide : close;
-      camera.position.copy(pose.position); cameraTarget.copy(pose.target); visualTarget.copy(pose.target);
-      camera.fov = pose.fov; camera.updateProjectionMatrix(); camera.lookAt(visualTarget);
-      render(); schedule(); emit();
     },
     requestGalleryMural() {
       if (!canControlCamera() || !galleryState || galleryMuralPreparation) return;

@@ -1,5 +1,5 @@
 import { memo, useEffect, useId, useRef, useState } from 'react';
-import { isCaissonOnlyMode, loadFirstGallery, subscribeFirstGallery } from '../services/first-gallery';
+import { loadFirstGallery, subscribeFirstGallery } from '../services/first-gallery';
 import { firstGalleryTasks, mogaoGalleryTasks, musicGalleryTasks, type GalleryTask, type GalleryTaskArea, type GalleryTaskGroup } from '../services/gallery-tasks';
 import { loadMogaoExhibitProgress, type MogaoExhibitProgress } from '../services/mogao-exhibit-progress';
 import { loadMogaoHallAProgress, type MogaoHallAProgress } from '../services/mogao-hall-a-progress';
@@ -12,7 +12,6 @@ interface ProgressProps {
   musicProgress?: MusicGalleryProgress | null;
   muralProgress?: MogaoHallAProgress;
   exhibitProgress?: MogaoExhibitProgress;
-  onLocateEasel?(): void;
 }
 
 const galleryNames: Record<GalleryTaskArea, string> = {
@@ -34,7 +33,7 @@ function TaskSteps({ items }: { items: readonly GalleryTask[] }) {
   </ul>;
 }
 
-function TaskGroups({ groups, discloseItems = false, onLocateEasel }: { groups: GalleryTaskGroup[]; discloseItems?: boolean; onLocateEasel?(): void }) {
+function TaskGroups({ groups, discloseItems = false }: { groups: GalleryTaskGroup[]; discloseItems?: boolean }) {
   return <>
     <p className="world-task-total">挑战进度 <strong>{completedCount(groups)} / {groups.length}</strong></p>
     <ul className="world-task-groups">
@@ -47,7 +46,6 @@ function TaskGroups({ groups, discloseItems = false, onLocateEasel }: { groups: 
             <TaskSteps items={items} />
           </details> : <>
             <div className="world-task-group-heading" data-complete={complete}>{heading}</div>
-            {onLocateEasel && label === '画架设色' && !complete && <button className="world-task-locate" type="button" onClick={onLocateEasel}>去看看</button>}
             {items && <TaskSteps items={items} />}
           </>}
         </li>;
@@ -56,14 +54,14 @@ function TaskGroups({ groups, discloseItems = false, onLocateEasel }: { groups: 
   </>;
 }
 
-function FirstGalleryTaskGroups({ onLocateEasel }: Pick<ProgressProps, 'onLocateEasel'>) {
+function FirstGalleryTaskGroups() {
   const [progress, setProgress] = useState(() => loadFirstGallery().data);
   useEffect(() => subscribeFirstGallery(() => setProgress(loadFirstGallery().data)), []);
-  return <TaskGroups groups={firstGalleryTasks(progress)} onLocateEasel={isCaissonOnlyMode() ? onLocateEasel : undefined} />;
+  return <TaskGroups groups={firstGalleryTasks(progress)} />;
 }
 
-function CurrentGalleryTasks({ gallery, musicProgress, muralProgress, exhibitProgress, onLocateEasel }: ProgressProps & { gallery: GalleryTaskArea | null }) {
-  if (gallery === 'first') return <FirstGalleryTaskGroups onLocateEasel={onLocateEasel} />;
+function CurrentGalleryTasks({ gallery, musicProgress, muralProgress, exhibitProgress }: ProgressProps & { gallery: GalleryTaskArea | null }) {
+  if (gallery === 'first') return <FirstGalleryTaskGroups />;
   if (gallery === 'music') return <TaskGroups groups={musicGalleryTasks(musicProgress ?? loadMusicGalleryProgress())} discloseItems />;
   if (gallery === 'mogao') return <TaskGroups groups={mogaoGalleryTasks(
     muralProgress ?? loadMogaoHallAProgress().data, exhibitProgress ?? loadMogaoExhibitProgress().data,
@@ -71,10 +69,9 @@ function CurrentGalleryTasks({ gallery, musicProgress, muralProgress, exhibitPro
   return <p className="world-task-outside">走进展馆后，这里会显示该馆的任务进度。</p>;
 }
 
-export const GalleryTasks = memo(function GalleryTasks({ gallery, disabled, onLocateEasel, ...progress }: Omit<ProgressProps, 'onLocateEasel'> & {
+export const GalleryTasks = memo(function GalleryTasks({ gallery, disabled, ...progress }: ProgressProps & {
   gallery: GalleryTaskArea | null;
   disabled?: boolean;
-  onLocateEasel?(): boolean;
 }) {
   const [open, setOpen] = useState(false);
   const toggle = useRef<HTMLButtonElement>(null);
@@ -98,8 +95,7 @@ export const GalleryTasks = memo(function GalleryTasks({ gallery, disabled, onLo
           <button type="button" className="world-task-close" aria-label="关闭任务" onClick={close}>×</button>
         </div>
         <div className="world-task-body" tabIndex={0} key={gallery ?? 'outside'}>
-          <CurrentGalleryTasks gallery={gallery} {...progress}
-            onLocateEasel={onLocateEasel ? () => { if (onLocateEasel()) close(); } : undefined} />
+          <CurrentGalleryTasks gallery={gallery} {...progress} />
         </div>
       </>}
     </section>

@@ -17,6 +17,7 @@ interface GalleryCompletion {
   muralParts: readonly FirstGalleryMuralPart[];
   caissonCompleted: boolean;
   coloringCompleted: boolean;
+  ceremonySeen?: boolean;
 }
 const introduction = z.enum(['mural', 'caisson', 'easel']);
 export type FirstGalleryIntroduction = z.infer<typeof introduction>;
@@ -89,7 +90,10 @@ export function isFirstGalleryUnlocked(state: GalleryCompletion): boolean {
 }
 
 export function isFirstGalleryCeremonyReady(state: GalleryCompletion, compact = false): boolean {
-  return compact ? state.muralParts.length === 3 && state.caissonCompleted : isFirstGalleryUnlocked(state);
+  // Older compact saves could complete the ceremony with two tasks. Keep
+  // those already-open scrolls available, but require all three for a new one.
+  return isFirstGalleryUnlocked(state) || (compact && state.ceremonySeen === true &&
+    state.muralParts.length === 3 && state.caissonCompleted);
 }
 
 export function getGalleryEaselArtwork(state: FirstGalleryState): FirstGalleryArtwork | undefined {

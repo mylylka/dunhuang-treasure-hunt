@@ -15,9 +15,10 @@ const routeNotes: Partial<Record<GalleryTaskArea, string>> = {
 
 type GalleryResetSettingsProps = {
   onReset(gallery: GalleryTaskArea, task?: GalleryTaskId): { ok: true } | { ok: false; message: string };
+  compact?: boolean;
 };
 
-export function GalleryResetSettings({ onReset }: GalleryResetSettingsProps) {
+export function GalleryResetSettings({ onReset, compact = false }: GalleryResetSettingsProps) {
   const id = useId();
   const select = useRef<HTMLSelectElement>(null);
   const dialog = useRef<HTMLDialogElement>(null);
@@ -59,7 +60,8 @@ export function GalleryResetSettings({ onReset }: GalleryResetSettingsProps) {
         setSuccess('');
       }}>
         <option value="" disabled>请选择展馆</option>
-        {Object.entries(galleryNames).map(([area, name]) => <option key={area} value={area}>{name}</option>)}
+        {Object.entries(galleryNames).filter(([area]) => !compact || area === 'first')
+          .map(([area, name]) => <option key={area} value={area}>{name}</option>)}
       </select>
       <label htmlFor={`${id}-scope`} className="visually-hidden">选择清除范围</label>
       <select id={`${id}-scope`} value={taskId} disabled={!selected} onChange={event => {
@@ -89,7 +91,7 @@ export function GalleryResetSettings({ onReset }: GalleryResetSettingsProps) {
           <p>将清除该馆的首次游览记录、任务进度、解锁及图鉴奖励。清除后无法恢复。</p>
           <p>其他展馆的记录和已保存作品会保留。</p>
         </>}
-        {selected && routeNotes[selected] && <p>{routeNotes[selected]}</p>}
+        {!compact && selected && routeNotes[selected] && <p>{routeNotes[selected]}</p>}
       </div>
       <p className="gallery-reset-error" role="alert">{error}</p>
       <div className="gallery-reset-dialog-actions">

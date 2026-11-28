@@ -56,14 +56,34 @@ describe('first gallery exploration cues and access', () => {
     expect(galleryNearby(courtyard(-12, -14))).toBe('caisson');
     expect(galleryNearby(GALLERY_TARGETS.scroll)).toBe('scroll');
   });
-  it('does not repeat completed or persisted introductions', () => {
-    const seen = createFirstGalleryEvents(['easel']);
+  it.each([false, true])('does not repeat completed or persisted introductions (compact: %s)', (compact) => {
+    const seen = createFirstGalleryEvents(['easel'], compact);
     seen.update(GALLERY_TARGETS.easel, false, 2, state);
-    expect(seen.snapshot()).toMatchObject({ cue: null, easelReady: true });
-    const completed = createFirstGalleryEvents();
+    expect(seen.snapshot()).toMatchObject({ cue: null, easelInvitation: false, easelReady: true });
+    const completed = createFirstGalleryEvents([], compact);
     completed.update(GALLERY_TARGETS.easel, false, 2, { ...state, easel: true });
-    expect(completed.snapshot()).toMatchObject({ cue: null, easelReady: true });
+    expect(completed.snapshot()).toMatchObject({ cue: null, easelInvitation: false, easelReady: true });
     expect(galleryNearby(toTerrainPoint('courtyard', { x: -12, z: -15 }))).toBe('caisson');
+  });
+  it('waits for the compact easel invitation to be accepted and offers it again after leaving', () => {
+    const events = createFirstGalleryEvents([], true);
+    const approach = courtyard(-8.2, -2.1), outside = courtyard(-9.35, -2.1);
+    events.update(outside, true, .05, state);
+    expect(events.snapshot().easelInvitation).toBe(false);
+    events.update(approach, true, .05, state);
+    expect(events.snapshot()).toMatchObject({ easelInvitation: true, cue: null, easelReady: false });
+    events.update(approach, false, 2, state);
+    expect(events.snapshot()).toMatchObject({ easelInvitation: true, cue: null });
+
+    expect(events.respondToEaselInvitation('explore')).toBe(true);
+    events.update(approach, false, 2, state);
+    expect(events.snapshot()).toMatchObject({ easelInvitation: false, cue: null });
+    events.update(outside, true, .05, state);
+    expect(events.respondToEaselInvitation('look')).toBe(false);
+    events.update(approach, true, .05, state);
+    expect(events.snapshot().easelInvitation).toBe(true);
+    expect(events.respondToEaselInvitation('look')).toBe(true);
+    expect(events.snapshot()).toMatchObject({ easelInvitation: false, line: { narration: 'easel-discover' } });
   });
   it('shows the caisson cue two floor tiles earlier along the entrance approach', () => {
     const at = (x: number, z: number) => galleryNearby(toTerrainPoint('courtyard', { x, z }));
@@ -71,9 +91,10 @@ describe('first gallery exploration cues and access', () => {
     expect(at(-12, -8.4)).toBeNull();
     expect(at(-16, -12)).toBeNull();
   });
-  it('offers the easel only after both lines and the one-second quiet gap', () => {
-    const events = createFirstGalleryEvents(), position = GALLERY_TARGETS.easel;
+  it.each([false, true])('offers the easel after both introduction lines (compact: %s)', (compact) => {
+    const events = createFirstGalleryEvents([], compact), position = GALLERY_TARGETS.easel;
     events.update(position, false, .8, state, true, true);
+    if (compact) expect(events.respondToEaselInvitation('look')).toBe(true);
     expect(events.snapshot().line?.narration).toBe('easel-discover');
     expect(events.advanceCue()).toBe(true);
     expect(events.snapshot()).toMatchObject({ line: null, betweenLines: true, easelReady: false });

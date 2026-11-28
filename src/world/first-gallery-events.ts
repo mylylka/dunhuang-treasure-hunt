@@ -6,6 +6,7 @@ import type { WorldPoint } from './types';
 
 export interface FirstGallerySnapshot {
   nearby: GalleryInteraction | null;
+  easelInvitation: boolean;
   easelReady: boolean;
   line: GalleryLine | null;
   cue: GalleryLine | null;
@@ -47,11 +48,19 @@ export function createFirstGalleryEvents(initialSeen: readonly GalleryInteractio
   let introduction: GalleryInteraction | null = null, finishedIntroduction: GalleryInteraction | null = null;
   let gate: string | null = null, gateTime = 0;
   let easelCompleted = false;
+  let easelInvitationDismissed = false;
+  let introductionsAllowed = false;
   let retainWhileMoving = false;
   let pauseRemaining = 0;
   const current = () => queue[index] ?? null;
   function cancel() { introduction = null; queue = []; index = 0; time = 0; still = 0; pauseRemaining = 0; retainWhileMoving = false; cueId++; }
   function say(lines: readonly GalleryLine[], retain = false) { introduction = null; queue = lines; index = 0; time = 0; pauseRemaining = 0; cueId++; retainWhileMoving = retain; }
+  const easelIntroAvailable = () => introductionsAllowed && nearby === 'easel' && !current() && !easelCompleted && !seen.has('easel');
+  const easelInvitation = () => caissonOnly && !easelInvitationDismissed && easelIntroAvailable();
+  function introduceEasel() {
+    say(GALLERY_INTRO.easel);
+    introduction = 'easel';
+  }
   function nextCue() {
     index++; time = 0; cueId++;
     if (!current()) {
@@ -74,6 +83,12 @@ export function createFirstGalleryEvents(initialSeen: readonly GalleryInteractio
   }
   return {
     cancel, say, advanceCue,
+    respondToEaselInvitation(response: 'look' | 'explore') {
+      if (!easelInvitation()) return false;
+      if (response === 'look') introduceEasel();
+      else easelInvitationDismissed = true;
+      return true;
+    },
     cancelOnMotion() { if (!retainWhileMoving) cancel(); },
     consumeIntroduction() { const id = finishedIntroduction; finishedIntroduction = null; return id; },
     block(region: 'music' | 'stories' | 'third-locked' | 'loading' | 'failed') {
@@ -88,17 +103,15 @@ export function createFirstGalleryEvents(initialSeen: readonly GalleryInteractio
     },
     update(point: WorldPoint, moving: boolean, dt: number, completed: { mural: boolean; caisson: boolean; easel: boolean; unlocked: boolean }, allowIntroduction = true, audioManaged = false, elapsedSeconds = dt) {
       easelCompleted = completed.easel;
+      introductionsAllowed = allowIntroduction;
       const next = galleryNearby(point, caissonOnly, completed.unlocked, nearby);
-      if (next !== nearby) { cancel(); nearby = next; }
+      if (next !== nearby) { cancel(); nearby = next; easelInvitationDismissed = false; }
       gateTime -= dt; if (gateTime <= 0) gate = null;
       if (moving) {
         still = 0;
         if (!retainWhileMoving) { if (current()) cancel(); return; }
       } else still += dt;
-      if (!caissonOnly && allowIntroduction && !current() && nearby === 'easel' && still > .7 && !easelCompleted && !seen.has('easel')) {
-        say(GALLERY_INTRO.easel);
-        introduction = 'easel';
-      }
+      if (!caissonOnly && still > .7 && easelIntroAvailable()) introduceEasel();
       if (current()) {
         if (pauseRemaining > 0) {
           pauseRemaining = Math.max(0, pauseRemaining - elapsedSeconds);
@@ -113,7 +126,7 @@ export function createFirstGalleryEvents(initialSeen: readonly GalleryInteractio
     snapshot(): FirstGallerySnapshot {
       const cue = current();
       const betweenLines = pauseRemaining > 0;
-      return { nearby, easelReady: caissonOnly || easelCompleted || seen.has('easel'),
+      return { nearby, easelInvitation: easelInvitation(), easelReady: easelCompleted || seen.has('easel'),
         line: !betweenLines && (cue?.narration || time >= .55) ? cue : null, cue, cueId, gate, betweenLines };
     },
   };

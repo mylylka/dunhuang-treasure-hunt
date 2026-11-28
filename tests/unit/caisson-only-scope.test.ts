@@ -10,16 +10,17 @@ import { PATTERN_STATIONS } from '../../src/world/pattern-interactives';
 afterEach(() => vi.unstubAllGlobals());
 
 describe('精简版第一馆', () => {
-  it('精简版保留借物桌、画架和画卷台的碰撞，隐藏旧画板与颜料架', () => {
+  it('精简版保留第一馆装置及画卷台旁展架、颜料小柜的原有碰撞', () => {
     const ids = ['terrain-courtyard-hall-v003-pattern-display', 'terrain-courtyard-hall-v003-pigment-rack'];
     expect(TERRAIN_CAISSON_ONLY_PLAYER_COLLIDERS.some(solid => solid.id === 'terrain-courtyard-hall-v003-workbench')).toBe(true);
     for (const id of ids) {
-      expect(TERRAIN_FIRST_GALLERY_PLAYER_COLLIDERS.some(solid => solid.id === id)).toBe(true);
-      expect(TERRAIN_CAISSON_ONLY_PLAYER_COLLIDERS.some(solid => solid.id === id)).toBe(false);
+      const full = TERRAIN_FIRST_GALLERY_PLAYER_COLLIDERS.find(solid => solid.id === id);
+      expect(full).toBeDefined();
+      expect(TERRAIN_CAISSON_ONLY_PLAYER_COLLIDERS.find(solid => solid.id === id)).toEqual(full);
     }
     const full = terrainCameraSpace(true, true);
     const compact = terrainCameraSpace(true, true, false, false, false, true);
-    expect(full.orientedBoxes!.length - compact.orientedBoxes!.length).toBe(4);
+    expect(compact.orientedBoxes).toEqual(full.orientedBoxes);
     for (const station of PATTERN_STATIONS) {
       expect(TERRAIN_CAISSON_ONLY_PLAYER_COLLIDERS.some(solid => solid.id === `terrain-courtyard-${station.id}`)).toBe(true);
       const { x, z } = toTerrainPoint('courtyard', station.position);

@@ -150,6 +150,7 @@ export function createWorldInput(canvas: HTMLCanvasElement, onInteract: (point?:
     clear,
     setEnabled(value: boolean) { enabled = value; if (value) clear(); else suspend(); },
     get mouseLookActive() { return mouseLook?.active === true; },
+    releaseMouseLook() { mouseLook?.release(); },
     updateMouseLook() { if (mouseLook && !canCapture()) mouseLook.suspend(); },
     setJoystick(x: number, y: number) { if (Math.hypot(x, y) > .08) onIntent?.(); if (enabled) joystick = { x: Math.max(-1, Math.min(1, x)), y: Math.max(-1, Math.min(1, y)) }; },
     read() {

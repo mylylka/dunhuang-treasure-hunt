@@ -87,6 +87,35 @@ describe('第一馆进度、画架和作品库', () => {
     expect(loadFirstGallery(store).data.displayedArtworkId).toBe(requestId);
   });
 
+  it('精简版导入兼容的 2D 成品，只加入独立作品库且不改变原作和任务进度', () => {
+    const store = memory();
+    const artwork = withArtwork(emptyArtworks(), level, red, true, timestamp);
+    expect(saveArtworks(artwork, store).ok).toBe(true);
+    const originalArtwork = store.getItem(ARTWORKS_KEY);
+    const fullGallery = JSON.stringify(emptyFirstGallery());
+    store.setItem(FIRST_GALLERY_STORAGE_KEY, fullGallery);
+    const compactGallery = { ...emptyFirstGallery(), muralParts: ['lotus', 'bird', 'grapes'], caissonCompleted: true };
+    store.setItem(CAISSON_ONLY_GALLERY_STORAGE_KEY, JSON.stringify(compactGallery));
+
+    vi.stubGlobal('document', { getElementById: () => ({ dataset: { caissonOnly: 'v001' } }) });
+    try {
+      expect(importGalleryArtworks(catalog, store).ok).toBe(true);
+      const once = store.getItem(CAISSON_ONLY_GALLERY_STORAGE_KEY);
+      expect(importGalleryArtworks(catalog, store).ok).toBe(true);
+      expect(store.getItem(CAISSON_ONLY_GALLERY_STORAGE_KEY)).toBe(once);
+      expect(store.getItem(ARTWORKS_KEY)).toBe(originalArtwork);
+      expect(store.getItem(FIRST_GALLERY_STORAGE_KEY)).toBe(fullGallery);
+      const state = loadFirstGallery(store).data;
+      expect(Object.values(state.artworks)).toHaveLength(1);
+      expect(Object.values(state.artworks)[0]).toMatchObject({ levelId: level.id, colors: red, submittedAt: timestamp });
+      expect(state).toMatchObject({ muralParts: compactGallery.muralParts, caissonCompleted: true,
+        coloringCompleted: false, ceremonySeen: false, displayedArtworkId: null });
+      expect(isFirstGalleryCeremonyReady(state, true)).toBe(false);
+    } finally {
+      vi.unstubAllGlobals();
+    }
+  });
+
   it('从旧收藏再配一版，刷新恢复本次草稿，提交另存而不覆盖旧作', () => {
     const store = memory(), session = memory();
     expect(submitGalleryArtwork({ level, requestId, colors: red, materials: {} }, store).ok).toBe(true);
@@ -159,22 +188,32 @@ describe('第一馆进度、画架和作品库', () => {
     expect(loadFirstGallery(store).data).toMatchObject({ ceremonySeen: true, firstSuccessSeen: true });
   });
 
-  it('精简版用两项进度保存仪式，完整三馆的存档规则独立', () => {
-    const store = memory();
+  it('精简版新仪式要求三项完成，旧的两项通关记录保持可读且画卷开放', () => {
+    const store = memory(), session = memory();
     const twoTasks = { ...emptyFirstGallery(), muralParts: ['lotus', 'bird', 'grapes'] as const, caissonCompleted: true };
     const fullRaw = JSON.stringify(twoTasks);
     store.setItem(FIRST_GALLERY_STORAGE_KEY, fullRaw);
     vi.stubGlobal('document', { getElementById: () => ({ dataset: { caissonOnly: 'v001' } }) });
     try {
-      store.setItem(CAISSON_ONLY_GALLERY_STORAGE_KEY, JSON.stringify({ ...twoTasks, caissonCompleted: false }));
+      const legacyRaw = JSON.stringify({ ...twoTasks, ceremonySeen: true });
+      store.setItem(CAISSON_ONLY_GALLERY_STORAGE_KEY, legacyRaw);
+      const legacy = loadFirstGallery(store);
+      expect(legacy.warning).toBeNull();
+      expect(legacy.data).toEqual({ ...twoTasks, ceremonySeen: true });
+      expect(isFirstGalleryCeremonyReady(legacy.data, true)).toBe(true);
+      expect(store.getItem(CAISSON_ONLY_GALLERY_STORAGE_KEY)).toBe(legacyRaw);
+
+      store.setItem(CAISSON_ONLY_GALLERY_STORAGE_KEY, JSON.stringify(twoTasks));
+      expect(isFirstGalleryCeremonyReady(loadFirstGallery(store).data, true)).toBe(false);
       expect(markGalleryCeremonySeen(store).ok).toBe(false);
-      expect(completeGalleryCaisson(store).ok).toBe(true);
+
+      const entry = begin(session);
+      expect(submitGalleryArtwork({ level, requestId: entry.token, easelClaim: entry.token, colors: red, materials: {} }, store, session).ok).toBe(true);
       expect(isFirstGalleryCeremonyReady(loadFirstGallery(store).data, true)).toBe(true);
       expect(markGalleryCeremonySeen(store).ok).toBe(true);
       const reloaded = loadFirstGallery(store);
       expect(reloaded.warning).toBeNull();
-      expect(reloaded.data).toEqual({ ...twoTasks, ceremonySeen: true });
-      expect(getFirstGalleryAccess(reloaded.data, 'music')).toBe(false);
+      expect(reloaded.data).toMatchObject({ ...twoTasks, coloringCompleted: true, ceremonySeen: true, displayedArtworkId: entry.token });
       expect(store.getItem(FIRST_GALLERY_STORAGE_KEY)).toBe(fullRaw);
     } finally {
       vi.unstubAllGlobals();

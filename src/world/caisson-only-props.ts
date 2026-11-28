@@ -1,4 +1,2 @@
-/** Unavailable workshop interaction furnishings in the compact edition. */
-export const CAISSON_ONLY_HIDDEN_COURTYARD_OBJECTS = new Set([
-  'hall-v003-pattern-display', 'hall-v003-pattern-display-art', 'hall-v003-pigment-rack',
-]);
+/** Compact-edition exclusions shared by courtyard rendering and collision. */
+export const CAISSON_ONLY_HIDDEN_COURTYARD_OBJECTS = new Set<string>();

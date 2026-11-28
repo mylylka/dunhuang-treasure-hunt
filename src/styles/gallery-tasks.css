@@ -7,17 +7,6 @@
   position: relative;
 }
 
-.world-task-locate {
-  margin: 3px 8px 6px;
-  padding: 4px 10px;
-  min-height: 30px;
-  background: #fff6e2;
-  color: #704227;
-  border: 1px solid #ab8b68;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
 .world-task-dropdown > button[aria-expanded="true"] {
   background: #f0dec0;
   border-color: #987453;
